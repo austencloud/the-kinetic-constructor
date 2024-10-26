@@ -63,10 +63,10 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 20,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
-                "rotation_type": "halved",
+                "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
                 "selected_letter_types": [
@@ -92,7 +92,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": "continuous"
+            "filters": null
         },
         "last_used_builder": "manual"
     },

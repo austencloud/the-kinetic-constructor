@@ -15,8 +15,6 @@ class TimestampFrame(QWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        # set transparent background
-        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setContentsMargins(0, 0, 0, 0)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
@@ -25,9 +23,7 @@ class TimestampFrame(QWidget):
             timestamp = Timestamp(self, f"{row * 10}:00")  # Example: 0:00, 0:10, etc.
             self.timestamps.update({row: timestamp})
             self.layout.addWidget(timestamp)
-            timestamp.setVisible(True)
-            timestamp.label.setAlignment(Qt.AlignmentFlag.AlignTop)
-            timestamp.label.setVisible(True)
+            timestamp.label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def resize_timestamp_frame(self):
         for timestamp in self.timestamps.values():

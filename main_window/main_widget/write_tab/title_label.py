@@ -15,7 +15,8 @@ class TitleLabel(EditableLabel):
     def __init__(self, title_text, header_widget: "ActHeaderWidget"):
         super().__init__(header_widget, title_text)
         self.header_widget = header_widget
-
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
     def _show_edit(self, event):
         """Show the QLineEdit for editing with the current timestamp pre-filled."""
         self.edit.setText(self.label.text())  # Pre-fill with current timestamp

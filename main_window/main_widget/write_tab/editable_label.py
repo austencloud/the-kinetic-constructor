@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QHBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QLineEdit, QWidget, QStackedLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 
 
@@ -7,14 +7,45 @@ class EditableLabel(QWidget):
         super().__init__(parent)
         self.label = QLabel(label_text, self)
         self.edit = QLineEdit(self)
-        self.edit.setVisible(False)
         self.edit.returnPressed.connect(self._hide_edit)
 
-        layout = QHBoxLayout(self)
-        layout.addWidget(self.label)
-        layout.addWidget(self.edit)
-        self.setLayout(layout)
+        # Set alignment to top-left
+        # self.label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        # self.edit.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
+        # Remove padding and margins in style sheets
+        self.label.setStyleSheet(
+            "border-top: 1px solid black;"
+            "border-bottom: 1px solid black;"
+            "padding: 0px;"
+            "margin: 0px;"
+        )
+        self.edit.setStyleSheet(
+            "border-top: 1px solid black;"
+            "border-bottom: 1px solid black;"
+            "padding: 0px;"
+            "margin: 0px;"
+        )
+
+        # Remove contents margins
+        self.label.setContentsMargins(0, 0, 0, 0)
+        self.edit.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
+
+        # # Set size policies
+        # self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        # self.label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        # self.edit.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+
+        # Use QStackedLayout to switch between label and edit
+        self.layout: QStackedLayout = QStackedLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.edit)
+        self.setLayout(self.layout)
+
+        # Assign the mouse press event to show the editor
         self.label.mousePressEvent = self._show_edit
 
     def _show_edit(self, event):
@@ -22,10 +53,10 @@ class EditableLabel(QWidget):
         self.edit.setText(self.label.text())
         current_font = self.label.font()
         self.edit.setFont(current_font)
-        
-        self.label.setVisible(False)
-        self.edit.setVisible(True)
-        
+
+        # Switch to the edit widget
+        self.layout.setCurrentWidget(self.edit)
+
         self.edit.setFocus()
         self.edit.selectAll()
 
@@ -33,8 +64,9 @@ class EditableLabel(QWidget):
         """Hide the QLineEdit and show the QLabel."""
         new_text = self.edit.text()
         self.label.setText(new_text if new_text else self.label.text())
-        self.label.setVisible(True)
-        self.edit.setVisible(False)
+
+        # Switch back to the label widget
+        self.layout.setCurrentWidget(self.label)
 
     def set_text(self, text: str):
         """Programmatically set the text of the label."""
@@ -43,14 +75,3 @@ class EditableLabel(QWidget):
     def get_text(self) -> str:
         """Get the current text of the label."""
         return self.label.text()
-
-    def resizeEvent(self, event):
-        """Resize the QLineEdit to match the QLabel size."""
-        self.edit.resize(self.label.size())
-        self.edit.setStyleSheet(
-            "border: none;"
-            "background-color: rgba(0, 0, 0, 0);"
-            "color: black;"
-            "alignment: center;"
-        )
-        super().resizeEvent(event)
