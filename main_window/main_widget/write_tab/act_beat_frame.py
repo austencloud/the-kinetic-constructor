@@ -19,12 +19,12 @@ from main_window.main_widget.write_tab.act_beat_frame_layout_manager import (
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.write_tab import WriteTab
-    from main_window.main_widget.write_tab.beat_scroll_area import BeatScrollArea
+    from main_window.main_widget.write_tab.act_tab import ActTab
+    from main_window.main_widget.write_tab.act_beat_scroll_area import ActBeatScrollArea
 
 
 class ActBeatFrame(BaseBeatFrame):
-    def __init__(self, beat_scroll_area: "BeatScrollArea"):
+    def __init__(self, beat_scroll_area: "ActBeatScrollArea"):
         super().__init__(beat_scroll_area.write_tab.main_widget)
         self.write_tab = beat_scroll_area.write_tab
         self.main_widget = self.write_tab.main_widget
@@ -33,7 +33,6 @@ class ActBeatFrame(BaseBeatFrame):
         self.layout_manager = ActBeatFrameLayoutManager(self)
         self.layout_manager.setup_layout()
 
-
     def init_act(self, num_beats: int, num_rows: int):
         """Initialize the act with a large grid of beats."""
         for row in range(num_rows):
@@ -41,7 +40,7 @@ class ActBeatFrame(BaseBeatFrame):
                 beat_view = ActBeatView(self)
                 self.beats.append(beat_view)
                 self.layout.addWidget(beat_view, row, col)
-                beat_number = col + 1 
+                beat_number = col + 1
                 beat_view.add_beat_number(beat_number)
 
     def _setup_layout(self):
@@ -58,7 +57,7 @@ class ActBeatFrame(BaseBeatFrame):
         self.beat_size = int(width_without_scrollbar // 8)
 
         for view in self.beats:
-            view.resize_act_beat_view() 
+            view.resize_act_beat_view()
 
     def dragEnterEvent(self, event: "QDragEnterEvent"):
         if event.mimeData().hasFormat("application/sequence-data"):

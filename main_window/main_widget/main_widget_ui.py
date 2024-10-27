@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-from main_window.main_widget.write_tab.write_tab import WriteTab
+from main_window.main_widget.write_tab.act_tab import ActTab
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 from main_window.main_widget.navigation_widget import NavigationWidget
 from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -39,7 +39,7 @@ class MainWidgetUI:
         self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
-        self.main_widget.write_widget = WriteTab(self.main_widget)
+        self.main_widget.write_widget = ActTab(self.main_widget)
 
         # Initialize builder_stacked_widget to switch between manual builder and sequence generator
         self.main_widget.builder_stacked_widget = QStackedWidget()

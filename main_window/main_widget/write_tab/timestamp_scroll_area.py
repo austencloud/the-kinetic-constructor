@@ -4,11 +4,11 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.write_tab.timestamp_frame import TimestampFrame
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.write_tab import WriteTab
+    from main_window.main_widget.write_tab.act_tab import ActTab
 
 
 class TimestampScrollArea(QScrollArea):
-    def __init__(self, write_tab: "WriteTab"):
+    def __init__(self, write_tab: "ActTab"):
         super().__init__(write_tab)
         self.write_tab = write_tab
         self.setWidgetResizable(True)
@@ -22,6 +22,8 @@ class TimestampScrollArea(QScrollArea):
         self.timestamp_frame = TimestampFrame(self)
         self.timestamp_frame.init_timestamps(num_rows=20)
         self.setWidget(self.timestamp_frame)
+        # transparent_background
+        self.setStyleSheet("background: transparent;")
 
     def resize_timestamp_frame(self):
         self.timestamp_frame.resize_timestamp_frame()

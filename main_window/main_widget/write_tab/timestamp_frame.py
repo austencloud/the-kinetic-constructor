@@ -4,8 +4,10 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.write_tab.timestamp import Timestamp
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timestamp_scroll_area import TimestampScrollArea
-    from main_window.main_widget.write_tab.write_tab import WriteTab
+    from main_window.main_widget.write_tab.timestamp_scroll_area import (
+        TimestampScrollArea,
+    )
+    from main_window.main_widget.write_tab.act_tab import ActTab
 
 
 class TimestampFrame(QWidget):

@@ -7,11 +7,11 @@ from main_window.main_widget.write_tab.editable_label import EditableLabel
 from main_window.main_widget.write_tab.title_label import TitleLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.write_tab import WriteTab
+    from main_window.main_widget.write_tab.act_tab import ActTab
 
 
 class ActHeaderWidget(QWidget):
-    def __init__(self, write_tab: "WriteTab"):
+    def __init__(self, write_tab: "ActTab"):
         super().__init__(write_tab)
         self.write_tab = write_tab
         self.settings_manager = self.write_tab.main_widget.main_window.settings_manager

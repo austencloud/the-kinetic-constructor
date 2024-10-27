@@ -5,11 +5,11 @@ from main_window.main_widget.act_thumbnail_box import ActThumbnailBox
 from main_window.main_widget.metadata_extractor import MetaDataExtractor
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.write_tab import WriteTab
+    from main_window.main_widget.write_tab.act_tab import ActTab
 
 
 class ActBrowser(QScrollArea):
-    def __init__(self, write_tab: "WriteTab") -> None:
+    def __init__(self, write_tab: "ActTab") -> None:
         super().__init__(write_tab)
         self.write_tab = write_tab
         self.thumbnail_boxes: list[ActThumbnailBox] = []
