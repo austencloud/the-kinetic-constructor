@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.act_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_frame.cue_frame import (
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll.cue_frame.cue_frame import (
         CueFrame,
     )
 

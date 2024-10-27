@@ -30,4 +30,4 @@ class SettingsManager(QObject):
         self.sequence_layout = SequenceLayoutSettings(self)
         self.builder_settings = BuilderSettings(self)
         self.sequence_sharing = SequenceSharingSettings(self)
-        self.act_tab_settings = ActTabSettings(self)
+        self.act_tab = ActTabSettings(self)

@@ -17,7 +17,7 @@ class ActSheet(QWidget):
         self.splitter = ActSplitter(self)
 
         self._setup_layout()
-        self.splitter.connect_scroll_sync() 
+        self.splitter.connect_scroll_sync()
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
@@ -31,7 +31,7 @@ class ActSheet(QWidget):
         """Resize each part when ActSheet resizes."""
         self.header.resize_header_widget()
         self.splitter.beat_scroll_area.act_beat_frame.resize_act_beat_frame()
-        self.splitter.timestamp_scroll_area.resize_timestamp_frame()
+        self.splitter.cue_scroll.resize_timestamp_frame()
 
     def closeEvent(self, event):
         self.splitter.save_splitter_state()

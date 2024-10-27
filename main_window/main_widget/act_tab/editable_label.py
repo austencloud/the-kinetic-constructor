@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QWidget, QStackedLayout, QLineEdit
+from PyQt6.QtWidgets import QLabel, QWidget, QStackedLayout, QLineEdit, QTextEdit
 from PyQt6.QtCore import Qt, QEvent
 
 
@@ -13,7 +13,7 @@ class EditableLabel(QWidget):
     ):
         super().__init__(parent)
         self.label = QLabel(label_text, self)
-        self.edit = QLineEdit(self)  # Use QTextEdit for multi-line text
+        self.edit = QTextEdit(self)  # Use QTextEdit for multi-line text
         self._align = align
         self._padding = padding
         self._bg_color = bg_color
@@ -63,7 +63,7 @@ class EditableLabel(QWidget):
 
     def _hide_edit(self):
         """Switch back to the label mode."""
-        self.label.setText(self.edit.text() or self.label.text())
+        self.label.setText(self.edit.toPlainText() or self.label.text())
         self.layout.setCurrentWidget(self.label)
 
     def set_text(self, text: str):

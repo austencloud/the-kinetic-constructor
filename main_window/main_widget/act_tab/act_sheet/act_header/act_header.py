@@ -3,8 +3,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 from .title_label import TitleLabel
+
 if TYPE_CHECKING:
     from ..act_sheet import ActSheet
+
 
 class ActHeader(QWidget):
     def __init__(self, act_sheet: "ActSheet"):
@@ -12,7 +14,14 @@ class ActHeader(QWidget):
         self.act_sheet = act_sheet
         self.settings_manager = self.act_sheet.main_widget.main_window.settings_manager
 
-        # Setup header layout and components
+        # Initial header setup
+        self._configure_header_style()
+        self._initialize_components()
+        self._layout_components()
+        self._initialize_content()
+
+    def _configure_header_style(self):
+        """Set up styling for the header widget."""
         self.setObjectName("timelineHeader")
         self.setStyleSheet(
             """
@@ -22,20 +31,23 @@ class ActHeader(QWidget):
                 border-radius: 10px;
                 padding: 10px;
             }
-        """
+            """
         )
-        self._setup_header()
 
-    def _setup_header(self):
+    def _initialize_components(self):
+        """Initialize the labels for date, title, and author."""
         self.date_label = QLabel(self)
         self.date_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        saved_title = self.settings_manager.act_tab_settings.get_act_title()
+        saved_title = self.settings_manager.act_tab.get_act_title()
         self.title_label = TitleLabel(self, saved_title)
-        self.author_label = QLabel(self)
         self.title_label.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.author_label = QLabel(self)
         self.author_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+    def _layout_components(self):
+        """Arrange components in a vertical layout for the header."""
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.addWidget(self.date_label)
@@ -43,32 +55,36 @@ class ActHeader(QWidget):
         layout.addWidget(self.author_label)
         self.setLayout(layout)
 
-        self.set_date(datetime.datetime.now().strftime("%m/%d/%Y"))
+    def _initialize_content(self):
+        """Set initial content for date and author labels."""
+        self.display_date()
         self.display_author()
 
-    def set_title(self, text: str):
-        self.title_label.set_text(text)
-
-    def set_date(self, text: str):
-        self.date_label.setText(text)
+    def display_date(self):
+        """Fetch and display the current date."""
+        date = datetime.datetime.now().strftime("%m/%d/%Y")
+        self.date_label.setText(date)
 
     def display_author(self):
-        author = (
-            self.act_sheet.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
-        )
+        """Fetch and display the author name."""
+        author = self._get_current_author()
         self.author_label.setText(f"Choreography by {author}")
 
     def save_title(self):
+        """Save the current title to settings."""
         new_title = self.title_label.get_text()
-        self.settings_manager.act_tab_settings.save_act_title(new_title)
-
+        self.settings_manager.act_tab.save_act_title(new_title)
 
     def resize_header_widget(self):
-        """Resize the title label based on the timeline width."""
+        """Adjust the size of each label based on the width of the act sheet."""
         self.title_label.resize_title_label()
-        date_size = self.act_sheet.width() // 50
-        author_label_size = self.act_sheet.width() // 50
-        date_label_stylesheet = f"font-size: {date_size}px;"
-        author_label_stylesheet = f"font-size: {author_label_size}px;"
-        self.date_label.setStyleSheet(date_label_stylesheet)
-        self.author_label.setStyleSheet(author_label_stylesheet)
+        self._resize_label(self.date_label, self.act_sheet.width() // 50)
+        self._resize_label(self.author_label, self.act_sheet.width() // 50)
+
+    def _resize_label(self, label: QLabel, font_size: int):
+        """Helper method to resize a QLabel's font size."""
+        label.setStyleSheet(f"font-size: {font_size}px;")
+
+    def _get_current_author(self) -> str:
+        """Fetch the current author name from settings."""
+        return self.settings_manager.users.user_manager.get_current_user()

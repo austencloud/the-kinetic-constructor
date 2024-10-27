@@ -1,15 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QFrame
 from PyQt6.QtCore import Qt
-from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_frame.cue_frame import (
-    CueFrame,
-)
+from .cue_frame.cue_frame import CueFrame
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet.act_sheet import ActSheet
+    from ...act_sheet import ActSheet
 
 
-class CueScrollArea(QScrollArea):
+class CueScroll(QScrollArea):
     def __init__(self, act_sheet: "ActSheet"):
         super().__init__(act_sheet)
         self.act_sheet = act_sheet

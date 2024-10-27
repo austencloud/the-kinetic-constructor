@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSplitter
+from PyQt6.QtWidgets import QSplitter, QScrollArea
 from PyQt6.QtCore import Qt
 
-from .cue_scroll_area.cue_scroll_area import CueScrollArea
-from .act_beat_scroll_area.act_beat_scroll_area import ActBeatScrollArea
+from .cue_scroll.cue_scroll import CueScroll
+from .act_beat_scroll.act_beat_scroll import ActBeatScrollArea
 
 if TYPE_CHECKING:
     from main_window.main_widget.act_tab.act_sheet.act_sheet import ActSheet
@@ -17,11 +17,11 @@ class ActSplitter(QSplitter):
         self.main_widget = act_sheet.main_widget
 
         # Initialize scroll areas
-        self.timestamp_scroll_area = CueScrollArea(self.act_sheet)
+        self.cue_scroll = CueScroll(self.act_sheet)
         self.beat_scroll_area = ActBeatScrollArea(self.act_sheet)
 
         # Add widgets to the splitter
-        self.addWidget(self.timestamp_scroll_area)
+        self.addWidget(self.cue_scroll)
         self.addWidget(self.beat_scroll_area)
 
         # Configure splitter appearance and behavior
@@ -34,7 +34,7 @@ class ActSplitter(QSplitter):
 
     def on_splitter_moved(self, pos, index):
         self.save_splitter_state()
-        self.timestamp_scroll_area.timestamp_frame.resize_timestamp_frame()
+        self.cue_scroll.timestamp_frame.resize_timestamp_frame()
         self.beat_scroll_area.act_beat_frame.resize_act_beat_frame()
 
     def save_splitter_state(self):
@@ -60,21 +60,17 @@ class ActSplitter(QSplitter):
             )
         timestamp_scrollbar_state = settings.value("act_sheet/scrollbar_state")
         if timestamp_scrollbar_state:
-            self.timestamp_scroll_area.verticalScrollBar().setValue(
-                int(timestamp_scrollbar_state)
-            )
+            self.cue_scroll.verticalScrollBar().setValue(int(timestamp_scrollbar_state))
 
     def connect_scroll_sync(self):
         """Synchronize the scrollbars of the timestamp and beat scroll areas."""
-        self.beat_scroll_area.verticalScrollBar().valueChanged.connect(
-            self.timestamp_scroll_area.verticalScrollBar().setValue
-        )
-        self.timestamp_scroll_area.verticalScrollBar().valueChanged.connect(
-            self.beat_scroll_area.verticalScrollBar().setValue
-        )
-        self.beat_scroll_area.verticalScrollBar().valueChanged.connect(
-            self.save_scrollbar_state
-        )
-        self.timestamp_scroll_area.verticalScrollBar().valueChanged.connect(
-            self.save_scrollbar_state
-        )
+        scroll_areas: list[tuple[QScrollArea, QScrollArea]] = [
+            (self.beat_scroll_area, self.cue_scroll),
+            (self.cue_scroll, self.beat_scroll_area),
+        ]
+
+        for source, target in scroll_areas:
+            source.verticalScrollBar().valueChanged.connect(
+                target.verticalScrollBar().setValue
+            )
+            source.verticalScrollBar().valueChanged.connect(self.save_scrollbar_state)

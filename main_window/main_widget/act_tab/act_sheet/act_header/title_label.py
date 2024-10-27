@@ -36,7 +36,9 @@ class TitleLabel(EditableLabel):
     def _adjust_edit_geometry(self):
         """Adjust geometry to keep the QLineEdit centered based on text content."""
         # Calculate width based on text length
-        text_width = self.edit.fontMetrics().horizontalAdvance(self.edit.text()) + 20
+        text_width = (
+            self.edit.fontMetrics().horizontalAdvance(self.edit.toPlainText()) + 20
+        )
 
         # Get the label's center point
         label_rect = self.label.geometry()
