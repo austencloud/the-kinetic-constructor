@@ -6,7 +6,7 @@ from data.act_beat_frame_layouts import ACT_BEAT_FRAME_LAYOUTS
 from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
+    from main_window.main_widget.act_tab.act_beat_frame import ActBeatFrame
 
 
 class ActBeatFrameLayoutManager:
@@ -36,7 +36,7 @@ class ActBeatFrameLayoutManager:
         columns, rows = self.calculate_layout(num_beats)
 
         # Ensure vertical scroll when there are too many rows
-        self.beat_frame.write_tab.beat_scroll_area.verticalScrollBarPolicy = (
+        self.beat_frame.act_tab.beat_scroll_area.verticalScrollBarPolicy = (
             Qt.ScrollBarPolicy.ScrollBarAlwaysOn
             if rows > 4
             else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
@@ -54,7 +54,6 @@ class ActBeatFrameLayoutManager:
         index = 0
         beats = self.beat_frame.beats
         for row in range(rows):
-
 
             # Add beats starting from column 1
             for col in range(1, columns + 1):

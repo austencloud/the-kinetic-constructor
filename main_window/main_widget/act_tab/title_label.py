@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLineEdit
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.write_tab.editable_label import EditableLabel
+from main_window.main_widget.act_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_header_widget import (
+    from main_window.main_widget.act_tab.act_header_widget import (
         ActHeaderWidget,
     )
 
@@ -16,7 +16,7 @@ class TitleLabel(EditableLabel):
         super().__init__(header_widget, title_text)
         self.header_widget = header_widget
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
+
     def _show_edit(self, event):
         """Show the QLineEdit for editing with the current timestamp pre-filled."""
         self.edit.setText(self.label.text())  # Pre-fill with current timestamp
@@ -44,7 +44,7 @@ class TitleLabel(EditableLabel):
 
     def resize_title_label(self):
         """Resize the title label based on the timeline width."""
-        self.title_size = self.header_widget.write_tab.width() // 45
+        self.title_size = self.header_widget.act_sheet.width() // 20
         title_label_stylesheet = (
             f"font-size: {self.title_size}px; "
             f"font-weight: bold; "

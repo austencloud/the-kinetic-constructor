@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QFrame
 from PyQt6.QtCore import Qt
-from main_window.main_widget.write_tab.timestamp_frame import TimestampFrame
+from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_tab import ActTab
+    from main_window.main_widget.act_tab.act_sheet import ActSheet
+    from main_window.main_widget.act_tab.act_tab import ActTab
 
 
 class TimestampScrollArea(QScrollArea):
-    def __init__(self, write_tab: "ActTab"):
-        super().__init__(write_tab)
-        self.write_tab = write_tab
+    def __init__(self, act_sheet: "ActSheet"):
+        super().__init__(act_sheet)
+        self.act_sheet = act_sheet
         self.setWidgetResizable(True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

@@ -1,4 +1,3 @@
-
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsTextItem
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -7,8 +6,10 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager 
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_beat_view import ActBeatView
-    from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
+    from main_window.main_widget.act_tab.act_beat_view import ActBeatView
+    from main_window.main_widget.act_tab.act_beat_frame import ActBeatFrame
+
+
 class ActBeat(BasePictograph):
     def __init__(self, beat_frame: "ActBeatFrame", duration: Union[int, float] = 1):
         super().__init__(beat_frame.main_widget)

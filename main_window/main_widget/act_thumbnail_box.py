@@ -22,9 +22,9 @@ class ActThumbnailBox(QWidget):
         self.browser = browser
         self.word = word
         self.thumbnails = thumbnails
-        self.main_widget = browser.write_tab.main_widget
+        self.main_widget = browser.act_tab.main_widget
         self.current_index = 0
-        
+
         self.word_label = WordLabel(self)
         self.image_label = ActThumbnailImageLabel(self)
 

@@ -1,4 +1,4 @@
-# write_tab_beat.py
+# act_tab_beat.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
 from PyQt6.QtCore import QPointF
@@ -6,9 +6,9 @@ from PyQt6.QtGui import QFont
 from main_window.main_widget.sequence_widget.beat_frame.act_beat import ActBeat
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
+    from main_window.main_widget.act_tab.act_beat_frame import ActBeatFrame
 
-# write_tab_beat.py
+# act_tab_beat.py
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QFont

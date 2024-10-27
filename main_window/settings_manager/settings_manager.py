@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QSettings, QObject, pyqtSignal
 from .builder_settings import BuilderSettings
 from .sequence_sharing_settings import SequenceSharingSettings
-from .write_tab_settings import WriteTabSettings
+from .act_tab_settings import ActTabSettings
 from .dictionary_settings import DictionarySettings
 from .image_export_settings import ImageExportSettings
 from .sequence_layout_settings import SequenceLayoutSettings
@@ -30,4 +30,4 @@ class SettingsManager(QObject):
         self.sequence_layout = SequenceLayoutSettings(self)
         self.builder_settings = BuilderSettings(self)
         self.sequence_sharing = SequenceSharingSettings(self)
-        self.write_tab_settings = WriteTabSettings(self)
+        self.act_tab_settings = ActTabSettings(self)

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel
 from base_widgets.base_beat_frame import BaseBeatFrame
-from main_window.main_widget.write_tab.act_beat_view import ActBeatView
+from main_window.main_widget.act_tab.act_beat_view import ActBeatView
 from PyQt6.QtCore import Qt, QMimeData
 from PyQt6.QtWidgets import QFrame
 from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
@@ -11,23 +11,23 @@ from PyQt6.QtCore import QDataStream, QIODevice
 from main_window.main_widget.sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
 )
-from main_window.main_widget.write_tab.timestamp import (
+from main_window.main_widget.act_tab.timestamp import (
     Timestamp,
 )
-from main_window.main_widget.write_tab.act_beat_frame_layout_manager import (
+from main_window.main_widget.act_tab.act_beat_frame_layout_manager import (
     ActBeatFrameLayoutManager,
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_tab import ActTab
-    from main_window.main_widget.write_tab.act_beat_scroll_area import ActBeatScrollArea
+    from main_window.main_widget.act_tab.act_tab import ActTab
+    from main_window.main_widget.act_tab.act_beat_scroll_area import ActBeatScrollArea
 
 
 class ActBeatFrame(BaseBeatFrame):
     def __init__(self, beat_scroll_area: "ActBeatScrollArea"):
-        super().__init__(beat_scroll_area.write_tab.main_widget)
-        self.write_tab = beat_scroll_area.write_tab
-        self.main_widget = self.write_tab.main_widget
+        super().__init__(beat_scroll_area.act_sheet.main_widget)
+        self.act_tab = beat_scroll_area.act_sheet
+        self.main_widget = self.act_tab.main_widget
         self.beats: list[ActBeatView] = []
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
@@ -52,7 +52,7 @@ class ActBeatFrame(BaseBeatFrame):
     def resize_act_beat_frame(self):
         """Resize each beat and adjust layout dynamically."""
         width_without_scrollbar = (
-            self.width() - self.write_tab.beat_scroll_area.verticalScrollBar().width()
+            self.width() - self.act_tab.beat_scroll_area.verticalScrollBar().width()
         )
         self.beat_size = int(width_without_scrollbar // 8)
 

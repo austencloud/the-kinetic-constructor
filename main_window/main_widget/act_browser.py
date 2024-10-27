@@ -5,15 +5,15 @@ from main_window.main_widget.act_thumbnail_box import ActThumbnailBox
 from main_window.main_widget.metadata_extractor import MetaDataExtractor
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_tab import ActTab
+    from main_window.main_widget.act_tab.act_tab import ActTab
 
 
 class ActBrowser(QScrollArea):
-    def __init__(self, write_tab: "ActTab") -> None:
-        super().__init__(write_tab)
-        self.write_tab = write_tab
+    def __init__(self, act_tab: "ActTab") -> None:
+        super().__init__(act_tab)
+        self.act_tab = act_tab
         self.thumbnail_boxes: list[ActThumbnailBox] = []
-        self.metadata_extractor = MetaDataExtractor(self.write_tab.main_widget)
+        self.metadata_extractor = MetaDataExtractor(self.act_tab.main_widget)
 
         self.scroll_content = QWidget()
         self.grid_layout = QGridLayout(self.scroll_content)
@@ -49,7 +49,7 @@ class ActBrowser(QScrollArea):
 
         # Fetch sequences and add favorites only
         sequences = (
-            self.write_tab.main_widget.dictionary_widget.browser.get_all_sequences()
+            self.act_tab.main_widget.dictionary_widget.browser.get_all_sequences()
         )
         print(f"Found {len(sequences)} sequences.")
 

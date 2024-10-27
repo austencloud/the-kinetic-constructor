@@ -3,18 +3,19 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.write_tab.editable_label import EditableLabel
-from main_window.main_widget.write_tab.title_label import TitleLabel
+from main_window.main_widget.act_tab.editable_label import EditableLabel
+from main_window.main_widget.act_tab.title_label import TitleLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_tab import ActTab
+    from main_window.main_widget.act_tab.act_sheet import ActSheet
+    from main_window.main_widget.act_tab.act_tab import ActTab
 
 
 class ActHeaderWidget(QWidget):
-    def __init__(self, write_tab: "ActTab"):
-        super().__init__(write_tab)
-        self.write_tab = write_tab
-        self.settings_manager = self.write_tab.main_widget.main_window.settings_manager
+    def __init__(self, act_sheet: "ActSheet"):
+        super().__init__(act_sheet)
+        self.act_sheet = act_sheet
+        self.settings_manager = self.act_sheet.main_widget.main_window.settings_manager
 
         # Setup header layout and components
         self.setObjectName("timelineHeader")
@@ -36,7 +37,7 @@ class ActHeaderWidget(QWidget):
         self.date_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Load title from settings
-        saved_title = self.settings_manager.write_tab_settings.get_act_title()
+        saved_title = self.settings_manager.act_tab_settings.get_act_title()
         self.title_label = TitleLabel(saved_title, self)
         self.author_label = QLabel(self)
         self.title_label.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -67,20 +68,20 @@ class ActHeaderWidget(QWidget):
 
     def display_author(self):
         author = (
-            self.write_tab.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
+            self.act_sheet.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
         )
         self.author_label.setText(f"Choreography by {author}")
 
     def save_title(self):
         """Save the title to settings when it's changed."""
         new_title = self.title_label.get_text()
-        self.settings_manager.write_tab_settings.save_act_title(new_title)
+        self.settings_manager.act_tab_settings.save_act_title(new_title)
 
     def resize_header_widget(self):
         """Resize the title label based on the timeline width."""
         self.title_label.resize_title_label()
-        date_size = self.write_tab.width() // 100
-        author_label_size = self.write_tab.width() // 100
+        date_size = self.act_sheet.width() // 50
+        author_label_size = self.act_sheet.width() // 50
         date_label_stylesheet = f"font-size: {date_size}px;"
         author_label_stylesheet = f"font-size: {author_label_size}px;"
         self.date_label.setStyleSheet(date_label_stylesheet)

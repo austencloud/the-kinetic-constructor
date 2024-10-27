@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-from main_window.main_widget.write_tab.act_tab import ActTab
+from main_window.main_widget.act_tab.act_tab import ActTab
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 from main_window.main_widget.navigation_widget import NavigationWidget
 from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -109,7 +109,7 @@ class MainWidgetUI:
         self.main_widget.generate_tab_index = 1
         self.main_widget.dictionary_tab_index = 2
         self.main_widget.learn_tab_index = 3
-        self.main_widget.write_tab_index = 4
+        self.main_widget.act_tab_index = 4
 
     def _load_current_tab(self):
         self.main_widget.current_tab = (

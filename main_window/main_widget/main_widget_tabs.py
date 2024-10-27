@@ -36,7 +36,7 @@ class MainWidgetTabs:
                 self.main_widget.dictionary_learn_widget.setCurrentIndex(
                     1
                 )  # learn_widget
-            elif index == self.main_widget.write_tab_index:
+            elif index == self.main_widget.act_tab_index:
                 self.main_widget.main_stacked_widget.setCurrentIndex(2)  # write_widget
 
         # Update the current tab in settings
@@ -45,7 +45,7 @@ class MainWidgetTabs:
             self.main_widget.generate_tab_index: "generate",
             self.main_widget.dictionary_tab_index: "dictionary",
             self.main_widget.learn_tab_index: "learn",
-            self.main_widget.write_tab_index: "write",
+            self.main_widget.act_tab_index: "write",
         }
         if index in tab_names:
             self.main_widget.settings_manager.global_settings.set_current_tab(
@@ -58,7 +58,7 @@ class MainWidgetTabs:
             "generate": self.main_widget.generate_tab_index,
             "dictionary": self.main_widget.dictionary_tab_index,
             "learn": self.main_widget.learn_tab_index,
-            "write": self.main_widget.write_tab_index,
+            "write": self.main_widget.act_tab_index,
         }
 
         if self.main_widget.current_tab in tab_indices:

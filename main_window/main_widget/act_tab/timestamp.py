@@ -3,17 +3,17 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLineEdit, QSizePolicy
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.write_tab.editable_label import EditableLabel
+from main_window.main_widget.act_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timestamp_frame import TimestampFrame
+    from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
 
 
 class Timestamp(EditableLabel):
     def __init__(self, timestamp_frame: "TimestampFrame", label_text="0:00"):
         super().__init__(timestamp_frame, label_text)
         self.timestamp_frame = timestamp_frame
-        self.write_tab = timestamp_frame.write_tab
+        self.act_tab = timestamp_frame.act_tab
         self.setContentsMargins(0, 0, 0, 0)
         self.label.setContentsMargins(0, 0, 0, 0)
         self.edit.setContentsMargins(0, 0, 0, 0)
@@ -55,7 +55,9 @@ class Timestamp(EditableLabel):
         self.label.setText(text)
 
     def resize_timestamp(self):
-        desired_height = self.timestamp_frame.write_tab.beat_scroll_area.act_beat_frame.beat_size
+        desired_height = (
+            self.timestamp_frame.act_tab.beat_scroll_area.act_beat_frame.beat_size
+        )
         self.setFixedHeight(desired_height)
         self.label.setFixedHeight(desired_height)
         self.edit.setFixedHeight(desired_height)

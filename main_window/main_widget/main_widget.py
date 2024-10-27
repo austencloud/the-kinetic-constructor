@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.main_widget.write_tab.act_tab import ActTab
+from main_window.main_widget.act_tab.act_tab import ActTab
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 
 
@@ -101,7 +101,7 @@ class MainWidget(QWidget):
     generate_tab_index: int = 1
     dictionary_tab_index: int = 2
     learn_tab_index: int = 3
-    write_tab_index: int = 4
+    act_tab_index: int = 4
 
     # Current state
     current_tab: str

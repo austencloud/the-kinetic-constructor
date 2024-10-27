@@ -1,19 +1,19 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
-from main_window.main_widget.write_tab.timestamp import Timestamp
+from main_window.main_widget.act_tab.timestamp import Timestamp
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timestamp_scroll_area import (
+    from main_window.main_widget.act_tab.timestamp_scroll_area import (
         TimestampScrollArea,
     )
-    from main_window.main_widget.write_tab.act_tab import ActTab
+    from main_window.main_widget.act_tab.act_tab import ActTab
 
 
 class TimestampFrame(QWidget):
     def __init__(self, timestamp_scroll_area: "TimestampScrollArea"):
         super().__init__(timestamp_scroll_area)
-        self.write_tab = timestamp_scroll_area.write_tab
+        self.act_tab = timestamp_scroll_area.act_sheet
         self.timestamps: dict[int, Timestamp] = {}
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)

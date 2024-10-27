@@ -7,9 +7,9 @@ if TYPE_CHECKING:
 
 
 class AnnotationEditor(QWidget):
-    def __init__(self, write_tab: "ActTab") -> None:
-        super().__init__(write_tab)
-        self.write_tab = write_tab
+    def __init__(self, act_tab: "ActTab") -> None:
+        super().__init__(act_tab)
+        self.act_tab = act_tab
 
         self._setup_components()
         self._setup_layout()
