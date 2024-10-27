@@ -20,11 +20,13 @@ class Timestamp(EditableLabel):
         )
         self.cue_box = cue_box
 
-        # Replace the default QLineEdit with TimestampLineEdit for auto-formatting
-        self.edit = TimestampLineEdit(label_text)
+        self.edit = TimestampLineEdit(self, label_text)
         self.layout.addWidget(self.edit)  # Add it to the layout
 
     def resize_timestamp(self):
+        self.setFixedWidth(self.sizeHint().width())
+        self.edit.setFixedWidth(self.edit.sizeHint().width())
+
         font_size = int(self.cue_box.cue_frame.cue_scroll.act_sheet.height() // 80)
         font = self.label.font()
         font.setPointSize(font_size)

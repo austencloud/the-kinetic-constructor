@@ -8,6 +8,9 @@ from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
 import json
 from PyQt6.QtCore import QDataStream, QIODevice
 from PyQt6.QtCore import Qt
+from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll.act_beat_frame.act_step_label import (
+    ActStepLabel,
+)
 from main_window.main_widget.act_tab.editable_label import EditableLabel
 from main_window.main_widget.sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
@@ -26,7 +29,7 @@ class ActBeatFrame(BaseBeatFrame):
         self.act_sheet = beat_scroll_area.act_sheet
         self.main_widget = self.act_sheet.main_widget
         self.beats: list[ActBeatView] = []
-        self.labels: list[EditableLabel] = []  # Add this line
+        self.step_labels: list[ActStepLabel] = []  # Add this line
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
         self.layout_manager.setup_layout()
@@ -43,10 +46,9 @@ class ActBeatFrame(BaseBeatFrame):
                 beat_number = col + 1
                 beat_view.add_beat_number(beat_number)
 
-                # Add an editable label under each beat
-                label = EditableLabel(self, "", align=Qt.AlignmentFlag.AlignCenter)
-                self.labels.append(label)
-                self.layout.addWidget(label, row * 2 + 1, col)
+                step_label = ActStepLabel(self, "")
+                self.step_labels.append(step_label)
+                self.layout.addWidget(step_label, row * 2 + 1, col)
 
     def resize_act_beat_frame(self):
         """Resize each beat and label, adjusting the layout dynamically."""
@@ -60,15 +62,8 @@ class ActBeatFrame(BaseBeatFrame):
         for view in self.beats:
             view.resize_act_beat_view()
 
-        for label in self.labels:
-            label.setFixedHeight(self.steps_label_height)  # Adjust as needed
-            label.setFixedWidth(self.beat_size)
-            label.resizeEvent(None)  # Trigger resize to adjust font size
-            font_size = label.height() // 4
-            font = label.font()
-            font.setPointSize(font_size)
-            label.setFont(font)
-            label.edit.setFont(font)
+        for label in self.step_labels:
+            label.resize_step_label()
 
     def dragEnterEvent(self, event: "QDragEnterEvent"):
         if event.mimeData().hasFormat("application/sequence-data"):

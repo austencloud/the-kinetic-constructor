@@ -25,7 +25,7 @@ class ActBeatFrameLayoutManager:
 
         # Arrange beats and labels
         for i, (beat, label) in enumerate(
-            zip(self.beat_frame.beats, self.beat_frame.labels)
+            zip(self.beat_frame.beats, self.beat_frame.step_labels)
         ):
             row, col = divmod(i, self.beat_frame.num_columns)
             layout.addWidget(beat, row * 2, col)
@@ -43,7 +43,7 @@ class ActBeatFrameLayoutManager:
 
         index = 0
         beats = self.beat_frame.beats
-        labels = self.beat_frame.labels
+        labels = self.beat_frame.step_labels
         for row in range(rows):
             for col in range(columns):
                 if index < num_beats:

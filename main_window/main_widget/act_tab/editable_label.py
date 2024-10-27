@@ -1,4 +1,3 @@
-# editable_label.py
 from PyQt6.QtWidgets import (
     QLabel,
     QFrame,
@@ -10,6 +9,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QEvent
 
+from main_window.main_widget.act_tab.editable_label_manager import EditableLabelManager
+
 
 class EditableLabel(QWidget):
     def __init__(
@@ -19,77 +20,73 @@ class EditableLabel(QWidget):
         align=Qt.AlignmentFlag.AlignLeft,
         padding=5,
         bg_color="#FFFFFF",
-        multi_line=False,  # Control single or multi-line
+        multi_line=False,
     ):
         super().__init__(parent)
+
         self._align = align
         self._padding = padding
         self._bg_color = bg_color
         self.multi_line = multi_line
 
-        self.label = QLabel(label_text, self)
-        if self.multi_line:
-            self.edit = QTextEdit(self)
-            self.edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-            self.edit.setMinimumHeight(0)
-            self.edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            self.edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            self.edit.setFrameShape(QFrame.Shape.NoFrame)
+        self.label = self._create_label(label_text)
+        self.edit = self._create_edit_widget()
 
-            # Enable word wrap and set text format
-            self.label.setWordWrap(True)
-            self.label.setTextFormat(Qt.TextFormat.PlainText)
-        else:
-            self.edit = QLineEdit(self)
-            self.edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-            self.edit.setMinimumHeight(0)
-            self.edit.setFrame(False)
-
-        # Configure layout for stacked editing
-        self.layout: QStackedLayout = QStackedLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.edit)
-
-        # Apply initial styles and alignment
+        self.layout: QStackedLayout = self._configure_layout()
         self.apply_styles()
-        self.setLayout(self.layout)
-        self.label.mousePressEvent = self._show_edit  # Edit on click
 
-        # Install event filter on edit to detect Enter key
+        self.label.mousePressEvent = self._show_edit
         self.edit.installEventFilter(self)
 
-        # Set size policies
-        self.label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setCursor(Qt.CursorShape.IBeamCursor)
 
-    def eventFilter(self, source, event):
-        """Detect Enter key press in edit to exit edit mode."""
-        if (
-            source == self.edit
-            and event.type() == QEvent.Type.KeyPress
-            and event.key() == Qt.Key.Key_Return
-            and (
-                not self.multi_line
-                or (self.multi_line and event.modifiers() == Qt.KeyboardModifier.NoModifier)
+    def _create_label(self, text):
+        """Initialize the label to display text."""
+        label = QLabel(text, self)
+        label.setAlignment(self._align)
+        if self.multi_line:
+            label.setWordWrap(True)
+            label.setTextFormat(Qt.TextFormat.PlainText)
+        return label
+
+    def _create_edit_widget(self):
+        """Initialize the editing widget (QLineEdit or QTextEdit)."""
+        if self.multi_line:
+            edit = QTextEdit(self)
+            edit.setSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
             )
-        ):
-            self._hide_edit()
-            return True
-        return super().eventFilter(source, event)
+            edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        else:
+            edit = QLineEdit(self)
+            edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        return edit
+
+    def _configure_layout(self):
+        """Configure a stacked layout to switch between label and edit view."""
+        layout = QStackedLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(self.label)
+        layout.addWidget(self.edit)
+        self.setLayout(layout)
+        return layout
 
     def apply_styles(self):
-        """Applies alignment, padding, and color styling to label and edit fields."""
-        self.label.setAlignment(self._align)
-        self.edit.setAlignment(self._align)
-        self.label.setStyleSheet(f"padding: 0px; margin: 0px;")
+        """Apply styling to label and edit fields."""
+        self.label.setStyleSheet("padding: 0px; margin: 0px;")
         self.edit.setStyleSheet(
             f"background-color: {self._bg_color}; padding: {self._padding}px; margin: 0px;"
         )
+        self.edit.setAlignment(self._align)
 
     def _show_edit(self, event=None):
-        """Switch to the edit mode."""
+        """Switch from label to edit mode."""
+
+        EditableLabelManager.set_active(self)  # Set this as the active edit
+
         if self.multi_line:
             self.edit.setPlainText(self.label.text())
         else:
@@ -100,14 +97,26 @@ class EditableLabel(QWidget):
         self.edit.selectAll()
 
     def _hide_edit(self):
-        """Switch back to the label mode."""
+        """Switch from edit mode back to label mode and save the text."""
+        text = self.edit.toPlainText() if self.multi_line else self.edit.text()
         if self.multi_line:
-            text = self.edit.toPlainText()
-            # Ensure the label uses plain text format and preserves line breaks
             self.label.setTextFormat(Qt.TextFormat.PlainText)
             self.label.setWordWrap(True)
-        else:
-            text = self.edit.text()
         self.label.setText(text or self.label.text())
         self.layout.setCurrentWidget(self.label)
+        EditableLabelManager.clear_active()  # Clear the active edit when hiding
 
+    def eventFilter(self, source, event):
+        """Detect Enter key press in edit mode to exit edit mode."""
+        if (
+            source == self.edit
+            and event.type() == QEvent.Type.KeyPress
+            and event.key() == Qt.Key.Key_Return
+            and (
+                not self.multi_line
+                or event.modifiers() == Qt.KeyboardModifier.NoModifier
+            )
+        ):
+            self._hide_edit()
+            return True
+        return super().eventFilter(source, event)

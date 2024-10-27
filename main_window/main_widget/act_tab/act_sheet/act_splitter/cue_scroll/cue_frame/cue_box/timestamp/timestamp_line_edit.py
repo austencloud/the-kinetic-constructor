@@ -1,10 +1,13 @@
+from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt, QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator, QKeyEvent
 from PyQt6.QtWidgets import QLineEdit
+if TYPE_CHECKING:
+    from .timestamp import Timestamp
 
 
 class TimestampLineEdit(QLineEdit):
-    def __init__(self, initial_text="0:00"):
+    def __init__(self, timestamp: "Timestamp",initial_text="0:00"):
         super().__init__(initial_text)
 
         # Define regular expression for validation (X:XX or XX:XX)
@@ -13,7 +16,7 @@ class TimestampLineEdit(QLineEdit):
 
         # Apply the validator to restrict input to valid timestamp format
         self.setValidator(timestamp_validator)
-        self.setMaxLength(4)  # Restrict to "X:XX" or "XX:XX" format
+        self.setMaxLength(4)
 
     def keyPressEvent(self, event: QKeyEvent):
         """Handle key press events to auto-format input as a timestamp."""
