@@ -1,8 +1,8 @@
 # act_tab_beat.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
-from PyQt6.QtCore import QPointF
-from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu
+from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtGui import QFont, QContextMenuEvent, QMouseEvent, QAction
 from main_window.main_widget.sequence_widget.beat_frame.act_beat import ActBeat
 
 if TYPE_CHECKING:
@@ -34,6 +34,14 @@ class ActBeatView(QGraphicsView):
 
         # Prevent scrolling by disabling scrolling behavior
         self.setInteractive(False)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.show_context_menu)
+
+    def show_context_menu(self, position):
+        menu = QMenu()
+        test_action = QAction("Test", self)
+        menu.addAction(test_action)
+        menu.exec(self.mapToGlobal(position))
 
     def add_beat_number(self, beat_number_text=None):
         """Display the beat number."""

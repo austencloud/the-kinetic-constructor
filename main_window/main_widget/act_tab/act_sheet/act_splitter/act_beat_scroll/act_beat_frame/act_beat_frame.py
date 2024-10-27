@@ -11,7 +11,6 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll.act_beat_frame.act_step_label import (
     ActStepLabel,
 )
-from main_window.main_widget.act_tab.editable_label import EditableLabel
 from main_window.main_widget.sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
 )
@@ -29,7 +28,11 @@ class ActBeatFrame(BaseBeatFrame):
         self.act_sheet = beat_scroll_area.act_sheet
         self.main_widget = self.act_sheet.main_widget
         self.beats: list[ActBeatView] = []
-        self.step_labels: list[ActStepLabel] = []  # Add this line
+        self.step_labels: list[ActStepLabel] = []
+        self.beat_step_map: dict[ActBeatView, ActStepLabel] = (
+            {}
+        )  # Dictionary for beat-step mapping
+
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
         self.layout_manager.setup_layout()
@@ -37,18 +40,24 @@ class ActBeatFrame(BaseBeatFrame):
 
     def init_act(self, num_beats: int, num_rows: int):
         """Initialize the act with a grid of beats and labels."""
-        self.num_columns = num_beats  # Update the number of columns
+        self.num_columns = num_beats
         for row in range(num_rows):
             for col in range(num_beats):
+                # Create and add each beat view
                 beat_view = ActBeatView(self)
+                beat_view.setCursor(Qt.CursorShape.PointingHandCursor)
                 self.beats.append(beat_view)
                 self.layout.addWidget(beat_view, row * 2, col)
                 beat_number = col + 1
                 beat_view.add_beat_number(beat_number)
 
+                # Create and add each step label
                 step_label = ActStepLabel(self, "")
                 self.step_labels.append(step_label)
                 self.layout.addWidget(step_label, row * 2 + 1, col)
+
+                # Map the beat view to its associated step label
+                self.beat_step_map[beat_view] = step_label
 
     def resize_act_beat_frame(self):
         """Resize each beat and label, adjusting the layout dynamically."""
@@ -67,7 +76,7 @@ class ActBeatFrame(BaseBeatFrame):
 
     def dragEnterEvent(self, event: "QDragEnterEvent"):
         if event.mimeData().hasFormat("application/sequence-data"):
-            event.acceptProposedAction()  # Accept the drag
+            event.acceptProposedAction()
 
     def dragMoveEvent(self, event: "QDragMoveEvent"):
         if event.mimeData().hasFormat("application/sequence-data"):
@@ -77,7 +86,7 @@ class ActBeatFrame(BaseBeatFrame):
         if event.mimeData().hasFormat("application/sequence-data"):
             data = event.mimeData().data("application/sequence-data")
             stream = QDataStream(data, QIODevice.OpenModeFlag.ReadOnly)
-            sequence_data = stream.readQString()  # Deserialize the sequence data
+            sequence_data = stream.readQString()
 
             sequence_dict = json.loads(sequence_data)
             self.handle_dropped_sequence(sequence_dict)

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSplitter, QScrollArea
+from PyQt6.QtWidgets import QSplitter, QScrollArea, QFrame, QHBoxLayout
 from PyQt6.QtCore import Qt
 from .act_beat_scroll.act_beat_scroll import ActBeatScroll
 from .cue_scroll.cue_scroll import CueScroll
@@ -8,27 +8,23 @@ if TYPE_CHECKING:
     from ..act_sheet import ActSheet
 
 
-class ActSplitter(QSplitter):
+class ActFrame(QFrame):
     def __init__(self, act_sheet: "ActSheet") -> None:
-        super().__init__(Qt.Orientation.Horizontal, act_sheet)
+        super().__init__(act_sheet)
         self.act_sheet = act_sheet
         self.main_widget = act_sheet.main_widget
 
         # Initialize scroll areas
         self.cue_scroll = CueScroll(self.act_sheet)
         self.beat_scroll = ActBeatScroll(self.act_sheet)
-
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         # Add widgets to the splitter
-        self.addWidget(self.cue_scroll)
-        self.addWidget(self.beat_scroll)
+        self.layout.addWidget(self.cue_scroll, 1)
+        self.layout.addWidget(self.beat_scroll, 8)
 
         # Configure splitter appearance and behavior
-        self.setHandleWidth(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("margin: 0px; padding: 0px; spacing: 0px;")
-        self.setStretchFactor(0, 1)
-        self.setStretchFactor(1, 10)
-        self.splitterMoved.connect(self.on_splitter_moved)
 
     def on_splitter_moved(self, pos, index):
         self.save_splitter_state()

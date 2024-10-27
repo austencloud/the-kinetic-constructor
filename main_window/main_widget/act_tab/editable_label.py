@@ -1,6 +1,6 @@
+# editable_label.py
 from PyQt6.QtWidgets import (
     QLabel,
-    QFrame,
     QWidget,
     QStackedLayout,
     QLineEdit,
@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QEvent
-
 from main_window.main_widget.act_tab.editable_label_manager import EditableLabelManager
 
 
@@ -18,14 +17,12 @@ class EditableLabel(QWidget):
         parent,
         label_text: str,
         align=Qt.AlignmentFlag.AlignLeft,
-        padding=5,
         bg_color="#FFFFFF",
         multi_line=False,
     ):
         super().__init__(parent)
 
         self._align = align
-        self._padding = padding
         self._bg_color = bg_color
         self.multi_line = multi_line
 
@@ -33,7 +30,7 @@ class EditableLabel(QWidget):
         self.edit = self._create_edit_widget()
 
         self.layout: QStackedLayout = self._configure_layout()
-        self.apply_styles()
+        self.apply_styles()  # Apply default styling
 
         self.label.mousePressEvent = self._show_edit
         self.edit.installEventFilter(self)
@@ -42,7 +39,6 @@ class EditableLabel(QWidget):
         self.setCursor(Qt.CursorShape.IBeamCursor)
 
     def _create_label(self, text):
-        """Initialize the label to display text."""
         label = QLabel(text, self)
         label.setAlignment(self._align)
         if self.multi_line:
@@ -50,8 +46,7 @@ class EditableLabel(QWidget):
             label.setTextFormat(Qt.TextFormat.PlainText)
         return label
 
-    def _create_edit_widget(self):
-        """Initialize the editing widget (QLineEdit or QTextEdit)."""
+    def _create_edit_widget(self) -> QTextEdit | QLineEdit:
         if self.multi_line:
             edit = QTextEdit(self)
             edit.setSizePolicy(
@@ -64,8 +59,7 @@ class EditableLabel(QWidget):
             edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         return edit
 
-    def _configure_layout(self):
-        """Configure a stacked layout to switch between label and edit view."""
+    def _configure_layout(self) -> QStackedLayout:
         layout = QStackedLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -74,19 +68,25 @@ class EditableLabel(QWidget):
         self.setLayout(layout)
         return layout
 
-    def apply_styles(self):
-        """Apply styling to label and edit fields."""
+    def apply_styles(self, margin_top_bottom=0) -> None:
+        """Apply styling to label and edit fields, with optional border for edit."""
         self.label.setStyleSheet("padding: 0px; margin: 0px;")
-        self.edit.setStyleSheet(
-            f"background-color: {self._bg_color}; padding: {self._padding}px; margin: 0px;"
+        # Apply border styling if specified
+        border_style = (
+            f"border: 1px solid gray; padding: 5px; margin: {margin_top_bottom}px 0px;"
+            if margin_top_bottom
+            else "padding: 0px; margin: 0px;"
         )
+        # Style edit widget
+        self.edit.setStyleSheet(f"background-color: {self._bg_color}; {border_style}")
         self.edit.setAlignment(self._align)
 
-    def _show_edit(self, event=None):
-        """Switch from label to edit mode."""
+        # Style edit widget
+        self.edit.setStyleSheet(f"background-color: {self._bg_color}; {border_style}")
+        self.edit.setAlignment(self._align)
 
-        EditableLabelManager.set_active(self)  # Set this as the active edit
-
+    def _show_edit(self, event=None) -> None:
+        EditableLabelManager.set_active(self)
         if self.multi_line:
             self.edit.setPlainText(self.label.text())
         else:
@@ -96,18 +96,16 @@ class EditableLabel(QWidget):
         self.edit.setFocus()
         self.edit.selectAll()
 
-    def _hide_edit(self):
-        """Switch from edit mode back to label mode and save the text."""
+    def _hide_edit(self) -> None:
         text = self.edit.toPlainText() if self.multi_line else self.edit.text()
         if self.multi_line:
             self.label.setTextFormat(Qt.TextFormat.PlainText)
             self.label.setWordWrap(True)
         self.label.setText(text or self.label.text())
         self.layout.setCurrentWidget(self.label)
-        EditableLabelManager.clear_active()  # Clear the active edit when hiding
+        EditableLabelManager.clear_active()
 
-    def eventFilter(self, source, event):
-        """Detect Enter key press in edit mode to exit edit mode."""
+    def eventFilter(self, source, event) -> bool:
         if (
             source == self.edit
             and event.type() == QEvent.Type.KeyPress

@@ -19,19 +19,24 @@ class TitleLabel(EditableLabel):
         # Connect textChanged signal to dynamically adjust size and keep centered
         self.edit.textChanged.connect(self._adjust_edit_geometry)
 
-    def _show_edit(self, event):
+    def _show_edit(self, event=None):
         """Show the QLineEdit for editing with the current title pre-filled."""
-        self.edit.setText(self.label.text())
-        current_font = self.label.font()
-        self.edit.setFont(current_font)
+        # Lock the edit height to prevent layout shifting
+        self.edit.setFixedHeight(self.label.height())
+        
+        # Call the superclass method to maintain EditableLabelManager functionality
+        super()._show_edit(event)
 
         # Set initial geometry and center
         self._adjust_edit_geometry()
 
-        self.label.setVisible(False)
-        self.edit.setVisible(True)
-        self.edit.setFocus()
-        self.edit.selectAll()
+    def _hide_edit(self):
+        """Save changes and hide the editor."""
+        # Unlock the height to restore flexibility
+        self.edit.setFixedHeight(0)
+        
+        # Call the superclass method to maintain EditableLabelManager functionality
+        super()._hide_edit()
 
     def _adjust_edit_geometry(self):
         """Adjust geometry to keep the QLineEdit centered based on text content."""
@@ -47,15 +52,6 @@ class TitleLabel(EditableLabel):
         self.edit.setGeometry(
             QRect(edit_x, label_rect.y(), text_width, label_rect.height())
         )
-
-    def _hide_edit(self):
-        """Save changes and hide the editor."""
-        new_text = self.edit.text()
-        self.label.setText(new_text if new_text else self.label.text())
-        self.label.setVisible(True)
-        self.edit.setVisible(False)
-
-
 
     def resize_title_label(self):
         """Resize the title label based on the act sheet width."""

@@ -1,4 +1,4 @@
-# step_label.py
+# act_step_label.py
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from .....editable_label import EditableLabel
@@ -17,9 +17,16 @@ class ActStepLabel(EditableLabel):
         )
         self.act_beat_frame = act_beat_frame
 
+        # Apply border styling specifically for the step label's edit field
+
     def resize_step_label(self):
+        """Resize the step label based on the beat frame's calculated sizes."""
+        margin = int(self.act_beat_frame.beat_size // 8)
+        self.apply_styles(margin)
         self.setFixedHeight(self.act_beat_frame.steps_label_height)
         self.setFixedWidth(self.act_beat_frame.beat_size)
+
+        # Adjust font size based on height
         font_size = self.height() // 4
         font = self.font()
         font.setPointSize(font_size)

@@ -18,7 +18,12 @@ class CueLabel(EditableLabel):
         self.cue_box = cue_box
 
     def resize_cue_label(self):
-        font_size = int(self.cue_box.cue_frame.cue_scroll.act_sheet.height() // 100)
+        margin = int(
+            self.cue_box.cue_frame.cue_scroll.act_sheet.splitter.beat_scroll.act_beat_frame.beat_size
+            // 8
+        )
+        self.apply_styles(margin)
+        font_size = int(self.cue_box.cue_frame.cue_scroll.act_sheet.height() // 80)
         font = self.label.font()
         font.setPointSize(font_size)
         font.setBold(True)

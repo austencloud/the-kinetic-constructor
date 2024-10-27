@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from .act_header.act_header import ActHeader
-from .act_splitter.act_splitter import ActSplitter
+from .act_splitter.act_frame import ActFrame
 
 if TYPE_CHECKING:
     from ..act_tab import ActTab
@@ -17,7 +17,7 @@ class ActSheet(QWidget):
         self.main_widget = act_tab.main_widget
 
         self.header = ActHeader(self)
-        self.splitter = ActSplitter(self)
+        self.splitter = ActFrame(self)
 
         self._setup_layout()
         self.splitter.connect_scroll_sync()
@@ -37,11 +37,9 @@ class ActSheet(QWidget):
         self.splitter.cue_scroll.resize_cue_scroll()
 
     def closeEvent(self, event):
-        self.splitter.save_splitter_state()
         self.splitter.save_scrollbar_state()
         super().closeEvent(event)
 
     def showEvent(self, event):
-        self.splitter.restore_splitter_state()
         self.splitter.restore_scrollbar_state()
         super().showEvent(event)
