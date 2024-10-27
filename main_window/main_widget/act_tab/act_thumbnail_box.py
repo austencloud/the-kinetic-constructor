@@ -3,7 +3,7 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QApplication
 from PyQt6.QtGui import QPixmap
 
-from main_window.main_widget.act_thumbnail_image_label import ActThumbnailImageLabel
+from main_window.main_widget.act_tab.act_thumbnail_image_label import ActThumbnailImageLabel
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_image_label import (
     ThumbnailImageLabel,
 )
@@ -13,7 +13,7 @@ from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.
 from main_window.main_widget.metadata_extractor import MetaDataExtractor
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_browser import ActBrowser
+    from main_window.main_widget.act_tab.act_browser import ActBrowser
 
 
 class ActThumbnailBox(QWidget):

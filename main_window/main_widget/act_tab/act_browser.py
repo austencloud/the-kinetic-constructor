@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QGridLayout, QSizePolicy
-from main_window.main_widget.act_thumbnail_box import ActThumbnailBox
+from main_window.main_widget.act_tab.act_thumbnail_box import ActThumbnailBox
 from main_window.main_widget.metadata_extractor import MetaDataExtractor
 
 if TYPE_CHECKING:

@@ -10,7 +10,7 @@ from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_browser import ActThumbnailBox
+    from main_window.main_widget.act_tab.act_browser import ActThumbnailBox
 
 
 class ActThumbnailImageLabel(ThumbnailImageLabel):

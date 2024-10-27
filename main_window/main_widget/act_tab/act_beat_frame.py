@@ -46,7 +46,8 @@ class ActBeatFrame(BaseBeatFrame):
     def resize_act_beat_frame(self):
         """Resize each beat and adjust layout dynamically."""
         width_without_scrollbar = (
-            self.width() - self.act_tab.beat_scroll_area.verticalScrollBar().width()
+            self.width()
+            - self.act_tab.splitter.beat_scroll_area.verticalScrollBar().width()
         )
         self.beat_size = int(width_without_scrollbar // 8)
 

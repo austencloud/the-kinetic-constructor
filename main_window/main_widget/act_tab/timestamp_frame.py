@@ -65,7 +65,7 @@ class TimestampFrame(QWidget):
 
     def resize_timestamp_frame(self):
         """Applies calculated size settings to all elements in the timestamp frame."""
-        beat_size = self.act_tab.beat_scroll_area.act_beat_frame.beat_size
+        beat_size = self.act_tab.splitter.beat_scroll_area.act_beat_frame.beat_size
         container_width = self.timestamp_scroll_area.width()
 
         for info_container in self.info_containers.values():
