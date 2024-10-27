@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-
-from .act_browser import ActBrowser
-from .act_sheet import ActSheet
+from .act_browser.act_browser import ActBrowser
+from .act_sheet.act_sheet import ActSheet
 
 if TYPE_CHECKING:
-    from main_window.main_widget.main_widget import MainWidget
+    from ..main_widget import MainWidget
 
 
 class ActTab(QWidget):
@@ -16,7 +15,6 @@ class ActTab(QWidget):
         self.act_sheet = ActSheet(self)
         self.act_browser = ActBrowser(self)
 
-        # Centralized layout setup for consistency
         self._setup_layout()
 
     def _setup_layout(self):
@@ -33,7 +31,5 @@ class ActTab(QWidget):
         self.act_browser.resize_browser()
 
     def showEvent(self, event):
-        if not self.act_sheet.initialized:
-            self.act_sheet.resize_act_sheet()
-        self.act_browser.resize_browser()
+        self.act_sheet.resize_act_sheet()
         super().showEvent(event)

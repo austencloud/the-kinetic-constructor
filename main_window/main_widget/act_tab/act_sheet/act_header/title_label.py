@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt, QRect
-from main_window.main_widget.act_tab.editable_label import EditableLabel
+from ....act_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_header import ActHeader
+    from .act_header import ActHeader
 
 
 class TitleLabel(EditableLabel):

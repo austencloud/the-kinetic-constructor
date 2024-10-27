@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QGridLayout, QSizePolicy
-from main_window.main_widget.act_tab.act_thumbnail_box import ActThumbnailBox
+from main_window.main_widget.act_tab.act_browser.act_thumbnail_box import (
+    ActThumbnailBox,
+)
 from main_window.main_widget.metadata_extractor import MetaDataExtractor
 
 if TYPE_CHECKING:
@@ -30,7 +32,6 @@ class ActBrowser(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self._setup_layout()
         self.populate_favorites()
-        # transparent back
         self.setStyleSheet("background-color: rgba(0,0,0,0);")
 
     def _setup_layout(self):
@@ -38,23 +39,19 @@ class ActBrowser(QScrollArea):
         self.setWidget(self.scroll_content)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setContentsMargins(0, 0, 0, 0)
-        print("ActBrowser layout setup complete.")
 
     def populate_favorites(self):
-        # Clear any existing thumbnail boxes
         for box in self.thumbnail_boxes:
             box.setParent(None)
 
         self.thumbnail_boxes = []
 
-        # Fetch sequences and add favorites only
         sequences = (
             self.act_tab.main_widget.dictionary_widget.browser.get_all_sequences()
         )
-        print(f"Found {len(sequences)} sequences.")
 
         row, col = 0, 0
-        max_columns = 2  # Number of thumbnails per row
+        max_columns = 2 
 
         for sequence in sequences:
             thumbnails = sequence[1]
@@ -62,10 +59,7 @@ class ActBrowser(QScrollArea):
 
             if is_favorite:
                 thumbnail_box = ActThumbnailBox(self, sequence[0], thumbnails)
-                # Expanding size policy, but we'll fix the width later
-                # thumbnail_box.setSizePolicy(
-                #     QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
-                # )
+
 
                 self.thumbnail_boxes.append(thumbnail_box)
                 self.grid_layout.addWidget(thumbnail_box, row, col)  # Remove AlignTop

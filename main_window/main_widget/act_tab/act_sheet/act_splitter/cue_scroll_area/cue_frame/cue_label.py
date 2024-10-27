@@ -5,11 +5,13 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.act_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_frame.cue_frame import (
+        CueFrame,
+    )
 
 
 class CueLabel(EditableLabel):
-    def __init__(self, timestamp_frame: "TimestampFrame", label_text=""):
+    def __init__(self, timestamp_frame: "CueFrame", label_text=""):
         super().__init__(
             timestamp_frame, label_text, align=Qt.AlignmentFlag.AlignCenter
         )

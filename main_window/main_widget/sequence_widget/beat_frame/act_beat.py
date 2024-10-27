@@ -6,8 +6,8 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager 
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_beat_view import ActBeatView
-    from main_window.main_widget.act_tab.act_beat_frame import ActBeatFrame
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll_area.act_beat_frame.act_beat_view import ActBeatView
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll_area.act_beat_frame.act_beat_frame import ActBeatFrame
 
 
 class ActBeat(BasePictograph):

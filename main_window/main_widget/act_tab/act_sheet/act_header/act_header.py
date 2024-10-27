@@ -2,14 +2,9 @@ import datetime
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.act_tab.title_label import TitleLabel
-
+from .title_label import TitleLabel
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet import ActSheet
-
-
-# ActHeader remains unchanged, except removing `returnPressed` connection
+    from ..act_sheet import ActSheet
 
 class ActHeader(QWidget):
     def __init__(self, act_sheet: "ActSheet"):

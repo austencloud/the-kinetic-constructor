@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSplitter
 from PyQt6.QtCore import Qt
 
-from .timestamp_scroll_area import TimestampScrollArea
-from .act_beat_scroll_area import ActBeatScrollArea
+from .cue_scroll_area.cue_scroll_area import CueScrollArea
+from .act_beat_scroll_area.act_beat_scroll_area import ActBeatScrollArea
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet import ActSheet
+    from main_window.main_widget.act_tab.act_sheet.act_sheet import ActSheet
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -17,7 +17,7 @@ class ActSplitter(QSplitter):
         self.main_widget = act_sheet.main_widget
 
         # Initialize scroll areas
-        self.timestamp_scroll_area = TimestampScrollArea(self.act_sheet)
+        self.timestamp_scroll_area = CueScrollArea(self.act_sheet)
         self.beat_scroll_area = ActBeatScrollArea(self.act_sheet)
 
         # Add widgets to the splitter

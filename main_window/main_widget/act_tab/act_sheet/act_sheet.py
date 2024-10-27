@@ -1,12 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
-
-from main_window.main_widget.act_tab.act_header import ActHeader
-from .act_splitter import ActSplitter  # Import the new ActSplitter class
+from .act_header.act_header import ActHeader
+from .act_splitter.act_splitter import ActSplitter
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_tab import ActTab
-    from main_window.main_widget.main_widget import MainWidget
+    from ..act_tab import ActTab
 
 
 class ActSheet(QWidget):
@@ -14,15 +12,12 @@ class ActSheet(QWidget):
         super().__init__(act_tab)
         self.act_tab = act_tab
         self.main_widget = act_tab.main_widget
-        self.initialized = False
 
-        # Initialize header and splitter
         self.header = ActHeader(self)
         self.splitter = ActSplitter(self)
 
-        # Setup layout
         self._setup_layout()
-        self.splitter.connect_scroll_sync()  # Synchronize scrolling
+        self.splitter.connect_scroll_sync() 
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)

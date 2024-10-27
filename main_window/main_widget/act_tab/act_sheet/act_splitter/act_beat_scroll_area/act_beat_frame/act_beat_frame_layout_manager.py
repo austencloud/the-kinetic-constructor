@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QGridLayout
 from data.act_beat_frame_layouts import ACT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_beat_frame import ActBeatFrame
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll_area.act_beat_frame.act_beat_frame import ActBeatFrame
 
 
 class ActBeatFrameLayoutManager:

@@ -1,13 +1,15 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QFrame
 from PyQt6.QtCore import Qt
-from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
+from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_frame.cue_frame import (
+    CueFrame,
+)
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet import ActSheet
+    from main_window.main_widget.act_tab.act_sheet.act_sheet import ActSheet
 
 
-class TimestampScrollArea(QScrollArea):
+class CueScrollArea(QScrollArea):
     def __init__(self, act_sheet: "ActSheet"):
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
@@ -19,7 +21,7 @@ class TimestampScrollArea(QScrollArea):
         self.setViewportMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.timestamp_frame = TimestampFrame(self)
+        self.timestamp_frame = CueFrame(self)
         self.timestamp_frame.init_timestamps(num_rows=20)
         self.setWidget(self.timestamp_frame)
         self.setStyleSheet("background: transparent; padding: 0px; margin: 0px;")

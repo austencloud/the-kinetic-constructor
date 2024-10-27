@@ -1,17 +1,19 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QFrame
 from PyQt6.QtCore import Qt
-from main_window.main_widget.act_tab.cue_label import CueLabel
-from main_window.main_widget.act_tab.timestamp import Timestamp
+from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_frame.cue_label import (
+    CueLabel,
+)
+from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_frame.timestamp import Timestamp
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.timestamp_scroll_area import (
-        TimestampScrollArea,
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll_area.cue_scroll_area import (
+        CueScrollArea,
     )
 
 
-class TimestampFrame(QWidget):
-    def __init__(self, timestamp_scroll_area: "TimestampScrollArea"):
+class CueFrame(QWidget):
+    def __init__(self, timestamp_scroll_area: "CueScrollArea"):
         super().__init__(timestamp_scroll_area)
         self.act_tab = timestamp_scroll_area.act_sheet
         self.timestamp_scroll_area = timestamp_scroll_area
