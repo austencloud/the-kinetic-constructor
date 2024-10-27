@@ -17,8 +17,6 @@ class ActStepLabel(EditableLabel):
         )
         self.act_beat_frame = act_beat_frame
 
-        # Apply border styling specifically for the step label's edit field
-
     def resize_step_label(self):
         """Resize the step label based on the beat frame's calculated sizes."""
         margin = int(self.act_beat_frame.beat_size // 8)

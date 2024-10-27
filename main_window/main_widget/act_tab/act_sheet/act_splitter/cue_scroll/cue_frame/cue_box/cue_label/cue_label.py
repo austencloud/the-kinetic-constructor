@@ -1,6 +1,6 @@
-# cue_label.py
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QTextOption, QFontMetrics
 from .......editable_label import EditableLabel
 
 if TYPE_CHECKING:
@@ -18,14 +18,28 @@ class CueLabel(EditableLabel):
         self.cue_box = cue_box
 
     def resize_cue_label(self):
-        margin = int(
-            self.cue_box.cue_frame.cue_scroll.act_sheet.splitter.beat_scroll.act_beat_frame.beat_size
-            // 8
-        )
-        self.apply_styles(margin)
-        font_size = int(self.cue_box.cue_frame.cue_scroll.act_sheet.height() // 80)
+        # Set width constraints to match the cue box exactly
+        self.setFixedWidth(self.cue_box.width() - 10)  # Small padding for aesthetics
+        self.label.setWordWrap(True)
+        self.edit.setWordWrapMode(QTextOption.WrapMode.WordWrap)
+
+        # Dynamically adjust font size to fit available space
+        font_size = self.calculate_font_size(self.width())
         font = self.label.font()
         font.setPointSize(font_size)
         font.setBold(True)
         self.label.setFont(font)
         self.edit.setFont(font)
+
+    def calculate_font_size(self, width):
+        """Calculate appropriate font size based on width constraint."""
+        font = self.label.font()
+        font_size = font.pointSize()
+
+        while font_size > 5:
+            font.setPointSize(font_size)
+            metrics = QFontMetrics(font)
+            if metrics.horizontalAdvance(self.label.text()) <= width:
+                break
+            font_size -= 1
+        return font_size

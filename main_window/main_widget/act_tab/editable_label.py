@@ -1,4 +1,3 @@
-# editable_label.py
 from PyQt6.QtWidgets import (
     QLabel,
     QWidget,
@@ -30,12 +29,11 @@ class EditableLabel(QWidget):
         self.edit = self._create_edit_widget()
 
         self.layout: QStackedLayout = self._configure_layout()
-        self.apply_styles()  # Apply default styling
+        self.apply_styles()
 
         self.label.mousePressEvent = self._show_edit
         self.edit.installEventFilter(self)
 
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setCursor(Qt.CursorShape.IBeamCursor)
 
     def _create_label(self, text):
@@ -49,11 +47,11 @@ class EditableLabel(QWidget):
     def _create_edit_widget(self) -> QTextEdit | QLineEdit:
         if self.multi_line:
             edit = QTextEdit(self)
-            edit.setSizePolicy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-            )
             edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            edit.setSizePolicy(
+                QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding
+            )
         else:
             edit = QLineEdit(self)
             edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
@@ -71,17 +69,12 @@ class EditableLabel(QWidget):
     def apply_styles(self, margin_top_bottom=0) -> None:
         """Apply styling to label and edit fields, with optional border for edit."""
         self.label.setStyleSheet("padding: 0px; margin: 0px;")
-        # Apply border styling if specified
         border_style = (
             f"border: 1px solid gray; padding: 5px; margin: {margin_top_bottom}px 0px;"
             if margin_top_bottom
             else "padding: 0px; margin: 0px;"
         )
-        # Style edit widget
-        self.edit.setStyleSheet(f"background-color: {self._bg_color}; {border_style}")
-        self.edit.setAlignment(self._align)
 
-        # Style edit widget
         self.edit.setStyleSheet(f"background-color: {self._bg_color}; {border_style}")
         self.edit.setAlignment(self._align)
 

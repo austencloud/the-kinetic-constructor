@@ -2,55 +2,97 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt, QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator, QKeyEvent
 from PyQt6.QtWidgets import QLineEdit
+from main_window.main_widget.act_tab.editable_label_manager import EditableLabelManager
+
 if TYPE_CHECKING:
     from .timestamp import Timestamp
 
 
 class TimestampLineEdit(QLineEdit):
-    def __init__(self, timestamp: "Timestamp",initial_text="0:00"):
+    def __init__(self, timestamp: "Timestamp", initial_text="0:00"):
         super().__init__(initial_text)
+        self.timestamp = timestamp
 
-        # Define regular expression for validation (X:XX or XX:XX)
-        timestamp_regex = QRegularExpression(r"^\d:\d{2}$|^\d{2}:\d{2}$")
-        timestamp_validator = QRegularExpressionValidator(timestamp_regex)
+        # Regular expression to validate only X:XX format
+        self.timestamp_regex = QRegularExpression(r"^\d{1,2}:\d{2}$")
+        self.validator = QRegularExpressionValidator(self.timestamp_regex)
+        self.setValidator(None)  # Temporarily bypass validator for formatting
+        self.setMaxLength(5)  # Max length for "X:XX" format
 
-        # Apply the validator to restrict input to valid timestamp format
-        self.setValidator(timestamp_validator)
-        self.setMaxLength(4)
+        # Styling to match `EditableLabel`
+        self.setStyleSheet(
+            "background-color: #FFFFFF; border: 1px solid gray; padding: 5px;"
+        )
+        self.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        # Track for initial clear on first input
+        self.first_keypress = True
 
     def keyPressEvent(self, event: QKeyEvent):
         """Handle key press events to auto-format input as a timestamp."""
         key = event.key()
 
-        # Allow Backspace and Delete keys without formatting
+        # Clear initial text on the first keypress
+        if self.first_keypress:
+            self.clear()
+            self.first_keypress = False
+
+        # Allow Backspace and Delete without blocking
         if key in (Qt.Key.Key_Backspace, Qt.Key.Key_Delete):
             super().keyPressEvent(event)
+            self._apply_temporary_format()  # Update format after deletion
             return
 
-        # Only allow numeric input for formatting
+        # Handle numeric input only and restrict to exactly 3 digits
         if event.text().isdigit():
-            current_text = self.text().replace(":", "")  # Remove any existing colon
-            new_text = current_text + event.text()  # Append the new digit
+            current_text = self.text().replace(":", "")
+            new_text = current_text + event.text()
 
-            # Format the text based on the number of digits
+            # Prevent invalid seconds values by checking the second digit for tens of seconds
+            if len(new_text) == 2 and int(new_text[1]) > 5:
+                return  # Reject if tens of seconds > 5
+
+            # Apply custom formatting based on number of digits
+            formatted_text = ""
             if len(new_text) == 1:
-                self.setText(new_text + ":")
+                formatted_text = f"{new_text}:"
             elif len(new_text) == 2:
-                self.setText(new_text[0] + ":" + new_text[1])
+                formatted_text = f"{new_text[0]}:{new_text[1]}"
             elif len(new_text) == 3:
-                self.setText(new_text[0] + ":" + new_text[1:])
+                formatted_text = f"{new_text[0]}:{new_text[1:]}"
+                self.setText(formatted_text)
+                self._auto_accept()  # Accept automatically once in X:XX format
+                return
 
-            # Move cursor to the end
-            self.setCursorPosition(len(self.text()))
+            self.setText(formatted_text)
+            self.setCursorPosition(len(self.text()))  # Move cursor to end
 
-        # Prevent pressing Enter unless the format is complete (X:XX or XX:XX)
-        if key == Qt.Key.Key_Return and not self._is_complete_format():
-            return  # Prevent Enter action if format is incomplete
-
-        # Accept the event to prevent further handling
         event.accept()
 
-    def _is_complete_format(self):
-        """Check if the current text matches the required X:XX or XX:XX format."""
-        current_text = self.text()
-        return len(current_text) == 4 and current_text[1] == ":"  # Match X:XX or XX:XX
+    def _apply_temporary_format(self):
+        """Apply temporary format to text for visual feedback."""
+        current_text = self.text().replace(":", "")
+        formatted_text = ""
+        if len(current_text) == 1:
+            formatted_text = f"{current_text}:"
+        elif len(current_text) == 2:
+            formatted_text = f"{current_text[0]}:{current_text[1]}"
+        elif len(current_text) == 3:
+            formatted_text = f"{current_text[0]}:{current_text[1:]}"
+
+        self.setText(formatted_text)
+        self.setCursorPosition(len(self.text()))
+
+    def _auto_accept(self):
+        """Automatically accept the timestamp once in X:XX format."""
+        self.setValidator(self.validator)
+        self.clearFocus()
+        self.setValidator(None)  # Disable to allow edits again later
+        self._hide_edit()  # Hide the edit field
+
+    def _hide_edit(self) -> None:
+        """Hide the edit field and update the timestamp display."""
+        text = self.text()
+        self.timestamp.label.setText(text)
+        self.timestamp.layout.setCurrentWidget(self.timestamp.label)
+        EditableLabelManager.clear_active()
