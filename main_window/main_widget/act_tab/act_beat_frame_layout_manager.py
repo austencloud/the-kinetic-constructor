@@ -3,7 +3,6 @@ from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import QGridLayout
 from data.act_beat_frame_layouts import ACT_BEAT_FRAME_LAYOUTS
-from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
     from main_window.main_widget.act_tab.act_beat_frame import ActBeatFrame

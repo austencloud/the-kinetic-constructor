@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
-from PyQt6.QtCore import Qt, QSettings
+from PyQt6.QtCore import Qt
 
 from main_window.main_widget.act_tab.act_header import ActHeader
 

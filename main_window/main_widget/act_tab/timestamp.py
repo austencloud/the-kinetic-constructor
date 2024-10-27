@@ -1,6 +1,5 @@
 # timestamp_label.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLineEdit, QSizePolicy
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.act_tab.editable_label import EditableLabel

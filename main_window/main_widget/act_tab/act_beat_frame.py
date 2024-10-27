@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel
+from PyQt6.QtWidgets import QGridLayout
 from base_widgets.base_beat_frame import BaseBeatFrame
 from main_window.main_widget.act_tab.act_beat_view import ActBeatView
-from PyQt6.QtCore import Qt, QMimeData
-from PyQt6.QtWidgets import QFrame
 from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
 import json
 from PyQt6.QtCore import QDataStream, QIODevice
@@ -11,15 +9,11 @@ from PyQt6.QtCore import QDataStream, QIODevice
 from main_window.main_widget.sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
 )
-from main_window.main_widget.act_tab.timestamp import (
-    Timestamp,
-)
 from main_window.main_widget.act_tab.act_beat_frame_layout_manager import (
     ActBeatFrameLayoutManager,
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_tab import ActTab
     from main_window.main_widget.act_tab.act_beat_scroll_area import ActBeatScrollArea
 
 

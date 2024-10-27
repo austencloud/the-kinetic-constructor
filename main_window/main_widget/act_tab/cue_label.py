@@ -1,6 +1,5 @@
 # timestamp_label.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLineEdit, QSizePolicy
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.act_tab.editable_label import EditableLabel
@@ -9,7 +8,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
 
 
-class LyricLabel(EditableLabel):
+class CueLabel(EditableLabel):
     def __init__(self, timestamp_frame: "TimestampFrame", label_text=""):
         super().__init__(
             timestamp_frame, label_text, align=Qt.AlignmentFlag.AlignCenter
@@ -18,7 +17,7 @@ class LyricLabel(EditableLabel):
 
     def resize_lyric_label(self):
         font_size = int(
-            self.timestamp_frame.timestamp_scroll_area.act_sheet.height() // 80
+            self.timestamp_frame.timestamp_scroll_area.act_sheet.height() // 100
         )
         font = self.label.font()
         font.setPointSize(font_size)

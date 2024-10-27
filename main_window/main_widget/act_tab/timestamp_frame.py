@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QFrame
 from PyQt6.QtCore import Qt
-from main_window.main_widget.act_tab.lyric_label import LyricLabel
+from main_window.main_widget.act_tab.cue_label import CueLabel
 from main_window.main_widget.act_tab.timestamp import Timestamp
 
 if TYPE_CHECKING:
     from main_window.main_widget.act_tab.timestamp_scroll_area import (
         TimestampScrollArea,
     )
-    from main_window.main_widget.act_tab.act_tab import ActTab
 
 
 class TimestampFrame(QWidget):
@@ -18,7 +17,7 @@ class TimestampFrame(QWidget):
         self.timestamp_scroll_area = timestamp_scroll_area
 
         self.timestamps: dict[int, Timestamp] = {}
-        self.lyric_labels: dict[int, LyricLabel] = {}
+        self.cue_labels: dict[int, CueLabel] = {}
         self.info_containers: dict[int, QFrame] = {}
 
         self.setup_layout()
@@ -35,18 +34,18 @@ class TimestampFrame(QWidget):
         """Creates and stores timestamp, lyric label, and info container for each row."""
         for row in range(num_rows):
             timestamp = Timestamp(self, f"{row * 10}:00")
-            lyric_label = LyricLabel(self, "")
-            info_container = self.create_info_container(timestamp, lyric_label)
+            cue_label = CueLabel(self, "")
+            info_container = self.create_info_container(timestamp, cue_label)
 
             self.timestamps[row] = timestamp
-            self.lyric_labels[row] = lyric_label
+            self.cue_labels[row] = cue_label
             self.info_containers[row] = info_container
 
             self.layout.addWidget(info_container)
             timestamp.label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
     def create_info_container(
-        self, timestamp: Timestamp, lyric_label: LyricLabel
+        self, timestamp: Timestamp, lyric_label: CueLabel
     ) -> QFrame:
         """Sets up and returns a QFrame containing timestamp and lyric label."""
         info_container = QFrame(self)
@@ -74,5 +73,5 @@ class TimestampFrame(QWidget):
             info_container.setFixedWidth(container_width)
         for timestamp in self.timestamps.values():
             timestamp.resize_timestamp()
-        for lyric_label in self.lyric_labels.values():
+        for lyric_label in self.cue_labels.values():
             lyric_label.resize_lyric_label()

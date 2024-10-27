@@ -5,7 +5,6 @@ from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
 
 if TYPE_CHECKING:
     from main_window.main_widget.act_tab.act_sheet import ActSheet
-    from main_window.main_widget.act_tab.act_tab import ActTab
 
 
 class TimestampScrollArea(QScrollArea):
