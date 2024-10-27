@@ -6,6 +6,7 @@ from .act_sheet import ActSheet
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
+
 class ActTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
@@ -26,6 +27,11 @@ class ActTab(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.act_sheet.resizeEvent(event)
+        self.act_sheet.resize_act_sheet()
         self.act_browser.resize_browser()
 
+    def showEvent(self, event):
+        if not self.act_sheet.initialized:
+            self.act_sheet.resize_act_sheet()
+        self.act_browser.resize_browser()
+        super().showEvent(event)

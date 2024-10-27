@@ -49,7 +49,7 @@ class BaseAutoBuilder:
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         self.sequence_widget.beat_frame.populator.modify_layout_for_chosen_number_of_beats(
-            length
+            int(length)
         )
 
     def add_start_pos_pictograph(self) -> None:

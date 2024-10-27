@@ -61,11 +61,12 @@ class Timestamp(EditableLabel):
         self.setFixedHeight(desired_height)
         self.label.setFixedHeight(desired_height)
         self.edit.setFixedHeight(desired_height)
-        self.label.setFixedWidth(self.timestamp_frame.width())
-        self.edit.setFixedWidth(self.timestamp_frame.width())
-        self.setFixedWidth(self.timestamp_frame.width())
-        # Adjust font size if necessary
-        font_size = int(desired_height * 0.1)  # For example, 60% of the height
+        self.label.setFixedWidth(self.timestamp_frame.timestamp_scroll_area.width())
+        self.edit.setFixedWidth(self.timestamp_frame.timestamp_scroll_area.width())
+        self.setFixedWidth(self.timestamp_frame.timestamp_scroll_area.width())
+        font_size = int(
+            self.timestamp_frame.timestamp_scroll_area.act_sheet.height() // 80
+        )
         font = self.label.font()
         font.setPointSize(font_size)
         font.setBold(True)

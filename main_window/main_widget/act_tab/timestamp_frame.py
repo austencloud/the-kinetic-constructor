@@ -14,6 +14,7 @@ class TimestampFrame(QWidget):
     def __init__(self, timestamp_scroll_area: "TimestampScrollArea"):
         super().__init__(timestamp_scroll_area)
         self.act_tab = timestamp_scroll_area.act_sheet
+        self.timestamp_scroll_area = timestamp_scroll_area
         self.timestamps: dict[int, Timestamp] = {}
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)

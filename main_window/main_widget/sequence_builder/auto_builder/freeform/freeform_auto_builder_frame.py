@@ -26,8 +26,10 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
     def _on_create_sequence(self):
         """Trigger sequence creation for Freeform."""
         self.builder.build_sequence(
-            self.auto_builder_settings.get_auto_builder_setting(
-                "sequence_length", self.builder_type
+            int(
+                self.auto_builder_settings.get_auto_builder_setting(
+                    "sequence_length", self.builder_type
+                )
             ),
             float(
                 self.auto_builder_settings.get_auto_builder_setting(

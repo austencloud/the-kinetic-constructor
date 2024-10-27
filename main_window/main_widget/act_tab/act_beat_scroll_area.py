@@ -22,6 +22,3 @@ class ActBeatScrollArea(QScrollArea):
         self.act_beat_frame.init_act(num_beats=8, num_rows=10)
         self.setWidget(self.act_beat_frame)
         self.setStyleSheet("background: transparent; padding: 0px; margin: 0px;")
-
-    def resize_act_beat_frame(self):
-        self.act_beat_frame.resize_act_beat_frame()
