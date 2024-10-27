@@ -7,12 +7,12 @@ from main_window.main_widget.act_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
     from main_window.main_widget.act_tab.act_header_widget import (
-        ActHeaderWidget,
+        ActHeader,
     )
 
 
 class TitleLabel(EditableLabel):
-    def __init__(self, title_text, header_widget: "ActHeaderWidget"):
+    def __init__(self, title_text, header_widget: "ActHeader"):
         super().__init__(header_widget, title_text)
         self.header_widget = header_widget
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)

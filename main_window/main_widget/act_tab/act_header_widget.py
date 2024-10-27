@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.act_tab.act_tab import ActTab
 
 
-class ActHeaderWidget(QWidget):
+class ActHeader(QWidget):
     def __init__(self, act_sheet: "ActSheet"):
         super().__init__(act_sheet)
         self.act_sheet = act_sheet

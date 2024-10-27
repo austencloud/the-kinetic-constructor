@@ -16,12 +16,12 @@ class ActTabSettings:
 
     def save_act_title(self, title: str) -> None:
         """Save the current act's title."""
-        self.settings.setValue("act_tab/act_title", title)
+        self.settings.setValue("act_sheet/act_title", title)
 
     def get_act_title(self) -> str:
         """Retrieve the saved act title with a default fallback."""
         return self.settings.value(
-            "act_tab/act_title", self.DEFAULT_act_tab_SETTINGS["act_title"]
+            "act_sheet/act_title", self.DEFAULT_act_tab_SETTINGS["act_title"]
         )
 
     def save_last_act(self, act_data: dict) -> None:

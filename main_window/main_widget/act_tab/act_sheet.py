@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt, QSettings
 
 from .timestamp_scroll_area import TimestampScrollArea
 from .act_beat_scroll_area import ActBeatScrollArea
-from main_window.main_widget.act_tab.act_header_widget import ActHeaderWidget
+from main_window.main_widget.act_tab.act_header_widget import ActHeader
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -16,13 +16,15 @@ class ActSheet(QWidget):
         self.main_widget = main_widget
 
         # Instantiate widgets and the splitter manager
-        self.header_widget = ActHeaderWidget(self)
+        self.header = ActHeader(self)
         self.timestamp_scroll_area = TimestampScrollArea(self)
         self.beat_scroll_area = ActBeatScrollArea(self)
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
         self.splitter.addWidget(self.timestamp_scroll_area)
         self.splitter.addWidget(self.beat_scroll_area)
         self.splitter.splitterMoved.connect(self.on_splitter_moved)
+        self.splitter.setContentsMargins(0, 0, 0, 0)
+        self.splitter.setHandleWidth(0)  # Remove handle space between frames
 
         self._setup_layout()
         self._connect_scrolls()
@@ -34,22 +36,22 @@ class ActSheet(QWidget):
 
     def save_splitter_state(self):
         settings = self.main_widget.settings_manager.settings
-        settings.setValue("act_sheet_splitter_state", self.splitter.saveState())
+        settings.setValue("act_sheet/splitter_state", self.splitter.saveState())
 
     def restore_splitter_state(self):
         settings = self.main_widget.settings_manager.settings
-        splitter_state = settings.value("act_sheet_splitter_state")
+        splitter_state = settings.value("act_sheet/splitter_state")
         if splitter_state:
             self.splitter.restoreState(splitter_state)
 
     def restore_scrollbar_state(self):
         settings = self.main_widget.settings_manager.settings
-        beat_scrollbar_state = settings.value("act_sheet_scrollbar_state")
+        beat_scrollbar_state = settings.value("act_sheet/scrollbar_state")
         if beat_scrollbar_state:
             self.beat_scroll_area.verticalScrollBar().setValue(
                 int(beat_scrollbar_state)
             )
-        timestamp_scrollbar_state = settings.value("act_sheet_scrollbar_state")
+        timestamp_scrollbar_state = settings.value("act_sheet/scrollbar_state")
         if timestamp_scrollbar_state:
             self.timestamp_scroll_area.verticalScrollBar().setValue(
                 int(timestamp_scrollbar_state)
@@ -71,11 +73,11 @@ class ActSheet(QWidget):
 
     def save_scrollbar_state(self):
         settings = self.main_widget.settings_manager.settings
-        settings.setValue("act_sheet_scrollbar_state", self.sender().value())
+        settings.setValue("act_sheet/scrollbar_state", self.sender().value())
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
-        layout.addWidget(self.header_widget, 1)
+        layout.addWidget(self.header, 1)
         layout.addWidget(self.splitter, 10)
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -84,7 +86,7 @@ class ActSheet(QWidget):
     def resizeEvent(self, event):
         """Resize each part when ActSheet resizes."""
         super().resizeEvent(event)
-        self.header_widget.resize_header_widget()
+        self.header.resize_header_widget()
         self.beat_scroll_area.resize_act_beat_frame()
         self.timestamp_scroll_area.resize_timestamp_frame()
 
