@@ -9,20 +9,17 @@ class EditableLabel(QWidget):
         self.edit = QLineEdit(self)
         self.edit.returnPressed.connect(self._hide_edit)
 
-        # Set alignment to top-left
-        # self.label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        # self.edit.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
         # Remove padding and margins in style sheets
         self.label.setStyleSheet(
-            "border-top: 1px solid black;"
-            "border-bottom: 1px solid black;"
+            # "border-top: 1px solid black;"
+            # "border-bottom: 1px solid black;"
             "padding: 0px;"
             "margin: 0px;"
         )
         self.edit.setStyleSheet(
-            "border-top: 1px solid black;"
-            "border-bottom: 1px solid black;"
+            # "border-top: 1px solid black;"
+            # "border-bottom: 1px solid black;"
             "padding: 0px;"
             "margin: 0px;"
         )
@@ -31,11 +28,6 @@ class EditableLabel(QWidget):
         self.label.setContentsMargins(0, 0, 0, 0)
         self.edit.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
-
-        # # Set size policies
-        # self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        # self.label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        # self.edit.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         # Use QStackedLayout to switch between label and edit
         self.layout: QStackedLayout = QStackedLayout(self)

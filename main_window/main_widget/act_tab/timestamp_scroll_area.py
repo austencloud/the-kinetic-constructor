@@ -23,7 +23,6 @@ class TimestampScrollArea(QScrollArea):
         self.timestamp_frame = TimestampFrame(self)
         self.timestamp_frame.init_timestamps(num_rows=20)
         self.setWidget(self.timestamp_frame)
-        # transparent_background
         self.setStyleSheet("background: transparent; padding: 0px; margin: 0px;")
 
     def resize_timestamp_frame(self):

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.act_tab.timestamp_frame import TimestampFrame
 
 
-class Timestamp(EditableLabel):
+class LyricLabel(EditableLabel):
     def __init__(self, timestamp_frame: "TimestampFrame", label_text="0:00"):
         super().__init__(timestamp_frame, label_text)
         self.timestamp_frame = timestamp_frame
@@ -17,12 +17,11 @@ class Timestamp(EditableLabel):
         self.setContentsMargins(0, 0, 0, 0)
         self.label.setContentsMargins(0, 0, 0, 0)
         self.edit.setContentsMargins(0, 0, 0, 0)
-        self.label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        self.edit.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.edit.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setMargin(0)
-        # set size poily to expand
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        
+
     def _show_edit(self, event):
         """Show the QLineEdit for editing with the current timestamp pre-filled."""
         self.edit.setText(self.label.text())  # Pre-fill with current timestamp
@@ -46,7 +45,7 @@ class Timestamp(EditableLabel):
 
     def resize_timestamp(self):
         desired_height = (
-            self.timestamp_frame.act_tab.beat_scroll_area.act_beat_frame.beat_size // 2
+            self.timestamp_frame.act_tab.beat_scroll_area.act_beat_frame.beat_size //2
         )
         # self.setFixedHeight(desired_height)
         # self.label.setFixedHeight(desired_height)
