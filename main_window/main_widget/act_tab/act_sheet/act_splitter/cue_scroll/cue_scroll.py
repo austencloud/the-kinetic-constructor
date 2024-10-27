@@ -11,6 +11,7 @@ class CueScroll(QScrollArea):
     def __init__(self, act_sheet: "ActSheet"):
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
+        
         self.setWidgetResizable(True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -20,7 +21,6 @@ class CueScroll(QScrollArea):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.cue_frame = CueFrame(self)
-        self.cue_frame.init_cue_boxes(num_rows=20)
         self.setWidget(self.cue_frame)
         self.setStyleSheet("background: transparent; padding: 0px; margin: 0px;")
 

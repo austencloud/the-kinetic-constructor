@@ -1,4 +1,13 @@
-from PyQt6.QtWidgets import QLabel, QWidget, QStackedLayout, QLineEdit, QTextEdit
+# editable_label.py
+from PyQt6.QtWidgets import (
+    QLabel,
+    QFrame,
+    QWidget,
+    QStackedLayout,
+    QLineEdit,
+    QTextEdit,
+    QSizePolicy,
+)
 from PyQt6.QtCore import Qt, QEvent
 
 
@@ -10,13 +19,31 @@ class EditableLabel(QWidget):
         align=Qt.AlignmentFlag.AlignLeft,
         padding=5,
         bg_color="#FFFFFF",
+        multi_line=False,  # Control single or multi-line
     ):
         super().__init__(parent)
-        self.label = QLabel(label_text, self)
-        self.edit = QTextEdit(self)  # Use QTextEdit for multi-line text
         self._align = align
         self._padding = padding
         self._bg_color = bg_color
+        self.multi_line = multi_line
+
+        self.label = QLabel(label_text, self)
+        if self.multi_line:
+            self.edit = QTextEdit(self)
+            self.edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+            self.edit.setMinimumHeight(0)
+            self.edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            self.edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            self.edit.setFrameShape(QFrame.Shape.NoFrame)
+
+            # Enable word wrap and set text format
+            self.label.setWordWrap(True)
+            self.label.setTextFormat(Qt.TextFormat.PlainText)
+        else:
+            self.edit = QLineEdit(self)
+            self.edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+            self.edit.setMinimumHeight(0)
+            self.edit.setFrame(False)
 
         # Configure layout for stacked editing
         self.layout: QStackedLayout = QStackedLayout(self)
@@ -30,15 +57,23 @@ class EditableLabel(QWidget):
         self.setLayout(self.layout)
         self.label.mousePressEvent = self._show_edit  # Edit on click
 
-        # Install event filter on QTextEdit to detect Enter key
+        # Install event filter on edit to detect Enter key
         self.edit.installEventFilter(self)
 
+        # Set size policies
+        self.label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
     def eventFilter(self, source, event):
-        """Detect Enter key press in QTextEdit to exit edit mode."""
+        """Detect Enter key press in edit to exit edit mode."""
         if (
             source == self.edit
             and event.type() == QEvent.Type.KeyPress
             and event.key() == Qt.Key.Key_Return
+            and (
+                not self.multi_line
+                or (self.multi_line and event.modifiers() == Qt.KeyboardModifier.NoModifier)
+            )
         ):
             self._hide_edit()
             return True
@@ -55,7 +90,10 @@ class EditableLabel(QWidget):
 
     def _show_edit(self, event=None):
         """Switch to the edit mode."""
-        self.edit.setText(self.label.text())
+        if self.multi_line:
+            self.edit.setPlainText(self.label.text())
+        else:
+            self.edit.setText(self.label.text())
         self.edit.setFont(self.label.font())
         self.layout.setCurrentWidget(self.edit)
         self.edit.setFocus()
@@ -63,11 +101,13 @@ class EditableLabel(QWidget):
 
     def _hide_edit(self):
         """Switch back to the label mode."""
-        self.label.setText(self.edit.toPlainText() or self.label.text())
+        if self.multi_line:
+            text = self.edit.toPlainText()
+            # Ensure the label uses plain text format and preserves line breaks
+            self.label.setTextFormat(Qt.TextFormat.PlainText)
+            self.label.setWordWrap(True)
+        else:
+            text = self.edit.text()
+        self.label.setText(text or self.label.text())
         self.layout.setCurrentWidget(self.label)
 
-    def set_text(self, text: str):
-        self.label.setText(text)
-
-    def get_text(self) -> str:
-        return self.label.text()

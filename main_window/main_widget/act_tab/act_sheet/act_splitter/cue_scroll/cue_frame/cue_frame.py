@@ -2,7 +2,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
-from .cue_box import CueBox
+from .cue_box.cue_box import CueBox
 
 if TYPE_CHECKING:
     from ..cue_scroll import CueScroll
@@ -18,6 +18,7 @@ class CueFrame(QWidget):
 
         self.setup_layout()
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.init_cue_boxes(self.cue_scroll.act_sheet.DEFAULT_ROWS)
 
     def setup_layout(self):
         """Initializes main layout settings for the cue frame."""
@@ -29,7 +30,7 @@ class CueFrame(QWidget):
     def init_cue_boxes(self, num_rows: int):
         """Creates and stores CueBox for each row."""
         for row in range(num_rows):
-            cue_box = CueBox(self, f"{row * 10}:00", "")
+            cue_box = CueBox(self, f"{row * 10 // 60}:{row * 10 % 60:02d}", "")
             self.cue_boxes[row] = cue_box
 
             self.layout.addWidget(cue_box)
@@ -37,11 +38,5 @@ class CueFrame(QWidget):
 
     def resize_cue_frame(self):
         """Applies calculated size settings to all elements in the cue frame."""
-        beat_size = self.act_tab.splitter.beat_scroll.act_beat_frame.beat_size
-        container_width = self.cue_scroll.width()
-
         for cue_box in self.cue_boxes.values():
-            cue_box.setFixedHeight(beat_size)
-            cue_box.setFixedWidth(container_width)
-            cue_box.timestamp.resize_timestamp()
-            cue_box.cue_label.resize_lyric_label()
+            cue_box.resize_cue_box()

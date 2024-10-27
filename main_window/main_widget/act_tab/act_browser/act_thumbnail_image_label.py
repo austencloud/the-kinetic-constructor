@@ -1,8 +1,7 @@
 from PIL import Image
 import json
-from PyQt6.QtCore import Qt, QByteArray, QDataStream, QIODevice, QMimeData, QEvent
-from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent, QDrag
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import Qt, QMimeData, QEvent
+from PyQt6.QtGui import QCursor, QMouseEvent, QDrag
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_image_label import (

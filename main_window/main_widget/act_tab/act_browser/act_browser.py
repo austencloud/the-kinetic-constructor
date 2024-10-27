@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QGridLayout, QSizePolicy
+from PyQt6.QtWidgets import QWidget, QScrollArea, QGridLayout, QSizePolicy
 from main_window.main_widget.act_tab.act_browser.act_thumbnail_box import (
     ActThumbnailBox,
 )

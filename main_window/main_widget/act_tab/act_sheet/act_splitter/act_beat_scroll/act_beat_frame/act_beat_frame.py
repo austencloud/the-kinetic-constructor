@@ -23,14 +23,14 @@ class ActBeatFrame(BaseBeatFrame):
 
     def __init__(self, beat_scroll_area: "ActBeatScroll"):
         super().__init__(beat_scroll_area.act_sheet.main_widget)
-        self.act_tab = beat_scroll_area.act_sheet
-        self.main_widget = self.act_tab.main_widget
+        self.act_sheet = beat_scroll_area.act_sheet
+        self.main_widget = self.act_sheet.main_widget
         self.beats: list[ActBeatView] = []
         self.labels: list[EditableLabel] = []  # Add this line
-        self.num_columns = 8  # Adjust this based on your layout
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
         self.layout_manager.setup_layout()
+        self.init_act(self.act_sheet.DEFAULT_COLUMNS, self.act_sheet.DEFAULT_ROWS)
 
     def init_act(self, num_beats: int, num_rows: int):
         """Initialize the act with a grid of beats and labels."""
@@ -51,15 +51,17 @@ class ActBeatFrame(BaseBeatFrame):
     def resize_act_beat_frame(self):
         """Resize each beat and label, adjusting the layout dynamically."""
         width_without_scrollbar = (
-            self.width() - self.act_tab.splitter.beat_scroll.verticalScrollBar().width()
+            self.width()
+            - self.act_sheet.splitter.beat_scroll.verticalScrollBar().width()
         )
         self.beat_size = int(width_without_scrollbar // self.num_columns)
+        self.steps_label_height = self.beat_size // 2
 
         for view in self.beats:
             view.resize_act_beat_view()
 
         for label in self.labels:
-            label.setFixedHeight(self.beat_size // 2)  # Adjust as needed
+            label.setFixedHeight(self.steps_label_height)  # Adjust as needed
             label.setFixedWidth(self.beat_size)
             label.resizeEvent(None)  # Trigger resize to adjust font size
             font_size = label.height() // 4

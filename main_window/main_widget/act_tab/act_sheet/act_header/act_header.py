@@ -72,7 +72,7 @@ class ActHeader(QWidget):
 
     def save_title(self):
         """Save the current title to settings."""
-        new_title = self.title_label.get_text()
+        new_title = self.title_label.label.text()
         self.settings_manager.act_tab.save_act_title(new_title)
 
     def resize_header_widget(self):

@@ -8,6 +8,9 @@ if TYPE_CHECKING:
 
 
 class ActSheet(QWidget):
+    DEFAULT_ROWS = 24
+    DEFAULT_COLUMNS = 8
+
     def __init__(self, act_tab: "ActTab") -> None:
         super().__init__(act_tab)
         self.act_tab = act_tab
