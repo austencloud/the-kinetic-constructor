@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSplitter, QScrollArea
 from PyQt6.QtCore import Qt
-
+from .act_beat_scroll.act_beat_scroll import ActBeatScroll
 from .cue_scroll.cue_scroll import CueScroll
-from .act_beat_scroll.act_beat_scroll import ActBeatScrollArea
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet.act_sheet import ActSheet
-    from main_window.main_widget.main_widget import MainWidget
+    from ..act_sheet import ActSheet
 
 
 class ActSplitter(QSplitter):
@@ -18,11 +16,11 @@ class ActSplitter(QSplitter):
 
         # Initialize scroll areas
         self.cue_scroll = CueScroll(self.act_sheet)
-        self.beat_scroll_area = ActBeatScrollArea(self.act_sheet)
+        self.beat_scroll = ActBeatScroll(self.act_sheet)
 
         # Add widgets to the splitter
         self.addWidget(self.cue_scroll)
-        self.addWidget(self.beat_scroll_area)
+        self.addWidget(self.beat_scroll)
 
         # Configure splitter appearance and behavior
         self.setHandleWidth(0)
@@ -34,8 +32,8 @@ class ActSplitter(QSplitter):
 
     def on_splitter_moved(self, pos, index):
         self.save_splitter_state()
-        self.cue_scroll.timestamp_frame.resize_timestamp_frame()
-        self.beat_scroll_area.act_beat_frame.resize_act_beat_frame()
+        self.cue_scroll.cue_frame.resize_cue_frame()
+        self.beat_scroll.act_beat_frame.resize_act_beat_frame()
 
     def save_splitter_state(self):
         settings = self.main_widget.settings_manager.settings
@@ -55,9 +53,7 @@ class ActSplitter(QSplitter):
         settings = self.main_widget.settings_manager.settings
         beat_scrollbar_state = settings.value("act_sheet/scrollbar_state")
         if beat_scrollbar_state:
-            self.beat_scroll_area.verticalScrollBar().setValue(
-                int(beat_scrollbar_state)
-            )
+            self.beat_scroll.verticalScrollBar().setValue(int(beat_scrollbar_state))
         timestamp_scrollbar_state = settings.value("act_sheet/scrollbar_state")
         if timestamp_scrollbar_state:
             self.cue_scroll.verticalScrollBar().setValue(int(timestamp_scrollbar_state))
@@ -65,8 +61,8 @@ class ActSplitter(QSplitter):
     def connect_scroll_sync(self):
         """Synchronize the scrollbars of the timestamp and beat scroll areas."""
         scroll_areas: list[tuple[QScrollArea, QScrollArea]] = [
-            (self.beat_scroll_area, self.cue_scroll),
-            (self.cue_scroll, self.beat_scroll_area),
+            (self.beat_scroll, self.cue_scroll),
+            (self.cue_scroll, self.beat_scroll),
         ]
 
         for source, target in scroll_areas:

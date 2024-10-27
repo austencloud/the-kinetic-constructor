@@ -30,8 +30,8 @@ class ActSheet(QWidget):
     def resize_act_sheet(self):
         """Resize each part when ActSheet resizes."""
         self.header.resize_header_widget()
-        self.splitter.beat_scroll_area.act_beat_frame.resize_act_beat_frame()
-        self.splitter.cue_scroll.resize_timestamp_frame()
+        self.splitter.beat_scroll.act_beat_frame.resize_act_beat_frame()
+        self.splitter.cue_scroll.resize_cue_scroll()
 
     def closeEvent(self, event):
         self.splitter.save_splitter_state()

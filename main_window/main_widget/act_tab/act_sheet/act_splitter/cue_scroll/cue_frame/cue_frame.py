@@ -1,81 +1,47 @@
+# cue_frame.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QFrame
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
-from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll.cue_frame.cue_label import (
-    CueLabel,
-)
-from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll.cue_frame.timestamp import (
-    Timestamp,
-)
+from .cue_box import CueBox
 
 if TYPE_CHECKING:
-    from main_window.main_widget.act_tab.act_sheet.act_splitter.cue_scroll.cue_scroll import (
-        CueScroll,
-    )
+    from ..cue_scroll import CueScroll
 
 
 class CueFrame(QWidget):
-    def __init__(self, timestamp_scroll_area: "CueScroll"):
-        super().__init__(timestamp_scroll_area)
-        self.act_tab = timestamp_scroll_area.act_sheet
-        self.timestamp_scroll_area = timestamp_scroll_area
+    def __init__(self, cue_scroll: "CueScroll"):
+        super().__init__(cue_scroll)
+        self.act_tab = cue_scroll.act_sheet
+        self.cue_scroll = cue_scroll
 
-        self.timestamps: dict[int, Timestamp] = {}
-        self.cue_labels: dict[int, CueLabel] = {}
-        self.info_containers: dict[int, QFrame] = {}
+        self.cue_boxes: dict[int, CueBox] = {}  # Store CueBox instances
 
         self.setup_layout()
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
     def setup_layout(self):
-        """Initializes main layout settings for the timestamp frame."""
+        """Initializes main layout settings for the cue frame."""
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
 
-    def init_timestamps(self, num_rows: int):
-        """Creates and stores timestamp, lyric label, and info container for each row."""
+    def init_cue_boxes(self, num_rows: int):
+        """Creates and stores CueBox for each row."""
         for row in range(num_rows):
-            timestamp = Timestamp(self, f"{row * 10}:00")
-            cue_label = CueLabel(self, "")
-            info_container = self.create_info_container(timestamp, cue_label)
+            cue_box = CueBox(self, f"{row * 10}:00", "")
+            self.cue_boxes[row] = cue_box
 
-            self.timestamps[row] = timestamp
-            self.cue_labels[row] = cue_label
-            self.info_containers[row] = info_container
+            self.layout.addWidget(cue_box)
+            cue_box.timestamp.label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-            self.layout.addWidget(info_container)
-            timestamp.label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+    def resize_cue_frame(self):
+        """Applies calculated size settings to all elements in the cue frame."""
+        beat_size = self.act_tab.splitter.beat_scroll.act_beat_frame.beat_size
+        container_width = self.cue_scroll.width()
 
-    def create_info_container(
-        self, timestamp: Timestamp, lyric_label: CueLabel
-    ) -> QFrame:
-        """Sets up and returns a QFrame containing timestamp and lyric label."""
-        info_container = QFrame(self)
-        info_container_layout = QVBoxLayout(info_container)
-
-        info_container.setObjectName("info_container")
-        info_container.setStyleSheet(" #info_container {border-top: 1px solid black;}")
-        info_container.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
-        info_container.setContentsMargins(0, 0, 0, 0)
-
-        info_container_layout.addWidget(timestamp, 1)
-        info_container_layout.addWidget(lyric_label, 3)
-
-        return info_container
-
-    def resize_timestamp_frame(self):
-        """Applies calculated size settings to all elements in the timestamp frame."""
-        beat_size = self.act_tab.splitter.beat_scroll_area.act_beat_frame.beat_size
-        container_width = self.timestamp_scroll_area.width()
-
-        for info_container in self.info_containers.values():
-            info_container.setFixedHeight(beat_size)
-            info_container.setFixedWidth(container_width)
-        for timestamp in self.timestamps.values():
-            timestamp.resize_timestamp()
-        for lyric_label in self.cue_labels.values():
-            lyric_label.resize_lyric_label()
+        for cue_box in self.cue_boxes.values():
+            cue_box.setFixedHeight(beat_size)
+            cue_box.setFixedWidth(container_width)
+            cue_box.timestamp.resize_timestamp()
+            cue_box.cue_label.resize_lyric_label()

@@ -19,10 +19,10 @@ class CueScroll(QScrollArea):
         self.setViewportMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.timestamp_frame = CueFrame(self)
-        self.timestamp_frame.init_timestamps(num_rows=20)
-        self.setWidget(self.timestamp_frame)
+        self.cue_frame = CueFrame(self)
+        self.cue_frame.init_cue_boxes(num_rows=20)
+        self.setWidget(self.cue_frame)
         self.setStyleSheet("background: transparent; padding: 0px; margin: 0px;")
 
-    def resize_timestamp_frame(self):
-        self.timestamp_frame.resize_timestamp_frame()
+    def resize_cue_scroll(self):
+        self.cue_frame.resize_cue_frame()
