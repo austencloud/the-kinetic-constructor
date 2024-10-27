@@ -2,9 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
 from PyQt6.QtCore import Qt, QSettings
 
+from main_window.main_widget.act_tab.act_header import ActHeader
+
 from .timestamp_scroll_area import TimestampScrollArea
 from .act_beat_scroll_area import ActBeatScrollArea
-from main_window.main_widget.act_tab.act_header_widget import ActHeader
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget

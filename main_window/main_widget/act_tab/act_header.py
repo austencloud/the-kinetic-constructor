@@ -38,7 +38,7 @@ class ActHeader(QWidget):
 
         # Load title from settings
         saved_title = self.settings_manager.act_tab_settings.get_act_title()
-        self.title_label = TitleLabel(saved_title, self)
+        self.title_label = TitleLabel(self, saved_title)
         self.author_label = QLabel(self)
         self.title_label.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.author_label.setAlignment(Qt.AlignmentFlag.AlignCenter)

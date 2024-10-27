@@ -1,69 +1,61 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QWidget, QStackedLayout, QSizePolicy
-from PyQt6.QtCore import Qt
-
+from PyQt6.QtWidgets import QLabel, QTextEdit, QWidget, QStackedLayout
+from PyQt6.QtCore import Qt, QEvent
 
 class EditableLabel(QWidget):
-    def __init__(self, parent, label_text: str):
+    def __init__(self, parent, label_text: str, align=Qt.AlignmentFlag.AlignLeft, padding=5, bg_color="#FFFFFF"):
         super().__init__(parent)
         self.label = QLabel(label_text, self)
-        self.edit = QLineEdit(self)
-        self.edit.returnPressed.connect(self._hide_edit)
+        self.edit = QTextEdit(self)  # Use QTextEdit for multi-line text
+        self._align = align
+        self._padding = padding
+        self._bg_color = bg_color
 
-
-        # Remove padding and margins in style sheets
-        self.label.setStyleSheet(
-            # "border-top: 1px solid black;"
-            # "border-bottom: 1px solid black;"
-            "padding: 0px;"
-            "margin: 0px;"
-        )
-        self.edit.setStyleSheet(
-            # "border-top: 1px solid black;"
-            # "border-bottom: 1px solid black;"
-            "padding: 0px;"
-            "margin: 0px;"
-        )
-
-        # Remove contents margins
-        self.label.setContentsMargins(0, 0, 0, 0)
-        self.edit.setContentsMargins(0, 0, 0, 0)
-        self.setContentsMargins(0, 0, 0, 0)
-
-        # Use QStackedLayout to switch between label and edit
-        self.layout: QStackedLayout = QStackedLayout(self)
+        # Configure layout for stacked editing
+        self.layout:QStackedLayout = QStackedLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.edit)
+
+        # Apply initial styles and alignment
+        self.apply_styles()
         self.setLayout(self.layout)
+        self.label.mousePressEvent = self._show_edit  # Edit on click
 
-        # Assign the mouse press event to show the editor
-        self.label.mousePressEvent = self._show_edit
+        # Install event filter on QTextEdit to detect Enter key
+        self.edit.installEventFilter(self)
 
-    def _show_edit(self, event):
-        """Show the QLineEdit for editing with the current text pre-filled."""
+    def eventFilter(self, source, event):
+        """Detect Enter key press in QTextEdit to exit edit mode."""
+        if source == self.edit and event.type() == QEvent.KeyPress and event.key() == Qt.Key.Key_Return:
+            self._hide_edit()
+            return True
+        return super().eventFilter(source, event)
+
+    def apply_styles(self):
+        """Applies alignment, padding, and color styling to label and edit fields."""
+        self.label.setAlignment(self._align)
+        self.edit.setAlignment(self._align)
+        self.label.setStyleSheet(f"padding: 0px; margin: 0px;")
+        self.edit.setStyleSheet(
+            f"background-color: {self._bg_color}; padding: {self._padding}px; margin: 0px;"
+        )
+
+    def _show_edit(self, event=None):
+        """Switch to the edit mode."""
         self.edit.setText(self.label.text())
-        current_font = self.label.font()
-        self.edit.setFont(current_font)
-
-        # Switch to the edit widget
+        self.edit.setFont(self.label.font())
         self.layout.setCurrentWidget(self.edit)
-
         self.edit.setFocus()
         self.edit.selectAll()
 
     def _hide_edit(self):
-        """Hide the QLineEdit and show the QLabel."""
-        new_text = self.edit.text()
-        self.label.setText(new_text if new_text else self.label.text())
-
-        # Switch back to the label widget
+        """Switch back to the label mode."""
+        self.label.setText(self.edit.toPlainText() or self.label.text())
         self.layout.setCurrentWidget(self.label)
 
     def set_text(self, text: str):
-        """Programmatically set the text of the label."""
         self.label.setText(text)
 
     def get_text(self) -> str:
-        """Get the current text of the label."""
         return self.label.text()
