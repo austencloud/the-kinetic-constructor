@@ -149,6 +149,10 @@ class LayoutOptionsPanel(QWidget):
         grow_sequence = self.settings_manager.sequence_layout.get_layout_setting(
             "grow_sequence"
         )
+        if grow_sequence == "true":
+            grow_sequence = True
+        elif grow_sequence == "false":
+            grow_sequence = False
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         font = self.sequence_growth_checkbox.font()
         font_size = self.sequence_widget.width() // 60

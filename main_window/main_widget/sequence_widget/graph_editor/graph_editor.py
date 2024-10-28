@@ -1,6 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 
+from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_tab import (
+    GraphEditorToggleTab,
+)
+from main_window.main_widget.sequence_widget.graph_editor_animator import (
+    GraphEditorAnimator,
+)
+
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer
 
@@ -14,12 +21,19 @@ class GraphEditor(QFrame):
         super().__init__()
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
+        self.settings_manager = self.main_widget.main_window.settings_manager
+        self.is_graph_editor_visible = self.settings_manager.settings.value(
+            "graph_editor_visible", True, type=bool
+        )
         self._setup_components()
         self._setup_layout()
 
     def _setup_components(self) -> None:
         self.pictograph_container = GraphEditorPictographContainer(self)
         self.adjustment_panel = BeatAdjustmentPanel(self)
+        self.toggle_tab = GraphEditorToggleTab(self)
+        self.toggle_tab.toggled.connect(self.toggle_graph_editor)
+        self.animator = GraphEditorAnimator(self)
 
     def _setup_layout(self) -> None:
         self.pictograph_layout = self._setup_pictograph_layout()
@@ -46,12 +60,33 @@ class GraphEditor(QFrame):
         adjustment_panel_layout.setSpacing(0)
         return adjustment_panel_layout
 
+    def toggle_graph_editor(self):
+        """Animate the opening or closing of the GraphEditor and toggle tab."""
+        self.animator.animate_toggle()
+
+    def update_graph_editor_visibility(self):
+        """Set the initial state of the GraphEditor based on saved settings."""
+        if self.is_graph_editor_visible:
+            self.setMaximumHeight(self.main_widget.height() // 4)
+        else:
+            self.setMaximumHeight(0)
+            self.toggle_tab.move(
+                self.toggle_tab.pos().x(), self.height() - self.toggle_tab.height()
+            )
+
+    def save_graph_editor_state(self):
+        """Save the visibility state of the GraphEditor."""
+        self.settings_manager.settings.setValue(
+            "graph_editor_visible", self.is_graph_editor_visible
+        )
+
     def clear_graph_editor(self) -> None:
         self.pictograph_container.GE_pictograph_view.set_to_blank_grid()
         self.adjustment_panel.update_adjustment_panel()
 
     def resize_graph_editor(self) -> None:
-        self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
+        if not self.animator.is_animating:
+            self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
         self.setMaximumWidth(self.sequence_widget.width())
         self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()
