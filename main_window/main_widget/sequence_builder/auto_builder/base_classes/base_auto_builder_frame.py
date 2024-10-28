@@ -2,6 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.sequence_builder.auto_builder.base_classes.customize_your_sequence_label import (
+    CustomizeSequenceLabel,
+)
+
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster
 from ..widgets.level_selector import LevelSelector
@@ -28,6 +32,7 @@ class BaseAutoBuilderFrame(QFrame):
         self.setLayout(self.layout)
 
         # Modular widgets
+        self.customize_sequence_label = CustomizeSequenceLabel(self)
         self.level_selector = LevelSelector(self)
         self.length_adjuster = LengthAdjuster(self)
         self.turn_intensity_adjuster = TurnIntensityAdjuster(self)
@@ -37,6 +42,10 @@ class BaseAutoBuilderFrame(QFrame):
         self.create_sequence_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         # Add Widgets to Layout
+        self.layout.addWidget(
+            self.customize_sequence_label, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
         self.layout.addStretch(1)
         self.layout.addWidget(self.level_selector)
         self.layout.addStretch(1)
@@ -62,9 +71,12 @@ class BaseAutoBuilderFrame(QFrame):
         intensity = self.auto_builder_settings.get_auto_builder_setting(
             "max_turn_intensity", self.builder_type
         )
+        
+        # Convert continuous_rotation to boolean
         continuous_rotation = self.auto_builder_settings.get_auto_builder_setting(
             "continuous_rotation", self.builder_type
         )
+        continuous_rotation = continuous_rotation.lower() == "true" if isinstance(continuous_rotation, str) else bool(continuous_rotation)
 
         self.level_selector.set_level(level)
         self.length_adjuster.set_length(int(length))
@@ -72,8 +84,10 @@ class BaseAutoBuilderFrame(QFrame):
         self.continuous_rotation_toggle.set_state(continuous_rotation)
         self.continuous_rotation_toggle.update_mode_label_styles()
 
+
     def _resize_auto_builder_frame(self):
         """Resize the auto builder frame based on the parent widget size."""
+        self.customize_sequence_label.resize_customize_sequence_label()  # Resize the label
         self._resize_widgets()
         self._resize_create_sequence_button()
 
