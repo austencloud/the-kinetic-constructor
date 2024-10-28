@@ -44,6 +44,3 @@ class ImageExportManager:
         self.image_saver = ImageSaver(self)
         self.dialog_executor = ImageExportDialogExecutor(self)
 
-    def create_act_image(self, act: "Act"):
-        # Similar to create_sequence_image but for the entire act
-        pass

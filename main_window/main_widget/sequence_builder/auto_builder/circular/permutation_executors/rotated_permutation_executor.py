@@ -58,7 +58,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
             sequence.append(next_pictograph)
 
             sequence_widget = self.circular_auto_builder.main_widget.sequence_widget
-            sequence_widget.beat_factory.create_new_beat_and_add_to_sequence(
+            sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
             )
             # self.validation_engine.validate_last_pictograph()

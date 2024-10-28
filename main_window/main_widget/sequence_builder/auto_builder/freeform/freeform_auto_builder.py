@@ -48,7 +48,7 @@ class FreeFormAutoBuilder(BaseAutoBuilder):
                 red_rot_dir,
             )
             self.sequence.append(next_pictograph)
-            self.sequence_widget.beat_factory.create_new_beat_and_add_to_sequence(
+            self.sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
             )
             self.validation_engine.validate_last_pictograph()

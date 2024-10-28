@@ -108,7 +108,7 @@ class BeatFramePopulator:
                     self.current_sequence_json, pictograph_dict
                 )
                 # Create the beat with reversal information
-                self.sequence_widget.beat_factory.create_new_beat_and_add_to_sequence(
+                self.sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                     pictograph_dict,
                     override_grow_sequence=True,
                     update_word=False,

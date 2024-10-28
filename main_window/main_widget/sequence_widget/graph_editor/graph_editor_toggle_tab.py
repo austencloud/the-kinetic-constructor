@@ -3,9 +3,9 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt, pyqtSignal
 
 
-
 class GraphEditorToggleTab(QWidget):
     """Toggle tab widget to expand/collapse the GraphEditor."""
+
     toggled = pyqtSignal()  # Signal to toggle the GraphEditor
 
     def __init__(self, parent=None):
@@ -14,7 +14,7 @@ class GraphEditorToggleTab(QWidget):
         self.setStyleSheet("background-color: gray; border-radius: 5px;")
         self.label = QLabel("Graph Editor", self)
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         layout = QVBoxLayout(self)
         layout.addWidget(self.label)
         self.setLayout(layout)
