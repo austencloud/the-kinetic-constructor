@@ -12,7 +12,6 @@ class SequenceClearer:
         self.sequence_widget = sequence_widget
         self.json_manager = sequence_widget.json_manager
         self.manual_builder = None
-        self.beat_frame = sequence_widget.beat_frame
         self.settings_manager = sequence_widget.settings_manager
 
     def clear_sequence(
@@ -20,26 +19,38 @@ class SequenceClearer:
     ) -> None:
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
-        if not self.manual_builder:
-            self.manual_builder = self.sequence_widget.main_widget.manual_builder
-        if should_reset_to_start_pos_picker:
-            self.manual_builder.reset_to_start_pos_picker()
-        self.manual_builder.last_beat = self.beat_frame.start_pos
-        if show_indicator:
-            self.sequence_widget.indicator_label.show_message("Sequence cleared")
+        self._initialize_manual_builder()
+        self._reset_manual_builder(should_reset_to_start_pos_picker)
+        self._show_clear_indicator(show_indicator)
         self.sequence_widget.graph_editor.clear_graph_editor()
-
-        if self.settings_manager.global_settings.get_grow_sequence():
-            self.beat_frame.layout_manager.configure_beat_frame(0)
+        self._configure_beat_frame()
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
+    def _initialize_manual_builder(self) -> None:
+        if not self.manual_builder:
+            self.manual_builder = self.sequence_widget.main_widget.manual_builder
+
+    def _reset_manual_builder(self, should_reset_to_start_pos_picker: bool) -> None:
+        if should_reset_to_start_pos_picker:
+            self.manual_builder.reset_to_start_pos_picker()
+        self.manual_builder.last_beat = self.sequence_widget.beat_frame.start_pos
+
+    def _show_clear_indicator(self, show_indicator: bool) -> None:
+        if show_indicator:
+            self.sequence_widget.indicator_label.show_message("Sequence cleared")
+
+    def _configure_beat_frame(self) -> None:
+        if self.settings_manager.global_settings.get_grow_sequence():
+            self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(0)
+
     def _reset_beat_frame(self) -> None:
+        self.beat_frame = self.sequence_widget.beat_frame
         for beat_view in self.beat_frame.beats:
             beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
-        self.beat_frame.start_pos_view.setScene(
+        self.sequence_widget.beat_frame.start_pos_view.setScene(
             self.beat_frame.start_pos_view.blank_beat
         )
         self.beat_frame.start_pos_view.is_filled = False
         self.beat_frame.selection_overlay.deselect_beat()
-        self.beat_frame.sequence_widget.update_current_word_from_beats()
+        self.beat_frame.sequence_widget.current_word_label.update_current_word_label_from_beats()

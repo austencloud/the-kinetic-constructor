@@ -39,7 +39,7 @@ class BeatFrameUpdater:
                     f"Beat with number {beat_num} not found in the beat frame. Skipping."
                 )
         if beat_entries:
-            self.beat_frame.sequence_widget.update_difficulty_label()
+            self.beat_frame.sequence_widget.difficulty_label.update_difficulty_label()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]

@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import QGridLayout
 from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -97,3 +98,18 @@ class SequenceWidgetBeatFrameLayoutManager:
     def adjust_layout_to_sequence_length(self):
         last_filled_index = self.beat_frame.get.next_available_beat()
         self.configure_beat_frame(last_filled_index)
+
+    def calculate_current_layout(self) -> tuple:
+        layout = self.beat_frame.layout
+
+        max_row = 0
+        max_col = 0
+
+        for i in range(layout.count()):
+            item = layout.itemAt(i)
+            if item and isinstance(item.widget(), BeatView):
+                position = layout.getItemPosition(i)
+                max_row = max(max_row, position[0])
+                max_col = max(max_col, position[1])
+
+        return max_row + 1, max_col  # Add 1 to max_row to get the count

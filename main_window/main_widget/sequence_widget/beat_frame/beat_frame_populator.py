@@ -80,7 +80,7 @@ class BeatFramePopulator:
 
     def _update_difficulty_level(self):
         if len(self.current_sequence_json) > 2:
-            self.sequence_widget.update_difficulty_label()
+            self.sequence_widget.difficulty_label.update_difficulty_label()
         else:
             self.sequence_widget.difficulty_label.set_difficulty_level("")
 
@@ -108,7 +108,7 @@ class BeatFramePopulator:
                     self.current_sequence_json, pictograph_dict
                 )
                 # Create the beat with reversal information
-                self.sequence_widget.create_new_beat_and_add_to_sequence(
+                self.sequence_widget.beat_factory.create_new_beat_and_add_to_sequence(
                     pictograph_dict,
                     override_grow_sequence=True,
                     update_word=False,

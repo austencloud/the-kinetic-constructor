@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import ReversalDetector
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+    ReversalDetector,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
@@ -35,10 +37,14 @@ class BeatAdder:
 
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:
             # Detect reversals
-            sequence_so_far = self.json_manager.loader_saver.load_current_sequence_json()
-            reversal_info = ReversalDetector.detect_reversal(sequence_so_far, new_beat.pictograph_dict)
-            new_beat.blue_reversal = reversal_info.get('blue_reversal', False)
-            new_beat.red_reversal = reversal_info.get('red_reversal', False)
+            sequence_so_far = (
+                self.json_manager.loader_saver.load_current_sequence_json()
+            )
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, new_beat.pictograph_dict
+            )
+            new_beat.blue_reversal = reversal_info.get("blue_reversal", False)
+            new_beat.red_reversal = reversal_info.get("red_reversal", False)
             self.beats[next_beat_index].set_beat(new_beat, next_beat_number)
 
             if grow_sequence and not override_grow_sequence:
@@ -51,7 +57,7 @@ class BeatAdder:
                 self.beats[next_beat_index]
             )
             if update_word:
-                self.sequence_widget.update_current_word_from_beats()
+                self.sequence_widget.current_word_label.update_current_word_label_from_beats()
 
     def _adjust_layout_and_update_sequence_builder(self, index: int) -> None:
         self.beat_frame.layout_manager.adjust_layout_to_sequence_length()

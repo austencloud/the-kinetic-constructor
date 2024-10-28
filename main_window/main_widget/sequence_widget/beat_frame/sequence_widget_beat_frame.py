@@ -1,13 +1,19 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtGui import QKeyEvent
+
+from main_window.main_widget.sequence_widget.sequence_widget_pictograph_factory import (
+    BeatFactory,
+)
 from .beat_adder import BeatAdder
 from .beat_duration_manager import BeatDurationManager
 from .beat_frame_key_event_handler import BeatFrameKeyEventHandler
 from .beat_frame_populator import BeatFramePopulator
 from .beat_frame_resizer import BeatFrameResizer
 from .beat_updater import BeatFrameUpdater
-from .sequence_widget_beat_frame_layout_manager import SequenceWidgetBeatFrameLayoutManager
+from .sequence_widget_beat_frame_layout_manager import (
+    SequenceWidgetBeatFrameLayoutManager,
+)
 from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
@@ -41,6 +47,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
             beat.hide()
 
     def _setup_components(self) -> None:
+        self.beat_factory = BeatFactory(self)
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = SequenceWidgetBeatFrameLayoutManager(self)
         self.beat_deletion_manager = BeatDeletionManager(self)

@@ -23,7 +23,6 @@ class SequenceWidgetButtonPanel(QFrame):
         self.sequence_widget = sequence_widget
         self.full_screen_overlay = None
         self.font_size = self.sequence_widget.width() // 45
-        self.add_to_dictionary_manager = self.sequence_widget.add_to_dictionary_manager
         self._setup_dependencies()
         self._setup_buttons()
         self._setup_layout()
@@ -44,7 +43,7 @@ class SequenceWidgetButtonPanel(QFrame):
         button_dict = {
             "add_to_dictionary": {
                 "icon": "add_to_dictionary.svg",
-                "callback": self.add_to_dictionary_manager.add_to_dictionary,
+                "callback": self.sequence_widget.add_to_dictionary_manager.add_to_dictionary,
                 "tooltip": "Add to Dictionary",
             },
             "save_image": {

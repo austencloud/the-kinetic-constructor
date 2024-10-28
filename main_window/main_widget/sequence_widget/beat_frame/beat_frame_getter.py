@@ -63,3 +63,17 @@ class BeatFrameGetter:
             if beat_view.number == beat_number:
                 return beat_view
         return None
+
+    def current_beat_frame_state(self) -> dict:
+        num_beats = sum(1 for beat in self.beat_frame.beats if beat.isVisible())
+        grow_sequence = (
+            self.beat_frame.settings_manager.global_settings.get_grow_sequence()
+        )
+        rows, cols = self.beat_frame.layout_manager.calculate_current_layout()
+
+        return {
+            "num_beats": num_beats,
+            "rows": rows,
+            "cols": cols,
+            "grow_sequence": grow_sequence,
+        }

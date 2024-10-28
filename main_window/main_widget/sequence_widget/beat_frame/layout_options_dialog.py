@@ -19,14 +19,11 @@ class LayoutOptionsDialog(QDialog):
         self.settings_manager = (
             self.sequence_widget.main_widget.main_window.settings_manager
         )
-        initial_state = self.sequence_widget._get_current_beat_frame_state()
+        initial_state = self.sequence_widget.beat_frame.get.current_beat_frame_state()
         self.setWindowTitle("Layout Options")
-
         self._set_size()
-
         self.beat_frame = LayoutOptionsBeatFrame(self)
         self.panel = LayoutOptionsPanel(self)
-
         self._setup_cancel_button()
         self._setup_apply_button()
         self._setup_action_button_layout()
@@ -80,7 +77,7 @@ class LayoutOptionsDialog(QDialog):
             cols, rows = map(int, selected_layout.split(" x "))
             if num_beats < num_filled_beats:
                 if self.open_warning_dialog():
-                    self.sequence_widget.apply_layout_options(rows, cols, num_beats)
+                    self.sequence_widget.layout_manager.apply_layout_options(rows, cols, num_beats)
                     for i in range(num_beats, num_filled_beats):
                         self.sequence_widget.beat_frame.beats[i].setScene(
                             self.sequence_widget.beat_frame.beats[i].blank_beat
@@ -100,7 +97,7 @@ class LayoutOptionsDialog(QDialog):
                 else:
                     return
             else:
-                self.sequence_widget.apply_layout_options(cols, rows, num_beats)
+                self.sequence_widget.layout_manager.apply_layout_options(cols, rows, num_beats)
         self.check_option_picker_state()
         self.accept()
 

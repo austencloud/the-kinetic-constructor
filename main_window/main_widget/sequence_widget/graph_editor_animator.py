@@ -8,7 +8,6 @@ from PyQt6.QtCore import (
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
     from main_window.main_widget.sequence_widget.graph_editor.graph_editor import (
         GraphEditor,
     )

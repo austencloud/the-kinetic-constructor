@@ -63,7 +63,7 @@ class BeatDeletionManager:
         self.json_manager.updater.clear_and_repopulate_the_current_sequence()
         if self.settings_manager.global_settings.get_grow_sequence():
             self.beat_frame.layout_manager.adjust_layout_to_sequence_length()
-        self.beat_frame.sequence_widget.update_current_word_from_beats()
+        self.beat_frame.sequence_widget.current_word_label.update_current_word_label_from_beats()
         self.manual_builder.option_picker.update_option_picker()
 
     def _delete_non_first_beat(self, selected_beat: BeatView) -> None:
@@ -85,9 +85,7 @@ class BeatDeletionManager:
         for i in range(self.beats.index(selected_beat) + 1, len(self.beats)):
             self.delete_beat(self.beats[i])
 
-        self.sequence_widget = (
-            self.beat_frame.main_widget.sequence_widget
-        )
+        self.sequence_widget = self.beat_frame.main_widget.sequence_widget
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
     def _delete_start_pos(self) -> None:
@@ -103,9 +101,7 @@ class BeatDeletionManager:
         self.manual_builder.last_beat = None
         self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.option_picker.update_option_picker()
-        graph_editor = (
-            self.beat_frame.main_widget.sequence_widget.graph_editor
-        )
+        graph_editor = self.beat_frame.main_widget.sequence_widget.graph_editor
         graph_editor.adjustment_panel.update_adjustment_panel()
 
     def delete_beat(self, beat_view: BeatView) -> None:

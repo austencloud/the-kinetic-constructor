@@ -14,14 +14,12 @@ class ThumbnailGenerator:
     def __init__(self, add_to_dictionary_manager: "AddToDictionaryManager"):
         self.manager = add_to_dictionary_manager
         self.sequence_widget = add_to_dictionary_manager.sequence_widget
-        self.beat_frame = self.sequence_widget.beat_frame
-        self.export_manager = self.beat_frame.image_export_manager
 
     def generate_and_save_thumbnail(
         self, sequence, structural_variation_number, directory
     ):
         """Generate and save thumbnail for a sequence variation."""
-        beat_frame_image = self.export_manager.image_creator.create_sequence_image(
+        beat_frame_image = self.sequence_widget.beat_frame.image_export_manager.image_creator.create_sequence_image(
             sequence, include_start_pos=False
         )
         pil_image = self.qimage_to_pil(beat_frame_image)

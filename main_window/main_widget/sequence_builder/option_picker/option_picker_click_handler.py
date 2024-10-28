@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QApplication
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.manual_builder import ManualBuilderWidget
+    from main_window.main_widget.sequence_builder.manual_builder import (
+        ManualBuilderWidget,
+    )
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
@@ -20,11 +22,14 @@ class OptionPickerClickHandler:
             clicked_option
         )
         next_beat_number = beat_frame.beat_adder.calculate_next_beat_number()
-        if (
-            next_beat_number
-            > beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
+        num_beats = int(
+            beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
                 "num_beats"
             )
+        )
+
+        if (
+            next_beat_number > num_beats
         ) and not beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
             "grow_sequence"
         ):

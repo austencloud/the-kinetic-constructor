@@ -136,13 +136,15 @@ class StartPosManager(QObject):
                 pictograph_dict["red_attributes"]["start_ori"] = start_pos_data[
                     "red_attributes"
                 ]["end_ori"]
-                pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
+                pictograph_factory = (
+                    self.main_widget.sequence_widget.beat_frame.beat_factory
+                )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(
                         pictograph_dict
                     )
                 )
-                start_pos_pictograph = pictograph_factory.get_or_create_pictograph(
+                start_pos_pictograph = pictograph_factory.create_start_pos_beat(
                     pictograph_key, pictograph_dict
                 )
                 return start_pos_pictograph
