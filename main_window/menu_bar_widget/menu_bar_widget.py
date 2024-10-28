@@ -1,10 +1,9 @@
-# menu_bar_widget.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QFrame, QLabel
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QFrame, QLabel, QVBoxLayout
 from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 
 from main_window.menu_bar_widget.base_selector import BaseSelector
-
 from .user_profile_selector import UserProfileSelector
 from .background_selector.background_selector import BackgroundSelector
 from .prop_type_selector import PropTypeSelector
@@ -42,7 +41,9 @@ class MenuBarWidget(QWidget):
             (self.background_label, self.background_selector),
             (self.visibility_label, self.visibility_selector),
         ]
-
+        # set all the labels to be centered horizontally
+        for label in self.sections:
+            label[0].setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.labels = [label for label, _ in self.sections]
         self.separators: list[QFrame] = []
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -59,11 +60,11 @@ class MenuBarWidget(QWidget):
         self.setLayout(self.layout)
 
     def add_section(self, label: QLabel, selector: QWidget):
-        section_layout = QHBoxLayout()
-        section_layout.setSpacing(5)
+        section_layout = QVBoxLayout()
+        section_layout.setSpacing(2)  # Minimal vertical spacing
+        section_layout.setContentsMargins(0, 0, 0, 0)  # Ensure no extra vertical padding
         section_layout.addWidget(label)
         section_layout.addWidget(selector)
-        section_layout.addStretch(1)
         self.layout.addLayout(section_layout)
 
     def add_separator(self):
@@ -76,9 +77,9 @@ class MenuBarWidget(QWidget):
 
     def resize_menu_bar_widget(self):
         self.menu_bar_font_size = self.main_widget.width() // 100
-        spacing = self.width() // 30
+        spacing = self.width() // 30  # Horizontal spacing between sections
         self.layout.setSpacing(spacing)
-        font_size = self.main_widget.height() // 75
+        font_size = self.main_widget.height() // 90
         for label in self.labels:
             font = QFont("Georgia", font_size)
             label.setFont(font)

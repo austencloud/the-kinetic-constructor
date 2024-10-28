@@ -85,6 +85,7 @@ class MainWidget(QWidget):
     grid_mode_checker: "GridModeChecker"
 
     # Layouts and Widgets
+    top_layout: QHBoxLayout
     main_layout: QVBoxLayout
     content_layout: QHBoxLayout
     builder_stacked_widget: QStackedWidget

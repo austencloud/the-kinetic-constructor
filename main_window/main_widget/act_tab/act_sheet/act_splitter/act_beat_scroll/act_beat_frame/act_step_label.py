@@ -24,7 +24,6 @@ class ActStepLabel(EditableLabel):
         self.setFixedHeight(self.act_beat_frame.steps_label_height)
         self.setFixedWidth(self.act_beat_frame.beat_size)
 
-        # Adjust font size based on height
         font_size = self.height() // 4
         font = self.font()
         font.setPointSize(font_size)

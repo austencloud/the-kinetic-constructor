@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QEvent
 from main_window.main_widget.act_tab.editable_label_manager import EditableLabelManager
+from PyQt6.QtGui import QTextOption, QResizeEvent
 
 
 class EditableLabel(QWidget):
@@ -33,7 +34,6 @@ class EditableLabel(QWidget):
 
         self.label.mousePressEvent = self._show_edit
         self.edit.installEventFilter(self)
-
         self.setCursor(Qt.CursorShape.IBeamCursor)
 
     def _create_label(self, text):
@@ -47,10 +47,11 @@ class EditableLabel(QWidget):
     def _create_edit_widget(self) -> QTextEdit | QLineEdit:
         if self.multi_line:
             edit = QTextEdit(self)
+            edit.setWordWrapMode(QTextOption.WrapMode.WordWrap)
             edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             edit.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             edit.setSizePolicy(
-                QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.MinimumExpanding
             )
         else:
             edit = QLineEdit(self)
@@ -67,14 +68,13 @@ class EditableLabel(QWidget):
         return layout
 
     def apply_styles(self, margin_top_bottom=0) -> None:
-        """Apply styling to label and edit fields, with optional border for edit."""
+        """Apply consistent styling to label and edit without excess expansion."""
         self.label.setStyleSheet("padding: 0px; margin: 0px;")
         border_style = (
             f"border: 1px solid gray; padding: 5px; margin: {margin_top_bottom}px 0px;"
             if margin_top_bottom
             else "padding: 0px; margin: 0px;"
         )
-
         self.edit.setStyleSheet(f"background-color: {self._bg_color}; {border_style}")
         self.edit.setAlignment(self._align)
 
@@ -96,9 +96,11 @@ class EditableLabel(QWidget):
             self.label.setWordWrap(True)
         self.label.setText(text or self.label.text())
         self.layout.setCurrentWidget(self.label)
+
         EditableLabelManager.clear_active()
 
     def eventFilter(self, source, event) -> bool:
+        """Filter for Enter key to commit and align height in edit mode."""
         if (
             source == self.edit
             and event.type() == QEvent.Type.KeyPress
@@ -111,3 +113,10 @@ class EditableLabel(QWidget):
             self._hide_edit()
             return True
         return super().eventFilter(source, event)
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """Resize both label and edit widgets to prevent overflow."""
+        new_width = event.size().width() - 10
+        self.label.setFixedWidth(new_width)
+        self.edit.setFixedWidth(new_width)
+        super().resizeEvent(event)

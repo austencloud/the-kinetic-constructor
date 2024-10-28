@@ -95,9 +95,10 @@ class MainWidgetUI:
         self.main_widget.setLayout(self.main_widget.main_layout)
 
         # Add navigation and menu bar widgets to the main layout
-        self.main_widget.main_layout.addWidget(self.main_widget.navigation_widget)
-        self.main_widget.main_layout.addWidget(self.main_widget.menu_bar_widget)
-
+        self.main_widget.top_layout = QHBoxLayout()
+        self.main_widget.top_layout.addWidget(self.main_widget.menu_bar_widget, 1)
+        self.main_widget.top_layout.addWidget(self.main_widget.navigation_widget, 1)
+        self.main_widget.main_layout.addLayout(self.main_widget.top_layout)
         # Add the main stacked widget to the main layout
         self.main_widget.main_layout.addWidget(self.main_widget.main_stacked_widget)
         self.main_widget.main_stacked_widget.setSizePolicy(

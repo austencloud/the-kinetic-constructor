@@ -62,7 +62,7 @@ class NavigationWidget(QWidget):
             self.set_button_appearance(index, idx, button)
 
     def set_button_appearance(self, index, idx, button: "QPushButton"):
-        font_size = self.main_widget.width() // 100
+        font_size = self.main_widget.width() // 120
         if idx == index:
             # Apply active style
             button.setStyleSheet(
@@ -71,8 +71,8 @@ class NavigationWidget(QWidget):
         else:
             # Apply normal style
             button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
-        button.setMinimumWidth(self.main_widget.width() // 8)
-        button.setMinimumHeight(self.main_widget.height() // 20)
+        button.setMinimumWidth(self.main_widget.width() // 10)
+        button.setMinimumHeight(self.main_widget.height() // 22)
 
     def resize_navigation_widget(self):
         self.set_active_tab(self.current_index)
