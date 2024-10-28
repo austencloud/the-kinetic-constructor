@@ -5,8 +5,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 class GraphEditorToggleTab(QWidget):
     """Toggle tab widget to expand/collapse the GraphEditor."""
-
-    toggled = pyqtSignal()  # Signal to toggle the GraphEditor
+    toggled = pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -20,4 +19,4 @@ class GraphEditorToggleTab(QWidget):
         self.setLayout(layout)
 
     def mousePressEvent(self, event):
-        self.toggled.emit()  # Emit the toggle signal on click
+        self.toggled.emit()

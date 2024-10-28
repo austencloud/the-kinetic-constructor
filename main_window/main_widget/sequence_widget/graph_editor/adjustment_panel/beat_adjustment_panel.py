@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget, QSizePolicy, QVBoxLayout, QLayout
 from data.constants import BLUE, RED
 from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
 from .ori_picker_box.ori_picker_box import OriPickerBox
@@ -16,70 +16,68 @@ class BeatAdjustmentPanel(QFrame):
         self.graph_editor = graph_editor
         self.GE_pictograph = graph_editor.pictograph_container.GE_pictograph
         self.initialized = False
+        # Set size policies
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.setMinimumHeight(0)
+        self._setup_layout()
+        self._setup_widgets()
 
-        # Create a stacked widget
+    def _setup_layout(self):
         self.stacked_widget = QStackedWidget(self)
-
-        # Setup the main layout to take full space and stretch
         self.main_layout = QHBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
         self.main_layout.addWidget(self.stacked_widget)
-        self.setLayout(self.main_layout)
+        self.main_layout.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
 
-        # Setup widgets and layouts
-        self._setup_widgets()
-        self._add_widgets_to_stacked_widget()
+        self.setLayout(self.main_layout)
 
     def _setup_widgets(self) -> None:
         """Setup the different boxes and widgets for the adjustment panel."""
         self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
         self.red_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, RED)
+        self.turns_box_set = self._setup_turns_box_set()
+        
         self.blue_ori_picker = OriPickerBox(self, self.GE_pictograph, BLUE)
         self.red_ori_picker = OriPickerBox(self, self.GE_pictograph, RED)
+        self.ori_picker_box_set = self._setup_ori_picker_box_set()
+        
         self.placeholder_widget = AdjustmentPanelPlaceHolderText(self)
 
-    def _add_widgets_to_stacked_widget(self) -> None:
-        """Add the widgets to the QStackedWidget."""
+        self.stacked_widget.addWidget(self.turns_box_set)
+        self.stacked_widget.addWidget(self.ori_picker_box_set)
+        self.stacked_widget.addWidget(self.placeholder_widget)
 
-        # Create individual layouts for different states and ensure full width
-        turns_widget = QWidget(self)
-        turns_layout = QHBoxLayout(turns_widget)
-        turns_layout.setContentsMargins(0, 0, 0, 0)
-        turns_layout.setSpacing(0)
-        turns_layout.addWidget(self.blue_turns_box)
-        turns_layout.addWidget(self.red_turns_box)
-        # turns_layout.addStretch()
-        self.stacked_widget.addWidget(turns_widget)
-
-        ori_picker_widget = QWidget(self)
-        ori_picker_layout = QHBoxLayout(ori_picker_widget)
+    def _setup_ori_picker_box_set(self):
+        ori_picker_box_set = QWidget(self)
+        ori_picker_layout = QHBoxLayout(ori_picker_box_set)
         ori_picker_layout.setContentsMargins(0, 0, 0, 0)
         ori_picker_layout.setSpacing(0)
         ori_picker_layout.addWidget(self.blue_ori_picker)
         ori_picker_layout.addWidget(self.red_ori_picker)
-        # ori_picker_layout.addStretch()
-        self.stacked_widget.addWidget(ori_picker_widget)
+        return ori_picker_box_set
 
-        # Add the placeholder widget to the stacked widget
-        self.stacked_widget.addWidget(self.placeholder_widget)
+    def _setup_turns_box_set(self):
+        turns_box_set = QWidget(self)
+        turns_layout = QHBoxLayout(turns_box_set)
+        turns_layout.setContentsMargins(0, 0, 0, 0)
+        turns_layout.setSpacing(0)
+        turns_layout.addWidget(self.blue_turns_box)
+        turns_layout.addWidget(self.red_turns_box)
+        return turns_box_set
 
     def update_adjustment_panel(self) -> None:
         """Update the panel based on the current pictograph's state."""
         pictograph = (
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
-
+        
         if pictograph.is_blank:
             self.stacked_widget.setCurrentWidget(self.placeholder_widget)
         elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
-            self.stacked_widget.setCurrentWidget(
-                self.stacked_widget.widget(1)
-            )  # Ori picker layout
+            self.stacked_widget.setCurrentWidget(self.stacked_widget.widget(1))
         else:
-            self.stacked_widget.setCurrentWidget(
-                self.stacked_widget.widget(0)
-            )  # Turns boxes layout
+            self.stacked_widget.setCurrentWidget(self.stacked_widget.widget(0))
 
     def update_turns_displays(
         self, blue_motion: "Motion", red_motion: "Motion"

@@ -11,15 +11,28 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
+# graph_editor.py
+
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
+
+if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
+
 class GraphEditor(QFrame):
     pictograph_layout: QVBoxLayout
     adjustment_panel_layout: QVBoxLayout
-
+    
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
+
+        # Set size policies
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.setMinimumHeight(0)  # Allow to shrink to zero height
+
         self._setup_components()
         self.layout_manager.setup_layout()
 
@@ -32,9 +45,17 @@ class GraphEditor(QFrame):
         self.animator = GraphEditorAnimator(self)
         self.toggle_tab.toggled.connect(self.animator.animate_toggle)
 
+        # Set size policies for child widgets
+        self.pictograph_container.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.pictograph_container.setMinimumHeight(0)
+
+        self.adjustment_panel.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.adjustment_panel.setMinimumHeight(0)
+
+
     def resize_graph_editor(self) -> None:
         if not self.animator.is_animating:
-            self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
+            self.setMaximumHeight(int(self.sequence_widget.height() // 3.5))
         self.setMaximumWidth(self.sequence_widget.width())
         self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()

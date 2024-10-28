@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-
 from .sequence_clearer import SequenceClearer
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
@@ -38,22 +37,19 @@ class SequenceWidget(QWidget):
         self.autocompleter = SequenceAutoCompleter(self)
         self.sequence_clearer = SequenceClearer(self)
         self.layout_manager = SequenceWidgetLayoutManager(self)
-        
+
         # Labels
         self.indicator_label = SequenceWidgetIndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)
         self.difficulty_label = DifficultyLabel(self)
-        
+
         # Sections
         self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.button_panel = SequenceWidgetButtonPanel(self)
         self.graph_editor = GraphEditor(self)
-        
 
-    def show_options_panel(self) -> None:
-        self.options_panel = LayoutOptionsDialog(self)
-        self.options_panel.exec()
+
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()

@@ -44,6 +44,7 @@ class GraphEditorAnimator(QObject):
 
         if self.graph_editor.state.is_graph_editor_visible:
             # Collapse to zero height
+            self.graph_editor.setMinimumHeight(0)
             self.graph_editor_animation.setStartValue(self.graph_editor.height())
             self.graph_editor_animation.setEndValue(0)
 
@@ -57,6 +58,7 @@ class GraphEditorAnimator(QObject):
             self.graph_editor.state.is_graph_editor_visible = False
         else:
             # Expand graph editor to full height
+            self.graph_editor.setMinimumHeight(0)
             self.graph_editor_animation.setStartValue(0)
             self.graph_editor_animation.setEndValue(editor_height)
 
