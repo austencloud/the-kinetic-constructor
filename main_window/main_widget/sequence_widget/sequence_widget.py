@@ -32,7 +32,7 @@ class SequenceWidget(QWidget):
         self._setup_components()
         self.layout_manager.setup_layout()
 
-    def _setup_components(self):
+    def _setup_components(self) -> None:
         # Managers
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
@@ -51,7 +51,7 @@ class SequenceWidget(QWidget):
         self.graph_editor = GraphEditor(self)
         
 
-    def show_options_panel(self):
+    def show_options_panel(self) -> None:
         self.options_panel = LayoutOptionsDialog(self)
         self.options_panel.exec()
 
@@ -61,10 +61,10 @@ class SequenceWidget(QWidget):
         self.beat_frame.resize_beat_frame()
         self.graph_editor.resize_graph_editor()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         self.resize_sequence_widget()
         super().resizeEvent(event)
 
-    def showEvent(self, event):
+    def showEvent(self, event) -> None:
         super().showEvent(event)
         self.current_word_label.update_current_word_label_from_beats()

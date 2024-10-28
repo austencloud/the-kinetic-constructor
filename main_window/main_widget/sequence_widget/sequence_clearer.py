@@ -22,7 +22,7 @@ class SequenceClearer:
         self._initialize_manual_builder()
         self._reset_manual_builder(should_reset_to_start_pos_picker)
         self._show_clear_indicator(show_indicator)
-        self.sequence_widget.graph_editor.clear_graph_editor()
+        self.sequence_widget.graph_editor.state.reset_graph_editor()
         self._configure_beat_frame()
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 

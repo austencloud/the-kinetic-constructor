@@ -19,7 +19,6 @@ if TYPE_CHECKING:
 
 class BeatFactory:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
-        self.sequence_widget = beat_frame
         self.pictograph_cache = beat_frame.main_widget.pictograph_cache
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
@@ -31,7 +30,7 @@ class BeatFactory:
         letter = Letter.get_letter(letter_str)
 
         if pictograph_dict is not None:
-            start_pos_beat = StartPositionBeat(self.sequence_widget.main_widget)
+            start_pos_beat = StartPositionBeat(self.beat_frame)
             start_pos_beat.updater.update_pictograph(pictograph_dict)
 
             if letter not in self.pictograph_cache:

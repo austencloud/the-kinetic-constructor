@@ -42,7 +42,7 @@ class GraphEditorAnimator(QObject):
         self.is_animating = True
         editor_height = self.sequence_widget.main_widget.height() // 4
 
-        if self.graph_editor.is_graph_editor_visible:
+        if self.graph_editor.state.is_graph_editor_visible:
             # Collapse to zero height
             self.graph_editor_animation.setStartValue(self.graph_editor.height())
             self.graph_editor_animation.setEndValue(0)
@@ -54,7 +54,7 @@ class GraphEditorAnimator(QObject):
             )
             self.toggle_tab_animation.setStartValue(self.toggle_tab.pos())
             self.toggle_tab_animation.setEndValue(toggle_bottom_position)
-            self.graph_editor.is_graph_editor_visible = False
+            self.graph_editor.state.is_graph_editor_visible = False
         else:
             # Expand graph editor to full height
             self.graph_editor_animation.setStartValue(0)
@@ -66,10 +66,10 @@ class GraphEditorAnimator(QObject):
             )
             self.toggle_tab_animation.setStartValue(self.toggle_tab.pos())
             self.toggle_tab_animation.setEndValue(toggle_top_position)
-            self.graph_editor.is_graph_editor_visible = True
+            self.graph_editor.state.is_graph_editor_visible = True
 
         self.animation_group.start()
 
     def animation_finished(self):
         self.is_animating = False
-        self.graph_editor.save_graph_editor_state()
+        self.graph_editor.state.save_graph_editor_state()
