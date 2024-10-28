@@ -4,21 +4,9 @@ from Enums.Enums import LetterType
 
 from Enums.letters import Letter
 from data.constants import (
-    BLUE_END_LOC,
-    BLUE_MOTION_TYPE,
-    BLUE_PROP_ROT_DIR,
-    BLUE_START_LOC,
-    END_POS,
     FLOAT,
-    LETTER,
-    RED_END_LOC,
-    RED_MOTION_TYPE,
-    RED_PROP_ROT_DIR,
-    RED_START_LOC,
-    START_POS,
 )
 
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
@@ -27,9 +15,6 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
-    from main_window.main_widget.sequence_widget.sequence_widget import (
-        SequenceWidget,
-    )
 
 
 class BeatFactory:

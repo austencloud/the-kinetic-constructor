@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSplitter, QScrollArea, QFrame, QHBoxLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QScrollArea, QFrame, QHBoxLayout
 from .act_beat_scroll.act_beat_scroll import ActBeatScroll
 from .cue_scroll.cue_scroll import CueScroll
 

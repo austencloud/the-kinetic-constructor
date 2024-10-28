@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QApplication
-from main_window.main_widget.metadata_extractor import MetaDataExtractor
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box_nav_btns import (
     ThumbnailBoxNavButtonsWidget,
 )

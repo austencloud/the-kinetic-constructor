@@ -11,7 +11,6 @@ from .labels.difficulty_label import DifficultyLabel
 from .graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .labels.sequence_widget_indicator_label import SequenceWidgetIndicatorLabel
-from .sequence_widget_pictograph_factory import BeatFactory
 from .sequence_widget_button_panel import SequenceWidgetButtonPanel
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
