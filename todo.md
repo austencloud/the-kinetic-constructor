@@ -10,3 +10,6 @@
 - More customizable variables in the browser options panel
 - Split the Learn tab into levels
 - Fix the Font Color updater to update currently selected toggles
+- Fix the show label's options to be a series of buttons in the option Picker that are toggleable.
+  - Filter by Red Reveral, Blue Reversal.
+- Make the graph editor collapsible
