@@ -49,8 +49,6 @@ class SequenceWidget(QWidget):
         self.button_panel = SequenceWidgetButtonPanel(self)
         self.graph_editor = GraphEditor(self)
 
-
-
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
         self.button_panel.resize_button_frame()
@@ -59,6 +57,8 @@ class SequenceWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         self.resize_sequence_widget()
+        if self.graph_editor.isVisible():
+            self.graph_editor.resize_graph_editor()
         super().resizeEvent(event)
 
     def showEvent(self, event) -> None:

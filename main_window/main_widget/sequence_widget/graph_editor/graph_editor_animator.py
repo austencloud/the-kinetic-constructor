@@ -39,6 +39,7 @@ class GraphEditorAnimator(QObject):
         self.animation_group.finished.connect(self.animation_finished)
 
     def animate_toggle(self):
+        self.graph_editor.show()
         self.is_animating = True
         editor_height = self.sequence_widget.main_widget.height() // 4
 

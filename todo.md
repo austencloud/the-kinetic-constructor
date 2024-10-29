@@ -13,3 +13,4 @@
 - Fix the show label's options to be a series of buttons in the option Picker that are toggleable.
   - Filter by Red Reveral, Blue Reversal.
 - Make the graph editor collapsible
+- Put the cheat sheet in the Learn Tab
