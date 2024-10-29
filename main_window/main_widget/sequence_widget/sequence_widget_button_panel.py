@@ -7,7 +7,9 @@ from main_window.main_widget.dictionary_widget.full_screen_image_overlay import 
     FullScreenImageOverlay,
 )
 
-from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog import LayoutOptionsDialog
+from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog import (
+    LayoutOptionsDialog,
+)
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
@@ -87,9 +89,11 @@ class SequenceWidgetButtonPanel(QFrame):
                 button_data["callback"],
                 button_data["tooltip"],
             )
+
     def show_options_panel(self) -> None:
         self.options_panel = LayoutOptionsDialog(self.sequence_widget)
         self.options_panel.exec()
+
     def view_full_screen(self):
         """Display the current image in full screen mode."""
         last_beat = self.beat_frame.get.last_filled_beat()
@@ -136,6 +140,7 @@ class SequenceWidgetButtonPanel(QFrame):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         for button in self.buttons:
             self.layout.addWidget(button)
+        self.layout.addStretch(1)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resize_button_frame(self) -> None:

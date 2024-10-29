@@ -87,4 +87,3 @@ class JsonSequenceUpdater:
         for beat_view in beat_views:
             if beat_view.is_filled:
                 self.update_current_sequence_file_with_beat(beat_view)
-        self.json_manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change

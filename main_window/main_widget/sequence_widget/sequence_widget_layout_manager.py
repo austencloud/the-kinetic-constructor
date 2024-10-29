@@ -19,21 +19,21 @@ class SequenceWidgetLayoutManager:
     def setup_layout(self):
         self.setup_beat_frame_layout()
         self.setup_indicator_label_layout()
-        layout: QVBoxLayout = QVBoxLayout(self.sequence_widget)
+        self.main_layout: QVBoxLayout = QVBoxLayout(self.sequence_widget)
 
         current_word_layout = QVBoxLayout()
         current_word_layout.addWidget(self.sequence_widget.current_word_label)
         current_word_layout.addWidget(self.sequence_widget.difficulty_label)
 
-        layout.addLayout(current_word_layout, 1)
-        layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
-        layout.addWidget(self.sequence_widget.indicator_label, 1)
-        layout.addWidget(
+        self.main_layout.addLayout(current_word_layout, 1)
+        self.main_layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
+        self.main_layout.addWidget(self.sequence_widget.indicator_label, 1)
+        self.main_layout.addStretch(2)
+        self.main_layout.addWidget(
             self.sequence_widget.graph_editor.toggle_tab,
             alignment=Qt.AlignmentFlag.AlignBottom,
         )
-        layout.addWidget(self.sequence_widget.graph_editor, 5)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.sequence_widget.graph_editor.state.update_graph_editor_visibility()
         self.sequence_widget.setSizePolicy(
@@ -41,7 +41,7 @@ class SequenceWidgetLayoutManager:
         )
         self.sequence_widget.scroll_area.setWidget(self.sequence_widget.beat_frame)
 
-        self.sequence_widget.setLayout(layout)
+        self.sequence_widget.setLayout(self.main_layout)
 
     def setup_beat_frame_layout(self):
         self.sequence_widget.beat_frame_layout = QHBoxLayout()
