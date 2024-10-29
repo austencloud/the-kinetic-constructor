@@ -59,7 +59,7 @@ class TurnIntensityAdjuster(QWidget):
 
     def set_intensity(self, intensity):
         """Set the initial intensity when loading settings."""
-        self.intensity = intensity
+        self.intensity = int(intensity)
         self.intensity_value_label.setText(str(self.intensity))
 
     def adjust_values(self, level):
