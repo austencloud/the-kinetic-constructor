@@ -10,6 +10,9 @@ from PyQt6.QtGui import QIcon, QFont, QFontMetrics, QMouseEvent
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
+    StartPosPickerPictographFrame,
+)
 from utilities.path_helpers import get_images_and_data_path
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import IN, COUNTER, ORI, OUT, CLOCK
@@ -131,23 +134,28 @@ class OriPickerWidget(QWidget):
             new_ori = current_ori
         self.set_orientation(new_ori)
 
-    def set_orientation(self, orientation):
-        if not self.option_picker:
-            self.option_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
-            )
+    def set_orientation(self, orientation: str) -> None:
+        """Set the displayed orientation and apply it to the related pictograph."""
         self.current_orientation_index = self.orientations.index(orientation)
         self.ori_display_label.setText(orientation)
+
+        # Update the pictograph and emit orientation changes
         self.json_manager.start_position_handler.update_start_pos_ori(
             self.color, orientation
         )
         self.json_validation_engine.run(is_current_sequence=True)
         self.ori_adjusted.emit(orientation)
-        current_pictograph = (
-            self.ori_picker_box.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+
+        # Update start position pictograph in the picker if visible
+        start_position_pictographs = (
+            self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.start_pos_picker.pictograph_frame.start_positions
         )
-        current_pictograph.props[self.color].updater.update_prop({ORI: orientation})
-        current_pictograph.updater.update_pictograph()
+        if start_position_pictographs:
+            for pictograph in start_position_pictographs.values():
+                pictograph.props[self.color].updater.update_prop({ORI: orientation})
+                pictograph.updater.update_pictograph()
+                QApplication.processEvents()
+        self.option_picker = self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
         QApplication.processEvents()
         self.option_picker.update_option_picker()
 

@@ -63,7 +63,10 @@ class GraphEditor(QFrame):
 
     def resize_graph_editor(self) -> None:
         graph_editor_height = self.get_graph_editor_height()
-        self.setFixedSize(self.sequence_widget.width(), graph_editor_height)
+        width = min(
+            self.sequence_widget.width(), self.sequence_widget.main_widget.width() // 2
+        )
+        self.setFixedSize(width, graph_editor_height)
 
         if self.sequence_widget.graph_editor.isVisible():
             self.sequence_widget.layout_manager.graph_editor_placeholder.resize_graph_editor_placeholder()

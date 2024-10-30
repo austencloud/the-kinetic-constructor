@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
+from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox, QApplication
 
 from main_window.main_widget.dictionary_widget.full_screen_image_overlay import (
     FullScreenImageOverlay,
@@ -102,6 +102,8 @@ class SequenceWidgetButtonPanel(QFrame):
 
     def view_full_screen(self):
         """Display the current image in full screen mode."""
+        # set mouse cursor to waiting
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         last_beat = self.beat_frame.get.last_filled_beat()
         if last_beat.__class__ == StartPositionBeatView:
             self.indicator_label.show_message("Please build a sequence first.")
@@ -116,6 +118,8 @@ class SequenceWidgetButtonPanel(QFrame):
                     self.main_widget, pixmap
                 )
                 self.full_screen_overlay.show()
+                # set mouse cursor back to normal
+                QApplication.restoreOverrideCursor()
             else:
                 QMessageBox.warning(self, "No Image", "Please select an image first.")
 

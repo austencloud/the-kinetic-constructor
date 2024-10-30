@@ -14,3 +14,4 @@
   - Filter by Red Reveral, Blue Reversal.
 - Make the graph editor collapsible
 - Put the cheat sheet in the Learn Tab
+- When the user is prompted to choose their start position, then the orientation pickers within the graph editor should apply to the pictographs they are being shown in the start position picker.

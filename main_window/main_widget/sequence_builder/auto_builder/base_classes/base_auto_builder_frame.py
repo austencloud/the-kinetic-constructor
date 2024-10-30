@@ -32,19 +32,12 @@ class BaseAutoBuilderFrame(QFrame):
         self.setLayout(self.layout)
 
         # Modular widgets
-        self.customize_sequence_label = CustomizeSequenceLabel(self)
         self.level_selector = LevelSelector(self)
         self.length_adjuster = LengthAdjuster(self)
         self.turn_intensity_adjuster = TurnIntensityAdjuster(self)
         self.continuous_rotation_toggle = ContinuousRotationToggle(self)
 
-        self.create_sequence_button = QPushButton("Create Sequence")
-        self.create_sequence_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
-        # Add Widgets to Layout
-        self.layout.addWidget(
-            self.customize_sequence_label, alignment=Qt.AlignmentFlag.AlignCenter
-        )
 
         self.layout.addStretch(1)
         self.layout.addWidget(self.level_selector)
@@ -56,9 +49,7 @@ class BaseAutoBuilderFrame(QFrame):
         self.layout.addWidget(self.continuous_rotation_toggle)
         self.layout.addStretch(1)
 
-        self.layout.addWidget(
-            self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
-        )
+
 
     def apply_settings(self):
         """Apply settings to modular widgets."""
@@ -71,12 +62,16 @@ class BaseAutoBuilderFrame(QFrame):
         intensity = self.auto_builder_settings.get_auto_builder_setting(
             "max_turn_intensity", self.builder_type
         )
-        
+
         # Convert continuous_rotation to boolean
         continuous_rotation = self.auto_builder_settings.get_auto_builder_setting(
             "continuous_rotation", self.builder_type
         )
-        continuous_rotation = continuous_rotation.lower() == "true" if isinstance(continuous_rotation, str) else bool(continuous_rotation)
+        continuous_rotation = (
+            continuous_rotation.lower() == "true"
+            if isinstance(continuous_rotation, str)
+            else bool(continuous_rotation)
+        )
 
         self.level_selector.set_level(level)
         self.length_adjuster.set_length(int(length))
@@ -84,12 +79,9 @@ class BaseAutoBuilderFrame(QFrame):
         self.continuous_rotation_toggle.set_state(continuous_rotation)
         self.continuous_rotation_toggle.update_mode_label_styles()
 
-
     def _resize_auto_builder_frame(self):
         """Resize the auto builder frame based on the parent widget size."""
-        self.customize_sequence_label.resize_customize_sequence_label()  # Resize the label
         self._resize_widgets()
-        self._resize_create_sequence_button()
 
     def _resize_widgets(self):
         self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
@@ -97,18 +89,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.length_adjuster.resize_length_adjuster()
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
 
-    def _resize_create_sequence_button(self):
-        font_size = self.sequence_generator_tab.main_widget.width() // 50
-        self.create_sequence_button.setStyleSheet(f"font-size: {font_size}px;")
-        self.create_sequence_button.updateGeometry()
-        self.create_sequence_button.repaint()
-
-        self.create_sequence_button.setFixedWidth(
-            self.sequence_generator_tab.main_widget.width() // 3
-        )
-        self.create_sequence_button.setFixedHeight(
-            self.sequence_generator_tab.main_widget.height() // 10
-        )
 
     def _update_sequence_length(self, length: int):
         self.auto_builder_settings.set_auto_builder_setting(

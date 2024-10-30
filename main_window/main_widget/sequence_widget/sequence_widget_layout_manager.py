@@ -29,7 +29,7 @@ class SequenceWidgetLayoutManager:
         current_word_layout = QVBoxLayout()
         current_word_layout.addWidget(self.sequence_widget.current_word_label)
         current_word_layout.addWidget(self.sequence_widget.difficulty_label)
-
+        self.main_layout.addStretch(1)
         self.main_layout.addLayout(current_word_layout, 1)
         self.main_layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
         self.main_layout.addWidget(self.sequence_widget.indicator_label, 1)
