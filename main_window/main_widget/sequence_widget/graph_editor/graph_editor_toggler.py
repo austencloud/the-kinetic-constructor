@@ -1,5 +1,14 @@
+from PyQt6.QtCore import QPropertyAnimation, QRect, QPoint, QEasingCurve, QObject
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import QObject, QPropertyAnimation, QEasingCurve, QRect, QPoint
+from PyQt6.QtWidgets import (
+    QSpacerItem,
+    QSizePolicy,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QFrame,
+    QSizePolicy,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -7,12 +16,16 @@ if TYPE_CHECKING:
 
 class GraphEditorToggler(QObject):
     def __init__(self, sequence_widget: "SequenceWidget"):
-
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
         self.graph_editor = sequence_widget.graph_editor
         self.toggle_tab = sequence_widget.toggle_tab
-        self.placeholder = sequence_widget.layout_manager.graph_editor_placeholder
+        self.graph_editor_placeholder = (
+            sequence_widget.layout_manager.graph_editor_placeholder
+        )
+        self.button_panel_bottom_placeholder = (
+            sequence_widget.button_panel.bottom_placeholder
+        )  # Bottom spacer in button panel
 
     def toggle(self):
         if self.graph_editor.isVisible():
@@ -27,7 +40,7 @@ class GraphEditorToggler(QObject):
         parent_width = self.sequence_widget.width()
         desired_height = self.sequence_widget.graph_editor.get_graph_editor_height()
 
-        # Define starting and ending positions for animations
+        # Define start and end values for animation
         if show:
             editor_start_rect = QRect(0, parent_height, parent_width, 0)
             editor_end_rect = QRect(
@@ -51,22 +64,23 @@ class GraphEditorToggler(QObject):
             placeholder_start_height = desired_height
             placeholder_end_height = 0
 
-        # Animate the GraphEditor geometry
+        # Animate GraphEditor geometry
         self.graph_editor_animation = QPropertyAnimation(self.graph_editor, b"geometry")
         self.graph_editor_animation.setStartValue(editor_start_rect)
         self.graph_editor_animation.setEndValue(editor_end_rect)
         self.graph_editor_animation.setDuration(300)
         self.graph_editor_animation.setEasingCurve(QEasingCurve.Type.OutQuad)
 
-        # Animate the height of the placeholder using set_height
-        self.placeholder_animation = QPropertyAnimation(
-            self.placeholder, b"minimumHeight"
+        # Animate graph editor placeholder height
+        self.graph_editor_placeholder_animation = QPropertyAnimation(
+            self.graph_editor_placeholder, b"minimumHeight"
         )
-        self.placeholder_animation.setStartValue(placeholder_start_height)
-        self.placeholder_animation.setEndValue(placeholder_end_height)
-        self.placeholder_animation.setDuration(300)
-        self.placeholder_animation.setEasingCurve(QEasingCurve.Type.OutQuad)
-        self.placeholder_animation.valueChanged.connect(self.placeholder.set_height)
+        self.graph_editor_placeholder_animation.setStartValue(placeholder_start_height)
+        self.graph_editor_placeholder_animation.setEndValue(placeholder_end_height)
+        self.graph_editor_placeholder_animation.setDuration(300)
+        self.graph_editor_placeholder_animation.setEasingCurve(
+            QEasingCurve.Type.OutQuad
+        )
 
         # Remove placeholder on collapse
         if not show:
@@ -75,7 +89,7 @@ class GraphEditorToggler(QObject):
             )
             self.graph_editor_animation.finished.connect(self.graph_editor.hide)
 
-        # Animate the toggle tab position
+        # Animate toggle tab position
         self.toggle_tab_animation = QPropertyAnimation(self.toggle_tab, b"pos")
         self.toggle_tab_animation.setStartValue(toggle_start_pos)
         self.toggle_tab_animation.setEndValue(toggle_end_pos)
@@ -84,5 +98,5 @@ class GraphEditorToggler(QObject):
 
         # Start all animations simultaneously
         self.graph_editor_animation.start()
-        self.placeholder_animation.start()
+        self.graph_editor_placeholder_animation.start()
         self.toggle_tab_animation.start()

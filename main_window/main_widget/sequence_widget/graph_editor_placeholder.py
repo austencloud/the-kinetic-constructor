@@ -15,5 +15,13 @@ class GraphEditorPlaceholder(QFrame):
     def set_height(self, new_height):
         """Sets the height of the placeholder dynamically."""
         self.setFixedHeight(new_height)
-        self.sequence_widget.updateGeometry()  # Update layout to reflect the height change
+        self.sequence_widget.updateGeometry()
+        self.sequence_widget.button_panel.updateGeometry()  # Update layout to reflect the height change
         QApplication.processEvents()  # Process events to update layout immediately
+
+    def resize_graph_editor_placeholder(self):
+        """Resizes the placeholder to match the graph editor height."""
+        graph_editor_height = (
+            self.sequence_widget.graph_editor.get_graph_editor_height()
+        )
+        self.set_height(graph_editor_height)

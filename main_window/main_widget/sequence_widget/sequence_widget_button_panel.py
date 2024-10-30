@@ -13,6 +13,7 @@ from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog im
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
+from main_window.main_widget.sequence_widget.button_panel_placeholder import ButtonPanelPlaceholder
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -24,18 +25,19 @@ class SequenceWidgetButtonPanel(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
+        self.placeholder = ButtonPanelPlaceholder(self)  # Initialize placeholder
+
         self.full_screen_overlay = None
         self.font_size = self.sequence_widget.width() // 45
         self._setup_dependencies()
         self._setup_buttons()
+        self.top_placeholder = ButtonPanelPlaceholder(self)   # Top spacer for centering
+        self.bottom_placeholder = ButtonPanelPlaceholder(self)  # Bottom spacer to adjust with GraphEditor
         self._setup_layout()
 
     def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
         self.json_manager = self.main_widget.json_manager
-        # self.sequence_builder = (
-        #     self.sequence_widget.top_builder_widget.sequence_builder_tab_widget
-        # )
         self.beat_frame = self.sequence_widget.beat_frame
         self.export_manager = self.beat_frame.image_export_manager
         self.indicator_label = self.sequence_widget.indicator_label
@@ -137,18 +139,21 @@ class SequenceWidgetButtonPanel(QFrame):
         self.buttons.append(button)
 
     def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout:QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.top_placeholder)   # Top placeholder
         for button in self.buttons:
             self.layout.addWidget(button)
-        self.layout.addStretch(1)
+        self.layout.addWidget(self.bottom_placeholder)  # Bottom placeholder
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout.setSpacing(self.sequence_widget.height() // 40)
 
     def resize_button_frame(self) -> None:
         button_size = self.sequence_widget.main_widget.height() // 18
-
         for button in self.buttons:
             button.setFixedSize(button_size, button_size)
             button.setIconSize((button.size() * 0.7))
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
         self.layout.setSpacing(self.sequence_widget.height() // 40)
+
+        self.layout.update()
