@@ -43,13 +43,11 @@ class GraphEditor(QFrame):
     def _setup_components(self) -> None:
         self.pictograph_container = GraphEditorPictographContainer(self)
         self.adjustment_panel = BeatAdjustmentPanel(self)
-        self.toggle_tab = GraphEditorToggleTab(self)
+        # self.toggle_tab = GraphEditorToggleTab(self)
         self.layout_manager = GraphEditorLayoutManager(self)
         self.state = GraphEditorStateManager(self)
-        # self.animator = GraphEditorAnimator(self)
-        self.toggle_tab.toggled.connect(self.toggle_graph_editor)
+        # self.sequence_widget.toggle_tab.toggled.connect(self.toggle_graph_editor)
 
-        # Set size policies for child widgets
         self.pictograph_container.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
@@ -60,69 +58,20 @@ class GraphEditor(QFrame):
         )
         self.adjustment_panel.setMinimumHeight(0)
 
-    def toggle_graph_editor(self):
-        if self.isVisible():
-            self.animate_graph_editor(show=False)
-        else:
-            self.show()
-            self.animate_graph_editor(show=True)
-
-    def animate_graph_editor(self, show):
-        parent_height = self.sequence_widget.height()
-        parent_width = self.sequence_widget.width()
-        desired_height = int(parent_height // 3.5)  # Or whatever height you desire
-
-        if show:
-            start_rect = QRect(0, parent_height, parent_width, 0)
-            end_rect = QRect(
-                0, parent_height - desired_height, parent_width, desired_height
-            )
-            self.sequence_widget.scroll_area.setFixedHeight(
-                self.sequence_widget.height()
-                - desired_height
-                - self.sequence_widget.current_word_label.height()
-                - self.sequence_widget.difficulty_label.height()
-                - self.toggle_tab.height()
-                - 150
-            )
-            # set the stretch of the beat frame layout in the layout manager of the sequence widget to be 8
-            self.sequence_widget.layout_manager.main_layout.setStretch(1, 2)
-        else:
-            start_rect = QRect(
-                0, parent_height - desired_height, parent_width, desired_height
-            )
-            end_rect = QRect(0, parent_height, parent_width, 0)
-            self.sequence_widget.scroll_area.setFixedHeight(
-                self.sequence_widget.height()
-                - self.sequence_widget.current_word_label.height()
-                - self.sequence_widget.difficulty_label.height()
-                - self.toggle_tab.height()
-                - 150
-            )
-
-        self.setGeometry(start_rect)
-
-        animation = QPropertyAnimation(self, b"geometry")
-        animation.setStartValue(start_rect)
-        animation.setEndValue(end_rect)
-        animation.setDuration(300)
-        animation.setEasingCurve(QEasingCurve.Type.OutQuad)
-        if not show:
-            animation.finished.connect(self.hide)
-        animation.start()
-        self.current_animation = animation  # Keep a reference
-
     def resize_graph_editor(self) -> None:
-        # Remove the move() call; position will be managed in animate_graph_editor()
-        self.setFixedSize(
-            self.sequence_widget.width(), int(self.sequence_widget.height() // 3.5)
-        )
+        graph_editor_height = self.get_graph_editor_height()
+        self.setFixedSize(self.sequence_widget.width(), graph_editor_height)
+
+        if self.sequence_widget.graph_editor.isVisible():
+            self.sequence_widget.layout_manager.graph_editor_placeholder.resize_graph_editor_placeholder()
+
         self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()
-        self.adjustment_panel.placeholder_widget.resize_adjustment_panel_placeholder_text()
         self.adjustment_panel.resize_beat_adjustment_panel()
-        self.raise_()  # Ensure it appears above other widgets
-        self.toggle_tab.raise_()
+        self.raise_()
+
+    def get_graph_editor_height(self):
+        return int(self.sequence_widget.height() // 3.5)
 
     def resizeEvent(self, event):
         self.resize_graph_editor()

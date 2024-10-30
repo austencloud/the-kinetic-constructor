@@ -1,6 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QSizePolicy, QSpacerItem
+
+from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
+    GraphEditorPlaceholder,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -9,6 +13,7 @@ if TYPE_CHECKING:
 class SequenceWidgetLayoutManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
+        self.graph_editor_placeholder = GraphEditorPlaceholder(sequence_widget)
 
     def resize_sequence_widget(self) -> None:
         self.sequence_widget.current_word_label.resize_current_word_label()
@@ -28,11 +33,9 @@ class SequenceWidgetLayoutManager:
         self.main_layout.addLayout(current_word_layout, 1)
         self.main_layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
         self.main_layout.addWidget(self.sequence_widget.indicator_label, 1)
-        self.main_layout.addStretch(2)
-        self.main_layout.addWidget(
-            self.sequence_widget.graph_editor.toggle_tab,
-            alignment=Qt.AlignmentFlag.AlignBottom,
-        )
+        # if self.sequence_widget.graph_editor.isVisible():
+        self.add_graph_editor_placeholder()
+
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.sequence_widget.graph_editor.state.update_graph_editor_visibility()
@@ -42,6 +45,14 @@ class SequenceWidgetLayoutManager:
         self.sequence_widget.scroll_area.setWidget(self.sequence_widget.beat_frame)
 
         self.sequence_widget.setLayout(self.main_layout)
+
+    def add_graph_editor_placeholder(self):
+        self.main_layout.addWidget(self.graph_editor_placeholder)
+        # self.graph_editor_placeholder.update_height()
+
+    def remove_graph_editor_placeholder(self):
+        self.main_layout.removeWidget(self.graph_editor_placeholder)
+        # self.graph_editor_placeholder.resize_graph_editor_placeholder()
 
     def setup_beat_frame_layout(self):
         self.sequence_widget.beat_frame_layout = QHBoxLayout()
