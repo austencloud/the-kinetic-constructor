@@ -13,7 +13,9 @@ from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog im
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
-from main_window.main_widget.sequence_widget.button_panel_placeholder import ButtonPanelPlaceholder
+from main_window.main_widget.sequence_widget.button_panel_placeholder import (
+    ButtonPanelPlaceholder,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -31,8 +33,10 @@ class SequenceWidgetButtonPanel(QFrame):
         self.font_size = self.sequence_widget.width() // 45
         self._setup_dependencies()
         self._setup_buttons()
-        self.top_placeholder = ButtonPanelPlaceholder(self)   # Top spacer for centering
-        self.bottom_placeholder = ButtonPanelPlaceholder(self)  # Bottom spacer to adjust with GraphEditor
+        self.top_placeholder = ButtonPanelPlaceholder(self)  # Top spacer for centering
+        self.bottom_placeholder = ButtonPanelPlaceholder(
+            self
+        )  # Bottom spacer to adjust with GraphEditor
         self._setup_layout()
 
     def _setup_dependencies(self):
@@ -139,21 +143,22 @@ class SequenceWidgetButtonPanel(QFrame):
         self.buttons.append(button)
 
     def _setup_layout(self) -> None:
-        self.layout:QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.top_placeholder)   # Top placeholder
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.top_placeholder)  # Top placeholder
         for button in self.buttons:
             self.layout.addWidget(button)
         self.layout.addWidget(self.bottom_placeholder)  # Bottom placeholder
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setSpacing(self.sequence_widget.height() // 40)
 
-    def resize_button_frame(self) -> None:
+    def resize_button_panel(self) -> None:
         button_size = self.sequence_widget.main_widget.height() // 18
         for button in self.buttons:
             button.setFixedSize(button_size, button_size)
             button.setIconSize((button.size() * 0.7))
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        self.layout.setSpacing(self.sequence_widget.height() // 40)
+        spacing = self.sequence_widget.beat_frame.height() // 40
+        self.layout.setSpacing(spacing)
 
         self.layout.update()

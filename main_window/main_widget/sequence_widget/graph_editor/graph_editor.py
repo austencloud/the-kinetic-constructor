@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve, QRect
 from .graph_editor_layout_manager import GraphEditorLayoutManager
 from .graph_editor_state_manager import GraphEditorStateManager
@@ -15,15 +15,18 @@ if TYPE_CHECKING:
 # graph_editor.py
 
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy, QStackedLayout
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class GraphEditor(QFrame):
+    main_layout: QHBoxLayout
     pictograph_layout: QVBoxLayout
     adjustment_panel_layout: QVBoxLayout
+    left_stack: QStackedLayout
+    right_stack: QStackedLayout
 
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)

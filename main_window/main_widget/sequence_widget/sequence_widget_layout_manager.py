@@ -17,7 +17,7 @@ class SequenceWidgetLayoutManager:
 
     def resize_sequence_widget(self) -> None:
         self.sequence_widget.current_word_label.resize_current_word_label()
-        self.sequence_widget.button_panel.resize_button_frame()
+        self.sequence_widget.button_panel.resize_button_panel()
         self.sequence_widget.beat_frame.resize_beat_frame()
         self.sequence_widget.graph_editor.resize_graph_editor()
 

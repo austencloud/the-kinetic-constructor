@@ -71,6 +71,10 @@ class PropRotDirButtonManager:
                 )
                 self._update_pictograph_and_json(motion, new_letter)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
+        self.option_picker = (
+            self.turns_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
+        )
+        self.option_picker.update_option_picker()
 
     def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
         """Update the pictograph and JSON with the new letter and motion attributes."""

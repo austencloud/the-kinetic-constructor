@@ -66,7 +66,7 @@ class SequenceWidget(QWidget):
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
-        self.button_panel.resize_button_frame()
+        self.button_panel.resize_button_panel()
         self.beat_frame.resize_beat_frame()
         self.graph_editor.resize_graph_editor()
 
