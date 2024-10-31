@@ -73,7 +73,9 @@ class FontColorUpdater:
                 self._apply_font_color(widget, font_color)
             for edit in [box.timestamp.edit, box.cue_label.edit]:
                 self._apply_font_color(edit, font_color)
-
+                    
+            box.setStyleSheet(f"#cue_box {{border-top: 1px solid {font_color};}}")
+            
     def _update_menu_bar_widget(
         self, main_widget: "MainWidget", font_color: str
     ) -> None:
