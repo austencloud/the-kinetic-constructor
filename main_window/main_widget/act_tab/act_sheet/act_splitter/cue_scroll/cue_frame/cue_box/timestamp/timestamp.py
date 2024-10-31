@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QEvent
 
 from .......editable_label import EditableLabel
 
@@ -33,3 +33,18 @@ class Timestamp(EditableLabel):
         font.setBold(True)
         self.label.setFont(font)
         self.edit.setFont(font)
+
+    def eventFilter(self, source, event) -> bool:
+        """Filter for Enter key to commit and align height in edit mode."""
+        if (
+            source == self.edit
+            and event.type() == QEvent.Type.KeyPress
+            and event.key() == Qt.Key.Key_Return
+            and (
+                not self.multi_line
+                or event.modifiers() == Qt.KeyboardModifier.NoModifier
+            )
+        ):
+            self._hide_edit()
+            return True
+        return super().eventFilter(source, event)

@@ -39,7 +39,7 @@ class MainWidgetUI:
         self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
-        self.main_widget.write_widget = ActTab(self.main_widget)
+        self.main_widget.act_tab = ActTab(self.main_widget)
 
         # Initialize builder_stacked_widget to switch between manual builder and sequence generator
         self.main_widget.builder_stacked_widget = QStackedWidget()
@@ -87,7 +87,7 @@ class MainWidgetUI:
             self.main_widget.dictionary_learn_widget
         )  # Index 1
         self.main_widget.main_stacked_widget.addWidget(
-            self.main_widget.write_widget
+            self.main_widget.act_tab
         )  # Index 2
 
     def _setup_layout(self):

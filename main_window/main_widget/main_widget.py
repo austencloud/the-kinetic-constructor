@@ -63,7 +63,7 @@ class MainWidget(QWidget):
     sequence_generator: "SequenceGeneratorWidget"
     dictionary_widget: "DictionaryWidget"
     learn_widget: "LearnWidget"
-    write_widget: "ActTab"
+    act_tab: "ActTab"
 
     # Handlers
     tabs_handler: "MainWidgetTabs"

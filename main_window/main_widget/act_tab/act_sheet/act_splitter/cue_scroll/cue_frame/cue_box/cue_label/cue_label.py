@@ -17,6 +17,8 @@ class CueLabel(EditableLabel):
         )
         self.cue_box = cue_box
 
+
+
     def resize_cue_label(self):
         max_width = self.cue_box.width() - 10
         self.setFixedWidth(max_width)
