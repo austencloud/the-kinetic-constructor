@@ -19,8 +19,8 @@ class ActTab(QWidget):
 
     def _setup_layout(self):
         layout = QHBoxLayout(self)
-        layout.addWidget(self.act_sheet)
-        layout.addWidget(self.act_browser)
+        layout.addWidget(self.act_sheet, 5)
+        layout.addWidget(self.act_browser, 4)
         self.setLayout(layout)
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
