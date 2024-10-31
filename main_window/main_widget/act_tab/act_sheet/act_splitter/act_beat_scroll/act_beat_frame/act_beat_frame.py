@@ -85,16 +85,12 @@ class ActBeatFrame(BaseBeatFrame):
     def dropEvent(self, event: QDropEvent):
         if event.mimeData().hasFormat("application/sequence-data"):
             data = event.mimeData().data("application/sequence-data")
-            data_str = bytes(data).decode(
-                "utf-8"
-            )  # Decode the data from bytes to string
-            sequence_dict = json.loads(data_str)  # Parse the JSON string
+            data_str = bytes(data).decode("utf-8")
+            sequence_dict = json.loads(data_str)
 
             # Confirm data structure before processing
             if isinstance(sequence_dict, dict):
-                self.populate_beats(
-                    sequence_dict
-                )  # Populate beats if metadata is valid
+                self.populate_beats(sequence_dict)
                 event.acceptProposedAction()
             else:
                 print("Error: Dropped data is not in expected dictionary format")
@@ -108,18 +104,19 @@ class ActBeatFrame(BaseBeatFrame):
 
     def populate_beats(self, sequence_data: dict):
         """Populate act beats with metadata from the sequence."""
-        beats = sequence_data.get("beats", [])
+        beats = sequence_data.get("sequence", [])
         sequence_length = len(beats)
 
         for i, beat_data in enumerate(beats):
-            # Add cues and timestamps for the start of each row (every 8 beats)
+            if i < 2:
+                continue
             if i % 8 == 0:
                 cue = beat_data.get("cue", "")
                 timestamp = beat_data.get("timestamp", "")
                 self.add_cue_and_timestamp(i, cue, timestamp)
 
             # Populate each individual beat
-            self.populate_beat(i, beat_data)
+            self.populate_beat(i - 2, beat_data)
 
     def add_cue_and_timestamp(self, beat_index: int, cue: str, timestamp: str):
         """Attach cue and timestamp to the corresponding row."""
@@ -133,14 +130,14 @@ class ActBeatFrame(BaseBeatFrame):
         if beat_index < len(self.beats):
             beat_view = self.beats[beat_index]
             step_label_text = beat_data.get("step_label", "")
-            beat_view.populate_from_metadata(beat_data)
+            beat_view.beat.updater.update_pictograph(beat_data)
             self.add_step_label(beat_view, step_label_text)
 
     def add_step_label(self, beat_view: ActBeatView, label_text: str):
         """Attach step label to an individual beat view."""
         if beat_view in self.beat_step_map:
             step_label = self.beat_step_map[beat_view]
-            step_label.setText(label_text)
+            step_label.label.setText(label_text)
 
     def handle_dropped_sequence(self, sequence_data):
         print("Dropped sequence data:", sequence_data)
@@ -170,8 +167,6 @@ class ActBeatFrame(BaseBeatFrame):
                 "application/sequence-data"
             ):
                 print("Drop Event Triggered in eventFilter")
-                self.dropEvent(
-                    event
-                )  # Explicitly call dropEvent to ensure it processes
+                self.dropEvent(event)
                 return True
         return super().eventFilter(source, event)

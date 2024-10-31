@@ -59,6 +59,5 @@ class ActThumbnailImageLabel(ThumbnailImageLabel):
             mime_data.setData("application/sequence-data", QByteArray(data_str.encode("utf-8")))
             drag.setMimeData(mime_data)
             drag.exec(Qt.DropAction.CopyAction)
-            print("Drag initiated with metadata:", metadata)  # Confirm drag initiation
         except json.JSONDecodeError as e:
             print(f"Error encoding metadata to JSON: {e}")
