@@ -61,8 +61,7 @@ class SequenceWidget(QWidget):
         # Initialize the toggle tab and toggler
         self.toggle_tab = GraphEditorToggleTab(self)
         self.toggler = GraphEditorToggler(self)
-        self.toggle_tab.move(0, self.height() - self.toggle_tab.height())
-        self.toggle_tab.raise_()
+
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
@@ -73,7 +72,7 @@ class SequenceWidget(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.resize_sequence_widget()
-
+        self.toggle_tab._resize_graph_editor_toggle_tab()
         if self.graph_editor.isVisible():
             desired_height = int(self.height() // 3.5)
             self.graph_editor.resize(self.width(), desired_height)

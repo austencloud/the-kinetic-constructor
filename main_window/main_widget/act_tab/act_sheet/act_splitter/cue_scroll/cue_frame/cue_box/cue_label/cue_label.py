@@ -17,14 +17,12 @@ class CueLabel(EditableLabel):
         )
         self.cue_box = cue_box
 
-
-
     def resize_cue_label(self):
-        max_width = self.cue_box.width() - 10
-        self.setFixedWidth(max_width)
-        self.label.setFixedWidth(max_width)
+        width = int(self.cue_box.cue_frame.cue_scroll.act_sheet.width() // 9)
+        self.setFixedWidth(width)
+        self.label.setFixedWidth(width)
         self.label.setWordWrap(True)
-        self.edit.setFixedWidth(max_width)
+        self.edit.setFixedWidth(width)
         self.edit.setWordWrapMode(QTextOption.WrapMode.WordWrap)
 
         # Reapply your margins
@@ -32,7 +30,7 @@ class CueLabel(EditableLabel):
         self.apply_styles(margin)
 
         # Dynamically adjust font size based on width
-        font_size = self.calculate_font_size(max_width)
+        font_size = self.calculate_font_size(width)
         font = self.label.font()
         font.setPointSize(font_size)
         font.setBold(True)

@@ -15,3 +15,4 @@
 - Make the graph editor collapsible
 - Put the cheat sheet in the Learn Tab
 - When the user is prompted to choose their start position, then the orientation pickers within the graph editor should apply to the pictographs they are being shown in the start position picker.
+- When the user clicks create sequence and the sequence is already full, Overwrite the sequence which is in the beat frame. Add a checkbox below the create sequence button. And if that check box is checked, Then it overwrites.

@@ -64,11 +64,11 @@ class FontColorUpdater:
 
     def _update_act_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         act_tab = main_widget.act_tab
-        self._apply_font_color(act_tab.act_sheet.header, font_color)
-        self._apply_font_color(act_tab.act_sheet.splitter, font_color)
+        self._apply_font_color(act_tab.act_sheet.act_header, font_color)
+        self._apply_font_color(act_tab.act_sheet.act_frame, font_color)
         for thumbnail_box in act_tab.act_browser.thumbnail_boxes:
             self._apply_font_color(thumbnail_box.word_label, font_color)
-        for box in act_tab.act_sheet.splitter.cue_scroll.cue_frame.cue_boxes.values():
+        for box in act_tab.act_sheet.act_frame.cue_scroll.cue_frame.cue_boxes.values():
             for widget in [box.timestamp, box.cue_label]:
                 self._apply_font_color(widget, font_color)
             for edit in [box.timestamp.edit, box.cue_label.edit]:

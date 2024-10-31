@@ -7,8 +7,10 @@ from PyQt6.QtGui import QFont
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
+
 class GraphEditorToggleTab(QWidget):
     """Toggle tab widget to expand/collapse the GraphEditor."""
+
     toggled = pyqtSignal()
 
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
@@ -16,6 +18,8 @@ class GraphEditorToggleTab(QWidget):
         self.sequence_widget = sequence_widget
         self._setup_layout()
         self._setup_components()
+        self.move(0, self.sequence_widget.height() - self.height())
+        self.raise_()
 
     def _setup_components(self):
         self.label = QLabel("Editor", self)
@@ -37,9 +41,9 @@ class GraphEditorToggleTab(QWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self._resize_graph_editor_toggler()
+        self._resize_graph_editor_toggle_tab()
 
-    def _resize_graph_editor_toggler(self):
+    def _resize_graph_editor_toggle_tab(self):
         self.setFixedHeight(self.sequence_widget.height() // 20)
         font_size = self.height() // 3
         font = QFont()

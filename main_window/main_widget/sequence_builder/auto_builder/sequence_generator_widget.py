@@ -128,8 +128,8 @@ class SequenceGeneratorWidget(QWidget):
         self.customize_sequence_label.resize_customize_sequence_label()  # Resize the label
 
         for button in self.buttons.values():
-            button.setMinimumHeight(self.main_widget.height() // 14)
-            button.setFixedWidth(self.main_widget.width() // 8)
+            button.setMinimumHeight(self.main_widget.height() // 16)
+            button.setFixedWidth(self.main_widget.width() // 10)
 
         self.update_button_styles()
         font_size = self.main_widget.width() // 75

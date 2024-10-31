@@ -16,30 +16,30 @@ class ActSheet(QWidget):
         self.act_tab = act_tab
         self.main_widget = act_tab.main_widget
 
-        self.header = ActHeader(self)
-        self.splitter = ActFrame(self)
+        self.act_header = ActHeader(self)
+        self.act_frame = ActFrame(self)
 
         self._setup_layout()
-        self.splitter.connect_scroll_sync()
+        self.act_frame.connect_scroll_sync()
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
-        layout.addWidget(self.header, 1)
-        layout.addWidget(self.splitter, 10)
+        layout.addWidget(self.act_header, 1)
+        layout.addWidget(self.act_frame, 10)
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
     def resize_act_sheet(self):
         """Resize each part when ActSheet resizes."""
-        self.header.resize_header_widget()
-        self.splitter.beat_scroll.act_beat_frame.resize_act_beat_frame()
-        self.splitter.cue_scroll.resize_cue_scroll()
+        self.act_header.resize_header_widget()
+        self.act_frame.beat_scroll.act_beat_frame.resize_act_beat_frame()
+        self.act_frame.cue_scroll.resize_cue_scroll()
 
     def closeEvent(self, event):
-        self.splitter.save_scrollbar_state()
+        self.act_frame.save_scrollbar_state()
         super().closeEvent(event)
 
     def showEvent(self, event):
-        self.splitter.restore_scrollbar_state()
+        self.act_frame.restore_scrollbar_state()
         super().showEvent(event)

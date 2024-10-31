@@ -13,41 +13,28 @@ class TitleLabel(EditableLabel):
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.edit.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Set background color and padding for the edit box
         self.edit.setStyleSheet("background-color: #F0F0F0; padding: 5px;")
 
-        # Connect textChanged signal to dynamically adjust size and keep centered
         self.edit.textChanged.connect(self._adjust_edit_geometry)
 
     def _show_edit(self, event=None):
         """Show the QLineEdit for editing with the current title pre-filled."""
-        # Lock the edit height to prevent layout shifting
         self.edit.setFixedHeight(self.label.height())
-        
-        # Call the superclass method to maintain EditableLabelManager functionality
         super()._show_edit(event)
-
-        # Set initial geometry and center
         self._adjust_edit_geometry()
 
     def _hide_edit(self):
         """Save changes and hide the editor."""
-        # Unlock the height to restore flexibility
         self.edit.setFixedHeight(0)
-        
-        # Call the superclass method to maintain EditableLabelManager functionality
         super()._hide_edit()
 
     def _adjust_edit_geometry(self):
         """Adjust geometry to keep the QLineEdit centered based on text content."""
-        # Calculate width based on text length
         text_width = self.edit.fontMetrics().horizontalAdvance(self.edit.text()) + 20
 
-        # Get the label's center point
         label_rect = self.label.geometry()
         center_x = label_rect.center().x()
 
-        # Center the edit field around the label’s center
         edit_x = center_x - (text_width // 2)
         self.edit.setGeometry(
             QRect(edit_x, label_rect.y(), text_width, label_rect.height())
@@ -63,5 +50,4 @@ class TitleLabel(EditableLabel):
         )
         self.label.setStyleSheet(title_label_stylesheet)
 
-        # Synchronize edit field size with label size
-        self._adjust_edit_geometry()  # Recenter after resizing
+        self._adjust_edit_geometry() 
