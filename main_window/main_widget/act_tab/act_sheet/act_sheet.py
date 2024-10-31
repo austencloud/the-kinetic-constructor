@@ -18,6 +18,7 @@ class ActSheet(QWidget):
         self.settings_manager = self.main_widget.main_window.settings_manager.act_sheet
         self.act_header = ActHeader(self)
         self.act_frame = ActFrame(self)
+        self.setAcceptDrops(False)
 
         self._setup_layout()
         self.act_frame.connect_scroll_sync()

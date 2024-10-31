@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QWidget, QScrollArea, QGridLayout, QSizePolicy
 from main_window.main_widget.act_tab.act_browser.act_thumbnail_box import (
     ActThumbnailBox,
 )
-from main_window.main_widget.metadata_extractor import MetaDataExtractor
 
 if TYPE_CHECKING:
     from main_window.main_widget.act_tab.act_tab import ActTab
@@ -15,7 +14,7 @@ class ActBrowser(QScrollArea):
         super().__init__(act_tab)
         self.act_tab = act_tab
         self.thumbnail_boxes: list[ActThumbnailBox] = []
-        self.metadata_extractor = MetaDataExtractor(self.act_tab.main_widget)
+        self.metadata_extractor = self.act_tab.main_widget.metadata_extractor
 
         self.scroll_content = QWidget()
         self.grid_layout = QGridLayout(self.scroll_content)

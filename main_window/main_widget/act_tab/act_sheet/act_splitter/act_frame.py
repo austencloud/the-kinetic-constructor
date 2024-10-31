@@ -20,6 +20,7 @@ class ActFrame(QFrame):
         # Add widgets to the splitter
         self.layout.addWidget(self.cue_scroll, 1)
         self.layout.addWidget(self.beat_scroll, 8)
+        self.setAcceptDrops(False)
 
         # Configure splitter appearance and behavior
         self.setContentsMargins(0, 0, 0, 0)

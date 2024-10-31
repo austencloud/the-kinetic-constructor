@@ -14,6 +14,7 @@ class ActTab(QWidget):
 
         self.act_sheet = ActSheet(self)
         self.act_browser = ActBrowser(self)
+        self.setAcceptDrops(False)
 
         self._setup_layout()
 

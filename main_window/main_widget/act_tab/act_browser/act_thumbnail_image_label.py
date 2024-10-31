@@ -1,6 +1,6 @@
 from PIL import Image
 import json
-from PyQt6.QtCore import Qt, QMimeData, QEvent
+from PyQt6.QtCore import Qt, QMimeData, QEvent, QByteArray
 from PyQt6.QtGui import QCursor, QMouseEvent, QDrag
 from typing import TYPE_CHECKING
 
@@ -45,19 +45,20 @@ class ActThumbnailImageLabel(ThumbnailImageLabel):
     def mousePressEvent(self, event: QMouseEvent):
         """Override click behavior to initiate drag-and-drop."""
         if event.button() == Qt.MouseButton.LeftButton and self.thumbnails:
-            # Retrieve metadata from the file
-            self.dragging_metadata = self.metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[self.thumbnail_box.current_index]
-            )
+            # Retrieve metadata for drag
+            metadata = self.metadata_extractor.extract_metadata_from_file(self.thumbnails[self.thumbnail_box.current_index])
+            if metadata:
+                self.startDrag(metadata)
 
-            if self.dragging_metadata:
-                # Start the drag-and-drop process and add dummy QMimeData
-                drag = QDrag(self)
-                mime_data = QMimeData()
-                mime_data.setText("dummy")  # Dummy content to satisfy QDrag requirements
-                drag.setMimeData(mime_data)
-                
-                # Start the drag operation
-                drag.exec(Qt.DropAction.CopyAction)
-            else:
-                print("No metadata available for this thumbnail.")
+    def startDrag(self, metadata: dict):
+        drag = QDrag(self)
+        mime_data = QMimeData()
+
+        try:
+            data_str = json.dumps(metadata)
+            mime_data.setData("application/sequence-data", QByteArray(data_str.encode("utf-8")))
+            drag.setMimeData(mime_data)
+            drag.exec(Qt.DropAction.CopyAction)
+            print("Drag initiated with metadata:", metadata)  # Confirm drag initiation
+        except json.JSONDecodeError as e:
+            print(f"Error encoding metadata to JSON: {e}")

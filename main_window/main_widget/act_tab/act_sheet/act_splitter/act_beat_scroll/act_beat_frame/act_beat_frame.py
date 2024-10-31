@@ -1,19 +1,14 @@
-from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGridLayout
-from base_widgets.base_beat_frame import BaseBeatFrame
-from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll.act_beat_frame.act_beat_view import (
-    ActBeatView,
-)
-from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
 import json
-from PyQt6.QtCore import QDataStream, QIODevice
-from PyQt6.QtCore import Qt
-from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll.act_beat_frame.act_step_label import (
-    ActStepLabel,
-)
-from main_window.main_widget.sequence_widget.beat_frame.beat_selection_overlay import (
-    BeatSelectionOverlay,
-)
+from typing import TYPE_CHECKING, Union
+
+from PyQt6.QtWidgets import QGridLayout
+from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
+from PyQt6.QtCore import QEvent, Qt
+
+from base_widgets.base_beat_frame import BaseBeatFrame
+from .act_beat_view import ActBeatView
+from .act_step_label import ActStepLabel
+from ......sequence_widget.beat_frame.beat_selection_overlay import BeatSelectionOverlay
 from .act_beat_frame_layout_manager import ActBeatFrameLayoutManager
 
 if TYPE_CHECKING:
@@ -29,14 +24,13 @@ class ActBeatFrame(BaseBeatFrame):
         self.main_widget = self.act_sheet.main_widget
         self.beats: list[ActBeatView] = []
         self.step_labels: list[ActStepLabel] = []
-        self.beat_step_map: dict[ActBeatView, ActStepLabel] = (
-            {}
-        )  # Dictionary for beat-step mapping
-
+        self.beat_step_map: dict[ActBeatView, ActStepLabel] = {}
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
         self.layout_manager.setup_layout()
         self.init_act(self.act_sheet.DEFAULT_COLUMNS, self.act_sheet.DEFAULT_ROWS)
+        self.setAcceptDrops(True)  # Inside ActBeatFrame __init__
+        self.installEventFilter(self)
 
     def init_act(self, num_beats: int, num_rows: int):
         """Initialize the act with a grid of beats and labels."""
@@ -74,24 +68,83 @@ class ActBeatFrame(BaseBeatFrame):
         for label in self.step_labels:
             label.resize_step_label()
 
-    def dragEnterEvent(self, event: "QDragEnterEvent"):
+    def dragEnterEvent(self, event: QDragEnterEvent):
         if event.mimeData().hasFormat("application/sequence-data"):
+            print("Drag Enter Event Triggered")
             event.acceptProposedAction()
+        else:
+            event.ignore()
 
-    def dragMoveEvent(self, event: "QDragMoveEvent"):
+    def dragMoveEvent(self, event: QDragMoveEvent):
         if event.mimeData().hasFormat("application/sequence-data"):
+            print("Drag Move Event Triggered")
             event.acceptProposedAction()
+        else:
+            event.ignore()
 
-    def dropEvent(self, event: "QDropEvent"):
+    def dropEvent(self, event: QDropEvent):
         if event.mimeData().hasFormat("application/sequence-data"):
             data = event.mimeData().data("application/sequence-data")
-            stream = QDataStream(data, QIODevice.OpenModeFlag.ReadOnly)
-            sequence_data = stream.readQString()
+            data_str = bytes(data).decode(
+                "utf-8"
+            )  # Decode the data from bytes to string
+            sequence_dict = json.loads(data_str)  # Parse the JSON string
 
-            sequence_dict = json.loads(sequence_data)
-            self.handle_dropped_sequence(sequence_dict)
+            # Confirm data structure before processing
+            if isinstance(sequence_dict, dict):
+                self.populate_beats(
+                    sequence_dict
+                )  # Populate beats if metadata is valid
+                event.acceptProposedAction()
+            else:
+                print("Error: Dropped data is not in expected dictionary format")
+                event.ignore()  # Ignore invalid data
+        else:
+            event.ignore()
 
-            event.acceptProposedAction()
+    def populate_beats(self, sequence_data: dict):
+        """Populate act beats with metadata from the sequence."""
+        # For example, we could process positions, timing, and props
+        start_position = sequence_data.get("sequence_start_position", None)
+        author = sequence_data.get("author", "Unknown")
+        length = sequence_data.get("length", 8)
+
+        # Populate beat views based on metadata details
+        for i, beat_view in enumerate(self.beats[:length]):
+            beat_view.populate_from_metadata(
+                position=start_position, author=author, beat_number=i + 1
+            )
 
     def handle_dropped_sequence(self, sequence_data):
         print("Dropped sequence data:", sequence_data)
+
+    def eventFilter(
+        self, source, event: Union[QDragEnterEvent, QDragMoveEvent, QDropEvent]
+    ):
+        if event.type() in (
+            QEvent.Type.DragEnter,
+            QEvent.Type.DragMove,
+            QEvent.Type.Drop,
+        ):
+            print("Event caught in eventFilter:", event.type())
+            if event.type() == QEvent.Type.DragEnter and event.mimeData().hasFormat(
+                "application/sequence-data"
+            ):
+                print("Drag Enter Event Triggered in eventFilter")
+                event.accept()
+                return True
+            elif event.type() == QEvent.Type.DragMove and event.mimeData().hasFormat(
+                "application/sequence-data"
+            ):
+                print("Drag Move Event Triggered in eventFilter")
+                event.accept()
+                return True
+            elif event.type() == QEvent.Type.Drop and event.mimeData().hasFormat(
+                "application/sequence-data"
+            ):
+                print("Drop Event Triggered in eventFilter")
+                self.dropEvent(
+                    event
+                )  # Explicitly call dropEvent to ensure it processes
+                return True
+        return super().eventFilter(source, event)
