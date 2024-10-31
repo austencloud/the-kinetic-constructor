@@ -88,3 +88,12 @@ class ActHeader(QWidget):
     def _get_current_author(self) -> str:
         """Fetch the current author name from settings."""
         return self.settings_manager.users.user_manager.get_current_user()
+
+    def get_title(self) -> str:
+        """Return the current title of the act."""
+        return self.title_label.label.text()
+    
+    def set_title(self, title: str):
+        """Set the title of the act."""
+        self.title_label.label.setText(title)
+        self.save_title()

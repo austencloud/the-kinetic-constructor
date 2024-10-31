@@ -62,3 +62,8 @@ class ActBeatFrameLayoutManager:
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
         return ACT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
+
+    def get_row(self, beat_view):
+        return self.beat_frame.layout.getItemPosition(
+            self.beat_frame.layout.indexOf(beat_view)
+        )[0]

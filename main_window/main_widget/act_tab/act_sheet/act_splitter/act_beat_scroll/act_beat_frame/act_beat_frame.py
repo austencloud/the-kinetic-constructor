@@ -102,18 +102,45 @@ class ActBeatFrame(BaseBeatFrame):
         else:
             event.ignore()
 
+    def get_beat_number(self, beat_view: ActBeatView) -> int:
+        """Get the beat number for a given beat view."""
+        return self.beats.index(beat_view) + 1
+
     def populate_beats(self, sequence_data: dict):
         """Populate act beats with metadata from the sequence."""
-        # For example, we could process positions, timing, and props
-        start_position = sequence_data.get("sequence_start_position", None)
-        author = sequence_data.get("author", "Unknown")
-        length = sequence_data.get("length", 8)
+        beats = sequence_data.get("beats", [])
+        sequence_length = len(beats)
 
-        # Populate beat views based on metadata details
-        for i, beat_view in enumerate(self.beats[:length]):
-            beat_view.populate_from_metadata(
-                position=start_position, author=author, beat_number=i + 1
-            )
+        for i, beat_data in enumerate(beats):
+            # Add cues and timestamps for the start of each row (every 8 beats)
+            if i % 8 == 0:
+                cue = beat_data.get("cue", "")
+                timestamp = beat_data.get("timestamp", "")
+                self.add_cue_and_timestamp(i, cue, timestamp)
+
+            # Populate each individual beat
+            self.populate_beat(i, beat_data)
+
+    def add_cue_and_timestamp(self, beat_index: int, cue: str, timestamp: str):
+        """Attach cue and timestamp to the corresponding row."""
+        row_index = beat_index // 8
+        # Assuming each cue and timestamp applies to the start of each 8-beat row
+        cue_label = f"{timestamp} - {cue}"
+        # Here you'd set the cue/timestamp text within the UI element for the row
+
+    def populate_beat(self, beat_index: int, beat_data: dict):
+        """Populate an individual beat with its metadata."""
+        if beat_index < len(self.beats):
+            beat_view = self.beats[beat_index]
+            step_label_text = beat_data.get("step_label", "")
+            beat_view.populate_from_metadata(beat_data)
+            self.add_step_label(beat_view, step_label_text)
+
+    def add_step_label(self, beat_view: ActBeatView, label_text: str):
+        """Attach step label to an individual beat view."""
+        if beat_view in self.beat_step_map:
+            step_label = self.beat_step_map[beat_view]
+            step_label.setText(label_text)
 
     def handle_dropped_sequence(self, sequence_data):
         print("Dropped sequence data:", sequence_data)

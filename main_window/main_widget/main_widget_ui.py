@@ -93,7 +93,9 @@ class MainWidgetUI:
     def _setup_layout(self):
         self.main_widget.main_layout = QVBoxLayout(self.main_widget)
         self.main_widget.setLayout(self.main_widget.main_layout)
-
+        # remove contents margins at the top
+        self.main_widget.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_widget.main_layout.setSpacing(0)
         # Add navigation and menu bar widgets to the main layout
         self.main_widget.top_layout = QHBoxLayout()
         self.main_widget.top_layout.addWidget(self.main_widget.menu_bar_widget, 1)

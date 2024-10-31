@@ -37,6 +37,17 @@ class ActBeatView(QGraphicsView):
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
+    def extract_metadata(self):
+        """Extract beat data for saving in act JSON."""
+        return {
+            "beat_number": self.get_beat_number_in_act_beat_frame(),
+            "pictograph_dict": self.beat.pictograph_dict,
+        }
+
+    def get_beat_number_in_act_beat_frame(self):
+        """Get the beat number in the act beat frame."""
+        return self.beat_frame.get_beat_number(self)
+    
     def show_context_menu(self, position):
         menu = QMenu()
         test_action = QAction("Test", self)
@@ -45,13 +56,14 @@ class ActBeatView(QGraphicsView):
 
     def add_beat_number(self, beat_number_text=None):
         """Display the beat number."""
+        self.beat_number_text = beat_number_text
         if not beat_number_text:
-            beat_number_text = str(self.number) if self.number else "N/A"
+            self.beat_number_text = str(self.number) if self.number else "N/A"
 
         if self.beat_number_item:
             self.beat.removeItem(self.beat_number_item)
 
-        self.beat_number_item = QGraphicsTextItem(str(beat_number_text))
+        self.beat_number_item = QGraphicsTextItem(str(self.beat_number_text))
         self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
         self.beat_number_item.setPos(
             QPointF(
