@@ -66,7 +66,7 @@ class ActBeatFrame(BaseBeatFrame):
             - self.act_sheet.act_frame.beat_scroll.verticalScrollBar().width()
         )
         self.beat_size = int(width_without_scrollbar // self.num_columns)
-        self.steps_label_height = self.beat_size // 2
+        self.steps_label_height = int(self.beat_size * (2 / 3))
 
         for view in self.beats:
             view.resize_act_beat_view()
