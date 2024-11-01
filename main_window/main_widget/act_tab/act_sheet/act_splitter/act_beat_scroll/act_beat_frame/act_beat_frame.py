@@ -1,9 +1,10 @@
 import json
+import os
 from typing import TYPE_CHECKING, Union
 
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
-from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtCore import QEvent, Qt, QDir
 
 from base_widgets.base_beat_frame import BaseBeatFrame
 from .act_beat_view import ActBeatView
@@ -57,7 +58,7 @@ class ActBeatFrame(BaseBeatFrame):
         """Resize each beat and label, adjusting the layout dynamically."""
         width_without_scrollbar = (
             self.width()
-            - self.act_sheet.act_frame.beat_scroll.verticalScrollBar().width()
+            - self.act_sheet.act_container.beat_scroll.verticalScrollBar().width()
         )
         self.beat_size = int(width_without_scrollbar // self.num_columns)
         self.steps_label_height = int(self.beat_size * (2 / 3))
@@ -105,18 +106,73 @@ class ActBeatFrame(BaseBeatFrame):
     def populate_beats(self, sequence_data: dict):
         """Populate act beats with metadata from the sequence."""
         beats = sequence_data.get("sequence", [])
-        sequence_length = len(beats)
+        start_index = self.find_next_available_beat_index()
 
         for i, beat_data in enumerate(beats):
             if i < 2:
                 continue
-            if i % 8 == 0:
+            current_index = start_index + i
+            if current_index % 8 == 0:
                 cue = beat_data.get("cue", "")
                 timestamp = beat_data.get("timestamp", "")
-                self.add_cue_and_timestamp(i, cue, timestamp)
+                self.add_cue_and_timestamp(current_index, cue, timestamp)
 
-            # Populate each individual beat
-            self.populate_beat(i - 2, beat_data)
+            self.populate_beat(current_index - 2, beat_data)
+
+        # Save act immediately after each population
+        self.save_act_to_json()
+
+    def _collect_sequences(self):
+        """Collect sequences including cues, timestamps, and step labels for saving."""
+        sequences = []
+        total_rows = (
+            self.act_sheet.act_container.beat_scroll.act_beat_frame.layout_manager.calculate_total_rows()
+        )
+
+        for row in range(total_rows):
+            # Get cue and timestamp for each row
+            cue, timestamp = self.act_sheet.act_container.get_cue_timestamp_for_row(row)
+            sequence_data = {
+                "sequence_start_marker": row == 0,
+                "cue": cue,
+                "timestamp": timestamp,
+                "beats": [],
+            }
+
+            # Retrieve each beat view in the current row
+            beat_views = self.act_sheet.act_container.get_beats_in_row(row)
+            for beat_view in beat_views:
+                if not beat_view.is_populated():
+                    continue
+                beat_data = beat_view.extract_metadata()
+                beat_data["step_label"] = self.beat_step_map[beat_view].label.text()
+                sequence_data["beats"].append(beat_data)
+
+            sequences.append(sequence_data)
+        return sequences
+
+    def save_act_to_json(self, filename="current_act.json"):
+        """Save the current act to a JSON file in the acts directory."""
+        act_data = {
+            "title": self.act_sheet.act_header.get_title(),
+            "prop_type": self.main_widget.prop_type.name,
+            "grid_mode": self.main_widget.settings_manager.global_settings.get_grid_mode(),
+            "sequences": self._collect_sequences(),
+        }
+        acts_dir = os.path.join(QDir.currentPath(), "acts")
+        os.makedirs(acts_dir, exist_ok=True)
+        file_path = os.path.join(acts_dir, filename)
+
+        with open(file_path, "w") as f:
+            json.dump(act_data, f, indent=4)
+        print(f"Act saved to {file_path}")
+
+    def find_next_available_beat_index(self) -> int:
+        """Find the next empty beat index in the act to start the new sequence."""
+        for index, beat_view in enumerate(self.beats):
+            if not beat_view.is_populated():
+                return index
+        return len(self.beats)  # Start at the end if all beats are populated
 
     def add_cue_and_timestamp(self, beat_index: int, cue: str, timestamp: str):
         """Attach cue and timestamp to the corresponding row."""
@@ -131,6 +187,7 @@ class ActBeatFrame(BaseBeatFrame):
             beat_view = self.beats[beat_index]
             step_label_text = beat_data.get("step_label", "")
             beat_view.beat.updater.update_pictograph(beat_data)
+            beat_view.beat.pictograph_dict = beat_data
             self.add_step_label(beat_view, step_label_text)
 
     def add_step_label(self, beat_view: ActBeatView, label_text: str):

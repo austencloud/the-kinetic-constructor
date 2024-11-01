@@ -33,6 +33,12 @@ class ActBeatFrameLayoutManager:
 
         self.beat_frame.layout = layout
 
+    def calculate_total_rows(self) -> int:
+        """Calculate the total number of rows based on the layout configuration."""
+        return (
+            len(self.beat_frame.beats) + self.beat_frame.num_columns - 1
+        ) // self.beat_frame.num_columns
+
     def rearrange_beats(self, num_beats, columns, rows):
         # Clear the current layout and hide widgets
         while self.beat_frame.layout.count():

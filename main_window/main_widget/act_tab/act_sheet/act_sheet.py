@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from .act_header.act_header import ActHeader
-from .act_splitter.act_frame import ActFrame
+from .act_splitter.act_container import ActContainer
 
 if TYPE_CHECKING:
     from ..act_tab import ActTab
@@ -23,11 +23,11 @@ class ActSheet(QWidget):
         self.main_widget = act_tab.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager.act_sheet
         self.act_header = ActHeader(self)
-        self.act_frame = ActFrame(self)
+        self.act_container = ActContainer(self)
         self.setAcceptDrops(False)
 
         self._setup_layout()
-        self.act_frame.connect_scroll_sync()
+        self.act_container.connect_scroll_sync()
 
     def save_act_to_json(self, filename="current_act.json"):
         """Save the current act to a JSON file in the acts directory."""
@@ -59,19 +59,19 @@ class ActSheet(QWidget):
     def _collect_sequences(self):
         """Collect sequences including cues, timestamps, and step labels for saving."""
         sequences = []
-        for i, row in enumerate(self.act_frame.rows):
+        for i, row in enumerate(self.act_container.rows):
             sequence_data: dict[str, Union[str, list[dict[str, str]]]] = {
                 "sequence_start_marker": i == 0,
                 "beats": [],
             }
-            cue, timestamp = self.act_frame.get_cue_timestamp_for_row(i)
+            cue, timestamp = self.act_container.get_cue_timestamp_for_row(i)
             sequence_data["cue"] = cue
             sequence_data["timestamp"] = timestamp
 
-            for beat_view in self.act_frame.get_beats_in_row(i):
+            for beat_view in self.act_container.get_beats_in_row(i):
                 beat_data = beat_view.extract_metadata()
                 beat_data["step_label"] = (
-                    self.act_frame.beat_scroll.act_beat_frame.beat_step_map[
+                    self.act_container.beat_scroll.act_beat_frame.beat_step_map[
                         beat_view
                     ].label.text()
                 )
@@ -88,12 +88,12 @@ class ActSheet(QWidget):
         self.main_widget.manager.set_grid_mode(act_data.get("grid_mode", "diamond"))
 
         for sequence in act_data["sequences"]:
-            self.act_frame.beat_scroll.act_beat_frame.populate_beats(sequence)
+            self.act_container.beat_scroll.act_beat_frame.populate_beats(sequence)
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
         layout.addWidget(self.act_header, 1)
-        layout.addWidget(self.act_frame, 10)
+        layout.addWidget(self.act_container, 10)
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
@@ -101,13 +101,13 @@ class ActSheet(QWidget):
     def resize_act_sheet(self):
         """Resize each part when ActSheet resizes."""
         self.act_header.resize_header_widget()
-        self.act_frame.beat_scroll.act_beat_frame.resize_act_beat_frame()
-        self.act_frame.cue_scroll.resize_cue_scroll()
+        self.act_container.beat_scroll.act_beat_frame.resize_act_beat_frame()
+        self.act_container.cue_scroll.resize_cue_scroll()
 
     def closeEvent(self, event):
-        self.act_frame.save_scrollbar_state()
+        self.act_container.save_scrollbar_state()
         super().closeEvent(event)
 
     def showEvent(self, event):
-        self.act_frame.restore_scrollbar_state()
+        self.act_container.restore_scrollbar_state()
         super().showEvent(event)

@@ -37,6 +37,10 @@ class ActBeatView(QGraphicsView):
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
+    def is_populated(self) -> bool:
+        """Check if this beat view has been populated with any data."""
+        return bool(self.beat.letter)  # or another attribute indicating population
+
     def extract_metadata(self):
         """Extract beat data for saving in act JSON."""
         return {
@@ -47,7 +51,7 @@ class ActBeatView(QGraphicsView):
     def get_beat_number_in_act_beat_frame(self):
         """Get the beat number in the act beat frame."""
         return self.beat_frame.get_beat_number(self)
-    
+
     def show_context_menu(self, position):
         menu = QMenu()
         test_action = QAction("Test", self)

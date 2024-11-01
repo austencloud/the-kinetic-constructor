@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from ..act_sheet import ActSheet
 
 
-class ActFrame(QFrame):
+class ActContainer(QFrame):
     def __init__(self, act_sheet: "ActSheet") -> None:
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
