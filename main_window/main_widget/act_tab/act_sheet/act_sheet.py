@@ -88,7 +88,7 @@ class ActSheet(QWidget):
         self.main_widget.manager.set_grid_mode(act_data.get("grid_mode", "diamond"))
 
         for sequence in act_data["sequences"]:
-            self.act_container.beat_scroll.act_beat_frame.populate_beats(sequence)
+            self.act_container.beat_scroll.act_beat_frame.populator.populate_beats(sequence)
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)

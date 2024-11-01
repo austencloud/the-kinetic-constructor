@@ -15,6 +15,7 @@ class ActBeatFrameLayoutManager:
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_overlay
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager
+        self.setup_layout()
 
     def setup_layout(self) -> None:
         layout: QGridLayout = QGridLayout(self.beat_frame)
@@ -27,7 +28,7 @@ class ActBeatFrameLayoutManager:
         for i, (beat, label) in enumerate(
             zip(self.beat_frame.beats, self.beat_frame.step_labels)
         ):
-            row, col = divmod(i, self.beat_frame.num_columns)
+            row, col = divmod(i, self.beat_frame.act_sheet.DEFAULT_COLUMNS)
             layout.addWidget(beat, row * 2, col)
             layout.addWidget(label, row * 2 + 1, col)
 
@@ -36,8 +37,8 @@ class ActBeatFrameLayoutManager:
     def calculate_total_rows(self) -> int:
         """Calculate the total number of rows based on the layout configuration."""
         return (
-            len(self.beat_frame.beats) + self.beat_frame.num_columns - 1
-        ) // self.beat_frame.num_columns
+            len(self.beat_frame.beats) + self.beat_frame.act_sheet.DEFAULT_COLUMNS - 1
+        ) // self.beat_frame.act_sheet.DEFAULT_COLUMNS
 
     def rearrange_beats(self, num_beats, columns, rows):
         # Clear the current layout and hide widgets

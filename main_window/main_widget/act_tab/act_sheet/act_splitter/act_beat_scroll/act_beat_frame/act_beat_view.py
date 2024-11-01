@@ -50,7 +50,7 @@ class ActBeatView(QGraphicsView):
 
     def get_beat_number_in_act_beat_frame(self):
         """Get the beat number in the act beat frame."""
-        return self.beat_frame.get_beat_number(self)
+        return self.beat_frame.get.beat_number(self)
 
     def show_context_menu(self, position):
         menu = QMenu()
