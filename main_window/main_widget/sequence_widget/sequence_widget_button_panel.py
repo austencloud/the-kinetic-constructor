@@ -34,9 +34,7 @@ class SequenceWidgetButtonPanel(QFrame):
         self._setup_dependencies()
         self._setup_buttons()
         self.top_placeholder = ButtonPanelPlaceholder(self)  # Top spacer for centering
-        self.bottom_placeholder = ButtonPanelPlaceholder(
-            self
-        )  # Bottom spacer to adjust with GraphEditor
+        self.bottom_placeholder = ButtonPanelPlaceholder(self)
         self._setup_layout()
 
     def _setup_dependencies(self):
@@ -162,7 +160,7 @@ class SequenceWidgetButtonPanel(QFrame):
             button.setIconSize((button.size() * 0.7))
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        spacing = self.sequence_widget.beat_frame.height() // 40
+        spacing = self.sequence_widget.beat_frame.main_widget.height() // 40
         self.layout.setSpacing(spacing)
 
         self.layout.update()

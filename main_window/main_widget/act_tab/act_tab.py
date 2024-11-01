@@ -17,6 +17,7 @@ class ActTab(QWidget):
         self.setAcceptDrops(False)
 
         self._setup_layout()
+        self.act_sheet.load_act_from_json()
 
     def _setup_layout(self):
         layout = QHBoxLayout(self)

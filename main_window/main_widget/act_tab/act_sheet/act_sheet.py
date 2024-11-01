@@ -82,9 +82,9 @@ class ActSheet(QWidget):
     def populate_from_act_data(self, act_data: dict):
         """Populate ActSheet from saved JSON data."""
         self.act_header.set_title(act_data.get("title", "Untitled Act"))
-        self.main_widget.settings_manager.global_settings.set_prop_type(
-            act_data.get("prop_type", "Staff")
-        )
+        # self.main_widget.settings_manager.global_settings.set_prop_type(
+        #     act_data.get("prop_type", "Staff")
+        # )
         self.main_widget.manager.set_grid_mode(act_data.get("grid_mode", "diamond"))
 
         for sequence in act_data["sequences"]:

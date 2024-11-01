@@ -33,6 +33,8 @@ class ActBeatFrame(BaseBeatFrame):
         self.setAcceptDrops(True)  # Inside ActBeatFrame __init__
         self.installEventFilter(self)
 
+
+
     def init_act(self, num_beats: int, num_rows: int):
         """Initialize the act with a grid of beats and labels."""
         self.num_columns = num_beats
