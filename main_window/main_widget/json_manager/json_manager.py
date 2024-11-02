@@ -9,7 +9,7 @@ from .json_ori_calculator import JsonOriCalculator
 
 from .json_ori_validation_engine import JsonOrientationValidationEngine
 from .json_start_position_handler import JsonStartPositionHandler
-from .json_sequence_loader_saver import JsonSequenceLoaderSaver
+from .sequence_data_loader_saver import SequenceDataLoaderSaver
 from .json_special_placement_handler import JsonSpecialPlacementHandler
 
 if TYPE_CHECKING:
@@ -25,13 +25,12 @@ class JsonManager:
         self.special_placement_handler = JsonSpecialPlacementHandler(self)
 
         # current sequence
-        self.loader_saver = JsonSequenceLoaderSaver(self)
+        self.loader_saver = SequenceDataLoaderSaver(self)
         self.updater = JsonSequenceUpdater(self)
         self.start_position_handler = JsonStartPositionHandler(self)
         self.ori_calculator = JsonOriCalculator(self)
         self.ori_validation_engine = JsonOrientationValidationEngine(self)
         self.act_saver = JsonActSaver(self)
-
 
     def save_act(self, act_data: dict):
         """Save the act using the JsonActSaver."""

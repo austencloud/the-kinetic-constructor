@@ -14,7 +14,8 @@ class ActBeatFrameInitializer:
         self.beat_frame = beat_frame
         self.act_sheet = beat_frame.act_sheet
         self.init_act(
-            self.act_sheet.DEFAULT_COLUMNS, self.act_sheet.DEFAULT_ROWS
+            self.act_sheet.DEFAULT_COLUMNS,
+            self.act_sheet.DEFAULT_ROWS,
         )
 
     def init_act(self, num_beats: int, num_rows: int):

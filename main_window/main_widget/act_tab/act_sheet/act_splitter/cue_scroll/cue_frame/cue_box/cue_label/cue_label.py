@@ -60,4 +60,4 @@ class CueLabel(EditableLabel):
 
     def _hide_edit(self) -> None:
         super()._hide_edit()
-        self.cue_box.cue_frame.act_sheet.save_act_to_json()
+        self.cue_box.cue_frame.act_sheet.act_saver.save_act()

@@ -33,4 +33,4 @@ class ActStepLabel(EditableLabel):
 
     def _hide_edit(self) -> None:
         super()._hide_edit()
-        self.act_beat_frame.act_sheet.save_act_to_json()
+        self.act_beat_frame.act_sheet.act_saver.save_act()
