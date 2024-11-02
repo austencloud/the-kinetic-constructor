@@ -2,13 +2,29 @@
 
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.act_tab.act_sheet.act_splitter.act_beat_scroll.act_beat_frame.act_beat_view import (
+        ActBeatView,
+    )
     from .act_beat_frame import ActBeatFrame
 
 
 class ActPopulator:
     def __init__(self, beat_frame: "ActBeatFrame"):
         self.beat_frame = beat_frame
+
+    def populate_row_beats(self, row_index, beat_data: list):
+        """Populate each row in the act based on row index and beat data."""
+        for i, data in enumerate(beat_data):
+            beat_view: "ActBeatView" = self.beat_frame.beats[row_index * 8 + i]
+            beat_view.beat.updater.update_pictograph(data)
+            beat_view.beat.pictograph_dict = data
+            # Update step label if necessary
+            if beat_view in self.beat_frame.beat_step_map:
+                self.beat_frame.beat_step_map[beat_view].label.setText(
+                    data.get("step_label", "")
+                )
 
     def create_initial_act_structure(self) -> dict:
         """Initialize the act structure with empty beats and metadata placeholders."""

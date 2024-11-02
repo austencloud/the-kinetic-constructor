@@ -29,6 +29,9 @@ class ActTab(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        self.resize_act_tab()
+
+    def resize_act_tab(self):
         self.act_sheet.resize_act_sheet()
         self.act_browser.resize_browser()
 
