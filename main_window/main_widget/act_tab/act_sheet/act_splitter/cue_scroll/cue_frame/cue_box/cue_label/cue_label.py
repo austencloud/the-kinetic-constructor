@@ -57,3 +57,7 @@ class CueLabel(EditableLabel):
     def _show_edit(self, event=None) -> None:
         super()._show_edit(event)
         self.edit.setFixedWidth(self.width() - 10)
+
+    def _hide_edit(self) -> None:
+        super()._hide_edit()
+        self.cue_box.cue_frame.act_sheet.act_container.beat_scroll.act_beat_frame.populator.save_populated_act()

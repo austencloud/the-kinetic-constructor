@@ -30,3 +30,7 @@ class ActStepLabel(EditableLabel):
         self.setFont(font)
         self.label.setFont(font)
         self.edit.setFont(font)
+
+    def _hide_edit(self) -> None:
+        super()._hide_edit()
+        self.act_beat_frame.populator.save_act_to_json()

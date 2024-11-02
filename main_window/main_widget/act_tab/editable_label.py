@@ -121,8 +121,4 @@ class EditableLabel(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Resize both label and edit widgets to prevent overflow."""
-        # new_width = event.size().width() - 10
-        # self.label.setFixedWidth(new_width)
-        # self.edit.setFixedWidth(new_width)
-
         super().resizeEvent(event)

@@ -1,6 +1,7 @@
 import logging
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.json_manager.json_act_saver import JsonActSaver
 from main_window.main_widget.json_manager.json_sequence_updater.json_sequence_updater import (
     JsonSequenceUpdater,
 )
@@ -29,3 +30,9 @@ class JsonManager:
         self.start_position_handler = JsonStartPositionHandler(self)
         self.ori_calculator = JsonOriCalculator(self)
         self.ori_validation_engine = JsonOrientationValidationEngine(self)
+        self.act_saver = JsonActSaver(self)
+
+
+    def save_act(self, act_data: dict):
+        """Save the act using the JsonActSaver."""
+        self.act_saver.save_act(act_data)

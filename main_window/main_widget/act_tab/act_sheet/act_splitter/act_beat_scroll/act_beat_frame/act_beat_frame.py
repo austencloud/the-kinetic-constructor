@@ -20,6 +20,7 @@ class ActBeatFrame(BaseBeatFrame):
 
     def __init__(self, beat_scroll_area: "ActBeatScroll"):
         super().__init__(beat_scroll_area.act_sheet.main_widget)
+        self.beat_scroll_area = beat_scroll_area
         self.act_sheet = beat_scroll_area.act_sheet
         self.main_widget = self.act_sheet.main_widget
         self.beats: list[ActBeatView] = []
