@@ -29,7 +29,7 @@ class TitleLabel(EditableLabel):
         self.header_widget.act_sheet.settings_manager.save_act_title(new_title)
         self.layout.setCurrentWidget(self.label)
         super()._hide_edit()
-        self.header_widget.act_sheet.act_container.beat_scroll.act_beat_frame.populator.save_act_to_json()
+        self.header_widget.act_sheet.save_act_to_json()
 
     def _adjust_edit_geometry(self):
         """Adjust geometry to keep the QLineEdit centered based on text content."""

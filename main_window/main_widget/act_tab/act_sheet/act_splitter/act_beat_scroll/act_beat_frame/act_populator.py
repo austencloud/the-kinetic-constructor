@@ -54,7 +54,6 @@ class ActPopulator:
         # Save the updated act
         self.save_populated_act()
 
-
     def find_next_available_beat_index(self) -> int:
         """Find the next empty beat index in the act to start the new sequence."""
         for index, beat_view in enumerate(self.beat_frame.beats):
@@ -65,7 +64,14 @@ class ActPopulator:
     def add_cue_and_timestamp(self, beat_index: int, cue: str, timestamp: str):
         """Attach cue and timestamp to the corresponding row."""
         row_index = beat_index // 8
-        cue_label = f"{timestamp} - {cue}"
+        if cue:
+            self.beat_frame.act_sheet.act_container.cue_scroll.cue_frame.cue_boxes[
+                row_index - 1
+            ].cue_label.label.setText(cue)
+        if timestamp:
+            self.beat_frame.act_sheet.act_container.cue_scroll.cue_frame.cue_boxes[
+                row_index - 1
+            ].timestamp.label.setText(timestamp)
 
     def populate_beat(self, beat_index: int, beat_data: dict):
         """Populate an individual beat with its metadata."""
@@ -74,7 +80,7 @@ class ActPopulator:
             step_label_text = beat_data.get("step_label", "")
             beat_view.beat.updater.update_pictograph(beat_data)
             beat_view.beat.pictograph_dict = beat_data
-            self.add_step_label(beat_view, step_label_text)
+            # self.add_step_label(beat_view, step_label_text)
 
     def add_step_label(self, beat_view, label_text: str):
         """Attach step label to an individual beat view."""
@@ -92,7 +98,7 @@ class ActPopulator:
         act_data = self.create_initial_act_structure()  # Start with the frame
         act_data["sequences"] = self.collect_sequences()
         self.beat_frame.main_widget.json_manager.save_act(act_data)
-        
+
     def collect_sequences(self):
         """Collect sequences including cues, timestamps, and step labels for saving."""
         sequences = []
