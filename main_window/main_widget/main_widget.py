@@ -153,8 +153,7 @@ class MainWidget(QWidget):
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)
 
-    def closeEvent(self, event: QCloseEvent):
-        self.event_handler.closeEvent(event)
+
 
     def get_tab_bar_height(self):
         return self.ui_handler.main_widget.tab_bar_styler.tab_height

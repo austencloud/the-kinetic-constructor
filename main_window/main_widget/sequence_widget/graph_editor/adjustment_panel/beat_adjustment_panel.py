@@ -82,8 +82,12 @@ class BeatAdjustmentPanel(QFrame):
 
         if pictograph.is_blank:
             # self.stacked_widget.setCurrentWidget(self.placeholder_widget)
-            self.graph_editor.left_stack.setCurrentWidget(self.placeholder_widget)
-            self.graph_editor.right_stack.setCurrentWidget(self.placeholder_widget)
+            self.graph_editor.left_stack.setCurrentWidget(
+                self.graph_editor.left_stack.widget(0)
+            )
+            self.graph_editor.right_stack.setCurrentWidget(
+                self.graph_editor.right_stack.widget(0)
+            )
 
         elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
             self.graph_editor.left_stack.setCurrentWidget(

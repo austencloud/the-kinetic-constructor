@@ -8,14 +8,8 @@ class MainWidgetState:
     def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
 
-    def save_state(self):
-        self.main_widget.json_manager.loader_saver.save_current_sequence(
-            self.main_widget.json_manager.loader_saver.load_current_sequence_json()
-        )
-        self.main_widget.settings_manager.save_settings()
 
     def load_state(self):
-        # Settings are automatically loaded in QSettings, so no need for load_settings
         current_sequence = (
             self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )

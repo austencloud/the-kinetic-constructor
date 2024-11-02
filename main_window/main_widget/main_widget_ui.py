@@ -29,7 +29,6 @@ class MainWidgetUI:
         self._setup_components()
         self._setup_layout()
         self._setup_indices()
-        self._load_current_tab()
 
     def _setup_components(self):
         self.main_widget.menu_bar_widget = MenuBarWidget(self.main_widget)
@@ -114,7 +113,7 @@ class MainWidgetUI:
         self.main_widget.learn_tab_index = 3
         self.main_widget.act_tab_index = 4
 
-    def _load_current_tab(self):
+    def load_current_tab(self):
         self.main_widget.current_tab = (
             self.main_widget.settings_manager.global_settings.get_current_tab()
         )
