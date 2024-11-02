@@ -26,6 +26,8 @@ class ActLoader:
         """Populate the act based on saved data, using sequence length to determine row spans."""
         beat_frame = self.act_sheet.act_container.beat_scroll.act_beat_frame
 
+        current_row = 0  # Track the current row across sequences
+
         for sequence in act_data["sequences"]:
             start_marker = sequence.get("sequence_start_marker", False)
             sequence_length = sequence.get("sequence_length", 8)
@@ -34,11 +36,12 @@ class ActLoader:
             # Calculate the number of rows needed to fit this sequence
             num_rows = (sequence_length + self.act_sheet.DEFAULT_COLUMNS - 1) // self.act_sheet.DEFAULT_COLUMNS
 
-            # Populate rows with beats for this sequence
+            # Populate rows with beats for this sequence, adjusting `current_row` as needed
             for row_index in range(num_rows):
                 start_idx = row_index * self.act_sheet.DEFAULT_COLUMNS
                 end_idx = start_idx + self.act_sheet.DEFAULT_COLUMNS
                 beat_data = beats[start_idx:end_idx]
 
-                # Populate each row with the sliced beats
-                beat_frame.populator.populate_row_beats(row_index, beat_data)
+                # Populate each row with the sliced beats, incrementing `current_row` for each row
+                beat_frame.populator.populate_row_beats(current_row, beat_data)
+                current_row += 1  # Move to the next row for the next part of the sequence or next sequence

@@ -14,9 +14,7 @@ class ActSaver:
 
     def save_act(self, filename="current_act.json"):
         """Save the current act to a JSON file in the acts directory."""
-        sequences = self.act_sheet.sequence_collector.collect_sequences(
-            total_rows=self.act_sheet.DEFAULT_ROWS
-        )
+        sequences = self.act_sheet.sequence_collector.collect_sequences()
         act_data = {
             "title": self.act_sheet.act_header.get_title(),
             "prop_type": self.act_sheet.main_widget.prop_type.name,
@@ -29,4 +27,3 @@ class ActSaver:
 
         with open(file_path, "w") as f:
             json.dump(act_data, f, indent=4)
-        print(f"Act saved to {file_path}")

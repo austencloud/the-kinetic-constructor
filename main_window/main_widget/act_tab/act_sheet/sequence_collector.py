@@ -14,6 +14,7 @@ class SequenceCollector:
         total_rows = self.act_sheet.DEFAULT_ROWS
 
         for row in range(total_rows):
+            # Start a new sequence for each row and collect beats
             sequence_data = {
                 "sequence_start_marker": row == 0,
                 "cue": "",
@@ -26,13 +27,27 @@ class SequenceCollector:
             for beat_view in beat_views:
                 if not beat_view.is_populated():
                     continue
-                beat_data = beat_view.extract_metadata()
-                
-                # Remove any nested "pictograph_dict" key to avoid redundant nesting
-                if "pictograph_dict" in beat_data:
-                    beat_data = beat_data["pictograph_dict"]
-                
-                sequence_data["beats"].append(beat_data)
+
+                # Extract metadata once, ensuring there's no redundant `pictograph_dict`
+                raw_beat_data = beat_view.extract_metadata()
+                if "pictograph_dict" in raw_beat_data:
+                    raw_beat_data = raw_beat_data["pictograph_dict"]
+
+                # Build beat data dictionary with flattened structure
+                sequence_data["beats"].append(
+                    {
+                        "beat_number": beat_view.beat_number,
+                        "pictograph_dict": raw_beat_data,  # Ensure no nested dict here
+                        "step_label": (
+                            self.act_container.beat_scroll.act_beat_frame.beat_step_map[
+                                beat_view
+                            ].label.text()
+                            if beat_view
+                            in self.act_container.beat_scroll.act_beat_frame.beat_step_map
+                            else ""
+                        ),
+                    }
+                )
 
             if sequence_data["beats"]:
                 sequences.append(sequence_data)

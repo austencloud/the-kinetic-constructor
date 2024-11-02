@@ -17,11 +17,11 @@ from PyQt6.QtGui import QFont
 
 
 class ActBeatView(QGraphicsView):
-    def __init__(self, beat_frame: "ActBeatFrame", number=None):
+    def __init__(self, beat_frame: "ActBeatFrame", beat_number=None):
         super().__init__()
         self.beat_frame = beat_frame
         self.is_filled = False
-        self.number = number  # Beat number to display
+        self.beat_number = beat_number  # Beat number to display
         self.beat = ActBeat(beat_frame, 1)
         self.setScene(self.beat)
         self.beat_number_item = None
@@ -62,7 +62,7 @@ class ActBeatView(QGraphicsView):
         """Display the beat number."""
         self.beat_number_text = beat_number_text
         if not beat_number_text:
-            self.beat_number_text = str(self.number) if self.number else "N/A"
+            self.beat_number_text = str(self.beat_number) if self.beat_number else "N/A"
 
         if self.beat_number_item:
             self.beat.removeItem(self.beat_number_item)
