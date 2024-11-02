@@ -62,7 +62,6 @@ class SequenceWidget(QWidget):
         self.toggle_tab = GraphEditorToggleTab(self)
         self.toggler = GraphEditorToggler(self)
 
-
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
         self.button_panel.resize_button_panel()

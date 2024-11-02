@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsR
 from PyQt6.QtCore import Qt, QEvent, QTimer, QEvent
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor
 
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
+    ReversalSymbolManager,
+)
 
 from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_view_mouse_event_handler import PictographViewMouseEventHandler
@@ -54,14 +56,9 @@ class PictographView(QGraphicsView):
 
         view_width = min(
             int(
-                (
-                    self.pictograph.scroll_area.option_picker.main_widget.width()
-                    // 2
-                    / COLUMN_COUNT
-                )
+                (self.pictograph.scroll_area.option_picker.width() / COLUMN_COUNT)
                 - ((sections[letter_type].pictograph_frame.spacing))
             ),
-            # get the height of the option picker widget  divided by 6
             int(self.pictograph.scroll_area.option_picker.height() / 8),
         )
 
@@ -125,7 +122,6 @@ class PictographView(QGraphicsView):
             settings_manager.visibility.glyph_visibility_manager.apply_current_visibility_settings(
                 self.pictograph
             )
-        
 
     def _resetTouchState(self) -> None:
         self._ignoreNextMousePress = False

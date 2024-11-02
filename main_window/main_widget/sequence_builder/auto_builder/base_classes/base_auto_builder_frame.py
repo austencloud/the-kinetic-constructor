@@ -37,8 +37,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.turn_intensity_adjuster = TurnIntensityAdjuster(self)
         self.continuous_rotation_toggle = ContinuousRotationToggle(self)
 
-
-
         self.layout.addStretch(1)
         self.layout.addWidget(self.level_selector)
         self.layout.addStretch(1)
@@ -48,8 +46,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.layout.addStretch(1)
         self.layout.addWidget(self.continuous_rotation_toggle)
         self.layout.addStretch(1)
-
-
 
     def apply_settings(self):
         """Apply settings to modular widgets."""
@@ -88,7 +84,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.level_selector.resize_level_selector()
         self.length_adjuster.resize_length_adjuster()
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
-
 
     def _update_sequence_length(self, length: int):
         self.auto_builder_settings.set_auto_builder_setting(

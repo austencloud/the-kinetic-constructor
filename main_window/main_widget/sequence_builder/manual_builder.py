@@ -42,7 +42,6 @@ class ManualBuilderWidget(QFrame):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setStyleSheet("background: transparent;")
 
-
         self.stacked_widget.addWidget(self.start_pos_picker)
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)
         self.stacked_widget.addWidget(self.option_picker)
@@ -123,7 +122,7 @@ class ManualBuilderWidget(QFrame):
 
     def resize_manual_builder(self) -> None:
         """Resize the components based on the current state."""
-        self.setMaximumWidth(int(self.main_widget.width() // 2))
+        # self.setMaximumWidth(int(self.main_widget.width() // 2))
         self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()
