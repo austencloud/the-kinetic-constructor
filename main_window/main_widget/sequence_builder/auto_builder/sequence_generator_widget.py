@@ -61,12 +61,7 @@ class SequenceGeneratorWidget(QWidget):
         self.stacked_layout.addWidget(self.circular_builder_frame)
         self.layout.addLayout(self.stacked_layout)
 
-        # Add the Create Sequence button
-        self.generate_sequence_button = GenerateSequenceButton(self)
-        self.layout.addStretch(1)
-        self.layout.addWidget(
-            self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
-        )
+
 
         # Default to showing Freeform frame
         self.current_auto_builder = "freeform"
@@ -94,6 +89,18 @@ class SequenceGeneratorWidget(QWidget):
             "freeform": self.freeform_button,
             "circular": self.circular_button,
         }
+        # Set an initial dummy connection
+        self.generate_sequence_button = GenerateSequenceButton(self)
+        # Add the Create Sequence button
+        self.layout.addStretch(1)
+        self.layout.addWidget(
+            self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.generate_sequence_button.clicked.connect(self.dummy_function)
+
+    def dummy_function(self):
+        """Placeholder function to ensure there's always a connected slot."""
+        pass
 
     def show_freeform_frame(self):
         """Display Freeform frame by setting it in the stacked layout."""
@@ -102,7 +109,9 @@ class SequenceGeneratorWidget(QWidget):
         self.update_button_styles()
 
         # Reconnect the create sequence button to Freeform's create function
-        # self.generate_sequence_button.clicked.disconnect()
+        # check if it's connected, if so idscconnect it
+
+        self.generate_sequence_button.clicked.disconnect()
         self.generate_sequence_button.clicked.connect(
             self.freeform_builder_frame.on_create_sequence
         )
@@ -130,14 +139,14 @@ class SequenceGeneratorWidget(QWidget):
             style = active_style if self.current_auto_builder == key else inactive_style
             button.setStyleSheet(f"{style} font-size: {font_size}px; padding: 8px;")
 
-    def resize_sequence_generator(self):
+    def resize_sequence_generator(self) -> None:
         """Resize handler for the auto builder UI."""
         # Resize frames
         self.freeform_builder_frame._resize_auto_builder_frame()
         self.circular_builder_frame._resize_auto_builder_frame()
         self.customize_sequence_label.resize_customize_sequence_label()
         self.generate_sequence_button.resize_generate_sequence_button()
-        
+
         # Update button sizes
         for button in self.buttons.values():
             button.setMinimumHeight(self.main_widget.height() // 16)
