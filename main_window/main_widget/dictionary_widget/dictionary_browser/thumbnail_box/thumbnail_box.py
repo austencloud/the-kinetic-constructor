@@ -22,7 +22,7 @@ class ThumbnailBox(QWidget):
         self.word = word
         self.thumbnails: list[str] = thumbnails
         self.browser = browser
-        self.main_widget = browser.dictionary_widget.main_widget
+        self.main_widget = browser.dictionary.main_widget
         self.initial_size_set = False
         self.current_index = 0
         self.browser = browser
@@ -66,7 +66,7 @@ class ThumbnailBox(QWidget):
         self.save_favorite_status()
 
         current_filter = (
-            self.browser.dictionary_widget.dictionary_settings.get_current_filter()
+            self.browser.dictionary.dictionary_settings.get_current_filter()
         )
         if current_filter and current_filter.get("favorites"):
             if not self.favorite_status:
@@ -104,10 +104,8 @@ class ThumbnailBox(QWidget):
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
-        if self == self.browser.dictionary_widget.preview_area.current_thumbnail_box:
-            self.browser.dictionary_widget.preview_area.update_thumbnails(
-                self.thumbnails
-            )
+        if self == self.browser.dictionary.preview_area.current_thumbnail_box:
+            self.browser.dictionary.preview_area.update_thumbnails(self.thumbnails)
         self.image_label.thumbnails = thumbnails
         self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
         if len(self.thumbnails) == 1:

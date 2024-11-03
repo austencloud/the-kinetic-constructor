@@ -8,9 +8,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
         DictionaryBrowser,
     )
-    from main_window.main_widget.dictionary_widget.dictionary_widget import (
-        DictionaryWidget,
-    )
 
 
 class VideoPreviewWidget(QWidget):

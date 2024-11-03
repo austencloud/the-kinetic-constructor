@@ -20,11 +20,11 @@ class ThumbnailBoxSorter:
         self.main_widget = browser.main_widget
         self.section_manager = browser.section_manager
         self.currently_displaying_label = browser.currently_displaying_label
-        self.num_columns = self.browser.num_columns
+        self.num_columns = 3
 
     def reload_currently_displayed_filtered_sequences(self):
         current_filter = (
-            self.browser.dictionary_widget.dictionary_settings.get_current_filter()
+            self.browser.dictionary.dictionary_settings.get_current_filter()
         )
         self.browser.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
@@ -102,7 +102,7 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.browser.number_of_sequences_label.setText(
+        self.browser.sequence_count_label.setText(
             f"Number of words: {len(self.browser.currently_displayed_sequences)}"
         )
         QApplication.restoreOverrideCursor()
@@ -126,10 +126,10 @@ class ThumbnailBoxSorter:
             "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
             "starting_position": starting_position_section.display_only_thumbnails_with_starting_position,
             "author": author_section.display_only_thumbnails_by_author,
-            "favorites": self.browser.show_favorites,
-            "most_recent": self.browser.show_most_recent_sequences,
+            "favorites": self.browser.filter_manager.show_favorites,
+            "most_recent": self.browser.filter_manager.show_most_recent_sequences,
             "grid_mode": grid_mode_section.display_only_thumbnails_with_grid_mode,
-            "show_all": self.browser.show_all_sequences,
+            "show_all": self.browser.filter_manager.show_all_sequences,
         }
         if initial_selection:
             for key, value in initial_selection.items():
@@ -138,6 +138,7 @@ class ThumbnailBoxSorter:
                         display_functions[key]()
                     else:
                         display_functions[key](value)
+        self.browser.initialized = True
 
     ### HELPER FUNCTIONS ###
 

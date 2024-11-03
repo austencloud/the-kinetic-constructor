@@ -43,7 +43,7 @@ class StartingLetterSection(FilterSectionBase):
 
     def add_buttons(self):
         self.initialized = True
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
 
         layout: QVBoxLayout = self.layout()
@@ -91,7 +91,9 @@ class StartingLetterSection(FilterSectionBase):
     def _get_starting_letter_sequence_counts(self) -> dict[str, int]:
         """Tally up how many sequences start with each letter."""
         letter_counts = {letter: 0 for letter in self.buttons.keys()}
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+        base_words = self.browser.thumbnail_box_sorter.get_sorted_base_words(
+            "sequence_length"
+        )
 
         for word, _, _ in base_words:
             first_letter = self.extract_first_letter(word)
@@ -109,7 +111,7 @@ class StartingLetterSection(FilterSectionBase):
 
     def display_only_thumbnails_starting_with_letter(self, letter: str):
         """Display thumbnails of sequences starting with the specified letter."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.browser.dictionary.dictionary_settings.set_current_filter(
             {"starting_letter": letter}
         )
 
@@ -120,9 +122,9 @@ class StartingLetterSection(FilterSectionBase):
         )
         self.browser.nav_sidebar.clear_sidebar()
         QApplication.processEvents()
-        self.browser.prepare_ui_for_filtering(description)
+        self.browser.filter_manager.prepare_ui_for_filtering(description)
 
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+        base_words = self.browser.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
         if letter == "show_all":
             matching_sequences = [
                 (word, thumbnails, seq_length)
@@ -137,7 +139,7 @@ class StartingLetterSection(FilterSectionBase):
 
         total_sequences = len(matching_sequences) or 1  # Prevent division by zero
         self.browser.currently_displayed_sequences = matching_sequences
-        self.browser.update_and_display_ui(total_sequences, letter)
+        self.browser.ui_updater.update_and_display_ui(total_sequences, letter)
 
     def _word_starts_with_letter(self, word: str, letter: str) -> bool:
         """Check if the word starts with the given letter."""

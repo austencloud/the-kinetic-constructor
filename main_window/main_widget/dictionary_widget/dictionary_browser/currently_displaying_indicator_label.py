@@ -16,3 +16,8 @@ class CurrentlyDisplayingIndicatorLabel(QLabel):
 
     def show_message(self, description):
         self.setText(f"Currently displaying {description}.")
+
+    def resize_currently_displaying_label(self):
+        font = self.font()
+        font.setPointSize(self.browser.width() // 65)
+        self.setFont(font)

@@ -46,7 +46,7 @@ class LevelSection(FilterSectionBase):
         # Clear existing widgets to prevent duplication
         # self.clear_layout()
 
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
@@ -195,10 +195,10 @@ class LevelSection(FilterSectionBase):
 
     def display_only_thumbnails_with_level(self, level: int):
         """Display only the thumbnails that match the selected level."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.dictionary.dictionary_widget.dictionary_settings.set_current_filter(
             {"level": level}
         )
-        self.browser.prepare_ui_for_filtering(f"level {level} sequences")
+        self.browser.filter_manager.prepare_ui_for_filtering(f"level {level} sequences")
 
         sequences = self.get_sequences_that_are_a_specific_level(level)
         total_sequences = len(sequences)
@@ -208,7 +208,7 @@ class LevelSection(FilterSectionBase):
             for word, thumbnails in sequences
         ]
 
-        self.browser.update_and_display_ui(total_sequences, level)
+        self.browser.ui_updater.update_and_display_ui(total_sequences, level)
 
     def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""

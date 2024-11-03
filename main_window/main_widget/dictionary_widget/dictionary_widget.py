@@ -5,6 +5,9 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
     DictionaryBrowser,
 )
+from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
+    DictionaryInitialSelectionsWidget,
+)
 from main_window.main_widget.dictionary_widget.dictionary_deletion_handler import (
     DictionaryDeletionHandler,
 )
@@ -50,23 +53,26 @@ class DictionaryWidget(QWidget):
         self.deletion_handler = DictionaryDeletionHandler(self)
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
+        # self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.addWidget(self.browser, 5)
+        self.layout.addWidget(self.preview_area, 3)
         self.setLayout(self.layout)
 
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
         self.preview_area.resize_preview_area()
+        # self.initial_selection_widget.resize_initial_selections_widget()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
-        self.preview_area.resize_preview_area()
+        self.resize_dictionary_widget()
 
     def show_initial_section(self):
         current_section = (
-            self.browser.dictionary_widget.dictionary_settings.get_current_section()
+            self.browser.dictionary.dictionary_settings.get_current_section()
         )
         initial_selection_widget = self.browser.initial_selection_widget
 
@@ -89,7 +95,7 @@ class DictionaryWidget(QWidget):
                 "starting_position"
             ),
             "author": lambda: initial_selection_widget.show_section("author"),
-            "browser": self.browser.show_browser_with_filters_from_settings,
+            "browser": self.browser.filter_manager.show_browser_with_filters_from_settings,
         }
 
         if current_section in section_map:

@@ -17,7 +17,6 @@ class PreviewAreaImageLabel(QLabel):
         self.thumbnails = preview_area.thumbnails
         self.current_index = preview_area.current_index
         self.metadata_extractor = preview_area.main_widget.metadata_extractor
-        self.browser = preview_area.dictionary_widget.browser
         self.is_selected = False
         self.setStyleSheet("border: 3px solid black;")
         self.installEventFilter(self)
@@ -54,7 +53,7 @@ class PreviewAreaImageLabel(QLabel):
     def style_placeholder(self):
         placeholder_text_font_size = self.preview_area.width() // 50
         global_settings = (
-            self.browser.main_widget.main_window.settings_manager.global_settings
+            self.preview_area.dictionary_widget.browser.main_widget.main_window.settings_manager.global_settings
         )
         font_color = global_settings.font_color_updater.get_font_color(
             global_settings.get_background_type()

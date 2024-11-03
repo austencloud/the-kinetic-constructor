@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
+
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import (
     ThumbnailBox,
 )
@@ -32,6 +33,7 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.is_initialized = True
         self.section_headers: dict[int, "DictionaryBrowserSectionHeader"] = {}
         self._setup_scroll_area()
+        # setup go back button
         self._setup_layout()
 
     def _setup_layout(self):

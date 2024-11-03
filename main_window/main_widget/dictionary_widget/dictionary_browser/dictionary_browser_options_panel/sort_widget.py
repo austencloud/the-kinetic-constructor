@@ -16,7 +16,7 @@ class SortWidget(QWidget):
         super().__init__(options_panel)
         self.browser = options_panel.browser
         self.settings_manager = (
-            self.browser.dictionary_widget.main_widget.main_window.settings_manager
+            self.browser.dictionary.main_widget.main_window.settings_manager
         )
         self.selected_button: QPushButton = None  # Track the selected button
         self._setup_sort_buttons()
@@ -126,7 +126,7 @@ class SortWidget(QWidget):
             )
         )
         font_size = self.browser.width() // 50
-        self.browser.number_of_sequences_label.setStyleSheet(
+        self.browser.sequence_count_label.setStyleSheet(
             f"font-size: {font_size}px; color: {font_color};"
         )
 

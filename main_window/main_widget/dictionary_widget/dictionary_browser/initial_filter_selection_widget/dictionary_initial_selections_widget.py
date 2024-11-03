@@ -81,7 +81,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
                 resize_method = getattr(section, f"resize_{section_name}_section", None)
                 if callable(resize_method):
                     resize_method()
-            self.browser.dictionary_widget.dictionary_settings.set_current_section(
+            self.browser.dictionary.dictionary_settings.set_current_section(
                 section_name
             )
             self.current_filter_section = section_name
@@ -99,10 +99,10 @@ class DictionaryInitialSelectionsWidget(QWidget):
             filter_key (str): The filter key (e.g., 'level', 'author').
             filter_value: The value for the filter key.
         """
-        self.browser.dictionary_widget.dictionary_settings.set_current_section(
+        self.browser.dictionary.dictionary_settings.set_current_section(
             "browser"
         )
-        self.browser.apply_current_filter({filter_key: filter_value})
+        self.browser.filter_manager.apply_current_filter({filter_key: filter_value})
 
     # Event Handlers
     def on_starting_letter_button_clicked(self, letter: str):
@@ -138,7 +138,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.resize_filter_choice_widget()
         for section in self.section_map.values():
             if isinstance(section, FilterSectionBase):
-                section.resize_go_back_button()
+                section.go_back_button.resize_go_back_button()
 
     def resize_initial_filter_buttons(self):
         """Resize the filter choice buttons based on the browser's width."""

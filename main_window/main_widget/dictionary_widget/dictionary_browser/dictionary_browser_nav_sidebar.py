@@ -24,7 +24,7 @@ class DictionaryBrowserNavSidebar(QWidget):
         self.letter_spacer_line: QLabel = None  # Spacer line for letter label
         self.selected_button: QPushButton = None  # Track the selected button
         self.settings_manager = (
-            self.browser.dictionary_widget.main_widget.main_window.settings_manager
+            self.browser.dictionary.main_widget.main_window.settings_manager
         )
 
         main_layout = QVBoxLayout(self)
@@ -210,8 +210,10 @@ class DictionaryBrowserNavSidebar(QWidget):
 
     def style_button(self, button: QPushButton, selected: bool = False):
         font_size = self.browser.height() // 40
-        font_color = self.settings_manager.global_settings.font_color_updater.get_font_color(
-            self.settings_manager.global_settings.get_background_type()
+        font_color = (
+            self.settings_manager.global_settings.font_color_updater.get_font_color(
+                self.settings_manager.global_settings.get_background_type()
+            )
         )
         button_background_color = "lightgray" if font_color == "black" else "#555"
         hover_color = "lightgray" if font_color == "black" else "#555"
@@ -248,8 +250,10 @@ class DictionaryBrowserNavSidebar(QWidget):
 
     def style_header_label(self, label: QLabel):
         font_size = self.browser.height() // 40
-        font_color = self.settings_manager.global_settings.font_color_updater.get_font_color(
-            self.settings_manager.global_settings.get_background_type()
+        font_color = (
+            self.settings_manager.global_settings.font_color_updater.get_font_color(
+                self.settings_manager.global_settings.get_background_type()
+            )
         )
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(

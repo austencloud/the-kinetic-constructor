@@ -41,6 +41,7 @@ class DictionaryPreviewArea(QWidget):
         self._setup_components()
         # self._hide_components()
         self._setup_layout()
+        self.hide()
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)

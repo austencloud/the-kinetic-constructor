@@ -37,7 +37,7 @@ class AuthorSection(FilterSectionBase):
 
     def add_buttons(self):
         """Initialize the UI components for the author selection."""
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
@@ -155,10 +155,10 @@ class AuthorSection(FilterSectionBase):
 
     def display_only_thumbnails_by_author(self, author: str):
         """Display only the thumbnails that match the selected author."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browser.dictionary.dictionary_settings.set_current_filter(
             {"author": author}
         )
-        self.browser.prepare_ui_for_filtering(f"sequences by {author}")
+        self.browser.filter_manager.prepare_ui_for_filtering(f"sequences by {author}")
 
         sequences = self.get_sequences_by_author(author)
         total_sequences = len(sequences)
@@ -168,7 +168,7 @@ class AuthorSection(FilterSectionBase):
             for word, thumbnails in sequences
         ]
 
-        self.browser.update_and_display_ui(total_sequences, author)
+        self.browser.ui_updater.update_and_display_ui(total_sequences, author)
 
     def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""

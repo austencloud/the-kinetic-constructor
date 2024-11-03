@@ -28,7 +28,7 @@ class SequenceLengthSection(FilterSectionBase):
         self.add_buttons()
 
     def add_buttons(self):
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
@@ -100,7 +100,9 @@ class SequenceLengthSection(FilterSectionBase):
     def _get_sequence_length_counts(self) -> dict[int, int]:
         """Tally up how many sequences are available for each length."""
         length_counts = {}
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+        base_words = self.browser.thumbnail_box_sorter.get_sorted_base_words(
+            "sequence_length"
+        )
 
         for _, _, seq_length in base_words:
             length_counts[seq_length] = length_counts.get(seq_length, 0) + 1
@@ -109,12 +111,16 @@ class SequenceLengthSection(FilterSectionBase):
 
     def display_only_thumbnails_with_sequence_length(self, length: int):
         """Display sequences of a specific length."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.brdictionary.dictionary_widget.dictionary_settings.set_current_filter(
             {"sequence_length": length}
         )
-        self.browser.prepare_ui_for_filtering(f"sequences of length {length}")
+        self.browser.filter_manager.prepare_ui_for_filtering(
+            f"sequences of length {length}"
+        )
 
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+        base_words = self.browser.thumbnail_box_sorter.get_sorted_base_words(
+            "sequence_length"
+        )
         matching_sequences = [
             (word, thumbnails, seq_length)
             for word, thumbnails, seq_length in base_words
@@ -124,7 +130,7 @@ class SequenceLengthSection(FilterSectionBase):
         total_sequences = len(matching_sequences) or 1  # Prevent division by zero
         self.browser.currently_displayed_sequences = matching_sequences
 
-        self.browser.update_and_display_ui(total_sequences, length)
+        self.browser.ui_updater.update_and_display_ui(total_sequences, length)
 
     def resize_sequence_length_section(self):
         self.resize_buttons()

@@ -44,7 +44,7 @@ class ContainsLettersSection(FilterSectionBase):
 
     def add_buttons(self):
         self.initialized = True
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
 
         layout: QVBoxLayout = self.layout()
@@ -102,7 +102,9 @@ class ContainsLettersSection(FilterSectionBase):
         if not self.selected_letters:
             return 0
 
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+        base_words = self.browser.thumbnail_box_sorter.get_sorted_base_words(
+            "sequence_length"
+        )
         return sum(
             any(letter in word for letter in self.selected_letters)
             for word, _, _ in base_words
@@ -119,14 +121,16 @@ class ContainsLettersSection(FilterSectionBase):
         letters = self.organize_letters(letters)
         display_letters = self.format_display_letters(letters)
 
-        self.browser.prepare_ui_for_filtering(
+        self.browser.filter_manager.prepare_ui_for_filtering(
             f"sequences containing\n{display_letters}"
         )
 
         sort_method = (
             self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
         )
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+        base_words = self.browser.thumbnail_box_sorter.get_sorted_base_words(
+            "sequence_length"
+        )
 
         matching_sequences = [
             (word, thumbnails, seq_length)
@@ -138,15 +142,15 @@ class ContainsLettersSection(FilterSectionBase):
 
         total_sequences = len(matching_sequences) or 1
         self.browser.currently_displayed_sequences = matching_sequences
-        self.browser.number_of_sequences_label.setText(
+        self.browser.sequence_count_label.setText(
             f"Number of words to be displayed: {len(matching_sequences)}"
         )
 
         def update_ui():
             for index, (word, thumbnails, _) in enumerate(matching_sequences):
-                row_index = index // self.thumbnail_box_sorter.num_columns
-                column_index = index % self.thumbnail_box_sorter.num_columns
-                self.thumbnail_box_sorter.add_thumbnail_box(
+                row_index = index // self.browser.thumbnail_box_sorter.num_columns
+                column_index = index % self.browser.thumbnail_box_sorter.num_columns
+                self.browser.thumbnail_box_sorter.add_thumbnail_box(
                     row_index=row_index,
                     column_index=column_index,
                     word=word,
@@ -155,18 +159,20 @@ class ContainsLettersSection(FilterSectionBase):
                 )
                 percentage = int(((index + 1) / total_sequences) * 100)
                 self.browser.progress_bar.setValue(percentage)
-                self.browser.number_of_sequences_label.setText(
+                self.browser.sequence_count_label.setText(
                     f"Number of words: {index + 1}"
                 )
                 QApplication.processEvents()
 
             self.browser.progress_bar.setVisible(False)
-            self.browser.update_and_display_ui(total_sequences, display_letters)
+            self.browser.ui_updater.update_and_display_ui(
+                total_sequences, display_letters
+            )
 
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.dictionary.dictionary_widget.dictionary_settings.set_current_filter(
             {"contains_letters": letters}
         )
 

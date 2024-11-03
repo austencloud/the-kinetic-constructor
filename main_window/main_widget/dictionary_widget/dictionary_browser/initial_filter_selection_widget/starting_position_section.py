@@ -43,7 +43,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def add_buttons(self):
         """Initialize the UI components for the starting position selection."""
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
@@ -201,10 +201,12 @@ class StartingPositionSection(FilterSectionBase):
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         """Display only the thumbnails that match the selected starting position."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.dictionary.dictionary_widget.dictionary_settings.set_current_filter(
             {"starting_position": position.lower()}
         )
-        self.browser.prepare_ui_for_filtering(f"sequences starting at {position}")
+        self.browser.filter_manager.prepare_ui_for_filtering(
+            f"sequences starting at {position}"
+        )
 
         sequences = self.get_sequences_that_are_a_specific_position(position)
         total_sequences = len(sequences)
@@ -214,7 +216,7 @@ class StartingPositionSection(FilterSectionBase):
             for word, thumbnails in sequences
         ]
 
-        self.browser.update_and_display_ui(total_sequences, position)
+        self.browser.ui_updater.update_and_display_ui(total_sequences, position)
 
     def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""

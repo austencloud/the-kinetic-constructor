@@ -55,7 +55,7 @@ class ThumbnailImageLabel(QLabel):
             metadata = self.metadata_extractor.extract_metadata_from_file(
                 self.thumbnails[0]
             )
-            self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
+            self.browser.dictionary.selection_handler.thumbnail_clicked(
                 self,
                 QPixmap(self.thumbnails[self.thumbnail_box.current_index]),
                 metadata,
@@ -63,7 +63,7 @@ class ThumbnailImageLabel(QLabel):
                 self.thumbnail_box.current_index,
             )
         else:
-            self.browser.dictionary_widget.deletion_handler.delete_variation(
+            self.browser.dictionary.deletion_handler.delete_variation(
                 self.thumbnail_box, self.thumbnail_box.current_index
             )
 

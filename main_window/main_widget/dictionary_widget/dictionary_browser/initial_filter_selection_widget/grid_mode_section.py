@@ -42,7 +42,7 @@ class GridModeSection(FilterSectionBase):
 
     def add_buttons(self):
         """Initialize the UI components for the grid mode selection."""
-        self.back_button.show()
+        self.go_back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
@@ -222,10 +222,10 @@ class GridModeSection(FilterSectionBase):
 
     def display_only_thumbnails_with_grid_mode(self, grid_mode: str):
         """Display only the thumbnails that match the selected grid mode."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browser.dictionary.dictionary_settings.set_current_filter(
             {"grid_mode": grid_mode.lower()}
         )
-        self.browser.prepare_ui_for_filtering(
+        self.browser.filter_manager.prepare_ui_for_filtering(
             f"{grid_mode.capitalize()} mode sequences."
         )
 
@@ -237,7 +237,7 @@ class GridModeSection(FilterSectionBase):
             for word, thumbnails in sequences
         ]
 
-        self.browser.update_and_display_ui(total_sequences, grid_mode)
+        self.browser.ui_updater.update_and_display_ui(total_sequences, grid_mode)
 
     def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""
