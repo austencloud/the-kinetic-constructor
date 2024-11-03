@@ -52,6 +52,7 @@ class DictionaryBrowser(QWidget):
         self.nav_sidebar = DictionaryBrowserNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.options_widget = DictionaryOptionsPanel(self)
+        self.video_preview_widget = VideoPreviewWidget(self)
 
         self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
 
