@@ -1,10 +1,12 @@
-
-from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
-    DictionaryBrowser,
-)
+from typing import TYPE_CHECKING
 from main_window.main_widget.dictionary_widget.dictionary_browser.rainbow_progress_bar import (
     RainbowProgressBar,
 )
+
+if TYPE_CHECKING:
+    from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
+        DictionaryBrowser,
+    )
 
 
 class DictionaryProgressBar(RainbowProgressBar):
