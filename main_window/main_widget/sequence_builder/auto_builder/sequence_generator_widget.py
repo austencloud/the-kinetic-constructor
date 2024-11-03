@@ -61,7 +61,12 @@ class SequenceGeneratorWidget(QWidget):
         self.stacked_layout.addWidget(self.circular_builder_frame)
         self.layout.addLayout(self.stacked_layout)
 
-
+        # Add the Create Sequence button
+        self.layout.addStretch(1)
+        self.layout.addWidget(
+            self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout.addStretch(1)
 
         # Default to showing Freeform frame
         self.current_auto_builder = "freeform"
@@ -91,11 +96,6 @@ class SequenceGeneratorWidget(QWidget):
         }
         # Set an initial dummy connection
         self.generate_sequence_button = GenerateSequenceButton(self)
-        # Add the Create Sequence button
-        self.layout.addStretch(1)
-        self.layout.addWidget(
-            self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
-        )
         self.generate_sequence_button.clicked.connect(self.dummy_function)
 
     def dummy_function(self):

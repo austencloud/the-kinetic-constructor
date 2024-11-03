@@ -72,16 +72,7 @@ class SequenceWidget(QWidget):
         super().resizeEvent(event)
         self.resize_sequence_widget()
         self.toggle_tab._resize_graph_editor_toggle_tab()
-        if self.graph_editor.isVisible():
-            desired_height = int(self.height() // 3.5)
-            self.graph_editor.resize(self.width(), desired_height)
-            self.graph_editor.move(0, self.height() - desired_height)
-
-            self.toggle_tab.move(
-                0, self.height() - desired_height - self.toggle_tab.height()
-            )
-        else:
-            self.toggle_tab.move(0, self.height() - self.toggle_tab.height())
+        self.toggle_tab.reposition_tobble_tab()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
