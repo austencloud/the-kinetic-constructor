@@ -18,8 +18,7 @@ class ExportDialogPreviewPanel(QFrame):
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.preview_label = QLabel(self)
-        # self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # self.preview_label.setScaledContents(False)  # Disable scaled contents
+
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
