@@ -96,7 +96,7 @@ class ActPopulator:
             step_label_text = beat_data.get("step_label", "")
             beat_view.beat.updater.update_pictograph(beat_data)
             beat_view.beat.pictograph_dict = beat_data
-            # self.add_step_label(beat_view, step_label_text)
+            self.add_step_label(beat_view, step_label_text)
 
     def add_step_label(self, beat_view, label_text: str):
         """Attach step label to an individual beat view."""
@@ -111,41 +111,5 @@ class ActPopulator:
 
     def save_populated_act(self):
         """Save the populated act structure."""
-        act_data = self.create_initial_act_structure()  # Start with the frame
-        act_data["sequences"] = self.collect_sequences()
-        self.beat_frame.main_widget.json_manager.save_act(act_data)
 
-    def collect_sequences(self):
-        """Collect sequences including cues, timestamps, and step labels for saving."""
-        sequences = []
-        total_rows = (
-            self.beat_frame.act_sheet.act_container.beat_scroll.act_beat_frame.layout_manager.calculate_total_rows()
-        )
-
-        for row in range(total_rows):
-            # Get cue and timestamp for each row
-            cue, timestamp = (
-                self.beat_frame.act_sheet.act_container.get_cue_timestamp_for_row(row)
-            )
-            sequence_data = {
-                "sequence_start_marker": row == 0,
-                "cue": cue,
-                "timestamp": timestamp,
-                "beats": [],
-            }
-
-            # Retrieve each beat view in the current row
-            beat_views = self.beat_frame.act_sheet.act_container.get_beats_in_row(row)
-            for beat_view in beat_views:
-                if not beat_view.is_populated():
-                    continue
-                beat_data = beat_view.extract_metadata()
-                beat_data["step_label"] = self.beat_frame.beat_step_map[
-                    beat_view
-                ].label.text()
-                sequence_data["beats"].append(beat_data)
-
-            if sequence_data["beats"]:
-                sequences.append(sequence_data)
-
-        return sequences
+        self.beat_frame.act_sheet.act_saver.save_act()

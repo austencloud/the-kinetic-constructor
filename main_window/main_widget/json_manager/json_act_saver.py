@@ -9,7 +9,7 @@ class JsonActSaver:
     def __init__(self, json_manager):
         self.json_manager = json_manager
         self.current_act_json = os.path.join(
-            QDir.currentPath(), "acts", "current_act.json"
+            QDir.currentPath(), "current_act.json"
         )
 
     def save_act(self, act_data: dict):

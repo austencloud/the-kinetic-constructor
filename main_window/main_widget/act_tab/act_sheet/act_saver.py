@@ -15,15 +15,20 @@ class ActSaver:
     def save_act(self, filename="current_act.json"):
         """Save the current act to a JSON file in the acts directory."""
         sequences = self.act_sheet.sequence_collector.collect_sequences()
-        act_data = {
-            "title": self.act_sheet.act_header.get_title(),
-            "prop_type": self.act_sheet.main_widget.prop_type.name,
-            "grid_mode": self.act_sheet.main_widget.settings_manager.global_settings.get_grid_mode(),
+        grid_mode = (
+            self.act_sheet.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        prop_type = self.act_sheet.main_widget.prop_type.name
+        title = self.act_sheet.act_header.get_title()
+        
+        sequences = {
+            "title": title,
+            "prop_type": prop_type,
+            "grid_mode": grid_mode,
             "sequences": sequences,
         }
-        acts_dir = get_user_editable_resource_path("acts")
-        os.makedirs(acts_dir, exist_ok=True)
-        file_path = os.path.join(acts_dir, filename)
+        
+        file_path = get_user_editable_resource_path(filename)
 
         with open(file_path, "w") as f:
-            json.dump(act_data, f, indent=4)
+            json.dump(sequences, f, indent=4)

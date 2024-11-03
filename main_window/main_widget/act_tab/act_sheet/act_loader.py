@@ -13,7 +13,7 @@ class ActLoader:
 
     def load_act(self, filename="current_act.json") -> None:
         """Load an act from a JSON file in the acts directory."""
-        file_path = get_user_editable_resource_path(f"acts/{filename}")
+        file_path = get_user_editable_resource_path(filename)
         if not os.path.isfile(file_path):
             print(f"No saved act found at {file_path}")
             return None
@@ -34,7 +34,9 @@ class ActLoader:
             beats = sequence["beats"]
 
             # Calculate the number of rows needed to fit this sequence
-            num_rows = (sequence_length + self.act_sheet.DEFAULT_COLUMNS - 1) // self.act_sheet.DEFAULT_COLUMNS
+            num_rows = (
+                sequence_length + self.act_sheet.DEFAULT_COLUMNS - 1
+            ) // self.act_sheet.DEFAULT_COLUMNS
 
             # Populate rows with beats for this sequence, adjusting `current_row` as needed
             for row_index in range(num_rows):
