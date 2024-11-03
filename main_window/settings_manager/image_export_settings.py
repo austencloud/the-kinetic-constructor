@@ -21,9 +21,14 @@ class ImageExportSettings:
 
     def get_image_export_setting(self, key):
         # Retrieve the setting value or default to the dictionary's default value
-        return self.settings.value(
+        setting = self.settings.value(
             f"image_export/{key}", self.DEFAULT_IMAGE_EXPORT_SETTINGS.get(key)
         )
+        if setting == "false":
+            setting = False
+        elif setting == "true":
+            setting = True
+        return setting
 
     def set_image_export_setting(self, key, value):
         # Set the value in QSettings

@@ -2,12 +2,12 @@ from datetime import datetime
 import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer
-from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
+
+from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_progress_bar import DictionaryProgressBar
+from .initial_filter_selection_widget.dictionary_initial_selections_widget import (
     DictionaryInitialSelectionsWidget,
 )
-from main_window.main_widget.dictionary_widget.dictionary_browser.rainbow_progress_bar import (
-    RainbowProgressBar,
-)
+from .video_preview_widget import VideoPreviewWidget
 from utilities.path_helpers import get_images_and_data_path
 from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 from .dictionary_browser_nav_sidebar import DictionaryBrowserNavSidebar
@@ -54,6 +54,7 @@ class DictionaryBrowser(QWidget):
         self.section_manager = SectionManager(self)
         self.thumbnail_box_sorter = ThumbnailBoxSorter(self)
         self.options_widget = DictionaryOptionsPanel(self)
+        self.video_preview_widget = VideoPreviewWidget(self)
 
         self._setup_go_back_to_initial_selection_widget_button()
         self._setup_number_of_currently_displayed_sequences_label()
@@ -84,23 +85,15 @@ class DictionaryBrowser(QWidget):
             self.thumbnail_box_sorter.num_columns,
             Qt.AlignmentFlag.AlignCenter,
         )
-        self._style_progress_bar()
+        self.progress_bar._style_dictionary_progress_bar()
         self.progress_bar.setVisible(True)
         QApplication.processEvents()
 
     def _initialize_progress_bar(self):
-        self.progress_bar = RainbowProgressBar(self.scroll_widget.scroll_content)
+        self.progress_bar = DictionaryProgressBar(self.scroll_widget.scroll_content)
         self.progress_bar.setVisible(False)
 
-    def _style_progress_bar(self):
-        self.progress_bar.setFixedWidth(self.width() // 3)
-        self.progress_bar.setFixedHeight(self.height() // 6)
 
-        progress_bar_font = self.progress_bar.percentage_label.font()
-        progress_bar_font.setFamily("Monotype Corsiva")  # Set font to Monotype Corsiva
-        progress_bar_font.setPointSize(self.width() // 40)
-        self.progress_bar.percentage_label.setFont(progress_bar_font)
-        self.progress_bar.loading_label.setFont(progress_bar_font)
 
     def _setup_number_of_currently_displayed_sequences_label(self):
         self.number_of_sequences_label = QLabel("")
@@ -151,6 +144,7 @@ class DictionaryBrowser(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.initial_selection_widget)
+        self.layout.addWidget(self.video_preview_widget)
 
     def _add_components_to_layout(self):
         self.layout.addLayout(self.go_back_button_layout)
@@ -206,6 +200,14 @@ class DictionaryBrowser(QWidget):
         )
 
         self.apply_current_filter(current_filter)
+
+    def load_sequence_with_video(self, metadata: dict):
+        video_url = metadata.get("video_url")
+        if video_url:
+            self.video_preview_widget.load_video(video_url)
+            self.video_preview_widget.show()
+        else:
+            self.video_preview_widget.hide()  # Hide if no video available
 
     def show_favorites(self):
         """Show only favorite sequences."""
