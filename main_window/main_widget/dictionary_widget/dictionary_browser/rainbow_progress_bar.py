@@ -62,5 +62,3 @@ class RainbowProgressBar(QWidget):
     def setMaximum(self, value):
         """Set the maximum value for the progress bar"""
         self.progress_bar.setMaximum(value)
-
-

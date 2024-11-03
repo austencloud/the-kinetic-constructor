@@ -3,11 +3,14 @@ import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer
 
-from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_progress_bar import DictionaryProgressBar
+from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_progress_bar import (
+    DictionaryProgressBar,
+)
 from .initial_filter_selection_widget.dictionary_initial_selections_widget import (
     DictionaryInitialSelectionsWidget,
 )
-from .video_preview_widget import VideoPreviewWidget
+
+# from .video_preview_widget import VideoPreviewWidget
 from utilities.path_helpers import get_images_and_data_path
 from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 from .dictionary_browser_nav_sidebar import DictionaryBrowserNavSidebar
@@ -54,7 +57,7 @@ class DictionaryBrowser(QWidget):
         self.section_manager = SectionManager(self)
         self.thumbnail_box_sorter = ThumbnailBoxSorter(self)
         self.options_widget = DictionaryOptionsPanel(self)
-        self.video_preview_widget = VideoPreviewWidget(self)
+        # self.video_preview_widget = VideoPreviewWidget(self)
 
         self._setup_go_back_to_initial_selection_widget_button()
         self._setup_number_of_currently_displayed_sequences_label()
@@ -92,8 +95,6 @@ class DictionaryBrowser(QWidget):
     def _initialize_progress_bar(self):
         self.progress_bar = DictionaryProgressBar(self.scroll_widget.scroll_content)
         self.progress_bar.setVisible(False)
-
-
 
     def _setup_number_of_currently_displayed_sequences_label(self):
         self.number_of_sequences_label = QLabel("")
@@ -144,7 +145,7 @@ class DictionaryBrowser(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.initial_selection_widget)
-        self.layout.addWidget(self.video_preview_widget)
+        # self.layout.addWidget(self.video_preview_widget)
 
     def _add_components_to_layout(self):
         self.layout.addLayout(self.go_back_button_layout)

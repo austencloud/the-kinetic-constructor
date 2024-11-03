@@ -2,13 +2,22 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QUrl
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
+
+
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
+        DictionaryBrowser,
+    )
+    from main_window.main_widget.dictionary_widget.dictionary_widget import (
+        DictionaryWidget,
+    )
+
 
 class VideoPreviewWidget(QWidget):
-    def __init__(self, dictionary_widget: "DictionaryWidget"):
-        super().__init__(dictionary_widget)
-        self.layout:QVBoxLayout = QVBoxLayout(self)
+    def __init__(self, browser: "DictionaryBrowser"):
+        super().__init__(browser)
+        self.browser = browser
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.web_view = QWebEngineView(self)
         self.layout.addWidget(self.web_view)
         self.setLayout(self.layout)
