@@ -40,8 +40,9 @@ class GlyphVisibilityManager:
         # Apply current settings to all visible pictographs
         for pictograph_list in self.main_window.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():
-                if pictograph.view.isVisible():
-                    self.apply_current_visibility_settings(pictograph)
+                if pictograph.view:
+                    if pictograph.view.isVisible():
+                        self.apply_current_visibility_settings(pictograph)
 
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:

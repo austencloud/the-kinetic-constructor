@@ -13,8 +13,10 @@ class UserManager(QObject):
         self.user_profile_settings = user_profile_settings
         self.previous_user = ""
         self.user_combo_box = None
+        self.is_in_image_export = False
 
     def populate_user_profiles_combo_box(self, user_combo_box: QComboBox):
+        self.is_in_image_export = True
         user_profiles = self.user_profile_settings.get_user_profiles()
         current_user = self.user_profile_settings.get_current_user()
         self.user_combo_box = user_combo_box
@@ -40,7 +42,8 @@ class UserManager(QObject):
     def open_edit_users_dialog(self):
         dialog = EditUserProfilesDialog(self)
         if dialog.exec():
-            self.populate_user_profiles_combo_box(self.user_combo_box)
+            if self.is_in_image_export:
+                self.populate_user_profiles_combo_box(self.user_combo_box)
 
     def get_all_users(self):
         return list(self.user_profile_settings.get_user_profiles().keys())

@@ -1,5 +1,13 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
+from PyQt6.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve, QRect
+
+from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_tab import (
+    GraphEditorToggleTab,
+)
+from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggler import (
+    GraphEditorToggler,
+)
 from .sequence_clearer import SequenceClearer
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
@@ -20,6 +28,7 @@ if TYPE_CHECKING:
 class SequenceWidget(QWidget):
     beat_frame_layout: QHBoxLayout
     indicator_label_layout: QHBoxLayout
+    graph_editor_placeholder: "QSpacerItem"
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
@@ -49,17 +58,21 @@ class SequenceWidget(QWidget):
         self.button_panel = SequenceWidgetButtonPanel(self)
         self.graph_editor = GraphEditor(self)
 
+        # Initialize the toggle tab and toggler
+        self.toggle_tab = GraphEditorToggleTab(self)
+        self.toggler = GraphEditorToggler(self)
+
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
-        self.button_panel.resize_button_frame()
+        self.button_panel.resize_button_panel()
         self.beat_frame.resize_beat_frame()
         self.graph_editor.resize_graph_editor()
 
     def resizeEvent(self, event) -> None:
-        self.resize_sequence_widget()
-        if self.graph_editor.isVisible():
-            self.graph_editor.resize_graph_editor()
         super().resizeEvent(event)
+        self.resize_sequence_widget()
+        self.toggle_tab._resize_graph_editor_toggle_tab()
+        self.toggle_tab.reposition_tobble_tab()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)

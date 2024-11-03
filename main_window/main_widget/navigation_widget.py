@@ -64,12 +64,10 @@ class NavigationWidget(QWidget):
     def set_button_appearance(self, index, idx, button: "QPushButton"):
         font_size = self.main_widget.width() // 120
         if idx == index:
-            # Apply active style
             button.setStyleSheet(
                 f"background-color: lightblue; font-size: {font_size}pt; font-family: Georgia;"
             )
         else:
-            # Apply normal style
             button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
         button.setMinimumWidth(self.main_widget.width() // 10)
         button.setMinimumHeight(self.main_widget.height() // 22)

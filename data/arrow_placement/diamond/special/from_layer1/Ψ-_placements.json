@@ -155,6 +155,9 @@
     },
     "(o, 2.5, 1.5)": {
       "swap_beta_w_nonradial_blue_dash_s_red_dash_n": true
+    },
+    "(o, 1, 2)": {
+      "swap_beta_e_radial_blue_dash_s_red_dash_n": true
     }
   }
 }

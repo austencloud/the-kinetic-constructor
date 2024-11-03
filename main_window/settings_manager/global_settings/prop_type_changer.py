@@ -35,7 +35,7 @@ class PropTypeChanger:
     def update_props_to_type(self, new_prop_type) -> None:
         for pictograph_list in self.main_window.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():
-                if pictograph.view.isVisible():
+                if pictograph.view:
                     self.replace_props(new_prop_type, pictograph)
                     pictograph.prop_type = new_prop_type
 

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class CueFrame(QWidget):
     def __init__(self, cue_scroll: "CueScroll"):
         super().__init__(cue_scroll)
-        self.act_tab = cue_scroll.act_sheet
+        self.act_sheet = cue_scroll.act_sheet
         self.cue_scroll = cue_scroll
 
         self.cue_boxes: dict[int, CueBox] = {}  # Store CueBox instances

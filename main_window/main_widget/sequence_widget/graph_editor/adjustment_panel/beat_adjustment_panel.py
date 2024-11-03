@@ -1,5 +1,13 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget, QSizePolicy, QVBoxLayout, QLayout
+from PyQt6.QtWidgets import (
+    QFrame,
+    QHBoxLayout,
+    QStackedWidget,
+    QWidget,
+    QSizePolicy,
+    QVBoxLayout,
+    QLayout,
+)
 from data.constants import BLUE, RED
 from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
 from .ori_picker_box.ori_picker_box import OriPickerBox
@@ -37,11 +45,11 @@ class BeatAdjustmentPanel(QFrame):
         self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
         self.red_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, RED)
         self.turns_box_set = self._setup_turns_box_set()
-        
+
         self.blue_ori_picker = OriPickerBox(self, self.GE_pictograph, BLUE)
         self.red_ori_picker = OriPickerBox(self, self.GE_pictograph, RED)
         self.ori_picker_box_set = self._setup_ori_picker_box_set()
-        
+
         self.placeholder_widget = AdjustmentPanelPlaceHolderText(self)
 
         self.stacked_widget.addWidget(self.turns_box_set)
@@ -71,13 +79,30 @@ class BeatAdjustmentPanel(QFrame):
         pictograph = (
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
-        
+
         if pictograph.is_blank:
-            self.stacked_widget.setCurrentWidget(self.placeholder_widget)
+            # self.stacked_widget.setCurrentWidget(self.placeholder_widget)
+            self.graph_editor.left_stack.setCurrentWidget(
+                self.graph_editor.left_stack.widget(0)
+            )
+            self.graph_editor.right_stack.setCurrentWidget(
+                self.graph_editor.right_stack.widget(0)
+            )
+
         elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
-            self.stacked_widget.setCurrentWidget(self.stacked_widget.widget(1))
+            self.graph_editor.left_stack.setCurrentWidget(
+                self.graph_editor.left_stack.widget(0)
+            )
+            self.graph_editor.right_stack.setCurrentWidget(
+                self.graph_editor.right_stack.widget(0)
+            )
         else:
-            self.stacked_widget.setCurrentWidget(self.stacked_widget.widget(0))
+            self.graph_editor.left_stack.setCurrentWidget(
+                self.graph_editor.left_stack.widget(1)
+            )
+            self.graph_editor.right_stack.setCurrentWidget(
+                self.graph_editor.right_stack.widget(1)
+            )
 
     def update_turns_displays(
         self, blue_motion: "Motion", red_motion: "Motion"

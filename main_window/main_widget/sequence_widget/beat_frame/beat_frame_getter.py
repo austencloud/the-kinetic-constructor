@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from utilities.word_simplifier import WordSimplifier
-
+from PyQt6.QtWidgets import QGraphicsView
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
@@ -77,3 +77,7 @@ class BeatFrameGetter:
             "cols": cols,
             "grow_sequence": grow_sequence,
         }
+
+    def beat_number(self, beat_view: QGraphicsView) -> int:
+        """Get the beat number for a given beat view."""
+        return self.beat_frame.beats.index(beat_view) + 1

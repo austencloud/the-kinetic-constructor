@@ -27,7 +27,6 @@ class StartPosPickerPictographFrame(QWidget):
             else self.start_pos_picker.manual_builder.option_picker.width()
         )
 
-        # self.setMaximumWidth(width)
         self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
         for button in self.variation_buttons.values():
             button.setMaximumWidth(
@@ -45,3 +44,4 @@ class StartPosPickerPictographFrame(QWidget):
             key
         ] = start_pos
         self.start_positions[start_pos.letter] = start_pos
+

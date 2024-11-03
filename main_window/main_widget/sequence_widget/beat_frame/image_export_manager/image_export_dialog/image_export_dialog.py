@@ -61,15 +61,6 @@ class ImageExportDialog(QDialog):
         self.share_button.clicked.connect(self.open_sharer_dialog)
         self.share_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
-        button_height = int(self.height() * 0.08)
-        font_size = int(self.height() * 0.03)
-        for button in [self.ok_button, self.cancel_button, self.share_button]:
-            button.setMinimumHeight(button_height)
-            button.setSizePolicy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-            )
-            button.setStyleSheet(f"font-size: {font_size}px;")  # Set dynamic text size
-
     def _setup_components(self):
         """Setup the components for the export dialog."""
         self.preview_panel = ExportDialogPreviewPanel(self)
@@ -87,7 +78,7 @@ class ImageExportDialog(QDialog):
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.cancel_button)
         button_layout.addWidget(self.ok_button)
-        button_layout.addWidget(self.share_button)
+        # button_layout.addWidget(self.share_button)
 
         # Main layout with buttons at the bottom
         layout = QVBoxLayout(self)
@@ -160,6 +151,11 @@ class ImageExportDialog(QDialog):
 
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
         # set the font size for all the checkbox labels and all the comboboxes and buttons int he control panel
+        self._resize_widgets()
+        self.update_preview()
+        self._resize_buttons()
+
+    def _resize_widgets(self):
         font_size = int(self.height() * 0.025)
         for widget in self.control_panel.findChildren(QCheckBox):
             widget.setStyleSheet(f"font-size: {font_size}px;")
@@ -171,6 +167,8 @@ class ImageExportDialog(QDialog):
             widget.setStyleSheet(f"font-size: {font_size}px;")
         for widget in self.preview_panel.findChildren(QLineEdit):
             widget.setStyleSheet(f"font-size: {font_size}px;")
+
+    def update_preview(self):
         self.preview_panel.update_preview(
             self.control_panel.include_start_pos_check.isChecked(),
             self.control_panel.add_info_check.isChecked(),
@@ -180,3 +178,13 @@ class ImageExportDialog(QDialog):
             self.control_panel.add_beat_numbers_check.isChecked(),
             self.control_panel.add_reversal_symbols_check.isChecked(),
         )
+
+    def _resize_buttons(self):
+        button_height = int(self.height() * 0.08)
+        font_size = int(self.height() * 0.03)
+        for button in [self.ok_button, self.cancel_button, self.share_button]:
+            button.setMinimumHeight(button_height)
+            button.setSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+            )
+            button.setStyleSheet(f"font-size: {font_size}px;")

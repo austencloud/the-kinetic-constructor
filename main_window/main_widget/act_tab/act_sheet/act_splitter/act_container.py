@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from ..act_sheet import ActSheet
 
 
-class ActFrame(QFrame):
+class ActContainer(QFrame):
     def __init__(self, act_sheet: "ActSheet") -> None:
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
@@ -17,28 +17,22 @@ class ActFrame(QFrame):
         self.cue_scroll = CueScroll(self.act_sheet)
         self.beat_scroll = ActBeatScroll(self.act_sheet)
         self.layout: QHBoxLayout = QHBoxLayout(self)
+
         # Add widgets to the splitter
         self.layout.addWidget(self.cue_scroll, 1)
         self.layout.addWidget(self.beat_scroll, 8)
+        self.setAcceptDrops(False)
 
         # Configure splitter appearance and behavior
         self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("margin: 0px; padding: 0px; spacing: 0px;")
 
-    def on_splitter_moved(self, pos, index):
-        self.save_splitter_state()
-        self.cue_scroll.cue_frame.resize_cue_frame()
-        self.beat_scroll.act_beat_frame.resize_act_beat_frame()
-
-    def save_splitter_state(self):
-        settings = self.main_widget.settings_manager.settings
-        settings.setValue("act_sheet/splitter_state", self.saveState())
-
-    def restore_splitter_state(self):
-        settings = self.main_widget.settings_manager.settings
-        splitter_state = settings.value("act_sheet/splitter_state")
-        if splitter_state:
-            self.restoreState(splitter_state)
+    def get_cue_timestamp_for_row(self, row: int) -> tuple[str, str]:
+        """Get the cue timestamp for the specified row."""
+        cue_box = self.cue_scroll.cue_frame.cue_boxes[row]
+        cue_text = cue_box.cue_label.label.text()
+        timestamp_text = cue_box.timestamp.label.text()
+        return cue_text, timestamp_text
 
     def save_scrollbar_state(self):
         settings = self.main_widget.settings_manager.settings
@@ -65,3 +59,11 @@ class ActFrame(QFrame):
                 target.verticalScrollBar().setValue
             )
             source.verticalScrollBar().valueChanged.connect(self.save_scrollbar_state)
+
+    def get_beats_in_row(self, row: int):
+        """Get the beat views in the specified row."""
+        return [
+            beat_view
+            for beat_view in self.beat_scroll.act_beat_frame.beats
+            if self.beat_scroll.act_beat_frame.layout_manager.get_row(beat_view) == row
+        ]

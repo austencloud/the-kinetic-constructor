@@ -36,6 +36,11 @@ class EditableLabel(QWidget):
         self.edit.installEventFilter(self)
         self.setCursor(Qt.CursorShape.IBeamCursor)
 
+    def change_edit_background_color(self, color):
+        self.setStyleSheet(
+            f"background-color: {color}; border: 1px solid gray; padding: 5px;"
+        )
+
     def _create_label(self, text):
         label = QLabel(text, self)
         label.setAlignment(self._align)
@@ -116,7 +121,4 @@ class EditableLabel(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Resize both label and edit widgets to prevent overflow."""
-        new_width = event.size().width() - 10
-        self.label.setFixedWidth(new_width)
-        self.edit.setFixedWidth(new_width)
         super().resizeEvent(event)

@@ -18,6 +18,7 @@ class ActBeatScroll(QScrollArea):
         self.setFrameShape(QFrame.Shape.NoFrame)
         self.setViewportMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
+        self.setAcceptDrops(False)  # ActBeatScroll will pass drag events to children
 
         self.act_beat_frame = ActBeatFrame(self)
         self.setWidget(self.act_beat_frame)

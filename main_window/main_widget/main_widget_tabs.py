@@ -10,36 +10,23 @@ class MainWidgetTabs:
         self.main_widget = main_widget
 
     def on_tab_changed(self, index: int) -> None:
-        if index in [
-            self.main_widget.build_tab_index,
-            self.main_widget.generate_tab_index,
-        ]:
-            # Show the Build/Generate Widget
-            self.main_widget.main_stacked_widget.setCurrentIndex(0)
-            # Switch between manual_builder and sequence_generator
-            if index == self.main_widget.build_tab_index:
-                self.main_widget.builder_stacked_widget.setCurrentIndex(
-                    0
-                )  # manual_builder
-            else:
-                self.main_widget.builder_stacked_widget.setCurrentIndex(
-                    1
-                )  # sequence_generator
-        else:
-            # Show the Dictionary/Learn Widget
-            self.main_widget.main_stacked_widget.setCurrentIndex(1)
-            if index == self.main_widget.dictionary_tab_index:
-                self.main_widget.dictionary_learn_widget.setCurrentIndex(
-                    0
-                )  # dictionary_widget
-            elif index == self.main_widget.learn_tab_index:
-                self.main_widget.dictionary_learn_widget.setCurrentIndex(
-                    1
-                )  # learn_widget
-            elif index == self.main_widget.act_tab_index:
-                self.main_widget.main_stacked_widget.setCurrentIndex(2)  # write_widget
+        tab_mapping = {
+            self.main_widget.build_tab_index: (0, 0),
+            self.main_widget.generate_tab_index: (0, 1),
+            self.main_widget.dictionary_tab_index: (1, 0),
+            self.main_widget.learn_tab_index: (1, 1),
+            self.main_widget.act_tab_index: (2, None),
+        }
 
-        # Update the current tab in settings
+        if index in tab_mapping:
+            main_index, sub_index = tab_mapping[index]
+            self.main_widget.main_stacked_widget.setCurrentIndex(main_index)
+            if sub_index is not None:
+                if main_index == 0:
+                    self.main_widget.builder_stacked_widget.setCurrentIndex(sub_index)
+                elif main_index == 1:
+                    self.main_widget.dictionary_learn_widget.setCurrentIndex(sub_index)
+
         tab_names = {
             self.main_widget.build_tab_index: "build",
             self.main_widget.generate_tab_index: "generate",

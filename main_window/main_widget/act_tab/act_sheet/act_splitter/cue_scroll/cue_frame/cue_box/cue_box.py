@@ -38,7 +38,7 @@ class CueBox(QWidget):
 
     def resize_cue_box(self):
         beat_frame = (
-            self.cue_frame.cue_scroll.act_sheet.splitter.beat_scroll.act_beat_frame
+            self.cue_frame.cue_scroll.act_sheet.act_container.beat_scroll.act_beat_frame
         )
         height = beat_frame.beat_size + beat_frame.steps_label_height
         self.setFixedHeight(height)

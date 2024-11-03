@@ -36,14 +36,33 @@ class StartPosManager(QObject):
             start_position_pictograph.view.hide()
 
     def setup_start_positions(self) -> None:
-        """Shows options for the starting position."""
+        """Setup initial orientations and show options for the starting position."""
         grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
-        if grid_mode == DIAMOND:
-            start_pos = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
-        elif grid_mode == BOX:
-            start_pos = ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
-        for i, position_key in enumerate(start_pos):
+        start_pos_keys = (
+            ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
+            if grid_mode == DIAMOND
+            else ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
+        )
+
+        for position_key in start_pos_keys:
             self._add_start_position_option_to_start_pos_frame(position_key)
+
+        # Set initial orientation in the OriPickerBox to "IN" if no orientation specified
+        if self.start_options:
+            initial_pictograph = next(iter(self.start_options.values()))
+            blue_orientation = initial_pictograph.pictograph_dict[
+                "blue_attributes"
+            ].get("start_ori", "IN")
+            red_orientation = initial_pictograph.pictograph_dict["red_attributes"].get(
+                "start_ori", "IN"
+            )
+
+            # Update OriPickerBox for blue and red orientations
+            self.graph_editor = (
+                self.start_pos_frame.start_pos_picker.main_widget.sequence_widget.graph_editor
+            )
+            # self.graph_editor.adjustment_panel.blue_ori_picker.set_initial_orientation(blue_orientation)
+            # self.graph_editor.adjustment_panel.red_ori_picker.set_initial_orientation(red_orientation)
 
     def _add_start_position_option_to_start_pos_frame(self, position_key: str) -> None:
         """Adds an option for the specified start position."""

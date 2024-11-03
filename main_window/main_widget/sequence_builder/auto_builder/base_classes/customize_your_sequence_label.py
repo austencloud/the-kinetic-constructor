@@ -1,25 +1,28 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.auto_builder.base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+    from main_window.main_widget.sequence_builder.auto_builder.sequence_generator_widget import (
+        SequenceGeneratorWidget,
+    )
+    from main_window.main_widget.sequence_builder.auto_builder.base_classes.base_auto_builder_frame import (
+        BaseAutoBuilderFrame,
+    )
 
 
 class CustomizeSequenceLabel(QLabel):
-    def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame") -> None:
-        super().__init__(auto_builder_frame)
-        self.auto_builder_frame = auto_builder_frame
-        self.set_default_text()
+    def __init__(self, generator_widget: "SequenceGeneratorWidget") -> None:
+        super().__init__(generator_widget)
+        self.generator_widget = generator_widget
+        self.setText("Customize your sequence:")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.set_stylesheet()
 
-    def set_default_text(self) -> None:
-        self.setText("Customize Your Sequence")
-
     def set_stylesheet(self) -> None:
-        width = self.auto_builder_frame.width()
+        width = self.generator_widget.width()
         font_size = int(0.04 * width)
         self.setStyleSheet(
             f"QLabel {{"
@@ -31,8 +34,8 @@ class CustomizeSequenceLabel(QLabel):
         )
 
     def resize_customize_sequence_label(self) -> None:
-        width = self.auto_builder_frame.sequence_generator_tab.width() // 3
-        height = self.auto_builder_frame.sequence_generator_tab.height() // 15
+        width = self.generator_widget.main_widget.width() // 4
+        height = self.generator_widget.main_widget.height() // 20
 
         self.setFixedSize(width, height)
         self.set_stylesheet()

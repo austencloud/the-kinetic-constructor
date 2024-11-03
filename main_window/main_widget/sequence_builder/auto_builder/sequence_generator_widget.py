@@ -1,72 +1,158 @@
-from PyQt6.QtWidgets import QVBoxLayout, QTabWidget
+from PyQt6.QtWidgets import (
+    QVBoxLayout,
+    QPushButton,
+    QWidget,
+    QHBoxLayout,
+    QStackedLayout,
+)
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.sequence_builder.auto_builder.base_classes.customize_your_sequence_label import (
+    CustomizeSequenceLabel,
+)
+from main_window.main_widget.sequence_builder.auto_builder.generate_sequence_button import (
+    GenerateSequenceButton,
+)
 from .circular.circular_auto_builder_frame import CircularAutoBuilderFrame
 from .freeform.freeform_auto_builder_frame import FreeformAutoBuilderFrame
 
+if TYPE_CHECKING:
+    from main_window.main_widget.main_widget import MainWidget
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QStackedLayout
+from PyQt6.QtCore import Qt
+from typing import TYPE_CHECKING
+
+from main_window.main_widget.sequence_builder.auto_builder.base_classes.customize_your_sequence_label import (
+    CustomizeSequenceLabel,
+)
+from .circular.circular_auto_builder_frame import CircularAutoBuilderFrame
+from .freeform.freeform_auto_builder_frame import FreeformAutoBuilderFrame
 
 if TYPE_CHECKING:
-
     from main_window.main_widget.main_widget import MainWidget
 
 
-class SequenceGeneratorWidget(QTabWidget):
+class SequenceGeneratorWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.global_settings = (
-            self.main_widget.main_window.settings_manager.global_settings
-        )
-        self.background_manager = None
+        self.global_settings = main_widget.main_window.settings_manager.global_settings
+
+        # Main layout containing all widgets
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.setLayout(self.layout)
 
-        # self.layout.addWidget(self)
+        # Top label and buttons
+        self.customize_sequence_label = CustomizeSequenceLabel(self)
+        self.layout.addWidget(
+            self.customize_sequence_label, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout.addStretch(1)
+
+        # Freeform and Circular buttons
+        self._setup_buttons()
+
+        # Stacked layout for Freeform and Circular frames
+        self.stacked_layout = QStackedLayout()
         self.freeform_builder_frame = FreeformAutoBuilderFrame(self)
         self.circular_builder_frame = CircularAutoBuilderFrame(self)
-        self.addTab(self.freeform_builder_frame, "Freeform")
-        self.addTab(self.circular_builder_frame, "Circular")
-        self.tabBar().setCursor(Qt.CursorShape.PointingHandCursor)
-        self.current_auto_builder = None
-        self.currentChanged.connect(self.on_tab_changed)
+        self.stacked_layout.addWidget(self.freeform_builder_frame)
+        self.stacked_layout.addWidget(self.circular_builder_frame)
+        self.layout.addLayout(self.stacked_layout)
 
-    def load_last_used_auto_builder(self, builder_type: str):
-        """Load the last used auto builder (Freeform or Circular)."""
-        if builder_type == "freeform":
-            self.setCurrentWidget(self.freeform_builder_frame)
-        elif builder_type == "circular":
-            self.setCurrentWidget(self.circular_builder_frame)
+        # Add the Create Sequence button
+        self.layout.addStretch(1)
+        self.layout.addWidget(
+            self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout.addStretch(1)
 
-    def get_current_auto_builder_type(self) -> str:
-        """Return the currently open auto builder type."""
-        return self.current_auto_builder
+        # Default to showing Freeform frame
+        self.current_auto_builder = "freeform"
+        self.show_freeform_frame()
 
-    def on_tab_changed(self, index: int):
-        """Handle tab change event to update the current auto builder type."""
-        current_widget = self.currentWidget()
+    def _setup_buttons(self):
+        """Set up Freeform and Circular buttons and add them to the layout."""
+        self.button_layout = QHBoxLayout()
+        self.freeform_button = QPushButton("Freeform")
+        self.circular_button = QPushButton("Circular")
 
-        if current_widget == self.freeform_builder_frame:
-            self.current_auto_builder = "freeform"
-        elif current_widget == self.circular_builder_frame:
-            self.current_auto_builder = "circular"
+        # Connect signals for frame switching
+        self.freeform_button.clicked.connect(self.show_freeform_frame)
+        self.circular_button.clicked.connect(self.show_circular_frame)
 
-        # Update settings for the current auto builder
-        self.main_widget.settings_manager.builder_settings.auto_builder.update_current_auto_builder(
-            self.current_auto_builder
+        # Apply the same cursor and add to the button layout
+        for button in [self.freeform_button, self.circular_button]:
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            self.button_layout.addWidget(button)
+
+        self.layout.addLayout(self.button_layout)
+
+        # Store buttons for easy style updates
+        self.buttons = {
+            "freeform": self.freeform_button,
+            "circular": self.circular_button,
+        }
+        # Set an initial dummy connection
+        self.generate_sequence_button = GenerateSequenceButton(self)
+        self.generate_sequence_button.clicked.connect(self.dummy_function)
+
+    def dummy_function(self):
+        """Placeholder function to ensure there's always a connected slot."""
+        pass
+
+    def show_freeform_frame(self):
+        """Display Freeform frame by setting it in the stacked layout."""
+        self.stacked_layout.setCurrentWidget(self.freeform_builder_frame)
+        self.current_auto_builder = "freeform"
+        self.update_button_styles()
+
+        # Reconnect the create sequence button to Freeform's create function
+        # check if it's connected, if so idscconnect it
+
+        self.generate_sequence_button.clicked.disconnect()
+        self.generate_sequence_button.clicked.connect(
+            self.freeform_builder_frame.on_create_sequence
         )
 
-    def resize_sequence_generator(self):
-        """Resize handler for the auto builder UI."""
-        # Resize the tab widget and its contents
-        tab_font_size = self.main_widget.width() // 50
-        tab_font = self.font()
-        tab_font.setPointSize(tab_font_size)
-        self.setFont(tab_font)
+    def show_circular_frame(self):
+        """Display Circular frame by setting it in the stacked layout."""
+        self.stacked_layout.setCurrentWidget(self.circular_builder_frame)
+        self.current_auto_builder = "circular"
+        self.update_button_styles()
 
-        # Resize the builder frames
+        # Reconnect the create sequence button to Circular's create function
+        self.generate_sequence_button.clicked.disconnect()
+        self.generate_sequence_button.clicked.connect(
+            self.circular_builder_frame.on_create_sequence
+        )
+
+    def update_button_styles(self):
+        """Apply active and inactive styles across all main buttons."""
+        font_size = self.main_widget.width() // 75
+        active_style = "background-color: lightblue; font-weight: bold;"
+        inactive_style = "background-color: none; font-weight: normal;"
+
+        # Update each button with active/inactive style
+        for key, button in self.buttons.items():
+            style = active_style if self.current_auto_builder == key else inactive_style
+            button.setStyleSheet(f"{style} font-size: {font_size}px; padding: 8px;")
+
+    def resize_sequence_generator(self) -> None:
+        """Resize handler for the auto builder UI."""
+        # Resize frames
         self.freeform_builder_frame._resize_auto_builder_frame()
         self.circular_builder_frame._resize_auto_builder_frame()
+        self.customize_sequence_label.resize_customize_sequence_label()
+        self.generate_sequence_button.resize_generate_sequence_button()
+
+        # Update button sizes
+        for button in self.buttons.values():
+            button.setMinimumHeight(self.main_widget.height() // 16)
+            button.setFixedWidth(self.main_widget.width() // 10)
+
+        self.update_button_styles()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

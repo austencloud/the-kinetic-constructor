@@ -29,7 +29,6 @@ class MainWidgetUI:
         self._setup_components()
         self._setup_layout()
         self._setup_indices()
-        self._load_current_tab()
 
     def _setup_components(self):
         self.main_widget.menu_bar_widget = MenuBarWidget(self.main_widget)
@@ -39,7 +38,7 @@ class MainWidgetUI:
         self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
-        self.main_widget.write_widget = ActTab(self.main_widget)
+        self.main_widget.act_tab = ActTab(self.main_widget)
 
         # Initialize builder_stacked_widget to switch between manual builder and sequence generator
         self.main_widget.builder_stacked_widget = QStackedWidget()
@@ -87,13 +86,15 @@ class MainWidgetUI:
             self.main_widget.dictionary_learn_widget
         )  # Index 1
         self.main_widget.main_stacked_widget.addWidget(
-            self.main_widget.write_widget
+            self.main_widget.act_tab
         )  # Index 2
 
     def _setup_layout(self):
         self.main_widget.main_layout = QVBoxLayout(self.main_widget)
         self.main_widget.setLayout(self.main_widget.main_layout)
-
+        # remove contents margins at the top
+        self.main_widget.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_widget.main_layout.setSpacing(0)
         # Add navigation and menu bar widgets to the main layout
         self.main_widget.top_layout = QHBoxLayout()
         self.main_widget.top_layout.addWidget(self.main_widget.menu_bar_widget, 1)
@@ -112,7 +113,7 @@ class MainWidgetUI:
         self.main_widget.learn_tab_index = 3
         self.main_widget.act_tab_index = 4
 
-    def _load_current_tab(self):
+    def load_current_tab(self):
         self.main_widget.current_tab = (
             self.main_widget.settings_manager.global_settings.get_current_tab()
         )

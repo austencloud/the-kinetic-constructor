@@ -44,22 +44,28 @@ class LetterTypePicker(QWidget):
         return self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 90
 
     def _setup_layout(self):
-        """Set up the HBox layout for all letter types."""
+        """Set up the layout for a two-row, three-column arrangement of letter type buttons."""
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.title_label)
 
-        hbox_layout = QHBoxLayout()
-        hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        hbox_layout.addStretch(2)
+        # Create two rows with three buttons each
+        row_layouts = [QHBoxLayout(), QHBoxLayout()]
+        row_layouts[0].setAlignment(Qt.AlignmentFlag.AlignCenter)
+        row_layouts[1].setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        for label in self.buttons.values():
-            hbox_layout.addWidget(label)
-            hbox_layout.addStretch(1)
+        # Add buttons to rows in a two-row, three-column format
+        buttons = list(self.buttons.values())
+        for i in range(3):
+            row_layouts[0].addWidget(buttons[i])  # First three buttons in first row
+            row_layouts[1].addWidget(buttons[i + 3])  # Next three buttons in second row
 
-        hbox_layout.addStretch(1)
-        layout.addLayout(hbox_layout)
+        # Add each row layout to the main layout
+        layout.addLayout(row_layouts[0])
+        layout.addLayout(row_layouts[1])
+
         self.setLayout(layout)
+
 
     def _connect_signals(self):
         """Connect label click signals to update settings."""

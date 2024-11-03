@@ -22,7 +22,7 @@ class OriPickerBox(QFrame):
         self.color = color
         self.start_pos = start_pos
         self.graph_editor = self.adjustment_panel.graph_editor
-        self.border_width = self.graph_editor.width() // 100
+        self.border_width = self.graph_editor.sequence_widget.width() // 100
 
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.prop_rot_dir_btn_state: dict[str, bool] = {
@@ -31,6 +31,10 @@ class OriPickerBox(QFrame):
         }
         self._setup_widgets()
         self._setup_layout()
+
+    def set_initial_orientation(self, orientation: str) -> None:
+        """Set the initial orientation for the OriPickerWidget."""
+        self.ori_picker_widget.set_orientation(orientation)
 
     def _setup_widgets(self) -> None:
         self.header = GE_OriPickerHeader(self)

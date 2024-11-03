@@ -14,16 +14,14 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
         self.builder = FreeFormAutoBuilder(self)
 
         # Attach specific action for sequence creation
-        self.create_sequence_button.clicked.connect(self._on_create_sequence)
+
         self.letter_type_picker = LetterTypePicker(self)  # Instantiate LetterTypePicker
         self.layout.addWidget(self.letter_type_picker)  # Add LetterTypePicker to layout
         self.layout.addStretch(1)
-        self.layout.addWidget(
-            self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
-        )
+
         self.apply_settings()
 
-    def _on_create_sequence(self):
+    def on_create_sequence(self):
         """Trigger sequence creation for Freeform."""
         self.builder.build_sequence(
             int(

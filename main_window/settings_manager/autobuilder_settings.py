@@ -8,15 +8,15 @@ class AutoBuilderSettings:
     DEFAULT_FREEFORM_SETTINGS = {
         "sequence_type": "freeform",
         "sequence_length": 16,
-        "max_turn_intensity": 50,
+        "max_turn_intensity": 1,
         "sequence_level": 1,
         "continuous_rotation": False,
     }
 
     DEFAULT_CIRCULAR_SETTINGS = {
         "sequence_type": "circular",
-        "sequence_length": 4,
-        "max_turn_intensity": 50,
+        "sequence_length": 16,
+        "max_turn_intensity": 1,
         "sequence_level": 1,
         "rotation_type": "quartered",
         "permutation_type": "rotated",
@@ -44,9 +44,10 @@ class AutoBuilderSettings:
 
     def get_current_auto_builder(self) -> str:
         return self.settings.value(
-            "builder/auto_builder/current_auto_builder",
-            "circular"
+            "builder/auto_builder/current_auto_builder", "circular"
         )
 
     def update_current_auto_builder(self, builder_type: str):
-        self.settings.setValue("builder/auto_builder/current_auto_builder", builder_type)
+        self.settings.setValue(
+            "builder/auto_builder/current_auto_builder", builder_type
+        )

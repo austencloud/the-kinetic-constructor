@@ -17,11 +17,11 @@ from PyQt6.QtGui import QFont
 
 
 class ActBeatView(QGraphicsView):
-    def __init__(self, beat_frame: "ActBeatFrame", number=None):
+    def __init__(self, beat_frame: "ActBeatFrame", beat_number=None):
         super().__init__()
         self.beat_frame = beat_frame
         self.is_filled = False
-        self.number = number  # Beat number to display
+        self.beat_number = beat_number  # Beat number to display
         self.beat = ActBeat(beat_frame, 1)
         self.setScene(self.beat)
         self.beat_number_item = None
@@ -37,6 +37,21 @@ class ActBeatView(QGraphicsView):
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
+    def is_populated(self) -> bool:
+        """Check if this beat view has been populated with any data."""
+        return bool(self.beat.letter)  # or another attribute indicating population
+
+    def extract_metadata(self):
+        """Extract beat data for saving in act JSON."""
+        return {
+            "beat_number": self.get_beat_number_in_act_beat_frame(),
+            "pictograph_dict": self.beat.pictograph_dict,
+        }
+
+    def get_beat_number_in_act_beat_frame(self):
+        """Get the beat number in the act beat frame."""
+        return self.beat_frame.get.beat_number(self)
+
     def show_context_menu(self, position):
         menu = QMenu()
         test_action = QAction("Test", self)
@@ -45,13 +60,14 @@ class ActBeatView(QGraphicsView):
 
     def add_beat_number(self, beat_number_text=None):
         """Display the beat number."""
+        self.beat_number_text = beat_number_text
         if not beat_number_text:
-            beat_number_text = str(self.number) if self.number else "N/A"
+            self.beat_number_text = str(self.beat_number) if self.beat_number else "N/A"
 
         if self.beat_number_item:
             self.beat.removeItem(self.beat_number_item)
 
-        self.beat_number_item = QGraphicsTextItem(str(beat_number_text))
+        self.beat_number_item = QGraphicsTextItem(str(self.beat_number_text))
         self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
         self.beat_number_item.setPos(
             QPointF(

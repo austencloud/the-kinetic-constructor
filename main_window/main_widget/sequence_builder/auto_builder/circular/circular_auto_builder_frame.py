@@ -18,17 +18,11 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
         self.rotation_type_toggle = RotationTypeToggle(self)
         self.permutation_type_toggle = PermutationTypeToggle(self)
 
-        # Attach specific action for sequence creation
-        self.create_sequence_button.clicked.connect(self._on_create_sequence)
-
         # Add Widgets to Layout
         self.layout.addWidget(self.rotation_type_toggle)
         self.layout.addStretch(1)
         # self.layout.addWidget(self.permutation_type_toggle)
         # self.layout.addStretch(1)
-        self.layout.addWidget(
-            self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
-        )
 
         # Apply Settings
         self.apply_settings()
@@ -69,7 +63,7 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
             self.rotation_type_toggle.show()
             self.length_adjuster.limit_length(True)
 
-    def _on_create_sequence(self):
+    def on_create_sequence(self):
         """Trigger sequence creation for Circular."""
         self.builder.build_sequence(
             self.auto_builder_settings.get_auto_builder_setting(
