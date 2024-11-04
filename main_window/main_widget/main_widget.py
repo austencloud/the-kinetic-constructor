@@ -132,9 +132,6 @@ class MainWidget(QWidget):
         self.state_handler = MainWidgetState(self)
         self.background_handler = MainWidgetBackground(self)
 
-        # Initialize the tab handler
-
-        # self.splash_screen.update(100, "Initialization complete!")
         QTimer.singleShot(0, self.state_handler.load_state)
 
     # Event Handlers

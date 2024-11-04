@@ -13,10 +13,10 @@ class VisibilitySettings:
             "TKA": True,
             "Elemental": False,
             "EndPosition": False,
-            "Reversals": False,
+            "Reversals": True,
         },
         "grid_visibility": {
-            "non_radial_points": True,
+            "non_radial_points": False,
         },
     }
 

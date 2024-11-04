@@ -60,7 +60,7 @@ class FontColorUpdater:
         self._update_sequence_builder(main_widget, font_color)
         self._update_dictionary_widget(main_widget, font_color)
         self._update_learn_widget(main_widget, font_color)
-        self._update_act_tab(main_widget, font_color)
+        # self._update_act_tab(main_widget, font_color)
 
     def _update_act_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         act_tab = main_widget.act_tab

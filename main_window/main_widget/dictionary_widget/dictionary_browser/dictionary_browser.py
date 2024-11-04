@@ -52,7 +52,6 @@ class DictionaryBrowser(QWidget):
         self.nav_sidebar = DictionaryBrowserNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.options_widget = DictionaryOptionsPanel(self)
-        # self.video_preview_widget = VideoPreviewWidget(self)
 
         self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
 
@@ -65,7 +64,7 @@ class DictionaryBrowser(QWidget):
 
     def resize_dictionary_browser(self):
         """Resize all necessary widgets in the dictionary browser."""
-        self.scroll_widget.resize_dictionary_browser_scroll_widget()
+        # self.scroll_widget.resize_dictionary_browser_scroll_widget()
         self.go_back_button.resize_go_back_button()
         self.currently_displaying_label.resize_currently_displaying_label()
         self.sequence_count_label.resize_sequence_count_label()
