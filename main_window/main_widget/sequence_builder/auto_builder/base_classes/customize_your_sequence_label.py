@@ -22,8 +22,8 @@ class CustomizeSequenceLabel(QLabel):
         self.set_stylesheet()
 
     def set_stylesheet(self) -> None:
-        width = self.generator_widget.width()
-        font_size = int(0.04 * width)
+        height = self.generator_widget.height()
+        font_size = int(0.04 * height)
         self.setStyleSheet(
             f"QLabel {{"
             f"  background-color: rgba(255, 255, 255, 200);"

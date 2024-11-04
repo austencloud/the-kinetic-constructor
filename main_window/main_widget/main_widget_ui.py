@@ -64,15 +64,7 @@ class MainWidgetUI:
         self.main_widget.build_generate_splitter.addWidget(
             self.main_widget.builder_stacked_widget
         )
-        # make them take equal space in the splitter
-        self.main_widget.build_generate_splitter.setStretchFactor(0, 1)
-        self.main_widget.build_generate_splitter.setStretchFactor(1, 1)
-        # self.main_widget.build_generate_layout.setStretch(0, 1)
-        # self.main_widget.build_generate_layout.setStretch(1, 1)
-        # self.main_widget.build_generate_widget.setLayout(
-        #     self.main_widget.build_generate_splitter
-        # )
-        # connect the splitter movement to self.on_splitter_moved
+
         self.main_widget.build_generate_splitter.splitterMoved.connect(
             self.on_splitter_moved
         )
@@ -95,11 +87,11 @@ class MainWidgetUI:
         self.main_widget.main_stacked_widget.addWidget(
             self.main_widget.act_tab
         )  # Index 2
+        self.main_widget.build_generate_splitter.setSizes([1, 1])
 
     def on_splitter_moved(self):
-        # resize the dictionary browser
         self.main_widget.manual_builder.resize_manual_builder()
-    
+        
     def _setup_layout(self):
         self.main_widget.main_layout = QVBoxLayout(self.main_widget)
         self.main_widget.setLayout(self.main_widget.main_layout)
@@ -113,9 +105,9 @@ class MainWidgetUI:
         self.main_widget.main_layout.addLayout(self.main_widget.top_layout)
         # Add the main stacked widget to the main layout
         self.main_widget.main_layout.addWidget(self.main_widget.main_stacked_widget)
-        self.main_widget.main_stacked_widget.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
+        # self.main_widget.main_stacked_widget.setSizePolicy(
+        #     QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        # )
 
     def _setup_indices(self):
         self.main_widget.build_tab_index = 0

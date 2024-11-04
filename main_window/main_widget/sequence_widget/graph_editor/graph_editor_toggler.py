@@ -1,14 +1,5 @@
 from PyQt6.QtCore import QPropertyAnimation, QRect, QPoint, QEasingCurve, QObject
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QSpacerItem,
-    QSizePolicy,
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
-    QFrame,
-    QSizePolicy,
-)
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget

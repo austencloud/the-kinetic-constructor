@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
     QWidget,
     QSizePolicy,
-    QVBoxLayout,
     QLayout,
 )
 from data.constants import BLUE, RED
