@@ -1,17 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import OPP, SAME
 from PyQt6.QtCore import Qt
-
-from widgets.sequence_builder.components.option_picker.option_picker_scroll_area.option_picker_section_manager.option_picker_section_widget.option_picker_section_header import (
-    OptionPickerSectionHeader,
-)
-
-from .......pictograph.pictograph import Pictograph
-from .option_picker_pictograph_frame import (
-    OptionPickerPictographFrame,
-)
+from ...option_picker_section_header import OptionPickerSectionHeader
+from .option_picker_pictograph_frame import OptionPickerPictographFrame
 
 if TYPE_CHECKING:
     from ...option_picker_scroll_area import OptionPickerScrollArea
@@ -31,9 +25,9 @@ class OptionPickerSectionWidget(QGroupBox):
     def setup_components(self) -> None:
         self.pictograph_frame = OptionPickerPictographFrame(self)
         self.header = OptionPickerSectionHeader(self)
-        
+
         self.header.type_label.clicked.connect(self.toggle_section)
-        self.pictographs: dict[str, Pictograph] = {}
+        self.pictographs: dict[str, BasePictograph] = {}
         self.pictograph_frame.setStyleSheet("QFrame {border: none;}")
         self._setup_layout()
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -45,7 +39,6 @@ class OptionPickerSectionWidget(QGroupBox):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.header)
         self.layout.addWidget(self.pictograph_frame)
-
 
     def toggle_section(self) -> None:
         is_visible = not self.pictograph_frame.isVisible()
@@ -63,7 +56,7 @@ class OptionPickerSectionWidget(QGroupBox):
         for pictograph in self.pictographs.values():
             pictograph.view.setSizePolicy(size_policy)
 
-    def add_pictograph(self, pictograph: Pictograph) -> None:
+    def add_pictograph(self, pictograph: BasePictograph) -> None:
         """Add a pictograph widget to the section layout."""
         self.pictographs[
             self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(

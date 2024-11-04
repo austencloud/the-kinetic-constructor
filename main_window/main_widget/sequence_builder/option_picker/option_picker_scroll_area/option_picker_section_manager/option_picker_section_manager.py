@@ -7,9 +7,9 @@ from .option_picker_section_widget.option_picker_section_widget import (
 from ..option_picker_section_group_widget import OptionPickerSectionGroupWidget
 
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_builder import manual_builder
 
     from ..option_picker_scroll_area import OptionPickerScrollArea
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 class OptionPickerSectionManager:
@@ -26,7 +26,7 @@ class OptionPickerSectionManager:
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sequence_builder: "SequenceBuilder" = scroll_area.manual_builder
+        self.manual_builder: "manual_builder" = scroll_area.manual_builder
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
@@ -53,7 +53,7 @@ class OptionPickerSectionManager:
             if section:
                 if section_type in grouped_sections:
                     if group_widget is None:
-                        group_widget = OptionPickerSectionGroupWidget()
+                        group_widget = OptionPickerSectionGroupWidget(self.scroll_area)
                         correct_index = self.get_correct_index_for_section(
                             grouped_sections[0]
                         )

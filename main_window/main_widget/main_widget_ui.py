@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
     QSizePolicy,
     QWidget,
+    QSplitter,
 )
 
 
@@ -54,21 +55,27 @@ class MainWidgetUI:
 
         # Create Build/Generate Widget
         self.main_widget.build_generate_widget = QWidget()
-        self.main_widget.build_generate_layout = QHBoxLayout(
+        self.main_widget.build_generate_splitter = QSplitter(
             self.main_widget.build_generate_widget
         )
-        self.main_widget.build_generate_layout.addWidget(
+        self.main_widget.build_generate_splitter.addWidget(
             self.main_widget.sequence_widget
         )
-        self.main_widget.build_generate_layout.addWidget(
+        self.main_widget.build_generate_splitter.addWidget(
             self.main_widget.builder_stacked_widget
         )
-        self.main_widget.build_generate_layout.setStretch(0, 1)
-        self.main_widget.build_generate_layout.setStretch(1, 1)
-        self.main_widget.build_generate_widget.setLayout(
-            self.main_widget.build_generate_layout
+        # make them take equal space in the splitter
+        self.main_widget.build_generate_splitter.setStretchFactor(0, 1)
+        self.main_widget.build_generate_splitter.setStretchFactor(1, 1)
+        # self.main_widget.build_generate_layout.setStretch(0, 1)
+        # self.main_widget.build_generate_layout.setStretch(1, 1)
+        # self.main_widget.build_generate_widget.setLayout(
+        #     self.main_widget.build_generate_splitter
+        # )
+        # connect the splitter movement to self.on_splitter_moved
+        self.main_widget.build_generate_splitter.splitterMoved.connect(
+            self.on_splitter_moved
         )
-
         # Create Dictionary/Learn Widget
         self.main_widget.dictionary_learn_widget = QStackedWidget()
         self.main_widget.dictionary_learn_widget.addWidget(
@@ -80,7 +87,7 @@ class MainWidgetUI:
 
         # Add Build/Generate Widget and Dictionary/Learn Widget to main_stacked_widget
         self.main_widget.main_stacked_widget.addWidget(
-            self.main_widget.build_generate_widget
+            self.main_widget.build_generate_splitter
         )  # Index 0
         self.main_widget.main_stacked_widget.addWidget(
             self.main_widget.dictionary_learn_widget
@@ -89,6 +96,10 @@ class MainWidgetUI:
             self.main_widget.act_tab
         )  # Index 2
 
+    def on_splitter_moved(self):
+        # resize the dictionary browser
+        self.main_widget.manual_builder.resize_manual_builder()
+    
     def _setup_layout(self):
         self.main_widget.main_layout = QVBoxLayout(self.main_widget)
         self.main_widget.setLayout(self.main_widget.main_layout)

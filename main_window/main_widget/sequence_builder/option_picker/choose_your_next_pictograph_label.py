@@ -24,8 +24,8 @@ class ChooseYourNextPictographLabel(QLabel):
         self.setText("Loading...")
 
     def set_stylesheet(self) -> None:
-        width = self.option_picker.width()
-        font_size = int(0.04 * width)
+        height = self.option_picker.height()
+        font_size = int(0.04 * height)
         self.setStyleSheet(
             f"QLabel {{"
             f"  background-color: rgba(255, 255, 255, 200);"
@@ -36,8 +36,12 @@ class ChooseYourNextPictographLabel(QLabel):
         )
 
     def resize_choose_your_next_pictograph_label(self) -> None:
-        width = self.option_picker.manual_builder.main_widget.width() // 4
-        height = self.option_picker.manual_builder.main_widget.height() // 20
-
+        # use font metrics to get the width and height, allowing for a margin
+        font_metrics = self.fontMetrics()
+        text_width = font_metrics.horizontalAdvance(self.text())
+        text_height = font_metrics.height()
+        margin = 20
+        width = text_width + margin
+        height = text_height + margin
         self.setFixedSize(width, height)
         self.set_stylesheet()

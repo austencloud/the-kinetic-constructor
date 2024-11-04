@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QKeyEvent, QCloseEvent
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget, QSplitter
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
@@ -92,7 +92,7 @@ class MainWidget(QWidget):
     main_stacked_widget: QStackedWidget
     dictionary_learn_widget: QStackedWidget
     build_generate_widget: QWidget
-    build_generate_layout: QHBoxLayout
+    build_generate_splitter: QSplitter
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
@@ -152,8 +152,6 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)
-
-
 
     def get_tab_bar_height(self):
         return self.ui_handler.main_widget.tab_bar_styler.tab_height
