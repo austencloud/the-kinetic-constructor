@@ -240,12 +240,7 @@
     },
     "(o, 2, 2, op, op)": {
       "dash": [-50, -65],
-      "static_rot_angle_override": true,
       "static": [0, 0]
-    },
-    "(o, 2, 1, op, op)": {
-      "static_rot_angle_override": true,
-      "static": [80, -20]
     },
     "(o, 2, 0.5, op, op)": {
       "static_rot_angle_override": true,

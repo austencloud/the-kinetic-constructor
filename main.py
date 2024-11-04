@@ -40,7 +40,7 @@ def main() -> None:
     settings_manager = SettingsManager(None)
 
     # Load SplashScreen with periodic QApplication processing
-    from splash_screen import SplashScreen
+    from splash_screen.splash_screen import SplashScreen
     splash_screen = SplashScreen(target_screen, settings_manager)
     app.processEvents()
 

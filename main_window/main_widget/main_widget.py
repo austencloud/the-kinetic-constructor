@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
     from .navigation_widget import NavigationWidget
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
-    from splash_screen import SplashScreen
+    from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
     from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
         BackgroundManager,
@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    # Class variables with type hints
+    
     main_window: "MainWindow"
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
@@ -92,7 +92,7 @@ class MainWidget(QWidget):
     main_stacked_widget: QStackedWidget
     dictionary_learn_widget: QStackedWidget
     build_generate_widget: QWidget
-    build_generate_splitter: QSplitter
+    build_generate_layout: QHBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
