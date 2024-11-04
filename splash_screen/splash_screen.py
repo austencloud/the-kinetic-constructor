@@ -2,11 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtGui import QScreen, QPainter
 
-from main_window.main_widget.act_tab.act_sheet.act_header import title_label
+from splash_screen.splash_geometry_manager import SplashScreenGeometryManager
 
 from .splash_properties import SplashProperties
 from .splash_components import SplashComponents
 from .splash_layout_manager import SplashLayoutManager
+from .splash_screen_updater import SplashScreenUpdater
 
 if TYPE_CHECKING:
     from main_window.main_widget.dictionary_widget.dictionary_browser.rainbow_progress_bar import (
@@ -27,11 +28,12 @@ class SplashScreen(QWidget):
         self.target_screen = target_screen
         self.settings_manager = settings_manager
 
-        self.properties = SplashProperties(self, self.target_screen)
+        self.properties = SplashProperties(self)
         self.components = SplashComponents(self)
-        self.layout_manager = SplashLayoutManager(self, self.components)
+        self.layout_manager = SplashLayoutManager(self)
+        self.updater = SplashScreenUpdater(self)
+        self.geometry_manager = SplashScreenGeometryManager(self)
         self._setup_background_manager()
-        self._center_on_screen()
         self.show()
 
     def _setup_background_manager(self):
@@ -41,20 +43,10 @@ class SplashScreen(QWidget):
             )
         )
 
-    def _center_on_screen(self):
-        screen_geometry = self.target_screen.geometry()
-        self.setGeometry(
-            screen_geometry.x() + (screen_geometry.width() - self.width()) // 2,
-            screen_geometry.y() + (screen_geometry.height() - self.height()) // 2,
-            self.width(),
-            self.height(),
-        )
-
     def paintEvent(self, event):
+        """Handle custom painting with background manager."""
         painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)
-
-    def update_progress(self, value, message=""):
-        self.progress_bar.setValue(value)
-        if message:
-            self.currently_loading_label.setText(message)
+        try:
+            self.background_manager.paint_background(self, painter)
+        finally:
+            painter.end()  # Ensures QPainter is ended after painting

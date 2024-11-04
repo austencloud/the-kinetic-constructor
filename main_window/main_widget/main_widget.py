@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    
+
     main_window: "MainWindow"
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
@@ -134,7 +134,7 @@ class MainWidget(QWidget):
 
         # Initialize the tab handler
 
-        self.splash_screen.update_progress(100, "Initialization complete!")
+        # self.splash_screen.update(100, "Initialization complete!")
         QTimer.singleShot(0, self.state_handler.load_state)
 
     # Event Handlers

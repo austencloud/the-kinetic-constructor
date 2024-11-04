@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QScreen
 
 if TYPE_CHECKING:
     from .splash_screen import SplashScreen
@@ -9,9 +8,9 @@ if TYPE_CHECKING:
 class SplashProperties:
     """Handles window properties like flags, transparency, and size."""
 
-    def __init__(self, splash_screen: "SplashScreen", target_screen: QScreen):
+    def __init__(self, splash_screen: "SplashScreen"):
         self.splash_screen = splash_screen
-        self.target_screen = target_screen
+        self.target_screen = splash_screen.target_screen
         self._setup_window_properties()
 
     def _setup_window_properties(self):

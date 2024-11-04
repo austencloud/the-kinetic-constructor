@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QWidget
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont, QPixmap
 from PyQt6.QtCore import Qt
 from main_window.main_widget.dictionary_widget.dictionary_browser.rainbow_progress_bar import (

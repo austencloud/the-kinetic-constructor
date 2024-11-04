@@ -18,21 +18,31 @@ if TYPE_CHECKING:
 class MainWidgetUI:
     def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
+        self.splash_screen = main_widget.splash_screen
         self._setup_components()
         self._setup_layout()
         self._setup_indices()
 
     def _setup_components(self):
-        # Assign primary components directly to main_widget attributes
         mw = self.main_widget
+        splash = self.splash_screen
+        splash.updater.update_progress("MenuBarWidget")
         mw.menu_bar_widget = MenuBarWidget(mw)
+        splash.updater.update_progress("NavigationWidget")
         mw.navigation_widget = NavigationWidget(mw)
+        splash.updater.update_progress("SequenceWidget")
         mw.sequence_widget = SequenceWidget(mw)
+        splash.updater.update_progress("ManualBuilderWidget")
         mw.manual_builder = ManualBuilderWidget(mw)
+        splash.updater.update_progress("SequenceGeneratorWidget")
         mw.sequence_generator = SequenceGeneratorWidget(mw)
+        splash.updater.update_progress("DictionaryWidget")
         mw.dictionary_widget = DictionaryWidget(mw)
+        splash.updater.update_progress("LearnWidget")
         mw.learn_widget = LearnWidget(mw)
+        splash.updater.update_progress("ActTab")
         mw.act_tab = ActTab(mw)
+        splash.updater.update_progress("Finalizing")
 
         # Create stacked widgets and primary layouts
         mw.builder_stacked_widget = QStackedWidget()
@@ -55,7 +65,7 @@ class MainWidgetUI:
 
     def _setup_layout(self):
         mw = self.main_widget
-        # Set up main layout and top navigation
+
         mw.main_layout = QVBoxLayout(mw)
         mw.main_layout.setContentsMargins(0, 0, 0, 0)
         mw.main_layout.setSpacing(0)
@@ -69,7 +79,6 @@ class MainWidgetUI:
         mw.main_layout.addWidget(mw.main_stacked_widget)
 
     def _setup_indices(self):
-        # Define tab indices for easy reference
         self.main_widget.build_tab_index = 0
         self.main_widget.generate_tab_index = 1
         self.main_widget.dictionary_tab_index = 2
@@ -85,4 +94,4 @@ class MainWidgetUI:
         mw.tabs_handler.update_tab_based_on_settings()
 
 
-7
+

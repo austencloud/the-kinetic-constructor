@@ -38,32 +38,18 @@ class MainWidgetManager:
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
-        self.splash_screen.update_progress(20, "Loading JSON Manager...")
-        self.main_widget.json_manager = JsonManager(self.main_widget)
-
-        self.splash_screen.update_progress(30, "Loading SVG Manager...")
-        self.main_widget.svg_manager = SvgManager(self.main_widget)
-
-        self.splash_screen.update_progress(40, "Loading key generators...")
-        self.main_widget.turns_tuple_generator = TurnsTupleGenerator()
-        self.main_widget.pictograph_key_generator = PictographKeyGenerator(
-            self.main_widget
-        )
-
-        self.splash_screen.update_progress(50, "Loading special placements...")
-        self.main_widget.special_placement_loader = SpecialPlacementLoader(
-            self.main_widget
-        )
-
-        self.splash_screen.update_progress(60, "Loading Metadata Extractor...")
-        self.main_widget.metadata_extractor = MetaDataExtractor(self.main_widget)
-        self.main_widget.tab_bar_styler = MainWidgetTabBarStyler(self.main_widget)
-        self.main_widget.sequence_level_evaluator = SequenceLevelEvaluator()
-        self.main_widget.sequence_properties_manager = SequencePropertiesManager(
-            self.main_widget
-        )
-        self.main_widget.thumbnail_finder = ThumbnailFinder(self.main_widget)
-        self.main_widget.grid_mode_checker = GridModeChecker()
+        mw = self.main_widget
+        mw.json_manager = JsonManager(mw)
+        mw.svg_manager = SvgManager(mw)
+        mw.turns_tuple_generator = TurnsTupleGenerator()
+        mw.pictograph_key_generator = PictographKeyGenerator(mw)
+        mw.special_placement_loader = SpecialPlacementLoader(mw)
+        mw.metadata_extractor = MetaDataExtractor(mw)
+        mw.tab_bar_styler = MainWidgetTabBarStyler(mw)
+        mw.sequence_level_evaluator = SequenceLevelEvaluator()
+        mw.sequence_properties_manager = SequencePropertiesManager(mw)
+        mw.thumbnail_finder = ThumbnailFinder(mw)
+        mw.grid_mode_checker = GridModeChecker()
 
     def _setup_pictograph_cache(self) -> None:
         from Enums.Enums import Letter
@@ -85,7 +71,6 @@ class MainWidgetManager:
         )
 
     def _setup_letters(self) -> None:
-        self.splash_screen.update_progress(10, "Loading pictograph dictionaries...")
         self.main_widget.pictograph_dict_loader = PictographDictLoader(self.main_widget)
         self.main_widget.pictograph_dicts = (
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
@@ -98,16 +83,22 @@ class MainWidgetManager:
 
         # Refresh placements and load any required data
         self.main_widget.special_placement_loader.refresh_placements()
-        self.pictograph_dicts = self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
+        self.pictograph_dicts = (
+            self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
+        )
 
         # Clear and re-setup necessary components based on new grid mode
-        start_pos_manager = self.main_widget.manual_builder.start_pos_picker.start_pos_manager
+        start_pos_manager = (
+            self.main_widget.manual_builder.start_pos_picker.start_pos_manager
+        )
         start_pos_manager.clear_start_positions()
         start_pos_manager.setup_start_positions()
 
         sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
         sequence_clearer.clear_sequence(show_indicator=False)
 
-        pictograph_container = self.main_widget.sequence_widget.graph_editor.pictograph_container
+        pictograph_container = (
+            self.main_widget.sequence_widget.graph_editor.pictograph_container
+        )
         pictograph_container.GE_pictograph_view.set_to_blank_grid()
         self._setup_special_placements()

@@ -1,18 +1,16 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .splash_screen import SplashScreen
-    from .splash_components import SplashComponents
 
 
 class SplashLayoutManager:
     """Handles the layout of the splash screen components."""
 
-    def __init__(self, splash_screen: "SplashScreen", components: "SplashComponents"):
+    def __init__(self, splash_screen: "SplashScreen"):
         self.splash_screen = splash_screen
-        self.components = components
         self._setup_layout()
 
     def _setup_layout(self):
