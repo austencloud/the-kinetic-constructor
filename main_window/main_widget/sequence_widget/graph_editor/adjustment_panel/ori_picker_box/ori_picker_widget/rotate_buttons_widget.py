@@ -39,7 +39,7 @@ class RotateButtonsWidget(QWidget):
         new_ori = self.ori_picker_widget.orientations[
             self.ori_picker_widget.current_orientation_index
         ]
-        self.ori_picker_widget.set_orientation(new_ori)
+        self.ori_picker_widget.ori_setter.set_orientation(new_ori)
 
     def rotate_ccw(self) -> None:
         self.ori_picker_widget.current_orientation_index = (
@@ -48,4 +48,4 @@ class RotateButtonsWidget(QWidget):
         new_ori = self.ori_picker_widget.orientations[
             self.ori_picker_widget.current_orientation_index
         ]
-        self.ori_picker_widget.set_orientation(new_ori)
+        self.ori_picker_widget.ori_setter.set_orientation(new_ori)

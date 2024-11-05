@@ -3,8 +3,11 @@ from PyQt6.QtGui import QMouseEvent, QFont, QFontMetrics
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING, Literal
 
-
-from data.constants import RED, BLUE
+from PyQt6.QtCore import QPoint
+from data.constants import RED, BLUE, IN, OUT, CLOCK, COUNTER
+from main_window.main_widget.sequence_widget.graph_editor.adjustment_panel.ori_picker_box.ori_picker_widget.ori_selection_dialog import (
+    OriSelectionDialog,
+)
 
 
 if TYPE_CHECKING:
@@ -20,6 +23,8 @@ class ClickableOriLabel(QLabel):
         self.ori_picker_widget = ori_picker_widget
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.leftClicked.connect(self._on_orientation_display_clicked)
+        self.rightClicked.connect(self._on_orientation_label_right_clicked)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
@@ -59,3 +64,22 @@ class ClickableOriLabel(QLabel):
             return "#2E3192"
         else:
             return "black"
+
+    def _on_orientation_display_clicked(self):
+        dialog = OriSelectionDialog(self.ori_picker_widget)
+        dialog.move(self.mapToGlobal(QPoint(0, 0)))
+        if dialog.exec():
+            new_orientation = dialog.selected_orientation
+            self.ori_picker_widget.ori_setter.set_orientation(new_orientation)
+
+    def _on_orientation_label_right_clicked(self):
+        current_ori = self.ori_picker_widget.orientations[
+            self.ori_picker_widget.current_orientation_index
+        ]
+        if current_ori in [IN, OUT]:
+            new_ori = OUT if current_ori == IN else IN
+        elif current_ori in [CLOCK, COUNTER]:
+            new_ori = COUNTER if current_ori == CLOCK else CLOCK
+        else:
+            new_ori = current_ori
+        self.ori_picker_widget.ori_setter.set_orientation(new_ori)

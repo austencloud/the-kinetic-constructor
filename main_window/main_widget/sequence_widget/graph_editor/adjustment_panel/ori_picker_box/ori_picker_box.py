@@ -34,7 +34,7 @@ class OriPickerBox(QFrame):
 
     def set_initial_orientation(self, orientation: str) -> None:
         """Set the initial orientation for the OriPickerWidget."""
-        self.ori_picker_widget.set_orientation(orientation)
+        self.ori_picker_widget.ori_setter.set_orientation(orientation)
 
     def _setup_widgets(self) -> None:
         self.header = GE_OriPickerHeader(self)

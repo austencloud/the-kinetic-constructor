@@ -106,10 +106,10 @@ class MainWidgetManager:
             show_indicator=False,
             should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
         )
-        self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.set_orientation(
+        self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.ori_setter.set_orientation(
             IN
         )
-        self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.set_orientation(
+        self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.ori_setter.set_orientation(
             IN
         )
         pictograph_container = (
