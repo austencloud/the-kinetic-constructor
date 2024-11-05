@@ -201,7 +201,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         """Display only the thumbnails that match the selected starting position."""
-        self.initial_selection_widget.dictionary.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browser.dictionary.dictionary_settings.set_current_filter(
             {"starting_position": position.lower()}
         )
         self.browser.filter_manager.prepare_ui_for_filtering(

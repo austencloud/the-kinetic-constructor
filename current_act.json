@@ -259,26 +259,26 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 1,
-                        "letter": "I",
-                        "start_pos": "beta5",
-                        "end_pos": "beta3",
-                        "timing": "tog",
-                        "direction": "same",
+                        "letter": "Q",
+                        "start_pos": "gamma11",
+                        "end_pos": "gamma5",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "in",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "s",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
                             "motion_type": "anti",
                             "start_ori": "in",
                             "prop_rot_dir": "cw",
                             "start_loc": "s",
                             "end_loc": "e",
+                            "turns": 1,
+                            "end_ori": "in"
+                        },
+                        "red_attributes": {
+                            "motion_type": "anti",
+                            "start_ori": "in",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "e",
+                            "end_loc": "s",
                             "turns": 1,
                             "end_ori": "in"
                         }
@@ -289,28 +289,28 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 2,
-                        "letter": "I",
-                        "start_pos": "beta3",
-                        "end_pos": "beta5",
-                        "timing": "tog",
-                        "direction": "same",
+                        "letter": "N",
+                        "start_pos": "gamma5",
+                        "end_pos": "gamma15",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
                             "motion_type": "anti",
-                            "start_ori": "out",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "e",
-                            "end_loc": "s",
-                            "turns": 0,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "pro",
                             "start_ori": "in",
                             "prop_rot_dir": "cw",
                             "start_loc": "e",
-                            "end_loc": "s",
+                            "end_loc": "n",
                             "turns": 0,
-                            "end_ori": "in"
+                            "end_ori": "out"
+                        },
+                        "red_attributes": {
+                            "motion_type": "anti",
+                            "start_ori": "in",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "s",
+                            "end_loc": "w",
+                            "turns": 0,
+                            "end_ori": "out"
                         }
                     },
                     "step_label": ""
@@ -319,26 +319,26 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 3,
-                        "letter": "\u0394-",
-                        "start_pos": "beta5",
-                        "end_pos": "gamma1",
+                        "letter": "\u039b",
+                        "start_pos": "gamma15",
+                        "end_pos": "gamma7",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "s",
-                            "end_loc": "w",
+                            "motion_type": "dash",
+                            "start_ori": "out",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "n",
+                            "end_loc": "s",
                             "turns": 0,
-                            "end_ori": "out"
+                            "end_ori": "in"
                         },
                         "red_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "s",
-                            "end_loc": "n",
+                            "motion_type": "static",
+                            "start_ori": "out",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "w",
+                            "end_loc": "w",
                             "turns": 1,
                             "end_ori": "in"
                         }
@@ -349,27 +349,29 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 4,
-                        "letter": "\u039b",
-                        "start_pos": "gamma1",
+                        "letter": "P",
+                        "start_pos": "gamma7",
                         "end_pos": "gamma13",
-                        "timing": "none",
-                        "direction": "none",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "w",
-                            "end_loc": "w",
-                            "turns": 0,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
-                            "motion_type": "dash",
+                            "motion_type": "float",
                             "start_ori": "in",
                             "prop_rot_dir": "no_rot",
-                            "start_loc": "n",
+                            "start_loc": "s",
+                            "end_loc": "w",
+                            "turns": "fl",
+                            "end_ori": "clock",
+                            "prefloat_motion_type": "pro",
+                            "prefloat_prop_rot_dir": "cw"
+                        },
+                        "red_attributes": {
+                            "motion_type": "pro",
+                            "start_ori": "in",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "w",
                             "end_loc": "s",
-                            "turns": 0,
+                            "turns": 1,
                             "end_ori": "out"
                         }
                     },
@@ -379,28 +381,28 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 5,
-                        "letter": "\u039b-",
+                        "letter": "Q",
                         "start_pos": "gamma13",
-                        "end_pos": "gamma9",
-                        "timing": "none",
-                        "direction": "none",
+                        "end_pos": "gamma7",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
+                            "motion_type": "anti",
+                            "start_ori": "clock",
+                            "prop_rot_dir": "cw",
                             "start_loc": "w",
-                            "end_loc": "e",
-                            "turns": 0,
-                            "end_ori": "in"
+                            "end_loc": "s",
+                            "turns": 1,
+                            "end_ori": "clock"
                         },
                         "red_attributes": {
-                            "motion_type": "dash",
+                            "motion_type": "anti",
                             "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
+                            "prop_rot_dir": "ccw",
                             "start_loc": "s",
-                            "end_loc": "n",
-                            "turns": 0,
-                            "end_ori": "in"
+                            "end_loc": "w",
+                            "turns": 1,
+                            "end_ori": "out"
                         }
                     },
                     "step_label": ""
@@ -410,27 +412,27 @@
                     "pictograph_dict": {
                         "beat": 6,
                         "letter": "N",
-                        "start_pos": "gamma9",
-                        "end_pos": "gamma7",
+                        "start_pos": "gamma7",
+                        "end_pos": "gamma9",
                         "timing": "quarter",
                         "direction": "opp",
                         "blue_attributes": {
                             "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "e",
-                            "end_loc": "s",
-                            "turns": 1,
-                            "end_ori": "in"
+                            "start_ori": "clock",
+                            "prop_rot_dir": "cw",
+                            "start_loc": "s",
+                            "end_loc": "e",
+                            "turns": 0,
+                            "end_ori": "counter"
                         },
                         "red_attributes": {
                             "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "w",
+                            "start_ori": "out",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "w",
+                            "end_loc": "n",
                             "turns": 0,
-                            "end_ori": "out"
+                            "end_ori": "in"
                         }
                     },
                     "step_label": ""
@@ -439,26 +441,26 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 7,
-                        "letter": "X-",
-                        "start_pos": "gamma7",
-                        "end_pos": "alpha5",
+                        "letter": "\u039b",
+                        "start_pos": "gamma9",
+                        "end_pos": "gamma1",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
                             "motion_type": "dash",
-                            "start_ori": "in",
+                            "start_ori": "counter",
                             "prop_rot_dir": "no_rot",
-                            "start_loc": "s",
-                            "end_loc": "n",
+                            "start_loc": "e",
+                            "end_loc": "w",
                             "turns": 0,
-                            "end_ori": "out"
+                            "end_ori": "clock"
                         },
                         "red_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "w",
-                            "end_loc": "s",
+                            "motion_type": "static",
+                            "start_ori": "in",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "n",
+                            "end_loc": "n",
                             "turns": 1,
                             "end_ori": "out"
                         }
@@ -469,27 +471,27 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 8,
-                        "letter": "\u03a8",
-                        "start_pos": "alpha5",
-                        "end_pos": "beta1",
-                        "timing": "none",
-                        "direction": "none",
+                        "letter": "P",
+                        "start_pos": "gamma1",
+                        "end_pos": "gamma15",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "static",
+                            "motion_type": "float",
+                            "start_ori": "clock",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "w",
+                            "end_loc": "n",
+                            "turns": "fl",
+                            "end_ori": "out"
+                        },
+                        "red_attributes": {
+                            "motion_type": "pro",
                             "start_ori": "out",
                             "prop_rot_dir": "ccw",
                             "start_loc": "n",
-                            "end_loc": "n",
+                            "end_loc": "w",
                             "turns": 1,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "s",
-                            "end_loc": "n",
-                            "turns": 0,
                             "end_ori": "in"
                         }
                     },
@@ -506,15 +508,15 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 9,
-                        "letter": "I",
-                        "start_pos": "beta1",
-                        "end_pos": "beta7",
-                        "timing": "tog",
-                        "direction": "same",
+                        "letter": "Q",
+                        "start_pos": "gamma15",
+                        "end_pos": "gamma1",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "in",
-                            "prop_rot_dir": "ccw",
+                            "motion_type": "anti",
+                            "start_ori": "out",
+                            "prop_rot_dir": "cw",
                             "start_loc": "n",
                             "end_loc": "w",
                             "turns": 1,
@@ -523,9 +525,9 @@
                         "red_attributes": {
                             "motion_type": "anti",
                             "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "w",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "w",
+                            "end_loc": "n",
                             "turns": 1,
                             "end_ori": "in"
                         }
@@ -536,28 +538,28 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 10,
-                        "letter": "I",
-                        "start_pos": "beta7",
-                        "end_pos": "beta1",
-                        "timing": "tog",
-                        "direction": "same",
+                        "letter": "N",
+                        "start_pos": "gamma1",
+                        "end_pos": "gamma11",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
                             "motion_type": "anti",
                             "start_ori": "out",
-                            "prop_rot_dir": "ccw",
+                            "prop_rot_dir": "cw",
                             "start_loc": "w",
-                            "end_loc": "n",
+                            "end_loc": "s",
                             "turns": 0,
                             "end_ori": "in"
                         },
                         "red_attributes": {
-                            "motion_type": "pro",
+                            "motion_type": "anti",
                             "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "w",
-                            "end_loc": "n",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "n",
+                            "end_loc": "e",
                             "turns": 0,
-                            "end_ori": "in"
+                            "end_ori": "out"
                         }
                     },
                     "step_label": ""
@@ -566,26 +568,26 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 11,
-                        "letter": "\u0394-",
-                        "start_pos": "beta1",
-                        "end_pos": "gamma5",
+                        "letter": "\u039b",
+                        "start_pos": "gamma11",
+                        "end_pos": "gamma3",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "anti",
+                            "motion_type": "dash",
                             "start_ori": "in",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "n",
-                            "end_loc": "e",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "s",
+                            "end_loc": "n",
                             "turns": 0,
                             "end_ori": "out"
                         },
                         "red_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "s",
+                            "motion_type": "static",
+                            "start_ori": "out",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "e",
+                            "end_loc": "e",
                             "turns": 1,
                             "end_ori": "in"
                         }
@@ -596,27 +598,27 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 12,
-                        "letter": "\u039b",
-                        "start_pos": "gamma5",
+                        "letter": "P",
+                        "start_pos": "gamma3",
                         "end_pos": "gamma9",
-                        "timing": "none",
-                        "direction": "none",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "static",
+                            "motion_type": "float",
                             "start_ori": "out",
                             "prop_rot_dir": "no_rot",
-                            "start_loc": "e",
+                            "start_loc": "n",
                             "end_loc": "e",
-                            "turns": 0,
-                            "end_ori": "out"
+                            "turns": "fl",
+                            "end_ori": "counter"
                         },
                         "red_attributes": {
-                            "motion_type": "dash",
+                            "motion_type": "pro",
                             "start_ori": "in",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "s",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "e",
                             "end_loc": "n",
-                            "turns": 0,
+                            "turns": 1,
                             "end_ori": "out"
                         }
                     },
@@ -626,28 +628,28 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 13,
-                        "letter": "\u039b-",
+                        "letter": "Q",
                         "start_pos": "gamma9",
-                        "end_pos": "gamma13",
-                        "timing": "none",
-                        "direction": "none",
+                        "end_pos": "gamma3",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
+                            "motion_type": "anti",
+                            "start_ori": "counter",
+                            "prop_rot_dir": "cw",
                             "start_loc": "e",
-                            "end_loc": "w",
-                            "turns": 0,
-                            "end_ori": "in"
+                            "end_loc": "n",
+                            "turns": 1,
+                            "end_ori": "counter"
                         },
                         "red_attributes": {
-                            "motion_type": "dash",
+                            "motion_type": "anti",
                             "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
+                            "prop_rot_dir": "ccw",
                             "start_loc": "n",
-                            "end_loc": "s",
-                            "turns": 0,
-                            "end_ori": "in"
+                            "end_loc": "e",
+                            "turns": 1,
+                            "end_ori": "out"
                         }
                     },
                     "step_label": ""
@@ -657,27 +659,27 @@
                     "pictograph_dict": {
                         "beat": 14,
                         "letter": "N",
-                        "start_pos": "gamma13",
-                        "end_pos": "gamma3",
+                        "start_pos": "gamma3",
+                        "end_pos": "gamma13",
                         "timing": "quarter",
                         "direction": "opp",
                         "blue_attributes": {
                             "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "w",
-                            "end_loc": "n",
-                            "turns": 1,
-                            "end_ori": "in"
+                            "start_ori": "counter",
+                            "prop_rot_dir": "cw",
+                            "start_loc": "n",
+                            "end_loc": "w",
+                            "turns": 0,
+                            "end_ori": "clock"
                         },
                         "red_attributes": {
                             "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "s",
-                            "end_loc": "e",
+                            "start_ori": "out",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "e",
+                            "end_loc": "s",
                             "turns": 0,
-                            "end_ori": "out"
+                            "end_ori": "in"
                         }
                     },
                     "step_label": ""
@@ -686,26 +688,26 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 15,
-                        "letter": "X-",
-                        "start_pos": "gamma3",
-                        "end_pos": "alpha1",
+                        "letter": "\u039b",
+                        "start_pos": "gamma13",
+                        "end_pos": "gamma5",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
                             "motion_type": "dash",
-                            "start_ori": "in",
+                            "start_ori": "clock",
                             "prop_rot_dir": "no_rot",
-                            "start_loc": "n",
-                            "end_loc": "s",
+                            "start_loc": "w",
+                            "end_loc": "e",
                             "turns": 0,
-                            "end_ori": "out"
+                            "end_ori": "counter"
                         },
                         "red_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "e",
-                            "end_loc": "n",
+                            "motion_type": "static",
+                            "start_ori": "in",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "s",
+                            "end_loc": "s",
                             "turns": 1,
                             "end_ori": "out"
                         }
@@ -716,27 +718,27 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 16,
-                        "letter": "\u03a8",
-                        "start_pos": "alpha1",
-                        "end_pos": "beta5",
-                        "timing": "none",
-                        "direction": "none",
+                        "letter": "P",
+                        "start_pos": "gamma5",
+                        "end_pos": "gamma11",
+                        "timing": "quarter",
+                        "direction": "opp",
                         "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "ccw",
-                            "start_loc": "s",
+                            "motion_type": "float",
+                            "start_ori": "counter",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "e",
                             "end_loc": "s",
-                            "turns": 1,
+                            "turns": "fl",
                             "end_ori": "in"
                         },
                         "red_attributes": {
-                            "motion_type": "dash",
+                            "motion_type": "pro",
                             "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "n",
-                            "end_loc": "s",
-                            "turns": 0,
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "s",
+                            "end_loc": "e",
+                            "turns": 1,
                             "end_ori": "in"
                         }
                     },
@@ -753,30 +755,30 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 1,
-                        "letter": "\u03b8",
-                        "start_pos": "beta5",
-                        "end_pos": "gamma7",
+                        "letter": "W-",
+                        "start_pos": "gamma11",
+                        "end_pos": "alpha5",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "static",
+                            "motion_type": "dash",
                             "start_ori": "in",
                             "prop_rot_dir": "no_rot",
                             "start_loc": "s",
-                            "end_loc": "s",
+                            "end_loc": "n",
                             "turns": 0,
                             "blue_start_ori": "in",
-                            "end_ori": "in"
+                            "end_ori": "out"
                         },
                         "red_attributes": {
                             "motion_type": "pro",
                             "start_ori": "in",
                             "prop_rot_dir": "cw",
-                            "start_loc": "s",
-                            "end_loc": "w",
-                            "turns": 1,
-                            "end_ori": "out",
-                            "blue_ori": "in",
+                            "start_loc": "e",
+                            "end_loc": "s",
+                            "turns": 0,
+                            "end_ori": "in",
+                            "blue_ori": "out",
                             "red_start_ori": "in"
                         },
                         "red_turns": 0,
@@ -788,29 +790,34 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 2,
-                        "letter": "Z",
-                        "start_pos": "gamma7",
-                        "end_pos": "beta5",
+                        "letter": "\u03a9-",
+                        "start_pos": "alpha5",
+                        "end_pos": "gamma11",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "s",
+                            "motion_type": "dash",
+                            "start_ori": "out",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "n",
                             "end_loc": "s",
-                            "turns": 1,
-                            "end_ori": "out"
+                            "turns": 0,
+                            "blue_start_ori": "clock",
+                            "end_ori": "in"
                         },
                         "red_attributes": {
                             "motion_type": "anti",
-                            "start_ori": "out",
+                            "start_ori": "in",
                             "prop_rot_dir": "cw",
-                            "start_loc": "w",
-                            "end_loc": "s",
+                            "start_loc": "s",
+                            "end_loc": "e",
                             "turns": 1,
-                            "end_ori": "out"
-                        }
+                            "end_ori": "in",
+                            "blue_ori": "counter",
+                            "red_start_ori": "in"
+                        },
+                        "red_turns": 0,
+                        "blue_turns": 0
                     },
                     "step_label": ""
                 },
@@ -818,15 +825,15 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 3,
-                        "letter": "\u03a3-",
-                        "start_pos": "beta5",
-                        "end_pos": "gamma1",
+                        "letter": "Z-",
+                        "start_pos": "gamma11",
+                        "end_pos": "beta7",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
+                            "motion_type": "anti",
+                            "start_ori": "in",
+                            "prop_rot_dir": "ccw",
                             "start_loc": "s",
                             "end_loc": "w",
                             "turns": 1,
@@ -835,13 +842,13 @@
                         },
                         "red_attributes": {
                             "motion_type": "dash",
-                            "start_ori": "out",
+                            "start_ori": "in",
                             "prop_rot_dir": "no_rot",
-                            "start_loc": "s",
-                            "end_loc": "n",
+                            "start_loc": "e",
+                            "end_loc": "w",
                             "turns": 0,
-                            "end_ori": "in",
-                            "blue_ori": "in",
+                            "end_ori": "out",
+                            "blue_ori": "out",
                             "red_start_ori": "in"
                         },
                         "red_turns": 0,
@@ -853,29 +860,34 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 4,
-                        "letter": "Z",
-                        "start_pos": "gamma1",
-                        "end_pos": "beta7",
+                        "letter": "\u03a9",
+                        "start_pos": "beta7",
+                        "end_pos": "gamma15",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "w",
-                            "end_loc": "w",
-                            "turns": 1,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
                             "motion_type": "anti",
                             "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "w",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "w",
+                            "end_loc": "n",
                             "turns": 1,
+                            "blue_start_ori": "out",
                             "end_ori": "in"
-                        }
+                        },
+                        "red_attributes": {
+                            "motion_type": "static",
+                            "start_ori": "out",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "w",
+                            "end_loc": "w",
+                            "turns": 0,
+                            "end_ori": "out",
+                            "blue_ori": "in",
+                            "red_start_ori": "out"
+                        },
+                        "red_turns": 0,
+                        "blue_turns": 0
                     },
                     "step_label": ""
                 },
@@ -883,28 +895,28 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 5,
-                        "letter": "\u03b8",
-                        "start_pos": "beta7",
-                        "end_pos": "gamma15",
+                        "letter": "W-",
+                        "start_pos": "gamma15",
+                        "end_pos": "alpha1",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
+                            "motion_type": "dash",
+                            "start_ori": "in",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "n",
+                            "end_loc": "s",
+                            "turns": 0,
+                            "end_ori": "out"
+                        },
+                        "red_attributes": {
                             "motion_type": "pro",
                             "start_ori": "out",
                             "prop_rot_dir": "cw",
                             "start_loc": "w",
                             "end_loc": "n",
-                            "turns": 1,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "in",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "w",
-                            "end_loc": "w",
                             "turns": 0,
-                            "end_ori": "in"
+                            "end_ori": "out"
                         }
                     },
                     "step_label": ""
@@ -913,25 +925,25 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 6,
-                        "letter": "Z",
-                        "start_pos": "gamma15",
-                        "end_pos": "beta7",
+                        "letter": "\u03a9-",
+                        "start_pos": "alpha1",
+                        "end_pos": "gamma15",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "w",
-                            "turns": 1,
+                            "motion_type": "dash",
+                            "start_ori": "out",
+                            "prop_rot_dir": "no_rot",
+                            "start_loc": "s",
+                            "end_loc": "n",
+                            "turns": 0,
                             "end_ori": "in"
                         },
                         "red_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "in",
+                            "motion_type": "anti",
+                            "start_ori": "out",
                             "prop_rot_dir": "cw",
-                            "start_loc": "w",
+                            "start_loc": "n",
                             "end_loc": "w",
                             "turns": 1,
                             "end_ori": "out"
@@ -943,27 +955,27 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 7,
-                        "letter": "\u03a3-",
-                        "start_pos": "beta7",
-                        "end_pos": "gamma9",
+                        "letter": "Z-",
+                        "start_pos": "gamma15",
+                        "end_pos": "beta3",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "dash",
+                            "motion_type": "anti",
                             "start_ori": "in",
+                            "prop_rot_dir": "ccw",
+                            "start_loc": "n",
+                            "end_loc": "e",
+                            "turns": 1,
+                            "end_ori": "in"
+                        },
+                        "red_attributes": {
+                            "motion_type": "dash",
+                            "start_ori": "out",
                             "prop_rot_dir": "no_rot",
                             "start_loc": "w",
                             "end_loc": "e",
                             "turns": 0,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "w",
-                            "end_loc": "n",
-                            "turns": 1,
                             "end_ori": "in"
                         }
                     },
@@ -973,274 +985,27 @@
                     "beat_number": null,
                     "pictograph_dict": {
                         "beat": 8,
-                        "letter": "Z",
-                        "start_pos": "gamma9",
-                        "end_pos": "beta1",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "e",
-                            "end_loc": "n",
-                            "turns": 1,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "n",
-                            "turns": 1,
-                            "end_ori": "out"
-                        }
-                    },
-                    "step_label": ""
-                }
-            ]
-        },
-        {
-            "sequence_start_marker": false,
-            "cue": "",
-            "timestamp": "",
-            "beats": [
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 9,
-                        "letter": "\u03b8",
-                        "start_pos": "beta1",
-                        "end_pos": "gamma3",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "n",
-                            "end_loc": "n",
-                            "turns": 0,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "in"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 10,
-                        "letter": "Z",
-                        "start_pos": "gamma3",
-                        "end_pos": "beta1",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "n",
-                            "turns": 1,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "e",
-                            "end_loc": "n",
-                            "turns": 1,
-                            "end_ori": "in"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 11,
-                        "letter": "\u03a3-",
-                        "start_pos": "beta1",
-                        "end_pos": "gamma5",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "n",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "in",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "n",
-                            "end_loc": "s",
-                            "turns": 0,
-                            "end_ori": "out"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 12,
-                        "letter": "Z",
-                        "start_pos": "gamma5",
-                        "end_pos": "beta3",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "e",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "s",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "out"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 13,
-                        "letter": "\u03b8",
+                        "letter": "\u03a9",
                         "start_pos": "beta3",
                         "end_pos": "gamma11",
                         "timing": "none",
                         "direction": "none",
                         "blue_attributes": {
-                            "motion_type": "pro",
+                            "motion_type": "anti",
                             "start_ori": "in",
-                            "prop_rot_dir": "cw",
+                            "prop_rot_dir": "ccw",
                             "start_loc": "e",
                             "end_loc": "s",
                             "turns": 1,
-                            "end_ori": "out"
+                            "end_ori": "in"
                         },
                         "red_attributes": {
                             "motion_type": "static",
-                            "start_ori": "out",
+                            "start_ori": "in",
                             "prop_rot_dir": "no_rot",
                             "start_loc": "e",
                             "end_loc": "e",
                             "turns": 0,
-                            "end_ori": "out"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 14,
-                        "letter": "Z",
-                        "start_pos": "gamma11",
-                        "end_pos": "beta3",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "s",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "out"
-                        },
-                        "red_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "e",
-                            "end_loc": "e",
-                            "turns": 1,
-                            "end_ori": "in"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 15,
-                        "letter": "\u03a3-",
-                        "start_pos": "beta3",
-                        "end_pos": "gamma13",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "dash",
-                            "start_ori": "out",
-                            "prop_rot_dir": "no_rot",
-                            "start_loc": "e",
-                            "end_loc": "w",
-                            "turns": 0,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "pro",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "e",
-                            "end_loc": "s",
-                            "turns": 1,
-                            "end_ori": "out"
-                        }
-                    },
-                    "step_label": ""
-                },
-                {
-                    "beat_number": null,
-                    "pictograph_dict": {
-                        "beat": 16,
-                        "letter": "Z",
-                        "start_pos": "gamma13",
-                        "end_pos": "beta5",
-                        "timing": "none",
-                        "direction": "none",
-                        "blue_attributes": {
-                            "motion_type": "anti",
-                            "start_ori": "in",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "w",
-                            "end_loc": "s",
-                            "turns": 1,
-                            "end_ori": "in"
-                        },
-                        "red_attributes": {
-                            "motion_type": "static",
-                            "start_ori": "out",
-                            "prop_rot_dir": "cw",
-                            "start_loc": "s",
-                            "end_loc": "s",
-                            "turns": 1,
                             "end_ori": "in"
                         }
                     },

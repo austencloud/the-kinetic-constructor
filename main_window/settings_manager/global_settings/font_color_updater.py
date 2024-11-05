@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     )
 
     from ...main_widget.main_widget import MainWidget
-    from splash_screen import SplashScreen
+    from splash_screen.splash_screen import SplashScreen
 
 
 class FontColorUpdater:
@@ -60,7 +60,7 @@ class FontColorUpdater:
         self._update_sequence_builder(main_widget, font_color)
         self._update_dictionary_widget(main_widget, font_color)
         self._update_learn_widget(main_widget, font_color)
-        self._update_act_tab(main_widget, font_color)
+        # self._update_act_tab(main_widget, font_color)
 
     def _update_act_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         act_tab = main_widget.act_tab

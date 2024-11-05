@@ -10,9 +10,6 @@ from PyQt6.QtGui import QIcon, QFont, QFontMetrics, QMouseEvent
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
-    StartPosPickerPictographFrame,
-)
 from utilities.path_helpers import get_images_and_data_path
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import IN, COUNTER, ORI, OUT, CLOCK

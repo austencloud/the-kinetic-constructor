@@ -1,23 +1,15 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QStackedWidget,
-    QSizePolicy,
-    QWidget,
-)
-
-
-from main_window.main_widget.act_tab.act_tab import ActTab
-from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
-from main_window.main_widget.navigation_widget import NavigationWidget
-from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
-from main_window.main_widget.sequence_builder.auto_builder.sequence_generator_widget import (
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
+from .act_tab.act_tab import ActTab
+from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
+from .navigation_widget import NavigationWidget
+from .sequence_widget.sequence_widget import SequenceWidget
+from .sequence_builder.auto_builder.sequence_generator_widget import (
     SequenceGeneratorWidget,
 )
-from main_window.main_widget.sequence_builder.manual_builder import ManualBuilderWidget
-from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
-from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+from .sequence_builder.manual_builder import ManualBuilderWidget
+from .dictionary_widget.dictionary_widget import DictionaryWidget
+from .learn_widget.learn_widget import LearnWidget
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
@@ -26,85 +18,65 @@ if TYPE_CHECKING:
 class MainWidgetUI:
     def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
+        self.splash_screen = main_widget.splash_screen
         self._setup_components()
         self._setup_layout()
         self._setup_indices()
 
     def _setup_components(self):
-        self.main_widget.menu_bar_widget = MenuBarWidget(self.main_widget)
-        self.main_widget.navigation_widget = NavigationWidget(self.main_widget)
-        self.main_widget.sequence_widget = SequenceWidget(self.main_widget)
-        self.main_widget.manual_builder = ManualBuilderWidget(self.main_widget)
-        self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
-        self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
-        self.main_widget.learn_widget = LearnWidget(self.main_widget)
-        self.main_widget.act_tab = ActTab(self.main_widget)
+        mw = self.main_widget
+        splash = self.splash_screen
+        splash.updater.update_progress("MenuBarWidget")
+        mw.menu_bar_widget = MenuBarWidget(mw)
+        splash.updater.update_progress("NavigationWidget")
+        mw.navigation_widget = NavigationWidget(mw)
+        splash.updater.update_progress("SequenceWidget")
+        mw.sequence_widget = SequenceWidget(mw)
+        splash.updater.update_progress("ManualBuilderWidget")
+        mw.manual_builder = ManualBuilderWidget(mw)
+        splash.updater.update_progress("SequenceGeneratorWidget")
+        mw.sequence_generator = SequenceGeneratorWidget(mw)
+        splash.updater.update_progress("DictionaryWidget")
+        mw.dictionary_widget = DictionaryWidget(mw)
+        splash.updater.update_progress("LearnWidget")
+        mw.learn_widget = LearnWidget(mw)
+        splash.updater.update_progress("ActTab")
+        # mw.act_tab = ActTab(mw)
+        # splash.updater.update_progress("Finalizing")
 
-        # Initialize builder_stacked_widget to switch between manual builder and sequence generator
-        self.main_widget.builder_stacked_widget = QStackedWidget()
-        self.main_widget.builder_stacked_widget.addWidget(
-            self.main_widget.manual_builder
-        )
-        self.main_widget.builder_stacked_widget.addWidget(
-            self.main_widget.sequence_generator
-        )
+        # Create stacked widgets and primary layouts
+        mw.builder_stacked_widget = QStackedWidget()
+        mw.builder_stacked_widget.addWidget(mw.manual_builder)
+        mw.builder_stacked_widget.addWidget(mw.sequence_generator)
 
-        # Initialize main_stacked_widget to switch between Build/Generate and Dictionary/Learn
-        self.main_widget.main_stacked_widget = QStackedWidget()
+        mw.build_generate_widget = QWidget()
+        build_generate_layout = QHBoxLayout(mw.build_generate_widget)
+        build_generate_layout.addWidget(mw.sequence_widget)
+        build_generate_layout.addWidget(mw.builder_stacked_widget)
 
-        # Create Build/Generate Widget
-        self.main_widget.build_generate_widget = QWidget()
-        self.main_widget.build_generate_layout = QHBoxLayout(
-            self.main_widget.build_generate_widget
-        )
-        self.main_widget.build_generate_layout.addWidget(
-            self.main_widget.sequence_widget
-        )
-        self.main_widget.build_generate_layout.addWidget(
-            self.main_widget.builder_stacked_widget
-        )
-        self.main_widget.build_generate_layout.setStretch(0, 1)
-        self.main_widget.build_generate_layout.setStretch(1, 1)
-        self.main_widget.build_generate_widget.setLayout(
-            self.main_widget.build_generate_layout
-        )
+        mw.dictionary_learn_widget = QStackedWidget()
+        mw.dictionary_learn_widget.addWidget(mw.dictionary_widget)
+        mw.dictionary_learn_widget.addWidget(mw.learn_widget)
 
-        # Create Dictionary/Learn Widget
-        self.main_widget.dictionary_learn_widget = QStackedWidget()
-        self.main_widget.dictionary_learn_widget.addWidget(
-            self.main_widget.dictionary_widget
-        )
-        self.main_widget.dictionary_learn_widget.addWidget(
-            self.main_widget.learn_widget
-        )
-
-        # Add Build/Generate Widget and Dictionary/Learn Widget to main_stacked_widget
-        self.main_widget.main_stacked_widget.addWidget(
-            self.main_widget.build_generate_widget
-        )  # Index 0
-        self.main_widget.main_stacked_widget.addWidget(
-            self.main_widget.dictionary_learn_widget
-        )  # Index 1
-        self.main_widget.main_stacked_widget.addWidget(
-            self.main_widget.act_tab
-        )  # Index 2
+        mw.main_stacked_widget = QStackedWidget()
+        mw.main_stacked_widget.addWidget(mw.build_generate_widget)
+        mw.main_stacked_widget.addWidget(mw.dictionary_learn_widget)
+        # mw.main_stacked_widget.addWidget(mw.act_tab)
 
     def _setup_layout(self):
-        self.main_widget.main_layout = QVBoxLayout(self.main_widget)
-        self.main_widget.setLayout(self.main_widget.main_layout)
-        # remove contents margins at the top
-        self.main_widget.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.main_widget.main_layout.setSpacing(0)
-        # Add navigation and menu bar widgets to the main layout
-        self.main_widget.top_layout = QHBoxLayout()
-        self.main_widget.top_layout.addWidget(self.main_widget.menu_bar_widget, 1)
-        self.main_widget.top_layout.addWidget(self.main_widget.navigation_widget, 1)
-        self.main_widget.main_layout.addLayout(self.main_widget.top_layout)
-        # Add the main stacked widget to the main layout
-        self.main_widget.main_layout.addWidget(self.main_widget.main_stacked_widget)
-        self.main_widget.main_stacked_widget.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
+        mw = self.main_widget
+
+        mw.main_layout = QVBoxLayout(mw)
+        mw.main_layout.setContentsMargins(0, 0, 0, 0)
+        mw.main_layout.setSpacing(0)
+        mw.setLayout(mw.main_layout)
+
+        top_layout = QHBoxLayout()
+        top_layout.addWidget(mw.menu_bar_widget, 1)
+        top_layout.addWidget(mw.navigation_widget, 1)
+
+        mw.main_layout.addLayout(top_layout)
+        mw.main_layout.addWidget(mw.main_stacked_widget)
 
     def _setup_indices(self):
         self.main_widget.build_tab_index = 0
@@ -113,8 +85,10 @@ class MainWidgetUI:
         self.main_widget.learn_tab_index = 3
         self.main_widget.act_tab_index = 4
 
+    def on_splitter_moved(self):
+        self.main_widget.manual_builder.resize_manual_builder()
+
     def load_current_tab(self):
-        self.main_widget.current_tab = (
-            self.main_widget.settings_manager.global_settings.get_current_tab()
-        )
-        self.main_widget.tabs_handler.update_tab_based_on_settings()
+        mw = self.main_widget
+        mw.current_tab = mw.settings_manager.global_settings.get_current_tab()
+        mw.tabs_handler.update_tab_based_on_settings()

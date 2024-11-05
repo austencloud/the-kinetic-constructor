@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QStackedWidget, QStackedLayout
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QStackedLayout
 
 
 if TYPE_CHECKING:

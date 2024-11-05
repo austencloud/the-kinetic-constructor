@@ -3,7 +3,7 @@ from Enums.Enums import LetterType
 from Enums.letters import Letter
 from .option_picker_section_group_widget import OptionPickerSectionGroupWidget
 from .option_picker_section_widget import OptionPickerSectionWidget
-
+from PyQt6.QtWidgets import QHBoxLayout
 if TYPE_CHECKING:
 
     from .option_picker_scroll_area import OptionPickerScrollArea
@@ -50,17 +50,26 @@ class OptionPickerSectionManager:
             if section:
                 if section_type in grouped_sections:
                     if group_widget is None:
-                        group_widget = OptionPickerSectionGroupWidget()
-                        correct_index = self.get_correct_index_for_section(
-                            grouped_sections[0]
-                        )
-                        self.scroll_area.add_section_to_layout(
-                            group_widget, correct_index
-                        )
+                        # Create a group widget instance
+                        group_widget = OptionPickerSectionGroupWidget(self.scroll_area)
+                        
+                        # Create an HBox layout with stretch around the group widget
+                        group_layout = QHBoxLayout()
+                        group_layout.addStretch()  # Left spacer
+                        
+                        # Add the group widget to the layout
+                        group_layout.addWidget(group_widget)
+                        
+                        group_layout.addStretch()  # Right spacer
+                        
+                        # Add the entire group layout directly to the scroll area
+                        self.scroll_area.layout.addLayout(group_layout)
+
+                    # Add the section to the group widget
                     group_widget.add_section_widget(section)
                 else:
-                    correct_index = self.get_correct_index_for_section(section_type)
-                    self.scroll_area.add_section_to_layout(section, correct_index)
+                    # For other sections, directly add them to the main layout
+                    self.scroll_area.layout.addWidget(section)
 
     def get_correct_index_for_section(self, letter_type: LetterType) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)

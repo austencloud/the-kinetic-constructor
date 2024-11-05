@@ -17,7 +17,7 @@ class GraphEditorPlaceholder(QFrame):
         self.setFixedHeight(new_height)
         self.sequence_widget.updateGeometry()
         self.sequence_widget.button_panel.updateGeometry()  # Update layout to reflect the height change
-        QApplication.processEvents()  # Process events to update layout immediately
+        # QApplication.processEvents()  # Process events to update layout immediately
 
     def resize_graph_editor_placeholder(self):
         """Resizes the placeholder to match the graph editor height."""

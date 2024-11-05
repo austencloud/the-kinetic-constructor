@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from ..GE_pictograph_view import GE_PictographView, GE_BlankPictograph
 
 if TYPE_CHECKING:

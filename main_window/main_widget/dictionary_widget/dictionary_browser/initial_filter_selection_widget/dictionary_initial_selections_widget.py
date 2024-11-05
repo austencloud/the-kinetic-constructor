@@ -99,9 +99,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
             filter_key (str): The filter key (e.g., 'level', 'author').
             filter_value: The value for the filter key.
         """
-        self.browser.dictionary.dictionary_settings.set_current_section(
-            "browser"
-        )
+        self.browser.dictionary.dictionary_settings.set_current_section("browser")
         self.browser.filter_manager.apply_current_filter({filter_key: filter_value})
 
     # Event Handlers

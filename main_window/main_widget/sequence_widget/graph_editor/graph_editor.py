@@ -1,10 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
-from PyQt6.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve, QRect
+from PyQt6.QtCore import Qt
 from .graph_editor_layout_manager import GraphEditorLayoutManager
 from .graph_editor_state_manager import GraphEditorStateManager
-from .graph_editor_toggle_tab import GraphEditorToggleTab
-from .graph_editor_animator import GraphEditorAnimator
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer
 
@@ -34,7 +32,6 @@ class GraphEditor(QFrame):
         self.main_widget = sequence_widget.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
-        # Set size policies
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.setMinimumHeight(0)  # Allow to shrink to zero height
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
@@ -46,10 +43,8 @@ class GraphEditor(QFrame):
     def _setup_components(self) -> None:
         self.pictograph_container = GraphEditorPictographContainer(self)
         self.adjustment_panel = BeatAdjustmentPanel(self)
-        # self.toggle_tab = GraphEditorToggleTab(self)
         self.layout_manager = GraphEditorLayoutManager(self)
         self.state = GraphEditorStateManager(self)
-        # self.sequence_widget.toggle_tab.toggled.connect(self.toggle_graph_editor)
 
         self.pictograph_container.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
@@ -63,9 +58,8 @@ class GraphEditor(QFrame):
 
     def resize_graph_editor(self) -> None:
         graph_editor_height = self.get_graph_editor_height()
-        width = min(
-            self.sequence_widget.width(), self.sequence_widget.main_widget.width() // 2
-        )
+        width = self.sequence_widget.width()
+        
         self.setFixedSize(width, graph_editor_height)
 
         if self.sequence_widget.graph_editor.isVisible():

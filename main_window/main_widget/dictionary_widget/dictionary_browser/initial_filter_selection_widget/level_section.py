@@ -195,7 +195,7 @@ class LevelSection(FilterSectionBase):
 
     def display_only_thumbnails_with_level(self, level: int):
         """Display only the thumbnails that match the selected level."""
-        self.initial_selection_widget.dictionary.dictionary_widget.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browser.dictionary.dictionary_settings.set_current_filter(
             {"level": level}
         )
         self.browser.filter_manager.prepare_ui_for_filtering(f"level {level} sequences")

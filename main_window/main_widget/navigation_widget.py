@@ -16,13 +16,7 @@ class NavigationWidget(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
 
-        # Create a container frame
         self.container_frame = QFrame(self)
-        # self.container_frame.setStyleSheet(
-        #     f"QFrame {{ background-color: rgba(0, 0, 0, 0.5); border-radius: {self.calculate_border_radius()}px; }}"
-        # )
-
-        # Create a layout for the container frame
         self.container_layout = QVBoxLayout(self.container_frame)
         self.container_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -34,7 +28,7 @@ class NavigationWidget(QWidget):
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
-            "Write ✍️",
+            # "Write ✍️",
         ]
         self.current_index = 0
         for index, name in enumerate(self.tab_names):

@@ -61,12 +61,6 @@ class OptionPickerSectionWidget(QGroupBox):
             pictograph.view.setParent(None)
             pictograph.view.hide()
 
-    def set_size_policy(self, horizontal, vertical) -> None:
-        size_policy = QSizePolicy(horizontal, vertical)
-        self.setSizePolicy(size_policy)
-        for pictograph in self.pictographs.values():
-            pictograph.view.setSizePolicy(size_policy)
-
     def add_pictograph(self, pictograph: BasePictograph) -> None:
         """Add a pictograph widget to the section layout."""
         self.pictographs[
@@ -79,13 +73,29 @@ class OptionPickerSectionWidget(QGroupBox):
         pictograph.view.show()
 
     def resize_option_picker_section_widget(self) -> None:
-        section_width = int((self.scroll_area.manual_builder.width()))
+        """Resizes the section widget and ensures minimal space usage."""
+        section_width = self.scroll_area.manual_builder.width()
+
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
-            self.setMinimumWidth(section_width)
-            self.setMaximumWidth(section_width)
+            self.setFixedWidth(section_width)
         elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
-            self.setMinimumWidth(int(section_width / 3))
-            self.setMaximumWidth(int(section_width / 3))
+            COLUMN_COUNT = self.scroll_area.display_manager.COLUMN_COUNT
+            sections = self.scroll_area.section_manager.sections
+
+            calculated_width = int(
+                (self.scroll_area.option_picker.width() / COLUMN_COUNT)
+                - ((sections[self.letter_type].pictograph_frame.spacing))
+            )
+
+            view_width = (
+                calculated_width
+                if calculated_width < self.scroll_area.option_picker.height() // 8
+                else self.scroll_area.option_picker.height() // 8
+            )
+            width = int(view_width * 8) // 3
+            self.setFixedWidth(width)
+
+        # Resize each pictograph within the section to match
         for pictograph in self.pictographs.values():
             pictograph.view.resize_pictograph_view()
         self.header.type_label.resize_section_type_label()

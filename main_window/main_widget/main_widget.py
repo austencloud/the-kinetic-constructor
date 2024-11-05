@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QKeyEvent, QCloseEvent
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget, QSplitter
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
     from .navigation_widget import NavigationWidget
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
-    from splash_screen import SplashScreen
+    from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
     from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
         BackgroundManager,
@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    # Class variables with type hints
+
     main_window: "MainWindow"
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
@@ -132,9 +132,6 @@ class MainWidget(QWidget):
         self.state_handler = MainWidgetState(self)
         self.background_handler = MainWidgetBackground(self)
 
-        # Initialize the tab handler
-
-        self.splash_screen.update_progress(100, "Initialization complete!")
         QTimer.singleShot(0, self.state_handler.load_state)
 
     # Event Handlers
@@ -152,8 +149,6 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)
-
-
 
     def get_tab_bar_height(self):
         return self.ui_handler.main_widget.tab_bar_styler.tab_height

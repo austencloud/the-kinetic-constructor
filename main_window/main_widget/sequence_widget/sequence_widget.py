@@ -63,10 +63,12 @@ class SequenceWidget(QWidget):
         self.toggler = GraphEditorToggler(self)
 
     def resize_sequence_widget(self) -> None:
+        self.setMinimumWidth(int(self.main_widget.width() // 2))
         self.current_word_label.resize_current_word_label()
         self.button_panel.resize_button_panel()
         self.beat_frame.resize_beat_frame()
         self.graph_editor.resize_graph_editor()
+        # pass
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
