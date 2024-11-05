@@ -29,7 +29,7 @@ class OrientationSetter:
                 self.color, orientation
             )
             self.json_validation_engine.run(is_current_sequence=True)
-            self.ori_adjusted.emit(orientation)
+            # self.ori_picker_widget.ori_adjusted.emit(orientation)
             start_position_pictographs = (
                 self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.start_pos_picker.pictograph_frame.start_positions
             )
@@ -82,6 +82,8 @@ class OrientationSetter:
                         }
                     }
                 )
+        # propogate the change through the beat frame
+        self.beat_frame.updater.update_beats_from_json()
 
     def set_initial_orientation(
         self, start_pos_pictograph: "BasePictograph", color: str
