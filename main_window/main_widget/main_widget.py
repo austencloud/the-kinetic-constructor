@@ -108,7 +108,6 @@ class MainWidget(QWidget):
     current_tab: str
     background_manager: "BackgroundManager"
     json_manager: "JsonManager"
-    tab_bar_styler: "MainWidgetTabBarStyler"
 
     # Other attributes
     pictograph_cache: dict[str, dict[str, "BasePictograph"]]
@@ -150,5 +149,3 @@ class MainWidget(QWidget):
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)
 
-    def get_tab_bar_height(self):
-        return self.ui_handler.main_widget.tab_bar_styler.tab_height

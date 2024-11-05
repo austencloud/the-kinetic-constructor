@@ -1,4 +1,5 @@
 import json
+from turtle import st
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from Enums.PropTypes import PropType
@@ -45,7 +46,6 @@ class MainWidgetManager:
         mw.pictograph_key_generator = PictographKeyGenerator(mw)
         mw.special_placement_loader = SpecialPlacementLoader(mw)
         mw.metadata_extractor = MetaDataExtractor(mw)
-        mw.tab_bar_styler = MainWidgetTabBarStyler(mw)
         mw.sequence_level_evaluator = SequenceLevelEvaluator()
         mw.sequence_properties_manager = SequencePropertiesManager(mw)
         mw.thumbnail_finder = ThumbnailFinder(mw)
@@ -80,7 +80,7 @@ class MainWidgetManager:
     def set_grid_mode(self, grid_mode: str) -> None:
         # Set the grid mode and save it directly using QSettings
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
-        QApplication.processEvents()
+
         # Refresh placements and load any required data
         self.main_widget.special_placement_loader.refresh_placements()
         self.pictograph_dicts = (
@@ -88,12 +88,12 @@ class MainWidgetManager:
         )
 
         # Clear and re-setup necessary components based on new grid mode
-        start_pos_manager = (
-            self.main_widget.manual_builder.start_pos_picker.start_pos_manager
+        start_pos_picker = self.main_widget.manual_builder.start_pos_picker
+        start_pos_picker.display_variations(grid_mode)
+        advanced_start_pos_picker = (
+            self.main_widget.manual_builder.advanced_start_pos_picker
         )
-        start_pos_manager.clear_start_positions()
-        start_pos_manager.setup_start_positions()
-
+        advanced_start_pos_picker.display_variations(grid_mode)
         sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
         if (
             self.main_widget.manual_builder.stacked_widget.currentWidget()

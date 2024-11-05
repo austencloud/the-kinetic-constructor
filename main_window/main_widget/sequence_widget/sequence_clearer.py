@@ -41,8 +41,8 @@ class SequenceClearer:
             self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.last_beat = self.sequence_widget.beat_frame.start_pos
         self.graph_editor = self.sequence_widget.graph_editor
-        self.graph_editor.adjustment_panel.blue_ori_picker.set_initial_orientation(IN)
-        self.graph_editor.adjustment_panel.red_ori_picker.set_initial_orientation(IN)
+        # self.graph_editor.adjustment_panel.blue_ori_picker.set_initial_orientation(IN)
+        # self.graph_editor.adjustment_panel.red_ori_picker.set_initial_orientation(IN)
 
     def _show_clear_indicator(self, show_indicator: bool) -> None:
         if show_indicator:

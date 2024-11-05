@@ -59,7 +59,9 @@ class ManualBuilderWidget(QFrame):
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
         self.stacked_widget.setCurrentWidget(self.advanced_start_pos_picker)
-        self.advanced_start_pos_picker.init_ui()
+        self.advanced_start_pos_picker.display_variations(
+            self.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
 
     def reset_to_start_pos_picker(self) -> None:

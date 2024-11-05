@@ -183,9 +183,9 @@ class OriPickerWidget(QWidget):
                 self.ori_picker_box.graph_editor.sequence_widget.main_widget.settings_manager.global_settings.get_grid_mode()
             )
             if grid_mode == "box":
-                pictograph_list = start_pos_picker.start_pos_manager.box_pictographs
+                pictograph_list = start_pos_picker.box_pictographs
             elif grid_mode == "diamond":
-                pictograph_list = start_pos_picker.start_pos_manager.diamond_pictographs
+                pictograph_list = start_pos_picker.diamond_pictographs
             for pictograph in pictograph_list:
                 pictograph.updater.update_pictograph(
                     {

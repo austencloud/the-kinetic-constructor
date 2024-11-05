@@ -58,9 +58,9 @@ class FullScreenImageOverlay(QWidget):
         """Scale the pixmap to fit within the window while maintaining aspect ratio."""
         window_size = self.main_widget.main_window.size()
         # subtrract the height of the tab bar itself from the window size
-        tab_bar_height = self.main_widget.get_tab_bar_height()
+        # tab_bar_height = self.main_widget.get_tab_bar_height()
         menu_bar_height = self.main_widget.menu_bar_widget.height()
-        window_size.setHeight(window_size.height() - tab_bar_height - menu_bar_height)
+        window_size.setHeight(window_size.height() - menu_bar_height)
 
         scaled_pixmap = pixmap.scaled(
             window_size,

@@ -32,9 +32,15 @@ class StartPosPickerPictographFrame(QWidget):
             self.clickable_option_handler.get_click_handler(start_pos)
         )
         self.pictographs_layout.addWidget(start_pos.view)
-        self.start_pos_picker.start_pos_cache[start_pos.letter] = start_pos
+        self.start_pos_picker.start_options[start_pos.letter] = start_pos
         key = f"{start_pos.letter}_{start_pos.start_pos}_{start_pos.end_pos}"
         self.start_pos_picker.main_widget.pictograph_cache[start_pos.letter][
             key
         ] = start_pos
         self.start_positions[start_pos.letter] = start_pos
+
+    def clear_pictographs(self) -> None:
+        for i in reversed(range(self.pictographs_layout.count())):
+            widget_to_remove = self.pictographs_layout.itemAt(i).widget()
+            self.pictographs_layout.removeWidget(widget_to_remove)
+            widget_to_remove.setParent(None)
