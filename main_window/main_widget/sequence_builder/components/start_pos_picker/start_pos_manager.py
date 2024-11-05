@@ -1,11 +1,11 @@
 from copy import deepcopy
 from functools import partial
+from contextlib import contextmanager
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, END_POS, START_POS
 from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
 
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
@@ -24,48 +24,115 @@ class StartPosManager(QObject):
         self.start_pos_frame = start_pos_picker.pictograph_frame
         self.main_widget = start_pos_picker.manual_builder.main_widget
         self.top_builder_widget = None
+        self.box_pictographs: list[BasePictograph] = []
+        self.diamond_pictographs: list[BasePictograph] = []
         self.start_options: dict[str, BasePictograph] = {}
-        self.setup_start_positions()
         self.start_position_selected.connect(
             self.manual_builder.transition_to_sequence_building
         )
+        self.load_relevant_start_positions()
+
+    def get_all_start_positions(self) -> list[BasePictograph]:
+        """Get all start positions for the current grid mode."""
+        grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
+        return self.box_pictographs if grid_mode == BOX else self.diamond_pictographs
+
+    @contextmanager
+    def temporary_grid_mode(self, grid_mode):
+        """Context manager to temporarily set the grid mode."""
+        original_mode = (
+            self.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        self.main_widget.settings_manager.global_settings.set_grid_mode(grid_mode)
+        yield
+        self.main_widget.settings_manager.global_settings.set_grid_mode(original_mode)
 
     def clear_start_positions(self) -> None:
         """Clears the start positions."""
         for start_position_pictograph in self.start_options.values():
             start_position_pictograph.view.hide()
 
-    def setup_start_positions(self) -> None:
-        """Setup initial orientations and show options for the starting position."""
+    def load_relevant_start_positions(self) -> None:
+        """Load only the start positions relevant to the current grid mode."""
         grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
         start_pos_keys = (
             ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
             if grid_mode == DIAMOND
             else ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
         )
+        if grid_mode == BOX:
+            self.box_pictographs = self.get_box_variations()
+            for position_key in start_pos_keys:
+                self._add_start_position_option_to_start_pos_frame(position_key, BOX)
+        elif grid_mode == DIAMOND:
+            self.diamond_pictographs = self.get_diamond_variations()
+            for position_key in start_pos_keys:
+                self._add_start_position_option_to_start_pos_frame(
+                    position_key, DIAMOND
+                )
 
-        for position_key in start_pos_keys:
-            self._add_start_position_option_to_start_pos_frame(position_key)
+    def get_box_variations(self) -> list[BasePictograph]:
+        """Retrieve box mode variations without displaying them."""
+        box_positions = [
+            "alpha2",
+            "alpha4",
+            "alpha6",
+            "alpha8",
+            "beta2",
+            "beta4",
+            "beta6",
+            "beta8",
+            "gamma2",
+            "gamma4",
+            "gamma6",
+            "gamma8",
+            "gamma10",
+            "gamma12",
+            "gamma14",
+            "gamma16",
+        ]
+        box_variations = []
+        for letter in self.main_widget.pictograph_dicts:
+            for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
+                if pictograph_dict["start_pos"] in box_positions:
+                    pictograph = self.create_pictograph_from_dict(pictograph_dict, BOX)
+                    box_variations.append(pictograph)
+        return box_variations
 
-        # Set initial orientation in the OriPickerBox to "IN" if no orientation specified
-        if self.start_options:
-            initial_pictograph = next(iter(self.start_options.values()))
-            blue_orientation = initial_pictograph.pictograph_dict[
-                "blue_attributes"
-            ].get("start_ori", "IN")
-            red_orientation = initial_pictograph.pictograph_dict["red_attributes"].get(
-                "start_ori", "IN"
-            )
+    def get_diamond_variations(self) -> list[BasePictograph]:
+        """Retrieve diamond mode variations without displaying them."""
+        diamond_positions = [
+            "alpha1",
+            "alpha3",
+            "alpha5",
+            "alpha7",
+            "beta1",
+            "beta3",
+            "beta5",
+            "beta7",
+            "gamma1",
+            "gamma3",
+            "gamma5",
+            "gamma7",
+            "gamma9",
+            "gamma11",
+            "gamma13",
+            "gamma15",
+        ]
+        diamond_variations = []
+        for letter in self.main_widget.pictograph_dicts:
+            for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
+                if pictograph_dict["start_pos"] in diamond_positions:
+                    pictograph = self.create_pictograph_from_dict(
+                        pictograph_dict, DIAMOND
+                    )
+                    diamond_variations.append(pictograph)
+        return diamond_variations
 
-            # Update OriPickerBox for blue and red orientations
-            self.graph_editor = (
-                self.start_pos_frame.start_pos_picker.main_widget.sequence_widget.graph_editor
-            )
-            # self.graph_editor.adjustment_panel.blue_ori_picker.set_initial_orientation(blue_orientation)
-            # self.graph_editor.adjustment_panel.red_ori_picker.set_initial_orientation(red_orientation)
-
-    def _add_start_position_option_to_start_pos_frame(self, position_key: str) -> None:
-        """Adds an option for the specified start position."""
+    def _add_start_position_option_to_start_pos_frame(
+        self, position_key: str, grid_mode: str
+    ) -> None:
+        """Adds an option for the specified start position based on the current grid mode."""
         start_pos, end_pos = position_key.split("_")
         for (
             letter,
@@ -76,23 +143,20 @@ class StartPosManager(QObject):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_position_pictograph = BasePictograph(
-                        self.start_pos_picker.main_widget,
+                    # Create pictograph with the specified grid mode
+                    pictograph = self.create_pictograph_from_dict(
+                        pictograph_dict, grid_mode
                     )
-                    self.start_options[letter] = start_position_pictograph
-                    start_position_pictograph.letter = letter
-                    start_position_pictograph.start_pos = start_pos
-                    start_position_pictograph.end_pos = end_pos
-                    self.start_pos_frame._add_start_pos_to_layout(
-                        start_position_pictograph
-                    )
-                    start_position_pictograph.updater.update_pictograph(pictograph_dict)
-
-                    start_position_pictograph.view.mousePressEvent = partial(
+                    self.start_options[letter] = pictograph
+                    pictograph.letter = letter
+                    pictograph.start_pos = start_pos
+                    pictograph.end_pos = end_pos
+                    self.start_pos_frame._add_start_pos_to_layout(pictograph)
+                    pictograph.view.mousePressEvent = partial(
                         self.add_start_pos_to_sequence,
-                        start_position_pictograph,
+                        pictograph,
                     )
-                    start_position_pictograph.start_to_end_pos_glyph.hide()
+                    pictograph.start_to_end_pos_glyph.hide()
 
     def add_start_pos_to_sequence(
         self, clicked_start_option: BasePictograph, event: QWidget = None
@@ -178,70 +242,20 @@ class StartPosManager(QObject):
                 return mapping[key]
         return None
 
-    def get_all_start_positions(self) -> list["BasePictograph"]:
-        all_start_positions = []
-        valid_letters = [Letter.α, Letter.β, Letter.Γ]
-        for letter in self.main_widget.pictograph_dicts:
-            if letter in valid_letters:
-                all_start_positions.extend(self.get_variations(letter))
-        return all_start_positions
+    def create_pictograph_from_dict(
+        self, pictograph_dict: dict, target_grid_mode
+    ) -> BasePictograph:
+        """Create a pictograph under the specified grid mode without immediate display."""
+        with self.temporary_grid_mode(target_grid_mode):
+            pictograph = BasePictograph(self.main_widget)
+            pictograph.updater.update_pictograph(pictograph_dict)
 
-    def get_variations(self, start_pos_letter: str) -> list[BasePictograph]:
-        variations = []
-        for pictograph_dict in self.main_widget.pictograph_dicts[start_pos_letter]:
-            if (
-                self.main_widget.settings_manager.global_settings.get_grid_mode()
-                == DIAMOND
-            ):
-                if pictograph_dict["start_pos"] not in [
-                    "alpha1",
-                    "alpha3",
-                    "alpha5",
-                    "alpha7",
-                    "beta1",
-                    "beta3",
-                    "beta5",
-                    "beta7",
-                    "gamma1",
-                    "gamma3",
-                    "gamma5",
-                    "gamma7",
-                    "gamma9",
-                    "gamma11",
-                    "gamma13",
-                    "gamma15",
-                ]:
-                    continue
-                pictograph = self.create_pictograph_from_dict(pictograph_dict)
-            elif (
-                self.main_widget.settings_manager.global_settings.get_grid_mode() == BOX
-            ):
-                if pictograph_dict["start_pos"] not in [
-                    "alpha2",
-                    "alpha4",
-                    "alpha6",
-                    "alpha8",
-                    "beta2",
-                    "beta4",
-                    "beta6",
-                    "beta8",
-                    "gamma2",
-                    "gamma4",
-                    "gamma6",
-                    "gamma8",
-                    "gamma10",
-                    "gamma12",
-                    "gamma14",
-                    "gamma16",
-                ]:
-                    continue
-                pictograph = self.create_pictograph_from_dict(pictograph_dict)
-            variations.append(pictograph)
-        return variations
+        # Append to the list based on the grid mode
+        if target_grid_mode == BOX:
+            self.box_pictographs.append(pictograph)
+        elif target_grid_mode == DIAMOND:
+            self.diamond_pictographs.append(pictograph)
 
-    def create_pictograph_from_dict(self, pictograph_dict: dict) -> BasePictograph:
-        pictograph = BasePictograph(self.main_widget)
-        pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 
     def resize_start_position_pictographs(self) -> None:
@@ -257,3 +271,9 @@ class StartPosManager(QObject):
                 start_option.view.view_scale, start_option.view.view_scale
             )
             start_option.container.styled_border_overlay.resize_styled_border_overlay()
+
+    def reinitialize_pictographs(self):
+        """Reinitialize pictographs when the grid mode changes."""
+        self.clear_start_positions()
+        self.start_options.clear()
+        self.load_relevant_start_positions()

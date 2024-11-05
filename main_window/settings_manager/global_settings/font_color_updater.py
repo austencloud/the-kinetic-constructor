@@ -57,9 +57,10 @@ class FontColorUpdater:
         """Apply font colors to all relevant sections of the main widget."""
         self._update_menu_bar_widget(main_widget, font_color)
         self._update_sequence_widget(main_widget, font_color)
-        self._update_sequence_builder(main_widget, font_color)
-        self._update_dictionary_widget(main_widget, font_color)
-        self._update_learn_widget(main_widget, font_color)
+        self._update_build_tab(main_widget, font_color)
+        self._update_generate_tab(main_widget, font_color)
+        self._update_browse_tab(main_widget, font_color)
+        self._update_learn_tab(main_widget, font_color)
         # self._update_act_tab(main_widget, font_color)
 
     def _update_act_tab(self, main_widget: "MainWidget", font_color: str) -> None:
@@ -98,28 +99,30 @@ class FontColorUpdater:
             font_color,
         )
 
-    def _update_sequence_builder(
-        self, main_widget: "MainWidget", font_color: str
-    ) -> None:
-        manual_builder = main_widget.manual_builder
+    def _update_generate_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         sequence_generator = main_widget.sequence_generator
-        manual_labels = [
-            manual_builder.start_pos_picker.choose_your_start_pos_label,
-            manual_builder.advanced_start_pos_picker.choose_your_start_pos_label,
-        ]
-
         freeform_labels = self._get_freeform_builder_labels(
             sequence_generator.freeform_builder_frame
         )
         circular_labels = self._get_circular_builder_labels(
             sequence_generator.circular_builder_frame
         )
-        combo_box_label = [manual_builder.option_picker.combo_box_label]
 
         self._apply_font_colors(
-            manual_labels + freeform_labels + circular_labels + combo_box_label,
+            freeform_labels + circular_labels,
             font_color,
         )
+        sequence_generator.freeform_builder_frame.continuous_rotation_toggle.update_mode_label_styles()
+        sequence_generator.circular_builder_frame.continuous_rotation_toggle.update_mode_label_styles()
+
+    def _update_build_tab(self, main_widget: "MainWidget", font_color):
+        manual_builder = main_widget.manual_builder
+        manual_labels = [
+            manual_builder.start_pos_picker.choose_your_start_pos_label,
+            manual_builder.advanced_start_pos_picker.choose_your_start_pos_label,
+            manual_builder.option_picker.combo_box_label,
+        ]
+        self._apply_font_colors(manual_labels, font_color)
 
     def _get_freeform_builder_labels(
         self, freeform_builder_frame: "FreeformAutoBuilderFrame"
@@ -143,9 +146,7 @@ class FontColorUpdater:
             circular_builder_frame.turn_intensity_adjuster.intensity_value_label,
         ]
 
-    def _update_dictionary_widget(
-        self, main_widget: "MainWidget", font_color: str
-    ) -> None:
+    def _update_browse_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         dictionary = main_widget.dictionary_widget
         sort_widget = dictionary.browser.options_widget.sort_widget
 
@@ -169,13 +170,13 @@ class FontColorUpdater:
             thumbnail_box.word_label.reload_favorite_icon()
             self._apply_font_color(thumbnail_box.variation_number_label, font_color)
 
-    def _update_learn_widget(self, main_widget: "MainWidget", font_color: str) -> None:
+    def _update_learn_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         learn_widget = main_widget.learn_widget
         self._apply_font_color(learn_widget.lesson_selector.title_label, font_color)
         self._apply_font_colors(
             list(learn_widget.lesson_selector.description_labels.values()), font_color
         )
-
+        learn_widget.lesson_selector.mode_toggle_widget.update_mode_label_styles()
         lesson_widgets: list[BaseLessonWidget] = [
             learn_widget.lesson_1_widget,
             learn_widget.lesson_2_widget,

@@ -31,7 +31,7 @@ class AdvancedStartPosPicker(QWidget):
         self.start_pos_picker = self.manual_builder.start_pos_picker
         self.start_pos_cache: dict[str, list[BasePictograph]] = {}
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
-        self.ori_picker = AdvancedStartPosOriPicker(self)
+        # self.ori_picker = AdvancedStartPosOriPicker(self)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
             self, self.start_pos_cache
@@ -44,8 +44,8 @@ class AdvancedStartPosPicker(QWidget):
         self.layout.addStretch(1)
         self.layout.addWidget(self.choose_your_start_pos_label)
         self.layout.addStretch(1)
-        self.layout.addWidget(self.ori_picker)
-        self.layout.addStretch(1)
+        # self.layout.addWidget(self.ori_picker)
+        # self.layout.addStretch(1)
         self.layout.addLayout(self.grid_layout)
         self.layout.addStretch(1)
 
@@ -103,5 +103,8 @@ class AdvancedStartPosPicker(QWidget):
         )
 
     def resize_advanced_start_pos_picker(self) -> None:
-        self.ori_picker.resize_default_ori_picker()
+        # self.ori_picker.resize_default_ori_picker()
         self.choose_your_start_pos_label.set_stylesheet()
+        # set the spacing in the grid using set_spacing
+        self.grid_layout.setHorizontalSpacing(20)
+        self.grid_layout.setVerticalSpacing(20)

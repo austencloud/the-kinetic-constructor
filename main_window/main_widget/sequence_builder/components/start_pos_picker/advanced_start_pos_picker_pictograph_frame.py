@@ -21,16 +21,3 @@ class AdvancedStartPosPickerPictographFrame(QWidget):
         self.layout.addLayout(self.pictographs_layout)
         self.variation_buttons: dict[str, QPushButton] = {}
         self.start_positions: dict[str, BasePictograph] = {}
-
-    def _add_start_pos_to_layout(self, start_pos: BasePictograph) -> None:
-        start_pos.view.mousePressEvent = (
-            self.clickable_option_handler.get_click_handler(start_pos)
-        )
-        self.pictographs_layout.setSpacing(5)  # Adjust spacing between pictographs
-        self.pictographs_layout.addWidget(start_pos.view)
-        self.advanced_start_pos_picker.start_pos_cache[start_pos.letter] = start_pos
-        key = f"{start_pos.letter}_{start_pos.start_pos}_{start_pos.end_pos}"
-        self.advanced_start_pos_picker.main_widget.pictograph_cache[start_pos.letter][
-            key
-        ] = start_pos
-        self.start_positions[start_pos.letter] = start_pos

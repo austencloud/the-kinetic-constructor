@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from data.constants import IN
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import (
@@ -17,6 +19,10 @@ class SequenceClearer:
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True
     ) -> None:
+        if not self.manual_builder:
+            self.manual_builder = self.sequence_widget.main_widget.manual_builder
+        # if the user is on the advanced start pos picker tab, then don't reset to the start pos picker
+
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
         self._initialize_manual_builder()
@@ -34,6 +40,9 @@ class SequenceClearer:
         if should_reset_to_start_pos_picker:
             self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.last_beat = self.sequence_widget.beat_frame.start_pos
+        self.graph_editor = self.sequence_widget.graph_editor
+        self.graph_editor.adjustment_panel.blue_ori_picker.set_initial_orientation(IN)
+        self.graph_editor.adjustment_panel.red_ori_picker.set_initial_orientation(IN)
 
     def _show_clear_indicator(self, show_indicator: bool) -> None:
         if show_indicator:

@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
     QLayout,
 )
-from data.constants import BLUE, RED
+from data.constants import BLUE, IN, RED
 from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
 from .ori_picker_box.ori_picker_box import OriPickerBox
 from .turns_box.turns_box import TurnsBox
@@ -62,6 +62,9 @@ class BeatAdjustmentPanel(QFrame):
         ori_picker_layout.setSpacing(0)
         ori_picker_layout.addWidget(self.blue_ori_picker)
         ori_picker_layout.addWidget(self.red_ori_picker)
+        self.blue_ori_picker.ori_picker_widget.ori_display_label.setText(IN)
+        self.red_ori_picker.ori_picker_widget.ori_display_label.setText(IN)
+
         return ori_picker_box_set
 
     def _setup_turns_box_set(self):

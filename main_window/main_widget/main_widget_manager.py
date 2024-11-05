@@ -1,6 +1,6 @@
 import json
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QApplication
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
 from utilities.path_helpers import get_images_and_data_path
@@ -80,7 +80,7 @@ class MainWidgetManager:
     def set_grid_mode(self, grid_mode: str) -> None:
         # Set the grid mode and save it directly using QSettings
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
-
+        QApplication.processEvents()
         # Refresh placements and load any required data
         self.main_widget.special_placement_loader.refresh_placements()
         self.pictograph_dicts = (
@@ -95,7 +95,17 @@ class MainWidgetManager:
         start_pos_manager.setup_start_positions()
 
         sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
-        sequence_clearer.clear_sequence(show_indicator=False)
+        if (
+            self.main_widget.manual_builder.stacked_widget.currentWidget()
+            == self.main_widget.manual_builder.advanced_start_pos_picker
+        ):
+            should_reset_to_start_pos_picker = False
+        else:
+            should_reset_to_start_pos_picker = True
+        sequence_clearer.clear_sequence(
+            show_indicator=False,
+            should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
+        )
 
         pictograph_container = (
             self.main_widget.sequence_widget.graph_editor.pictograph_container

@@ -1,3 +1,4 @@
+from tkinter import END
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -12,7 +13,7 @@ from typing import TYPE_CHECKING
 
 from utilities.path_helpers import get_images_and_data_path
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from data.constants import IN, COUNTER, ORI, OUT, CLOCK
+from data.constants import END_ORI, IN, COUNTER, ORI, OUT, CLOCK, START_ORI
 from data.constants import BLUE, RED
 from .ori_selection_dialog import OriSelectionDialog
 
@@ -137,24 +138,65 @@ class OriPickerWidget(QWidget):
         self.ori_display_label.setText(orientation)
 
         # Update the pictograph and emit orientation changes
-        self.json_manager.start_position_handler.update_start_pos_ori(
-            self.color, orientation
-        )
-        self.json_validation_engine.run(is_current_sequence=True)
-        self.ori_adjusted.emit(orientation)
+        # if the sequence is not empty, then update the start pos
+        if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
+            self.json_manager.start_position_handler.update_start_pos_ori(
+                self.color, orientation
+            )
+            self.json_validation_engine.run(is_current_sequence=True)
+            self.ori_adjusted.emit(orientation)
 
-        # Update start position pictograph in the picker if visible
-        start_position_pictographs = (
-            self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.start_pos_picker.pictograph_frame.start_positions
-        )
-        if start_position_pictographs:
-            for pictograph in start_position_pictographs.values():
-                pictograph.props[self.color].updater.update_prop({ORI: orientation})
+            # Update start position pictograph in the picker if visible
+            start_position_pictographs = (
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.start_pos_picker.pictograph_frame.start_positions
+            )
+            if start_position_pictographs:
+                for pictograph in start_position_pictographs.values():
+                    pictograph.props[self.color].updater.update_prop({ORI: orientation})
+                    pictograph.updater.update_pictograph()
+                    QApplication.processEvents()
+            self.option_picker = (
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
+            )
+            QApplication.processEvents()
+            self.option_picker.update_option_picker()
+        else:
+            # update the start pos picker's pictographs
+            start_pos_picker = (
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.start_pos_picker
+            )
+            for (
+                pictograph
+            ) in start_pos_picker.pictograph_frame.start_positions.values():
+                pictograph.updater.update_pictograph(
+                    {
+                        f"{self.color}_attributes": {
+                            START_ORI: orientation,
+                            END_ORI: orientation,
+                        }
+                    }
+                )
                 pictograph.updater.update_pictograph()
                 QApplication.processEvents()
-        self.option_picker = self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
-        QApplication.processEvents()
-        self.option_picker.update_option_picker()
+
+            grid_mode = (
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.settings_manager.global_settings.get_grid_mode()
+            )
+            if grid_mode == "box":
+                pictograph_list = start_pos_picker.start_pos_manager.box_pictographs
+            elif grid_mode == "diamond":
+                pictograph_list = start_pos_picker.start_pos_manager.diamond_pictographs
+            for pictograph in pictograph_list:
+                pictograph.updater.update_pictograph(
+                    {
+                        f"{self.color}_attributes": {
+                            START_ORI: orientation,
+                            END_ORI: orientation,
+                        }
+                    }
+                )
+                pictograph.updater.update_pictograph()
+                QApplication.processEvents()
 
     def rotate_cw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index + 1) % len(
