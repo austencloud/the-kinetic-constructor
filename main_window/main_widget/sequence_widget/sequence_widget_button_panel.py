@@ -10,7 +10,8 @@ from main_window.main_widget.dictionary_widget.full_screen_image_overlay import 
 from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog import (
     LayoutOptionsDialog,
 )
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
 from main_window.main_widget.sequence_widget.button_panel_placeholder import (

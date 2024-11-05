@@ -2,8 +2,11 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
+
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
+    StartPositionBeatView,
+)
 from .beat_view import BeatView
-from .start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame

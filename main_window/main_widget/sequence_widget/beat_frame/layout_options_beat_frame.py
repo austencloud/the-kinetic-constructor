@@ -2,8 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
+    StartPositionBeatView,
+)
+
 from .beat_view import BeatView
-from .start_pos_beat import StartPositionBeatView
 
 
 if TYPE_CHECKING:

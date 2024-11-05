@@ -2,6 +2,7 @@ import json
 from turtle import st
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import Qt
 from Enums.PropTypes import PropType
 from data.constants import IN
 from letter_determiner.letter_determiner import LetterDeterminer
@@ -79,30 +80,19 @@ class MainWidgetManager:
         self.main_widget.letter_determiner = LetterDeterminer(self.main_widget)
 
     def set_grid_mode(self, grid_mode: str) -> None:
-        # Set the grid mode and save it directly using QSettings
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
-
-        # Refresh placements and load any required data
         self.main_widget.special_placement_loader.refresh_placements()
         self.pictograph_dicts = (
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
         )
 
-        # Clear and re-setup necessary components based on new grid mode
         start_pos_picker = self.main_widget.manual_builder.start_pos_picker
         start_pos_picker.display_variations(grid_mode)
         advanced_start_pos_picker = (
             self.main_widget.manual_builder.advanced_start_pos_picker
         )
         advanced_start_pos_picker.display_variations(grid_mode)
-
-        # set the ori pickers to IN
-        self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.set_orientation(
-            IN
-        )
-        self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.set_orientation(
-            IN
-        )
 
         sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
         if (
@@ -116,9 +106,15 @@ class MainWidgetManager:
             show_indicator=False,
             should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
         )
-
+        self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.set_orientation(
+            IN
+        )
+        self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.set_orientation(
+            IN
+        )
         pictograph_container = (
             self.main_widget.sequence_widget.graph_editor.pictograph_container
         )
         pictograph_container.GE_pictograph_view.set_to_blank_grid()
         self._setup_special_placements()
+        QApplication.restoreOverrideCursor()

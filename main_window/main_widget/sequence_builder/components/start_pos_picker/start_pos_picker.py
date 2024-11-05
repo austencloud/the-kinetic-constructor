@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 from typing import TYPE_CHECKING
+from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, START_POS, END_POS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
@@ -151,3 +152,58 @@ class StartPosPicker(BaseStartPosPicker):
             start_option.container.styled_border_overlay.resize_styled_border_overlay()
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.variations_button.resize_variations_button()
+
+    def convert_current_sequence_json_entry_to_start_pos_pictograph(
+        self, start_pos_entry
+    ) -> StartPositionBeat:
+        start_position_pictograph = self.get_start_pos_pictograph(
+            start_pos_entry[1] if start_pos_entry else None
+        )
+        start_pos_beat = StartPositionBeat(
+            self.main_widget.sequence_widget.beat_frame,
+        )
+        start_pos_beat.updater.update_pictograph(
+            start_position_pictograph.pictograph_dict
+        )
+
+        return start_pos_beat
+
+
+    def get_start_pos_pictograph(self, start_pos_data) -> "BasePictograph":
+        if not start_pos_data:
+            return None
+        start_pos_key = start_pos_data["end_pos"]
+        letter_str = self.start_pos_key_to_letter(start_pos_key)
+        letter = Letter(letter_str)
+        matching_letter_pictographs = self.main_widget.pictograph_dicts.get(letter, [])
+        for pictograph_dict in matching_letter_pictographs:
+            if pictograph_dict["start_pos"] == start_pos_key:
+
+                pictograph_dict["blue_attributes"]["start_ori"] = start_pos_data[
+                    "blue_attributes"
+                ]["end_ori"]
+                pictograph_dict["red_attributes"]["start_ori"] = start_pos_data[
+                    "red_attributes"
+                ]["end_ori"]
+                pictograph_factory = (
+                    self.main_widget.sequence_widget.beat_frame.beat_factory
+                )
+                pictograph_key = (
+                    self.main_widget.pictograph_key_generator.generate_pictograph_key(
+                        pictograph_dict
+                    )
+                )
+                start_pos_pictograph = pictograph_factory.create_start_pos_beat(
+                    pictograph_key, pictograph_dict
+                )
+                return start_pos_pictograph
+
+        print(f"No matching start position found for key: {start_pos_key}")
+        return None
+
+    def start_pos_key_to_letter(self, start_pos_key: str) -> str:
+        mapping = {"alpha": "α", "beta": "β", "gamma": "Γ"}
+        for key in mapping:
+            if start_pos_key.startswith(key):
+                return mapping[key]
+        return None

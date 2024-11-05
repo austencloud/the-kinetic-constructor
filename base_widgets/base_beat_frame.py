@@ -8,7 +8,7 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_frame_getter import
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
+    from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import StartPositionBeatView
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
     from main_window.main_widget.main_widget import MainWidget
     from main_window.main_widget.dictionary_widget.dictionary_widget import (

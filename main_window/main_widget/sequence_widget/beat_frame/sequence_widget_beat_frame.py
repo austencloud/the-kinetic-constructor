@@ -2,6 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtGui import QKeyEvent
 
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+)
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
+    StartPositionBeatView,
+)
 from main_window.main_widget.sequence_widget.sequence_widget_pictograph_factory import (
     BeatFactory,
 )
@@ -17,7 +23,6 @@ from .sequence_widget_beat_frame_layout_manager import (
 from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
-from .start_pos_beat import StartPositionBeat, StartPositionBeatView
 from .beat_view import BeatView
 from base_widgets.base_beat_frame import BaseBeatFrame
 

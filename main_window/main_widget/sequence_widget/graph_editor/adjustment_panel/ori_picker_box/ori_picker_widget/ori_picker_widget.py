@@ -133,8 +133,14 @@ class OriPickerWidget(QWidget):
             )
             if start_position_pictographs:
                 for pictograph in start_position_pictographs.values():
-                    pictograph.props[self.color].updater.update_prop({ORI: orientation})
-                    pictograph.updater.update_pictograph()
+                    pictograph.updater.update_pictograph(
+                        {
+                            f"{self.color}_attributes": {
+                                START_ORI: orientation,
+                                END_ORI: orientation,
+                            }
+                        }
+                    )
             self.option_picker = (
                 self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
             )

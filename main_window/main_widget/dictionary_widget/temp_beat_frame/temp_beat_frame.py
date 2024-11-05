@@ -16,6 +16,8 @@ from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.ima
 )
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
+)
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
 
@@ -121,9 +123,7 @@ class TempBeatFrame(BaseBeatFrame):
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
-        self.start_pos_manager = (
-            self.main_widget.manual_builder.start_pos_picker.start_pos_manager
-        )
+
         self.manual_builder = self.main_widget.manual_builder
         if not current_sequence_json:
             return
@@ -137,7 +137,7 @@ class TempBeatFrame(BaseBeatFrame):
             grid_mode
         )
 
-        start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
+        start_pos_beat = self.manual_builder.start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)

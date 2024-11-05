@@ -28,6 +28,8 @@ class JsonStartPositionHandler:
             ),
             "letter": start_pos_pictograph.letter.name,
             "end_pos": start_pos_pictograph.end_pos,
+            "timing": start_pos_pictograph.timing,
+            "direction": start_pos_pictograph.direction,
             "blue_attributes": {
                 "start_loc": start_pos_pictograph.blue_motion.start_loc,
                 "end_loc": start_pos_pictograph.blue_motion.end_loc,

@@ -25,9 +25,7 @@ class BeatFramePopulator:
         self.current_sequence_json = current_sequence_json  # Store the sequence JSON
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message("Loading sequence...")
-        self.start_pos_manager = (
-            self.main_widget.manual_builder.start_pos_picker.start_pos_manager
-        )
+
         self.manual_builder = self.main_widget.manual_builder
 
         if not self.current_sequence_json:
@@ -66,7 +64,8 @@ class BeatFramePopulator:
                 print(" Warning - no grid mode found in sequence metadata")
 
     def _set_start_position(self):
-        start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
+        start_pos_picker = self.manual_builder.start_pos_picker
+        start_pos_beat = start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             self.current_sequence_json
         )
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
