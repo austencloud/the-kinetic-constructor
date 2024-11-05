@@ -9,7 +9,9 @@ from PyQt6.QtGui import QIcon, QFont, QFontMetrics
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_widget.graph_editor.adjustment_panel.ori_picker_box.ori_picker_widget.clickable_label import ClickableOriLabel
+from main_window.main_widget.sequence_widget.graph_editor.adjustment_panel.ori_picker_box.ori_picker_widget.clickable_label import (
+    ClickableOriLabel,
+)
 from utilities.path_helpers import get_images_and_data_path
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import END_ORI, IN, COUNTER, ORI, OUT, CLOCK, START_ORI
@@ -18,8 +20,6 @@ from .ori_selection_dialog import OriSelectionDialog
 
 if TYPE_CHECKING:
     from ..ori_picker_box import OriPickerBox
-
-
 
 
 class OriPickerWidget(QWidget):
@@ -43,12 +43,11 @@ class OriPickerWidget(QWidget):
         self._setup_layout()
         self._attach_listeners()
 
-
     def _setup_components(self) -> None:
         self.orientation_text = QLabel("Orientation", self)
         self.orientation_text.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.ori_display_label = ClickableOriLabel(self)
+        self.clickable_ori_label = ClickableOriLabel(self)
 
         path = get_images_and_data_path("images/icons")
         self.ccw_button = self._create_rotate_button(
@@ -68,7 +67,7 @@ class OriPickerWidget(QWidget):
         main_layout.addStretch(1)
         main_layout.addWidget(self.orientation_text)
         main_layout.addStretch(1)
-        main_layout.addWidget(self.ori_display_label)
+        main_layout.addWidget(self.clickable_ori_label)
         main_layout.addStretch(1)
 
         button_layout = QHBoxLayout()
@@ -78,8 +77,10 @@ class OriPickerWidget(QWidget):
         main_layout.addStretch(1)
 
     def _attach_listeners(self) -> None:
-        self.ori_display_label.leftClicked.connect(self._on_orientation_display_clicked)
-        self.ori_display_label.rightClicked.connect(
+        self.clickable_ori_label.leftClicked.connect(
+            self._on_orientation_display_clicked
+        )
+        self.clickable_ori_label.rightClicked.connect(
             self._on_orientation_label_right_clicked
         )
         self.ori_adjusted.connect(self.beat_frame.updater.update_beats_from_json)
@@ -96,7 +97,7 @@ class OriPickerWidget(QWidget):
                 "red_attributes"
             ]["start_ori"]
         self.current_orientation_index = self.orientations.index(initial_orientation)
-        self.ori_display_label.setText(initial_orientation)
+        self.clickable_ori_label.setText(initial_orientation)
 
     def _on_orientation_display_clicked(self):
         dialog = OriSelectionDialog(self)
@@ -118,7 +119,7 @@ class OriPickerWidget(QWidget):
     def set_orientation(self, orientation: str) -> None:
         """Set the displayed orientation and apply it to the related pictograph."""
         self.current_orientation_index = self.orientations.index(orientation)
-        self.ori_display_label.setText(orientation)
+        self.clickable_ori_label.setText(orientation)
 
         if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
             self.json_manager.start_position_handler.update_start_pos_ori(
@@ -214,7 +215,7 @@ class OriPickerWidget(QWidget):
         font_size = int(self.ori_picker_box.graph_editor.width() // 30)
         font = QFont("Arial", font_size)
         font.setWeight(QFont.Weight.Bold)
-        self.ori_display_label.setFont(font)
+        self.clickable_ori_label.setFont(font)
 
         font_metrics = QFontMetrics(font)
         text_width = font_metrics.horizontalAdvance("counter")
@@ -222,11 +223,11 @@ class OriPickerWidget(QWidget):
 
         required_width = text_width + padding
 
-        self.ori_display_label.setMinimumWidth(required_width)
+        self.clickable_ori_label.setMinimumWidth(required_width)
 
         border_size = int(required_width / 60) or 1  # Ensure border size is at least 1
         border_color = self._get_border_color()
-        self.ori_display_label.setStyleSheet(
+        self.clickable_ori_label.setStyleSheet(
             f"""
             QLabel {{
                 border: {border_size}px solid {border_color};

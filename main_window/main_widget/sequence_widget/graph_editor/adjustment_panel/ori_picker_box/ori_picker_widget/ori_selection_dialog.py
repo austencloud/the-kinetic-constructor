@@ -47,7 +47,7 @@ class OriSelectionDialog(QDialog):
 
     def resize_buttons(self):
         """Resize buttons according to the orientation label's size."""
-        ori_label_width = self.ori_picker_widget.ori_display_label.width()
+        ori_label_width = self.ori_picker_widget.clickable_ori_label.width()
         button_height = int(self.ori_picker_widget.ori_picker_box.height() // 3)
         font_size = int(button_height * 0.5)  # Font size based on button height
 

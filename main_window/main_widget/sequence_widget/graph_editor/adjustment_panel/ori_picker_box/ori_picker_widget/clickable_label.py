@@ -1,14 +1,10 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-)
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QMouseEvent
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from .ori_picker_widget import OriPickerWidget
-
 
 class ClickableOriLabel(QLabel):
     leftClicked = pyqtSignal()
