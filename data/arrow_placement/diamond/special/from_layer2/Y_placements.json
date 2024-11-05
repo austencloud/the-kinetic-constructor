@@ -354,9 +354,9 @@
       "pro": [-120, 155]
     },
     "(o, 1.5, 2.5)": {
-      "static_rot_angle_override": true,
-      "static": [30, 15],
-      "pro": [-165, 150]
+      "swap_beta_n_radial_blue_pro_nw_red_static_n": true,
+      "static": [-20, 25],
+      "pro": [-140, 165]
     },
     "(o, 1.5, 3)": {
       "pro": [-140, 145]
@@ -483,6 +483,10 @@
       "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true,
       "static_rot_angle_override": true,
       "static": [100, 100]
+    },
+    "(1, 0)": {
+      "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true,
+      "swap_beta_s_nonradial_blue_pro_se_red_static_s": true
     }
   }
 }

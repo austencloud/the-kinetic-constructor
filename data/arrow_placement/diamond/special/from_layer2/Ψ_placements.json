@@ -278,7 +278,9 @@
     },
     "(o, 3, 1.5)": {
       "static_rot_angle_override": true,
-      "dash": [-20, -165]
+      "dash_to_layer2_rot_angle_override": true,
+      "dash": [-5, -120],
+      "static_to_layer1_rot_angle_override": true
     },
     "(o, 3, 2)": {
       "static_rot_angle_override": true,

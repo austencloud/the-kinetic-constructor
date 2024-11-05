@@ -26,9 +26,6 @@
       "static_rot_angle_override": true,
       "static": [35, -15]
     },
-    "(ccw, 0, 3)": {
-      "static": [-35, 15]
-    },
     "(ccw, 0, 2)": {
       "swap_beta_s_radial_blue_static_s_red_dash_e": true,
       "swap_beta_e_radial_blue_static_e_red_dash_n": true,
@@ -224,6 +221,10 @@
     },
     "(ccw, 1, 0)": {
       "swap_beta_w_radial_blue_dash_n_red_static_w": true
+    },
+    "(ccw, 0, 3)": {
+      "static_rot_angle_override": true,
+      "static": [-15, 0]
     }
   }
 }

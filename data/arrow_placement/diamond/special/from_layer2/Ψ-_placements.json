@@ -124,11 +124,11 @@
     },
     "(o, 2, 3)": {
       "red_rot_angle_override": true,
-      "red": [-40, -105]
+      "red": [-45, -100]
     },
     "(o, 3, 2)": {
       "blue_rot_angle_override": true,
-      "blue": [-40, -105]
+      "blue": [-45, -100]
     },
     "(o, 3, 2.5)": {
       "blue_rot_angle_override": true,

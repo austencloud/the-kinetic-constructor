@@ -250,6 +250,9 @@
     },
     "(s, 3, 1)": {
       "dash_rot_angle_override": true
+    },
+    "(o, 2, 2)": {
+      "swap_beta_s_nonradial_blue_dash_e_red_anti_se": true
     }
   }
 }

@@ -20,6 +20,9 @@
     "(s, 1, 2)": {
       "static_rot_angle_override": true,
       "static": [20, 0]
+    },
+    "(s, 1.5, 1)": {
+      "static": [110, 0]
     }
   }
 }

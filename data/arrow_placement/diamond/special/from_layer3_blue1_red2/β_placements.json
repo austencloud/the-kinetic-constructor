@@ -201,6 +201,9 @@
     "(cw, 1.5, 0)": {
       "blue_rot_angle_override": true,
       "blue": [0, 20]
+    },
+    "(cw, 2.5, 0)": {
+      "swap_beta_e_nonradial_blue_static_e_red_static_e": true
     }
   }
 }

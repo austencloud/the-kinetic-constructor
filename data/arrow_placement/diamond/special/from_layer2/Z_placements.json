@@ -276,8 +276,9 @@
       "anti": [-50, 10]
     },
     "(o, 2.5, 2)": {
-      "anti": [-50, 45],
-      "static_rot_angle_override": true
+      "anti": [-50, 40],
+      "static_rot_angle_override": true,
+      "static_to_layer2_rot_angle_override": true
     },
     "(o, 2.5, 2.5)": {
       "static_rot_angle_override": true,
@@ -328,6 +329,7 @@
       "static": [0, -90],
       "swap_beta_e_nonradial_blue_static_e_red_anti_se": true,
       "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true
-    }
+    },
+    "(0, 0)": {}
   }
 }
