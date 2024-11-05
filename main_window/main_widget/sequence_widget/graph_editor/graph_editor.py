@@ -1,21 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy, QStackedLayout
 from PyQt6.QtCore import Qt
 
-from data.constants import IN
 from .graph_editor_layout_manager import GraphEditorLayoutManager
 from .graph_editor_state_manager import GraphEditorStateManager
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer
-
-if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
-
-
-# graph_editor.py
-
-from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy, QStackedLayout
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -57,9 +47,6 @@ class GraphEditor(QFrame):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
         self.adjustment_panel.setMinimumHeight(0)
-        # set both ori picker boxes to IN orientation
-        # self.adjustment_panel.blue_ori_picker.set_initial_orientation(IN)
-        # self.adjustment_panel.red_ori_picker.set_initial_orientation(IN)
 
     def resize_graph_editor(self) -> None:
         graph_editor_height = self.get_graph_editor_height()

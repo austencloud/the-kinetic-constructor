@@ -3,6 +3,7 @@ from turtle import st
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from Enums.PropTypes import PropType
+from data.constants import IN
 from letter_determiner.letter_determiner import LetterDeterminer
 from utilities.path_helpers import get_images_and_data_path
 
@@ -94,6 +95,15 @@ class MainWidgetManager:
             self.main_widget.manual_builder.advanced_start_pos_picker
         )
         advanced_start_pos_picker.display_variations(grid_mode)
+
+        # set the ori pickers to IN
+        self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.set_orientation(
+            IN
+        )
+        self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.set_orientation(
+            IN
+        )
+
         sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
         if (
             self.main_widget.manual_builder.stacked_widget.currentWidget()

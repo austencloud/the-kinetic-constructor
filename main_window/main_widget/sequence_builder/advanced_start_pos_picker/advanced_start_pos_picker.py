@@ -42,9 +42,9 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         for variation in variations:
             self.start_pos_cache[variation.letter.value].append(variation)
 
-        all_variations: list["BasePictograph"] = []
+        self.all_variations: list["BasePictograph"] = []
         for letter in letters:
-            all_variations.extend(self.start_pos_cache[letter])
+            self.all_variations.extend(self.start_pos_cache[letter])
 
         # Clear the grid layout first
         for i in reversed(range(self.grid_layout.count())):
@@ -53,7 +53,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
             widget_to_remove.setParent(None)
 
         # Add variations to the grid layout
-        for i, variation in enumerate(all_variations):
+        for i, variation in enumerate(self.all_variations):
             row = i // 4
             col = i % 4
             self.grid_layout.addWidget(variation.view, row, col)
@@ -81,3 +81,4 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.choose_your_start_pos_label.set_stylesheet()
         self.grid_layout.setHorizontalSpacing(20)
         self.grid_layout.setVerticalSpacing(20)
+
