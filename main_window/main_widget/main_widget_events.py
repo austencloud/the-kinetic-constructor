@@ -34,9 +34,6 @@ class MainWidgetEvents:
 
     def resizeEvent(self, event) -> None:
         super(self.main_widget.__class__, self.main_widget).resizeEvent(event)
-        self.main_widget.setStyleSheet(
-            self.main_widget.tab_bar_styler.get_tab_stylesheet()
-        )
+
         self.main_widget.navigation_widget.resize_navigation_widget()
         self.main_widget.menu_bar_widget.resize_menu_bar_widget()
-
