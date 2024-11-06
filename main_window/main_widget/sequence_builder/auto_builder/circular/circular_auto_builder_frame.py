@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
 from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
 from ..widgets.permutation_type_toggle import PermutationTypeToggle
 from ..widgets.rotation_type_toggle import RotationTypeToggle

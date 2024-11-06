@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
+from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from Enums.Enums import LetterType
 from data.constants import OPP, SAME
 from PyQt6.QtCore import Qt

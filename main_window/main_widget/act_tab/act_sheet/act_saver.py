@@ -1,5 +1,4 @@
 import json
-import os
 from typing import TYPE_CHECKING
 
 from utilities.path_helpers import get_user_editable_resource_path

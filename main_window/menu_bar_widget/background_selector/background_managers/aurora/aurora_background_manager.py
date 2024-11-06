@@ -2,9 +2,7 @@
 
 from PyQt6.QtGui import QLinearGradient, QColor, QPainter
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import Qt
 import math
-import random
 
 from .sparkle_manager import SparkleManager
 from .blob_manager import BlobManager

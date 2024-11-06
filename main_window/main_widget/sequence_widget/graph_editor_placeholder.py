@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSpacerItem, QSizePolicy, QApplication, QFrame
+from PyQt6.QtWidgets import QSizePolicy, QFrame
 
 if TYPE_CHECKING:
     from .sequence_widget import SequenceWidget

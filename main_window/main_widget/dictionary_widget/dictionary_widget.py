@@ -1,16 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-
-from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
-    DictionaryBrowser,
-)
-from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
-    DictionaryInitialSelectionsWidget,
-)
-from main_window.main_widget.dictionary_widget.dictionary_deletion_handler import (
-    DictionaryDeletionHandler,
-)
+from .dictionary_browser.dictionary_browser import DictionaryBrowser
+from .dictionary_deletion_handler import DictionaryDeletionHandler
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
 from .dictionary_sequence_populator import DictionarySequencePopulator
@@ -35,14 +27,6 @@ class DictionaryWidget(QWidget):
         self._setup_ui()
         self.initialized = False
 
-    def update_background_manager(self, bg_type: str):
-        if self.background_manager:
-            self.background_manager.stop_animation()
-        self.background_manager = self.global_settings.setup_background_manager(self)
-        self.background_manager.update_required.connect(self.update)
-        self.background_manager.start_animation()
-        self.update()
-
     def _setup_ui(self) -> None:
         self._setup_handlers()
         self.browser = DictionaryBrowser(self)
@@ -53,7 +37,6 @@ class DictionaryWidget(QWidget):
         self.deletion_handler = DictionaryDeletionHandler(self)
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
-        # self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -64,7 +47,6 @@ class DictionaryWidget(QWidget):
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
         self.preview_area.resize_preview_area()
-        # self.initial_selection_widget.resize_initial_selections_widget()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)

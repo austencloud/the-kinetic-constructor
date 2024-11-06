@@ -1,20 +1,8 @@
 # ori_picker_widget.py
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from PyQt6.QtGui import QFont, QFontMetrics
-from PyQt6.QtCore import Qt, QPoint, pyqtSignal
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
-from data.constants import (
-    HEX_BLUE,
-    HEX_RED,
-    IN,
-    COUNTER,
-    OUT,
-    CLOCK,
-    START_ORI,
-    END_ORI,
-    RED,
-    BLUE,
-)
+from data.constants import IN, COUNTER, OUT, CLOCK
 from .ori_setter import OrientationSetter
 from .ori_text_label import OrientationTextLabel
 from .clickable_ori_label import ClickableOriLabel
@@ -22,7 +10,6 @@ from .rotate_buttons_widget import RotateButtonsWidget
 
 if TYPE_CHECKING:
     from ..ori_picker_box import OriPickerBox
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class OriPickerWidget(QWidget):
@@ -67,4 +54,3 @@ class OriPickerWidget(QWidget):
         self.orientation_label.resize_orientation_label()
         self.clickable_ori_label.resize_clickable_ori_label()
         self.rotate_buttons_widget.resize_rotate_buttons_widget()
-

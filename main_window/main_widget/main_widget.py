@@ -1,6 +1,6 @@
-from PyQt6.QtGui import QKeyEvent, QCloseEvent
+from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget, QSplitter
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
@@ -32,7 +32,6 @@ if TYPE_CHECKING:
     )
     from .dictionary_widget.dictionary_widget import DictionaryWidget
     from .learn_widget.learn_widget import LearnWidget
-    from styles.main_widget_tab_bar_styler import MainWidgetTabBarStyler
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
         SvgManager,
     )

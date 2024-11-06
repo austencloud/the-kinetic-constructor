@@ -1,15 +1,11 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.auto_builder.sequence_generator_widget import (
         SequenceGeneratorWidget,
-    )
-    from main_window.main_widget.sequence_builder.auto_builder.base_classes.base_auto_builder_frame import (
-        BaseAutoBuilderFrame,
     )
 
 

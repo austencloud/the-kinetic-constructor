@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
-from data.constants import BLUE_START_ORI, BLUE_TURNS, IN, RED_START_ORI, RED_TURNS
+from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
 from .components.start_pos_picker.start_pos_picker import StartPosPicker

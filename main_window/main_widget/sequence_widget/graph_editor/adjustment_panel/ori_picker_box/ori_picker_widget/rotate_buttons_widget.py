@@ -1,7 +1,6 @@
 # rotate_buttons_widget.py
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from PyQt6.QtCore import QSize
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 from utilities.path_helpers import get_images_and_data_path
 from .rotate_button import RotateButton
 

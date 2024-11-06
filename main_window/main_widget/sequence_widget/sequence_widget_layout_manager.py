@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QSizePolicy, QSpacerItem
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QSizePolicy
 
 from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
     GraphEditorPlaceholder,

@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.sequence_builder.auto_builder.base_classes.customize_your_sequence_label import (
-    CustomizeSequenceLabel,
-)
 
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster

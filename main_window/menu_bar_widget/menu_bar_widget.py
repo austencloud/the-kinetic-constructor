@@ -12,7 +12,6 @@ from .visibility_selector import VisibilitySelector
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_window import MainWindow
 
 
 class MenuBarWidget(QWidget):

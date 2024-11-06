@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
-from PyQt6.QtCore import Qt
 from ..widgets.letter_type_picker import LetterTypePicker
 from .freeform_auto_builder import FreeFormAutoBuilder
 

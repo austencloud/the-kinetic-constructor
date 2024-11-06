@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
-from .act_tab.act_tab import ActTab
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget

@@ -20,7 +20,7 @@ class DictionaryBrowserLayoutManager:
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.browser.setContentsMargins(0, 0, 0, 0)
 
-        initial_layout = QVBoxLayout(self.browser.initial_selection_widget)
+        initial_layout = QVBoxLayout()
         initial_layout.addWidget(self.browser.initial_selection_widget)
 
         self.main_content_layout = QVBoxLayout(self.main_content_widget)

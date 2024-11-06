@@ -1,7 +1,7 @@
 # options_dialog.py
 from PyQt6.QtWidgets import QDialog, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt
-from typing import Callable, List, TYPE_CHECKING
+from typing import Callable, TYPE_CHECKING
 
 from main_window.menu_bar_widget.base_selector import BaseSelector
 

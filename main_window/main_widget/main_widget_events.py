@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QKeyEvent, QPainter, QCloseEvent
+from PyQt6.QtGui import QKeyEvent, QPainter
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:

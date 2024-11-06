@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QFrame, QSizePolicy, QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget_button_panel import SequenceWidgetButtonPanel
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class ButtonPanelPlaceholder(QFrame):

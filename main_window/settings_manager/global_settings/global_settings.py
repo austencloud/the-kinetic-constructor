@@ -1,4 +1,3 @@
-from PyQt6.QtCore import QSettings
 from typing import Optional, TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.menu_bar_widget.background_selector.background_managers.aurora.aurora_background_manager import (

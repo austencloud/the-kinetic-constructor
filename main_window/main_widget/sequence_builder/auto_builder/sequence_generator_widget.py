@@ -100,7 +100,6 @@ class SequenceGeneratorWidget(QWidget):
 
     def dummy_function(self):
         """Placeholder function to ensure there's always a connected slot."""
-        pass
 
     def show_freeform_frame(self):
         """Display Freeform frame by setting it in the stacked layout."""

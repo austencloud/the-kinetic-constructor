@@ -8,9 +8,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.graph_editor.adjustment_panel.ori_picker_box.ori_picker_widget.rotate_buttons_widget import (
         RotateButtonsWidget,
     )
-    from main_window.main_widget.sequence_widget.graph_editor.adjustment_panel.ori_picker_box.ori_picker_widget.ori_picker_widget import (
-        OriPickerWidget,
-    )
 
 
 class RotateButton(QPushButton):

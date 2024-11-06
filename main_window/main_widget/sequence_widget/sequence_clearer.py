@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from data.constants import IN
 
 
 if TYPE_CHECKING:

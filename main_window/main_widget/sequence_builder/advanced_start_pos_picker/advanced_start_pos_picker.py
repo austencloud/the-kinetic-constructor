@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QGridLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from data.constants import BOX, DIAMOND
+from data.constants import BOX
 from main_window.main_widget.sequence_builder.components.start_pos_picker.base_start_pos_picker import (
     BaseStartPosPicker,
 )

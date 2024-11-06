@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QWidget, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QPushButton, QSizePolicy
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:

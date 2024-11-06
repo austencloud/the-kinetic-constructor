@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 from .go_back_button import GoBackToFilterChoiceButton
 from .sequence_count_label import SequenceCountLabel
-from .dictionary_browser_resizer import DictionaryBrowserResizer
 from .dictionary_filter_manager import DictionaryFilterManager
 from .dictionary_progress_bar import DictionaryProgressBar
 from .dictionary_browser_getter import DictionaryBrowserGetter

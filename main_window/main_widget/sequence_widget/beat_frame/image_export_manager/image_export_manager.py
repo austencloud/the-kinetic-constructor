@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.act_tab.act import Act
 
 
 from .image_export_layout_handler import ImageExportLayoutHandler

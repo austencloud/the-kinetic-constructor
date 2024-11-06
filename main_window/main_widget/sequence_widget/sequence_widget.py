@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
-from PyQt6.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve, QRect
 
 from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_tab import (
     GraphEditorToggleTab,
@@ -16,7 +15,6 @@ from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionary
 from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
 from .graph_editor.graph_editor import GraphEditor
-from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .labels.sequence_widget_indicator_label import SequenceWidgetIndicatorLabel
 from .sequence_widget_button_panel import SequenceWidgetButtonPanel
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea

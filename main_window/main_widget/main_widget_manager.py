@@ -1,5 +1,4 @@
 import json
-from turtle import st
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
@@ -21,7 +20,6 @@ from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 from .pictograph_key_generator import PictographKeyGenerator
 from .special_placement_loader import SpecialPlacementLoader
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import SvgManager
-from styles.main_widget_tab_bar_styler import MainWidgetTabBarStyler
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget

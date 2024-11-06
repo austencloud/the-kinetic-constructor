@@ -1,6 +1,6 @@
 # user_profile_selector.py
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QDialog, QPushButton, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QFont
