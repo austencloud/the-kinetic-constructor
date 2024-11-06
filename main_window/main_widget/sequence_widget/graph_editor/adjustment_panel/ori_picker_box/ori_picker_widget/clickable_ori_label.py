@@ -25,6 +25,7 @@ class ClickableOriLabel(QLabel):
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.leftClicked.connect(self._on_orientation_display_clicked)
         self.rightClicked.connect(self._on_orientation_label_right_clicked)
+        self.dialog = OriSelectionDialog(self.ori_picker_widget)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
@@ -66,10 +67,9 @@ class ClickableOriLabel(QLabel):
             return "black"
 
     def _on_orientation_display_clicked(self):
-        dialog = OriSelectionDialog(self.ori_picker_widget)
-        dialog.move(self.mapToGlobal(QPoint(0, 0)))
-        if dialog.exec():
-            new_orientation = dialog.selected_orientation
+        self.dialog.move(self.mapToGlobal(QPoint(0, 0)))
+        if self.dialog.exec():
+            new_orientation = self.dialog.selected_orientation
             self.ori_picker_widget.ori_setter.set_orientation(new_orientation)
 
     def _on_orientation_label_right_clicked(self):

@@ -1,5 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy, QStackedLayout
+from PyQt6.QtWidgets import (
+    QFrame,
+    QVBoxLayout,
+    QHBoxLayout,
+    QSizePolicy,
+    QStackedLayout,
+)
 from PyQt6.QtCore import Qt
 
 from .graph_editor_layout_manager import GraphEditorLayoutManager
@@ -59,7 +65,6 @@ class GraphEditor(QFrame):
 
         self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()
-        self.adjustment_panel.resize_beat_adjustment_panel()
         self.raise_()
 
     def get_graph_editor_height(self):

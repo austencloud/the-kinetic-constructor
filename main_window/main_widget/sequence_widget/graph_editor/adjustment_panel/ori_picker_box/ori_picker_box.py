@@ -56,5 +56,6 @@ class OriPickerBox(QFrame):
             f"}}"
         )
 
-    def resize_ori_picker_box(self) -> None:
+    def resizeEvent(self, event):
         self.update_styles()
+        super().resizeEvent(event)

@@ -10,6 +10,8 @@ from PyQt6.QtWidgets import QHBoxLayout
 
 
 class DirectSetTurnsDialog(QDialog):
+    buttons: dict[str, DirectSetTurnsButton] = {}
+
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         super().__init__(
             turns_widget, Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
@@ -17,15 +19,16 @@ class DirectSetTurnsDialog(QDialog):
         self.turns_widget = turns_widget
         self.turns_box = turns_widget.turns_box
         self.turns_display_frame = turns_widget.turns_display_frame
-        self.buttons: dict[str, DirectSetTurnsButton] = {}
         self._set_dialog_style()
-        self.layout = None
+        self._setup_buttons()
+        self._setup_layout()
 
     def _set_dialog_style(self):
+        border_color = HEX_BLUE if self.turns_box.color == BLUE else HEX_RED
         self.setStyleSheet(
             f"""
             QDialog {{
-                border: 2px solid {HEX_BLUE if self.turns_box.color == BLUE else HEX_RED};
+                border: 2px solid {border_color};
                 border-radius: 5px;
             }}
         """
@@ -46,17 +49,15 @@ class DirectSetTurnsDialog(QDialog):
             self.buttons[value] = button
 
     def _setup_layout(self):
-        if not self.layout:
-            self.layout: QHBoxLayout = QHBoxLayout(self)
-            self.layout.setContentsMargins(0, 0, 0, 0)
-            self.layout.setSpacing(0)
-            for button in self.buttons.values():
-                self.layout.addWidget(button)
+        layout: QHBoxLayout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        for button in self.buttons.values():
+            layout.addWidget(button)
         self.adjustSize()
 
     def show_direct_set_dialog(self) -> None:
-        self._setup_buttons()
-        self._setup_layout()
+
         self.resize_direct_set_buttons()
         turns_label_rect = self.turns_display_frame.turns_label.geometry()
         global_turns_label_pos = self.turns_display_frame.turns_label.mapToGlobal(

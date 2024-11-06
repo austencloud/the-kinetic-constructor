@@ -9,6 +9,7 @@ from .clickable_ori_label import ClickableOriLabel
 from .rotate_buttons_widget import RotateButtonsWidget
 
 if TYPE_CHECKING:
+    from ......sequence_builder.option_picker.option_picker import OptionPicker
     from ..ori_picker_box import OriPickerBox
 
 
@@ -16,17 +17,17 @@ class OriPickerWidget(QWidget):
     """Minimalist widget that displays the orientation controls."""
 
     ori_adjusted = pyqtSignal(str)
+    current_orientation_index = 0
+    orientations = [IN, COUNTER, OUT, CLOCK]
+    option_picker: "OptionPicker" = None
 
     def __init__(self, ori_picker_box: "OriPickerBox") -> None:
         super().__init__(ori_picker_box)
         self.ori_picker_box = ori_picker_box
         self.color = self.ori_picker_box.color
-        self.current_orientation_index = 0
-        self.orientations = [IN, COUNTER, OUT, CLOCK]
 
         self.json_manager = self.ori_picker_box.graph_editor.main_widget.json_manager
         self.json_validation_engine = self.json_manager.ori_validation_engine
-        self.option_picker = None
         self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame
 
         self.orientation_text_label = OrientationTextLabel(self)
@@ -42,10 +43,13 @@ class OriPickerWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.orientation_text_label)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.clickable_ori_label)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.rotate_buttons_widget)
+        widgets = [
+            self.orientation_text_label,
+            self.clickable_ori_label,
+            self.rotate_buttons_widget,
+        ]
+
+        for widget in widgets:
+            self.layout.addStretch(1)
+            self.layout.addWidget(widget)
         self.layout.addStretch(1)

@@ -25,3 +25,7 @@ class AdjustmentPanelPlaceHolderText(QLabel):
         font_size = int(0.02 * width)
         self.setFont(QFont("Cambria", font_size))
         self.setStyleSheet("background-color: white;")
+
+    def resizeEvent(self, event):
+        self.resize_adjustment_panel_placeholder_text()
+        super().resizeEvent(event)

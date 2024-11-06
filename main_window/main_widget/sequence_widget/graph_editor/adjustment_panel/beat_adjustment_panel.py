@@ -123,13 +123,3 @@ class BeatAdjustmentPanel(QFrame):
         for box in [self.blue_turns_box, self.red_turns_box]:
             box.header.update_turns_box_header()
             box.matching_motion = blue_motion if box.color == BLUE else red_motion
-
-    def resize_beat_adjustment_panel(self) -> None:
-        """Resize the components within the adjustment panel."""
-        for turns_box in [self.blue_turns_box, self.red_turns_box]:
-            turns_box.resize_turns_box()
-
-        for ori_picker_box in [self.blue_ori_picker, self.red_ori_picker]:
-            ori_picker_box.resize_ori_picker_box()
-
-        self.placeholder_widget.resize_adjustment_panel_placeholder_text()
