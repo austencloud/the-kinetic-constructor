@@ -23,3 +23,7 @@ class OrientationTextLabel(QLabel):
         font = QFont("Cambria", font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.setFont(font)
+
+    def resizeEvent(self, event):
+        self.resize_orientation_label()
+        event.accept()

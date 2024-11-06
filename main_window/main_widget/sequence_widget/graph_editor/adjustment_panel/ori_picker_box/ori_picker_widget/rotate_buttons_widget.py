@@ -48,3 +48,7 @@ class RotateButtonsWidget(QWidget):
             self.ori_picker_widget.current_orientation_index
         ]
         self.ori_picker_widget.ori_setter.set_orientation(new_ori)
+
+    def resizeEvent(self, event):
+        self.resize_rotate_buttons_widget()
+        event.accept()

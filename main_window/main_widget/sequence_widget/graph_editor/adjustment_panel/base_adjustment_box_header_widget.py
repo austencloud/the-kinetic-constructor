@@ -68,3 +68,7 @@ class BaseAdjustmentBoxHeaderWidget(QWidget):
         self.header_label_font.setPointSize(font_size)
         self.header_label.setFont(self.header_label_font)
         self.header_label.repaint()
+
+    def resizeEvent(self, event) -> None:
+        self.resize_header()
+        super().resizeEvent(event)

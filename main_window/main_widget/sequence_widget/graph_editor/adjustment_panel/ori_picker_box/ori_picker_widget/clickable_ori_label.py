@@ -83,3 +83,7 @@ class ClickableOriLabel(QLabel):
         else:
             new_ori = current_ori
         self.ori_picker_widget.ori_setter.set_orientation(new_ori)
+
+    def resizeEvent(self, event):
+        self.resize_clickable_ori_label()
+        super().resizeEvent(event)

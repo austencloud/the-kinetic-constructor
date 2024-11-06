@@ -29,7 +29,7 @@ class OriPickerWidget(QWidget):
         self.option_picker = None
         self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame
 
-        self.orientation_label = OrientationTextLabel(self)
+        self.orientation_text_label = OrientationTextLabel(self)
         self.clickable_ori_label = ClickableOriLabel(self)
         self.rotate_buttons_widget = RotateButtonsWidget(self)
         self.ori_setter = OrientationSetter(self)
@@ -43,14 +43,9 @@ class OriPickerWidget(QWidget):
         self.layout.setSpacing(0)
 
         self.layout.addStretch(1)
-        self.layout.addWidget(self.orientation_label)
+        self.layout.addWidget(self.orientation_text_label)
         self.layout.addStretch(1)
         self.layout.addWidget(self.clickable_ori_label)
         self.layout.addStretch(1)
         self.layout.addWidget(self.rotate_buttons_widget)
         self.layout.addStretch(1)
-
-    def resize_ori_picker_widget(self) -> None:
-        self.orientation_label.resize_orientation_label()
-        self.clickable_ori_label.resize_clickable_ori_label()
-        self.rotate_buttons_widget.resize_rotate_buttons_widget()
