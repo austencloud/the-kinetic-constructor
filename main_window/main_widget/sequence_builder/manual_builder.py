@@ -69,7 +69,7 @@ class ManualBuilderWidget(QFrame):
         self.start_position_picked = False
         self.stacked_widget.setCurrentWidget(self.start_pos_picker)
         self.start_pos_picker.show()
-        self.start_pos_picker.resize_start_pos_picker()
+        # self.start_pos_picker.resize_start_pos_picker()
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence
