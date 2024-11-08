@@ -84,7 +84,7 @@ class OptionPickerSectionWidget(QGroupBox):
 
             calculated_width = int(
                 (self.scroll_area.option_picker.width() / COLUMN_COUNT)
-                - ((sections[self.letter_type].pictograph_frame.spacing))
+                - ((self.scroll_area.spacing))
             )
 
             view_width = (

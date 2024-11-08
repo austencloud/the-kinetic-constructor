@@ -53,10 +53,12 @@ class PictographView(QGraphicsView):
         COLUMN_COUNT = self.pictograph.scroll_area.display_manager.COLUMN_COUNT
         sections = self.pictograph.scroll_area.section_manager.sections
         letter_type = self.pictograph.letter_type
+        spacing = (
+            self.pictograph.main_widget.manual_builder.option_picker.scroll_area.spacing
+        )
 
         calculated_width = int(
-            (self.pictograph.scroll_area.option_picker.width() / COLUMN_COUNT)
-            - ((sections[letter_type].pictograph_frame.spacing))
+            (self.pictograph.scroll_area.option_picker.width() / COLUMN_COUNT) - spacing
         )
 
         view_width = (
@@ -68,7 +70,9 @@ class PictographView(QGraphicsView):
 
         outer_border_width = max(1, int(view_width * 0.015))
         inner_border_width = max(1, int(view_width * 0.015))
-        view_width = view_width - (outer_border_width) - (inner_border_width) - 3
+
+        view_width = view_width - (outer_border_width) - (inner_border_width) - spacing
+
         return view_width
 
     ### EVENTS ###
