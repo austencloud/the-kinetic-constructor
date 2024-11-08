@@ -89,7 +89,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
-
             # Update the view to display reversal symbols
             pictograph.reversal_symbol_manager.update_reversal_symbols()
             pictograph.view.update()
@@ -139,36 +138,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
-    def resize_option_picker_scroll_area(self) -> None:
-        for section in self.section_manager.sections.values():
-            section.resize_option_picker_section_widget()
-
-    def wheelEvent(self, event: QWheelEvent) -> None:
-        if self.disabled:
-            return
-        modifiers = QApplication.keyboardModifiers()
-        if modifiers == Qt.KeyboardModifier.ControlModifier:
-            delta = event.angleDelta().y()
-            if delta > 0:
-                self.change_pictograph_size(increase=True)
-            elif delta < 0:
-                self.change_pictograph_size(increase=False)
-            event.accept()
-        else:
-            event.ignore()
-
-    def change_pictograph_size(self, increase: bool) -> None:
-        if self.disabled:
-            return
-        MAX_COLUMN_COUNT = 8
-        MIN_COLUMN_COUNT = 3
-        current_size = self.display_manager.COLUMN_COUNT
-
-        if increase and current_size > MIN_COLUMN_COUNT:
-            self.display_manager.COLUMN_COUNT -= 1
-        elif not increase and current_size < MAX_COLUMN_COUNT:
-            self.display_manager.COLUMN_COUNT += 1
-        # self.display_manager.order_and_display_pictographs()
+    # def resize_option_picker_scroll_area(self) -> None:
+    #     for section in self.section_manager.sections.values():
+    #         section.resize_option_picker_section_widget()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

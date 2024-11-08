@@ -72,7 +72,7 @@ class OptionPickerSectionWidget(QGroupBox):
         pictograph.view.resize_pictograph_view()
         pictograph.view.show()
 
-    def resize_option_picker_section_widget(self) -> None:
+    def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""
         section_width = self.scroll_area.manual_builder.width()
 
@@ -99,3 +99,4 @@ class OptionPickerSectionWidget(QGroupBox):
         for pictograph in self.pictographs.values():
             pictograph.view.resize_pictograph_view()
         self.header.type_label.resize_section_type_label()
+        super().resizeEvent(event)

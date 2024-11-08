@@ -114,7 +114,7 @@ class DictionaryButtonPanel(QWidget):
             self.preview_area.main_widget.navigation_widget.on_button_clicked(0)
             # QApplication.processEvents()
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-            self.dictionary_widget.main_widget.sequence_widget.resize_sequence_widget()
+            # self.dictionary_widget.main_widget.sequence_widget.resize_sequence_widget()
             self.sequence_populator.load_sequence_from_json(
                 self.preview_area.sequence_json
             )

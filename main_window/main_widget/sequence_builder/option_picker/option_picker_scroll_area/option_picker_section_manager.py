@@ -4,6 +4,7 @@ from Enums.letters import Letter
 from .option_picker_section_group_widget import OptionPickerSectionGroupWidget
 from .option_picker_section_widget import OptionPickerSectionWidget
 from PyQt6.QtWidgets import QHBoxLayout
+
 if TYPE_CHECKING:
 
     from .option_picker_scroll_area import OptionPickerScrollArea
@@ -52,16 +53,16 @@ class OptionPickerSectionManager:
                     if group_widget is None:
                         # Create a group widget instance
                         group_widget = OptionPickerSectionGroupWidget(self.scroll_area)
-                        
+
                         # Create an HBox layout with stretch around the group widget
                         group_layout = QHBoxLayout()
                         group_layout.addStretch()  # Left spacer
-                        
+
                         # Add the group widget to the layout
                         group_layout.addWidget(group_widget)
-                        
+
                         group_layout.addStretch()  # Right spacer
-                        
+
                         # Add the entire group layout directly to the scroll area
                         self.scroll_area.layout.addLayout(group_layout)
 
@@ -102,4 +103,4 @@ class OptionPickerSectionManager:
             self.initialized = True
         for section in self.sections.values():
             section.show()
-            section.resize_option_picker_section_widget()
+            # section.resize_option_picker_section_widget()

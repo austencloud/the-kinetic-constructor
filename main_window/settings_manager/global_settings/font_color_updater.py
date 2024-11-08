@@ -120,7 +120,7 @@ class FontColorUpdater:
         manual_labels = [
             manual_builder.start_pos_picker.choose_your_start_pos_label,
             manual_builder.advanced_start_pos_picker.choose_your_start_pos_label,
-            manual_builder.option_picker.combo_box_label,
+            manual_builder.option_picker.reversal_selector.combo_box_label,
         ]
         self._apply_font_colors(manual_labels, font_color)
 

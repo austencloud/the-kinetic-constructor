@@ -1,12 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
 
-from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_tab import (
+from .graph_editor.graph_editor_toggle_tab import (
     GraphEditorToggleTab,
 )
-from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggler import (
-    GraphEditorToggler,
-)
+from .graph_editor.graph_editor_toggler import GraphEditorToggler
 from .sequence_clearer import SequenceClearer
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
@@ -60,19 +58,14 @@ class SequenceWidget(QWidget):
         self.toggle_tab = GraphEditorToggleTab(self)
         self.toggler = GraphEditorToggler(self)
 
-    def resize_sequence_widget(self) -> None:
-        self.setMinimumWidth(int(self.main_widget.width() // 2))
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         self.current_word_label.resize_current_word_label()
         self.button_panel.resize_button_panel()
         self.beat_frame.resize_beat_frame()
         self.graph_editor.resize_graph_editor()
-        # pass
-
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        self.resize_sequence_widget()
-        self.toggle_tab._resize_graph_editor_toggle_tab()
         self.toggle_tab.reposition_tobble_tab()
+        self.toggle_tab._resize_graph_editor_toggle_tab()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)

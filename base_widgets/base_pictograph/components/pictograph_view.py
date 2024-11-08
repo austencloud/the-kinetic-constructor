@@ -68,7 +68,7 @@ class PictographView(QGraphicsView):
 
         outer_border_width = max(1, int(view_width * 0.015))
         inner_border_width = max(1, int(view_width * 0.015))
-        view_width = view_width - (outer_border_width) - (inner_border_width)
+        view_width = view_width - (outer_border_width) - (inner_border_width) - 3
         return view_width
 
     ### EVENTS ###
