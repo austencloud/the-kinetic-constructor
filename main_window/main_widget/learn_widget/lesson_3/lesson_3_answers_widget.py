@@ -36,7 +36,7 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
                     pictograph_dict
                 )
             )
-            pictograph = BasePictograph(self.main_widget, scroll_area=None)
+            pictograph = BasePictograph(self.main_widget, parent_widget=None)
             pictograph.disable_gold_overlay = False
             pictograph.updater.update_pictograph(pictograph_dict)
             self.pictographs[pictograph_key] = pictograph

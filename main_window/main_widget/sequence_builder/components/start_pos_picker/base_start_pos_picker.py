@@ -39,7 +39,7 @@ class BaseStartPosPicker(QWidget):
             return self.pictograph_cache[pictograph_key]
 
         with self.temporary_grid_mode(target_grid_mode):
-            pictograph = BasePictograph(self.main_widget)
+            pictograph = BasePictograph(self.main_widget, self)
             pictograph.updater.update_pictograph(deepcopy(pictograph_dict))
             self.pictograph_cache[pictograph_key] = pictograph
 

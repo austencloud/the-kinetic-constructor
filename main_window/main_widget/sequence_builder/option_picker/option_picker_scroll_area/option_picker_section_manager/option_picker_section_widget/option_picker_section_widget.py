@@ -64,7 +64,7 @@ class OptionPickerSectionWidget(QGroupBox):
             )
         ] = pictograph
         self.pictograph_frame.layout.addWidget(pictograph.view)
-        pictograph.view.resize_pictograph_view()
+        # pictograph.view.resize_pictograph_view()
         pictograph.view.show()
 
     def resize_option_picker_section_widget(self) -> None:
@@ -75,6 +75,6 @@ class OptionPickerSectionWidget(QGroupBox):
         elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
             self.setMinimumWidth(int(section_width / 3))
             self.setMaximumWidth(int(section_width / 3))
-        for pictograph in self.pictographs.values():
-            pictograph.view.resize_pictograph_view()
+        # for pictograph in self.pictographs.values():
+        #     pictograph.view.resize_pictograph_view()
         self.header.type_label.resize_section_type_label()

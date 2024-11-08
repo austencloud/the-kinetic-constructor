@@ -31,6 +31,7 @@ if TYPE_CHECKING:
 class OptionPicker(QWidget):
     """Contains the 'Choose Your Next Pictograph' label, filter combo box, and the OptionPickerScrollArea."""
 
+    COLUMN_COUNT = 8
     option_selected = pyqtSignal(str)
 
     def __init__(self, manual_builder: "ManualBuilderWidget"):

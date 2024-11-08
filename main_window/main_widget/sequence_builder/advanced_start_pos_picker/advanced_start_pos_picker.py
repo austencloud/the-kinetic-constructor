@@ -14,6 +14,8 @@ if TYPE_CHECKING:
 
 
 class AdvancedStartPosPicker(BaseStartPosPicker):
+    COLUMN_COUNT = 4
+
     def __init__(self, manual_builder: "ManualBuilderWidget"):
         super().__init__(manual_builder)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
@@ -29,7 +31,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.layout.addLayout(self.grid_layout)
         self.layout.addStretch(1)
 
-    def display_variations(self, grid_mode:str) -> None:
+    def display_variations(self, grid_mode: str) -> None:
         if grid_mode == BOX:
             variations = self.get_box_variations()
         else:
@@ -81,4 +83,3 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.choose_your_start_pos_label.set_stylesheet()
         self.grid_layout.setHorizontalSpacing(20)
         self.grid_layout.setVerticalSpacing(20)
-

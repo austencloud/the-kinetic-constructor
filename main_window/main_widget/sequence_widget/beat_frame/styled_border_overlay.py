@@ -30,7 +30,7 @@ class StyledBorderOverlay(QWidget):
         view_width = self.view.size().width()
         self.outer_border_width = max(1, math.ceil(view_width * 0.016))
         self.inner_border_width = max(1, math.ceil(view_width * 0.016))
-        self.update()
+        # self.update()
 
     def update_border_color_and_width(self, primary_color, secondary_color) -> None:
         self.update_border_widths()
@@ -85,7 +85,7 @@ class StyledBorderOverlay(QWidget):
 
     def set_gold_border(self) -> None:
         # Add a condition to skip setting the gold border when in quiz mode
-        if getattr(self.view.pictograph, 'disable_gold_overlay', True):
+        if getattr(self.view.pictograph, "disable_gold_overlay", True):
             # If in quiz mode, don't apply the gold border
             return
         self.saved_primary_color = self.primary_color
@@ -102,7 +102,6 @@ class StyledBorderOverlay(QWidget):
         self.saved_primary_color = self.primary_color
         self.saved_secondary_color = self.secondary_color
         self.update_border_color_and_width("gold", "gold")
-
 
     def remove_border(self) -> None:
         self.is_set = False

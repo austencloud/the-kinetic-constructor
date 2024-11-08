@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 
 class StartPosPickerPictographFrame(QWidget):
+    COLUMN_COUNT = 3
+
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker

@@ -36,36 +36,28 @@ class PictographView(QGraphicsView):
         self._touchTimeout.setSingleShot(True)
         self._touchTimeout.timeout.connect(self._resetTouchState)
         self._touchTimeout.setInterval(100)  # Adjust as needed
+        # self._resize_pictograph_view()
 
-    def resize_pictograph_view(self) -> None:
-        view_width = self.calculate_view_width()
-        self.pictograph.container.styled_border_overlay.update_border_widths()
-        self.setMinimumWidth(view_width)
-        self.setMaximumWidth(view_width)
-        self.setMinimumHeight(view_width)
-        self.setMaximumHeight(view_width)
-        self.view_scale = view_width / self.pictograph.width()
-        self.resetTransform()
-        self.scale(self.view_scale, self.view_scale)
-        self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()
+    def calculate_view_size(self):
+        if self.pictograph.parent_widget:
+            COLUMN_COUNT = self.pictograph.parent_widget.COLUMN_COUNT
+        else:
+            COLUMN_COUNT = 8
 
-    def calculate_view_width(self):
-        COLUMN_COUNT = self.pictograph.scroll_area.display_manager.COLUMN_COUNT
-        sections = self.pictograph.scroll_area.section_manager.sections
-        letter_type = self.pictograph.letter_type
         spacing = (
             self.pictograph.main_widget.manual_builder.option_picker.scroll_area.spacing
         )
 
         calculated_width = int(
-            (self.pictograph.scroll_area.option_picker.width() / COLUMN_COUNT) - spacing
+            (self.pictograph.main_widget.manual_builder.width() / COLUMN_COUNT)
+            - spacing
         )
 
         view_width = (
             calculated_width
             if calculated_width
-            < self.pictograph.scroll_area.option_picker.height() // 8
-            else self.pictograph.scroll_area.option_picker.height() // 8
+            < self.pictograph.main_widget.manual_builder.height() // 8
+            else self.pictograph.main_widget.manual_builder.height() // 8
         )
 
         outer_border_width = max(1, int(view_width * 0.015))
@@ -88,8 +80,8 @@ class PictographView(QGraphicsView):
         self._ignoreMouseEvents = not enabled
 
     def wheelEvent(self, event) -> None:
-        if self.pictograph.scroll_area:
-            self.pictograph.scroll_area.wheelEvent(event)
+        if self.pictograph.parent_widget:
+            self.pictograph.parent_widget.wheelEvent(event)
 
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
@@ -173,5 +165,17 @@ class PictographView(QGraphicsView):
     def resizeEvent(self, event):
         """Trigger fitInView whenever the widget is resized."""
         super().resizeEvent(event)
+        self._resize_pictograph_view()
+
+    def _resize_pictograph_view(self):
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        size = self.calculate_view_size()
+        self.pictograph.container.styled_border_overlay.update_border_widths()
+        self.setMinimumWidth(size)
+        self.setMaximumWidth(size)
+        self.setMinimumHeight(size)
+        self.setMaximumHeight(size)
+        self.view_scale = size / self.pictograph.width()
+        self.resetTransform()
+        self.scale(self.view_scale, self.view_scale)
         self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()

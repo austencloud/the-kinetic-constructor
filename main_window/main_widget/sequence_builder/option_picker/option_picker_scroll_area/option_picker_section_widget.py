@@ -69,7 +69,7 @@ class OptionPickerSectionWidget(QGroupBox):
             )
         ] = pictograph
         self.pictograph_frame.layout.addWidget(pictograph.view)
-        pictograph.view.resize_pictograph_view()
+        # pictograph.view.resize_pictograph_view()
         pictograph.view.show()
 
     def resizeEvent(self, event) -> None:
@@ -79,7 +79,7 @@ class OptionPickerSectionWidget(QGroupBox):
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
             self.setFixedWidth(section_width)
         elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
-            COLUMN_COUNT = self.scroll_area.display_manager.COLUMN_COUNT
+            COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
             sections = self.scroll_area.section_manager.sections
 
             calculated_width = int(
@@ -96,7 +96,7 @@ class OptionPickerSectionWidget(QGroupBox):
             self.setFixedWidth(width)
 
         # Resize each pictograph within the section to match
-        for pictograph in self.pictographs.values():
-            pictograph.view.resize_pictograph_view()
+        # for pictograph in self.pictographs.values():
+        #     pictograph.view.resize_pictograph_view()
         self.header.type_label.resize_section_type_label()
         super().resizeEvent(event)

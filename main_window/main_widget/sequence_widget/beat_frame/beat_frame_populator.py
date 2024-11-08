@@ -115,7 +115,7 @@ class BeatFramePopulator:
                     reversal_info=reversal_info,
                 )
                 previous_beat_dict = pictograph_dict
-            QApplication.processEvents()
+            # QApplication.processEvents()
 
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat

@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 class OptionPickerDisplayManager:
     SPACING = 5
-    COLUMN_COUNT = 8
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
@@ -26,14 +25,14 @@ class OptionPickerDisplayManager:
                 self.add_pictograph_to_layout(pictograph, index)
 
     def add_pictograph_to_layout(self, pictograph: BasePictograph, index: int) -> None:
-        row, col = divmod(index, self.COLUMN_COUNT)
+        row, col = divmod(index, self.scroll_area.option_picker.COLUMN_COUNT)
         letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             pictograph.letter
         )
         section = self.scroll_area.section_manager.get_section(letter_type)
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-            pictograph.view.resize_pictograph_view()
+            # pictograph.view.resize_pictograph_view()
             pictograph.view.show()
             # hide or show the reversal symbols depending on the context
             pictograph.reversal_symbol_manager.update_reversal_symbols()

@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 class StartPosPicker(BaseStartPosPicker):
     SPACING = 10
     start_position_selected = pyqtSignal(BasePictograph)
+    COLUMN_COUNT = 3
 
     def __init__(self, manual_builder: "ManualBuilderWidget"):
         super().__init__(manual_builder)
@@ -167,7 +168,6 @@ class StartPosPicker(BaseStartPosPicker):
         )
 
         return start_pos_beat
-
 
     def get_start_pos_pictograph(self, start_pos_data) -> "BasePictograph":
         if not start_pos_data:

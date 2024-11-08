@@ -1,11 +1,14 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
 from Enums.Enums import Letter, OpenCloseStates, SpecificPosition, VTG_Modes
 from Enums.MotionAttributes import Location
 
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
+
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
+    ReversalSymbolManager,
+)
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -43,6 +46,9 @@ if TYPE_CHECKING:
         OptionPickerScrollArea,
     )
     from main_window.main_widget.main_widget import MainWidget
+    from main_window.main_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
+        StartPosPickerPictographFrame,
+    )
 
 
 class BasePictograph(QGraphicsScene):
@@ -87,15 +93,16 @@ class BasePictograph(QGraphicsScene):
     blue_reversal_symbol: "QGraphicsTextItem" = None
     red_reversal = False
     red_reversal_symbol: "QGraphicsTextItem" = None
+    parent_widget: Union["StartPosPickerPictographFrame", "OptionPickerScrollArea"]
 
     def __init__(
         self,
         main_widget: "MainWidget",
-        scroll_area=None,
+        parent_widget=None,
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area: OptionPickerScrollArea = scroll_area
+        self.parent_widget = parent_widget
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)

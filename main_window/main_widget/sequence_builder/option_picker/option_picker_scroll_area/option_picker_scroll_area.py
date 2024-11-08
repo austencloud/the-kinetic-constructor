@@ -28,6 +28,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
     MAX_COLUMN_COUNT: int = 8
     MIN_COLUMN_COUNT: int = 3
     spacing = 3
+    COLUMN_COUNT = 8
 
     def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
