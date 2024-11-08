@@ -57,7 +57,6 @@ class BeatSelectionOverlay(QWidget):
                 red_start_pos_ori_picker.ori_picker_widget.ori_setter.set_initial_orientation(
                     start_pos_pictograph, "red"
                 )
-            # QApplication.processEvents()
 
     def deselect_beat(self):
         if self.selected_beat:
