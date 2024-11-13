@@ -34,15 +34,13 @@ class BeatAdder:
             self.sequence_widget.difficulty_label.set_difficulty_level(1)
 
         next_beat_index = self.beat_frame.get.next_available_beat()
-        # if the next beat index is 65, show an indicator label message to say the seuqnece is full at 64.
         if next_beat_number == 65:
             self.sequence_widget.indicator_label.show_message(
                 "The sequence is full at 64 beats."
             )
             return
-            
+
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:
-            # Detect reversals
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()
             )

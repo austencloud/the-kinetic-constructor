@@ -8,6 +8,9 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
+from main_window.main_widget.sequence_widget.beat_frame.start_position_adder import (
+    StartPositionAdder,
+)
 from main_window.main_widget.sequence_widget.sequence_widget_pictograph_factory import (
     BeatFactory,
 )
@@ -59,6 +62,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
         self.populator = BeatFramePopulator(self)
         self.beat_adder = BeatAdder(self)
+        self.start_position_adder = StartPositionAdder(self)
         self.duration_manager = BeatDurationManager(self)
         self.updater = BeatFrameUpdater(self)
         self.key_event_handler = BeatFrameKeyEventHandler(self)

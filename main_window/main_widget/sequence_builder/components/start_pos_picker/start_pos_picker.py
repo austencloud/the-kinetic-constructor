@@ -32,7 +32,9 @@ class StartPosPicker(BaseStartPosPicker):
         self.setStyleSheet("background-color: white;")
         self.initialized = False
         self.start_options: dict[str, BasePictograph] = {}
-
+        self.start_position_adder = (
+            self.manual_builder.main_widget.sequence_widget.beat_frame.start_position_adder
+        )
         self.start_position_selected.connect(
             self.manual_builder.transition_to_sequence_building
         )
@@ -52,11 +54,11 @@ class StartPosPicker(BaseStartPosPicker):
         self.pictograph_layout.addWidget(self.pictograph_frame)
 
         self.layout.addStretch(1)
-        self.layout.addLayout(self.start_label_layout)
+        self.layout.addLayout(self.start_label_layout, 1)
         self.layout.addStretch(1)
-        self.layout.addLayout(self.pictograph_layout)
+        self.layout.addLayout(self.pictograph_layout, 5)
         self.layout.addStretch(1)
-        self.layout.addLayout(self.button_layout)
+        self.layout.addLayout(self.button_layout, 5)
         self.layout.addStretch(1)
 
     def _setup_variations_button_layout(self) -> QHBoxLayout:
@@ -72,7 +74,6 @@ class StartPosPicker(BaseStartPosPicker):
 
     def display_variations(self, grid_mode: str) -> None:
         """Load only the start positions relevant to the current grid mode."""
-        # clear all previous start options
         self.pictograph_frame.clear_pictographs()
 
         start_pos_keys = (
@@ -102,7 +103,6 @@ class StartPosPicker(BaseStartPosPicker):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    # Use the cached pictograph if available
                     pictograph = self.create_pictograph_from_dict(
                         pictograph_dict, grid_mode
                     )
@@ -111,34 +111,12 @@ class StartPosPicker(BaseStartPosPicker):
                     pictograph.start_pos = start_pos
                     pictograph.end_pos = end_pos
                     self.pictograph_frame._add_start_pos_to_layout(pictograph)
-                    pictograph.view.mousePressEvent = partial(
-                        self.add_start_pos_to_sequence,
-                        pictograph,
+                    pictograph.view.mousePressEvent = lambda event: self.start_position_adder.add_start_pos_to_sequence(
+                        pictograph
                     )
+
                     pictograph.start_to_end_pos_glyph.hide()
-                    break  # Assuming only one pictograph per position_key
-
-    def add_start_pos_to_sequence(
-        self, clicked_start_option: BasePictograph, event: QWidget = None
-    ) -> None:
-        """Handle the start position click event."""
-        sequence_widget = self.main_widget.sequence_widget
-        start_position_beat = StartPositionBeat(sequence_widget.beat_frame)
-        clicked_start_option.updater.update_dict_from_attributes()
-        start_position_beat.updater.update_pictograph(
-            deepcopy(clicked_start_option.pictograph_dict)
-        )
-
-        sequence_widget.beat_frame.start_pos_view.set_start_pos(start_position_beat)
-        self.manual_builder.last_beat = start_position_beat
-        beat_frame = sequence_widget.beat_frame
-        start_pos_view = beat_frame.start_pos_view
-        beat_frame.selection_overlay.select_beat(start_pos_view)
-
-        self.main_widget.json_manager.start_position_handler.set_start_position_data(
-            start_position_beat
-        )
-        self.start_position_selected.emit(start_position_beat)
+                    break
 
     def convert_current_sequence_json_entry_to_start_pos_pictograph(
         self, start_pos_entry

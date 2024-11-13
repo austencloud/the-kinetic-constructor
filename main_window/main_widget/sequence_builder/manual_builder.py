@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 
 class ManualBuilderWidget(QFrame):
+    start_position_selected = pyqtSignal(object)
+
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -47,6 +49,7 @@ class ManualBuilderWidget(QFrame):
         self.stacked_widget.addWidget(self.option_picker)
 
         self.initialized = False
+        self.start_position_selected.connect(self.transition_to_sequence_building)
 
     def transition_to_sequence_building(self) -> None:
         """Transition to the option picker for sequence building."""
@@ -126,7 +129,7 @@ class ManualBuilderWidget(QFrame):
         """Resize the components based on the current state."""
         # self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
-        self.option_picker.resize_option_picker()
+        # self.option_picker.resize_option_picker()
 
     def resizeEvent(self, event) -> None:
         """Resize the manual builder based on the current state."""

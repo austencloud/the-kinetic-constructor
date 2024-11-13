@@ -109,11 +109,11 @@ class OptionPicker(QWidget):
             self.scroll_area.clear_pictographs()
             next_options = self.option_getter._load_all_next_options(sequence)
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
-        self.choose_your_next_pictograph_label.set_stylesheet()
+        # self.choose_your_next_pictograph_label.set_stylesheet()
 
-    def resize_option_picker(self) -> None:
-        self.choose_your_next_pictograph_label.resize_choose_your_next_pictograph_label()
-        # self.scroll_area.resize_option_picker_scroll_area()
+    # def resize_option_picker(self) -> None:
+    # self.choose_your_next_pictograph_label.resize_choose_your_next_pictograph_label()
+    # self.scroll_area.resize_option_picker_scroll_area()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
