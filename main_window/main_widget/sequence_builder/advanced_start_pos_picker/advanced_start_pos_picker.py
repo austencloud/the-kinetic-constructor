@@ -35,7 +35,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.layout.addStretch(1)
         self.layout.addLayout(self.start_label_layout, 1)
         self.layout.addStretch(1)
-        self.layout.addLayout(self.grid_layout, 10)
+        self.layout.addLayout(self.grid_layout, 15)
         self.layout.addStretch(1)
 
     def display_variations(self, grid_mode: str) -> None:
@@ -44,7 +44,6 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         else:
             variations = self.get_diamond_variations()
 
-        # Organize variations by letter
         letters = ["α", "β", "Γ"]
         self.start_pos_cache = {letter: [] for letter in letters}
 
@@ -55,13 +54,11 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         for letter in letters:
             self.all_variations.extend(self.start_pos_cache[letter])
 
-        # Clear the grid layout first
         for i in reversed(range(self.grid_layout.count())):
             widget_to_remove = self.grid_layout.itemAt(i).widget()
             self.grid_layout.removeWidget(widget_to_remove)
             widget_to_remove.setParent(None)
 
-        # Add variations to the grid layout
         for i, variation in enumerate(self.all_variations):
             row = i // 4
             col = i % 4
@@ -83,7 +80,6 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         )
 
     def on_variation_selected(self, variation: "BasePictograph") -> None:
-        # Use the cached pictograph
         self.start_position_adder.add_start_pos_to_sequence(variation)
 
     def resize_advanced_start_pos_picker(self) -> None:

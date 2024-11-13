@@ -1,31 +1,13 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QComboBox,
-    QLabel,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
 from PyQt6.QtCore import pyqtSignal, Qt
-
-from main_window.main_widget.sequence_builder.option_picker.option_picker_reversal_selector import (
-    OptionPickerReversalSelector,
-)
-from main_window.main_widget.sequence_builder.option_picker.reversal_combobox import (
-    ReversalCombobox,
-)
-
-
-from .toggle_with_label import ToggleWithLabel  # Import the new class
-
+from .option_picker_reversal_selector import OptionPickerReversalSelector
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
 from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
-    )
+    from ..manual_builder import ManualBuilderWidget
 
 
 class OptionPicker(QWidget):
@@ -59,9 +41,9 @@ class OptionPicker(QWidget):
 
         # Add the "Choose Your Next Pictograph" label
         header_label_layout = QHBoxLayout()
-        header_label_layout.addStretch(1)
+        # header_label_layout.addStretch(1)
         header_label_layout.addWidget(self.choose_your_next_pictograph_label)
-        header_label_layout.addStretch(1)
+        # header_label_layout.addStretch(1)
         header_layout.addLayout(header_label_layout)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.reversal_selector)
@@ -104,6 +86,7 @@ class OptionPicker(QWidget):
                 sequence, selected_filter
             )
             self.scroll_area.clear_pictographs()  # Clear existing pictographs
+            # QApplication.processEvents()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         elif len(sequence) == 2:
             self.scroll_area.clear_pictographs()
