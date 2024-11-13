@@ -80,6 +80,5 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.manual_builder.start_pos_picker.add_start_pos_to_sequence(variation)
 
     def resize_advanced_start_pos_picker(self) -> None:
-        self.choose_your_start_pos_label.set_stylesheet()
         self.grid_layout.setHorizontalSpacing(20)
         self.grid_layout.setVerticalSpacing(20)

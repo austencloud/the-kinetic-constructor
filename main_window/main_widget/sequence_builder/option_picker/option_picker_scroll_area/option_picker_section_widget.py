@@ -95,8 +95,5 @@ class OptionPickerSectionWidget(QGroupBox):
             width = int(view_width * 8) // 3
             self.setFixedWidth(width)
 
-        # Resize each pictograph within the section to match
-        # for pictograph in self.pictographs.values():
-        #     pictograph.view.resize_pictograph_view()
         self.header.type_label.resize_section_type_label()
         super().resizeEvent(event)

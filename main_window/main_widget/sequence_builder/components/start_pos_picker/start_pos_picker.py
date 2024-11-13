@@ -140,20 +140,6 @@ class StartPosPicker(BaseStartPosPicker):
         )
         self.start_position_selected.emit(start_position_beat)
 
-    def resize_start_pos_picker(self) -> None:
-        spacing = 10
-        for start_option in self.start_options.values():
-            view_width = int((self.width() // 5) - spacing)
-            start_option.view.setFixedSize(view_width, view_width)
-            start_option.view.view_scale = view_width / start_option.width()
-            start_option.view.resetTransform()
-            start_option.view.scale(
-                start_option.view.view_scale, start_option.view.view_scale
-            )
-            start_option.container.styled_border_overlay.resize_styled_border_overlay()
-        self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
-        self.variations_button.resize_variations_button()
-
     def convert_current_sequence_json_entry_to_start_pos_pictograph(
         self, start_pos_entry
     ) -> StartPositionBeat:
@@ -207,3 +193,18 @@ class StartPosPicker(BaseStartPosPicker):
             if start_pos_key.startswith(key):
                 return mapping[key]
         return None
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        spacing = 10
+        for start_option in self.start_options.values():
+            view_width = int((self.width() // 5) - spacing)
+            start_option.view.setFixedSize(view_width, view_width)
+            start_option.view.view_scale = view_width / start_option.width()
+            start_option.view.resetTransform()
+            start_option.view.scale(
+                start_option.view.view_scale, start_option.view.view_scale
+            )
+            start_option.container.styled_border_overlay.resize_styled_border_overlay()
+        self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
+        self.variations_button.resize_variations_button()

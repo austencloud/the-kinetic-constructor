@@ -1,15 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsRectItem
-from PyQt6.QtCore import Qt, QEvent, QTimer, QEvent
-from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor
+from PyQt6.QtCore import Qt, QEvent, QTimer
+from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
 
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
-)
 
 from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_view_mouse_event_handler import PictographViewMouseEventHandler
-
+from .pictograph_view_key_event_handler import PictographViewKeyEventHandler
+from .pictograph_view_size_calculator import PictographViewSizeCalculator
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -27,8 +25,12 @@ class PictographView(QGraphicsView):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.grabGesture(Qt.GestureType.TapGesture)
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
+
         self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
+        self.key_event_handler = PictographViewKeyEventHandler(self)
+        self.size_calculator = PictographViewSizeCalculator(self)
+
         self._gestureInProgress = False
         self._ignoreMouseEvents = False
         self._ignoreNextMousePress = False
@@ -37,35 +39,6 @@ class PictographView(QGraphicsView):
         self._touchTimeout.timeout.connect(self._resetTouchState)
         self._touchTimeout.setInterval(100)  # Adjust as needed
         # self._resize_pictograph_view()
-
-    def calculate_view_size(self):
-        if self.pictograph.parent_widget:
-            COLUMN_COUNT = self.pictograph.parent_widget.COLUMN_COUNT
-        else:
-            COLUMN_COUNT = 8
-
-        spacing = (
-            self.pictograph.main_widget.manual_builder.option_picker.scroll_area.spacing
-        )
-
-        calculated_width = int(
-            (self.pictograph.main_widget.manual_builder.width() / COLUMN_COUNT)
-            - spacing
-        )
-
-        view_width = (
-            calculated_width
-            if calculated_width
-            < self.pictograph.main_widget.manual_builder.height() // 8
-            else self.pictograph.main_widget.manual_builder.height() // 8
-        )
-
-        outer_border_width = max(1, int(view_width * 0.015))
-        inner_border_width = max(1, int(view_width * 0.015))
-
-        view_width = view_width - (outer_border_width) - (inner_border_width) - spacing
-
-        return view_width
 
     ### EVENTS ###
 
@@ -83,27 +56,8 @@ class PictographView(QGraphicsView):
         if self.pictograph.parent_widget:
             self.pictograph.parent_widget.wheelEvent(event)
 
-    def keyPressEvent(self, event) -> None:
-        shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
-        ctrl_held = event.modifiers() & Qt.KeyboardModifier.ControlModifier
-        wasd_manager = self.pictograph.wasd_manager
-
-        if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-            wasd_manager.movement_manager.handle_arrow_movement(
-                self.pictograph, event.key(), shift_held, ctrl_held
-            )
-
-        elif event.key() == Qt.Key.Key_X:
-            wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override()
-        elif event.key() == Qt.Key.Key_Z:
-            wasd_manager.handle_special_placement_removal()
-        elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
-            self.pictograph.main_widget.special_placement_loader.refresh_placements()
-        elif event.key() == Qt.Key.Key_C:
-            wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
-                event.key()
-            )
-        else:
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if not self.key_event_handler.handle_key_press(event):
             super().keyPressEvent(event)
 
     def showEvent(self, event):
@@ -169,7 +123,7 @@ class PictographView(QGraphicsView):
 
     def _resize_pictograph_view(self):
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-        size = self.calculate_view_size()
+        size = self.size_calculator.calculate_view_size()
         self.pictograph.container.styled_border_overlay.update_border_widths()
         self.setMinimumWidth(size)
         self.setMaximumWidth(size)

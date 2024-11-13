@@ -124,7 +124,7 @@ class ManualBuilderWidget(QFrame):
 
     def resize_manual_builder(self) -> None:
         """Resize the components based on the current state."""
-        self.start_pos_picker.resize_start_pos_picker()
+        # self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()
 

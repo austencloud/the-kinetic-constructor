@@ -4,15 +4,17 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
 
-
-
 if TYPE_CHECKING:
-    from ...advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
+    from ...advanced_start_pos_picker.advanced_start_pos_picker import (
+        AdvancedStartPosPicker,
+    )
     from ...components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class ChooseYourStartPosLabel(QLabel):
-    def __init__(self, start_pos_picker: Union["StartPosPicker", "AdvancedStartPosPicker"]) -> None:
+    def __init__(
+        self, start_pos_picker: Union["StartPosPicker", "AdvancedStartPosPicker"]
+    ) -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
         self.setText("Choose your start position!")
@@ -27,3 +29,6 @@ class ChooseYourStartPosLabel(QLabel):
         self.setFont(QFont("Monotype Corsiva", font_size))
         self.show()
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.set_stylesheet()
