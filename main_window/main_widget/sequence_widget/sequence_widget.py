@@ -60,11 +60,10 @@ class SequenceWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.current_word_label.resize_current_word_label()
-        self.button_panel.resize_button_panel()
-        self.beat_frame.resize_beat_frame()
+        # self.current_word_label.resize_current_word_label()
+        # self.button_panel.resize_button_panel()
         self.graph_editor.resize_graph_editor()
-        self.toggle_tab.reposition_tobble_tab()
+        self.toggle_tab.reposition_toggle_tab()
         self.toggle_tab._resize_graph_editor_toggle_tab()
 
     def showEvent(self, event) -> None:

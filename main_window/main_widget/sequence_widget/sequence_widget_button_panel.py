@@ -154,7 +154,11 @@ class SequenceWidgetButtonPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setSpacing(self.sequence_widget.height() // 40)
 
-    def resize_button_panel(self) -> None:
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.resize_button_panel()
+
+    def resize_button_panel(self):
         button_size = self.sequence_widget.main_widget.height() // 18
         for button in self.buttons:
             button.setFixedSize(button_size, button_size)

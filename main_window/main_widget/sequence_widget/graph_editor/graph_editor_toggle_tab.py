@@ -53,7 +53,7 @@ class GraphEditorToggleTab(QWidget):
         self.label.setFont(QFont(family, font_size))
         self.setStyleSheet("background-color: white")
 
-    def reposition_tobble_tab(self):
+    def reposition_toggle_tab(self):
         if self.sequence_widget.graph_editor.isVisible():
             desired_height = int(self.sequence_widget.height() // 3.5)
             self.sequence_widget.graph_editor.resize(self.width(), desired_height)

@@ -6,6 +6,8 @@ if TYPE_CHECKING:
 
 
 class GraphEditorPlaceholder(QFrame):
+    """This frame allows the sequence widget's items to reposition when toggling the graph editor's visibility."""
+
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget

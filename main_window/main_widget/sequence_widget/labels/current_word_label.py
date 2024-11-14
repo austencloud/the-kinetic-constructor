@@ -26,7 +26,7 @@ class CurrentWordLabel(QWidget):
         layout.setSpacing(0)
         self.setLayout(layout)
 
-    def resize_current_word_label(self):
+    def resizeEvent(self, event):
         sequence_widget_width = self.sequence_widget.width()
         font_size = sequence_widget_width // 30
         font = QFont()
@@ -48,7 +48,7 @@ class CurrentWordLabel(QWidget):
         simplified_word = WordSimplifier.simplify_repeated_word(word)
         self.current_word = simplified_word
         self.line_edit.setText(simplified_word)
-        self.resize_current_word_label()
+        # self.resize_current_word_label()
 
     def set_font_color(self, color: str):
         self.line_edit.setStyleSheet(
