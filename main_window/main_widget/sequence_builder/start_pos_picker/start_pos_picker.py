@@ -6,14 +6,14 @@ from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, START_POS, END_POS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+from ...sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from .start_pos_picker_variations_button import StartPosVariationsButton
 from .start_pos_pictograph_frame import StartPosPickerPictographFrame
 from .choose_your_start_pos_label import ChooseYourStartPosLabel
 from .base_start_pos_picker import BaseStartPosPicker
 
 if TYPE_CHECKING:
-    from ....sequence_builder.manual_builder import ManualBuilderWidget
+    from ...sequence_builder.manual_builder import ManualBuilderWidget
 
 
 class StartPosPicker(BaseStartPosPicker):

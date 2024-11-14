@@ -1,14 +1,11 @@
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from .components.arrow_adjustment_calculator import ArrowAdjustmentCalculator
-from .components.arrow_initial_pos_calculator import ArrowInitialPosCalculator
 
-from .components.default_arrow_positioner import DefaultArrowPositioner
-from .components.quadrant_index_handler import QuadrantIndexHandler
-from .components.special_arrow_positioner.special_arrow_positioner import (
-    SpecialArrowPositioner,
-)
-
+from .arrow_adjustment_calculator import ArrowAdjustmentCalculator
+from .arrow_initial_pos_calculator import ArrowInitialPosCalculator
+from .quadrant_index_handler import QuadrantIndexHandler
+from .special_arrow_positioner.special_arrow_positioner import SpecialArrowPositioner
+from .default_arrow_positioner import DefaultArrowPositioner
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph

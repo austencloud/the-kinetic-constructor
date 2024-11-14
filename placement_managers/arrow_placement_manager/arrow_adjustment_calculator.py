@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Optional
 from .directional_tuple_manager.directional_tuple_manager import DirectionalTupleManager
 
 if TYPE_CHECKING:
-    from ..arrow_placement_manager import ArrowPlacementManager
+    from .arrow_placement_manager import ArrowPlacementManager
 
 
 class ArrowAdjustmentCalculator:

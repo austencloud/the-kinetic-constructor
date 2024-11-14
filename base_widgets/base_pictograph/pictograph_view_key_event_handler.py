@@ -3,7 +3,7 @@ from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.components.pictograph_view import PictographView
+    from base_widgets.base_pictograph.pictograph_view import PictographView
 
 
 class PictographViewKeyEventHandler:

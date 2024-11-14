@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional
 from Enums.letters import Letter
 from data.constants import STATIC, DASH
 from objects.arrow.arrow import Arrow
-from base_widgets.base_pictograph.components.wasd_adjustment_manager.rotation_angle_override_key_generator import (
+from base_widgets.base_pictograph.wasd_adjustment_manager.rotation_angle_override_key_generator import (
     RotationAngleOverrideKeyGenerator,
 )
 
@@ -117,4 +117,3 @@ class RotationAngleOverrideManager:
             mirrored_entry_handler.rot_angle_manager.remove_rotation_angle_in_mirrored_entry(
                 self.pictograph.selected_arrow, hybrid_key
             )
-

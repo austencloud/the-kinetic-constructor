@@ -4,7 +4,7 @@ from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
-    from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
+    from .arrow_placement_manager import ArrowPlacementManager
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 

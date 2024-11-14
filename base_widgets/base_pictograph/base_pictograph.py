@@ -2,10 +2,8 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
 from Enums.Enums import Letter, OpenCloseStates, SpecificPosition, VTG_Modes
 from Enums.MotionAttributes import Location
-
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
-
 from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
     ReversalSymbolManager,
 )
@@ -19,26 +17,19 @@ from placement_managers.arrow_placement_manager.arrow_placement_manager import (
 from placement_managers.prop_placement_manager.prop_placement_manager import (
     PropPlacementManager,
 )
-
-from .components.elemental_glyph.elemental_glyph import ElementalGlyph
-from .components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
-    StartToEndPosGlyph,
-)
-from .components.tka_glyph.tka_glyph import TKA_Glyph
-from .components.vtg_glyph.vtg_glyph import VTG_Glyph
-from .components.pictograph_container import PictographContainer
-
-from .components.pictograph_attr_manager import PictographAttrManager
-from .components.pictograph_checker import PictographChecker
-from .components.pictograph_getter import PictographGetter
-
-from .components.pictograph_view import PictographView
-from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
-    WASD_AdjustmentManager,
-)
-from .components.pictograph_image_renderer import PictographImageRenderer
-from .components.pictograph_updater import PictographUpdater
-from .components.pictograph_initializer import PictographInitializer
+from .elemental_glyph.elemental_glyph import ElementalGlyph
+from .start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
+from .tka_glyph.tka_glyph import TKA_Glyph
+from .vtg_glyph.vtg_glyph import VTG_Glyph
+from .pictograph_container import PictographContainer
+from .pictograph_attr_manager import PictographAttrManager
+from .pictograph_checker import PictographChecker
+from .pictograph_getter import PictographGetter
+from .pictograph_view import PictographView
+from .wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
+from .pictograph_image_renderer import PictographImageRenderer
+from .pictograph_updater import PictographUpdater
+from .pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
@@ -46,7 +37,7 @@ if TYPE_CHECKING:
         OptionPickerScrollArea,
     )
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
+    from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_pictograph_frame import (
         StartPosPickerPictographFrame,
     )
 
@@ -99,6 +90,7 @@ class BasePictograph(QGraphicsScene):
         self,
         main_widget: "MainWidget",
         parent_widget=None,
+        fixed_view_size=None,
     ) -> None:
         super().__init__()
         self.main_widget = main_widget

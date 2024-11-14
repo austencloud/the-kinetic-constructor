@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.components.pictograph_view import PictographView
+    from base_widgets.base_pictograph.pictograph_view import PictographView
 
 
 class PictographViewSizeCalculator:
@@ -10,6 +10,7 @@ class PictographViewSizeCalculator:
         self.pictograph = pictograph_view.pictograph
 
     def calculate_view_size(self) -> int:
+
         if self.pictograph.parent_widget:
             COLUMN_COUNT = self.pictograph.parent_widget.COLUMN_COUNT
         else:

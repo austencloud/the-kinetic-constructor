@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING, Optional
 from Enums.Enums import LetterType, Letter
 
-from base_widgets.base_pictograph.components.lead_state_determiner import LeadStateDeterminer
+from base_widgets.base_pictograph.lead_state_determiner import (
+    LeadStateDeterminer,
+)
 from data.constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
@@ -9,7 +11,6 @@ from Enums.MotionAttributes import Location, MotionType
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
 
 
 class PictographGetter:
@@ -24,7 +25,9 @@ class PictographGetter:
         self.blue_arrow = self.pictograph.blue_arrow
         self.red_arrow = self.pictograph.red_arrow
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
-        self.lead_state_determiner = LeadStateDeterminer(self.red_motion, self.blue_motion)
+        self.lead_state_determiner = LeadStateDeterminer(
+            self.red_motion, self.blue_motion
+        )
 
     def motion_by_color(self, color: str) -> Motion:
         return self.pictograph.motions.get(color)

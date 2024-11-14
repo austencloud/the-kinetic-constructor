@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from base_widgets.base_pictograph.components.wasd_adjustment_manager.prop_placement_override_manager import (
+from base_widgets.base_pictograph.wasd_adjustment_manager.prop_placement_override_manager import (
     PropPlacementOverrideManager,
 )
 

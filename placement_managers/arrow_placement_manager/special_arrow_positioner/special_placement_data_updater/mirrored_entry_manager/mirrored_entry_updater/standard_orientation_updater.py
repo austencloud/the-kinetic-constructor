@@ -4,7 +4,7 @@ from Enums.letters import LetterConditions, Letter
 
 from data.constants import *
 from objects.arrow.arrow import Arrow
-from placement_managers.arrow_placement_manager.components.special_arrow_positioner.special_placement_data_updater.mirrored_entry_manager.mirrored_entry_updater.base_mirrored_entry_updater import (
+from placement_managers.arrow_placement_manager.special_arrow_positioner.special_placement_data_updater.mirrored_entry_manager.mirrored_entry_updater.base_mirrored_entry_updater import (
     BaseMirroredEntryUpdater,
 )
 

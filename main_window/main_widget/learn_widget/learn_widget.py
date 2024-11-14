@@ -69,14 +69,11 @@ class LearnWidget(QWidget):
             lesson_widget.set_mode(selected_mode)
             self.stack_layout.setCurrentWidget(lesson_widget)
 
-    def resize_learn_widget(self) -> None:
-        """Dynamically adjust button sizes and font sizes based on window size."""
+    def resizeEvent(self, event) -> None:
+        """Handle resize events for the widget."""
+        super().resizeEvent(event)
         self.lesson_1_widget.resize_lesson_widget()
         self.lesson_2_widget.resize_lesson_widget()
         self.lesson_3_widget.resize_lesson_widget()
         self.lesson_selector.resize_lesson_selector()
-
-    def resizeEvent(self, event) -> None:
-        """Handle resize events for the widget."""
-        super().resizeEvent(event)
-        self.resize_learn_widget()
+        # self.resize_learn_widget()

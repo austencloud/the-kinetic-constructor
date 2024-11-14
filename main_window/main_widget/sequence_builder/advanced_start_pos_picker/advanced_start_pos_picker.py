@@ -2,10 +2,10 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
 from typing import TYPE_CHECKING
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import BOX
-from main_window.main_widget.sequence_builder.components.start_pos_picker.base_start_pos_picker import (
+from main_window.main_widget.sequence_builder.start_pos_picker.base_start_pos_picker import (
     BaseStartPosPicker,
 )
-from main_window.main_widget.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import (
+from main_window.main_widget.sequence_builder.start_pos_picker.choose_your_start_pos_label import (
     ChooseYourStartPosLabel,
 )
 

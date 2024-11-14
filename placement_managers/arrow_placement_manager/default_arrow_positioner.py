@@ -23,7 +23,7 @@ from Enums.Enums import OrientationTypes
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from ..arrow_placement_manager import ArrowPlacementManager
+    from .arrow_placement_manager import ArrowPlacementManager
 import codecs
 
 
