@@ -41,9 +41,6 @@ class GraphEditorToggleTab(QWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self._resize_graph_editor_toggle_tab()
-
-    def _resize_graph_editor_toggle_tab(self):
         self.setFixedHeight(self.sequence_widget.height() // 20)
         font_size = self.height() // 3
         font = QFont()
@@ -54,11 +51,13 @@ class GraphEditorToggleTab(QWidget):
         self.setStyleSheet("background-color: white")
 
     def reposition_toggle_tab(self):
+        sequence_widget_height = self.sequence_widget.height()
+
         if self.sequence_widget.graph_editor.isVisible():
-            desired_height = int(self.sequence_widget.height() // 3.5)
+            desired_height = int(sequence_widget_height // 3.5)
             self.sequence_widget.graph_editor.resize(self.width(), desired_height)
             self.sequence_widget.graph_editor.move(
-                0, self.sequence_widget.height() - desired_height
+                0, sequence_widget_height - desired_height
             )
 
             self.move(
@@ -68,7 +67,7 @@ class GraphEditorToggleTab(QWidget):
                 - self.sequence_widget.height(),
             )
         else:
-            self.move(0, self.sequence_widget.height() - self.height())
+            self.move(0, sequence_widget_height - self.height())
 
     def enterEvent(self, event) -> None:
         self.setStyleSheet("background-color: lightgray; border: 1px solid black;")

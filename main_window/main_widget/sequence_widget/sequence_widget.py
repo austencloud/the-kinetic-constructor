@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
-
-from .graph_editor.graph_editor_toggle_tab import (
-    GraphEditorToggleTab,
-)
+from .graph_editor.graph_editor_toggle_tab import GraphEditorToggleTab
 from .graph_editor.graph_editor_toggler import GraphEditorToggler
 from .sequence_clearer import SequenceClearer
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
@@ -60,11 +57,7 @@ class SequenceWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        # self.current_word_label.resize_current_word_label()
-        # self.button_panel.resize_button_panel()
-        self.graph_editor.resize_graph_editor()
         self.toggle_tab.reposition_toggle_tab()
-        self.toggle_tab._resize_graph_editor_toggle_tab()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)

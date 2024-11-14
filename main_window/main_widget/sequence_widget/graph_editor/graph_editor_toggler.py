@@ -22,7 +22,10 @@ class GraphEditorToggler(QObject):
         if self.graph_editor.isVisible():
             self.animate_graph_editor(show=False)
         else:
-            self.sequence_widget.layout_manager.add_graph_editor_placeholder()
+            self.sequence_widget.layout_manager.main_layout.addWidget(
+                self.graph_editor_placeholder
+            )
+
             self.graph_editor.show()
             self.animate_graph_editor(show=True)
 
@@ -76,7 +79,9 @@ class GraphEditorToggler(QObject):
         # Remove placeholder on collapse
         if not show:
             self.graph_editor_animation.finished.connect(
-                lambda: self.sequence_widget.layout_manager.remove_graph_editor_placeholder()
+                lambda: self.sequence_widget.layout_manager.main_layout.removeWidget(
+                    self.graph_editor_placeholder
+                )
             )
             self.graph_editor_animation.finished.connect(self.graph_editor.hide)
 

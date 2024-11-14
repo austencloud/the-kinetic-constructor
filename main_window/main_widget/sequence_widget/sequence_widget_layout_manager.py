@@ -15,12 +15,6 @@ class SequenceWidgetLayoutManager:
         self.sequence_widget = sequence_widget
         self.graph_editor_placeholder = GraphEditorPlaceholder(sequence_widget)
 
-    def resize_sequence_widget(self) -> None:
-        # self.sequence_widget.current_word_label.resize_current_word_label()
-        self.sequence_widget.button_panel.resize_button_panel()
-        # self.sequence_widget.beat_frame.resize_beat_frame()
-        self.sequence_widget.graph_editor.resize_graph_editor()
-
     def setup_layout(self):
         self.setup_beat_frame_layout()
         self.setup_indicator_label_layout()
@@ -29,12 +23,12 @@ class SequenceWidgetLayoutManager:
         current_word_layout = QVBoxLayout()
         current_word_layout.addWidget(self.sequence_widget.current_word_label)
         current_word_layout.addWidget(self.sequence_widget.difficulty_label)
+
         self.main_layout.addStretch(1)
         self.main_layout.addLayout(current_word_layout, 1)
         self.main_layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
         self.main_layout.addWidget(self.sequence_widget.indicator_label, 1)
-        # if self.sequence_widget.graph_editor.isVisible():
-        self.add_graph_editor_placeholder()
+        self.main_layout.addWidget(self.graph_editor_placeholder)
 
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -45,14 +39,6 @@ class SequenceWidgetLayoutManager:
         self.sequence_widget.scroll_area.setWidget(self.sequence_widget.beat_frame)
 
         self.sequence_widget.setLayout(self.main_layout)
-
-    def add_graph_editor_placeholder(self):
-        self.main_layout.addWidget(self.graph_editor_placeholder)
-        # self.graph_editor_placeholder.update_height()
-
-    def remove_graph_editor_placeholder(self):
-        self.main_layout.removeWidget(self.graph_editor_placeholder)
-        # self.graph_editor_placeholder.resize_graph_editor_placeholder()
 
     def setup_beat_frame_layout(self):
         self.sequence_widget.beat_frame_layout = QHBoxLayout()
