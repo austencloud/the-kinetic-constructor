@@ -6,7 +6,7 @@ from .sequence_widget.sequence_widget import SequenceWidget
 from .sequence_builder.auto_builder.sequence_generator_widget import (
     SequenceGeneratorWidget,
 )
-from .sequence_builder.manual_builder import ManualBuilderWidget
+from .sequence_builder.manual_builder import ManualBuilder
 from .dictionary_widget.dictionary_widget import DictionaryWidget
 from .learn_widget.learn_widget import LearnWidget
 
@@ -32,7 +32,7 @@ class MainWidgetUI:
         splash.updater.update_progress("SequenceWidget")
         mw.sequence_widget = SequenceWidget(mw)
         splash.updater.update_progress("ManualBuilderWidget")
-        mw.manual_builder = ManualBuilderWidget(mw)
+        mw.manual_builder = ManualBuilder(mw)
         splash.updater.update_progress("SequenceGeneratorWidget")
         mw.sequence_generator = SequenceGeneratorWidget(mw)
         splash.updater.update_progress("DictionaryWidget")

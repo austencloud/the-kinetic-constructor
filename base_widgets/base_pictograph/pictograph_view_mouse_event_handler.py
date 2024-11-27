@@ -14,8 +14,8 @@ class PictographViewMouseEventHandler:
         self.pictograph = pictograph_view.pictograph
 
     def handle_mouse_press(self, event: "QMouseEvent") -> None:
-        if self.pictograph.check.is_in_sequence_builder():
-            self.pictograph.parent_widget.manual_builder.option_click_handler.on_option_clicked(
+        if self.pictograph.check.is_in_option_picker():
+            self.pictograph.view.option_picker.manual_builder.option_click_handler.on_option_clicked(
                 self.pictograph
             )
             return

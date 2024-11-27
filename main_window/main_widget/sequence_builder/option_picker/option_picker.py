@@ -7,7 +7,7 @@ from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..manual_builder import ManualBuilderWidget
+    from ..manual_builder import ManualBuilder
 
 
 class OptionPicker(QWidget):
@@ -16,7 +16,7 @@ class OptionPicker(QWidget):
     COLUMN_COUNT = 8
     option_selected = pyqtSignal(str)
 
-    def __init__(self, manual_builder: "ManualBuilderWidget"):
+    def __init__(self, manual_builder: "ManualBuilder"):
         super().__init__(manual_builder)
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget
@@ -26,6 +26,7 @@ class OptionPicker(QWidget):
         self.option_getter = OptionGetter(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_selector = OptionPickerReversalSelector(self)
+
         self._load_filter()
         self.setup_layout()
         self.hide()
@@ -68,9 +69,7 @@ class OptionPicker(QWidget):
         if index != -1:
             self.reversal_selector.reversal_combobox.setCurrentIndex(index)
         else:
-            self.reversal_selector.reversal_combobox.setCurrentIndex(
-                0
-            )  # Default to "All"
+            self.reversal_selector.reversal_combobox.setCurrentIndex(0)
 
     def update_option_picker(self, sequence=None):
         if self.disabled:
@@ -79,24 +78,17 @@ class OptionPicker(QWidget):
             sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(sequence) > 2:
-            # Get selected filter
             selected_filter = self.reversal_selector.reversal_combobox.currentData()
 
             next_options: list = self.option_getter.get_next_options(
                 sequence, selected_filter
             )
-            self.scroll_area.clear_pictographs()  # Clear existing pictographs
-            # QApplication.processEvents()
+            self.scroll_area.clear_pictographs()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         elif len(sequence) == 2:
             self.scroll_area.clear_pictographs()
             next_options = self.option_getter._load_all_next_options(sequence)
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
-        # self.choose_your_next_pictograph_label.set_stylesheet()
-
-    # def resize_option_picker(self) -> None:
-    # self.choose_your_next_pictograph_label.resize_choose_your_next_pictograph_label()
-    # self.scroll_area.resize_option_picker_scroll_area()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

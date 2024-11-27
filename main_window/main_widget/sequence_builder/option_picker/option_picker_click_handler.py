@@ -4,13 +4,13 @@ from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
+        ManualBuilder,
     )
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class OptionPickerClickHandler:
-    def __init__(self, manual_builder: "ManualBuilderWidget") -> None:
+    def __init__(self, manual_builder: "ManualBuilder") -> None:
         self.manual_builder = manual_builder
 
     def get_click_handler(self, start_pos: "BasePictograph") -> callable:

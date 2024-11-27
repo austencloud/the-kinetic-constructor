@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson_pictograph_view import (
+    LessonPictographView,
+)
 
 if TYPE_CHECKING:
     from .base_lesson_widget.base_lesson_widget import BaseLessonWidget
@@ -43,9 +46,11 @@ class BaseQuestionWidget(QWidget):
 
     def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""
-        self.pictograph: BasePictograph = BasePictograph(
-            self.main_widget, parent_widget=None
+        self.pictograph: BasePictograph = BasePictograph(self.main_widget)
+        self.pictograph.view = LessonPictographView(
+            self.pictograph, self.lesson_widget.learn_widget
         )
+
         self.pictograph.disable_gold_overlay = True
         self.pictograph.updater.update_pictograph(pictograph_dict)
         self.pictograph.quiz_mode = True

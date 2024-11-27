@@ -13,7 +13,7 @@ from .choose_your_start_pos_label import ChooseYourStartPosLabel
 from .base_start_pos_picker import BaseStartPosPicker
 
 if TYPE_CHECKING:
-    from ...sequence_builder.manual_builder import ManualBuilderWidget
+    from ...sequence_builder.manual_builder import ManualBuilder
 
 
 class StartPosPicker(BaseStartPosPicker):
@@ -21,7 +21,7 @@ class StartPosPicker(BaseStartPosPicker):
     start_position_selected = pyqtSignal(BasePictograph)
     COLUMN_COUNT = 3
 
-    def __init__(self, manual_builder: "ManualBuilderWidget"):
+    def __init__(self, manual_builder: "ManualBuilder"):
         super().__init__(manual_builder)
         self.top_builder_widget = None
         self.pictograph_frame = StartPosPickerPictographFrame(self)
@@ -183,6 +183,6 @@ class StartPosPicker(BaseStartPosPicker):
             start_option.view.scale(
                 start_option.view.view_scale, start_option.view.view_scale
             )
-            start_option.container.styled_border_overlay.resize_styled_border_overlay()
+            # start_option.container.styled_border_overlay.resize_styled_border_overlay()
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.variations_button.resize_variations_button()

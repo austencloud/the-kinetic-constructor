@@ -188,4 +188,4 @@ class CustomLetterTypeButton(QLabel):
         """Ensure the border overlay and the button size adjust when resized."""
         super().resizeEvent(event)
         self.update_style()
-        self.border_overlay.resize_styled_border_overlay()
+        # self.border_overlay.resize_styled_border_overlay()

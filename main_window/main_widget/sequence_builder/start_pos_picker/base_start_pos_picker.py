@@ -5,14 +5,18 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import BOX, DIAMOND
 from copy import deepcopy
 
+from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_picker_pictograph_view import (
+    StartPosPickerPictographView,
+)
+
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
+        ManualBuilder,
     )
 
 
 class BaseStartPosPicker(QWidget):
-    def __init__(self, manual_builder: "ManualBuilderWidget"):
+    def __init__(self, manual_builder: "ManualBuilder"):
         super().__init__(manual_builder)
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget
@@ -39,7 +43,8 @@ class BaseStartPosPicker(QWidget):
             return self.pictograph_cache[pictograph_key]
 
         with self.temporary_grid_mode(target_grid_mode):
-            pictograph = BasePictograph(self.main_widget, self)
+            pictograph = BasePictograph(self.main_widget)
+            pictograph.view = StartPosPickerPictographView(pictograph, self)
             pictograph.updater.update_pictograph(deepcopy(pictograph_dict))
             self.pictograph_cache[pictograph_key] = pictograph
 

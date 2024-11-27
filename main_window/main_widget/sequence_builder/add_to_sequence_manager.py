@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 
 
-
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
     from main_window.main_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
+        ManualBuilder,
     )
     from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
         Beat,
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class AddToSequenceManager:
-    def __init__(self, manual_builder: "ManualBuilderWidget") -> None:
+    def __init__(self, manual_builder: "ManualBuilder") -> None:
         self.manual_builder = manual_builder
 
     def create_new_beat(self, clicked_option: "BasePictograph") -> "Beat":
@@ -23,7 +22,9 @@ class AddToSequenceManager:
         )
 
         beat_frame = self.manual_builder.main_widget.sequence_widget.beat_frame
-        sequence = self.manual_builder.main_widget.json_manager.loader_saver.load_current_sequence_json()
+        sequence = (
+            self.manual_builder.main_widget.json_manager.loader_saver.load_current_sequence_json()
+        )
 
         last_beat_dict = None
         if len(sequence) > 1:
@@ -42,8 +43,6 @@ class AddToSequenceManager:
             + [("duration", 1)]
             + list(pictograph_dict.items())[1:]
         )
-
-
 
         new_beat.updater.update_pictograph(pictograph_dict)
         self.manual_builder.last_beat = new_beat

@@ -10,13 +10,13 @@ from main_window.main_widget.sequence_builder.start_pos_picker.choose_your_start
 )
 
 if TYPE_CHECKING:
-    from ..manual_builder import ManualBuilderWidget
+    from ..manual_builder import ManualBuilder
 
 
 class AdvancedStartPosPicker(BaseStartPosPicker):
     COLUMN_COUNT = 4
 
-    def __init__(self, manual_builder: "ManualBuilderWidget"):
+    def __init__(self, manual_builder: "ManualBuilder"):
         super().__init__(manual_builder)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self._setup_layout()

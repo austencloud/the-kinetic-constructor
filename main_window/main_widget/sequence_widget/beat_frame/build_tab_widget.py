@@ -4,19 +4,19 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
     from main_window.main_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
+        ManualBuilder,
     )
 
 
 class BuildTabWidget(QWidget):
     def __init__(
-        self, sequence_widget: "SequenceWidget", manual_builder: "ManualBuilderWidget"
+        self, sequence_widget: "SequenceWidget", manual_builder: "ManualBuilder"
     ):
         super().__init__()
         self.sequence_widget = sequence_widget
         self.manual_builder = manual_builder
 
-        self.layout:QHBoxLayout = QHBoxLayout(self)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.addWidget(self.sequence_widget)
         self.layout.addWidget(self.manual_builder)
 

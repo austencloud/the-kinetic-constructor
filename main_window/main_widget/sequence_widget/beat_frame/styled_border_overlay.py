@@ -22,15 +22,11 @@ class StyledBorderOverlay(QWidget):
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
-    def resize_styled_border_overlay(self) -> None:
-        self.setFixedSize(self.view.width(), self.view.height())
-        self.update_border_widths()
-
     def update_border_widths(self) -> None:
         view_width = self.view.size().width()
         self.outer_border_width = max(1, math.ceil(view_width * 0.016))
         self.inner_border_width = max(1, math.ceil(view_width * 0.016))
-        # self.update()
+        self.update()
 
     def update_border_color_and_width(self, primary_color, secondary_color) -> None:
         self.update_border_widths()
@@ -40,11 +36,6 @@ class StyledBorderOverlay(QWidget):
         )
         self.is_set = True
         self.update()
-
-    def paintEvent(self, event) -> None:
-        if self.primary_color and self.secondary_color:
-            painter = QPainter(self)
-            self._draw_borders(painter)
 
     def _draw_borders(self, painter: QPainter) -> None:
         pen = QPen()
@@ -106,3 +97,15 @@ class StyledBorderOverlay(QWidget):
     def remove_border(self) -> None:
         self.is_set = False
         self.update()
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.setFixedSize(self.view.width(), self.view.height())
+        self.update_border_widths()
+
+    def paintEvent(self, event) -> None:
+        print("StyledBorderOverlay paintEvent called")
+        super().paintEvent(event)
+        if self.primary_color and self.secondary_color:
+            painter = QPainter(self)
+            self._draw_borders(painter)

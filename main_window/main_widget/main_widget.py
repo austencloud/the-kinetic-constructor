@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     )
     from .json_manager.json_manager import JsonManager
     from .sequence_widget.sequence_widget import SequenceWidget
-    from .sequence_builder.manual_builder import ManualBuilderWidget
+    from .sequence_builder.manual_builder import ManualBuilder
     from .sequence_builder.auto_builder.sequence_generator_widget import (
         SequenceGeneratorWidget,
     )
@@ -58,7 +58,7 @@ class MainWidget(QWidget):
     splash_screen: "SplashScreen"
 
     # Sub-widgets
-    manual_builder: "ManualBuilderWidget"
+    manual_builder: "ManualBuilder"
     sequence_generator: "SequenceGeneratorWidget"
     dictionary_widget: "DictionaryWidget"
     learn_widget: "LearnWidget"
@@ -147,4 +147,3 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)
-

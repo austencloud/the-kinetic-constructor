@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
-from Enums.Enums import Letter, OpenCloseStates, SpecificPosition, VTG_Modes
+from Enums.Enums import Letter, OpenCloseStates, VTG_Modes
 from Enums.MotionAttributes import Location
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
@@ -31,6 +31,9 @@ from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_updater import PictographUpdater
 from .pictograph_initializer import PictographInitializer
 
+from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import (
+    StyledBorderOverlay,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
@@ -84,17 +87,11 @@ class BasePictograph(QGraphicsScene):
     blue_reversal_symbol: "QGraphicsTextItem" = None
     red_reversal = False
     red_reversal_symbol: "QGraphicsTextItem" = None
-    parent_widget: Union["StartPosPickerPictographFrame", "OptionPickerScrollArea"]
+    # styled_border_overlay: "StyledBorderOverlay"
 
-    def __init__(
-        self,
-        main_widget: "MainWidget",
-        parent_widget=None,
-        fixed_view_size=None,
-    ) -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.parent_widget = parent_widget
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
@@ -102,9 +99,10 @@ class BasePictograph(QGraphicsScene):
         self.check = PictographChecker(self)
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
-        self.view = PictographView(self)
         self.container = PictographContainer(self)
         self.initializer.init_all_components()
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
         self.reversal_symbol_manager = ReversalSymbolManager(self)
+        # self.container = PictographContainer(self)
+        # self.styled_border_overlay = StyledBorderOverlay(self.container)

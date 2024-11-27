@@ -8,6 +8,7 @@ from data.constants import BLUE, RED
 
 from base_widgets.base_picker_scroll_area import BasePickerScrollArea
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_builder.option_picker.option_picker_pictograph_view import OptionPickerPictographView
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
@@ -80,7 +81,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             self.set_pictograph_orientations(pictograph_dict, sequence)
             pictograph = self._get_or_create_pictograph(pictograph_dict, sequence)
             pictograph.updater.update_pictograph(pictograph_dict)
-
             # Detect reversals
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()

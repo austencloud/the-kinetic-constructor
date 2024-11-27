@@ -6,7 +6,7 @@ class LetterConditions(Enum):
     PRO = "pro"
     ANTI = "anti"
     DASH = "dash"
-    STATIC = "static"
+    HAS_STATIC = "static"
     ALPHA_ENDING = "alpha_ending"
     BETA_ENDING = "beta_ending"
     GAMMA_ENDING = "gamma_ending"
@@ -150,7 +150,7 @@ class Letter(Enum):
                 Letter.Ψ_DASH,
                 Letter.Λ_DASH,
             ],
-            LetterConditions.STATIC: [
+            LetterConditions.HAS_STATIC: [
                 Letter.W,
                 Letter.X,
                 Letter.Y,

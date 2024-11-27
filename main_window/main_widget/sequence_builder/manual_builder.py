@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class ManualBuilderWidget(QFrame):
+class ManualBuilder(QFrame):
     start_position_selected = pyqtSignal(object)
 
     def __init__(self, main_widget: "MainWidget") -> None:

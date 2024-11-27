@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from Enums.Enums import LetterType
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_builder.option_picker.option_picker_pictograph_view import (
+    OptionPickerPictographView,
+)
 
 if TYPE_CHECKING:
     from .option_picker_scroll_area import OptionPickerScrollArea
@@ -14,6 +17,7 @@ class OptionPickerPictographFactory:
         pictograph_cache: dict[str, BasePictograph],
     ) -> None:
         self.scroll_area = scroll_area
+        self.option_picker = scroll_area.option_picker
         self.pictograph_cache = pictograph_cache
 
     def get_or_create_pictograph(
@@ -64,6 +68,8 @@ class OptionPickerPictographFactory:
     def create_pictograph(self) -> BasePictograph:
         pictograph = BasePictograph(
             self.scroll_area.main_widget,
-            self.scroll_area,
+            # self.scroll_area,
         )
+        pictograph.view = OptionPickerPictographView(pictograph, self.option_picker)
+
         return pictograph

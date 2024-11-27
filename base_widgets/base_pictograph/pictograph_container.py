@@ -2,8 +2,9 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
-from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import StyledBorderOverlay
-
+from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import (
+    StyledBorderOverlay,
+)
 
 
 if TYPE_CHECKING:
@@ -18,10 +19,8 @@ class PictographContainer(QFrame):
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
 
-        self.view = pictograph.view
-        self.layout().addWidget(self.view)
         self.border_colors_map = self._get_border_colors_map()
-        self.styled_border_overlay = StyledBorderOverlay(self.view)
+        self.styled_border_overlay = StyledBorderOverlay(self)
 
     def _get_border_colors_map(self) -> dict[LetterType, tuple[str, str]]:
         border_colors_map = {

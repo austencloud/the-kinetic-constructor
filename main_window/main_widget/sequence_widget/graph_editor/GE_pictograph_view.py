@@ -23,11 +23,11 @@ if TYPE_CHECKING:
 class GE_PictographView(PictographView):
     def __init__(
         self,
-        pictograph_container: "GraphEditorPictographContainer",
+        container: "GraphEditorPictographContainer",
         blank_pictograph: "GE_BlankPictograph",
     ) -> None:
-        super().__init__(blank_pictograph)
-        self.graph_editor = pictograph_container.graph_editor
+        super().__init__(blank_pictograph, container.graph_editor)
+        self.graph_editor = container.graph_editor
         self.is_start_pos = False
         self.blank_pictograph = blank_pictograph
         self.main_widget = self.graph_editor.main_widget
