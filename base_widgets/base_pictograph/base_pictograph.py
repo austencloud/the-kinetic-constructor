@@ -1,9 +1,10 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
 from Enums.Enums import Letter, OpenCloseStates, VTG_Modes
 from Enums.MotionAttributes import Location
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
+from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
     ReversalSymbolManager,
 )
@@ -36,7 +37,7 @@ if TYPE_CHECKING:
 
 
 class BasePictograph(QGraphicsScene):
-    view: PictographView
+    view: Union[PictographView, BorderedPictographView]
     arrows: dict[str, Arrow]
     props: dict[str, Prop]
     motions: dict[str, Motion]

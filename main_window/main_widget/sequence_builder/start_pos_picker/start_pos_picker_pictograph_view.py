@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
 
+from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
 )
@@ -19,7 +20,7 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class StartPosPickerPictographView(PictographView):
+class StartPosPickerPictographView(BorderedPictographView):
     original_style: str
 
     def __init__(self, pictograph: "BasePictograph") -> None:
