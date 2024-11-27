@@ -4,7 +4,6 @@ from Enums.letters import Letter
 from data.constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 from functools import lru_cache
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -36,7 +35,6 @@ class PictographUpdater:
                 self.pictograph.vtg_glyph.set_vtg_mode()
                 self.pictograph.elemental_glyph.set_elemental_glyph()
                 self.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
-                self.pictograph.container.update_borders()
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
@@ -52,7 +50,7 @@ class PictographUpdater:
         self.pictograph.attr_manager.update_attributes(pictograph_dict)
         motion_dicts = self._get_motion_dicts(pictograph_dict)
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
-        self.pictograph.container.update_borders()
+        # self.pictograph.view.container.update_borders()
         red_arrow_dict, blue_arrow_dict = self.get_arrow_dicts(pictograph_dict)
         self._update_motions(pictograph_dict, motion_dicts)
         self._update_arrows(red_arrow_dict, blue_arrow_dict)

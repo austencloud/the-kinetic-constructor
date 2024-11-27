@@ -32,7 +32,7 @@ class OptionPickerPictographFactory:
         if pictograph_dict is not None:
             pictograph = self.create_pictograph()
             pictograph.updater.update_pictograph(pictograph_dict)
-
+            pictograph.view.update_borders()
             if letter not in self.pictograph_cache:
                 self.pictograph_cache[letter] = {}
             self.pictograph_cache[letter][pictograph_key] = pictograph
@@ -66,10 +66,7 @@ class OptionPickerPictographFactory:
         return self.scroll_area.pictograph_cache[pictograph_key]
 
     def create_pictograph(self) -> BasePictograph:
-        pictograph = BasePictograph(
-            self.scroll_area.main_widget,
-            # self.scroll_area,
-        )
+        pictograph = BasePictograph(self.scroll_area.main_widget)
         pictograph.view = OptionPickerPictographView(pictograph, self.option_picker)
-
+        # pictograph.view.update_borders()
         return pictograph

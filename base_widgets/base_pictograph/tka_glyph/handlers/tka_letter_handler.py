@@ -1,7 +1,5 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsTextItem
-from PyQt6.QtGui import QFont
 from Enums.Enums import LetterType
 
 from typing import TYPE_CHECKING

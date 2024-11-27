@@ -1,15 +1,11 @@
-from typing import TYPE_CHECKING, Optional
-from Enums.Enums import LetterType, Letter
+from typing import TYPE_CHECKING
 
 from data.constants import *
-from objects.arrow.arrow import Arrow
-from objects.motion.managers import handpath_calculator
 from objects.motion.managers.handpath_calculator import HandpathCalculator
 from objects.motion.motion import Motion
-from Enums.MotionAttributes import Location, MotionType
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    pass
 
 
 class LeadStateDeterminer:

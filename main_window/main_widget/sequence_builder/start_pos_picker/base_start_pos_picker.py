@@ -44,8 +44,9 @@ class BaseStartPosPicker(QWidget):
 
         with self.temporary_grid_mode(target_grid_mode):
             pictograph = BasePictograph(self.main_widget)
-            pictograph.view = StartPosPickerPictographView(pictograph, self)
+            pictograph.view = StartPosPickerPictographView(pictograph)
             pictograph.updater.update_pictograph(deepcopy(pictograph_dict))
+            pictograph.view.update_borders()
             self.pictograph_cache[pictograph_key] = pictograph
 
             # Append to the list based on the grid mode

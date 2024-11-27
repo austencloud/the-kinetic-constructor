@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QLabel
-from PyQt6.QtGui import QFont, QFontMetrics
+from PyQt6.QtGui import QFontMetrics
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 

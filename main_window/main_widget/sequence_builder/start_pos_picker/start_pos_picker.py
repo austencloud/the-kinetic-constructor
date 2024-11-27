@@ -1,7 +1,5 @@
-from copy import deepcopy
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal
-from functools import partial
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, START_POS, END_POS

@@ -8,7 +8,6 @@ if TYPE_CHECKING:
         OptionPickerSectionWidget,
     )
 
-    pass
 
 
 class OptionPickerSectionPictographFrame(QFrame):

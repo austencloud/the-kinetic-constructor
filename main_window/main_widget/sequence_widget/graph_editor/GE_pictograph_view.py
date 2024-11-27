@@ -26,7 +26,7 @@ class GE_PictographView(PictographView):
         container: "GraphEditorPictographContainer",
         blank_pictograph: "GE_BlankPictograph",
     ) -> None:
-        super().__init__(blank_pictograph, container.graph_editor)
+        super().__init__(blank_pictograph)
         self.graph_editor = container.graph_editor
         self.is_start_pos = False
         self.blank_pictograph = blank_pictograph

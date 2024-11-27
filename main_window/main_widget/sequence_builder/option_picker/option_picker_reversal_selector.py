@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QComboBox, QWidget, QLabel, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.sequence_builder.option_picker.reversal_combobox import (

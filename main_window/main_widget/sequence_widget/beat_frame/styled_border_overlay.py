@@ -3,6 +3,8 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt, QRect
 from typing import TYPE_CHECKING
 
+from Enums.letters import LetterType
+
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.pictograph_view import (
         PictographView,
@@ -21,6 +23,23 @@ class StyledBorderOverlay(QWidget):
         self.saved_secondary_color = None
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.border_colors_map = self._get_border_colors_map()
+        self.setContentsMargins(0, 0, 0, 0)
+        
+    def _get_border_colors_map(self) -> dict[LetterType, tuple[str, str]]:
+        border_colors_map = {
+            LetterType.Type1: ("#36c3ff", "#6F2DA8"),  # Cyan, Purple
+            LetterType.Type2: ("#6F2DA8", "#6F2DA8"),  # Purple, Purple
+            LetterType.Type3: ("#26e600", "#6F2DA8"),  # Green, Purple
+            LetterType.Type4: ("#26e600", "#26e600"),  # Green, Green
+            LetterType.Type5: ("#00b3ff", "#26e600"),  # Cyan, Green
+            LetterType.Type6: ("#eb7d00", "#eb7d00"),  # Orange, Orange
+        }
+        return border_colors_map
+
+    def get_border_colors(self) -> tuple[str, str]:
+        letter_type = self.view.pictograph.letter_type
+        return self.border_colors_map.get(letter_type, ("black", "black"))
 
     def update_border_widths(self) -> None:
         view_width = self.view.size().width()
@@ -49,14 +68,14 @@ class StyledBorderOverlay(QWidget):
         pen.setWidth(self.inner_border_width)
         pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
         painter.setPen(pen)
-        inner_offset = self.outer_border_width - (
-            self.outer_border_width - self.inner_border_width
-        )
+
+        # Adjust the rectangle by half the pen width
+        half_pen_width = int(self.inner_border_width / 2)
         inner_rect = outer_rect.adjusted(
-            inner_offset,
-            inner_offset,
-            -inner_offset,
-            -inner_offset,
+            half_pen_width,
+            half_pen_width,
+            -half_pen_width,
+            -half_pen_width,
         )
         painter.drawRect(inner_rect)
 
@@ -65,11 +84,14 @@ class StyledBorderOverlay(QWidget):
         pen.setWidth(self.outer_border_width)
         pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
         painter.setPen(pen)
+
+        # Adjust the rectangle by half the pen width
+        half_pen_width = int(self.outer_border_width / 2)
         outer_rect = self.rect().adjusted(
-            self.outer_border_width // 2,
-            self.outer_border_width // 2,
-            -(self.outer_border_width // 2),
-            -(self.outer_border_width // 2),
+            half_pen_width,
+            half_pen_width,
+            -half_pen_width,
+            -half_pen_width,
         )
         painter.drawRect(outer_rect)
         return outer_rect
@@ -104,8 +126,12 @@ class StyledBorderOverlay(QWidget):
         self.update_border_widths()
 
     def paintEvent(self, event) -> None:
-        print("StyledBorderOverlay paintEvent called")
         super().paintEvent(event)
         if self.primary_color and self.secondary_color:
             painter = QPainter(self)
             self._draw_borders(painter)
+
+    def update_borders(self) -> None:
+        primary_color, secondary_color = self.get_border_colors()
+        self.update_border_color_and_width(primary_color, secondary_color)
+        self.update()

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
 from Enums.Enums import Letter, OpenCloseStates, VTG_Modes
 from Enums.MotionAttributes import Location
@@ -21,7 +21,6 @@ from .elemental_glyph.elemental_glyph import ElementalGlyph
 from .start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
 from .tka_glyph.tka_glyph import TKA_Glyph
 from .vtg_glyph.vtg_glyph import VTG_Glyph
-from .pictograph_container import PictographContainer
 from .pictograph_attr_manager import PictographAttrManager
 from .pictograph_checker import PictographChecker
 from .pictograph_getter import PictographGetter
@@ -31,18 +30,9 @@ from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_updater import PictographUpdater
 from .pictograph_initializer import PictographInitializer
 
-from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import (
-    StyledBorderOverlay,
-)
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_pictograph_frame import (
-        StartPosPickerPictographFrame,
-    )
 
 
 class BasePictograph(QGraphicsScene):
@@ -99,10 +89,8 @@ class BasePictograph(QGraphicsScene):
         self.check = PictographChecker(self)
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
-        self.container = PictographContainer(self)
+        # self.container = PictographContainer(self)
         self.initializer.init_all_components()
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
         self.reversal_symbol_manager = ReversalSymbolManager(self)
-        # self.container = PictographContainer(self)
-        # self.styled_border_overlay = StyledBorderOverlay(self.container)

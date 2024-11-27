@@ -1,14 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QWheelEvent
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
 
 from base_widgets.base_picker_scroll_area import BasePickerScrollArea
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_builder.option_picker.option_picker_pictograph_view import OptionPickerPictographView
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )

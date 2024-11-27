@@ -70,6 +70,6 @@ class GraphEditor(QFrame):
     def get_graph_editor_height(self):
         return int(self.sequence_widget.height() // 3.5)
 
-    def resizeEvent(self, event):
-        self.resize_graph_editor()
-        super().resizeEvent(event)
+    # def resizeEvent(self, event):
+    #     super().resizeEvent(event)
+    #     self.resize_graph_editor()

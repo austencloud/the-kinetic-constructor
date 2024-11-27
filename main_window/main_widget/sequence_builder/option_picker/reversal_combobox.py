@@ -9,9 +9,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.option_picker.option_picker_reversal_selector import (
         OptionPickerReversalSelector,
     )
-    from main_window.main_widget.sequence_builder.option_picker.option_picker import (
-        OptionPicker,
-    )
 
 
 class ReversalCombobox(QComboBox):

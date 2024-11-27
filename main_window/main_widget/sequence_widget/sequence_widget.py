@@ -58,7 +58,7 @@ class SequenceWidget(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.toggle_tab.reposition_toggle_tab()
-
+        self.graph_editor.resize_graph_editor()  # Add this line
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.current_word_label.update_current_word_label_from_beats()

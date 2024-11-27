@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping

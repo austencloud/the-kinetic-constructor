@@ -67,7 +67,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 lambda event, v=variation: self.on_variation_selected(v)
             )
             self._resize_variation(variation)
-            variation.container.update_borders()
+            variation.view.update_borders()
 
     def _resize_variation(self, variation: "BasePictograph") -> None:
         view_width = int(self.manual_builder.height() // 6)
@@ -75,9 +75,9 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         variation.view.view_scale = view_width / variation.view.pictograph.width()
         variation.view.resetTransform()
         variation.view.scale(variation.view.view_scale, variation.view.view_scale)
-        variation.container.styled_border_overlay.setFixedSize(
-            variation.view.width(), variation.view.height()
-        )
+        # variation.view.setFixedSize(
+        #     variation.view.width(), variation.view.height()
+        # )
 
     def on_variation_selected(self, variation: "BasePictograph") -> None:
         self.start_position_adder.add_start_pos_to_sequence(variation)

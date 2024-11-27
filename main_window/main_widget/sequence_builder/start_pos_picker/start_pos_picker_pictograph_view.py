@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsRectItem
+from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
 
@@ -25,10 +25,8 @@ if TYPE_CHECKING:
 class StartPosPickerPictographView(PictographView):
     original_style: str
 
-    def __init__(
-        self, pictograph: "BasePictograph", option_picker: "OptionPicker"
-    ) -> None:
-        super().__init__(pictograph, option_picker)
+    def __init__(self, pictograph: "BasePictograph") -> None:
+        super().__init__(pictograph)
         self.pictograph = pictograph
         self.pictograph.view = self
         self.original_style = ""
@@ -103,7 +101,7 @@ class StartPosPickerPictographView(PictographView):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.pictograph.container.styled_border_overlay.set_gold_border()
+        self.pictograph.view.set_gold_border()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
@@ -119,7 +117,7 @@ class StartPosPickerPictographView(PictographView):
     def leaveEvent(self, event: QEvent) -> None:
         self.setStyleSheet("")
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-        self.pictograph.container.styled_border_overlay.reset_border()
+        self.pictograph.view.reset_border()
 
     def resizeEvent(self, event):
         """Trigger fitInView whenever the widget is resized."""
@@ -129,7 +127,7 @@ class StartPosPickerPictographView(PictographView):
     def _resize_pictograph_view(self):
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         size = self.calculate_view_size()
-        self.pictograph.container.styled_border_overlay.update_border_widths()
+        self.pictograph.view.update_border_widths()
         self.setMinimumWidth(size)
         self.setMaximumWidth(size)
         self.setMinimumHeight(size)
@@ -137,7 +135,6 @@ class StartPosPickerPictographView(PictographView):
         self.view_scale = size / self.pictograph.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-        # self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()
 
     def calculate_view_size(self) -> int:
         view_width = int((self.pictograph.main_widget.manual_builder.width() / 4))

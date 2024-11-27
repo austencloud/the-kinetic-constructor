@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 from .option_picker_reversal_selector import OptionPickerReversalSelector
 from .option_getter import OptionGetter

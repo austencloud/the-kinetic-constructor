@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsRectItem
+from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent, QPainter
 
@@ -28,7 +28,7 @@ class OptionPickerPictographView(PictographView):
     def __init__(
         self, pictograph: "BasePictograph", option_picker: "OptionPicker"
     ) -> None:
-        super().__init__(pictograph, option_picker)
+        super().__init__(pictograph)
         self.pictograph = pictograph
         self.pictograph.view = self
         self.option_picker = option_picker
@@ -49,17 +49,15 @@ class OptionPickerPictographView(PictographView):
         self._touchTimeout = QTimer(self)
         self._touchTimeout.setSingleShot(True)
         self._touchTimeout.timeout.connect(self._resetTouchState)
-        self._touchTimeout.setInterval(100)  # Adjust as needed
+        self._touchTimeout.setInterval(100)
 
-        if self.pictograph.container.styled_border_overlay.primary_color and self.pictograph.container.styled_border_overlay.secondary_color:
+        if self.pictograph.view.primary_color and self.pictograph.view.secondary_color:
             painter = QPainter(self)
-            self.pictograph.container.styled_border_overlay._draw_borders(painter)
+            self.pictograph.view._draw_borders(painter)
+
+        # self.update_borders()
 
     ### EVENTS ###
-
-    def paintEvent(self, event) -> None:
-        super().paintEvent(event)
-
 
     def set_overlay_color(self, color: str) -> None:
         overlay = QGraphicsRectItem(self.sceneRect())
@@ -112,7 +110,7 @@ class OptionPickerPictographView(PictographView):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.pictograph.container.styled_border_overlay.set_gold_border()
+        self.pictograph.view.set_gold_border()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
@@ -128,7 +126,7 @@ class OptionPickerPictographView(PictographView):
     def leaveEvent(self, event: QEvent) -> None:
         self.setStyleSheet("")
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-        self.pictograph.container.styled_border_overlay.reset_border()
+        self.pictograph.view.reset_border()
 
     def resizeEvent(self, event):
         """Trigger fitInView whenever the widget is resized."""
@@ -138,7 +136,7 @@ class OptionPickerPictographView(PictographView):
     def _resize_pictograph_view(self):
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         size = self.calculate_view_size()
-        self.pictograph.container.styled_border_overlay.update_border_widths()
+        self.pictograph.view.update_border_widths()
         self.setMinimumWidth(size)
         self.setMaximumWidth(size)
         self.setMinimumHeight(size)
@@ -146,7 +144,6 @@ class OptionPickerPictographView(PictographView):
         self.view_scale = size / self.pictograph.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-        # self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()
 
     def calculate_view_size(self) -> int:
         spacing = self.option_picker.scroll_area.spacing

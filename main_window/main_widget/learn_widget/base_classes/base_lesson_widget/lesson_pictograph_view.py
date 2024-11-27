@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsRectItem
+from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
 

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QHBoxLayout
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from data.constants import HEX_BLUE, HEX_RED, IN, COUNTER, OUT, CLOCK
+from data.constants import HEX_BLUE, HEX_RED
 from .ori_button import OriButton  # Import the new OriButton class
 
 if TYPE_CHECKING:

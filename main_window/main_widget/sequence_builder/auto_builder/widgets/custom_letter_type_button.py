@@ -33,7 +33,7 @@ class CustomLetterTypeButton(QLabel):
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # StyledBorderOverlay for custom borders
-        self.border_overlay = StyledBorderOverlay(self)
+        # self.border_overlay = StyledBorderOverlay(self)
 
         # Animation for background color transition
         self.bg_animation = QVariantAnimation(self)
@@ -122,13 +122,13 @@ class CustomLetterTypeButton(QLabel):
             self.bg_animation.setEndValue(QColor("#999999"))  # Darker gray for pressed
             self.bg_animation.start()
 
-            self.border_overlay.update_border_color_and_width(
-                *self._get_border_colors()
-            )
+            # self.border_overlay.update_border_color_and_width(
+            #     *self._get_border_colors()
+            # )
         else:
-            self.border_overlay.update_border_color_and_width(
-                "transparent", "transparent"
-            )
+            # self.border_overlay.update_border_color_and_width(
+            #     "transparent", "transparent"
+            # )
             if self.is_hovered:
                 self.bg_animation.setStartValue(
                     self.palette().color(self.backgroundRole())
