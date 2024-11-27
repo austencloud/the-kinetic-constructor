@@ -63,13 +63,8 @@ class GraphEditor(QFrame):
         if self.sequence_widget.graph_editor.isVisible():
             self.sequence_widget.layout_manager.graph_editor_placeholder.resize_graph_editor_placeholder()
 
-        # self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()
         self.raise_()
 
     def get_graph_editor_height(self):
         return int(self.sequence_widget.height() // 3.5)
-
-    # def resizeEvent(self, event):
-    #     super().resizeEvent(event)
-    #     self.resize_graph_editor()
