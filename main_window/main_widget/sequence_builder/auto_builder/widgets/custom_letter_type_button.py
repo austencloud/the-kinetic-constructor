@@ -6,9 +6,6 @@ from Enums.letters import LetterType
 from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
     LetterTypeTextPainter,
 )
-from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import (
-    StyledBorderOverlay,
-)
 
 
 if TYPE_CHECKING:

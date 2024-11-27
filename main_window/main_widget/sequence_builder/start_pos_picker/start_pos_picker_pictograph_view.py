@@ -17,9 +17,6 @@ from base_widgets.base_pictograph.pictograph_view_mouse_event_handler import (
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from main_window.main_widget.sequence_builder.option_picker.option_picker import (
-        OptionPicker,
-    )
 
 
 class StartPosPickerPictographView(PictographView):
