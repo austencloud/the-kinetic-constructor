@@ -27,28 +27,27 @@ class CurrentWordLabel(QWidget):
         self.setLayout(layout)
 
     def resizeEvent(self, event):
+        super().resizeEvent(event)
         sequence_widget_width = self.sequence_widget.width()
         font_size = sequence_widget_width // 30
-        font = QFont()
-        font.setPointSize(int(font_size))
-        self.line_edit.setFont(font)
+        self.font: QFont = QFont()
+        self.font.setPointSize(int(font_size))
+        self.line_edit.setFont(self.font)
         self.line_edit.kerning = int(font_size // 8.75)
-
-        # Reduce font size until horizontal advance is shorter than sequence widget width
         while (
             self.line_edit.fontMetrics().horizontalAdvance(self.current_word)
             > sequence_widget_width * 0.8
         ):
             font_size -= 1
-            font.setPointSize(int(font_size))
-            self.line_edit.setFont(font)
+            self.font.setPointSize(int(font_size))
+            self.line_edit.setFont(self.font)
             self.line_edit.kerning = int(font_size // 8.75)
 
     def set_current_word(self, word: str):
         simplified_word = WordSimplifier.simplify_repeated_word(word)
         self.current_word = simplified_word
         self.line_edit.setText(simplified_word)
-        # self.resize_current_word_label()
+        self.resizeEvent(None)
 
     def set_font_color(self, color: str):
         self.line_edit.setStyleSheet(

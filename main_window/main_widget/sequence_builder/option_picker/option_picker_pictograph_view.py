@@ -52,12 +52,6 @@ class OptionPickerPictographView(BorderedPictographView):
         self._touchTimeout.timeout.connect(self._resetTouchState)
         self._touchTimeout.setInterval(100)
 
-        if self.pictograph.view.primary_color and self.pictograph.view.secondary_color:
-            painter = QPainter(self)
-            self.pictograph.view._draw_borders(painter)
-
-        # self.update_borders()
-
     ### EVENTS ###
 
 
@@ -128,9 +122,6 @@ class OptionPickerPictographView(BorderedPictographView):
     def resizeEvent(self, event):
         """Trigger fitInView whenever the widget is resized."""
         super().resizeEvent(event)
-        self._resize_pictograph_view()
-
-    def _resize_pictograph_view(self):
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         size = self.calculate_view_size()
         self.pictograph.view.update_border_widths()
