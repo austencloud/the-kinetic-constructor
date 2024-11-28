@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
 
+from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
 )
@@ -15,19 +16,16 @@ from base_widgets.base_pictograph.pictograph_view_mouse_event_handler import (
 )
 
 
-
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class LessonPictographView(PictographView):
+class LessonPictographView(BorderedPictographView):
     original_style: str
 
-    def __init__(
-        self, pictograph: "BasePictograph", learn_widget: "LearnWidget"
-    ) -> None:
-        super().__init__(pictograph, learn_widget)
+    def __init__(self, pictograph: "BasePictograph") -> None:
+        super().__init__(pictograph)
         self.pictograph = pictograph
         self.original_style = ""
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -58,10 +56,6 @@ class LessonPictographView(PictographView):
 
     def set_enabled(self, enabled: bool) -> None:
         self._ignoreMouseEvents = not enabled
-
-    def wheelEvent(self, event) -> None:
-        if self.pictograph.parent_widget:
-            self.pictograph.parent_widget.wheelEvent(event)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self.key_event_handler.handle_key_press(event):
@@ -97,6 +91,7 @@ class LessonPictographView(PictographView):
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
+        super().enterEvent(event)
         from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
             GraphEditorPictographContainer,
         )
@@ -105,7 +100,9 @@ class LessonPictographView(PictographView):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.pictograph.container.styled_border_overlay.set_gold_border()
+        self.pictograph.view.set_gold_border()
+
+
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
@@ -118,8 +115,8 @@ class LessonPictographView(PictographView):
             else:
                 self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
-    def leaveEvent(self, event: QEvent) -> None:
-        self.setStyleSheet("")
-        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-        self.pictograph.container.styled_border_overlay.reset_border()
-
+    # def leaveEvent(self, event: QEvent) -> None:
+    #     super().leaveEvent(event)
+    #     self.setStyleSheet("")
+    #     self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+    #     self.pictograph.view.reset_border()

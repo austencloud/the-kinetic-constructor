@@ -37,11 +37,6 @@ class PictographView(QGraphicsView):
         self.setSceneRect(self.scene().itemsBoundingRect())
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
-    def paintEvent(self, event):
-        """Draw the pictograph."""
-        super().paintEvent(event)
-        # No border drawing here
-
     def enterEvent(self, event: QEvent) -> None:
         """Handle mouse entering the widget area."""
         # No border logic

@@ -6,6 +6,9 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.learn_widget.base_classes.base_answers_widget import (
     BaseAnswersWidget,
 )
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson_pictograph_view import (
+    LessonPictographView,
+)
 
 
 if TYPE_CHECKING:
@@ -38,9 +41,11 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
                     pictograph_dict
                 )
             )
-            pictograph = BasePictograph(self.main_widget, parent_widget=None)
+            pictograph = BasePictograph(self.main_widget)
+            pictograph.view = LessonPictographView(pictograph)
             pictograph.disable_gold_overlay = False
             pictograph.updater.update_pictograph(pictograph_dict)
+            pictograph.view.update_borders()
             self.pictographs[pictograph_key] = pictograph
             pictograph.view.setCursor(Qt.CursorShape.PointingHandCursor)
             pictograph.quiz_mode = True

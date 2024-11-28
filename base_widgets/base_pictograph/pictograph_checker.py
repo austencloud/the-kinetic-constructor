@@ -190,8 +190,7 @@ class PictographChecker:
             != self.pictograph.blue_motion.motion_type
         )
 
-    def is_in_option_picker(self) -> bool:
-        return self.pictograph.view.option_picker
+
 
     def has_all_props_of_type(self, prop_type: PropType) -> bool:
         return all(

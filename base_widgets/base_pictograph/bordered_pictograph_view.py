@@ -14,11 +14,10 @@ class BorderedPictographView(PictographView):
     def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__(pictograph)
 
-        # Initialize border-related attributes
         self.primary_color = None
         self.secondary_color = None
-        self.saved_primary_color = None
-        self.saved_secondary_color = None
+        self.original_primary_color = None
+        self.original_secondary_color = None
         self.update_borders()
 
     ### BORDER METHODS ###
@@ -37,26 +36,24 @@ class BorderedPictographView(PictographView):
         self.primary_color, self.secondary_color = border_colors_map.get(
             letter_type, ("black", "black")
         )
+        # Store original colors
+        self.original_primary_color = self.primary_color
+        self.original_secondary_color = self.secondary_color
         self.update()  # Trigger repaint
 
     def set_gold_border(self):
         """Set the border colors to gold, typically on hover."""
         if getattr(self.pictograph, "disable_gold_overlay", False):
             return
-        self.saved_primary_color = self.primary_color
-        self.saved_secondary_color = self.secondary_color
         self.primary_color = "gold"
         self.secondary_color = "gold"
         self.update()
 
     def reset_border(self):
         """Reset the border colors to their original values."""
-        if self.saved_primary_color and self.saved_secondary_color:
-            self.primary_color = self.saved_primary_color
-            self.secondary_color = self.saved_secondary_color
-            self.update()
-        else:
-            self.update_borders()
+        self.primary_color = self.original_primary_color
+        self.secondary_color = self.original_secondary_color
+        self.update()
 
     def update_border_widths(self) -> None:
         view_width = self.size().width()
@@ -76,6 +73,7 @@ class BorderedPictographView(PictographView):
     def _draw_borders(self, painter: QPainter):
         """Draw the outer and inner borders."""
         pen = QPen()
+
         # Use floating-point calculations
         view_width = self.viewport().size().width()
         outer_border_width = max(1.0, view_width * 0.016)
