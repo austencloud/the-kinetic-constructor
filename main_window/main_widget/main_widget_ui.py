@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
+
+from main_window.main_widget.act_tab.act_tab import ActTab
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
@@ -40,8 +42,8 @@ class MainWidgetUI:
         splash.updater.update_progress("LearnWidget")
         mw.learn_widget = LearnWidget(mw)
         splash.updater.update_progress("ActTab")
-        # mw.act_tab = ActTab(mw)
-        # splash.updater.update_progress("Finalizing")
+        mw.act_tab = ActTab(mw)
+        splash.updater.update_progress("Finalizing")
 
         # Create stacked widgets and primary layouts
         mw.builder_stacked_widget = QStackedWidget()
@@ -60,7 +62,7 @@ class MainWidgetUI:
         mw.main_stacked_widget = QStackedWidget()
         mw.main_stacked_widget.addWidget(mw.build_generate_widget)
         mw.main_stacked_widget.addWidget(mw.dictionary_learn_widget)
-        # mw.main_stacked_widget.addWidget(mw.act_tab)
+        mw.main_stacked_widget.addWidget(mw.act_tab)
 
     def _setup_layout(self):
         mw = self.main_widget
