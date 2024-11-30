@@ -5,7 +5,14 @@ from Enums.MotionAttributes import Location
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
-from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson_pictograph_view import LessonPictographView
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson_pictograph_view import (
+    LessonPictographView,
+)
+
+from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_picker_pictograph_view import (
+    StartPosPickerPictographView,
+)
+
 from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
     ReversalSymbolManager,
 )
@@ -38,7 +45,12 @@ if TYPE_CHECKING:
 
 
 class BasePictograph(QGraphicsScene):
-    view: Union[PictographView, BorderedPictographView, LessonPictographView]
+    view: Union[
+        PictographView,
+        BorderedPictographView,
+        LessonPictographView,
+        StartPosPickerPictographView,
+    ]
     arrows: dict[str, Arrow]
     props: dict[str, Prop]
     motions: dict[str, Motion]
@@ -91,7 +103,6 @@ class BasePictograph(QGraphicsScene):
         self.check = PictographChecker(self)
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
-        # self.container = PictographContainer(self)
         self.initializer.init_all_components()
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)

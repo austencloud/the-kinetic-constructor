@@ -127,13 +127,13 @@ class ManualBuilder(QFrame):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
 
-    def resize_manual_builder(self) -> None:
-        """Resize the components based on the current state."""
+    # def resize_manual_builder(self) -> None:
+    #     """Resize the components based on the current state."""
         # self.start_pos_picker.resize_start_pos_picker()
-        self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
+        # self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         # self.option_picker.resize_option_picker()
 
-    def resizeEvent(self, event) -> None:
-        """Resize the manual builder based on the current state."""
-        super().resizeEvent(event)
-        self.resize_manual_builder()
+    # def resizeEvent(self, event) -> None:
+    #     """Resize the manual builder based on the current state."""
+    #     super().resizeEvent(event)
+    #     # self.resize_manual_builder()

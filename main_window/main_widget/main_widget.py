@@ -87,7 +87,7 @@ class MainWidget(QWidget):
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
     content_layout: QHBoxLayout
-    builder_stacked_widget: QStackedWidget
+    right_stacked_widget: QStackedWidget
     main_stacked_widget: QStackedWidget
     dictionary_learn_widget: QStackedWidget
     build_generate_widget: QWidget

@@ -35,7 +35,7 @@ class BaseStartPosPicker(QWidget):
         self.main_widget.settings_manager.global_settings.set_grid_mode(original_mode)
 
     def create_pictograph_from_dict(
-        self, pictograph_dict: dict, target_grid_mode
+        self, pictograph_dict: dict, target_grid_mode, advanced=False
     ) -> BasePictograph:
         """Create a pictograph under the specified grid mode, using cache if available."""
         pictograph_key = self.generate_pictograph_key(pictograph_dict, target_grid_mode)
@@ -64,7 +64,7 @@ class BaseStartPosPicker(QWidget):
         end_pos = pictograph_dict["end_pos"]
         return f"{letter}_{start_pos}_{end_pos}_{grid_mode}"
 
-    def get_box_variations(self) -> list[BasePictograph]:
+    def get_box_variations(self, advanced: bool = False) -> list[BasePictograph]:
         """Retrieve box mode variations."""
         if self.box_pictographs:
             return self.box_pictographs  # Return cached variations
@@ -91,10 +91,10 @@ class BaseStartPosPicker(QWidget):
             for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
                 if pictograph_dict["start_pos"] == pictograph_dict["end_pos"]:
                     if pictograph_dict["start_pos"] in box_positions:
-                        self.create_pictograph_from_dict(pictograph_dict, BOX)
+                        self.create_pictograph_from_dict(pictograph_dict, BOX, advanced)
         return self.box_pictographs
 
-    def get_diamond_variations(self) -> list[BasePictograph]:
+    def get_diamond_variations(self, advanced: bool = False) -> list[BasePictograph]:
         """Retrieve diamond mode variations."""
         if self.diamond_pictographs:
             return self.diamond_pictographs  # Return cached variations
@@ -121,5 +121,5 @@ class BaseStartPosPicker(QWidget):
             for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
                 if pictograph_dict["start_pos"] == pictograph_dict["end_pos"]:
                     if pictograph_dict["start_pos"] in diamond_positions:
-                        self.create_pictograph_from_dict(pictograph_dict, DIAMOND)
+                        self.create_pictograph_from_dict(pictograph_dict, DIAMOND, advanced)
         return self.diamond_pictographs

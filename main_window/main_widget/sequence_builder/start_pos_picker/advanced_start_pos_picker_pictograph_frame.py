@@ -4,9 +4,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from ...advanced_start_pos_picker.advanced_start_pos_picker import (
-        AdvancedStartPosPicker,
-    )
+    from main_window.main_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
 
 
 class AdvancedStartPosPickerPictographFrame(QWidget):

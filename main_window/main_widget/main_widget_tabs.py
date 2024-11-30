@@ -23,7 +23,7 @@ class MainWidgetTabs:
             self.main_widget.main_stacked_widget.setCurrentIndex(main_index)
             if sub_index is not None:
                 if main_index == 0:
-                    self.main_widget.builder_stacked_widget.setCurrentIndex(sub_index)
+                    self.main_widget.right_stacked_widget.setCurrentIndex(sub_index)
                 elif main_index == 1:
                     self.main_widget.dictionary_learn_widget.setCurrentIndex(sub_index)
 

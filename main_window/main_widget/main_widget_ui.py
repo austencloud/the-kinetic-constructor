@@ -46,14 +46,18 @@ class MainWidgetUI:
         splash.updater.update_progress("Finalizing")
 
         # Create stacked widgets and primary layouts
-        mw.builder_stacked_widget = QStackedWidget()
-        mw.builder_stacked_widget.addWidget(mw.manual_builder)
-        mw.builder_stacked_widget.addWidget(mw.sequence_generator)
+        mw.right_stacked_widget = QStackedWidget()
+        mw.right_stacked_widget.addWidget(mw.manual_builder)
+        mw.right_stacked_widget.addWidget(mw.sequence_generator)
 
         mw.build_generate_widget = QWidget()
         build_generate_layout = QHBoxLayout(mw.build_generate_widget)
         build_generate_layout.addWidget(mw.sequence_widget)
-        build_generate_layout.addWidget(mw.builder_stacked_widget)
+        build_generate_layout.addWidget(mw.right_stacked_widget)
+
+        # Set equal stretch factors
+        build_generate_layout.setStretch(0, 1)  # Index 0 corresponds to sequence_widget
+        build_generate_layout.setStretch(1, 1)  # Index 1 corresponds to builder_stacked_widget
 
         mw.dictionary_learn_widget = QStackedWidget()
         mw.dictionary_learn_widget.addWidget(mw.dictionary_widget)
