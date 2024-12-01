@@ -61,7 +61,7 @@ class FontColorUpdater:
         self._update_generate_tab(main_widget, font_color)
         self._update_browse_tab(main_widget, font_color)
         self._update_learn_tab(main_widget, font_color)
-        # self._update_act_tab(main_widget, font_color)
+        self._update_act_tab(main_widget, font_color)
 
     def _update_act_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         act_tab = main_widget.act_tab

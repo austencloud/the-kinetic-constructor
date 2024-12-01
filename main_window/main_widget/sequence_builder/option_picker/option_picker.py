@@ -36,15 +36,11 @@ class OptionPicker(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.choose_your_next_pictograph_label.show()
 
-        # Create header layout
         header_layout = QVBoxLayout()
         header_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Add the "Choose Your Next Pictograph" label
         header_label_layout = QHBoxLayout()
-        # header_label_layout.addStretch(1)
         header_label_layout.addWidget(self.choose_your_next_pictograph_label)
-        # header_label_layout.addStretch(1)
         header_layout.addLayout(header_label_layout)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.reversal_selector)

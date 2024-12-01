@@ -181,6 +181,5 @@ class StartPosPicker(BaseStartPosPicker):
             start_option.view.scale(
                 start_option.view.view_scale, start_option.view.view_scale
             )
-            # start_option.container.styled_border_overlay.resize_styled_border_overlay()
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.variations_button.resize_variations_button()

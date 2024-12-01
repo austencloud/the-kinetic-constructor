@@ -135,7 +135,7 @@ class StartPosPickerPictographView(BorderedPictographView):
         self.scale(self.view_scale, self.view_scale)
 
     def calculate_view_size(self) -> int:
-        view_width = int((self.pictograph.main_widget.manual_builder.width() / 4))
+        view_width = int((self.pictograph.main_widget.manual_builder.width() / 5))
         outer_border_width = max(1, int(view_width * 0.015))
         inner_border_width = max(1, int(view_width * 0.015))
         view_width = view_width - (outer_border_width) - (inner_border_width)

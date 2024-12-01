@@ -25,7 +25,6 @@ if TYPE_CHECKING:
 
 class DictionaryButtonPanel(QWidget):
     delete_variation_button: QPushButton
-    # delete_word_button: QPushButton
     edit_sequence_button: QPushButton
     save_image_button: QPushButton
 
@@ -112,13 +111,10 @@ class DictionaryButtonPanel(QWidget):
             self.sequence_populator = self.dictionary_widget.sequence_populator
         if self.preview_area.sequence_json:
             self.preview_area.main_widget.navigation_widget.on_button_clicked(0)
-            # QApplication.processEvents()
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-            # self.dictionary_widget.main_widget.sequence_widget.resize_sequence_widget()
             self.sequence_populator.load_sequence_from_json(
                 self.preview_area.sequence_json
             )
-            # self.dictionary_widget.main_widget.manual_builder.resize_manual_builder()
             QApplication.restoreOverrideCursor()
         else:
             QMessageBox.warning(

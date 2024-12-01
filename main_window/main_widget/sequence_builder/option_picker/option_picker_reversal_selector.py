@@ -21,7 +21,6 @@ class OptionPickerReversalSelector(QWidget):
         self.reversal_combobox = ReversalCombobox(self)
         self.combo_box_label = QLabel("Show")
 
-        # Add combo box to the layout
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.combo_box_label: QLabel = QLabel("Show:")

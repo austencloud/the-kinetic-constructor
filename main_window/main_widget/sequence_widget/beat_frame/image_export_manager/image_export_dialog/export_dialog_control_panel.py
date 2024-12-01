@@ -8,6 +8,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import pyqtSignal, Qt
 
+from main_window.settings_manager.user_profile_settings.notes_manager.notes_manager import NotesManager
+
 if TYPE_CHECKING:
     from .image_export_dialog import ImageExportDialog
 
@@ -146,9 +148,9 @@ class ExportDialogControlPanel(QWidget):
             self.previous_note = selected_note
             self._update_preview()
 
-    def _open_edit_dialog(self, manager, previous_value, combo_box: QComboBox):
+    def _open_edit_dialog(self, manager: "NotesManager", previous_value, combo_box: QComboBox):
         """Open the edit dialog for users or notes."""
-        manager.open_edit_dialog()
+        manager.open_edit_notes_dialog()
         index = combo_box.findText(previous_value)
         if index != -1:
             combo_box.setCurrentIndex(index)

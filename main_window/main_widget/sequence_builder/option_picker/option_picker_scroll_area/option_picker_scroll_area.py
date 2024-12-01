@@ -79,7 +79,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             self.set_pictograph_orientations(pictograph_dict, sequence)
             pictograph = self._get_or_create_pictograph(pictograph_dict, sequence)
             pictograph.updater.update_pictograph(pictograph_dict)
-            # Detect reversals
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()
             )
@@ -89,7 +88,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
-            # Update the view to display reversal symbols
             pictograph.reversal_symbol_manager.update_reversal_symbols()
             pictograph.view.update()
 
@@ -138,10 +136,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
-    # def resize_option_picker_scroll_area(self) -> None:
-    #     for section in self.section_manager.sections.values():
-    #         section.resize_option_picker_section_widget()
-
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
         for section in self.section_manager.sections.values():
@@ -151,7 +145,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
     def add_section_to_layout(
         self, section: "OptionPickerSectionWidget", section_index: int = None
     ):
-        if section_index == 0 or section_index:  # widget is a section
+        if section_index == 0 or section_index:
             if section.__class__.__name__ == "OptionPickerSectionWidget":
                 if section.letter_type == LetterType.Type1:
                     self.layout.insertWidget(section_index, section, 4)
@@ -161,6 +155,5 @@ class OptionPickerScrollArea(BasePickerScrollArea):
                 self.layout.insertWidget(section_index, section, 4)
 
     def clear_pictographs(self) -> None:
-        # Clear pictographs from sections
         self.display_manager.clear_all_section_layouts()
         self.pictograph_cache.clear()

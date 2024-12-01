@@ -65,3 +65,6 @@ class NotesManager(QObject):
         index = self.notes_combo_box.findText(note)
         if index != -1:
             self.notes_combo_box.setCurrentIndex(index)
+
+    def get_previous_note(self):
+        return self.user_profile_settings.get_current_note()

@@ -21,40 +21,51 @@ class ReversalCombobox(QComboBox):
         self.addItem("One Reversal", userData="one_reversal")
         self.addItem("Two Reversals", userData="two_reversals")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+        self.currentIndexChanged.connect(
+            self.reversal_selector.option_picker.on_filter_changed
+        )
+
+    # on reswize, make the text bigger, a fraction of the width of the main widget
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        font = self.font()
+        font_size = int(
+            self.reversal_selector.option_picker.manual_builder.main_widget.width()
+            * 0.01
+        )
+        font.setPointSize(font_size)
+        font.setFamily("Georgia")
+        self.setFont(font)
         self.setStyleSheet(
-            """
-            QComboBox {
+            f"""
+            QComboBox {{
             background-color: white;
             color: black;
             border: 1px solid gray;
             padding: 2px 4px;
-            }
-            QComboBox QAbstractItemView {
+            font-size: {font_size}px;
+            }}
+            QComboBox QAbstractItemView {{
             background-color: white;
             color: black;
             selection-background-color: lightgray;
             selection-color: black;
-            }
-            QComboBox QAbstractItemView::item:hover {
+            font-size: {font_size}px;
+            }}
+            QComboBox QAbstractItemView::item:hover {{
             background-color: lightblue;
             color: black;
-            }
-            QComboBox::drop-down {
+            font-size: {font_size}px;
+            }}
+            QComboBox::drop-down {{
             border: none;
-            }
-            QComboBox::down-arrow {
-                image: url(arrow_down_icon.png); /* Replace with your icon */
-                width: 10px;
-                height: 10px;
-            }
-            QComboBox:hover {
+            }}
+            QComboBox:hover {{
                 border: 1px solid lightgray;
-            }
-            QComboBox:focus {
+            }}
+            QComboBox:focus {{
                 border: 1px solid blue;
-            }
+            }}
         """
-        )
-        self.currentIndexChanged.connect(
-            self.reversal_selector.option_picker.on_filter_changed
         )

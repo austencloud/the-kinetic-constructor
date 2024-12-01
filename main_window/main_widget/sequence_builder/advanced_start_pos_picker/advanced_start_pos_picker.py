@@ -1,7 +1,11 @@
+from copy import deepcopy
 from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QSizePolicy
 from typing import TYPE_CHECKING
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from data.constants import BOX
+from data.constants import BOX, DIAMOND
+from main_window.main_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_view import (
+    AdvancedStartPosPickerPictographView,
+)
 from main_window.main_widget.sequence_builder.start_pos_picker.base_start_pos_picker import (
     BaseStartPosPicker,
 )
@@ -14,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class AdvancedStartPosPicker(BaseStartPosPicker):
-    COLUMN_COUNT = 5  # Adjust as needed
+    COLUMN_COUNT = 4  # Adjust as needed
 
     def __init__(self, manual_builder: "ManualBuilder"):
         super().__init__(manual_builder)
@@ -40,6 +44,29 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.layout.addStretch(1)
         self.layout.addLayout(self.grid_layout, 15)
         self.layout.addStretch(1)
+
+    def create_pictograph_from_dict(
+        self, pictograph_dict: dict, target_grid_mode, advanced=False
+    ) -> BasePictograph:
+        """Create a pictograph under the specified grid mode, using cache if available."""
+        pictograph_key = self.generate_pictograph_key(pictograph_dict, target_grid_mode)
+        if pictograph_key in self.pictograph_cache:
+            return self.pictograph_cache[pictograph_key]
+
+        with self.temporary_grid_mode(target_grid_mode):
+            pictograph = BasePictograph(self.main_widget)
+            pictograph.view = AdvancedStartPosPickerPictographView(pictograph)
+            pictograph.updater.update_pictograph(deepcopy(pictograph_dict))
+            pictograph.view.update_borders()
+            self.pictograph_cache[pictograph_key] = pictograph
+
+            # Append to the list based on the grid mode
+            if target_grid_mode == BOX:
+                self.box_pictographs.append(pictograph)
+            elif target_grid_mode == DIAMOND:
+                self.diamond_pictographs.append(pictograph)
+
+        return pictograph
 
     def display_variations(self, grid_mode: str) -> None:
         self.generate_variations(
@@ -78,19 +105,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
             variation.view.update_borders()
 
     def _resize_variation(self, variation: "BasePictograph") -> None:
-        spacing = 20  # Match the spacing in the grid layout
-        columns = self.COLUMN_COUNT
-        total_spacing = spacing * (columns - 1)
-        available_width = (
-            self.manual_builder.width()
-            - total_spacing
-            - (
-                self.layout.contentsMargins().left()
-                + self.layout.contentsMargins().right()
-            )
-        )
-        view_width = available_width // columns
-
+        view_width = self.manual_builder.width() // 5
         variation.view.setFixedSize(view_width, view_width)
         variation.view.view_scale = view_width / variation.width()
         variation.view.resetTransform()
