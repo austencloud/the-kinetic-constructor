@@ -55,8 +55,6 @@ class BaseAutoBuilderFrame(QFrame):
         intensity = self.auto_builder_settings.get_auto_builder_setting(
             "max_turn_intensity", self.builder_type
         )
-
-        # Convert continuous_rotation to boolean
         continuous_rotation = self.auto_builder_settings.get_auto_builder_setting(
             "continuous_rotation", self.builder_type
         )

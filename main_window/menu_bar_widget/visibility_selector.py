@@ -25,7 +25,6 @@ class VisibilitySelector(ButtonSelector):
         self.show_visibility_dialog()
 
     def show_visibility_dialog(self):
-        # Create the dialog
         dialog = QDialog(self)
         dialog.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup)
         dialog.setStyleSheet(
@@ -41,11 +40,9 @@ class VisibilitySelector(ButtonSelector):
             """
         )
 
-        # Create the layout
         layout = QVBoxLayout(dialog)
         layout.setContentsMargins(5, 5, 5, 5)
 
-        # Define options
         glyph_types = ["TKA", "VTG", "Elemental", "Positions", "Reversals"]
         options = {
             f"{glyph}": self.glyph_visibility_manager.should_glyph_be_visible(glyph)
@@ -53,11 +50,8 @@ class VisibilitySelector(ButtonSelector):
         }
         options["Non-Radial Points"] = self.grid_visibility_manager.non_radial_visible
 
-        # Create checkboxes with larger font
         font = QFont()
-        font.setPointSize(
-            self.menu_bar_widget.menu_bar_font_size
-        )  # Adjust the font size as needed
+        font.setPointSize(self.menu_bar_widget.menu_bar_font_size)
 
         for option_text, checked in options.items():
             checkbox = QCheckBox(option_text)
@@ -71,7 +65,6 @@ class VisibilitySelector(ButtonSelector):
         dialog.setLayout(layout)
         dialog.adjustSize()
 
-        # Position the dialog below the button
         global_pos = self.button.mapToGlobal(self.button.rect().bottomLeft())
         dialog.move(global_pos)
         dialog.exec()
@@ -81,5 +74,4 @@ class VisibilitySelector(ButtonSelector):
         if option == "Non-Radial Points":
             self.grid_visibility_manager.set_non_radial_visibility(is_checked)
         else:
-            # Call VisibilitySettings directly for glyph visibility settings
             self.settings_manager.visibility.set_glyph_visibility(option, is_checked)

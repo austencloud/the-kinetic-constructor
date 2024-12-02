@@ -3,7 +3,9 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from main_window.settings_manager.visibility_settings.visibility_settings import VisibilitySettings
+    from main_window.settings_manager.visibility_settings.visibility_settings import (
+        VisibilitySettings,
+    )
 
 
 class GlyphVisibilityManager:
@@ -37,12 +39,18 @@ class GlyphVisibilityManager:
 
     def apply_glyph_visibility(self):
         # Apply current settings to all visible pictographs
-        for pictograph_list in self.main_window.main_widget.pictograph_cache.values():
-            for pictograph in pictograph_list.values():
-                if pictograph.view:
-                    if pictograph.view.isVisible():
-                        self.apply_current_visibility_settings(pictograph)
-
+        beat_views = self.main_window.main_widget.sequence_widget.beat_frame.beats
+        beats = [beat_view.beat for beat_view in beat_views]
+        for pictograph_key_with_scene in list(
+            self.main_window.main_widget.pictograph_cache.values()
+        ):
+            for scene in pictograph_key_with_scene.values():
+                if scene.view:
+                    if scene.view.isVisible():
+                        self.apply_current_visibility_settings(scene)
+        for beat in beats:
+            if beat:
+                self.apply_current_visibility_settings(beat)
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:
         """Check if a glyph type should be visible based on current settings."""

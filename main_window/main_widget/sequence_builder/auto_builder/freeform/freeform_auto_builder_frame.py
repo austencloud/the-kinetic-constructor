@@ -33,9 +33,9 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
                     "max_turn_intensity", self.builder_type
                 )
             ),
-            self.auto_builder_settings.get_auto_builder_setting(
+           int(self.auto_builder_settings.get_auto_builder_setting(
                 "sequence_level", self.builder_type
-            ),
+            )),
             self.auto_builder_settings.get_auto_builder_setting(
                 "continuous_rotation", self.builder_type
             ),
