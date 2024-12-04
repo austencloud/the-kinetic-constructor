@@ -117,29 +117,48 @@ class SequenceWidgetButtonPanel(QFrame):
         if len(current_sequence_json) < 2:
             self.indicator_label.show_message("No sequence to mirror.")
             return
+
         mirrored_sequence_json = self.sequence_mirror.mirror_sequence(
             current_sequence_json
         )
-        self.sequence_widget.sequence_clearer.clear_sequence(show_indicator=False)
-        self.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
-            mirrored_sequence_json
-        )
+        self.update_beats_in_place(mirrored_sequence_json)
         self.indicator_label.show_message("Sequence mirrored successfully!")
 
     def swap_colors_in_sequence(self):
-        self.toggle_swap_colors_icon()
         current_sequence_json = (
             self.json_manager.loader_saver.load_current_sequence_json()
         )
         if len(current_sequence_json) < 2:
             self.indicator_label.show_message("No sequence to swap colors.")
             return
+
         swapped_sequence_json = self.color_swapper.swap_colors(current_sequence_json)
-        self.sequence_widget.sequence_clearer.clear_sequence(show_indicator=False)
-        self.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
-            swapped_sequence_json
-        )
+        self.update_beats_in_place(swapped_sequence_json)
         self.indicator_label.show_message("Colors swapped successfully!")
+        self.toggle_swap_colors_icon()
+
+    def update_beats_in_place(self, modified_sequence_json):
+        beat_frame = self.sequence_widget.beat_frame
+        beats = beat_frame.beats
+
+        # Update the start position beat
+        if len(modified_sequence_json) > 1:
+            start_pos_dict = modified_sequence_json[1]
+            beat_frame.start_pos_view.start_pos.updater.update_pictograph(
+                start_pos_dict
+            )
+
+        # Update each beat
+        for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
+            if i < len(beats) and beats[i].is_filled:
+                beats[i].beat.updater.update_pictograph(beat_dict)
+            else:
+                break  # No more beats to updateOK.
+        
+        #update the current_sequence file with the modified sequence
+        self.json_manager.loader_saver.save_current_sequence(modified_sequence_json)
+        self.json_manager.ori_validation_engine.run(is_current_sequence=True)
+        #run the sequence validator
 
     def toggle_swap_colors_icon(self):
         if self.colors_swapped:

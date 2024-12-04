@@ -12,7 +12,7 @@ class TurnIntensityAdjuster(QWidget):
         self.auto_builder_frame = auto_builder_frame
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
-        self.values = [1, 2, 3]
+        self.values = [0.5, 1, 1.5, 2, 2.5, 3]
         self.intensity = 1
         self.intensity_label = QLabel("Turn Intensity:")
         self.intensity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -43,7 +43,10 @@ class TurnIntensityAdjuster(QWidget):
 
     def _increase_intensity(self):
         # Check the current index and make sure we do not exceed the max valid value
-        current_index = self.values.index(self.intensity)
+        try:
+            current_index = self.values.index(float(self.intensity))
+        except ValueError:
+            current_index = self.values.index(int(self.intensity))
         if current_index < len(self.values) - 1:
             self.intensity = self.values[current_index + 1]
             self.intensity_value_label.setText(str(self.intensity))
@@ -59,7 +62,10 @@ class TurnIntensityAdjuster(QWidget):
 
     def set_intensity(self, intensity):
         """Set the initial intensity when loading settings."""
-        self.intensity = int(intensity)
+        try:
+            self.intensity = int(intensity) if intensity in [0, 1, 2, 3] else float(intensity)
+        except ValueError:
+            self.intensity = float(intensity)
         self.intensity_value_label.setText(str(self.intensity))
 
     def adjust_values(self, level):
