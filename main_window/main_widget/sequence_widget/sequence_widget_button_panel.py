@@ -10,6 +10,7 @@ from main_window.main_widget.sequence_widget.full_screen_viewer import FullScree
 from main_window.main_widget.sequence_widget.sequence_color_swapper import (
     SequenceColorSwapper,
 )
+from main_window.main_widget.sequence_widget.sequence_rotater import SequenceRotator
 
 from .sequence_mirror import SequenceMirror
 from .button_panel_placeholder import ButtonPanelPlaceholder
@@ -46,6 +47,7 @@ class SequenceWidgetButtonPanel(QFrame):
         self.sequence_mirror = SequenceMirror()
         self.full_screen_viewer = FullScreenViewer(self.sequence_widget)
         self.color_swapper = SequenceColorSwapper()
+        self.sequence_rotator = SequenceRotator()
 
     def _setup_buttons(self) -> None:
         self.buttons: list[QPushButton] = []
@@ -81,6 +83,11 @@ class SequenceWidgetButtonPanel(QFrame):
                 "icon": "yinyang1.png",  # Updated icon filename
                 "callback": self.swap_colors_in_sequence,
                 "tooltip": "Swap Colors",
+            },
+            "rotate_sequence": {
+                "icon": "rotate.png",  # You'll need to provide an icon for rotation
+                "callback": self.rotate_current_sequence,
+                "tooltip": "Rotate Sequence",
             },
             "delete_beat": {
                 "icon": "delete.svg",
@@ -136,29 +143,51 @@ class SequenceWidgetButtonPanel(QFrame):
         self.update_beats_in_place(swapped_sequence_json)
         self.indicator_label.show_message("Colors swapped successfully!")
         self.toggle_swap_colors_icon()
+        currently_selected_beat = (
+            self.sequence_widget.beat_frame.selection_overlay.get_selected_beat()
+        )
+        self.sequence_widget.graph_editor.adjustment_panel.update_turns_panel(
+            currently_selected_beat.beat.blue_motion,
+            currently_selected_beat.beat.red_motion,
+        )
+
+    def rotate_current_sequence(self):
+        current_sequence_json = (
+            self.json_manager.loader_saver.load_current_sequence_json()
+        )
+        if len(current_sequence_json) < 2:
+            self.indicator_label.show_message("No sequence to rotate.")
+            return
+
+        rotated_sequence_json = self.sequence_rotator.rotate_sequence(
+            current_sequence_json
+        )
+        self.update_beats_in_place(rotated_sequence_json)
+        self.indicator_label.show_message("Sequence rotated successfully!")
 
     def update_beats_in_place(self, modified_sequence_json):
         beat_frame = self.sequence_widget.beat_frame
         beats = beat_frame.beats
 
-        # Update the start position beat
         if len(modified_sequence_json) > 1:
             start_pos_dict = modified_sequence_json[1]
             beat_frame.start_pos_view.start_pos.updater.update_pictograph(
                 start_pos_dict
             )
 
-        # Update each beat
         for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
             if i < len(beats) and beats[i].is_filled:
                 beats[i].beat.updater.update_pictograph(beat_dict)
             else:
-                break  # No more beats to updateOK.
-        
-        #update the current_sequence file with the modified sequence
+                break 
+
         self.json_manager.loader_saver.save_current_sequence(modified_sequence_json)
         self.json_manager.ori_validation_engine.run(is_current_sequence=True)
-        #run the sequence validator
+
+        self.sequence_widget.current_word_label.update_current_word_label_from_beats()
+        self.sequence_widget.difficulty_label.update_difficulty_label()
+
+        self.sequence_widget.main_widget.manual_builder.option_picker.update_option_picker()
 
     def toggle_swap_colors_icon(self):
         if self.colors_swapped:
@@ -204,13 +233,13 @@ class SequenceWidgetButtonPanel(QFrame):
         self.resize_button_panel()
 
     def resize_button_panel(self):
-        button_size = self.sequence_widget.main_widget.height() // 22
+        button_size = self.sequence_widget.main_widget.height() // 24
         for button in self.buttons:
             button.setFixedSize(button_size, button_size)
             button.setIconSize(button.size() * 0.7)
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        spacing = self.sequence_widget.beat_frame.main_widget.height() // 80
+        spacing = self.sequence_widget.beat_frame.main_widget.height() // 100
         self.layout.setSpacing(spacing)
 
         self.layout.update()
