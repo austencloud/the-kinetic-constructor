@@ -37,3 +37,11 @@ class Beat(BasePictograph):
             return f"{self.beat_number},{end_beat}"
         else:
             return str(self.beat_number)
+
+    def update_motions(self, beat_dict):
+        if 'blue_attributes' in beat_dict:
+            blue_attributes = beat_dict['blue_attributes']
+            self.blue_motion.updater.update_motion(blue_attributes)
+        if 'red_attributes' in beat_dict:
+            red_attributes = beat_dict['red_attributes']
+            self.red_motion.updater.update_motion(red_attributes)

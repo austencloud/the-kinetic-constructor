@@ -1,5 +1,15 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
+
+from main_window.main_widget.sequence_widget.sequence_color_swap_manager import (
+    SequenceColorSwapManager,
+)
+from main_window.main_widget.sequence_widget.sequence_mirror_manager import (
+    SequenceMirrorManager,
+)
+from main_window.main_widget.sequence_widget.sequence_rotation_manager import (
+    SequenceRotationManager,
+)
 from .graph_editor.graph_editor_toggle_tab import GraphEditorToggleTab
 from .graph_editor.graph_editor_toggler import GraphEditorToggler
 from .sequence_clearer import SequenceClearer
@@ -30,8 +40,47 @@ class SequenceWidget(QWidget):
         self.json_manager = self.main_widget.json_manager
         self.default_beat_quantity = 16
 
+        # Initialize managers
+        self.mirror_manager = SequenceMirrorManager(self)
+        self.color_swap_manager = SequenceColorSwapManager(self)
+        self.rotation_manager = SequenceRotationManager(self)
+
         self._setup_components()
         self.layout_manager.setup_layout()
+
+    def update_beats_in_place(self, modified_sequence_json):
+        beat_frame = self.beat_frame
+        beats = beat_frame.beats
+
+        if len(modified_sequence_json) > 1:
+            start_pos_dict = modified_sequence_json[1]
+            start_pos = beat_frame.start_pos_view.start_pos
+            start_pos.updater.update_pictograph(start_pos_dict)
+            start_pos.update_motions(start_pos_dict)
+
+        for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
+            if i < len(beats) and beats[i].is_filled:
+                beat = beats[i].beat
+                beat.updater.update_pictograph(beat_dict)
+                beat.update_motions(beat_dict)
+            else:
+                break
+
+        self.json_manager.loader_saver.save_current_sequence(modified_sequence_json)
+        self.json_manager.ori_validation_engine.run(is_current_sequence=True)
+
+        self.current_word_label.update_current_word_label_from_beats()
+        self.difficulty_label.update_difficulty_label()
+        self.main_widget.manual_builder.option_picker.update_option_picker()
+
+        # Update graph editor adjustment panel
+        currently_selected_beat = self.beat_frame.selection_overlay.selected_beat
+        blue_motion = currently_selected_beat.beat.blue_motion
+        red_motion = currently_selected_beat.beat.red_motion
+        self.graph_editor.adjustment_panel.update_turns_panel(blue_motion, red_motion)
+
+        # Reset rotation steps if sequence changes
+        self.rotation_manager.reset_rotation()
 
     def _setup_components(self) -> None:
         # Managers
@@ -58,7 +107,8 @@ class SequenceWidget(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.toggle_tab.reposition_toggle_tab()
-        self.graph_editor.resize_graph_editor()  # Add this line
+        self.graph_editor.resize_graph_editor()
+
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.current_word_label.update_current_word_label_from_beats()

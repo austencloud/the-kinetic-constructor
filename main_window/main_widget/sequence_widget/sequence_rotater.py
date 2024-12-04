@@ -57,7 +57,7 @@ class SequenceRotator:
 
     def _rotate_location(self, location, rotation_steps):
         if location not in self.rotation_mapping_90:
-            return location  # Return as is if not in mapping
+            return "Unknown location:" + location 
         for _ in range(rotation_steps % 4):
             location = self.rotation_mapping_90[location]
         return location

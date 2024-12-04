@@ -38,16 +38,11 @@ class SequenceWidgetButtonPanel(QFrame):
 
     def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
-        self.json_manager = self.main_widget.json_manager
         self.beat_frame = self.sequence_widget.beat_frame
         self.export_manager = self.beat_frame.image_export_manager
         self.indicator_label = self.sequence_widget.indicator_label
         self.settings_manager = self.main_widget.main_window.settings_manager
-
-        self.sequence_mirror = SequenceMirror()
         self.full_screen_viewer = FullScreenViewer(self.sequence_widget)
-        self.color_swapper = SequenceColorSwapper()
-        self.sequence_rotator = SequenceRotator()
 
     def _setup_buttons(self) -> None:
         self.buttons: list[QPushButton] = []
@@ -60,7 +55,7 @@ class SequenceWidgetButtonPanel(QFrame):
             "save_image": {
                 "icon": "save_image.svg",
                 "callback": lambda: self.export_manager.dialog_executor.exec_dialog(
-                    self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+                    self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
                 ),
                 "tooltip": "Save Image",
             },
@@ -76,17 +71,17 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "mirror_sequence": {
                 "icon": "mirror.png",
-                "callback": self.mirror_current_sequence,
+                "callback": self.sequence_widget.mirror_manager.mirror_current_sequence,
                 "tooltip": "Mirror Sequence",
             },
             "swap_colors": {
-                "icon": "yinyang1.png",  # Updated icon filename
-                "callback": self.swap_colors_in_sequence,
+                "icon": "yinyang1.png",
+                "callback": self.sequence_widget.color_swap_manager.swap_colors_in_sequence,
                 "tooltip": "Swap Colors",
             },
             "rotate_sequence": {
-                "icon": "rotate.png",  # You'll need to provide an icon for rotation
-                "callback": self.rotate_current_sequence,
+                "icon": "rotate.png",
+                "callback": self.sequence_widget.rotation_manager.rotate_current_sequence,
                 "tooltip": "Rotate Sequence",
             },
             "delete_beat": {
@@ -116,78 +111,6 @@ class SequenceWidgetButtonPanel(QFrame):
     def show_options_panel(self) -> None:
         self.options_panel = LayoutOptionsDialog(self.sequence_widget)
         self.options_panel.exec()
-
-    def mirror_current_sequence(self):
-        current_sequence_json = (
-            self.json_manager.loader_saver.load_current_sequence_json()
-        )
-        if len(current_sequence_json) < 2:
-            self.indicator_label.show_message("No sequence to mirror.")
-            return
-
-        mirrored_sequence_json = self.sequence_mirror.mirror_sequence(
-            current_sequence_json
-        )
-        self.update_beats_in_place(mirrored_sequence_json)
-        self.indicator_label.show_message("Sequence mirrored successfully!")
-
-    def swap_colors_in_sequence(self):
-        current_sequence_json = (
-            self.json_manager.loader_saver.load_current_sequence_json()
-        )
-        if len(current_sequence_json) < 2:
-            self.indicator_label.show_message("No sequence to swap colors.")
-            return
-
-        swapped_sequence_json = self.color_swapper.swap_colors(current_sequence_json)
-        self.update_beats_in_place(swapped_sequence_json)
-        self.indicator_label.show_message("Colors swapped successfully!")
-        self.toggle_swap_colors_icon()
-        currently_selected_beat = (
-            self.sequence_widget.beat_frame.selection_overlay.get_selected_beat()
-        )
-        self.sequence_widget.graph_editor.adjustment_panel.update_turns_panel(
-            currently_selected_beat.beat.blue_motion,
-            currently_selected_beat.beat.red_motion,
-        )
-
-    def rotate_current_sequence(self):
-        current_sequence_json = (
-            self.json_manager.loader_saver.load_current_sequence_json()
-        )
-        if len(current_sequence_json) < 2:
-            self.indicator_label.show_message("No sequence to rotate.")
-            return
-
-        rotated_sequence_json = self.sequence_rotator.rotate_sequence(
-            current_sequence_json
-        )
-        self.update_beats_in_place(rotated_sequence_json)
-        self.indicator_label.show_message("Sequence rotated successfully!")
-
-    def update_beats_in_place(self, modified_sequence_json):
-        beat_frame = self.sequence_widget.beat_frame
-        beats = beat_frame.beats
-
-        if len(modified_sequence_json) > 1:
-            start_pos_dict = modified_sequence_json[1]
-            beat_frame.start_pos_view.start_pos.updater.update_pictograph(
-                start_pos_dict
-            )
-
-        for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
-            if i < len(beats) and beats[i].is_filled:
-                beats[i].beat.updater.update_pictograph(beat_dict)
-            else:
-                break 
-
-        self.json_manager.loader_saver.save_current_sequence(modified_sequence_json)
-        self.json_manager.ori_validation_engine.run(is_current_sequence=True)
-
-        self.sequence_widget.current_word_label.update_current_word_label_from_beats()
-        self.sequence_widget.difficulty_label.update_difficulty_label()
-
-        self.sequence_widget.main_widget.manual_builder.option_picker.update_option_picker()
 
     def toggle_swap_colors_icon(self):
         if self.colors_swapped:
