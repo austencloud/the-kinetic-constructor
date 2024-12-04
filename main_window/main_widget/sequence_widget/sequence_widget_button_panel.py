@@ -1,40 +1,37 @@
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox, QApplication
-
-from main_window.main_widget.dictionary_widget.full_screen_image_overlay import (
-    FullScreenImageOverlay,
-)
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QApplication
 
 from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog import (
     LayoutOptionsDialog,
 )
+from main_window.main_widget.sequence_widget.full_screen_viewer import FullScreenViewer
+from main_window.main_widget.sequence_widget.sequence_color_swapper import (
+    SequenceColorSwapper,
+)
 
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
-    StartPositionBeatView,
-)
-from main_window.main_widget.sequence_widget.button_panel_placeholder import (
-    ButtonPanelPlaceholder,
-)
+from .sequence_mirror import SequenceMirror
+from .button_panel_placeholder import ButtonPanelPlaceholder
 from utilities.path_helpers import get_images_and_data_path
-
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class SequenceWidgetButtonPanel(QFrame):
+    swap_colors_button: QPushButton
+
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
-        self.placeholder = ButtonPanelPlaceholder(self)  # Initialize placeholder
+        self.placeholder = ButtonPanelPlaceholder(self)
 
-        self.full_screen_overlay = None
         self.font_size = self.sequence_widget.width() // 45
         self._setup_dependencies()
+        self.colors_swapped = False  # Add this flag
         self._setup_buttons()
-        self.top_placeholder = ButtonPanelPlaceholder(self)  # Top spacer for centering
+        self.top_placeholder = ButtonPanelPlaceholder(self)
         self.bottom_placeholder = ButtonPanelPlaceholder(self)
         self._setup_layout()
 
@@ -45,6 +42,10 @@ class SequenceWidgetButtonPanel(QFrame):
         self.export_manager = self.beat_frame.image_export_manager
         self.indicator_label = self.sequence_widget.indicator_label
         self.settings_manager = self.main_widget.main_window.settings_manager
+
+        self.sequence_mirror = SequenceMirror()
+        self.full_screen_viewer = FullScreenViewer(self.sequence_widget)
+        self.color_swapper = SequenceColorSwapper()
 
     def _setup_buttons(self) -> None:
         self.buttons: list[QPushButton] = []
@@ -67,9 +68,19 @@ class SequenceWidgetButtonPanel(QFrame):
                 "tooltip": "Layout Options",
             },
             "view_full_screen": {
-                "icon": "eye.png",  # Eye icon for full screen
-                "callback": self.view_full_screen,
+                "icon": "eye.png",
+                "callback": self.full_screen_viewer.view_full_screen,
                 "tooltip": "View Full Screen",
+            },
+            "mirror_sequence": {
+                "icon": "mirror.png",
+                "callback": self.mirror_current_sequence,
+                "tooltip": "Mirror Sequence",
+            },
+            "swap_colors": {
+                "icon": "yinyang1.png",  # Updated icon filename
+                "callback": self.swap_colors_in_sequence,
+                "tooltip": "Swap Colors",
             },
             "delete_beat": {
                 "icon": "delete.svg",
@@ -99,36 +110,51 @@ class SequenceWidgetButtonPanel(QFrame):
         self.options_panel = LayoutOptionsDialog(self.sequence_widget)
         self.options_panel.exec()
 
-    def view_full_screen(self):
-        """Display the current image in full screen mode."""
-        # set mouse cursor to waiting
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        last_beat = self.beat_frame.get.last_filled_beat()
-        if last_beat.__class__ == StartPositionBeatView:
-            self.indicator_label.show_message("Please build a sequence first.")
-            return
-        else:
-            current_thumbnail = self.create_thumbnail()
-            if current_thumbnail:
-                pixmap = QPixmap(current_thumbnail)
-                if self.full_screen_overlay:
-                    self.full_screen_overlay.close()  # Close any existing overlay
-                self.full_screen_overlay = FullScreenImageOverlay(
-                    self.main_widget, pixmap
-                )
-                self.full_screen_overlay.show()
-                # set mouse cursor back to normal
-                QApplication.restoreOverrideCursor()
-            else:
-                QMessageBox.warning(self, "No Image", "Please select an image first.")
-
-    def create_thumbnail(self):
-        # use the image export manager to create a thumbnail with custom settings specified in this function.
-        return self.sequence_widget.add_to_dictionary_manager.thumbnail_generator.generate_and_save_thumbnail(
-            self.json_manager.loader_saver.load_current_sequence_json(),
-            0,
-            get_images_and_data_path("temp"),
+    def mirror_current_sequence(self):
+        current_sequence_json = (
+            self.json_manager.loader_saver.load_current_sequence_json()
         )
+        if len(current_sequence_json) < 2:
+            self.indicator_label.show_message("No sequence to mirror.")
+            return
+        mirrored_sequence_json = self.sequence_mirror.mirror_sequence(
+            current_sequence_json
+        )
+        self.sequence_widget.sequence_clearer.clear_sequence(show_indicator=False)
+        self.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
+            mirrored_sequence_json
+        )
+        self.indicator_label.show_message("Sequence mirrored successfully!")
+
+    def swap_colors_in_sequence(self):
+        self.toggle_swap_colors_icon()
+        current_sequence_json = (
+            self.json_manager.loader_saver.load_current_sequence_json()
+        )
+        if len(current_sequence_json) < 2:
+            self.indicator_label.show_message("No sequence to swap colors.")
+            return
+        swapped_sequence_json = self.color_swapper.swap_colors(current_sequence_json)
+        self.sequence_widget.sequence_clearer.clear_sequence(show_indicator=False)
+        self.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
+            swapped_sequence_json
+        )
+        self.indicator_label.show_message("Colors swapped successfully!")
+
+    def toggle_swap_colors_icon(self):
+        if self.colors_swapped:
+            new_icon_path = get_images_and_data_path(
+                "images/icons/sequence_widget_icons/yinyang1.png"
+            )
+            self.colors_swapped = False
+        else:
+            new_icon_path = get_images_and_data_path(
+                "images/icons/sequence_widget_icons/yinyang2.png"
+            )
+            self.colors_swapped = True
+        new_icon = QIcon(new_icon_path)
+        self.swap_colors_button.setIcon(new_icon)
+        QApplication.processEvents()
 
     def _setup_button(
         self, button_name: str, icon_path: str, callback, tooltip: str
@@ -142,15 +168,15 @@ class SequenceWidgetButtonPanel(QFrame):
         )
         button.leaveEvent = lambda event: button.setCursor(Qt.CursorShape.ArrowCursor)
         button.setIcon(icon)
-        setattr(self, f"{button_name}_button", button)
+        setattr(self, f"{button_name}_button", button)  # Assign to self
         self.buttons.append(button)
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.top_placeholder)  # Top placeholder
+        self.layout.addWidget(self.top_placeholder)
         for button in self.buttons:
             self.layout.addWidget(button)
-        self.layout.addWidget(self.bottom_placeholder)  # Bottom placeholder
+        self.layout.addWidget(self.bottom_placeholder)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setSpacing(self.sequence_widget.height() // 40)
 
@@ -159,13 +185,13 @@ class SequenceWidgetButtonPanel(QFrame):
         self.resize_button_panel()
 
     def resize_button_panel(self):
-        button_size = self.sequence_widget.main_widget.height() // 18
+        button_size = self.sequence_widget.main_widget.height() // 22
         for button in self.buttons:
             button.setFixedSize(button_size, button_size)
-            button.setIconSize((button.size() * 0.7))
+            button.setIconSize(button.size() * 0.7)
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        spacing = self.sequence_widget.beat_frame.main_widget.height() // 40
+        spacing = self.sequence_widget.beat_frame.main_widget.height() // 80
         self.layout.setSpacing(spacing)
 
         self.layout.update()

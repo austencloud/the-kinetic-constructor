@@ -50,7 +50,6 @@ class PictographUpdater:
         self.pictograph.attr_manager.update_attributes(pictograph_dict)
         motion_dicts = self._get_motion_dicts(pictograph_dict)
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
-        # self.pictograph.view.container.update_borders()
         red_arrow_dict, blue_arrow_dict = self.get_arrow_dicts(pictograph_dict)
         self._update_motions(pictograph_dict, motion_dicts)
         self._update_arrows(red_arrow_dict, blue_arrow_dict)

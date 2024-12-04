@@ -50,7 +50,8 @@ class DictionaryBrowserLayoutManager:
     def switch_to_initial_filter_selection(self):
         """Switch to the initial selection page in the stacked layout."""
         self.stacked_layout.setCurrentIndex(0)
-
+        preview_area = self.browser.dictionary.preview_area
+        preview_area.word_label.setText("")
         self.browser.initial_selection_widget.show()
         self.browser.dictionary.preview_area.hide()
         self.browser.sequence_count_label.hide()
