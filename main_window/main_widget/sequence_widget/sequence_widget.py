@@ -98,6 +98,7 @@ class SequenceWidget(QWidget):
         self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.button_panel = SequenceWidgetButtonPanel(self)
+        
         self.graph_editor = GraphEditor(self)
 
         # Initialize the toggle tab and toggler

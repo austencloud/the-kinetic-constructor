@@ -1,135 +1,102 @@
-import os
+import sys
 import subprocess
 from PyQt6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QVBoxLayout,
-    QWidget,
-    QPushButton,
-    QLineEdit,
-    QFileDialog,
-    QMessageBox,
-    QLabel,
+    QApplication, QWidget, QLabel, QLineEdit, QPushButton,
+    QFileDialog, QVBoxLayout, QMessageBox
 )
 from PyQt6.QtCore import Qt
 
-
-class MovToMp4Converter(QMainWindow):
+class MOVtoMP4Converter(QWidget):
     def __init__(self):
         super().__init__()
-        self.init_ui()
-
-    def init_ui(self):
         self.setWindowTitle("MOV to MP4 Converter")
-        self.setGeometry(300, 300, 500, 200)
-
-        # Main layout
-        layout = QVBoxLayout()
 
         # Input file selection
-        self.input_label = QLabel("Select .mov file:")
-        self.input_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        layout.addWidget(self.input_label)
-
-        self.input_field = QLineEdit()
-        self.input_field.setPlaceholderText("Path to the .mov file")
-        layout.addWidget(self.input_field)
-
-        self.input_button = QPushButton("Browse")
-        self.input_button.clicked.connect(self.select_input_file)
-        layout.addWidget(self.input_button)
+        self.input_label = QLabel("Input .mov file:")
+        self.input_line_edit = QLineEdit()
+        self.input_browse_button = QPushButton("Browse...")
 
         # Output file selection
-        self.output_label = QLabel("Save as .mp4 file:")
-        self.output_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        layout.addWidget(self.output_label)
-
-        self.output_field = QLineEdit()
-        self.output_field.setPlaceholderText("Path to save the .mp4 file")
-        layout.addWidget(self.output_field)
-
-        self.output_button = QPushButton("Browse")
-        self.output_button.clicked.connect(self.select_output_file)
-        layout.addWidget(self.output_button)
+        self.output_label = QLabel("Output .mp4 file:")
+        self.output_line_edit = QLineEdit()
+        self.output_browse_button = QPushButton("Browse...")
 
         # Convert button
         self.convert_button = QPushButton("Convert")
-        self.convert_button.clicked.connect(self.convert_mov_to_mp4)
-        layout.addWidget(self.convert_button)
 
-        # Central widget setup
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
+        # Layout setup
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.input_label)
+        self.layout.addWidget(self.input_line_edit)
+        self.layout.addWidget(self.input_browse_button)
+        self.layout.addWidget(self.output_label)
+        self.layout.addWidget(self.output_line_edit)
+        self.layout.addWidget(self.output_browse_button)
+        self.layout.addWidget(self.convert_button)
 
-    def select_input_file(self):
-        """Open file dialog to select a .mov file."""
-        input_file, _ = QFileDialog.getOpenFileName(
-            self, "Select a .mov file", "", "MOV Files (*.mov)"
+        self.setLayout(self.layout)
+
+        # Connect buttons to functions
+        self.input_browse_button.clicked.connect(self.browse_input_file)
+        self.output_browse_button.clicked.connect(self.browse_output_file)
+        self.convert_button.clicked.connect(self.convert_video)
+
+    def browse_input_file(self):
+        file_name, _ = QFileDialog.getOpenFileName(
+            self, "Select Input MOV File", "", "MOV Files (*.mov)"
         )
-        if input_file:
-            self.input_field.setText(input_file)
+        if file_name:
+            self.input_line_edit.setText(file_name)
 
-    def select_output_file(self):
-        """Open file dialog to save the .mp4 file."""
-        output_file, _ = QFileDialog.getSaveFileName(
-            self, "Save as", "", "MP4 Files (*.mp4)"
+    def browse_output_file(self):
+        file_name, _ = QFileDialog.getSaveFileName(
+            self, "Select Output MP4 File", "", "MP4 Files (*.mp4)"
         )
-        if output_file:
-            self.output_field.setText(output_file)
+        if file_name:
+            self.output_line_edit.setText(file_name)
 
-    def convert_mov_to_mp4(self):
-        """Convert the selected .mov file to .mp4."""
-        input_file = self.input_field.text()
-        output_file = self.output_field.text()
+    def convert_video(self):
+        input_file = self.input_line_edit.text()
+        output_file = self.output_line_edit.text()
 
-        if not input_file or not output_file:
-            QMessageBox.critical(
-                self, "Error", "Please select both input and output files."
-            )
+        if not input_file:
+            QMessageBox.warning(self, "Error", "Please select an input .mov file.")
             return
 
-        if not os.path.exists(input_file):
-            QMessageBox.critical(
-                self, "Error", f"Input file does not exist: {input_file}"
-            )
+        if not output_file:
+            QMessageBox.warning(self, "Error", "Please select an output .mp4 file.")
             return
 
+        # Use full path to ffmpeg
+        ffmpeg_path = r"C:\ffmpeg\bin\ffmpeg.exe"  # Update this path as needed
+
+        # Call ffmpeg to convert the video
         try:
-            # Build and execute the ffmpeg command
-            command = [
-                "ffmpeg",
-                "-i",
-                input_file,  # Input file
-                "-c:v",
-                "libx264",  # Video codec
-                "-preset",
-                "medium",  # Compression speed/quality
-                "-crf",
-                "23",  # Quality level
-                "-c:a",
-                "aac",  # Audio codec
-                "-b:a",
-                "192k",  # Audio bitrate
-                "-movflags",
-                "+faststart",  # Optimize for streaming
-                output_file,  # Output file
-            ]
-            subprocess.run(command, check=True)
-            QMessageBox.information(
-                self, "Success", f"Conversion completed: {output_file}"
+            command = [ffmpeg_path, "-i", input_file, output_file]
+            process = subprocess.Popen(
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
             )
-        except subprocess.CalledProcessError as e:
-            QMessageBox.critical(self, "Error", f"Error during conversion: {e}")
+            stdout, stderr = process.communicate()
+
+            if process.returncode != 0:
+                error_message = stderr.decode('utf-8')
+                QMessageBox.critical(
+                    self, "Conversion Failed",
+                    f"An error occurred during conversion:\n{error_message}"
+                )
+            else:
+                QMessageBox.information(
+                    self, "Conversion Successful",
+                    "The video has been converted successfully."
+                )
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Unexpected error: {e}")
+            QMessageBox.critical(
+                self, "Error",
+                f"An error occurred:\n{str(e)}"
+            )
 
-
-# Run the application
 if __name__ == "__main__":
-    import sys
-
     app = QApplication(sys.argv)
-    window = MovToMp4Converter()
+    window = MOVtoMP4Converter()
     window.show()
     sys.exit(app.exec())

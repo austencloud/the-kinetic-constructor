@@ -45,7 +45,8 @@ class SequenceWidgetButtonPanel(QFrame):
         self.full_screen_viewer = FullScreenViewer(self.sequence_widget)
 
     def _setup_buttons(self) -> None:
-        self.buttons: list[QPushButton] = []
+        self.buttons: dict[str, QPushButton] = {}
+
         button_dict = {
             "add_to_dictionary": {
                 "icon": "add_to_dictionary.svg",
@@ -60,7 +61,7 @@ class SequenceWidgetButtonPanel(QFrame):
                 "tooltip": "Save Image",
             },
             "layout_options": {
-                "icon": "options.svg",
+                "icon": "settings.png",
                 "callback": self.show_options_panel,
                 "tooltip": "Layout Options",
             },
@@ -97,16 +98,28 @@ class SequenceWidgetButtonPanel(QFrame):
                 "tooltip": "Clear Sequence",
             },
         }
+
         for button_name, button_data in button_dict.items():
-            icon = get_images_and_data_path(
+            icon_path = get_images_and_data_path(
                 f"images/icons/sequence_widget_icons/{button_data['icon']}"
             )
-            self._setup_button(
-                button_name,
-                icon,
-                button_data["callback"],
-                button_data["tooltip"],
+            button = self._create_button(
+                icon_path, button_data["callback"], button_data["tooltip"]
             )
+            setattr(self, f"{button_name}_button", button)
+            self.buttons[button_name] = button
+
+    def _create_button(self, icon_path: str, callback, tooltip: str) -> QPushButton:
+        icon = QIcon(icon_path)
+        button = QPushButton()
+        button.clicked.connect(callback)
+        button.setToolTip(tooltip)
+        button.enterEvent = lambda event: button.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
+        button.leaveEvent = lambda event: button.setCursor(Qt.CursorShape.ArrowCursor)
+        button.setIcon(icon)
+        return button
 
     def show_options_panel(self) -> None:
         self.options_panel = LayoutOptionsDialog(self.sequence_widget)
@@ -127,28 +140,32 @@ class SequenceWidgetButtonPanel(QFrame):
         self.swap_colors_button.setIcon(new_icon)
         QApplication.processEvents()
 
-    def _setup_button(
-        self, button_name: str, icon_path: str, callback, tooltip: str
-    ) -> None:
-        icon = QIcon(icon_path)
-        button = QPushButton()
-        button.clicked.connect(callback)
-        button.setToolTip(tooltip)
-        button.enterEvent = lambda event: button.setCursor(
-            Qt.CursorShape.PointingHandCursor
-        )
-        button.leaveEvent = lambda event: button.setCursor(Qt.CursorShape.ArrowCursor)
-        button.setIcon(icon)
-        setattr(self, f"{button_name}_button", button)  # Assign to self
-        self.buttons.append(button)
-
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.top_placeholder)
-        for button in self.buttons:
-            self.layout.addWidget(button)
+
+        # Group 1 (Basic Tools)
+        for name in ["add_to_dictionary", "save_image", "view_full_screen"]:
+            self.layout.addWidget(self.buttons[name])
+
+        # Add spacing to separate groups
+        self.layout.addSpacing(self.sequence_widget.height() // 20)
+
+        # Group 2 (Transform Tools)
+        for name in ["mirror_sequence", "swap_colors", "rotate_sequence"]:
+            self.layout.addWidget(self.buttons[name])
+
+        # Add spacing before next group
+        self.layout.addSpacing(self.sequence_widget.height() // 20)
+
+        # Group 3 (Sequence Management)
+        for name in ["layout_options", "delete_beat", "clear_sequence"]:
+            self.layout.addWidget(self.buttons[name])
+
         self.layout.addWidget(self.bottom_placeholder)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Initial spacing setup
         self.layout.setSpacing(self.sequence_widget.height() // 40)
 
     def resizeEvent(self, event) -> None:
@@ -157,12 +174,18 @@ class SequenceWidgetButtonPanel(QFrame):
 
     def resize_button_panel(self):
         button_size = self.sequence_widget.main_widget.height() // 24
-        for button in self.buttons:
+        for button in self.buttons.values():
             button.setFixedSize(button_size, button_size)
-            button.setIconSize(button.size() * 0.7)
+            button.setIconSize(button.size() * 0.8)
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        spacing = self.sequence_widget.beat_frame.main_widget.height() // 100
-        self.layout.setSpacing(spacing)
+        # Adjust spacing if needed based on new size
+        self.layout.setSpacing(
+            self.sequence_widget.beat_frame.main_widget.height() // 120
+        )
+        # You can also recalculate the spacing for the groups if needed
+        # For example:
+        # self.layout.itemAt( (index_of_spacing_item) ).changeSize(...)
+        # but for simplicity we'll leave as is.
 
         self.layout.update()

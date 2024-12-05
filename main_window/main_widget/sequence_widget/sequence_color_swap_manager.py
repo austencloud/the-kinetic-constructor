@@ -25,9 +25,7 @@ class SequenceColorSwapManager:
 
         swapped_sequence_json = self.swap_colors(current_sequence_json)
         self.sequence_widget.update_beats_in_place(swapped_sequence_json)
-        self.sequence_widget.indicator_label.show_message(
-            "Colors swapped!"
-        )
+        self.sequence_widget.indicator_label.show_message("Colors swapped!")
         self.sequence_widget.button_panel.toggle_swap_colors_icon()
         # Update adjustment panel if necessary
 
