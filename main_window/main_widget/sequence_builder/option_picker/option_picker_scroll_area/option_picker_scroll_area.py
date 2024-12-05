@@ -62,38 +62,25 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
-    def add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
-        if self.disabled:
-            return
-        if QApplication.overrideCursor() is None:
-            QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+    def add_and_display_relevant_pictographs(self, next_options: list[dict]):
+        # Clear current pictographs from layout
+        self.display_manager.clear_all_section_layouts()
 
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        last_beat_dict = None
-        if len(sequence) > 1:
-            last_beat_dict = sequence[-1]
-            if last_beat_dict.get("is_placeholder", False):
-                last_beat_dict = sequence[-2]
+        for i, pictograph_dict in enumerate(next_options):
+            # Get a pictograph from our pool
+            if i >= len(self.option_picker.pictograph_pool):
+                break  # If not enough pre-initialized, either increase the pool or handle differently
+            p = self.option_picker.pictograph_pool[i]
 
-        for pictograph_dict in next_options:
-            self.set_pictograph_orientations(pictograph_dict, sequence)
-            pictograph = self._get_or_create_pictograph(pictograph_dict, sequence)
-            pictograph.updater.update_pictograph(pictograph_dict)
-            sequence_so_far = (
-                self.json_manager.loader_saver.load_current_sequence_json()
-            )
-            reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, pictograph_dict
-            )
-            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
-            pictograph.red_reversal = reversal_info.get("red_reversal", False)
+            # Update pictograph with new dict
+            p.updater.update_pictograph(pictograph_dict)
+            p.blue_reversal = False  # Reset any special states
+            p.red_reversal = False
 
-            pictograph.reversal_symbol_manager.update_reversal_symbols()
-            pictograph.view.update()
+            # Insert into layout
+            self.display_manager.add_pictograph_to_section_layout(p)
+            p.view.show()
 
-        self.display_manager.order_and_display_pictographs()
-        self.layout.update()
-        QApplication.restoreOverrideCursor()
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
         last_pictograph_dict = (

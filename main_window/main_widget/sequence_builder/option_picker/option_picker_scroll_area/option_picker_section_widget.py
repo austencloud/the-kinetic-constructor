@@ -62,15 +62,18 @@ class OptionPickerSectionWidget(QGroupBox):
             pictograph.view.hide()
 
     def add_pictograph(self, pictograph: BasePictograph) -> None:
-        """Add a pictograph widget to the section layout."""
         self.pictographs[
             self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
                 pictograph.pictograph_dict
             )
         ] = pictograph
-        self.pictograph_frame.layout.addWidget(pictograph.view)
-        # pictograph.view.resize_pictograph_view()
+        
+        # Suppose we keep a count of how many pictographs we've added:
+        count = len(self.pictographs)
+        row, col = divmod(count - 1, self.scroll_area.option_picker.COLUMN_COUNT) 
+        self.pictograph_frame.layout.addWidget(pictograph.view, row, col)
         pictograph.view.show()
+
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""
