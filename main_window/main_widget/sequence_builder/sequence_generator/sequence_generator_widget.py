@@ -87,6 +87,8 @@ class SequenceGeneratorWidget(QWidget):
     def _setup_buttons(self):
         """Set up Freeform and Circular buttons and add them to the layout."""
         self.button_layout = QHBoxLayout()
+        # set the alignment to center
+        self.button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.freeform_button = QPushButton("Freeform")
         self.circular_button = QPushButton("Circular")
 
@@ -98,7 +100,7 @@ class SequenceGeneratorWidget(QWidget):
         for button in [self.freeform_button, self.circular_button]:
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.button_layout.addWidget(button)
-
+        self.layout.addStretch(1)
         self.layout.addLayout(self.button_layout)
 
         # Store buttons for easy style updates
