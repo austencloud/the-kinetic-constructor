@@ -3,13 +3,13 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 
 class LevelSelector(QWidget):
-    def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
+    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
-        self.auto_builder_frame = auto_builder_frame
+        self.sequence_generator_frame = sequence_generator_frame
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
 
@@ -39,12 +39,12 @@ class LevelSelector(QWidget):
         for button in self.level_buttons.values():
             button.setChecked(False)
         self.level_buttons[f"level_{level}"].setChecked(True)
-        self.auto_builder_frame._update_sequence_level(level)
+        self.sequence_generator_frame._update_sequence_level(level)
         if level == 1:
-            self.auto_builder_frame.turn_intensity_adjuster.hide()
+            self.sequence_generator_frame.turn_intensity_adjuster.hide()
         else:
-            self.auto_builder_frame.turn_intensity_adjuster.show()
-            self.auto_builder_frame.turn_intensity_adjuster.adjust_values(level)
+            self.sequence_generator_frame.turn_intensity_adjuster.show()
+            self.sequence_generator_frame.turn_intensity_adjuster.adjust_values(level)
 
     def set_level(self, level):
         """Set the initial level when loading settings."""
@@ -52,7 +52,8 @@ class LevelSelector(QWidget):
 
     def resize_level_selector(self):
         font_size = (
-            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 75
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            // 75
         )
         for button in self.level_buttons.values():
             font = button.font()

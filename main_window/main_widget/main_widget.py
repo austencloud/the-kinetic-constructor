@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from .json_manager.json_manager import JsonManager
     from .sequence_widget.sequence_widget import SequenceWidget
     from .sequence_builder.manual_builder import ManualBuilder
-    from .sequence_builder.auto_builder.sequence_generator_widget import (
+    from .sequence_builder.sequence_generator.sequence_generator_widget import (
         SequenceGeneratorWidget,
     )
     from .dictionary_widget.dictionary_widget import DictionaryWidget

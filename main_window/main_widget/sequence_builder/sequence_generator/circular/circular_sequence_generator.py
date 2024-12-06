@@ -11,7 +11,7 @@ from data.position_maps import (
 )
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
-from ..base_classes.base_auto_builder import BaseAutoBuilder
+from ..base_classes.base_sequence_generator import BaseSequenceGenerator
 from .permutation_executors.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
@@ -21,12 +21,12 @@ from .permutation_executors.rotated_permutation_executor import (
 from ..turn_intensity_manager import TurnIntensityManager
 
 if TYPE_CHECKING:
-    from .circular_auto_builder_frame import CircularAutoBuilderFrame
+    from .circular_sequence_generator_frame import CircularSequenceGeneratorFrame
 
 
-class CircularAutoBuilder(BaseAutoBuilder):
-    def __init__(self, auto_builder_frame: "CircularAutoBuilderFrame"):
-        super().__init__(auto_builder_frame)
+class CircularSequenceGenerator(BaseSequenceGenerator):
+    def __init__(self, sequence_generator_frame: "CircularSequenceGeneratorFrame"):
+        super().__init__(sequence_generator_frame)
         self.rotated_executor = RotatedPermutationExecuter(self)
         self.mirrored_executor = MirroredPermutationExecutor(self, False)
 

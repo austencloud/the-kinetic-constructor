@@ -3,7 +3,7 @@ from .permutation_executor_base import PermutationExecutor
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from ..circular_auto_builder import CircularAutoBuilder
+    from ..circular_sequence_generator import CircularSequenceGenerator
 
 vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
 horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
@@ -12,12 +12,12 @@ horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
 class MirroredPermutationExecutor(PermutationExecutor):
     def __init__(
         self,
-        circular_auto_builder: "CircularAutoBuilder",
+        circular_sequence_generator: "CircularSequenceGenerator",
         color_swap_second_half: bool,
     ):
-        self.circular_auto_builder = circular_auto_builder
+        self.circular_sequence_generator = circular_sequence_generator
         self.color_swap_second_half = color_swap_second_half
-        self.validation_engine = circular_auto_builder.validation_engine
+        self.validation_engine = circular_sequence_generator.validation_engine
 
     def create_permutations(self, sequence: list[dict], vertical_or_horizontal: str):
         if not self.can_perform_mirrored_permutation(sequence):
@@ -45,7 +45,7 @@ class MirroredPermutationExecutor(PermutationExecutor):
             sequence.append(next_pictograph)
 
             sequence_widget = (
-                self.circular_auto_builder.top_builder_widget.sequence_widget
+                self.circular_sequence_generator.top_builder_widget.sequence_widget
             )
             sequence_widget.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
@@ -97,12 +97,12 @@ class MirroredPermutationExecutor(PermutationExecutor):
         }
 
         new_entry["blue_attributes"]["end_ori"] = (
-            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "blue"
             )
         )
         new_entry["red_attributes"]["end_ori"] = (
-            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "red"
             )
         )

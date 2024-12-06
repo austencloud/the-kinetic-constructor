@@ -9,7 +9,7 @@ from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
+    from main_window.main_widget.sequence_builder.sequence_generator.widgets.letter_type_picker import (
         LetterTypePicker,
     )
 

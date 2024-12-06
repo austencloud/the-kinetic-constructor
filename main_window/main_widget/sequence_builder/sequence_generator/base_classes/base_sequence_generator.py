@@ -26,15 +26,15 @@ from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
     from ....sequence_widget.sequence_widget import SequenceWidget
-    from .base_auto_builder_frame import BaseAutoBuilderFrame
+    from .base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 
-class BaseAutoBuilder:
-    def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
-        self.auto_builder_frame = auto_builder_frame
+class BaseSequenceGenerator:
+    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
+        self.sequence_generator_frame = sequence_generator_frame
         self.sequence_widget: "SequenceWidget" = None
 
-        self.main_widget = auto_builder_frame.sequence_generator_tab.main_widget
+        self.main_widget = sequence_generator_frame.sequence_generator_tab.main_widget
         self.validation_engine = self.main_widget.json_manager.ori_validation_engine
         self.json_manager = self.main_widget.json_manager
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
@@ -55,7 +55,7 @@ class BaseAutoBuilder:
     def add_start_pos_pictograph(self) -> None:
         """Add a starting position pictograph to the sequence."""
         grid_mode = (
-            self.auto_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_grid_mode()
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_grid_mode()
         )
         if grid_mode == DIAMOND:
             start_pos_keys = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]

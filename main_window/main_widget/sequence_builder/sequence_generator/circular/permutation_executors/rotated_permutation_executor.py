@@ -25,13 +25,13 @@ from .permutation_executor_base import PermutationExecutor
 from data.positions_map import positions_map
 
 if TYPE_CHECKING:
-    from ..circular_auto_builder import CircularAutoBuilder
+    from ..circular_sequence_generator import CircularSequenceGenerator
 
 
 class RotatedPermutationExecuter(PermutationExecutor):
-    def __init__(self, circular_auto_builder: "CircularAutoBuilder"):
-        self.circular_auto_builder = circular_auto_builder
-        self.validation_engine = circular_auto_builder.validation_engine
+    def __init__(self, circular_sequence_generator: "CircularSequenceGenerator"):
+        self.circular_sequence_generator = circular_sequence_generator
+        self.validation_engine = circular_sequence_generator.validation_engine
         self.hand_rot_dir_calculator = HandpathCalculator()
 
     def create_permutations(self, sequence: list[dict]):
@@ -57,7 +57,9 @@ class RotatedPermutationExecuter(PermutationExecutor):
             new_entries.append(next_pictograph)
             sequence.append(next_pictograph)
 
-            sequence_widget = self.circular_auto_builder.main_widget.sequence_widget
+            sequence_widget = (
+                self.circular_sequence_generator.main_widget.sequence_widget
+            )
             sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
             )
@@ -82,7 +84,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
 
     def is_quartered_permutation(self) -> bool:
         sequence = (
-            self.circular_auto_builder.json_manager.loader_saver.load_current_sequence_json()
+            self.circular_sequence_generator.json_manager.loader_saver.load_current_sequence_json()
         )
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
@@ -90,7 +92,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
 
     def is_halved_permutation(self) -> bool:
         sequence = (
-            self.circular_auto_builder.json_manager.loader_saver.load_current_sequence_json()
+            self.circular_sequence_generator.json_manager.loader_saver.load_current_sequence_json()
         )
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
@@ -210,12 +212,12 @@ class RotatedPermutationExecuter(PermutationExecutor):
             )
 
         new_entry["blue_attributes"]["end_ori"] = (
-            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "blue"
             )
         )
         new_entry["red_attributes"]["end_ori"] = (
-            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "red"
             )
         )

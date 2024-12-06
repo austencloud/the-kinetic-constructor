@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
-from main_window.main_widget.sequence_builder.auto_builder.circular.circular_auto_builder_frame import (
-    CircularAutoBuilderFrame,
+from main_window.main_widget.sequence_builder.sequence_generator.circular.circular_sequence_generator_frame import (
+    CircularSequenceGeneratorFrame,
 )
-from main_window.main_widget.sequence_builder.auto_builder.freeform.freeform_auto_builder_frame import (
-    FreeformAutoBuilderFrame,
+from main_window.main_widget.sequence_builder.sequence_generator.freeform.freeform_sequence_generator_frame import (
+    FreeformSequenceGeneratorFrame,
 )
 
 if TYPE_CHECKING:
@@ -125,7 +125,7 @@ class FontColorUpdater:
         self._apply_font_colors(manual_labels, font_color)
 
     def _get_freeform_builder_labels(
-        self, freeform_builder_frame: "FreeformAutoBuilderFrame"
+        self, freeform_builder_frame: "FreeformSequenceGeneratorFrame"
     ) -> list[QWidget]:
         return [
             freeform_builder_frame.level_selector.level_label,
@@ -136,7 +136,7 @@ class FontColorUpdater:
         ]
 
     def _get_circular_builder_labels(
-        self, circular_builder_frame: "CircularAutoBuilderFrame"
+        self, circular_builder_frame: "CircularSequenceGeneratorFrame"
     ) -> list[QWidget]:
         return [
             circular_builder_frame.level_selector.level_label,

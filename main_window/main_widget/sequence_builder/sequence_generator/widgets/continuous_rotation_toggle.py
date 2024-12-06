@@ -3,13 +3,13 @@ from pytoggle import PyToggle
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 
 class ContinuousRotationToggle(QWidget):
-    def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
+    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
-        self.auto_builder_frame = auto_builder_frame
+        self.sequence_generator_frame = sequence_generator_frame
         self.layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(self.layout)
         self._create_rotation_toggle()
@@ -29,16 +29,16 @@ class ContinuousRotationToggle(QWidget):
         self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
-        self.auto_builder_frame._update_continuous_rotation(bool(state))
+        self.sequence_generator_frame._update_continuous_rotation(bool(state))
         self.update_mode_label_styles()
 
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected rotation type."""
         font_color_updater = (
-            self.auto_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.font_color_updater
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.font_color_updater
         )
         font_color = font_color_updater.get_font_color(
-            self.auto_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_background_type()
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_background_type()
         )
         if self.toggle.isChecked():
             self.random_label.setStyleSheet("font-weight: normal; color: gray;")
@@ -56,7 +56,8 @@ class ContinuousRotationToggle(QWidget):
 
     def resize_continuous_rotation_toggle(self):
         font_size = (
-            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 75
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            // 75
         )
         font = self.random_label.font()
         font.setPointSize(font_size)

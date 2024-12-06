@@ -4,11 +4,13 @@ from pytoggle import PyToggle
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from ..circular.circular_auto_builder_frame import CircularAutoBuilderFrame
+    from ..circular.circular_sequence_generator_frame import (
+        CircularSequenceGeneratorFrame,
+    )
 
 
 class RotationTypeToggle(QWidget):
-    def __init__(self, circular_builder_frame: "CircularAutoBuilderFrame"):
+    def __init__(self, circular_builder_frame: "CircularSequenceGeneratorFrame"):
         super().__init__()
         self.circular_builder_frame = circular_builder_frame
         self.layout: QHBoxLayout = QHBoxLayout()

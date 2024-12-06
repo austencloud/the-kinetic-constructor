@@ -4,18 +4,19 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QStackedLayout,
+    QCheckBox,
 )
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_builder.auto_builder.base_classes.customize_your_sequence_label import (
+from main_window.main_widget.sequence_builder.sequence_generator.base_classes.customize_your_sequence_label import (
     CustomizeSequenceLabel,
 )
-from main_window.main_widget.sequence_builder.auto_builder.generate_sequence_button import (
+from main_window.main_widget.sequence_builder.sequence_generator.generate_sequence_button import (
     GenerateSequenceButton,
 )
-from .circular.circular_auto_builder_frame import CircularAutoBuilderFrame
-from .freeform.freeform_auto_builder_frame import FreeformAutoBuilderFrame
+from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
+from .freeform.freeform_sequence_generator_frame import FreeformSequenceGeneratorFrame
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -23,11 +24,11 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QStackedLayout
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_builder.auto_builder.base_classes.customize_your_sequence_label import (
+from main_window.main_widget.sequence_builder.sequence_generator.base_classes.customize_your_sequence_label import (
     CustomizeSequenceLabel,
 )
-from .circular.circular_auto_builder_frame import CircularAutoBuilderFrame
-from .freeform.freeform_auto_builder_frame import FreeformAutoBuilderFrame
+from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
+from .freeform.freeform_sequence_generator_frame import FreeformSequenceGeneratorFrame
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -38,6 +39,7 @@ class SequenceGeneratorWidget(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.global_settings = main_widget.main_window.settings_manager.global_settings
+        self.overwrite_connected = False
 
         # Main layout containing all widgets
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -55,8 +57,8 @@ class SequenceGeneratorWidget(QWidget):
 
         # Stacked layout for Freeform and Circular frames
         self.stacked_layout = QStackedLayout()
-        self.freeform_builder_frame = FreeformAutoBuilderFrame(self)
-        self.circular_builder_frame = CircularAutoBuilderFrame(self)
+        self.freeform_builder_frame = FreeformSequenceGeneratorFrame(self)
+        self.circular_builder_frame = CircularSequenceGeneratorFrame(self)
         self.stacked_layout.addWidget(self.freeform_builder_frame)
         self.stacked_layout.addWidget(self.circular_builder_frame)
         self.layout.addLayout(self.stacked_layout)
@@ -67,9 +69,19 @@ class SequenceGeneratorWidget(QWidget):
             self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.layout.addStretch(1)
+        # create a "overwrite checkbox" to allow the user to overwrite the existing sequence
+        self.overwrite_checkbox = QCheckBox("Overwrite sequence")
+        # connect the checkbox to the settings manager
 
+        # Create a widget to contain the checkbox and align it to center
+        checkbox_layout = QHBoxLayout()
+        checkbox_layout.addStretch(1)
+        checkbox_layout.addWidget(self.overwrite_checkbox)
+        checkbox_layout.addStretch(1)
+        self.layout.addLayout(checkbox_layout)
+        self.layout.addStretch(1)
         # Default to showing Freeform frame
-        self.current_auto_builder = "freeform"
+        self.current_sequence_generator = "freeform"
         self.show_freeform_frame()
 
     def _setup_buttons(self):
@@ -104,27 +116,91 @@ class SequenceGeneratorWidget(QWidget):
     def show_freeform_frame(self):
         """Display Freeform frame by setting it in the stacked layout."""
         self.stacked_layout.setCurrentWidget(self.freeform_builder_frame)
-        self.current_auto_builder = "freeform"
+        self.current_sequence_generator = "freeform"
         self.update_button_styles()
 
-        # Reconnect the create sequence button to Freeform's create function
-        # check if it's connected, if so idscconnect it
+        # Disconnect previous signals to avoid double connections
+        if self.overwrite_connected:
+            try:
+                self.overwrite_checkbox.stateChanged.disconnect()
+            except TypeError:
+                pass
+            self.overwrite_connected = False
+
+        # Retrieve the overwrite_sequence setting
+        overwrite_value = self.main_widget.settings_manager.builder_settings.sequence_generator.get_sequence_generator_setting(
+            "overwrite_sequence", self.current_sequence_generator
+        )
+
+        # Convert overwrite_value to boolean
+        if isinstance(overwrite_value, bool):
+            overwrite_bool = overwrite_value
+        elif isinstance(overwrite_value, str):
+            overwrite_bool = overwrite_value.lower() == "true"
+        else:
+            overwrite_bool = False
+
+        self.overwrite_checkbox.setChecked(overwrite_bool)
+
+        self.overwrite_checkbox.stateChanged.connect(
+            lambda state: self.main_widget.settings_manager.builder_settings.sequence_generator.set_sequence_generator_setting(
+                "overwrite_sequence",
+                state == 2,  # 2 is the value for Qt.CheckState.Checked
+                self.current_sequence_generator,
+            )
+        )
+        self.overwrite_connected = True
 
         self.generate_sequence_button.clicked.disconnect()
         self.generate_sequence_button.clicked.connect(
-            self.freeform_builder_frame.on_create_sequence
+            lambda: self.freeform_builder_frame.on_create_sequence(
+                self.overwrite_checkbox.isChecked()
+            )
         )
 
     def show_circular_frame(self):
         """Display Circular frame by setting it in the stacked layout."""
         self.stacked_layout.setCurrentWidget(self.circular_builder_frame)
-        self.current_auto_builder = "circular"
+        self.current_sequence_generator = "circular"
         self.update_button_styles()
 
-        # Reconnect the create sequence button to Circular's create function
+        # Disconnect previous signals to avoid double connections
+        if self.overwrite_connected:
+            try:
+                self.overwrite_checkbox.stateChanged.disconnect()
+            except TypeError:
+                pass
+            self.overwrite_connected = False
+
+        # Retrieve the overwrite_sequence setting
+        overwrite_value = self.main_widget.settings_manager.builder_settings.sequence_generator.get_sequence_generator_setting(
+            "overwrite_sequence", self.current_sequence_generator
+        )
+
+        # Convert overwrite_value to boolean
+        if isinstance(overwrite_value, bool):
+            overwrite_bool = overwrite_value
+        elif isinstance(overwrite_value, str):
+            overwrite_bool = overwrite_value.lower() == "true"
+        else:
+            overwrite_bool = False
+
+        self.overwrite_checkbox.setChecked(overwrite_bool)
+
+        self.overwrite_checkbox.stateChanged.connect(
+            lambda state: self.main_widget.settings_manager.builder_settings.sequence_generator.set_sequence_generator_setting(
+                "overwrite_sequence",
+                state == 2,
+                self.current_sequence_generator,
+            )
+        )
+        self.overwrite_connected = True
+
         self.generate_sequence_button.clicked.disconnect()
         self.generate_sequence_button.clicked.connect(
-            self.circular_builder_frame.on_create_sequence
+            lambda: self.circular_builder_frame.on_create_sequence(
+                self.overwrite_checkbox.isChecked()
+            )
         )
 
     def update_button_styles(self):
@@ -135,14 +211,18 @@ class SequenceGeneratorWidget(QWidget):
 
         # Update each button with active/inactive style
         for key, button in self.buttons.items():
-            style = active_style if self.current_auto_builder == key else inactive_style
+            style = (
+                active_style
+                if self.current_sequence_generator == key
+                else inactive_style
+            )
             button.setStyleSheet(f"{style} font-size: {font_size}px; padding: 8px;")
 
     def resize_sequence_generator(self) -> None:
         """Resize handler for the auto builder UI."""
         # Resize frames
-        self.freeform_builder_frame._resize_auto_builder_frame()
-        self.circular_builder_frame._resize_auto_builder_frame()
+        self.freeform_builder_frame._resize_sequence_generator_frame()
+        self.circular_builder_frame._resize_sequence_generator_frame()
         self.customize_sequence_label.resize_customize_sequence_label()
         self.generate_sequence_button.resize_generate_sequence_button()
 
@@ -152,6 +232,10 @@ class SequenceGeneratorWidget(QWidget):
             button.setFixedWidth(self.main_widget.width() // 10)
 
         self.update_button_styles()
+
+        font = self.overwrite_checkbox.font()
+        font.setPointSize(self.main_widget.height() // 85)
+        self.overwrite_checkbox.setFont(font)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

@@ -108,3 +108,11 @@ class BeatDeletionManager:
         """Delete a specific beat."""
         beat_view.setScene(beat_view.blank_beat)
         beat_view.is_filled = False
+
+    def delete_all_beats(self) -> None:
+        """Delete all beats."""
+        self.beats = self.beat_frame.beats
+        self._initialize_manual_builder()
+        self._initialize_GE_pictograph_view()
+        self._delete_start_pos()
+        self._post_deletion_updates()

@@ -79,6 +79,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
 
             # Insert into layout
             self.display_manager.add_pictograph_to_section_layout(p)
+            p.view.update_borders()
             p.view.show()
 
 

@@ -3,13 +3,13 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 
 class LengthAdjuster(QWidget):
-    def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
+    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
-        self.auto_builder_frame = auto_builder_frame
+        self.sequence_generator_frame = sequence_generator_frame
         self.length = 8
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -46,25 +46,25 @@ class LengthAdjuster(QWidget):
         if state:
             self.length = (self.length // 4) * 4
             self.length_value_label.setText(str(self.length))
-            self.auto_builder_frame._update_sequence_length(self.length)
+            self.sequence_generator_frame._update_sequence_length(self.length)
             self.adjustment_amount = 4
         else:
             self.length = (self.length // 2) * 2
             self.length_value_label.setText(str(self.length))
-            self.auto_builder_frame._update_sequence_length(self.length)
+            self.sequence_generator_frame._update_sequence_length(self.length)
             self.adjustment_amount = 2
 
     def _increment_length(self):
         if self.length < 64:
             self.length += self.adjustment_amount
             self.length_value_label.setText(str(self.length))
-            self.auto_builder_frame._update_sequence_length(self.length)
+            self.sequence_generator_frame._update_sequence_length(self.length)
 
     def _decrement_length(self):
         if self.length > 4:
             self.length -= self.adjustment_amount
             self.length_value_label.setText(str(self.length))
-            self.auto_builder_frame._update_sequence_length(self.length)
+            self.sequence_generator_frame._update_sequence_length(self.length)
 
     def set_length(self, length):
         """Set the initial length when loading settings."""
@@ -73,7 +73,8 @@ class LengthAdjuster(QWidget):
 
     def resize_length_adjuster(self):
         font_size = (
-            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 75
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            // 75
         )
         font = self.length_label.font()
         font.setPointSize(font_size)
@@ -83,7 +84,8 @@ class LengthAdjuster(QWidget):
         self.length_label.setFont(font)
         self.length_value_label.setFont(font)
         self.length_value_label.setFixedWidth(
-            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 25
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            // 25
         )
 
         self.minus_button.updateGeometry()

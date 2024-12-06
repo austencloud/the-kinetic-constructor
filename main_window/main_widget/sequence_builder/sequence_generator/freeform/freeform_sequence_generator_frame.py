@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING
-from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+from PyQt6.QtWidgets import QCheckBox
+from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 from ..widgets.letter_type_picker import LetterTypePicker
-from .freeform_auto_builder import FreeFormAutoBuilder
+from .freeform_sequence_generator import FreeFormSequenceGenerator
 
 if TYPE_CHECKING:
     from ..sequence_generator_widget import SequenceGeneratorWidget
 
 
-class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
+class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def __init__(self, sequence_generator_tab: "SequenceGeneratorWidget") -> None:
         super().__init__(sequence_generator_tab, "freeform")
-        self.builder = FreeFormAutoBuilder(self)
+        self.builder = FreeFormSequenceGenerator(self)
 
         # Attach specific action for sequence creation
 
@@ -20,23 +21,29 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
 
         self.apply_settings()
 
-    def on_create_sequence(self):
+    def on_create_sequence(self, overwrite_sequence: bool):
         """Trigger sequence creation for Freeform."""
+        if overwrite_sequence:
+            # ask the beat frame to remove all the beats first
+            self.sequence_generator_tab.main_widget.sequence_widget.beat_frame.beat_deletion_manager.delete_all_beats()
+
         self.builder.build_sequence(
             int(
-                self.auto_builder_settings.get_auto_builder_setting(
+                self.sequence_generator_settings.get_sequence_generator_setting(
                     "sequence_length", self.builder_type
                 )
             ),
             float(
-                self.auto_builder_settings.get_auto_builder_setting(
+                self.sequence_generator_settings.get_sequence_generator_setting(
                     "max_turn_intensity", self.builder_type
                 )
             ),
-           int(self.auto_builder_settings.get_auto_builder_setting(
-                "sequence_level", self.builder_type
-            )),
-            self.auto_builder_settings.get_auto_builder_setting(
+            int(
+                self.sequence_generator_settings.get_sequence_generator_setting(
+                    "sequence_level", self.builder_type
+                )
+            ),
+            self.sequence_generator_settings.get_sequence_generator_setting(
                 "continuous_rotation", self.builder_type
             ),
         )

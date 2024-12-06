@@ -5,14 +5,16 @@ from Enums.letters import LetterType
 from .custom_letter_type_button import CustomLetterTypeButton
 
 if TYPE_CHECKING:
-    from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 
 class LetterTypePicker(QWidget):
-    def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
-        super().__init__(auto_builder_frame)
-        self.auto_builder_frame = auto_builder_frame
-        self.auto_builder_settings = self.auto_builder_frame.auto_builder_settings
+    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
+        super().__init__(sequence_generator_frame)
+        self.sequence_generator_frame = sequence_generator_frame
+        self.sequence_generator_settings = (
+            self.sequence_generator_frame.sequence_generator_settings
+        )
 
         # Initialize UI components
         self._setup_components()
@@ -41,7 +43,10 @@ class LetterTypePicker(QWidget):
 
     def get_font_size(self) -> int:
         """Return the font size based on the parent widget's width."""
-        return self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 90
+        return (
+            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            // 90
+        )
 
     def _setup_layout(self):
         """Set up the layout for a two-row, three-column arrangement of letter type buttons."""
@@ -66,7 +71,6 @@ class LetterTypePicker(QWidget):
 
         self.setLayout(layout)
 
-
     def _connect_signals(self):
         """Connect label click signals to update settings."""
         for letter_type, label in self.buttons.items():
@@ -78,10 +82,10 @@ class LetterTypePicker(QWidget):
         label.update_style()
 
         selected_types = self.get_selected_letter_types()
-        self.auto_builder_settings.set_auto_builder_setting(
+        self.sequence_generator_settings.set_sequence_generator_setting(
             "selected_letter_types",
             [lt.description for lt in selected_types],
-            self.auto_builder_frame.builder_type,
+            self.sequence_generator_frame.builder_type,
         )
 
     def get_selected_letter_types(self) -> list["LetterType"]:
@@ -94,8 +98,8 @@ class LetterTypePicker(QWidget):
 
     def apply_settings(self):
         """Apply saved settings to the labels."""
-        saved_types = self.auto_builder_settings.get_auto_builder_setting(
-            "selected_letter_types", self.auto_builder_frame.builder_type
+        saved_types = self.sequence_generator_settings.get_sequence_generator_setting(
+            "selected_letter_types", self.sequence_generator_frame.builder_type
         )
 
         if saved_types is None:
