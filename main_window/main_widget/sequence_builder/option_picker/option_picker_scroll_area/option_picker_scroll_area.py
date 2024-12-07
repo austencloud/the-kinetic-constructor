@@ -80,8 +80,8 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             # Insert into layout
             self.display_manager.add_pictograph_to_section_layout(p)
             p.view.update_borders()
+            p.updater.update_pictograph(pictograph_dict)
             p.view.show()
-
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
         last_pictograph_dict = (
@@ -101,24 +101,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         pictograph_dict["red_attributes"]["blue_ori"] = (
             self.ori_calculator.calculate_end_orientation(pictograph_dict, BLUE)
         )
-
-    def _get_or_create_pictograph(
-        self, pictograph_dict: dict, sequence
-    ) -> BasePictograph:
-        modified_key = self.manual_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
-            pictograph_dict
-        )
-        if modified_key in self.pictograph_cache:
-            return self.pictograph_cache[modified_key]
-        else:
-            pictograph = self.manual_builder.render_and_store_pictograph(
-                pictograph_dict, sequence
-            )
-            self.pictograph_cache[modified_key] = pictograph
-            self.main_widget.pictograph_cache[pictograph.letter][
-                modified_key
-            ] = pictograph
-        return pictograph
 
     def _hide_all_pictographs(self) -> None:
         for pictograph in self.pictograph_cache.values():

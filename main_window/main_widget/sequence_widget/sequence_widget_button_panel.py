@@ -10,7 +10,6 @@ from main_window.main_widget.sequence_widget.full_screen_viewer import FullScree
 from main_window.main_widget.sequence_widget.sequence_color_swapper import (
     SequenceColorSwapper,
 )
-from main_window.main_widget.sequence_widget.sequence_rotater import SequenceRotator
 
 from .sequence_mirror import SequenceMirror
 from .button_panel_placeholder import ButtonPanelPlaceholder
