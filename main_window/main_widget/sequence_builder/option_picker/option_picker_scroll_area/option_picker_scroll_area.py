@@ -74,8 +74,15 @@ class OptionPickerScrollArea(BasePickerScrollArea):
 
             # Update pictograph with new dict
             p.updater.update_pictograph(pictograph_dict)
-            p.blue_reversal = False  # Reset any special states
-            p.red_reversal = False
+            sequence_so_far = (
+                self.json_manager.loader_saver.load_current_sequence_json()
+            )
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, p.pictograph_dict
+            )
+            p.blue_reversal = reversal_info.get("blue_reversal", False)
+            p.red_reversal = reversal_info.get("red_reversal", False)
+
 
             # Insert into layout
             self.display_manager.add_pictograph_to_section_layout(p)

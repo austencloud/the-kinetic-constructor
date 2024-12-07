@@ -2,7 +2,9 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_builder.option_picker.option_picker_pictograph_view import OptionPickerPictographView
+from main_window.main_widget.sequence_builder.option_picker.option_picker_pictograph_view import (
+    OptionPickerPictographView,
+)
 from .option_picker_reversal_selector import OptionPickerReversalSelector
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
@@ -31,13 +33,13 @@ class OptionPicker(QWidget):
         self.reversal_selector = OptionPickerReversalSelector(self)
         self.pictograph_pool: list[BasePictograph] = []
         # Decide on a max number based on the largest number of options typically displayed.
-        MAX_PICTOGRAPHS = 36  
+        MAX_PICTOGRAPHS = 36
         for _ in range(MAX_PICTOGRAPHS):
             p = BasePictograph(self.main_widget)
             p.view = OptionPickerPictographView(p, self)
             p.view.hide()  # Keep them hidden until needed
             self.pictograph_pool.append(p)
-            
+
         self._load_filter()
         self.setup_layout()
         self.hide()
@@ -92,6 +94,7 @@ class OptionPicker(QWidget):
             )
             self.scroll_area.clear_pictographs()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
+            
         elif len(sequence) == 2:
             self.scroll_area.clear_pictographs()
             next_options = self.option_getter._load_all_next_options(sequence)
