@@ -25,7 +25,8 @@ class DirectSetTurnsButton(QPushButton):
     def direct_set_adjustment(self):
         print("Direct set adjustment button clicked!")
 
-    def set_button_styles(self) -> None:
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         button_size = self.turns_box.height() // 2
         turns_display_font_size = int(
             self.turns_box.adjustment_panel.graph_editor.height() / 6
@@ -43,9 +44,4 @@ class DirectSetTurnsButton(QPushButton):
                 background-color: #f0f0f0;
             }}
         """
-        )
-
-    def resize_direct_set_turns_button(self) -> None:
-        self.setFixedSize(
-            int(self.turns_widget.width() / 2), int(self.turns_widget.width() / 2)
         )
