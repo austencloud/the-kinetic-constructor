@@ -37,7 +37,6 @@ class SequenceRotationManager:
         )
 
         self.update_grid_mode(rotated_sequence)
-
         self.sequence_widget.update_beats_in_place(rotated_sequence)
         self.sequence_widget.indicator_label.show_message("Sequence rotated!")
         QApplication.restoreOverrideCursor()
