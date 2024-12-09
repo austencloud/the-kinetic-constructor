@@ -49,21 +49,22 @@ class SequenceWidget(QWidget):
         self.layout_manager.setup_layout()
 
     def update_beats_in_place(self, modified_sequence_json):
-        self.update_beats(modified_sequence_json)
         self.json_manager.loader_saver.save_current_sequence(modified_sequence_json)
         self.json_manager.ori_validation_engine.run(is_current_sequence=True)
-        
+
+        self.update_beats(modified_sequence_json)
+        self.update_beats(modified_sequence_json)
+
         self.current_word_label.update_current_word_label_from_beats()
         self.difficulty_label.update_difficulty_label()
         self.main_widget.manual_builder.option_picker.update_option_picker()
-        
+
         currently_selected_beat = self.beat_frame.selection_overlay.selected_beat
         blue_motion = currently_selected_beat.beat.blue_motion
         red_motion = currently_selected_beat.beat.red_motion
         self.graph_editor.adjustment_panel.update_turns_panel(blue_motion, red_motion)
-        
+
         self.rotation_manager.reset_rotation()
-        self.update_beats(modified_sequence_json)
 
     def update_beats(self, modified_sequence_json: list[dict]):
         if len(modified_sequence_json) > 1:

@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
+
 from .attr_key_generator import AttrKeyGenerator
 from .special_placement_data_updater.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:
-    from ...arrow_placement_manager import ArrowPlacementManager
+    from placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 

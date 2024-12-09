@@ -3,6 +3,8 @@
 from typing import TYPE_CHECKING
 from data.constants import *
 from data.positions_map import positions_map
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -14,6 +16,9 @@ class SequenceColorSwapManager:
         self.positions_map = positions_map  # Assuming positions_map is imported
 
     def swap_colors_in_sequence(self):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.sequence_widget.button_panel.toggle_swap_colors_icon()
+        
         current_sequence_json = (
             self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
         )
@@ -26,8 +31,8 @@ class SequenceColorSwapManager:
         swapped_sequence_json = self.swap_colors(current_sequence_json)
         self.sequence_widget.update_beats_in_place(swapped_sequence_json)
         self.sequence_widget.indicator_label.show_message("Colors swapped!")
-        self.sequence_widget.button_panel.toggle_swap_colors_icon()
         # Update adjustment panel if necessary
+        QApplication.restoreOverrideCursor()
 
     def swap_colors(self, sequence_json: list[dict]) -> list[dict]:
         swapped_sequence = []

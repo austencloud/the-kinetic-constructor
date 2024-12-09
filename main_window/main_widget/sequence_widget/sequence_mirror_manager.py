@@ -3,12 +3,15 @@
 from typing import TYPE_CHECKING
 from data.constants import *
 from data.positions_map import positions_map
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
+
 class SequenceMirrorManager:
-    def __init__(self, sequence_widget: "SequenceWidget"):        
+    def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         # Define mappings for mirroring positions and locations
         self.vertical_mirror_positions = {
@@ -58,6 +61,8 @@ class SequenceMirrorManager:
         }
 
     def mirror_current_sequence(self):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+
         current_sequence_json = (
             self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
         )
@@ -67,9 +72,8 @@ class SequenceMirrorManager:
 
         mirrored_sequence_json = self.mirror_sequence(current_sequence_json)
         self.sequence_widget.update_beats_in_place(mirrored_sequence_json)
-        self.sequence_widget.indicator_label.show_message(
-            "Sequence mirrored!"
-        )
+        self.sequence_widget.indicator_label.show_message("Sequence mirrored!")
+        QApplication.restoreOverrideCursor()
 
     def mirror_sequence(self, sequence_json):
         mirrored_sequence = []
