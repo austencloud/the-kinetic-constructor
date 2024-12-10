@@ -43,6 +43,7 @@ class SequenceRotationManager:
 
     def update_grid_mode(self, rotated_sequence):
         mode = self._determine_grid_mode(rotated_sequence)
+        rotated_sequence[0]["grid_mode"] = mode
         grid_mode_selector = (
             self.sequence_widget.main_widget.menu_bar_widget.grid_mode_selector
         )
@@ -51,17 +52,6 @@ class SequenceRotationManager:
         self.sequence_widget.main_widget.manager.set_grid_mode(
             mode, clear_sequence=False
         )
-        # # update all the grids in the option picker and beat frame
-        # for (
-        #     pictograph
-        # ) in (
-        #     self.sequence_widget.main_widget.manual_builder.option_picker.pictograph_pool
-        # ):
-        #     pictograph.grid.clear_and_reinitialize(mode)
-        # for beat in self.sequence_widget.beat_frame.beats:
-        #     if beat.is_filled:
-        #         # if the nonraidal points are visible, rutn them off
-        #         beat.beat.grid.clear_and_reinitialize(mode)
 
     def rotate_sequence(self, sequence_json, rotation_steps):
         """Rotate the sequence by rotation_steps * 45°."""

@@ -1,7 +1,15 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
+from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem, QMenu
 from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent, QPainter
+from PyQt6.QtGui import (
+    QMouseEvent,
+    QCursor,
+    QBrush,
+    QColor,
+    QKeyEvent,
+    QPainter,
+    QAction, QContextMenuEvent
+)
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
@@ -54,7 +62,28 @@ class OptionPickerPictographView(BorderedPictographView):
 
     ### EVENTS ###
 
+    def contextMenuEvent(self, event: QEvent) -> None:
+        """
+        Optionally, add more actions specific to OptionPickerPictographView.
+        Then call the base class to include the "Copy Dictionary" action.
+        """
+        if isinstance(event, QContextMenuEvent):
+            context_menu = QMenu(self)
 
+            # Add any specific actions for OptionPicker here
+
+            # Add a separator
+            context_menu.addSeparator()
+
+            # Call the base class to add "Copy Dictionary"
+            copy_action = QAction("Copy Dictionary", self)
+            copy_action.triggered.connect(self.copy_pictograph_dict)
+            context_menu.addAction(copy_action)
+
+            # Execute the menu
+            context_menu.exec(QCursor.pos())
+        else:
+            super().contextMenuEvent(event)
 
     def set_enabled(self, enabled: bool) -> None:
         self._ignoreMouseEvents = not enabled
