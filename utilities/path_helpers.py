@@ -1,7 +1,7 @@
 import sys
 import os
-import winreg
-
+if sys.platform.startswith('win'):
+    import winreg
 
 def get_images_and_data_path(filename) -> str:
     """This is used for resources like data and images."""
