@@ -72,3 +72,11 @@ class ElementalGlyph(QGraphicsSvgItem):
         y = offset_height
         self.setPos(x, y)
         self.setTransformOriginPoint(width / 2, height / 2)
+
+    def update_elemental_glyph(self) -> None:
+        self.set_elemental_glyph()
+        self.position_elemental_glyph()
+        visibility_manager = (
+            self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
+        )
+        self.setVisible(visibility_manager.should_glyph_be_visible("Elemental"))

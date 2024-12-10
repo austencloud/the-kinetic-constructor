@@ -90,6 +90,13 @@ class Grid:
         self._create_grid_items(scene)
         self.center = self.grid_data.center_point.coordinates
 
+    def clear_and_reinitialize(self, mode: str):
+        # remove any layer2 points that are visible
+        self.set_layer_visibility("layer2_points", False)
+        self.grid_mode = mode
+        self.grid_data = self._load_grid_data()
+        self._create_grid_items(self.scene)
+
     def hide(self):
         for item in self.items.values():
             item.setVisible(False)

@@ -30,7 +30,9 @@ class StartPositionAdder:
         self.beat_frame.start_pos_view.set_start_pos(start_position_beat)
         self.main_widget.manual_builder.last_beat = start_position_beat
         start_pos_view = self.beat_frame.start_pos_view
-        self.beat_frame.selection_overlay.select_beat(start_pos_view)
+        self.beat_frame.selection_overlay.select_beat(
+            start_pos_view, toggle_graph_editor=False
+        )
 
         self.json_manager.start_position_handler.set_start_position_data(
             start_position_beat
