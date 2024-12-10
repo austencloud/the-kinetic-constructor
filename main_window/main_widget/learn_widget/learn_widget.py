@@ -1,36 +1,17 @@
 # learn_widget.py
+
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QFrame, QStackedLayout, QLabel, QScrollArea, QComboBox
+    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QFrame, QStackedLayout,
 )
-from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from data.constants import ANTI
-from main_window.main_widget.codex_widget.codex_widget import CodexWidget
+from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import CodexDataManager
+
+from .codex_widget.codex_widget import CodexWidget
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-
-def find_pictograph_dict(main_widget: "MainWidget", letter_str: str, start_pos: str, end_pos: str, blue_start_ori: str, red_start_ori: str) -> dict:
-    """Search main_widget's preloaded pictograph_dicts for a given letter and conditions."""
-    from Enums.letters import Letter
-    target_letter = None
-    for l in Letter:
-        if l.value == letter_str:
-            target_letter = l
-            break
-    if not target_letter:
-        return None
-
-    letter_dicts = main_widget.pictograph_dicts.get(target_letter, [])
-    for pdict in letter_dicts:
-        if pdict.get("start_pos") == start_pos and pdict.get("end_pos") == end_pos:
-            blue_attrs = pdict.get("blue_attributes", {})
-            red_attrs = pdict.get("red_attributes", {})
-            if blue_attrs.get("start_ori") == blue_start_ori and red_attrs.get("start_ori") == red_start_ori:
-                return pdict
-    return None
 
 
 class LearnWidget(QWidget):
@@ -44,7 +25,11 @@ class LearnWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
 
-        # We'll assume you have these widgets from your previous code:
+        # Initialize PictographDataManager
+        self.codex_data_manager = CodexDataManager(self.main_widget)
+        initial_codex_data = self.codex_data_manager.get_pictograph_data()
+
+        # Lesson widgets
         self.lesson_selector = self._create_lesson_selector()
         self.lesson_1_widget = self._create_lesson_1_widget()
         self.lesson_2_widget = self._create_lesson_2_widget()
@@ -57,55 +42,19 @@ class LearnWidget(QWidget):
         self.stack_layout.addWidget(self.lesson_3_widget)
         self.stack_layout.setCurrentWidget(self.lesson_selector)
 
-        # Retrieve dictionaries for some example letters
-        a_dict = find_pictograph_dict(
-            self.main_widget,
-            letter_str="A",
-            start_pos="alpha1",
-            end_pos="alpha3",
-            blue_start_ori="in",
-            red_start_ori="in"
-        )
-        b_dict = find_pictograph_dict(
-            self.main_widget,
-            letter_str="B",
-            start_pos="alpha1",
-            end_pos="alpha3",
-            blue_start_ori="in",
-            red_start_ori="in"
-        )
-        c_dict = find_pictograph_dict(
-            self.main_widget,
-            letter_str="C",
-            start_pos="alpha1",
-            end_pos="alpha3",
-            blue_start_ori="in",
-            red_start_ori="in",
-            # blue_motion_type = "anti",
-            # red_motion_type = "pro"
-        )
-
-        # Initial pictograph data (you can add more as needed)
-        initial_pictograph_data = {
-            "A": a_dict,
-            "B": b_dict,
-            "C": c_dict,
-            # If you want more letters pre-loaded, find them similarly
-        }
-
         # Main layout
         self.main_layout = QHBoxLayout(self)
-        self.main_layout.setContentsMargins(0,0,0,0)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
 
         # Codex panel
         self.codex_shown = False
-        self.codex_panel = CodexWidget(self, initial_pictograph_data)
-        self.codex_panel.setFixedWidth(0)  # hidden initially
+        self.codex_panel = CodexWidget(self, initial_codex_data)
+        self.codex_panel.setFixedWidth(0)  # Hidden initially
 
         # Right side with a top bar (Codex button) and stack_layout
         right_side = QWidget()
         right_layout = QVBoxLayout(right_side)
-        right_layout.setContentsMargins(0,0,0,0)
+        right_layout.setContentsMargins(0, 0, 0, 0)
 
         self.codex_button = QPushButton("Codex", self)
         self.codex_button.setFixedHeight(30)
@@ -157,16 +106,26 @@ class LearnWidget(QWidget):
     # Placeholder methods for creating lesson widgets
     def _create_lesson_selector(self):
         from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
+
         return LessonSelector(self)
 
     def _create_lesson_1_widget(self):
-        from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
+        from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import (
+            Lesson1Widget,
+        )
+
         return Lesson1Widget(self)
 
     def _create_lesson_2_widget(self):
-        from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
+        from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import (
+            Lesson2Widget,
+        )
+
         return Lesson2Widget(self)
 
     def _create_lesson_3_widget(self):
-        from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import Lesson3Widget
+        from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import (
+            Lesson3Widget,
+        )
+
         return Lesson3Widget(self)

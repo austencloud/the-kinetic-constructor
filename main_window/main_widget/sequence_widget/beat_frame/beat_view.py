@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPixmapItem
 from PyQt6.QtCore import Qt, QPointF, QEvent
-from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction, QCursor, QMouseEvent
+from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction, QCursor, QMouseEvent, QContextMenuEvent
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
@@ -40,7 +40,7 @@ class BeatView(PictographView):
         Optionally, add more actions specific to BeatView.
         Then call the base class to include the "Copy Dictionary" action.
         """
-        if isinstance(event, QMouseEvent):
+        if isinstance(event, QContextMenuEvent):
             context_menu = QMenu(self)
 
             # Add any specific actions for BeatView here
@@ -66,15 +66,7 @@ class BeatView(PictographView):
         )
         self.scene().addItem(arrow_item)
 
-    def show_context_menu(self, position):
-        menu = QMenu()
-        one_beat_action = QAction("1 Count", self)
-        one_beat_action.triggered.connect(lambda: self.set_duration(1))
-        two_beats_action = QAction("2 Counts", self)
-        two_beats_action.triggered.connect(lambda: self.set_duration(2))
-        menu.addAction(one_beat_action)
-        menu.addAction(two_beats_action)
-        menu.exec(self.mapToGlobal(position))
+
 
     def set_duration(self, duration):
         self.beat_frame.duration_manager.update_beat_duration(self, duration)

@@ -53,24 +53,24 @@ class SequenceRotationManager:
             mode, clear_sequence=False
         )
 
-    def rotate_sequence(self, sequence_json, rotation_steps):
+    def rotate_sequence(self, sequence_json: list[dict], rotation_steps):
         """Rotate the sequence by rotation_steps * 45°."""
         rotated_sequence = []
         metadata = sequence_json[0].copy()
         rotated_sequence.append(metadata)
-        start_pos_beat = sequence_json[1].copy()
-        self._rotate_beat(start_pos_beat, rotation_steps)
-        rotated_sequence.append(start_pos_beat)
-        for beat in sequence_json[2:]:
-            rotated_beat = beat.copy()
-            self._rotate_beat(rotated_beat, rotation_steps)
+        start_pos_beat_dict: dict = sequence_json[1].copy()
+        self.rotate_pictograph(start_pos_beat_dict, rotation_steps)
+        rotated_sequence.append(start_pos_beat_dict)
+        for beat_dict in sequence_json[2:]:
+            rotated_beat = beat_dict.copy()
+            self.rotate_pictograph(rotated_beat, rotation_steps)
             rotated_sequence.append(rotated_beat)
         return rotated_sequence
 
-    def _rotate_beat(self, beat, rotation_steps):
+    def rotate_pictograph(self, _dict: dict, rotation_steps):
         for color in ["blue_attributes", "red_attributes"]:
-            if color in beat:
-                attributes = beat[color]
+            if color in _dict:
+                attributes = _dict[color]
                 if "start_loc" in attributes:
                     attributes["start_loc"] = self._rotate_location(
                         attributes["start_loc"], rotation_steps
@@ -80,15 +80,15 @@ class SequenceRotationManager:
                         attributes["end_loc"], rotation_steps
                     )
 
-        if "blue_attributes" in beat and "red_attributes" in beat:
-            bl = beat["blue_attributes"]
-            rl = beat["red_attributes"]
+        if "blue_attributes" in _dict and "red_attributes" in _dict:
+            bl = _dict["blue_attributes"]
+            rl = _dict["red_attributes"]
             if "start_loc" in bl and "start_loc" in rl:
-                beat["start_pos"] = self.get_position_name(
+                _dict["start_pos"] = self.get_position_name(
                     bl["start_loc"], rl["start_loc"]
                 )
             if "end_loc" in bl and "end_loc" in rl:
-                beat["end_pos"] = self.get_position_name(bl["end_loc"], rl["end_loc"])
+                _dict["end_pos"] = self.get_position_name(bl["end_loc"], rl["end_loc"])
 
     def _rotate_location(self, location, rotation_steps):
         if location not in self.loc_order:

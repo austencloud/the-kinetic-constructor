@@ -121,15 +121,14 @@ class MainWidgetManager:
         for pictograph in option_picker.pictograph_pool:
             # remove the grid
             pictograph.grid.hide()
-            pictograph.grid.__init__(pictograph, grid_mode)
+            pictograph.grid.__init__(pictograph, pictograph.grid.grid_data, grid_mode)
 
         beat_frame = self.main_widget.sequence_widget.beat_frame
         for beat in beat_frame.beats:
             if beat.is_filled:
                 beat.beat.grid.hide()
-                beat.beat.grid.__init__(beat.beat, grid_mode)
-        beat_frame.start_pos_view.start_pos.grid.hide()
-        beat_frame.start_pos_view.start_pos.grid.__init__(
-            beat_frame.start_pos_view.start_pos, grid_mode
-        )
+                beat.beat.grid.__init__(beat.beat, beat.beat.grid.grid_data, grid_mode)
+        start_pos = beat_frame.start_pos_view.start_pos
+        start_pos.grid.hide()
+        start_pos.grid.__init__(start_pos, start_pos.grid.grid_data, grid_mode)
         QApplication.restoreOverrideCursor()

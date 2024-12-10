@@ -19,17 +19,33 @@ class ArrowInitialPosCalculator:
             return self._get_static_coords(arrow)
 
     def _get_shift_coords(self, arrow: Arrow) -> QPointF:
-        layer2_points = self.pictograph.grid.grid_data.layer2_points_normal
+        """
+        Retrieves the coordinates for a given layer2 point name.
+        """
         grid_mode = (
             self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
         )
         point_name = f"{arrow.loc}_{grid_mode}_layer2_point"
-        return layer2_points.points[point_name].coordinates
+        coord = self.pictograph.grid.grid_data.get_shift_coord(point_name)
+        if coord:
+            return coord
+        else:
+            # Handle missing coordinate, possibly return a default or raise an error
+            print(f"Warning: Shift coordinate for '{point_name}' not found.")
+            return QPointF(0, 0)  # Example default
 
     def _get_static_coords(self, arrow: Arrow) -> QPointF:
-        hand_points = self.pictograph.grid.grid_data.hand_points_normal
+        """
+        Retrieves the coordinates for a given static point name.
+        """
         grid_mode = (
             self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
         )
         point_name = f"{arrow.loc}_{grid_mode}_hand_point"
-        return hand_points.points[point_name].coordinates
+        coord = self.pictograph.grid.grid_data.get_static_coord(point_name)
+        if coord:
+            return coord
+        else:
+            # Handle missing coordinate, possibly return a default or raise an error
+            print(f"Warning: Static coordinate for '{point_name}' not found.")
+            return QPointF(0, 0)  # Example default

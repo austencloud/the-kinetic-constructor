@@ -1,3 +1,4 @@
+import logging
 import re
 from PyQt6.QtCore import QPointF
 from Enums.letters import Letter
@@ -8,11 +9,12 @@ from .directional_tuple_manager.directional_tuple_manager import DirectionalTupl
 
 if TYPE_CHECKING:
     from .arrow_placement_manager import ArrowPlacementManager
-
+logger = logging.getLogger(__name__)
 
 class ArrowAdjustmentCalculator:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
+
 
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         if not arrow.motion.pictograph.letter:
@@ -53,7 +55,20 @@ class ArrowAdjustmentCalculator:
         quadrant_index = (
             self.placement_manager.quadrant_index_handler.get_quadrant_index(arrow)
         )
+
+        # Add debug logs
+        logger.debug(f"Directional Adjustments: {directional_adjustments}")
+        logger.debug(f"Quadrant Index: {quadrant_index}")
+
+        # Check if quadrant_index is within range
+        if quadrant_index < 0 or quadrant_index >= len(directional_adjustments):
+            logger.error(
+                f"Quadrant index {quadrant_index} out of range for directional_adjustments with length {len(directional_adjustments)}."
+            )
+            return QPointF(0, 0)  # Return a default value or handle appropriately
+
         return QPointF(*directional_adjustments[quadrant_index])
+
 
     def _find_special_rotation(self, turn_data: dict) -> Optional[dict]:
         for key, value in turn_data.items():
