@@ -1,7 +1,7 @@
 # default_prop_positioner.py
 
 from PyQt6.QtCore import QPointF
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
 import logging
 
@@ -75,7 +75,7 @@ class DefaultPropPositioner:
     
         return center_point_in_svg
     
-    def get_location_points(self, strict: bool) -> Dict[str, "GridPoint"]:
+    def get_location_points(self, strict: bool) -> dict[str, "GridPoint"]:
         """
         Returns hand location points, depending on whether the props should be strictly placed.
         """

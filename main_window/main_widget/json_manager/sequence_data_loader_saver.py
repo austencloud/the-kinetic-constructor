@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from utilities.path_helpers import get_user_editable_resource_path
 from utilities.word_simplifier import WordSimplifier
 
@@ -14,7 +14,7 @@ class SequenceDataLoaderSaver:
             "current_sequence.json"
         )
 
-    def load_current_sequence_json(self) -> list[Dict]:
+    def load_current_sequence_json(self) -> list[dict]:
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
                 content = file.read().strip()
@@ -30,7 +30,7 @@ class SequenceDataLoaderSaver:
         except (FileNotFoundError, json.JSONDecodeError):
             return self.get_default_sequence()
 
-    def get_default_sequence(self) -> list[Dict]:
+    def get_default_sequence(self) -> list[dict]:
         """Return a default sequence if JSON is missing, empty, or invalid."""
         return [
             {
@@ -49,7 +49,7 @@ class SequenceDataLoaderSaver:
             }
         ]
 
-    def save_current_sequence(self, sequence: list[Dict]):
+    def save_current_sequence(self, sequence: list[dict]):
         if not sequence:
             sequence = self.get_default_sequence()
         else:
@@ -147,7 +147,7 @@ class SequenceDataLoaderSaver:
             return last_pictograph_dict["blue_attributes"]["end_ori"]
         return 0
 
-    def load_last_beat_dict(self) -> Dict:
+    def load_last_beat_dict(self) -> dict:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[-1]

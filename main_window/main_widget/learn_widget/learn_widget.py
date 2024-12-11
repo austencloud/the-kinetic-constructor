@@ -2,13 +2,20 @@
 
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QFrame, QStackedLayout,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QFrame,
+    QStackedLayout,
 )
 from PyQt6.QtGui import QFont
 
-from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import CodexDataManager
+from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import (
+    CodexDataManager,
+)
 
-from .codex_widget.codex_widget import CodexWidget
+from .codex_widget.codex import Codex
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -48,7 +55,7 @@ class LearnWidget(QWidget):
 
         # Codex panel
         self.codex_shown = False
-        self.codex_panel = CodexWidget(self, initial_codex_data)
+        self.codex_panel = Codex(self, initial_codex_data)
         self.codex_panel.setFixedWidth(0)  # Hidden initially
 
         # Right side with a top bar (Codex button) and stack_layout
