@@ -1,22 +1,21 @@
+# codex_section_manager.py
 
-from typing import TYPE_CHECKING,
-from PyQt6.QtWidgets import QGridLayout, QWidget, QLabel
+from typing import TYPE_CHECKING, Dict
+from PyQt6.QtWidgets import QGridLayout, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 import logging
 
 from Enums.letters import LetterType
+from main_window.main_widget.learn_widget.codex_widget.codex_pictograph_view import CodexPictographView
+from main_window.main_widget.learn_widget.codex_widget.codex_section_type_label import CodexSectionTypeLabel
+from main_window.main_widget.learn_widget.codex_widget.placeholder_pictograph import PlaceholderPictograph
 
-from main_window.main_widget.learn_widget.codex_widget.placeholder_pictograph import (
-    PlaceholderPictograph,
-)
-
-from .codex_constants import SECTIONS_PART1, SECTIONS_PART2, TYPE_MAP  # Import constants
+# Import your SectionTypeLabel and LetterTypeTextPainter
+from .codex_constants import TYPE_MAP  # TYPE_MAP may not be necessary if we get description from letter_type directly
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import (
-        Codex,
-    )
+    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
     from base_widgets.base_pictograph.pictograph_view import PictographView
 
 logger = logging.getLogger(__name__)
@@ -27,65 +26,65 @@ class CodexSectionManager:
 
     def __init__(self, codex: "Codex"):
         self.codex = codex
-        self.letter_views: dict[str, "PictographView"] = {}
+        self.letter_views: Dict[str, "PictographView"] = {}
 
     def load_sections(self):
-        self.load_section_with_label(SECTIONS_PART1)
-        self.load_section_with_label(SECTIONS_PART2)
+        """
+        Instead of loading hardcoded sections, we iterate over LetterType enums.
+        For each LetterType:
+        - Add a stylized heading
+        - Load all pictographs for the letters in that LetterType
+        """
+        for letter_type in LetterType:
+            self.load_letter_type_section(letter_type)
 
-    def load_section_with_label(self, sections: list[list[list[str]]]):
+    def load_letter_type_section(self, letter_type: LetterType):
         """
-        Loads a major section of the codex (like PART1 or PART2) and determines
-        the letter type from the first letter in this section to display a heading label.
+        Load a section for a given LetterType. This includes:
+        - A styled heading using SectionTypeLabel
+        - A grid of pictographs for all letters in this LetterType
         """
+        # Create a stylized heading
+        heading_label = CodexSectionTypeLabel(self.codex, letter_type)
+        self.codex.main_vlayout.addWidget(heading_label)
+
+        # Now load the pictographs for all letters in this letter_type
         from base_widgets.base_pictograph.base_pictograph import BasePictograph
         from base_widgets.base_pictograph.pictograph_view import PictographView
 
-        first_letter = sections[0][0][0]  # First letter of the first row
-        pictograph_dict = self.codex.pictograph_data.get(first_letter, None)
-        if pictograph_dict and "letter_type" in pictograph_dict:
-            try:
-                letter_type_enum = LetterType[pictograph_dict["letter_type"]]
-                type_label_str = f"Type {letter_type_enum.value}: {TYPE_MAP.get(letter_type_enum, 'Unknown Type')}"
-            except KeyError:
-                type_label_str = "Type Unknown: Unknown Type"
-        else:
-            type_label_str = "Type Unknown: Unknown Type"
-
-        type_label = QLabel()
-        type_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        font = QFont()
-        font.setBold(True)
-        type_label.setFont(font)
-        type_label.setText(type_label_str)
-        self.codex.main_vlayout.addWidget(type_label)
+        letters = letter_type.letters
+        if not letters:
+            logger.warning(f"No letters found for letter_type: {letter_type}")
+            return
 
         grid = QGridLayout()
         grid.setSpacing(0)
         grid.setContentsMargins(0, 0, 0, 0)
 
         row_counter = 0
-        for section in sections:
-            for row_letters in section:
-                col_counter = 0
-                for letter_str in row_letters:
-                    p_dict = self.codex.pictograph_data.get(letter_str, None)
-                    if p_dict:
-                        scene = BasePictograph(self.codex.main_widget)
-                        scene.updater.update_pictograph(p_dict)
+        col_counter = 0
+        letters_per_row = 6  # Arbitrary choice; adjust as needed
 
-                        view = PictographView(scene)
-                        self.letter_views[letter_str] = view
-                        grid.addWidget(view, row_counter, col_counter)
-                    else:
-                        logger.warning(
-                            f"Pictograph data for letter '{letter_str}' is incomplete or missing. Using placeholder."
-                        )
-                        scene = PlaceholderPictograph(self.codex.main_widget)
-                        view = PictographView(scene)
-                        self.letter_views[letter_str] = view
-                        grid.addWidget(view, row_counter, col_counter)
-                    col_counter += 1
+        for letter_str in letters:
+            p_dict = self.codex.pictograph_data.get(letter_str, None)
+            if p_dict:
+                scene = BasePictograph(self.codex.main_widget)
+                scene.updater.update_pictograph(p_dict)
+                view = CodexPictographView(scene, self.codex)
+                self.letter_views[letter_str] = view
+            else:
+                logger.warning(
+                    f"Pictograph data for letter '{letter_str}' is incomplete or missing. Using placeholder."
+                )
+                scene = PlaceholderPictograph(self.codex.main_widget)
+                view = CodexPictographView(scene)
+                self.letter_views[letter_str] = view
+            # add a black border around the pictograph view
+            grid.addWidget(view, row_counter, col_counter)
+
+            col_counter += 1
+            if col_counter >= letters_per_row:
+                col_counter = 0
                 row_counter += 1
 
         self.codex.main_vlayout.addLayout(grid)

@@ -1,8 +1,6 @@
-# codex_constants.py
 
 from Enums.letters import LetterType
 
-# Define the sections for the Codex
 SECTIONS_PART1 = [
     [
         ["A", "B", "C", "D", "E", "F"],
@@ -28,3 +26,4 @@ TYPE_MAP = {
     LetterType.Type5: "Dual-Dash",
     LetterType.Type6: "Static",
 }
+

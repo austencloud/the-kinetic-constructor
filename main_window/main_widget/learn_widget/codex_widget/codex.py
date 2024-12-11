@@ -34,15 +34,15 @@ class Codex(QWidget):
 
         self.ui_manager = CodexUIManager(self)
 
-        scroll = QScrollArea(self)
-        scroll.setWidgetResizable(True)
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setWidgetResizable(True)
         content_widget = QWidget()
         self.main_vlayout = QVBoxLayout(content_widget)
         self.main_vlayout.setContentsMargins(0, 0, 0, 0)
         self.main_vlayout.setSpacing(0)
 
-        self.main_layout.addWidget(scroll)
-        scroll.setWidget(content_widget)
+        self.main_layout.addWidget(self.scroll_area)
+        self.scroll_area.setWidget(content_widget)
 
         self.section_manager = CodexSectionManager(self)
         self.modification_manager = CodexModificationManager(self)
