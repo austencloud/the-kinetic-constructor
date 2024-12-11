@@ -1,30 +1,6 @@
 # codex_constants.py
 
 from Enums.letters import LetterType
-from data.constants import (
-    BLUE,
-    BOX,
-    DIAMOND,
-    DOWNLEFT,
-    DOWNRIGHT,
-    NONRADIAL,
-    EAST,
-    NORTH,
-    NORTHEAST,
-    NORTHWEST,
-    RADIAL,
-    RED,
-    SOUTH,
-    SOUTHEAST,
-    SOUTHWEST,
-    UPLEFT,
-    UPRIGHT,
-    WEST,
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-)
 
 # Define the sections for the Codex
 SECTIONS_PART1 = [

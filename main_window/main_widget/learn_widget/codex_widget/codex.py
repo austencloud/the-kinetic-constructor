@@ -2,18 +2,11 @@ from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QHBoxLayout,
     QPushButton,
     QScrollArea,
-    QLabel,
     QComboBox,
 )
-from PyQt6.QtCore import Qt
 
-from Enums.letters import LetterType
-from main_window.main_widget.learn_widget.codex_widget.placeholder_pictograph import (
-    PlaceholderPictograph,
-)
 from .codex_ui_manager import CodexUIManager
 from .codex_section_manager import CodexSectionManager
 from .codex_modification_manager import CodexModificationManager
@@ -29,7 +22,6 @@ import logging
 
 if TYPE_CHECKING:
     from PyQt6.QtCore import QPropertyAnimation
-    from base_widgets.base_pictograph.pictograph_view import PictographView
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 logger = logging.getLogger(__name__)

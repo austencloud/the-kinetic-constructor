@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import (
     QLabel,
     QComboBox,
 )
-from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.codex_widget.codex import Codex

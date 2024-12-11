@@ -1,7 +1,6 @@
 # codex_modification_manager.py
 
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QPushButton, QComboBox
 import logging
 
 if TYPE_CHECKING:
