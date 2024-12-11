@@ -139,7 +139,7 @@ class LevelSection(FilterSectionBase):
         """Handle clicks on level images."""
         self.handle_level_click(level)
 
-    def _get_all_sequences_with_levels(self) -> list[Tuple[str, list[str], int]]:
+    def _get_all_sequences_with_levels(self) -> list[tuple[str, list[str], int]]:
         """Retrieve and cache all sequences along with their levels."""
         if hasattr(self, "_all_sequences_with_levels"):
             return self._all_sequences_with_levels

@@ -1,23 +1,10 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QPushButton,
-    QScrollArea,
-    QComboBox,
-)
-
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QComboBox
 from .codex_ui_manager import CodexUIManager
 from .codex_section_manager import CodexSectionManager
 from .codex_modification_manager import CodexModificationManager
 from .codex_animation_manager import CodexAnimationManager
 from .codex_size_manager import CodexSizeManager
-from .codex_constants import (
-    SECTIONS_PART1,
-    SECTIONS_PART2,
-    TYPE_MAP,
-)  # Import constants
-
 import logging
 
 if TYPE_CHECKING:
