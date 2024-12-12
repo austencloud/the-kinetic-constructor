@@ -28,7 +28,7 @@ class CodexSectionTypeLabel(QLabel):
         self.setText(f"{letter_type.name}: {styled_description}")
 
     def get_font_size(self):
-        return max(12, self.codex.height() // 45)
+        return max(12, self.codex.height() // 60)
 
     def resizeEvent(self, event):
         self.label_height = self.get_font_size() * 2
@@ -44,4 +44,3 @@ class CodexSectionTypeLabel(QLabel):
             f"  padding: 0 10px;"
             f"}}"
         )
-

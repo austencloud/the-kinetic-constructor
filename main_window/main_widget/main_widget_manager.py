@@ -105,21 +105,18 @@ class MainWidgetManager:
                 show_indicator=False,
                 should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
             )
-            self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.ori_setter.set_orientation(
-                IN
+            adjustment_panel = (
+                self.main_widget.sequence_widget.graph_editor.adjustment_panel
             )
-            self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.ori_setter.set_orientation(
-                IN
-            )
+            for picker in [adjustment_panel.blue_ori_picker, adjustment_panel.red_ori_picker]:
+                picker.ori_picker_widget.ori_setter.set_orientation(IN)
             pictograph_container = (
                 self.main_widget.sequence_widget.graph_editor.pictograph_container
             )
             pictograph_container.GE_pictograph_view.set_to_blank_grid()
         self._setup_special_placements()
-        # reinitialize all the grids in the option picker with the new grid mode
         option_picker = self.main_widget.manual_builder.option_picker
         for pictograph in option_picker.pictograph_pool:
-            # remove the grid
             pictograph.grid.hide()
             pictograph.grid.__init__(pictograph, pictograph.grid.grid_data, grid_mode)
 

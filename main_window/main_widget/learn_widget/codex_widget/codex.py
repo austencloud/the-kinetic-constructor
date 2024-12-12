@@ -1,5 +1,3 @@
-# codex.py
-
 from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QComboBox, QPushButton
 import logging
@@ -34,36 +32,39 @@ class Codex(QWidget):
         self.main_widget = learn_widget.main_widget
         self.pictograph_data = pictograph_data
 
-        # Main vertical layout for the Codex
+        # Main layout for the entire Codex widget
         self.main_vlayout = QVBoxLayout(self)
         self.main_vlayout.setContentsMargins(0, 0, 0, 0)
         self.main_vlayout.setSpacing(0)
 
-        # Create the control widget and add it to the top of the layout
+        # Control widget at the top (buttons and orientation)
         self.control_widget = CodexControlWidget(self)
         self.main_vlayout.addWidget(self.control_widget)
 
-        # Create and configure the scroll area for content
+        # Scroll area for the pictographs
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
 
+        # content_widget inside the scroll_area where pictographs will be placed
         content_widget = QWidget()
         self.content_layout = QVBoxLayout(content_widget)
         self.content_layout.setContentsMargins(0, 0, 0, 0)
         self.content_layout.setSpacing(0)
-        self.scroll_area.setWidget(content_widget)
 
+        # Set the content_widget as scroll_area's widget
+        self.scroll_area.setWidget(content_widget)
         self.main_vlayout.addWidget(self.scroll_area)
 
+        # Managers
         self.section_manager = CodexSectionManager(self)
         self.modification_manager = CodexModificationManager(self)
         self.animation_manager = CodexAnimationManager(self)
         self.size_manager = CodexSizeManager(self)
 
-        # Load sections after everything is set up
+        # Load sections after managers are set up
         self.section_manager.load_sections()
 
-        # Set the background to transparent
+        # Transparent backgrounds
         self.setStyleSheet("background: transparent;")
         self.scroll_area.setStyleSheet("background: transparent;")
         self.scroll_area.viewport().setStyleSheet("background: transparent;")

@@ -1,12 +1,9 @@
-# codex_section_manager.py
-
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 import logging
 from Enums.letters import LetterType
 from .codex_pictograph_view import CodexPictographView
 from .codex_section_type_label import CodexSectionTypeLabel
-from .placeholder_pictograph import PlaceholderPictograph
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
@@ -30,7 +27,7 @@ class CodexSectionManager:
     def load_letter_type_section(self, letter_type: LetterType):
         """Load a section for a given LetterType."""
         heading_label = CodexSectionTypeLabel(self.codex, letter_type)
-        self.codex.main_vlayout.addWidget(heading_label)
+        self.codex.content_layout.addWidget(heading_label)
 
         letters = letter_type.letters
         if not letters:
@@ -49,21 +46,14 @@ class CodexSectionManager:
             p_dict = self.codex.pictograph_data.get(letter_str, None)
             if p_dict:
                 scene = BasePictograph(self.codex.main_widget)
-                scene.updater.update_pictograph(p_dict)
+                # scene.updater.update_pictograph(p_dict)
                 view = CodexPictographView(scene, self.codex)
                 self.letter_views[letter_str] = view
-            else:
-                logger.warning(
-                    f"Pictograph data for letter '{letter_str}' is incomplete or missing. Using placeholder."
-                )
-                scene = PlaceholderPictograph(self.codex.main_widget)
-                view = CodexPictographView(scene)
-                self.letter_views[letter_str] = view
-            grid.addWidget(view, row_counter, col_counter)
 
+            grid.addWidget(view, row_counter, col_counter)
             col_counter += 1
             if col_counter >= letters_per_row:
                 col_counter = 0
                 row_counter += 1
 
-        self.codex.main_vlayout.addLayout(grid)
+        self.codex.content_layout.addLayout(grid)

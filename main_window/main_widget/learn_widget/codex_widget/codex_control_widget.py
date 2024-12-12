@@ -1,14 +1,13 @@
-# codex_control_widget.py
-
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QComboBox, QLabel
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.codex_widget.codex import Codex
 
+
 class CodexControlWidget(QWidget):
     """
-    Holds codex buttons - rotate, mirror, color swap, 
+    Holds codex buttons - rotate, mirror, color swap,
     and the orientation selector.
     """
 
