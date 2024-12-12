@@ -18,7 +18,7 @@ class CodexSectionTypeLabel(QLabel):
         self.codex = codex
         self.letter_type = letter_type
         self.setContentsMargins(0, 0, 0, 0)
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.set_styled_text(letter_type)
 
     def set_styled_text(self, letter_type: LetterType) -> None:
