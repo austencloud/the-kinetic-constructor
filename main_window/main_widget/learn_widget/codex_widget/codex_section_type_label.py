@@ -20,22 +20,17 @@ class CodexSectionTypeLabel(QLabel):
         self.setContentsMargins(0, 0, 0, 0)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.set_styled_text(letter_type)
-        # self.set_label_style()
 
     def set_styled_text(self, letter_type: LetterType) -> None:
-        # Use LetterTypeTextPainter to style the letter_type description
         styled_description = LetterTypeTextPainter.get_colored_text(
             letter_type.description
         )
         self.setText(f"{letter_type.name}: {styled_description}")
 
     def get_font_size(self):
-        # Adjust font size based on codex height
-        # This is arbitrary; you may adjust as per your layout
         return max(12, self.codex.height() // 45)
 
     def resizeEvent(self, event):
-        # Setting a decent height and style for the label
         self.label_height = self.get_font_size() * 2
         self.setFixedHeight(self.label_height)
         border_style = "2px solid black"
@@ -50,10 +45,3 @@ class CodexSectionTypeLabel(QLabel):
             f"}}"
         )
 
-    # def enterEvent(self, event):
-    #     self.setCursor(Qt.CursorShape.PointingHandCursor)
-    #     self.set_label_style(outline=True)
-
-    # def leaveEvent(self, event):
-    #     self.setCursor(Qt.CursorShape.ArrowCursor)
-    #     self.set_label_style()

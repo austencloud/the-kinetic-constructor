@@ -162,6 +162,6 @@ class BaseLessonWidget(QWidget):
         self.question_widget.clear()
         self.answers_widget.clear()
 
-    def resize_lesson_widget(self):
+    def resizeEvent(self, event):
         """Resize UI elements dynamically."""
         self.layout_manager.resize_widgets()

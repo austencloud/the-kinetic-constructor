@@ -89,11 +89,12 @@ class LessonSelector(QWidget):
     # --------------------------------------
     # Resizing Methods
     # --------------------------------------
-    def resize_lesson_selector(self) -> None:
+    def resizeEvent(self, event) -> None:
         """Resize title, buttons, and descriptions based on window size."""
         self._resize_title_label()
         self._resize_lesson_layouts()
         self._resize_toggle_button()
+        super().resizeEvent(event)
 
     def _resize_title_label(self):
         title_font_size = self.main_widget.width() // 50

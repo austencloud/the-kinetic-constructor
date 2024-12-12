@@ -17,3 +17,5 @@ class Lesson1Widget(BaseLessonWidget):
 
         # Set up the layout
         self._setup_layout()
+
+    

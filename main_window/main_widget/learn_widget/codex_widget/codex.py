@@ -43,7 +43,10 @@ class Codex(QWidget):
 
         self.main_layout.addWidget(self.scroll_area)
         self.scroll_area.setWidget(content_widget)
-
+        # set the background to be transparent, both the codex and scroll
+        self.setStyleSheet("background: transparent;")
+        self.scroll_area.setStyleSheet("background: transparent;")
+        self.scroll_area.viewport().setStyleSheet("background: transparent;")
         self.section_manager = CodexSectionManager(self)
         self.modification_manager = CodexModificationManager(self)
         self.animation_manager = CodexAnimationManager(self)
