@@ -36,7 +36,9 @@ def main() -> None:
     palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
     palette.setColor(QPalette.ColorRole.Highlight, QColor(76, 163, 224))
     palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
+    # make sure checkboxes are visible
 
+    
     app.setPalette(palette)
 
     # Set up screen and development environment

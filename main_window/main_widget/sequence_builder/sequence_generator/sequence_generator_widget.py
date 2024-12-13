@@ -9,7 +9,15 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
+
+from main_window.main_widget.sequence_builder.sequence_generator.freeform.custom_checkbox_widget import (
+    CustomCheckBoxWidget,
+)
+from main_window.main_widget.sequence_builder.sequence_generator.styled_checkbox import (
+    StyledCheckBox,
+)
 from .base_classes.customize_your_sequence_label import CustomizeSequenceLabel
 from .generate_sequence_button import GenerateSequenceButton
 from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
@@ -25,27 +33,31 @@ class SequenceGeneratorWidget(QWidget):
         self.main_widget = main_widget
         self.global_settings = main_widget.main_window.settings_manager.global_settings
         self.overwrite_connected = False
+        self.current_sequence_generator = "freeform"
 
-        self.customize_sequence_label = CustomizeSequenceLabel(self)
         self._setup_spacers()
         self._setup_buttons()
         self._setup_checkbox()
-
-        self.freeform_builder_frame = FreeformSequenceGeneratorFrame(self)
-        self.circular_builder_frame = CircularSequenceGeneratorFrame(self)
-        self.freeform_button.clicked.connect(self.freeform_builder_frame.show)
-        self.circular_button.clicked.connect(self.circular_builder_frame.show)
-
+        self._setup_components()
+        self._connect_signals()
         self._setup_layout()
 
-        self.current_sequence_generator = "freeform"
-        self.freeform_builder_frame.show()
+        self.freeform_generator_frame.show()
+
+    def _setup_components(self):
+        self.customize_sequence_label = CustomizeSequenceLabel(self)
+        self.freeform_generator_frame = FreeformSequenceGeneratorFrame(self)
+        self.circular_generator_frame = CircularSequenceGeneratorFrame(self)
+
+    def _connect_signals(self):
+        self.freeform_button.clicked.connect(self.freeform_generator_frame.show)
+        self.circular_button.clicked.connect(self.circular_generator_frame.show)
 
     def _setup_layout(self):
         # Set up stacked layout
         self.stacked_layout = QStackedLayout()
-        self.stacked_layout.addWidget(self.freeform_builder_frame)
-        self.stacked_layout.addWidget(self.circular_builder_frame)
+        self.stacked_layout.addWidget(self.freeform_generator_frame)
+        self.stacked_layout.addWidget(self.circular_generator_frame)
 
         # Set up main layout
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -60,17 +72,21 @@ class SequenceGeneratorWidget(QWidget):
         self.layout.addItem(self.spacer_2)
         self.layout.addWidget(self.generate_sequence_button, alignment=alignment)
         self.layout.addLayout(self.checkbox_layout)
+        self.layout.addItem(self.spacer_3)
 
     def _setup_spacers(self):
-        self.spacer_1 = QSpacerItem(
-            0, self.main_widget.height() // 20, QSizePolicy.Policy.Minimum
-        )
-        self.spacer_2 = QSpacerItem(
-            0, self.main_widget.height() // 20, QSizePolicy.Policy.Minimum
-        )
+        self.spacers: list[QSpacerItem] = []
+        for _ in range(3):
+            spacer = QSpacerItem(
+                0,
+                self.main_widget.height() // 20,
+                QSizePolicy.Policy.Minimum,
+            )
+            self.spacers.append(spacer)
+        self.spacer_1, self.spacer_2, self.spacer_3 = self.spacers
 
     def _setup_checkbox(self):
-        self.overwrite_checkbox = QCheckBox("Overwrite sequence")
+        self.overwrite_checkbox = CustomCheckBoxWidget("Overwrite sequence")
         self.checkbox_layout = QHBoxLayout()
         self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.checkbox_layout.addWidget(self.overwrite_checkbox)
@@ -112,8 +128,8 @@ class SequenceGeneratorWidget(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.freeform_builder_frame._resize_sequence_generator_frame()
-        self.circular_builder_frame._resize_sequence_generator_frame()
+        self.freeform_generator_frame._resize_sequence_generator_frame()
+        self.circular_generator_frame._resize_sequence_generator_frame()
         self.customize_sequence_label.resize_customize_sequence_label()
         self.generate_sequence_button.resize_generate_sequence_button()
 
@@ -127,6 +143,9 @@ class SequenceGeneratorWidget(QWidget):
         font = self.overwrite_checkbox.font()
         font.setPointSize(self.main_widget.height() // 65)
         self.overwrite_checkbox.setFont(font)
+        self._resize_spacers()
+        self.overwrite_checkbox.label.setFont(QFont("Arial", self.height() // 50, 0))
 
-        self.spacer_1.changeSize(0, self.main_widget.height() // 20)
-        self.spacer_2.changeSize(0, self.main_widget.height() // 20)
+    def _resize_spacers(self):
+        for spacer in [self.spacer_1, self.spacer_2, self.spacer_3]:
+            spacer.changeSize(0, self.main_widget.height() // 20)

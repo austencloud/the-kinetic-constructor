@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QCheckBox, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from Enums.letters import LetterType
@@ -20,9 +20,9 @@ class LetterTypePickerWidget(QWidget):
         self.sequence_generator_settings = generator_frame.sequence_generator_settings
         self.builder_type = generator_frame.builder_type
 
-        self.letter_mode_checkbox = QCheckBox("Filter Letter Types")
-        self.letter_mode_checkbox.setChecked(True)
-        self.letter_mode_checkbox.stateChanged.connect(self._on_letter_mode_changed)
+        # Instead of a checkbox, use a label
+        self.filter_label = QLabel("Filter by type:")
+        self.filter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Layout for letter type buttons
         self.letter_types_layout = QHBoxLayout()
@@ -36,66 +36,24 @@ class LetterTypePickerWidget(QWidget):
             self.letter_types_layout.addWidget(w)
             self.letter_type_widgets.append(w)
 
-        # Initially hide these since default is "Use All Letters"
+        # Initially hide these since the default could be "All Letters"
+        # (Adjust logic as needed if you want them always visible)
         self._set_letter_type_buttons_visible(False)
 
         # Main layout
         main_layout = QVBoxLayout(self)
         mode_layout = QHBoxLayout()
         mode_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        mode_layout.addWidget(self.letter_mode_checkbox)
+        mode_layout.addWidget(self.filter_label)
         main_layout.addLayout(mode_layout)
         main_layout.addLayout(self.letter_types_layout)
         main_layout.addStretch(1)
 
-    def _on_letter_mode_changed(self, state):
-        if not self.letter_mode_checkbox.isChecked():
-            # All letters mode
-            self._set_letter_type_buttons_visible(False)
-            # self.sequence_generator_settings.set_sequence_generator_setting(
-            #     "selected_letter_types", None, self.builder_type
-            # )
-        else:
-            # Specific letters mode
-            self._set_letter_type_buttons_visible(True)
-            chosen = self.sequence_generator_settings.get_sequence_generator_setting(
-                "selected_letter_types", self.builder_type
-            )
-            if chosen is None:
-                # No previous selection, default all selected
-                for w in self.letter_type_widgets:
-                    w.is_selected = True
-                    w.update_colors()
-                self.sequence_generator_settings.set_sequence_generator_setting(
-                    "selected_letter_types",
-                    [lt.description for lt in LetterType],
-                    self.builder_type,
-                )
-            else:
-                # Restore previous selection
-                any_selected = False
-                for lt, w in zip(LetterType, self.letter_type_widgets):
-                    is_selected = lt.description in chosen
-                    w.is_selected = is_selected
-                    w.update_colors()
-                    if is_selected:
-                        any_selected = True
-                if not any_selected:
-                    # None selected, select all
-                    for w in self.letter_type_widgets:
-                        w.is_selected = True
-                        w.update_colors()
-                    self.sequence_generator_settings.set_sequence_generator_setting(
-                        "selected_letter_types",
-                        [lt.description for lt in LetterType],
-                        self.builder_type,
-                    )
-
     def _on_letter_type_clicked(self, letter_type: LetterType, is_selected: bool):
-        # Ensure at least one selected
+        # Ensure at least one is selected
         selected_count = sum(w.is_selected for w in self.letter_type_widgets)
         if selected_count == 0:
-            # revert this one
+            # revert this one to selected if none remain selected
             for lt, w in zip(LetterType, self.letter_type_widgets):
                 if lt == letter_type:
                     w.is_selected = True
@@ -122,12 +80,10 @@ class LetterTypePickerWidget(QWidget):
         )
 
         if selected_types is None:
-            # all letters
-            self.letter_mode_checkbox.setChecked(True)
+            # Means all letters are used, so hide the buttons if you like
             self._set_letter_type_buttons_visible(False)
         else:
-            # specific letters
-            self.letter_mode_checkbox.setChecked(False)
+            # Specific letters mode, show buttons and restore their states
             self._set_letter_type_buttons_visible(True)
             if len(selected_types) > 0:
                 any_selected = False
@@ -138,7 +94,7 @@ class LetterTypePickerWidget(QWidget):
                     if is_selected:
                         any_selected = True
                 if not any_selected:
-                    # select all by default
+                    # If none selected, select all by default
                     for w in self.letter_type_widgets:
                         w.is_selected = True
                         w.update_colors()
@@ -148,7 +104,7 @@ class LetterTypePickerWidget(QWidget):
                         self.builder_type,
                     )
             else:
-                # none chosen, select all
+                # None chosen, select all
                 for w in self.letter_type_widgets:
                     w.is_selected = True
                     w.update_colors()
@@ -165,8 +121,8 @@ class LetterTypePickerWidget(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        font_size = self.generator_frame.height() // 25
-        self.letter_mode_checkbox.setFont(QFont("Arial", font_size))
+        font_size = self.generator_frame.sequence_generator_widget.height() // 50
+        self.filter_label.setFont(QFont("Arial", font_size))
         self.layout().setSpacing(self.generator_frame.height() // 50)
         width = self.generator_frame.width() // 16
         for w in self.letter_type_widgets:
@@ -175,6 +131,14 @@ class LetterTypePickerWidget(QWidget):
             f.setPointSize(font_size)
             w.label.setFont(f)
 
-        f = self.letter_mode_checkbox.font()
+        f = self.filter_label.font()
         f.setPointSize(font_size)
-        self.letter_mode_checkbox.setFont(f)
+        self.filter_label.setFont(f)
+        global_settings = self.generator_frame.sequence_generator_widget.global_settings
+        color = global_settings.font_color_updater.get_font_color(
+            global_settings.get_background_type()
+        )
+        # Just apply the color to the label text, not the checkbox
+        existing_style = self.filter_label.styleSheet()
+        new_style = f"{existing_style} color: {color};"
+        self.filter_label.setStyleSheet(new_style)

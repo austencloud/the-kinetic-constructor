@@ -122,7 +122,7 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         self.sequence_generator_widget.overwrite_checkbox.setChecked(overwrite_bool)
 
-        self.sequence_generator_widget.overwrite_checkbox.stateChanged.connect(
+        self.sequence_generator_widget.overwrite_checkbox.checkbox.stateChanged.connect(
             lambda state: self.sequence_generator_settings.set_sequence_generator_setting(
                 "overwrite_sequence",
                 state == 2,

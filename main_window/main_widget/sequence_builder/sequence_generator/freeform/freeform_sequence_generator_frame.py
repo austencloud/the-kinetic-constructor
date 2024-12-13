@@ -64,7 +64,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         if self.sequence_generator_widget.overwrite_connected:
             try:
-                self.sequence_generator_widget.overwrite_checkbox.stateChanged.disconnect()
+                self.sequence_generator_widget.overwrite_checkbox.checkbox.stateChanged.disconnect()
             except TypeError:
                 pass
             self.sequence_generator_widget.overwrite_connected = False
@@ -85,7 +85,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         self.sequence_generator_widget.overwrite_checkbox.setChecked(overwrite_bool)
 
-        self.sequence_generator_widget.overwrite_checkbox.stateChanged.connect(
+        self.sequence_generator_widget.overwrite_checkbox.checkbox.stateChanged.connect(
             lambda state: self.sequence_generator_settings.set_sequence_generator_setting(
                 "overwrite_sequence",
                 state == 2,
