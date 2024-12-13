@@ -17,7 +17,7 @@ class BaseSequenceGeneratorFrame(QFrame):
         self, sequence_generator_tab: "SequenceGeneratorWidget", builder_type: str
     ) -> None:
         super().__init__(sequence_generator_tab)
-        self.sequence_generator_tab = sequence_generator_tab
+        self.sequence_generator_widget = sequence_generator_tab
         self.builder_type = builder_type
         self.sequence_generator_settings = (
             sequence_generator_tab.main_widget.main_window.settings_manager.builder_settings.sequence_generator

@@ -10,6 +10,9 @@ class ContinuousRotationToggle(QWidget):
     def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
         self.sequence_generator_frame = sequence_generator_frame
+        self.main_widget = (
+            self.sequence_generator_frame.sequence_generator_widget.main_widget
+        )
         self.layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(self.layout)
         self._create_rotation_toggle()
@@ -25,7 +28,6 @@ class ContinuousRotationToggle(QWidget):
         self.layout.addWidget(self.continuous_label)
         self.layout.addStretch(1)
 
-        # Initial style update
         self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
@@ -34,11 +36,10 @@ class ContinuousRotationToggle(QWidget):
 
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected rotation type."""
-        font_color_updater = (
-            self.sequence_generator_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.font_color_updater
-        )
+        settings_manager = self.main_widget.settings_manager
+        font_color_updater = settings_manager.global_settings.font_color_updater
         font_color = font_color_updater.get_font_color(
-            self.sequence_generator_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_background_type()
+            settings_manager.global_settings.get_background_type()
         )
         if self.toggle.isChecked():
             self.random_label.setStyleSheet("font-weight: normal; color: gray;")
@@ -55,10 +56,7 @@ class ContinuousRotationToggle(QWidget):
         self.update_mode_label_styles()
 
     def resize_continuous_rotation_toggle(self):
-        font_size = (
-            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
-            // 75
-        )
+        font_size = self.main_widget.width() // 75
         font = self.random_label.font()
         font.setPointSize(font_size)
         self.random_label.setFont(font)

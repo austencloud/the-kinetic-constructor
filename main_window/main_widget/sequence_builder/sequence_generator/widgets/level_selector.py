@@ -73,7 +73,7 @@ class LevelSelector(QWidget):
 
     def resize_level_selector(self):
         font_size = (
-            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            self.sequence_generator_frame.sequence_generator_widget.main_widget.width()
             // 75
         )
 

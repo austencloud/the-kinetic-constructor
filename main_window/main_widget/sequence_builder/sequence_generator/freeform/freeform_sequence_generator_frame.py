@@ -24,7 +24,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
     def on_create_sequence(self, overwrite_sequence: bool):
         if overwrite_sequence:
-            self.sequence_generator_tab.main_widget.sequence_widget.beat_frame.beat_deletion_manager.delete_all_beats()
+            self.sequence_generator_widget.main_widget.sequence_widget.beat_frame.beat_deletion_manager.delete_all_beats()
 
         self.builder.build_sequence(
             int(
@@ -46,7 +46,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        self.sequence_generator_tab.main_widget.manual_builder.option_picker.update_option_picker()
+        self.sequence_generator_widget.main_widget.manual_builder.option_picker.update_option_picker()
 
     def get_selected_letter_types(self) -> list[LetterType]:
         return self.letter_type_picker.get_selected_letter_types()
@@ -56,3 +56,48 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         font_size = self.height() // 30
         self.layout.setSpacing(self.height() // 50)
         # Adjust if needed
+
+    def show(self):
+        """Display Freeform frame by setting it in the stacked layout."""
+        self.sequence_generator_widget.stacked_layout.setCurrentWidget(self)
+        self.sequence_generator_widget.current_sequence_generator = "freeform"
+        self.sequence_generator_widget.update_button_styles()
+
+        if self.sequence_generator_widget.overwrite_connected:
+            try:
+                self.sequence_generator_widget.overwrite_checkbox.stateChanged.disconnect()
+            except TypeError:
+                pass
+            self.sequence_generator_widget.overwrite_connected = False
+
+        overwrite_value = (
+            self.sequence_generator_settings.get_sequence_generator_setting(
+                "overwrite_sequence",
+                self.sequence_generator_widget.current_sequence_generator,
+            )
+        )
+
+        if isinstance(overwrite_value, bool):
+            overwrite_bool = overwrite_value
+        elif isinstance(overwrite_value, str):
+            overwrite_bool = overwrite_value.lower() == "true"
+        else:
+            overwrite_bool = False
+
+        self.sequence_generator_widget.overwrite_checkbox.setChecked(overwrite_bool)
+
+        self.sequence_generator_widget.overwrite_checkbox.stateChanged.connect(
+            lambda state: self.sequence_generator_settings.set_sequence_generator_setting(
+                "overwrite_sequence",
+                state == 2,
+                self.sequence_generator_widget.current_sequence_generator,
+            )
+        )
+        self.overwrite_connected = True
+
+        self.sequence_generator_widget.generate_sequence_button.clicked.disconnect()
+        self.sequence_generator_widget.generate_sequence_button.clicked.connect(
+            lambda: self.on_create_sequence(
+                self.sequence_generator_widget.overwrite_checkbox.isChecked()
+            )
+        )

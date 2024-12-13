@@ -112,7 +112,8 @@ class FontColorUpdater:
             freeform_labels
             + circular_labels
             + [
-                sequence_generator.freeform_builder_frame.letter_type_picker.letter_mode_checkbox
+                sequence_generator.freeform_builder_frame.letter_type_picker.letter_mode_checkbox,
+                sequence_generator.overwrite_checkbox,
             ],
             font_color,
         )

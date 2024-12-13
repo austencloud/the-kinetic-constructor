@@ -39,10 +39,10 @@ class RotationTypeToggle(QWidget):
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected rotation type."""
         font_color_updater = (
-            self.circular_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.font_color_updater
+            self.circular_builder_frame.sequence_generator_widget.main_widget.settings_manager.global_settings.font_color_updater
         )
         font_color = font_color_updater.get_font_color(
-            self.circular_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_background_type()
+            self.circular_builder_frame.sequence_generator_widget.main_widget.settings_manager.global_settings.get_background_type()
         )
         if self.rotation_type_toggle.isChecked():
             self.halved_label.setStyleSheet("font-weight: normal; color: gray;")
@@ -62,7 +62,8 @@ class RotationTypeToggle(QWidget):
 
     def resize_rotation_type_toggle(self):
         font_size = (
-            self.circular_builder_frame.sequence_generator_tab.main_widget.width() // 75
+            self.circular_builder_frame.sequence_generator_widget.main_widget.width()
+            // 75
         )
         font = self.halved_label.font()
         font.setPointSize(font_size)

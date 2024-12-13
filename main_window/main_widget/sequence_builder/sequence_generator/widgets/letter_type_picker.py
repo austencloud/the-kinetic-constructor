@@ -44,7 +44,7 @@ class LetterTypePicker(QWidget):
     def get_font_size(self) -> int:
         """Return the font size based on the parent widget's width."""
         return (
-            self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
+            self.sequence_generator_frame.sequence_generator_widget.main_widget.width()
             // 90
         )
 
