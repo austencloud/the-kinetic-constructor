@@ -10,25 +10,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-
-from main_window.main_widget.sequence_builder.sequence_generator.base_classes.customize_your_sequence_label import (
-    CustomizeSequenceLabel,
-)
-from main_window.main_widget.sequence_builder.sequence_generator.generate_sequence_button import (
-    GenerateSequenceButton,
-)
-from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
-from .freeform.freeform_sequence_generator_frame import FreeformSequenceGeneratorFrame
-
-if TYPE_CHECKING:
-    from main_window.main_widget.main_widget import MainWidget
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QStackedLayout
-from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING
-
-from main_window.main_widget.sequence_builder.sequence_generator.base_classes.customize_your_sequence_label import (
-    CustomizeSequenceLabel,
-)
+from .base_classes.customize_your_sequence_label import CustomizeSequenceLabel
+from .generate_sequence_button import GenerateSequenceButton
 from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
 from .freeform.freeform_sequence_generator_frame import FreeformSequenceGeneratorFrame
 
@@ -127,8 +110,8 @@ class SequenceGeneratorWidget(QWidget):
             )
             button.setStyleSheet(f"{style} font-size: {font_size}px; padding: 8px;")
 
-    def resize_sequence_generator(self) -> None:
-        """Resize handler for the auto builder UI."""
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         self.freeform_builder_frame._resize_sequence_generator_frame()
         self.circular_builder_frame._resize_sequence_generator_frame()
         self.customize_sequence_label.resize_customize_sequence_label()
@@ -147,7 +130,3 @@ class SequenceGeneratorWidget(QWidget):
 
         self.spacer_1.changeSize(0, self.main_widget.height() // 20)
         self.spacer_2.changeSize(0, self.main_widget.height() // 20)
-
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.resize_sequence_generator()

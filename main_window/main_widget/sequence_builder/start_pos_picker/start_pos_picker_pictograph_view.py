@@ -7,7 +7,6 @@ from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictog
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
 )
-from base_widgets.base_pictograph.pictograph_view import PictographView
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )

@@ -11,7 +11,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.sequence_generator.freeform.freeform_sequence_generator_frame import (
         FreeformSequenceGeneratorFrame,
     )
-    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 
 class LetterTypePickerWidget(QWidget):

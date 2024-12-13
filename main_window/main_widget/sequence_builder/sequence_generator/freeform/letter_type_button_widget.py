@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QApplication
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QFont, QColor
+from PyQt6.QtGui import QColor
 
 from Enums.letters import LetterType
 from main_window.main_widget.sequence_widget.beat_frame.button_styled_border_overlay import (
@@ -10,7 +10,6 @@ from main_window.main_widget.sequence_widget.beat_frame.button_styled_border_ove
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.sequence_generator.freeform.letter_type_picker_widget import LetterTypePickerWidget
-    pass
 
 
 class LetterTypeButtonWidget(QWidget):

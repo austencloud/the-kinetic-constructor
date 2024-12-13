@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QFont
 
 from Enums.letters import LetterType
 from .letter_type_picker_widget import LetterTypePickerWidget
