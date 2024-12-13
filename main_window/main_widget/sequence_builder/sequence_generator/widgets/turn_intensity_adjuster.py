@@ -10,15 +10,16 @@ class TurnIntensityAdjuster(QWidget):
     def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
         self.sequence_generator_frame = sequence_generator_frame
-        self.layout: QVBoxLayout = QVBoxLayout()
+        self.layout: QHBoxLayout = QHBoxLayout()
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
         self.values = [0.5, 1, 1.5, 2, 2.5, 3]
         self.intensity = 1
         self.intensity_label = QLabel("Turn Intensity:")
-        self.intensity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.intensity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.intensity_buttons_layout = QHBoxLayout()
-        self.intensity_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.intensity_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._create_turn_intensity_adjuster()
 
@@ -95,15 +96,10 @@ class TurnIntensityAdjuster(QWidget):
         self.plus_button.setFont(font)
         self.intensity_label.setFont(font)
         self.intensity_value_label.setFont(font)
-        self.intensity_value_label.setFixedWidth(
+        btn_size = (
             self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
-            // 25
+            // 40
         )
+        self.minus_button.setFixedSize(btn_size, btn_size)
+        self.plus_button.setFixedSize(btn_size, btn_size)
 
-        self.minus_button.updateGeometry()
-        self.plus_button.updateGeometry()
-        self.intensity_label.updateGeometry()
-
-        self.minus_button.repaint()
-        self.plus_button.repaint()
-        self.intensity_label.repaint()

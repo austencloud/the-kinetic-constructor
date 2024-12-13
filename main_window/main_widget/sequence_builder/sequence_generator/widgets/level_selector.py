@@ -10,14 +10,14 @@ class LevelSelector(QWidget):
     def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
         self.sequence_generator_frame = sequence_generator_frame
-        self.layout: QVBoxLayout = QVBoxLayout()
+        self.layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(self.layout)
-
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.level_label = QLabel("Level:")
-        self.level_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.level_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         self.level_buttons_layout = QHBoxLayout()
-        self.level_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.level_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.level_buttons: dict[str, QPushButton] = {}
         self._create_level_buttons()

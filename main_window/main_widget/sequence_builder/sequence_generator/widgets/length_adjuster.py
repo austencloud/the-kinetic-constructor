@@ -11,14 +11,15 @@ class LengthAdjuster(QWidget):
         super().__init__()
         self.sequence_generator_frame = sequence_generator_frame
         self.length = 8
-        self.layout: QVBoxLayout = QVBoxLayout()
+        self.layout: QHBoxLayout = QHBoxLayout()
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
         self.adjustment_amount = 2
         self.length_label = QLabel("Length:")
-        self.length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.length_buttons_layout = QHBoxLayout()
-        self.length_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.length_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._create_length_adjuster()
 
@@ -83,15 +84,10 @@ class LengthAdjuster(QWidget):
         self.plus_button.setFont(font)
         self.length_label.setFont(font)
         self.length_value_label.setFont(font)
-        self.length_value_label.setFixedWidth(
+
+        btn_size = (
             self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
-            // 25
+            // 40
         )
-
-        self.minus_button.updateGeometry()
-        self.plus_button.updateGeometry()
-        self.length_label.updateGeometry()
-
-        self.minus_button.repaint()
-        self.plus_button.repaint()
-        self.length_label.repaint()
+        self.minus_button.setFixedSize(btn_size, btn_size)
+        self.plus_button.setFixedSize(btn_size, btn_size)
