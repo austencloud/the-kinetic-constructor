@@ -47,16 +47,12 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
     def _on_letter_mode_changed(self, state):
         if self.letter_mode_checkbox.isChecked():
-            # All letters selected
             self.select_letters_button.setVisible(False)
             self.selected_letters_label.setText("All Letters")
             self.sequence_generator_settings.set_sequence_generator_setting(
-                "selected_letter_types",
-                None,  # Marker for all
-                self.builder_type,
+                "selected_letter_types", None, self.builder_type
             )
         else:
-            # Specific letters mode
             self.select_letters_button.setVisible(True)
             chosen = self.sequence_generator_settings.get_sequence_generator_setting(
                 "selected_letter_types", self.builder_type
@@ -133,7 +129,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         for (
             letter_type,
             label,
-        ) in self.letter_picker_dialog.letter_type_picker.buttons.items():
+        ) in self.letter_picker_dialog.buttons.items():
             if label.is_checked:
                 selected_types.append(letter_type)
         return selected_types
