@@ -10,7 +10,6 @@ if TYPE_CHECKING:
 
 
 class CodexPictographView(PictographView):
-
     def __init__(self, pictograph: "BasePictograph", codex: "Codex") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph

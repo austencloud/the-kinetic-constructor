@@ -31,11 +31,32 @@ class LevelSelector(QWidget):
             button = QPushButton(f"{level}")
             button.setCheckable(True)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+            # Simplify stylesheet: no padding, rely on fixed size later
+            button.setStyleSheet(
+                """
+                QPushButton {
+                    background-color: #f0f0f0;
+                    border: 1px solid #8f8f91;
+                    border-radius: 4px;
+                }
+                QPushButton:hover {
+                    background-color: #e6f2ff;
+                }
+                QPushButton:pressed {
+                    background-color: #cce6ff;
+                }
+                QPushButton:checked {
+                    background-color: #cce6ff;
+                }
+            """
+            )
+
             button.clicked.connect(lambda _, l=level: self._on_level_change(l))
             self.level_buttons_layout.addWidget(button)
             self.level_buttons[f"level_{level}"] = button
 
-    def _on_level_change(self, level):
+    def _on_level_change(self, level: int):
         for button in self.level_buttons.values():
             button.setChecked(False)
         self.level_buttons[f"level_{level}"].setChecked(True)
@@ -46,7 +67,7 @@ class LevelSelector(QWidget):
             self.sequence_generator_frame.turn_intensity_adjuster.show()
             self.sequence_generator_frame.turn_intensity_adjuster.adjust_values(level)
 
-    def set_level(self, level):
+    def set_level(self, level: int):
         """Set the initial level when loading settings."""
         self._on_level_change(level)
 
@@ -55,12 +76,20 @@ class LevelSelector(QWidget):
             self.sequence_generator_frame.sequence_generator_tab.main_widget.width()
             // 75
         )
+
+        # Determine a size for the buttons based on font_size
+        # For example, make them about 3 * font_size to ensure they're big enough for the text
+        button_size = int(font_size * 2.5)
+
         for button in self.level_buttons.values():
             font = button.font()
             font.setPointSize(font_size)
             button.setFont(font)
+            # Make the button square
+            button.setFixedSize(button_size, button_size)
             button.updateGeometry()
             button.repaint()
+
         font = self.level_label.font()
         font.setPointSize(font_size)
         self.level_label.setFont(font)

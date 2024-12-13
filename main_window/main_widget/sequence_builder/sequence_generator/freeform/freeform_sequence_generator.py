@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication
 import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
+from Enums.letters import LetterType
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE
 from ..base_classes.base_sequence_generator import BaseSequenceGenerator
 from ..turn_intensity_manager import TurnIntensityManager
@@ -104,7 +105,7 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
     def _filter_options_by_letter_type(self, options: list[dict]) -> list[dict]:
         """Filter options based on selected letter types."""
         selected_types = (
-            self.sequence_generator_frame.letter_type_picker.get_selected_letter_types()
+            self.sequence_generator_frame.get_selected_letter_types()
         )
         selected_letters = []
         for letter_type in selected_types:
@@ -114,3 +115,4 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
             option for option in options if option["letter"] in selected_letters
         ]
         return filtered_options
+
