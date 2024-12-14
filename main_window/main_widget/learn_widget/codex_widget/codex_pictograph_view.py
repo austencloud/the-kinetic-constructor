@@ -19,7 +19,7 @@ class CodexPictographView(PictographView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.setStyleSheet("border: 1px solid black;")
-        
+
     ### EVENTS ###
 
     def contextMenuEvent(self, event: QEvent) -> None:
@@ -44,24 +44,12 @@ class CodexPictographView(PictographView):
             )
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         size = self.calculate_view_size()
-        self.setMinimumWidth(size)
-        self.setMaximumWidth(size)
-        self.setMinimumHeight(size)
-        self.setMaximumHeight(size)
-        self.view_scale = size / self.pictograph.width()
-        self.resetTransform()
-        self.scale(self.view_scale, self.view_scale)
+        self.setMinimumSize(size, size)
+        self.setMaximumSize(size, size)
+        self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
     def calculate_view_size(self) -> int:
         codex_scroll_area_bar_width = self.codex.scroll_area.verticalScrollBar().width()
-        calculated_width = int((self.codex.learn_widget.width() // 16)) - (
-            codex_scroll_area_bar_width // 6
-        )
-        view_width = calculated_width
-        outer_border_width = max(1, int(view_width * 0.015))
-        inner_border_width = max(1, int(view_width * 0.015))
-        view_width = view_width - (outer_border_width) - (inner_border_width)
+        view_width = int((self.codex.width() // 7)) - (codex_scroll_area_bar_width // 6)
         return view_width

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QComboBox, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QComboBox, QPushButton, QHBoxLayout
 import logging
 
 from .codex_control_widget import CodexControlWidget
@@ -13,6 +13,11 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 
 class Codex(QWidget):
@@ -37,34 +42,29 @@ class Codex(QWidget):
         self.main_vlayout.setContentsMargins(0, 0, 0, 0)
         self.main_vlayout.setSpacing(0)
 
-        # Control widget at the top (buttons and orientation)
         self.control_widget = CodexControlWidget(self)
         self.main_vlayout.addWidget(self.control_widget)
 
-        # Scroll area for the pictographs
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
 
-        # content_widget inside the scroll_area where pictographs will be placed
         content_widget = QWidget()
         self.content_layout = QVBoxLayout(content_widget)
         self.content_layout.setContentsMargins(0, 0, 0, 0)
         self.content_layout.setSpacing(0)
 
-        # Set the content_widget as scroll_area's widget
         self.scroll_area.setWidget(content_widget)
+        self.lower_hbox = QHBoxLayout()
+        
         self.main_vlayout.addWidget(self.scroll_area)
 
-        # Managers
         self.section_manager = CodexSectionManager(self)
         self.modification_manager = CodexModificationManager(self)
         self.animation_manager = CodexAnimationManager(self)
         self.size_manager = CodexSizeManager(self)
 
-        # Load sections after managers are set up
         self.section_manager.load_sections()
 
-        # Transparent backgrounds
         self.setStyleSheet("background: transparent;")
         self.scroll_area.setStyleSheet("background: transparent;")
         self.scroll_area.viewport().setStyleSheet("background: transparent;")

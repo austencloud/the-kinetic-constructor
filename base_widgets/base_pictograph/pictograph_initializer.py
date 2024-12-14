@@ -33,12 +33,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class PictographInitializer:
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
         self.pictograph.setSceneRect(0, 0, 950, 950)
         self.pictograph.setBackgroundBrush(Qt.GlobalColor.white)
         self.prop_factory = PropFactory()
+        self.grid_initialized = False
 
     ### INIT ###
 
@@ -55,7 +57,6 @@ class PictographInitializer:
         self.pictograph.vtg_glyph = self.init_vtg_glyph()
         self.pictograph.elemental_glyph = self.init_elemental_glyph()
         self.pictograph.start_to_end_pos_glyph = self.init_start_to_end_pos_glyph()
-        # set the nonradial points visibility based on user settings
         self.init_reversal_symbols()
 
         self.set_nonradial_points_visibility(
@@ -72,30 +73,37 @@ class PictographInitializer:
         self.pictograph.grid.toggle_non_radial_points_visibility(visible)
 
     def init_grid(self) -> Grid:
-        try:
-            # Load grid mode
-            grid_mode = self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-            
-            # Load grid data from JSON
-            json_path = get_images_and_data_path("data/circle_coords.json")
-            with open(json_path, "r") as file:
-                data = json.load(file)
-            
-            # Create GridData instance
-            grid_data = GridData(data)
-            
-            # Initialize Grid with GridData and grid_mode
-            grid = Grid(self.pictograph, grid_data, grid_mode)
-            return grid
-        except FileNotFoundError:
-            logger.error(f"Grid data file '{json_path}' not found.")
-            raise
-        except json.JSONDecodeError as e:
-            logger.error(f"Error decoding JSON from '{json_path}': {e}")
-            raise
-        except Exception as e:
-            logger.error(f"Unexpected error initializing grid: {e}")
-            raise
+        if not self.grid_initialized:
+            try:
+                # Load grid mode
+                grid_mode = (
+                    self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+                )
+
+                # Load grid data from JSON
+                json_path = get_images_and_data_path("data/circle_coords.json")
+                with open(json_path, "r") as file:
+                    data = json.load(file)
+
+                # Create GridData instance
+                grid_data = GridData(data)
+
+                # Initialize Grid with GridData and grid_mode
+                grid = Grid(self.pictograph, grid_data, grid_mode)
+                self.grid_initialized = True
+                return grid
+            except FileNotFoundError:
+                logger.error(f"Grid data file '{json_path}' not found.")
+                raise
+            except json.JSONDecodeError as e:
+                logger.error(f"Error decoding JSON from '{json_path}': {e}")
+                raise
+            except Exception as e:
+                logger.error(f"Unexpected error initializing grid: {e}")
+                raise
+        else:
+            logger.warning("Grid already initialized.")
+            return self.pictograph.grid
 
     def init_motions(self) -> dict[str, Motion]:
         motions: dict[str, Motion] = {}
@@ -207,7 +215,6 @@ class PictographInitializer:
             NORTHWEST: nw_boundary,
         }
         return locations
-
 
     ### CREATE ###
 

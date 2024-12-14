@@ -18,21 +18,24 @@ class CodexSectionTypeLabel(QLabel):
         self.codex = codex
         self.letter_type = letter_type
         self.setContentsMargins(0, 0, 0, 0)
-        self.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.set_styled_text(letter_type)
 
     def set_styled_text(self, letter_type: LetterType) -> None:
         styled_description = LetterTypeTextPainter.get_colored_text(
             letter_type.description
         )
-        self.setText(f"{letter_type.name}: {styled_description}")
+        type_name = ''.join([i if not i.isdigit() else f' {i}' for i in letter_type.name])
+        self.setText(f"{type_name}: {styled_description}")
 
     def get_font_size(self):
-        return max(12, self.codex.height() // 60)
+        return max(12, self.codex.height() // 45)
 
     def resizeEvent(self, event):
         self.label_height = self.get_font_size() * 2
         self.setFixedHeight(self.label_height)
+        # set it to take up the minimum width required for its text
+        self.setFixedWidth(self.fontMetrics().horizontalAdvance(self.text()))
         border_style = "2px solid black"
         self.setStyleSheet(
             f"QLabel {{"
