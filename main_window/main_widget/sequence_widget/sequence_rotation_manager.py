@@ -29,6 +29,7 @@ class SequenceRotationManager:
 
         if len(self.original_sequence_json) < 2:
             self.sequence_widget.indicator_label.show_message("No sequence to rotate.")
+            QApplication.restoreOverrideCursor()
             return
 
         self.rotation_steps = (self.rotation_steps + 1) % 8

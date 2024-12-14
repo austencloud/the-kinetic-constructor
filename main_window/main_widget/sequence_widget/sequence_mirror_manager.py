@@ -68,6 +68,7 @@ class SequenceMirrorManager:
         )
         if len(current_sequence_json) < 2:
             self.sequence_widget.indicator_label.show_message("No sequence to mirror.")
+            QApplication.restoreOverrideCursor()
             return
 
         mirrored_sequence_json = self.mirror_sequence(current_sequence_json)

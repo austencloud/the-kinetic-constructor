@@ -17,8 +17,7 @@ class SequenceColorSwapManager:
 
     def swap_colors_in_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.sequence_widget.button_panel.toggle_swap_colors_icon()
-        
+
         current_sequence_json = (
             self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
         )
@@ -26,12 +25,13 @@ class SequenceColorSwapManager:
             self.sequence_widget.indicator_label.show_message(
                 "No sequence to swap colors."
             )
+            QApplication.restoreOverrideCursor()
             return
 
+        self.sequence_widget.button_panel.toggle_swap_colors_icon()
         swapped_sequence_json = self.swap_colors(current_sequence_json)
         self.sequence_widget.update_beats_in_place(swapped_sequence_json)
         self.sequence_widget.indicator_label.show_message("Colors swapped!")
-        # Update adjustment panel if necessary
         QApplication.restoreOverrideCursor()
 
     def swap_colors(self, sequence_json: list[dict]) -> list[dict]:

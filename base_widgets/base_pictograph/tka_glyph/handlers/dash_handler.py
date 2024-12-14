@@ -42,7 +42,8 @@ class DashHandler:
 
     def update_dash(self) -> None:
         if "-" in self.glyph.pictograph.letter.value:
-            # if there is not a dash already:
+            if self.dash_item:
+                self.position_dash()
             if not self.dash_item:
                 self.add_dash()
                 self.position_dash()
