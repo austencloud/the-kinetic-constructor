@@ -1,5 +1,3 @@
-# learn_widget.py
-
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
@@ -8,13 +6,13 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QFrame,
     QStackedLayout,
+    QSplitter,
 )
 from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 
 from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
-from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import (
-    CodexDataManager,
-)
+from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import CodexDataManager
 
 from .codex_widget.codex import Codex
 
@@ -50,14 +48,15 @@ class LearnWidget(QWidget):
         self.stack_layout.addWidget(self.lesson_3_widget)
         self.stack_layout.setCurrentWidget(self.lesson_selector)
 
-        # Main layout
-        self.main_layout = QHBoxLayout(self)
-        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        # Main layout using QSplitter for smoother resizing
+        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.main_splitter.setContentsMargins(0, 0, 0, 0)
+        self.main_splitter.setHandleWidth(0)  # Hide splitter handle for a cleaner look
 
         # Codex panel
         self.codex_shown = False
         self.codex_panel = Codex(self, initial_codex_data)
-        self.codex_panel.setFixedWidth(0)  # Hidden initially
+        self.codex_panel.setMaximumWidth(0)  # Hidden initially
 
         # Right side with a top bar (Codex button) and stack_layout
         right_side = QWidget()
@@ -80,9 +79,15 @@ class LearnWidget(QWidget):
         content_frame.setLayout(self.stack_layout)
         right_layout.addWidget(content_frame)
 
-        self.main_layout.addWidget(self.codex_panel)
-        self.main_layout.addWidget(right_side)
-        self.setLayout(self.main_layout)
+        # Add Codex and right_side to splitter
+        self.main_splitter.addWidget(self.codex_panel)
+        self.main_splitter.addWidget(right_side)
+
+        # Wrap the QSplitter in a QVBoxLayout
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.main_splitter)
+        layout.setContentsMargins(0, 0, 0, 0)  # Optional: adjust margins
+        self.setLayout(layout)
 
     def toggle_codex(self):
         self.codex_shown = not self.codex_shown
@@ -103,7 +108,7 @@ class LearnWidget(QWidget):
             lesson_widget = lesson_widgets[lesson_number - 1]
             self.stack_layout.setCurrentWidget(lesson_widget)
             lesson_widget.prepare_quiz_ui()
-            
+
     def update_background_manager(self, bg_type: str):
         if self.background_manager:
             self.background_manager.stop_animation()

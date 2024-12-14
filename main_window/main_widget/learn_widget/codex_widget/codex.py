@@ -1,3 +1,5 @@
+# codex.py
+
 from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import (
     QWidget,
@@ -6,6 +8,7 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QPushButton,
     QHBoxLayout,
+    QSizePolicy,
 )
 import logging
 
@@ -43,6 +46,10 @@ class Codex(QWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
         self.pictograph_data = pictograph_data
+
+        # Set size policy to allow maximumWidth to be animated
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        self.setMaximumWidth(0)  # Start hidden
 
         # Main layout for the entire Codex widget
         self.main_vlayout = QVBoxLayout(self)
