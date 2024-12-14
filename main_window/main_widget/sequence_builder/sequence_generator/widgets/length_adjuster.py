@@ -12,6 +12,7 @@ class LengthAdjuster(QWidget):
         self.sequence_generator_frame = sequence_generator_frame
         self.length = 8
         self.layout: QHBoxLayout = QHBoxLayout()
+        self.layout.setSpacing(10)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
         self.adjustment_amount = 2

@@ -11,6 +11,7 @@ class TurnIntensityAdjuster(QWidget):
         super().__init__()
         self.sequence_generator_frame = sequence_generator_frame
         self.layout: QHBoxLayout = QHBoxLayout()
+        self.layout.setSpacing(10)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
         self.values = [0.5, 1, 1.5, 2, 2.5, 3]

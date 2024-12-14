@@ -66,7 +66,7 @@ class BaseSequenceGeneratorFrame(QFrame):
             else bool(continuous_rotation)
         )
 
-        self.level_selector.set_level(int(level))
+        self.level_selector._on_level_change(int(level))
         self.length_adjuster.set_length(int(length))
         self.turn_intensity_adjuster.set_intensity(intensity)
         self.continuous_rotation_toggle.set_state(continuous_rotation)
