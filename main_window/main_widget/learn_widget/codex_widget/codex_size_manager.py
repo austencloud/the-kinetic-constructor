@@ -25,5 +25,5 @@ class CodexSizeManager:
         square_size = codex_width // 6  # Adjusted to divide by 6 as per requirement
         logger.debug(f"Adjusting pictograph sizes to {square_size}x{square_size}.")
 
-        for view in self.parent.section_manager.letter_views.values():
+        for view in self.parent.section_manager.pictograph_views.values():
             view.setFixedSize(QSize(square_size, square_size))

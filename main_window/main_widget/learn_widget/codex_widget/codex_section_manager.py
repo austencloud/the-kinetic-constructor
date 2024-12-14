@@ -26,7 +26,7 @@ class CodexSectionManager:
 
     def __init__(self, codex: "Codex"):
         self.codex = codex
-        self.letter_views: dict[str, "PictographView"] = {}
+        self.pictograph_views: dict[str, "PictographView"] = {}
         self.custom_rows = [
             ["A", "B", "C", "D", "E", "F"],
             ["G", "H", "I", "J", "K", "L"],
@@ -100,16 +100,16 @@ class CodexSectionManager:
             for letter_str in current_letters:
                 p_dict = self.codex.pictograph_data.get(letter_str, None)
                 if p_dict:
-                    if letter_str not in self.letter_views:
+                    if letter_str not in self.pictograph_views:
                         scene = BasePictograph(self.codex.main_widget)
                         view = CodexPictographView(scene, self.codex)
                         scene.updater.update_pictograph(p_dict)
-                        self.letter_views[letter_str] = view
+                        self.pictograph_views[letter_str] = view
                         logger.debug(
                             f"Created new CodexPictographView for letter '{letter_str}'"
                         )
                     else:
-                        view = self.letter_views[letter_str]
+                        view = self.pictograph_views[letter_str]
                         logger.debug(
                             f"Reusing existing CodexPictographView for letter '{letter_str}'"
                         )
@@ -137,3 +137,12 @@ class CodexSectionManager:
 
         self.codex.content_layout.addLayout(vertical_layout)
         logger.debug("Added vertical layout with all rows to the content layout.")
+
+    def reload_sections(self):
+        """Reload all sections to reflect updated data."""
+        for letter, view in self.pictograph_views.items():
+            if letter in self.codex.pictograph_data:
+                pictograph_dict = self.codex.pictograph_data[letter]
+                view.pictograph.updater.update_pictograph(pictograph_dict)
+                view.scene().update()
+        logger.debug("Reloaded all sections in Codex.")

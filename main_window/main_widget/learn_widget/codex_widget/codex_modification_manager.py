@@ -32,7 +32,7 @@ class CodexModificationManager:
             sequence_rotation_manager = (
                 self.codex.main_widget.sequence_widget.rotation_manager
             )
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     rotated_pictograph_dict = scene.pictograph_dict.copy()
@@ -47,7 +47,7 @@ class CodexModificationManager:
     def mirror_all(self):
         logger.info("Mirror action triggered.")
         try:
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     # Implement actual mirror logic here
@@ -59,7 +59,7 @@ class CodexModificationManager:
     def color_swap_all(self):
         logger.info("Color Swap action triggered.")
         try:
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     # Implement actual color swap logic here
@@ -71,7 +71,7 @@ class CodexModificationManager:
     def update_orientation_all(self, orientation: str):
         logger.info(f"Orientation update triggered to '{orientation}'.")
         try:
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     new_dict = scene.pictograph_dict.copy()
