@@ -67,10 +67,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for i, pictograph_dict in enumerate(next_options):
             # Get a pictograph from our pool
             if i >= len(self.option_picker.pictograph_pool):
-                break  # If not enough pre-initialized, either increase the pool or handle differently
+                break  
             p = self.option_picker.pictograph_pool[i]
 
-            # Update pictograph with new dict
             p.updater.update_pictograph(pictograph_dict)
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()
