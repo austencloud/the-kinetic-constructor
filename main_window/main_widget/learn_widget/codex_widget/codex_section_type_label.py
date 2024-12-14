@@ -25,11 +25,13 @@ class CodexSectionTypeLabel(QLabel):
         styled_description = LetterTypeTextPainter.get_colored_text(
             letter_type.description
         )
-        type_name = ''.join([i if not i.isdigit() else f' {i}' for i in letter_type.name])
+        type_name = "".join(
+            [i if not i.isdigit() else f" {i}" for i in letter_type.name]
+        )
         self.setText(f"{type_name}: {styled_description}")
 
     def get_font_size(self):
-        return max(12, self.codex.height() // 45)
+        return max(12, self.codex.main_widget.height() // 45)
 
     def resizeEvent(self, event):
         self.label_height = self.get_font_size() * 2

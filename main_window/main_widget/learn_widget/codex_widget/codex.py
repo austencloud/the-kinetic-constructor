@@ -1,5 +1,12 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QComboBox, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QScrollArea,
+    QComboBox,
+    QPushButton,
+    QHBoxLayout,
+)
 import logging
 
 from .codex_control_widget import CodexControlWidget
@@ -15,8 +22,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 
@@ -55,7 +62,7 @@ class Codex(QWidget):
 
         self.scroll_area.setWidget(content_widget)
         self.lower_hbox = QHBoxLayout()
-        
+
         self.main_vlayout.addWidget(self.scroll_area)
 
         self.section_manager = CodexSectionManager(self)
@@ -72,6 +79,8 @@ class Codex(QWidget):
     def resizeEvent(self, event):
         logger.debug("CodexWidget resized.")
         self.size_manager.adjust_pictograph_sizes()
+        self.section_manager.spacer_1.changeSize(20, self.height() // 30)
+        self.section_manager.spacer_2.changeSize(20, self.height() // 30)
         super().resizeEvent(event)
 
     def toggle_codex(self, show: bool):

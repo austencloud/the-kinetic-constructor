@@ -153,19 +153,19 @@ class CodexDataManager:
                 "red_motion_type": "pro",
             },
             "D": {
-                "start_pos": "beta5",
+                "start_pos": "beta1",
                 "end_pos": "alpha3",
                 "blue_motion_type": "pro",
                 "red_motion_type": "pro",
             },
             "E": {
-                "start_pos": "beta5",
+                "start_pos": "beta1",
                 "end_pos": "alpha3",
                 "blue_motion_type": "anti",
                 "red_motion_type": "anti",
             },
             "F": {
-                "start_pos": "beta5",
+                "start_pos": "beta1",
                 "end_pos": "alpha3",
                 "blue_motion_type": "anti",
                 "red_motion_type": "pro",

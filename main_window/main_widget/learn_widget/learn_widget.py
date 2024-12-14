@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
 from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import (
     CodexDataManager,
 )
@@ -93,7 +94,7 @@ class LearnWidget(QWidget):
 
     def start_lesson(self, lesson_number: int) -> None:
         """Start the specified lesson."""
-        lesson_widgets = [
+        lesson_widgets: list[BaseLessonWidget] = [
             self.lesson_1_widget,
             self.lesson_2_widget,
             self.lesson_3_widget,
@@ -101,7 +102,8 @@ class LearnWidget(QWidget):
         if 1 <= lesson_number <= len(lesson_widgets):
             lesson_widget = lesson_widgets[lesson_number - 1]
             self.stack_layout.setCurrentWidget(lesson_widget)
-
+            lesson_widget.prepare_quiz_ui()
+            
     def update_background_manager(self, bg_type: str):
         if self.background_manager:
             self.background_manager.stop_animation()

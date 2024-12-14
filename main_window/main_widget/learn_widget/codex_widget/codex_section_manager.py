@@ -48,14 +48,17 @@ class CodexSectionManager:
     def load_letter_type_section(self, letter_type: LetterType):
         """Load a section for a given LetterType."""
         heading_label = CodexSectionTypeLabel(self.codex, letter_type)
+        self.spacer_1 = QSpacerItem(
+            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+        )
+        self.spacer_2 = QSpacerItem(
+            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+        )
+        self.codex.content_layout.addSpacerItem(self.spacer_1)
         self.codex.content_layout.addWidget(
             heading_label, alignment=Qt.AlignmentFlag.AlignCenter
         )
-
-        extra_spacer = QSpacerItem(
-            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
-        )
-        self.codex.content_layout.addSpacerItem(extra_spacer)
+        self.codex.content_layout.addSpacerItem(self.spacer_2)
         logger.debug("Added extra spacer below the heading label.")
 
         letters = letter_type.letters
@@ -70,7 +73,7 @@ class CodexSectionManager:
         for row_index, row_letters in enumerate(self.custom_rows):
             current_letters = [letter for letter in row_letters if letter in letters]
             if not current_letters:
-                continue 
+                continue
 
             horizontal_layout = QHBoxLayout()
             horizontal_layout.setSpacing(20)
@@ -128,7 +131,6 @@ class CodexSectionManager:
                 )
                 horizontal_layout.addSpacerItem(right_spacer)
                 logger.debug(f"Added right spacer for centering row {row_index + 1}.")
-
 
             vertical_layout.addLayout(horizontal_layout)
             logger.debug(f"Added horizontal layout and line for row {row_index + 1}.")
