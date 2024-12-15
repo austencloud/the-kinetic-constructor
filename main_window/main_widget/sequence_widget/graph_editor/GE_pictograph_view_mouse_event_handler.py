@@ -3,40 +3,34 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QMouseEvent
 
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import (
+        GE_PictographView,
+    )
     from base_widgets.base_pictograph.pictograph_view import (
         PictographView,
     )
 
 
 class GE_PictographViewMouseEventHandler:
-    def __init__(self, pictograph_view: "PictographView") -> None:
+    def __init__(self, pictograph_view: "GE_PictographView") -> None:
         self.pictograph_view = pictograph_view
         self.pictograph = pictograph_view.pictograph
+        self.selection_manager = (
+            self.pictograph_view.graph_editor.arrow_selection_manager
+        )
 
-    def handle_mouse_press(self, event: "QMouseEvent") -> None:
-        pictograph = self.pictograph_view.pictograph
+    def handle_mouse_press(self, event: QMouseEvent) -> None:
         widget_pos = event.pos()
         scene_pos = self.pictograph_view.mapToScene(widget_pos)
-        items_at_pos = self.pictograph.items(scene_pos)
+        items_at_pos = self.pictograph_view.scene().items(scene_pos)
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
 
         if arrow:
-            if pictograph.selected_arrow == arrow:
-                pictograph.selected_arrow.setSelected(False)
-                pictograph.selected_arrow = None
-            else:
-                if pictograph.selected_arrow:
-                    pictograph.selected_arrow.setSelected(False)
-                pictograph.selected_arrow = arrow
-                arrow.setSelected(True)
-            pictograph.update()
+            self.selection_manager.set_selected_arrow(arrow)
         else:
-            if pictograph.selected_arrow:
-                pictograph.selected_arrow.setSelected(False)
-                pictograph.selected_arrow = None
-            pictograph.update()
+            self.selection_manager.clear_selection()
+
         self.pictograph_view.repaint()
-        
 
     def is_arrow_under_cursor(self, event: "QMouseEvent") -> bool:
         widget_pos = event.pos()

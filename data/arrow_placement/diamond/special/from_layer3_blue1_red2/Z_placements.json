@@ -97,8 +97,10 @@
       "static_from_layer2": [120, -100]
     },
     "(s, 0, 0.5)": {
-      "static_from_layer1": [-100, -120],
-      "static_from_layer2": {}
+      "static_from_layer1": [-80, -130],
+      "static_from_layer2": {},
+      "swap_beta_n_nonradial_blue_static_n_red_anti_ne": true,
+      "static_from_layer1_rot_angle_override": true
     },
     "(s, 0, 1)": {
       "static_from_layer1": [-65, 0],

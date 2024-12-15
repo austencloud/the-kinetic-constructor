@@ -17,6 +17,9 @@ from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
 from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
     GE_PictographViewMouseEventHandler,
 )
+from main_window.main_widget.sequence_widget.graph_editor.arrow_selection_manager import (
+    ArrowSelectionManager,
+)
 
 
 if TYPE_CHECKING:
@@ -46,6 +49,12 @@ class GE_PictographView(PictographView):
         self.mouse_event_handler = GE_PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
+        self.graph_editor.arrow_selection_manager.selection_changed.connect(
+            self.on_selection_changed
+        )
+
+    def on_selection_changed(self, selected_arrow):
+        self.scene().update()  # Ensure the view reflects the updated selection
 
     def set_to_blank_grid(self) -> None:
         self.blank_pictograph = GE_BlankPictograph(self)
