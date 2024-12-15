@@ -11,9 +11,7 @@ from base_widgets.base_pictograph.pictograph_view import PictographView
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
-from base_widgets.base_pictograph.pictograph_view_mouse_event_handler import (
-    PictographViewMouseEventHandler,
-)
+
 
 
 if TYPE_CHECKING:
@@ -34,7 +32,6 @@ class LessonPictographView(BorderedPictographView):
         self.grabGesture(Qt.GestureType.TapGesture)
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
 
-        self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
 
@@ -81,42 +78,5 @@ class LessonPictographView(BorderedPictographView):
     def _resetTouchState(self) -> None:
         self._ignoreNextMousePress = False
 
-    def mousePressEvent(self, event: QMouseEvent) -> None:
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if self._ignoreMouseEvents or self._ignoreNextMousePress:
-            event.ignore()
-            return
-        elif event.button() == Qt.MouseButton.LeftButton:
-            self.mouse_event_handler.handle_mouse_press(event)
-        QApplication.restoreOverrideCursor()
-
-    def enterEvent(self, event: QEvent) -> None:
-        super().enterEvent(event)
-        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
-            GraphEditorPictographContainer,
-        )
-
-        if isinstance(self.parent(), GraphEditorPictographContainer):
-            self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-        else:
-            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.pictograph.view.set_gold_border()
 
 
-
-    def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
-            GraphEditorPictographContainer,
-        )
-
-        if isinstance(self.parent(), GraphEditorPictographContainer):
-            if self.mouse_event_handler.is_arrow_under_cursor(event):
-                self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            else:
-                self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-
-    # def leaveEvent(self, event: QEvent) -> None:
-    #     super().leaveEvent(event)
-    #     self.setStyleSheet("")
-    #     self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-    #     self.pictograph.view.reset_border()

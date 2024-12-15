@@ -8,38 +8,35 @@ if TYPE_CHECKING:
     )
 
 
-class PictographViewMouseEventHandler:
+class GE_PictographViewMouseEventHandler:
     def __init__(self, pictograph_view: "PictographView") -> None:
         self.pictograph_view = pictograph_view
         self.pictograph = pictograph_view.pictograph
 
     def handle_mouse_press(self, event: "QMouseEvent") -> None:
-        if self.pictograph.view.__class__.__name__ == "OptionPickerPictographView":
-            self.pictograph.main_widget.manual_builder.option_picker.manual_builder.option_click_handler.on_option_clicked(
-                self.pictograph
-            )
-            return
-
+        pictograph = self.pictograph_view.pictograph
         widget_pos = event.pos()
         scene_pos = self.pictograph_view.mapToScene(widget_pos)
-        items_at_pos = self.pictograph_view.scene().items(scene_pos)
+        items_at_pos = self.pictograph.items(scene_pos)
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
 
         if arrow:
-            if self.pictograph_view.pictograph.selected_arrow == arrow:
-                self.pictograph_view.pictograph.selected_arrow.setSelected(False)
-                self.pictograph_view.pictograph.selected_arrow = None
+            if pictograph.selected_arrow == arrow:
+                pictograph.selected_arrow.setSelected(False)
+                pictograph.selected_arrow = None
             else:
-                if self.pictograph_view.pictograph.selected_arrow:
-                    self.pictograph_view.pictograph.selected_arrow.setSelected(False)
-                self.pictograph_view.pictograph.selected_arrow = arrow
+                if pictograph.selected_arrow:
+                    pictograph.selected_arrow.setSelected(False)
+                pictograph.selected_arrow = arrow
                 arrow.setSelected(True)
-            self.pictograph.update()
+            pictograph.update()
         else:
-            if self.pictograph_view.pictograph.selected_arrow:
-                self.pictograph_view.pictograph.selected_arrow.setSelected(False)
-                self.pictograph_view.pictograph.selected_arrow = None
-            self.pictograph.update()
+            if pictograph.selected_arrow:
+                pictograph.selected_arrow.setSelected(False)
+                pictograph.selected_arrow = None
+            pictograph.update()
+        self.pictograph_view.repaint()
+        
 
     def is_arrow_under_cursor(self, event: "QMouseEvent") -> bool:
         widget_pos = event.pos()

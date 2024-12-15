@@ -1,12 +1,22 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPainter, QPen, QColor
+from PyQt6.QtGui import QPainter, QPen, QColor, QMouseEvent, QKeyEvent, QCursor
+from PyQt6.QtWidgets import QApplication
 
+from base_widgets.base_pictograph.pictograph_context_menu_handler import (
+    PictographContextMenuHandler,
+)
 from base_widgets.base_pictograph.pictograph_view import (
     PictographView,
 )
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
+    PictographViewKeyEventHandler,
+)
+from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
+    GE_PictographViewMouseEventHandler,
+)
 
 
 if TYPE_CHECKING:
@@ -33,10 +43,34 @@ class GE_PictographView(PictographView):
         self.main_widget = self.graph_editor.main_widget
         self.setScene(blank_pictograph)
         self.setFrameShape(PictographView.Shape.Box)
+        self.mouse_event_handler = GE_PictographViewMouseEventHandler(self)
+        self.context_menu_handler = PictographContextMenuHandler(self)
+        self.key_event_handler = PictographViewKeyEventHandler(self)
 
     def set_to_blank_grid(self) -> None:
         self.blank_pictograph = GE_BlankPictograph(self)
         self.setScene(self.blank_pictograph)
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if not self.key_event_handler.handle_key_press(event):
+            super().keyPressEvent(event)
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.mouse_event_handler.handle_mouse_press(event)
+        QApplication.restoreOverrideCursor()
+
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+            GraphEditorPictographContainer,
+        )
+
+        if isinstance(self.parent(), GraphEditorPictographContainer):
+            if self.mouse_event_handler.is_arrow_under_cursor(event):
+                self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+            else:
+                self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
     def paintEvent(self, event) -> None:
         super().paintEvent(event)
