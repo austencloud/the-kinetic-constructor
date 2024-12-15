@@ -21,7 +21,21 @@ class JsonOrientationValidationEngine:
 
         if is_current_sequence:
             self.json_manager.loader_saver.save_current_sequence(self.sequence)
+    def validate_single_pictograph(self, pictograph: dict, previous_pictograph: dict) -> dict:
+        """
+        Validates and updates the start and end orientations of a single pictograph.
+        """
+        # Update start orientation based on the previous pictograph
+        pictograph["red_attributes"]["start_ori"] = previous_pictograph["red_attributes"]["end_ori"]
+        pictograph["blue_attributes"]["start_ori"] = previous_pictograph["blue_attributes"]["end_ori"]
 
+        # Recalculate the end orientation
+        for color in ["red", "blue"]:
+            pictograph[f"{color}_attributes"]["end_ori"] = self.ori_calculator.calculate_end_orientation(
+                pictograph, color
+            )
+        
+        return pictograph
     def update_json_entry_start_orientation(self, index) -> None:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
         current_pictograph = self.sequence[index]
