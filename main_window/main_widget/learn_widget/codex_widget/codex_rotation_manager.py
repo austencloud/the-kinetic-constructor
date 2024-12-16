@@ -66,6 +66,7 @@ class CodexRotationManager:
         """Retrieve position name from a map based on left and right locations."""
         try:
             from data.positions_map import positions_map
+
             return positions_map[(left_loc, right_loc)]
         except KeyError:
             return "unknown"  # Handle missing mappings gracefully
@@ -106,6 +107,7 @@ class CodexRotationManager:
             )
 
         self.codex.pictograph_data["grid_mode"] = mode
+
         print(f"Grid mode updated to: {mode}")  # Replace with a UI message if necessary
 
     def _refresh_pictograph_views(self):
