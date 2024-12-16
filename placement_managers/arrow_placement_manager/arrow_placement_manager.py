@@ -23,12 +23,12 @@ class ArrowPlacementManager:
         self.adjustment_calculator = ArrowAdjustmentCalculator(self)
         self.quadrant_index_handler = QuadrantIndexHandler(self)
 
-    def update_arrow_placements(self) -> None:
+    def update_arrow_placements(self, grid_mode:str = None) -> None:
         for arrow in self.pictograph.arrows.values():
-            self.update_arrow_position(arrow)
+            self.update_arrow_position(arrow, grid_mode)
 
-    def update_arrow_position(self, arrow: Arrow) -> None:
-        initial_pos = self.initial_pos_calculator.get_initial_coords(arrow)
+    def update_arrow_position(self, arrow: Arrow, grid_mode:str = None) -> None:
+        initial_pos = self.initial_pos_calculator.get_initial_coords(arrow, grid_mode)
         adjustment = self.adjustment_calculator.get_adjustment(arrow)
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)

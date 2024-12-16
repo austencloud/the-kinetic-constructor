@@ -35,13 +35,17 @@ class PictographUpdater:
                 self.pictograph.vtg_glyph.set_vtg_mode()
                 self.pictograph.elemental_glyph.set_elemental_glyph()
                 self.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
+                self.grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
+                    self.pictograph.pictograph_dict
+                )
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self.pictograph.elemental_glyph.update_elemental_glyph()
-        self._position_objects()
+
+        self._position_objects(self.grid_mode)
         self.pictograph.reversal_symbol_manager.update_reversal_symbols()
 
     def get_end_pos(self) -> str:
@@ -206,9 +210,9 @@ class PictographUpdater:
             k: self._hashable_to_dict(v) if isinstance(v, tuple) else v for k, v in t
         }
 
-    def _position_objects(self) -> None:
-        self.pictograph.prop_placement_manager.update_prop_positions()
-        self.pictograph.arrow_placement_manager.update_arrow_placements()
+    def _position_objects(self, grid_mode: str = None) -> None:
+        self.pictograph.prop_placement_manager.update_prop_positions(grid_mode)
+        self.pictograph.arrow_placement_manager.update_arrow_placements(grid_mode)
 
     def update_dict_from_attributes(self) -> dict:
         pictograph_dict = self.pictograph.get.pictograph_dict()

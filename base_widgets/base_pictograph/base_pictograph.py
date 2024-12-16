@@ -9,7 +9,9 @@ from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson
     LessonPictographView,
 )
 
-from main_window.main_widget.learn_widget.codex_widget.codex_pictograph_view import CodexPictographView
+from main_window.main_widget.learn_widget.codex_widget.codex_pictograph_view import (
+    CodexPictographView,
+)
 from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_picker_pictograph_view import (
     StartPosPickerPictographView,
 )
@@ -103,10 +105,9 @@ class BasePictograph(QGraphicsScene):
         self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
+        self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
-        self.initializer.init_all_components()
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
         self.reversal_symbol_manager = ReversalSymbolManager(self)
-

@@ -107,21 +107,20 @@ class CodexRotationManager:
             view.pictograph.grid.__init__(
                 view.pictograph, view.pictograph.grid.grid_data, mode
             )
+        self.codex.main_widget.special_placement_loader.refresh_placements(mode)
 
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""
         for letter, view in self.codex.section_manager.pictograph_views.items():
             if letter in self.codex.pictograph_data:
                 pictograph_dict = self.codex.pictograph_data[letter]
+                grid_mode = self.codex.main_widget.grid_mode_checker.get_grid_mode(
+                    pictograph_dict
+                )
+                view.pictograph.arrow_placement_manager.default_positioner.__init__(
+                    view.pictograph.arrow_placement_manager, grid_mode
+                )
+
                 view.pictograph.updater.update_pictograph(pictograph_dict)
                 view.pictograph.updater.update_motions(pictograph_dict)
-                view.pictograph.updater.update_pictograph(pictograph_dict)
-                view.pictograph.updater.update_motions(pictograph_dict)
-                # update arrows
-                blue_arrow_dict, red_arrow_dict = (
-                    view.pictograph.updater.get_arrow_dicts(pictograph_dict)
-                )
-                view.pictograph.updater._update_arrows(
-                    blue_arrow_dict=blue_arrow_dict, red_arrow_dict=red_arrow_dict
-                )
                 view.scene().update()

@@ -28,7 +28,9 @@ import codecs
 
 
 class DefaultArrowPositioner:
-    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
+    def __init__(
+        self, placement_manager: "ArrowPlacementManager", grid_mode: str = None
+    ) -> None:
         self.placement_manager = placement_manager
         self.pictograph = placement_manager.pictograph
         self.diamond_placements_files = {
@@ -45,22 +47,23 @@ class DefaultArrowPositioner:
             DASH: "default_box_dash_placements.json",
             STATIC: "default_box_static_placements.json",
         }
-        self._load_all_default_placements()
+        self._load_all_default_placements(grid_mode)
 
-    def _load_all_default_placements(self):
+    def _load_all_default_placements(self, grid_mode: str = None) -> None:
         self.default_placements = {}
         motion_types = [PRO, ANTI, FLOAT, DASH, STATIC]
         for motion_type in motion_types:
             self.default_placements[motion_type] = (
-                self._load_default_placements_for_motion_type(motion_type)
+                self._load_default_placements_for_motion_type(motion_type, grid_mode)
             )
 
     def _load_default_placements_for_motion_type(
-        self, motion_type: str
+        self, motion_type: str, grid_mode: str = None
     ) -> dict[str, dict[str, list[int]]]:
-        grid_mode = (
-            self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        if not grid_mode:
+            grid_mode = (
+                self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+            )
         if grid_mode == DIAMOND:
             json_filename = self.diamond_placements_files.get(motion_type)
             json_path = get_images_and_data_path(
