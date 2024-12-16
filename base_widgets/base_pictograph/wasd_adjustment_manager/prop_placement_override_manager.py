@@ -47,7 +47,7 @@ class PropPlacementOverrideManager:
         override_key = self._generate_override_key(beta_ori)
         return adjustment_key_str, ori_key, override_key
 
-    def _is_mixed_ori(self):
+    def _is_mixed_ori(self) -> bool:
         return not (
             self.pictograph.check.ends_with_nonradial_ori()
             or self.pictograph.check.ends_with_radial_ori()

@@ -121,6 +121,7 @@ class PictographUpdater:
         turns = pictograph_dict[f"{color}_attributes"].get("turns", None)
         prop_rot_dir = pictograph_dict[f"{color}_attributes"].get("prop_rot_dir", None)
         loc = pictograph_dict[f"{color}_attributes"].get("loc", None)
+
         if turns or turns == 0:
             arrow_dict = {"turns": turns}
         elif prop_rot_dir:
@@ -213,3 +214,11 @@ class PictographUpdater:
         pictograph_dict = self.pictograph.get.pictograph_dict()
         self.pictograph.pictograph_dict = pictograph_dict
         return pictograph_dict
+
+    def update_motions(self, pictograph_dict):
+        if "blue_attributes" in pictograph_dict:
+            blue_attributes = pictograph_dict["blue_attributes"]
+            self.pictograph.blue_motion.updater.update_motion(blue_attributes)
+        if "red_attributes" in pictograph_dict:
+            red_attributes = pictograph_dict["red_attributes"]
+            self.pictograph.red_motion.updater.update_motion(red_attributes)

@@ -4,9 +4,7 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 class StaticDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        grid_mode = (
-            self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = self._get_grid_mode()
         if self.motion.prop_rot_dir == NO_ROT:
             return [(x, y), (-x, -y), (-y, x), (y, -x)]
 

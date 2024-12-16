@@ -1,3 +1,4 @@
+from typing import Literal
 from data.constants import (
     BOX,
     CCW_HANDPATH,
@@ -17,9 +18,7 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 class ShiftDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        grid_mode = (
-            self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = self._get_grid_mode()
         if grid_mode == DIAMOND:
             directional_tuples = {
                 PRO: self._generate_diamond_pro_directional_tuples,
@@ -33,6 +32,7 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
                 FLOAT: self._generate_box_float_directional_tuples,
             }
         return directional_tuples.get(self.motion.motion_type, [])(x, y)
+
 
     def _generate_diamond_pro_directional_tuples(
         self, x: int, y: int

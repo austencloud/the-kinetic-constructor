@@ -109,3 +109,4 @@ class BasePictograph(QGraphicsScene):
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
         self.reversal_symbol_manager = ReversalSymbolManager(self)
+

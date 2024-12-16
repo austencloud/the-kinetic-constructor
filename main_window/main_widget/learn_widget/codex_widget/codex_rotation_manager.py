@@ -17,18 +17,18 @@ class CodexRotationManager:
         if not self.codex.pictograph_data:
             return
 
-        self.rotation_steps = (self.rotation_steps + 1) % 8
+        self.rotation_steps = 1
         for letter, pictograph in self.codex.pictograph_data.items():
             if pictograph:
-                self._rotate_pictograph(pictograph)
-
+                dict = self._rotate_pictograph(pictograph)
+                self.codex.pictograph_data[letter] = dict
         # Update UI or grid modes if needed
         self.update_grid_mode()
         self.codex.section_manager.reload_sections()
         print("Codex rotated!")  # Replace with a UI message if required
         self._refresh_pictograph_views()
 
-    def _rotate_pictograph(self, pictograph_dict: dict):
+    def _rotate_pictograph(self, pictograph_dict: dict) -> dict:
         """Rotate a single pictograph dictionary."""
         for color in ["blue_attributes", "red_attributes"]:
             if color in pictograph_dict:
@@ -53,6 +53,7 @@ class CodexRotationManager:
                 pictograph_dict["end_pos"] = self.get_position_name(
                     bl["end_loc"], rl["end_loc"]
                 )
+        return pictograph_dict
 
     def _rotate_location(self, location: str, rotation_steps: int) -> str:
         """Rotate a single location by 45° increments."""
@@ -60,7 +61,8 @@ class CodexRotationManager:
             return location
         idx = self.loc_order.index(location)
         new_idx = (idx + rotation_steps) % len(self.loc_order)
-        return self.loc_order[new_idx]
+        new_loc = self.loc_order[new_idx]
+        return new_loc
 
     def get_position_name(self, left_loc: str, right_loc: str) -> str:
         """Retrieve position name from a map based on left and right locations."""
@@ -106,14 +108,20 @@ class CodexRotationManager:
                 view.pictograph, view.pictograph.grid.grid_data, mode
             )
 
-        self.codex.pictograph_data["grid_mode"] = mode
-
-        print(f"Grid mode updated to: {mode}")  # Replace with a UI message if necessary
-
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""
         for letter, view in self.codex.section_manager.pictograph_views.items():
             if letter in self.codex.pictograph_data:
                 pictograph_dict = self.codex.pictograph_data[letter]
                 view.pictograph.updater.update_pictograph(pictograph_dict)
+                view.pictograph.updater.update_motions(pictograph_dict)
+                view.pictograph.updater.update_pictograph(pictograph_dict)
+                view.pictograph.updater.update_motions(pictograph_dict)
+                # update arrows
+                blue_arrow_dict, red_arrow_dict = (
+                    view.pictograph.updater.get_arrow_dicts(pictograph_dict)
+                )
+                view.pictograph.updater._update_arrows(
+                    blue_arrow_dict=blue_arrow_dict, red_arrow_dict=red_arrow_dict
+                )
                 view.scene().update()

@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import QPointF, QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
@@ -47,8 +47,10 @@ class PictographInitializer:
     def init_all_components(self) -> None:
         self.pictograph.dragged_prop = None
         self.pictograph.dragged_arrow = None
-
-        self.pictograph.grid = self.init_grid()
+        grid_mode = (
+            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        self.pictograph.grid = self.init_grid(grid_mode)
         self.pictograph.locations = self.init_quadrant_boundaries(self.pictograph.grid)
         self.pictograph.motions = self.init_motions()
         self.pictograph.arrows = self.init_arrows()
@@ -72,15 +74,9 @@ class PictographInitializer:
     def set_nonradial_points_visibility(self, visible: bool) -> None:
         self.pictograph.grid.toggle_non_radial_points_visibility(visible)
 
-    def init_grid(self) -> Grid:
+    def init_grid(self, grid_mode: str) -> Grid:
         if not self.grid_initialized:
             try:
-                # Load grid mode
-                grid_mode = (
-                    self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-                )
-
-                # Load grid data from JSON
                 json_path = get_images_and_data_path("data/circle_coords.json")
                 with open(json_path, "r") as file:
                     data = json.load(file)
@@ -183,7 +179,6 @@ class PictographInitializer:
     def init_quadrant_boundaries(
         self, grid: Grid
     ) -> dict[Location, tuple[int, int, int, int]]:
-        # Access the center point using the stored grid_mode
         grid_center: QPoint = grid.center.toPoint()
 
         grid_center_x = grid_center.x()

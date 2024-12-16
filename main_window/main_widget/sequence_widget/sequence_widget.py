@@ -71,13 +71,13 @@ class SequenceWidget(QWidget):
             start_pos_dict = modified_sequence_json[1]
             start_pos = self.beat_frame.start_pos_view.start_pos
             start_pos.updater.update_pictograph(start_pos_dict)
-            start_pos.update_motions(start_pos_dict)
+            start_pos.updater.update_motions(start_pos_dict)
 
         for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
             if i < len(self.beat_frame.beats) and self.beat_frame.beats[i].is_filled:
                 beat = self.beat_frame.beats[i].beat
                 beat.updater.update_pictograph(beat_dict)
-                beat.update_motions(beat_dict)
+                beat.updater.update_motions(beat_dict)
             else:
                 break
 

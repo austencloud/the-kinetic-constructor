@@ -19,7 +19,7 @@ class SpecialPlacementLoader:
         }
 
     def load_special_placements(
-        self,
+        self, grid_mode: str
     ) -> dict[str, dict[str, dict[str, dict[str, int]]]]:
         for subfolder in [
             "from_layer1",
@@ -27,9 +27,7 @@ class SpecialPlacementLoader:
             "from_layer3_blue2_red1",
             "from_layer3_blue1_red2",
         ]:
-            grid_mode = (
-                self.main_widget.settings_manager.global_settings.get_grid_mode()
-            )
+
             directory = get_images_and_data_path(
                 f"data/arrow_placement/{grid_mode}/special/{subfolder}"
             )
@@ -42,18 +40,17 @@ class SpecialPlacementLoader:
                         self.special_placements[subfolder].update(data)
         return self.special_placements
 
-    def refresh_placements(self) -> None:
+    def refresh_placements(self, grid_mode: str = None) -> None:
         """Refreshes the special placements and updates all pictographs."""
-        self.main_widget.special_placements = self.load_special_placements()
+        if not grid_mode:
+            grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
+        self.main_widget.special_placements = self.load_special_placements(grid_mode)
 
         for _, pictograph_list in self.main_widget.pictograph_cache.items():
             for _, pictograph in pictograph_list.items():
-                grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
+                pictograph_grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
                     pictograph.pictograph_dict
                 )
-                if (
-                    grid_mode
-                    == self.main_widget.settings_manager.global_settings.get_grid_mode()
-                ):
+                if pictograph_grid_mode == grid_mode:
                     pictograph.updater.update_pictograph()
                     pictograph.update()
