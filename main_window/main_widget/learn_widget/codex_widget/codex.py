@@ -12,9 +12,15 @@ from PyQt6.QtWidgets import (
 )
 import logging
 
-from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import CodexColorSwapManager
-from main_window.main_widget.learn_widget.codex_widget.codex_mirror_manager import CodexMirrorManager
-from main_window.main_widget.learn_widget.codex_widget.codex_rotation_manager import CodexRotationManager
+from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import (
+    CodexColorSwapManager,
+)
+from main_window.main_widget.learn_widget.codex_widget.codex_mirror_manager import (
+    CodexMirrorManager,
+)
+from main_window.main_widget.learn_widget.codex_widget.codex_rotation_manager import (
+    CodexRotationManager,
+)
 
 from .codex_control_widget import CodexControlWidget
 from .codex_section_manager import CodexSectionManager
@@ -42,9 +48,6 @@ class Codex(QWidget):
     color_swap_btn: QPushButton
     orientation_selector: QComboBox
     animation: "QPropertyAnimation"
-
-
-
 
     def __init__(
         self, learn_widget: "LearnWidget", pictograph_data: dict[str, Optional[dict]]

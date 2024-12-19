@@ -67,7 +67,7 @@ class CodexSectionManager:
             return
 
         vertical_layout = QVBoxLayout()
-        vertical_layout.setSpacing(10)
+        vertical_layout.setSpacing(0)
         vertical_layout.setContentsMargins(0, 0, 0, 0)
 
         for row_index, row_letters in enumerate(self.custom_rows):
@@ -76,7 +76,7 @@ class CodexSectionManager:
                 continue
 
             horizontal_layout = QHBoxLayout()
-            horizontal_layout.setSpacing(20)
+            horizontal_layout.setSpacing(0)
             horizontal_layout.setContentsMargins(0, 0, 0, 0)
 
             needs_centering = len(current_letters) == 4 or len(current_letters) == 3
@@ -90,12 +90,11 @@ class CodexSectionManager:
                 horizontal_layout.addSpacerItem(outer_left_spacer)
                 logger.debug(f"Added outer left spacer for row {row_index + 1}.")
 
-            if needs_centering:
-                left_spacer = QSpacerItem(
-                    40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-                )
-                horizontal_layout.addSpacerItem(left_spacer)
-                logger.debug(f"Added left spacer for centering row {row_index + 1}.")
+            left_spacer = QSpacerItem(
+                40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+            )
+            horizontal_layout.addSpacerItem(left_spacer)
+            logger.debug(f"Added left spacer for centering row {row_index + 1}.")
 
             for letter_str in current_letters:
                 p_dict = self.codex.pictograph_data.get(letter_str, None)
@@ -125,12 +124,11 @@ class CodexSectionManager:
                 horizontal_layout.addSpacerItem(outer_right_spacer)
                 logger.debug(f"Added outer right spacer for row {row_index + 1}.")
 
-            if needs_centering:
-                right_spacer = QSpacerItem(
-                    40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-                )
-                horizontal_layout.addSpacerItem(right_spacer)
-                logger.debug(f"Added right spacer for centering row {row_index + 1}.")
+            right_spacer = QSpacerItem(
+                40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+            )
+            horizontal_layout.addSpacerItem(right_spacer)
+            logger.debug(f"Added right spacer for centering row {row_index + 1}.")
 
             vertical_layout.addLayout(horizontal_layout)
             logger.debug(f"Added horizontal layout and line for row {row_index + 1}.")
