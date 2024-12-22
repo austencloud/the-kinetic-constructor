@@ -11,9 +11,13 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 import logging
-
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import (
     CodexColorSwapManager,
+)
+from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import (
+    CodexDataManager,
 )
 from main_window.main_widget.learn_widget.codex_widget.codex_mirror_manager import (
     CodexMirrorManager,
@@ -49,18 +53,26 @@ class Codex(QWidget):
     orientation_selector: QComboBox
     animation: "QPropertyAnimation"
 
-    def __init__(
-        self, learn_widget: "LearnWidget", pictograph_data: dict[str, Optional[dict]]
-    ):
+    def __init__(self, learn_widget: "LearnWidget"):
         super().__init__(learn_widget)
         self.learn_widget = learn_widget
-        self.main_widget = learn_widget.main_widget
-        self.pictograph_data = pictograph_data
 
-        # Initialize managers
+        self.main_widget = learn_widget.main_widget
+        self.codex_shown = False
+
+        self.setMaximumWidth(0)  # Hidden initially
+
+        # Manipulation
         self.mirror_manager = CodexMirrorManager(self)
         self.color_swap_manager = CodexColorSwapManager(self)
         self.rotation_manager = CodexRotationManager(self)
+
+        # Toggle Button
+        self.codex_button = self.create_codex_button()
+
+        # Data
+        self.codex_data_manager = CodexDataManager(self.main_widget)
+        self.pictograph_data = self.codex_data_manager.get_pictograph_data()
 
         # Main layout for the Codex
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
@@ -106,6 +118,18 @@ class Codex(QWidget):
         self.section_manager.spacer_2.changeSize(20, self.height() // 30)
         super().resizeEvent(event)
 
-    def toggle_codex(self, show: bool):
+    def toggle_codex(self):
         """Toggle the visibility of the codex with animation."""
-        self.animation_manager.toggle_codex(show)
+        self.codex_shown = not self.codex_shown
+        self.animation_manager.toggle_codex(self.codex_shown)
+
+    def create_codex_button(self) -> QPushButton:
+        """Creates and returns the 'Codex' toggle button with styling."""
+        self.codex_button = QPushButton("Codex", self)
+        self.codex_button.setFixedHeight(30)
+        font = QFont()
+        font.setBold(True)
+        self.codex_button.setFont(font)
+        self.codex_button.clicked.connect(self.toggle_codex)
+        self.codex_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        return self.codex_button

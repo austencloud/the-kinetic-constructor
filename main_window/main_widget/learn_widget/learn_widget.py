@@ -3,17 +3,16 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QVBoxLayout,
-    QPushButton,
     QFrame,
     QStackedLayout,
     QSplitter,
 )
-from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
-from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import CodexDataManager
-
+from .lesson_1.lesson_1_widget import Lesson1Widget
+from .lesson_2.lesson_2_widget import Lesson2Widget
+from .lesson_3.lesson_3_widget import Lesson3Widget
+from .base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
+from .lesson_selector import LessonSelector
 from .codex_widget.codex import Codex
 
 if TYPE_CHECKING:
@@ -24,6 +23,7 @@ class LearnWidget(QWidget):
     """Widget for the learning module, managing lesson selection and individual lessons."""
 
     def __init__(self, main_widget: "MainWidget") -> None:
+        """Initializes LearnWidget with references to the main widget and settings."""
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.background_manager = None
@@ -31,16 +31,25 @@ class LearnWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
 
-        # Initialize PictographDataManager
-        self.codex_data_manager = CodexDataManager(self.main_widget)
-        initial_codex_data = self.codex_data_manager.get_pictograph_data()
+        self._setup_components()
+        self._setup_ui()
 
-        # Lesson widgets
-        self.lesson_selector = self._create_lesson_selector()
-        self.lesson_1_widget = self._create_lesson_1_widget()
-        self.lesson_2_widget = self._create_lesson_2_widget()
-        self.lesson_3_widget = self._create_lesson_3_widget()
+    def _setup_components(self):
+        self.lesson_selector = LessonSelector(self)
+        self.lesson_1_widget = Lesson1Widget(self)
+        self.lesson_2_widget = Lesson2Widget(self)
+        self.lesson_3_widget = Lesson3Widget(self)
+        self.codex = Codex(self)
 
+    def _setup_ui(self) -> None:
+        """Orchestrates creation of the main UI components and layout."""
+        self._setup_stacked_layout()
+        self._setup_right_side()
+        self._setup_main_splitter()
+        self._setup_main_layout()
+
+    def _setup_stacked_layout(self) -> None:
+        """Creates the QStackedLayout to hold the lesson selector and lesson widgets."""
         self.stack_layout = QStackedLayout()
         self.stack_layout.addWidget(self.lesson_selector)
         self.stack_layout.addWidget(self.lesson_1_widget)
@@ -48,98 +57,32 @@ class LearnWidget(QWidget):
         self.stack_layout.addWidget(self.lesson_3_widget)
         self.stack_layout.setCurrentWidget(self.lesson_selector)
 
-        # Main layout using QSplitter for smoother resizing
-        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
-        self.main_splitter.setContentsMargins(0, 0, 0, 0)
-        self.main_splitter.setHandleWidth(0)  # Hide splitter handle for a cleaner look
-
-        # Codex panel
-        self.codex_shown = False
-        self.codex_panel = Codex(self, initial_codex_data)
-        self.codex_panel.setMaximumWidth(0)  # Hidden initially
-
-        # Right side with a top bar (Codex button) and stack_layout
-        right_side = QWidget()
-        right_layout = QVBoxLayout(right_side)
+    def _setup_right_side(self) -> QWidget:
+        """Creates the right-side widget, including the top bar and content frame."""
+        self.right_side = QWidget()
+        right_layout = QVBoxLayout(self.right_side)
         right_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.codex_button = QPushButton("Codex", self)
-        self.codex_button.setFixedHeight(30)
-        font = QFont()
-        font.setBold(True)
-        self.codex_button.setFont(font)
-        self.codex_button.clicked.connect(self.toggle_codex)
-
         top_bar_layout = QHBoxLayout()
-        top_bar_layout.addWidget(self.codex_button)
+        top_bar_layout.addWidget(self.codex.codex_button)
         top_bar_layout.addStretch()
-
         right_layout.addLayout(top_bar_layout)
+
         content_frame = QFrame()
         content_frame.setLayout(self.stack_layout)
         right_layout.addWidget(content_frame)
 
-        # Add Codex and right_side to splitter
-        self.main_splitter.addWidget(self.codex_panel)
-        self.main_splitter.addWidget(right_side)
+    def _setup_main_splitter(self) -> None:
+        """Sets up the main QSplitter, holding the Codex panel and right-side widget."""
+        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.main_splitter.setContentsMargins(0, 0, 0, 0)
+        self.main_splitter.setHandleWidth(0)
+        self.main_splitter.addWidget(self.codex)
+        self.main_splitter.addWidget(self.right_side)
 
-        # Wrap the QSplitter in a QVBoxLayout
+    def _setup_main_layout(self) -> None:
+        """Sets the final QVBoxLayout for the LearnWidget."""
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.main_splitter)
-        layout.setContentsMargins(0, 0, 0, 0)  # Optional: adjust margins
         self.setLayout(layout)
-
-    def toggle_codex(self):
-        self.codex_shown = not self.codex_shown
-        self.codex_panel.toggle_codex(self.codex_shown)
-
-    def show_lesson_selection_widget(self) -> None:
-        """Show the lesson selection screen."""
-        self.stack_layout.setCurrentWidget(self.lesson_selector)
-
-    def start_lesson(self, lesson_number: int) -> None:
-        """Start the specified lesson."""
-        lesson_widgets: list[BaseLessonWidget] = [
-            self.lesson_1_widget,
-            self.lesson_2_widget,
-            self.lesson_3_widget,
-        ]
-        if 1 <= lesson_number <= len(lesson_widgets):
-            lesson_widget = lesson_widgets[lesson_number - 1]
-            self.stack_layout.setCurrentWidget(lesson_widget)
-            lesson_widget.prepare_quiz_ui()
-
-    def update_background_manager(self, bg_type: str):
-        if self.background_manager:
-            self.background_manager.stop_animation()
-        self.background_manager = self.global_settings.setup_background_manager(self)
-        self.background_manager.update_required.connect(self.update)
-        self.background_manager.start_animation()
-        self.update()
-
-    # Placeholder methods for creating lesson widgets
-    def _create_lesson_selector(self):
-        from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
-
-        return LessonSelector(self)
-
-    def _create_lesson_1_widget(self):
-        from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import (
-            Lesson1Widget,
-        )
-
-        return Lesson1Widget(self)
-
-    def _create_lesson_2_widget(self):
-        from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import (
-            Lesson2Widget,
-        )
-
-        return Lesson2Widget(self)
-
-    def _create_lesson_3_widget(self):
-        from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import (
-            Lesson3Widget,
-        )
-
-        return Lesson3Widget(self)

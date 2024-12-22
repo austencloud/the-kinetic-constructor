@@ -3,6 +3,10 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PyQt6.QtCore import Qt
 from functools import partial
 
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
+    BaseLessonWidget,
+)
+
 from .lesson_mode_toggle_widget import LessonModeToggleWidget
 
 if TYPE_CHECKING:
@@ -44,17 +48,17 @@ class LessonSelector(QWidget):
         self.add_lesson_button(
             "Lesson 1",
             "Match the correct letter to the given pictograph",
-            partial(self.learn_widget.start_lesson, 1),
+            partial(self.start_lesson, 1),
         )
         self.add_lesson_button(
             "Lesson 2",
             "Identify the correct pictograph for the displayed letter",
-            partial(self.learn_widget.start_lesson, 2),
+            partial(self.start_lesson, 2),
         )
         self.add_lesson_button(
             "Lesson 3",
             "Choose the pictograph that logically follows",
-            partial(self.learn_widget.start_lesson, 3),
+            partial(self.start_lesson, 3),
         )
 
         self.layout.addStretch(2)
@@ -93,7 +97,6 @@ class LessonSelector(QWidget):
         """Resize title, buttons, and descriptions based on window size."""
         self._resize_title_label()
         self._resize_lesson_layouts()
-        self._resize_toggle_button()
         super().resizeEvent(event)
 
     def _resize_title_label(self):
@@ -133,5 +136,19 @@ class LessonSelector(QWidget):
             font.setPointSize(description_font_size)
             description.setFont(font)
 
-    def _resize_toggle_button(self):
-        button_font_size = self.main_widget.width() // 60
+
+    def start_lesson(self, lesson_number: int) -> None:
+        """Starts the specified lesson by switching to its widget in the stacked layout."""
+        lesson_widgets: list[BaseLessonWidget] = [
+            self.learn_widget.lesson_1_widget,
+            self.learn_widget.lesson_2_widget,
+            self.learn_widget.lesson_3_widget,
+        ]
+        if 1 <= lesson_number <= len(lesson_widgets):
+            lesson_widget = lesson_widgets[lesson_number - 1]
+            self.learn_widget.stack_layout.setCurrentWidget(lesson_widget)
+            lesson_widget.prepare_quiz_ui()
+
+    def show(self) -> None:
+        """Show the LessonSelector widget."""
+        self.learn_widget.stack_layout.setCurrentWidget(self)

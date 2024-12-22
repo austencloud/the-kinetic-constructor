@@ -134,7 +134,7 @@ class BaseLessonWidget(QWidget):
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""
         self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(self.learn_widget.show_lesson_selection_widget)
+        self.back_button.clicked.connect(self.learn_widget.lesson_selector.show)
         self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.back_layout.addWidget(self.back_button)
         self.back_layout.addStretch(1)
