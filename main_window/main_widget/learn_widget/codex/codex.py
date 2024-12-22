@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 
+from main_window.main_widget.learn_widget.codex.codex_ori_selector import CodexOriSelector
 from main_window.main_widget.learn_widget.codex.codex_toggle_button import (
     CodexToggleButton,
 )
@@ -38,16 +39,8 @@ logging.basicConfig(
 
 
 class Codex(QWidget):
-    """Container widget for the Codex, managing pictographs and global modifications."""
-
-    rotate_btn: QPushButton
-    mirror_btn: QPushButton
-    color_swap_btn: QPushButton
-    orientation_selector: QComboBox
-    animation: "QPropertyAnimation"
-
+    """ Displays all pictographs with a control panel to modify them. """
     def __init__(self, learn_widget: "LearnWidget"):
-        """Initializes the Codex with reference to the parent LearnWidget."""
         super().__init__(learn_widget)
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget

@@ -83,7 +83,7 @@ class FontColorUpdater:
         self._update_build_tab(main_widget, font_color)
         self._update_generate_tab(main_widget, font_color)
         self._update_browse_tab(main_widget, font_color)
-        self._update_learn_tab(main_widget, font_color)
+        self._update_learn_widget(main_widget, font_color)
         self._update_act_tab(main_widget, font_color)
 
     def _update_act_tab(self, main_widget: "MainWidget", font_color: str) -> None:
@@ -197,7 +197,7 @@ class FontColorUpdater:
             thumbnail_box.word_label.reload_favorite_icon()
             self._apply_font_color(thumbnail_box.variation_number_label, font_color)
 
-    def _update_learn_tab(self, main_widget: "MainWidget", font_color: str) -> None:
+    def _update_learn_widget(self, main_widget: "MainWidget", font_color: str) -> None:
         learn_widget = main_widget.learn_widget
         self._apply_font_color(learn_widget.lesson_selector.title_label, font_color)
         self._apply_font_colors(
@@ -213,3 +213,5 @@ class FontColorUpdater:
             self._apply_font_color(lesson_widget.question_widget, font_color)
             self._apply_font_color(lesson_widget.progress_label, font_color)
             self._apply_font_color(lesson_widget.result_label, font_color)
+
+        self._apply_font_color(learn_widget.codex.control_widget.ori_selector.start_ori_label, font_color)

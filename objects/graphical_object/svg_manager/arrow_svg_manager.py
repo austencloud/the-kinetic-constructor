@@ -24,18 +24,11 @@ class ArrowSvgManager:
 
     def _get_arrow_svg_file(self, arrow: "Arrow") -> str:
         start_ori = arrow.motion.start_ori
-        if arrow.motion.motion_type == FLOAT:  # Handle the float case
+        if arrow.motion.motion_type == FLOAT: 
             return get_images_and_data_path("images/arrows/float.svg")
         arrow_turns: Union[str, int, float] = arrow.motion.turns
         if isinstance(arrow_turns, (int, float)):
             turns = float(arrow_turns)
-        # elif arrow_turns == "fl":
-        #     turns = "fl"
-        # if turns == "fl":
-        #     arrow.motion.prefloat_motion_type = arrow.motion.motion_type
-        #     arrow.motion.prefloat_prop_rot_dir = arrow.motion.prop_rot_dir
-        #     arrow.motion.motion_type = FLOAT
-        #     arrow.motion.prop_rot_dir = NO_ROT
             
         if not turns == "fl":
             if start_ori in [IN, OUT]:
@@ -48,8 +41,6 @@ class ArrowSvgManager:
                     f"images/arrows/{arrow.motion.motion_type}/from_nonradial/"
                     f"{arrow.motion.motion_type}_{turns}.svg"
                 )
-        # if turns == "fl":
-        #     return get_images_and_data_path("images/arrows/float.svg")
 
     def _setup_arrow_svg_renderer(self, arrow: "Arrow", svg_data: str) -> None:
         renderer = QSvgRenderer()
