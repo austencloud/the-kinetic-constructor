@@ -1,11 +1,9 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QWidget,
     QVBoxLayout,
     QHBoxLayout,
     QSpacerItem,
     QSizePolicy,
-    QFrame,
 )
 import logging
 from Enums.letters import LetterType
@@ -41,7 +39,7 @@ class CodexSectionManager:
             ["α", "β", "Γ"],
         ]
 
-    def load_sections(self):
+    def setup_sections(self):
         for letter_type in LetterType:
             self.load_letter_type_section(letter_type)
 

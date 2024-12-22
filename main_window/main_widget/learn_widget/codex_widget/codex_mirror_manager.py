@@ -2,13 +2,14 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.codex_widget.codex import Codex
-
+    from main_window.main_widget.learn_widget.codex_widget.codex_manipulation_manager import CodexManipulationManager
+    from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import CodexColorSwapManager
 
 class CodexMirrorManager:
     """Handles mirroring of pictographs in the Codex."""
 
-    def __init__(self, codex: "Codex"):
-        self.codex = codex
+    def __init__(self, manip_manager: "CodexManipulationManager"):
+        self.codex = manip_manager.codex
         # Define mappings for mirroring positions and locations
         self.vertical_mirror_positions = {
             "alpha1": "alpha1",

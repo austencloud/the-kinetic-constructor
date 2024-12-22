@@ -2,12 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import (
     QPropertyAnimation,
     QRect,
-    QPoint,
     QEasingCurve,
     QObject,
     QAbstractAnimation,
 )
-from PyQt6.QtWidgets import QGraphicsOpacityEffect, QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QGraphicsOpacityEffect
 from PyQt6.QtCore import QParallelAnimationGroup
 import logging
 

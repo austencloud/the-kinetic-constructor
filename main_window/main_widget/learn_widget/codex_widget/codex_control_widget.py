@@ -21,13 +21,14 @@ class CodexControlWidget(QWidget):
     def setup_ui(self):
         # Create buttons and orientation selector
         self.rotate_btn = self._create_button(
-            "rotate.png", self.codex.rotation_manager.rotate_codex
+            "rotate.png", self.codex.manipulation_manager.rotation_manager.rotate_codex
         )
         self.mirror_btn = self._create_button(
-            "mirror.png", self.codex.mirror_manager.mirror_codex
+            "mirror.png", self.codex.manipulation_manager.mirror_manager.mirror_codex
         )
         self.color_swap_btn = self._create_button(
-            "yinyang1.png", self.codex.color_swap_manager.swap_colors_in_codex
+            "yinyang1.png",
+            self.codex.manipulation_manager.color_swap_manager.swap_colors_in_codex,
         )
         self.orientation_selector = self._create_selector(
             ["in", "clock", "out", "counter"]
@@ -48,7 +49,7 @@ class CodexControlWidget(QWidget):
         self.setLayout(self.layout)
         self.layout.addLayout(self.top_layout)
         self.layout.addWidget(self.orientation_selector)
-        
+
         self.setStyleSheet(
             """
             QWidget {

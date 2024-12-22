@@ -3,18 +3,25 @@
 from typing import TYPE_CHECKING
 import logging
 
+from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import CodexColorSwapManager
+from main_window.main_widget.learn_widget.codex_widget.codex_mirror_manager import CodexMirrorManager
+from main_window.main_widget.learn_widget.codex_widget.codex_rotation_manager import CodexRotationManager
+
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.codex_widget.codex import Codex
 
 logger = logging.getLogger(__name__)
 
 
-class CodexModificationManager:
+class CodexManipulationManager:
     """Manages global modifications for the CodexWidget."""
 
     def __init__(self, codex: "Codex"):
         self.codex = codex
-        self.setup_connections()
+
+        self.mirror_manager = CodexMirrorManager(self)
+        self.color_swap_manager = CodexColorSwapManager(self)
+        self.rotation_manager = CodexRotationManager(self)
 
     def setup_connections(self):
         logger.debug("Setting up connections for global modifications.")

@@ -64,7 +64,7 @@ class LearnWidget(QWidget):
         right_layout.setContentsMargins(0, 0, 0, 0)
 
         top_bar_layout = QHBoxLayout()
-        top_bar_layout.addWidget(self.codex.codex_button)
+        top_bar_layout.addWidget(self.codex.toggle_button)
         top_bar_layout.addStretch()
         right_layout.addLayout(top_bar_layout)
 
