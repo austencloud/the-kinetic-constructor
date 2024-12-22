@@ -67,7 +67,9 @@ class MainWidgetManager:
 
     def _setup_special_placements(self) -> None:
         self.main_widget.special_placements = (
-            self.main_widget.special_placement_loader.load_special_placements()
+            self.main_widget.special_placement_loader.load_special_placements(
+                self.main_widget.settings_manager.global_settings.get_grid_mode()
+            )
         )
 
     def _setup_letters(self) -> None:
@@ -108,7 +110,10 @@ class MainWidgetManager:
             adjustment_panel = (
                 self.main_widget.sequence_widget.graph_editor.adjustment_panel
             )
-            for picker in [adjustment_panel.blue_ori_picker, adjustment_panel.red_ori_picker]:
+            for picker in [
+                adjustment_panel.blue_ori_picker,
+                adjustment_panel.red_ori_picker,
+            ]:
                 picker.ori_picker_widget.ori_setter.set_orientation(IN)
             pictograph_container = (
                 self.main_widget.sequence_widget.graph_editor.pictograph_container

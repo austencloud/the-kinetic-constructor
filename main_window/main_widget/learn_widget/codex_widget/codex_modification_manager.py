@@ -19,35 +19,17 @@ class CodexModificationManager:
     def setup_connections(self):
         logger.debug("Setting up connections for global modifications.")
         # Accessing buttons from the parent's control_widget
-        self.codex.control_widget.rotate_btn.clicked.connect(self.rotate_all)
+        # self.codex.control_widget.rotate_btn.clicked.connect(self.rotate_all)
         self.codex.control_widget.mirror_btn.clicked.connect(self.mirror_all)
         self.codex.control_widget.color_swap_btn.clicked.connect(self.color_swap_all)
         self.codex.control_widget.orientation_selector.currentTextChanged.connect(
             self.update_orientation_all
         )
 
-    def rotate_all(self):
-        logger.info("Rotate action triggered.")
-        try:
-            sequence_rotation_manager = (
-                self.codex.main_widget.sequence_widget.rotation_manager
-            )
-            for letter_str, view in self.codex.section_manager.letter_views.items():
-                scene = view.pictograph
-                if scene.pictograph_dict:
-                    rotated_pictograph_dict = scene.pictograph_dict.copy()
-                    sequence_rotation_manager.rotate_pictograph(
-                        rotated_pictograph_dict, 1
-                    )
-                    scene.updater.update_pictograph(rotated_pictograph_dict)
-                    logger.debug(f"Rotated pictograph for letter '{letter_str}'.")
-        except Exception as e:
-            logger.exception(f"Error during rotate_all: {e}")
-
     def mirror_all(self):
         logger.info("Mirror action triggered.")
         try:
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     # Implement actual mirror logic here
@@ -59,7 +41,7 @@ class CodexModificationManager:
     def color_swap_all(self):
         logger.info("Color Swap action triggered.")
         try:
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     # Implement actual color swap logic here
@@ -71,7 +53,7 @@ class CodexModificationManager:
     def update_orientation_all(self, orientation: str):
         logger.info(f"Orientation update triggered to '{orientation}'.")
         try:
-            for letter_str, view in self.codex.section_manager.letter_views.items():
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     new_dict = scene.pictograph_dict.copy()

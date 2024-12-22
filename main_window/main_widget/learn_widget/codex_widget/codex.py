@@ -12,6 +12,16 @@ from PyQt6.QtWidgets import (
 )
 import logging
 
+from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import (
+    CodexColorSwapManager,
+)
+from main_window.main_widget.learn_widget.codex_widget.codex_mirror_manager import (
+    CodexMirrorManager,
+)
+from main_window.main_widget.learn_widget.codex_widget.codex_rotation_manager import (
+    CodexRotationManager,
+)
+
 from .codex_control_widget import CodexControlWidget
 from .codex_section_manager import CodexSectionManager
 from .codex_modification_manager import CodexModificationManager
@@ -47,27 +57,33 @@ class Codex(QWidget):
         self.main_widget = learn_widget.main_widget
         self.pictograph_data = pictograph_data
 
-        # Set size policy to allow maximumWidth to be animated
-        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
-        self.setMaximumWidth(0)  # Start hidden
+        # Initialize managers
+        self.mirror_manager = CodexMirrorManager(self)
+        self.color_swap_manager = CodexColorSwapManager(self)
+        self.rotation_manager = CodexRotationManager(self)
 
-        # Main layout for the entire Codex widget
+        # Main layout for the Codex
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        self.setMaximumWidth(0)
+
         self.main_vlayout = QVBoxLayout(self)
         self.main_vlayout.setContentsMargins(0, 0, 0, 0)
         self.main_vlayout.setSpacing(0)
 
+        # Control widget with buttons
         self.control_widget = CodexControlWidget(self)
         self.main_vlayout.addWidget(self.control_widget)
 
+        # Scroll area for displaying content
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
+        self.main_vlayout.addWidget(self.scroll_area)
 
+        # Set up content area
         content_widget = QWidget()
         self.content_layout = QVBoxLayout(content_widget)
-        self.content_layout.setContentsMargins(0, 0, 0, 0)
-        self.content_layout.setSpacing(0)
-
         self.scroll_area.setWidget(content_widget)
+
         self.lower_hbox = QHBoxLayout()
 
         self.main_vlayout.addWidget(self.scroll_area)

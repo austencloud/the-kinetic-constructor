@@ -1,13 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QApplication, QMenu
 from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import (
-    QMouseEvent,
-    QCursor,
-    QKeyEvent,
-    QAction,
-    QContextMenuEvent
-)
+from PyQt6.QtGui import QMouseEvent, QCursor, QKeyEvent, QAction, QContextMenuEvent
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
@@ -16,8 +10,8 @@ from base_widgets.base_pictograph.pictograph_context_menu_handler import (
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
-from base_widgets.base_pictograph.pictograph_view_mouse_event_handler import (
-    PictographViewMouseEventHandler,
+from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
+    GE_PictographViewMouseEventHandler,
 )
 
 
@@ -45,7 +39,7 @@ class OptionPickerPictographView(BorderedPictographView):
         self.grabGesture(Qt.GestureType.TapGesture)
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
 
-        self.mouse_event_handler = PictographViewMouseEventHandler(self)
+        # self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
 
@@ -115,7 +109,9 @@ class OptionPickerPictographView(BorderedPictographView):
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
-            self.mouse_event_handler.handle_mouse_press(event)
+            self.pictograph.main_widget.manual_builder.option_picker.manual_builder.option_click_handler.on_option_clicked(
+                self.pictograph
+            )
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
@@ -128,17 +124,6 @@ class OptionPickerPictographView(BorderedPictographView):
         else:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.pictograph.view.set_gold_border()
-
-    def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
-            GraphEditorPictographContainer,
-        )
-
-        if isinstance(self.parent(), GraphEditorPictographContainer):
-            if self.mouse_event_handler.is_arrow_under_cursor(event):
-                self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            else:
-                self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
     def leaveEvent(self, event: QEvent) -> None:
         self.setStyleSheet("")

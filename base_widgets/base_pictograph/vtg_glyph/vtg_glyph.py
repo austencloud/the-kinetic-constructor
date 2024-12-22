@@ -1,3 +1,4 @@
+from math import pi
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
@@ -30,6 +31,7 @@ from data.constants import (
     TOG_OPP,
     TOG_SAME,
 )
+from main_window.main_widget import grid_mode_checker, pcitograph_dict_loader
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -79,8 +81,8 @@ class VTG_Glyph(QGraphicsSvgItem):
         letter_str = self.pictograph.letter.value
         mode = self.pictograph.vtg_mode
         start_pos = self.pictograph.start_pos
-        grid_mode = (
-            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
+            self.pictograph.pictograph_dict
         )
         if grid_mode == DIAMOND:
             if letter_str in ["A", "B", "C"]:

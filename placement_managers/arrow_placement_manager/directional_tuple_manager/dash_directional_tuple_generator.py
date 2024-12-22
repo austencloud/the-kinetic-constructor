@@ -26,9 +26,8 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 class DashDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        grid_mode = (
-            self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = self._get_grid_mode()
+
         if grid_mode == DIAMOND:
             if (
                 self.motion.pictograph.letter_type == LetterType.Type5

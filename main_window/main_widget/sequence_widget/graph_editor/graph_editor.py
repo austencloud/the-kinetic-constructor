@@ -8,6 +8,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.sequence_widget.graph_editor.arrow_selection_manager import (
+    ArrowSelectionManager,
+)
+
 from .graph_editor_layout_manager import GraphEditorLayoutManager
 from .graph_editor_state_manager import GraphEditorStateManager
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
@@ -39,6 +43,7 @@ class GraphEditor(QFrame):
         self.hide()
 
     def _setup_components(self) -> None:
+        self.arrow_selection_manager = ArrowSelectionManager(self)
         self.pictograph_container = GraphEditorPictographContainer(self)
         self.adjustment_panel = BeatAdjustmentPanel(self)
         self.layout_manager = GraphEditorLayoutManager(self)

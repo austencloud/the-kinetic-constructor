@@ -86,6 +86,16 @@ class OptionGetter:
                 for dict in dict_list:
                     if dict[START_POS] == start_pos:
                         next_options.append(dict)
+                        
+        # we need to get the end orientation of the last item in the sequence and set the start otientations of 
+        # each next option to it, then use the JsonOrientationValidationEngine to validate and update the new end ori for each option
+        for option in next_options:
+            option["blue_attributes"]["start_ori"] = last_pictograph_dict["blue_attributes"]["end_ori"]
+            option["red_attributes"]["start_ori"] = last_pictograph_dict["red_attributes"]["end_ori"]
+            self.json_manager.ori_validation_engine.validate_single_pictograph(
+                option, last_pictograph_dict
+            )
+                        
         return next_options
 
     def _apply_filters(self, sequence: list, options: list, filters: dict):

@@ -82,6 +82,8 @@ class OrientationSetter:
                         }
                     }
                 )
+
+
         # propogate the change through the beat frame
         self.beat_frame.updater.update_beats_from_json()
 

@@ -16,6 +16,7 @@ from data.constants import (
     WEST,
     EAST,
 )
+from objects import grid
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop
@@ -49,9 +50,10 @@ class PropRotAngleManager:
         return rotation_angle if self.prop.prop_type != PropType.Hand else 0
 
     def update_prop_rot_angle(self) -> None:
-        grid_mode = (
-            self.prop.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        if self.prop.loc in ["n", "e", "s", "w"]:
+            grid_mode = DIAMOND
+        elif self.prop.loc in ["ne", "nw", "se", "sw"]:
+            grid_mode = BOX
         if grid_mode == DIAMOND:
             prop_rotation_angle = self.get_diamond_rotation_angle()
         elif grid_mode == BOX:

@@ -20,7 +20,10 @@ class ArrowMovementManager:
     def handle_arrow_movement(
         self, pictograph: "BasePictograph", key, shift_held, ctrl_held
     ) -> None:
-        if not pictograph.selected_arrow:
+        self.graph_editor = pictograph.main_widget.sequence_widget.graph_editor
+        selected_arrow = self.graph_editor.arrow_selection_manager.selected_arrow
+
+        if not selected_arrow:
             return
 
         adjustment_increment = 5
@@ -31,11 +34,9 @@ class ArrowMovementManager:
 
         adjustment = self.get_adjustment(key, adjustment_increment)
 
-        self.data_updater.update_arrow_adjustments_in_json(
-            adjustment, self.pictograph.selected_arrow
-        )
+        self.data_updater.update_arrow_adjustments_in_json(adjustment, selected_arrow)
         self.data_updater.mirrored_entry_manager.update_mirrored_entry_in_json(
-            self.pictograph.selected_arrow
+            selected_arrow
         )
         pictograph.arrow_placement_manager.update_arrow_placements()
         QApplication.processEvents()
@@ -47,8 +48,9 @@ class ArrowMovementManager:
         visible_pictographs = []
         for pictograph_list in self.pictograph.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():
-                if pictograph.view.isVisible():
-                    visible_pictographs.append(pictograph)
+                if pictograph.view:
+                    if pictograph.view.isVisible():
+                        visible_pictographs.append(pictograph)
         return visible_pictographs
 
     def get_adjustment(self, key, increment) -> tuple[int, int]:

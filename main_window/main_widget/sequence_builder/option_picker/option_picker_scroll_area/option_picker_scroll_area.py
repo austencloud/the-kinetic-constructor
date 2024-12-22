@@ -67,7 +67,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for i, pictograph_dict in enumerate(next_options):
             # Get a pictograph from our pool
             if i >= len(self.option_picker.pictograph_pool):
-                break  
+                break
             p = self.option_picker.pictograph_pool[i]
 
             p.updater.update_pictograph(pictograph_dict)
@@ -79,7 +79,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             )
             p.blue_reversal = reversal_info.get("blue_reversal", False)
             p.red_reversal = reversal_info.get("red_reversal", False)
-
 
             # Insert into layout
             self.display_manager.add_pictograph_to_section_layout(p)
