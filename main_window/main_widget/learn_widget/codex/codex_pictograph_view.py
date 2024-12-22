@@ -5,7 +5,7 @@ from PyQt6.QtGui import QCursor, QAction, QContextMenuEvent
 from base_widgets.base_pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
+    from main_window.main_widget.learn_widget.codex.codex import Codex
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 

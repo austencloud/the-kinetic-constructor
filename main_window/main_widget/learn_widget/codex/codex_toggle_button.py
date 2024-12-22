@@ -4,7 +4,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
+    from main_window.main_widget.learn_widget.codex.codex import Codex
 
 
 class CodexToggleButton(QPushButton):

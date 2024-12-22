@@ -9,7 +9,7 @@ from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
+    from main_window.main_widget.learn_widget.codex.codex import Codex
 
 
 class CodexSectionTypeLabel(QLabel):

@@ -2,10 +2,19 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QComboBox, QVBoxLayout
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
+from main_window.main_widget.learn_widget.codex.codex_color_swap_manager import (
+    CodexColorSwapManager,
+)
+from main_window.main_widget.learn_widget.codex.codex_mirror_manager import (
+    CodexMirrorManager,
+)
+from main_window.main_widget.learn_widget.codex.codex_rotation_manager import (
+    CodexRotationManager,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
+    from main_window.main_widget.learn_widget.codex.codex import Codex
 
 
 class CodexControlWidget(QWidget):
@@ -16,19 +25,21 @@ class CodexControlWidget(QWidget):
     def __init__(self, codex: "Codex"):
         super().__init__(codex)
         self.codex = codex
+        self.mirror_manager = CodexMirrorManager(self)
+        self.color_swap_manager = CodexColorSwapManager(self)
+        self.rotation_manager = CodexRotationManager(self)
         self.setup_ui()
 
     def setup_ui(self):
-        # Create buttons and orientation selector
         self.rotate_btn = self._create_button(
-            "rotate.png", self.codex.manipulation_manager.rotation_manager.rotate_codex
+            "rotate.png", self.rotation_manager.rotate_codex
         )
         self.mirror_btn = self._create_button(
-            "mirror.png", self.codex.manipulation_manager.mirror_manager.mirror_codex
+            "mirror.png", self.mirror_manager.mirror_codex
         )
         self.color_swap_btn = self._create_button(
             "yinyang1.png",
-            self.codex.manipulation_manager.color_swap_manager.swap_colors_in_codex,
+            self.color_swap_manager.swap_colors_in_codex,
         )
         self.orientation_selector = self._create_selector(
             ["in", "clock", "out", "counter"]

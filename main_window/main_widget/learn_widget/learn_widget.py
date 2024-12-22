@@ -13,7 +13,7 @@ from .lesson_2.lesson_2_widget import Lesson2Widget
 from .lesson_3.lesson_3_widget import Lesson3Widget
 from .base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
 from .lesson_selector import LessonSelector
-from .codex_widget.codex import Codex
+from .codex.codex import Codex
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget

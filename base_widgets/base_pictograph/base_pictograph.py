@@ -9,7 +9,7 @@ from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson
     LessonPictographView,
 )
 
-from main_window.main_widget.learn_widget.codex_widget.codex_pictograph_view import (
+from main_window.main_widget.learn_widget.codex.codex_pictograph_view import (
     CodexPictographView,
 )
 from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_picker_pictograph_view import (

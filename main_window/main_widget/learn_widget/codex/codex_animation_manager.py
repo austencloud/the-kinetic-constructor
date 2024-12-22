@@ -11,7 +11,7 @@ from PyQt6.QtCore import QParallelAnimationGroup
 import logging
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
+    from main_window.main_widget.learn_widget.codex.codex import Codex
 
 logger = logging.getLogger(__name__)
 

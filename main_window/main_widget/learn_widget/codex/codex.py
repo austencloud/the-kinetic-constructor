@@ -11,17 +11,17 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 
-from main_window.main_widget.learn_widget.codex_widget.codex_toggle_button import (
+from main_window.main_widget.learn_widget.codex.codex_toggle_button import (
     CodexToggleButton,
 )
 
 from .codex_control_widget import CodexControlWidget
 from .codex_section_manager import CodexSectionManager
-from .codex_manipulation_manager import CodexManipulationManager
+
 from .codex_animation_manager import CodexAnimationManager
 from .codex_size_manager import CodexSizeManager
 
-from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import (
+from main_window.main_widget.learn_widget.codex.codex_data_manager import (
     CodexDataManager,
 )
 
@@ -56,7 +56,6 @@ class Codex(QWidget):
         self.setMaximumWidth(0)
 
         self.section_manager = CodexSectionManager(self)
-        self.manipulation_manager = CodexManipulationManager(self)
         self.control_widget = CodexControlWidget(self)
         self.animation_manager = CodexAnimationManager(self)
         self.size_manager = CodexSizeManager(self)
@@ -67,7 +66,6 @@ class Codex(QWidget):
         self._setup_scroll_area()
         self._apply_styles()
 
-        self.manipulation_manager.setup_connections()
         self.section_manager.setup_sections()
 
     def _initialize_data(self) -> None:

@@ -1,15 +1,19 @@
+import logging
 from typing import TYPE_CHECKING
 
+
+logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex_widget.codex import Codex
-    from main_window.main_widget.learn_widget.codex_widget.codex_manipulation_manager import CodexManipulationManager
-    from main_window.main_widget.learn_widget.codex_widget.codex_color_swap_manager import CodexColorSwapManager
+    from main_window.main_widget.learn_widget.codex.codex_control_widget import (
+        CodexControlWidget,
+    )
+
 
 class CodexMirrorManager:
     """Handles mirroring of pictographs in the Codex."""
 
-    def __init__(self, manip_manager: "CodexManipulationManager"):
-        self.codex = manip_manager.codex
+    def __init__(self, control_widget: "CodexControlWidget"):
+        self.codex = control_widget.codex
         # Define mappings for mirroring positions and locations
         self.vertical_mirror_positions = {
             "alpha1": "alpha1",
@@ -56,6 +60,18 @@ class CodexMirrorManager:
             "se": "sw",
             "sw": "se",
         }
+
+    def mirror_all(self):
+        logger.info("Mirror action triggered.")
+        try:
+            for letter_str, view in self.codex.section_manager.pictograph_views.items():
+                scene = view.pictograph
+                if scene.pictograph_dict:
+                    # Implement actual mirror logic here
+                    scene.updater.update_pictograph(scene.pictograph_dict)
+                    logger.debug(f"Mirrored pictograph for letter '{letter_str}'.")
+        except Exception as e:
+            logger.exception(f"Error during mirror_all: {e}")
 
     def mirror_codex(self):
         """Apply mirroring logic to all pictographs in the Codex."""
