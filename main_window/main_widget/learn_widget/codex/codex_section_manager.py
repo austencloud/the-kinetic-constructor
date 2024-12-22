@@ -1,149 +1,106 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QSpacerItem,
-    QSizePolicy,
-)
-import logging
+
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout
+from PyQt6.QtCore import Qt
+
 from Enums.letters import LetterType
 from .codex_pictograph_view import CodexPictographView
 from .codex_section_type_label import CodexSectionTypeLabel
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .codex import Codex
     from base_widgets.base_pictograph.pictograph_view import PictographView
 
-logger = logging.getLogger(__name__)
-
 
 class CodexSectionManager:
-    """Manages the loading and organization of pictograph sections."""
+    """Manages the loading and organization of pictograph sections in the Codex."""
+
+    VERT_SPACING = 20
+    ROWS = [
+        ["A", "B", "C", "D", "E", "F"],
+        ["G", "H", "I", "J", "K", "L"],
+        ["M", "N", "O", "P", "Q", "R"],
+        ["S", "T", "U", "V"],
+        ["W", "X", "Y", "Z"],
+        ["Σ", "Δ", "θ", "Ω"],
+        ["W-", "X-", "Y-", "Z-"],
+        ["Σ-", "Δ-", "θ-", "Ω-"],
+        ["Φ", "Ψ", "Λ"],
+        ["Φ-", "Ψ-", "Λ-"],
+        ["α", "β", "Γ"],
+    ]
 
     def __init__(self, codex: "Codex"):
         self.codex = codex
+        self.scroll_area = self.codex.scroll_area
+        self.content_layout = self.scroll_area.content_layout
         self.pictograph_views: dict[str, "PictographView"] = {}
-        self.custom_rows = [
-            ["A", "B", "C", "D", "E", "F"],
-            ["G", "H", "I", "J", "K", "L"],
-            ["M", "N", "O", "P", "Q", "R"],
-            ["S", "T", "U", "V"],
-            ["W", "X", "Y", "Z"],
-            ["Σ", "Δ", "θ", "Ω"],
-            ["W-", "X-", "Y-", "Z-"],
-            ["Σ-", "Δ-", "θ-", "Ω-"],
-            ["Φ", "Ψ", "Λ"],
-            ["Φ-", "Ψ-", "Λ-"],
-            ["α", "β", "Γ"],
-        ]
+        self.setup_sections()
 
-    def setup_sections(self):
+    def setup_sections(self) -> None:
         for letter_type in LetterType:
-            self.load_letter_type_section(letter_type)
+            self._load_letter_type_section(letter_type)
 
-    def load_letter_type_section(self, letter_type: LetterType):
-        """Load a section for a given LetterType."""
+    def reload_sections(self) -> None:
+        for letter_str, view in self.pictograph_views.items():
+            if letter_str in self.codex.data_manager.pictograph_data:
+                pictograph_dict = self.codex.data_manager.pictograph_data[letter_str]
+                view.pictograph.updater.update_pictograph(pictograph_dict)
+                view.scene().update()
+
+    def _load_letter_type_section(self, letter_type: LetterType) -> None:
         heading_label = CodexSectionTypeLabel(self.codex, letter_type)
-        self._setup_spacers()
-
-        self.codex.scroll_area.content_layout.addSpacerItem(self.spacer_1)
-        self.codex.scroll_area.content_layout.addWidget(
-            heading_label, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.codex.scroll_area.content_layout.addSpacerItem(self.spacer_2)
-        logger.debug("Added extra spacer below the heading label.")
+        self._add_heading(heading_label)
 
         letters = letter_type.letters
         if not letters:
-            logger.warning(f"No letters found for letter_type: {letter_type}")
             return
 
         vertical_layout = QVBoxLayout()
         vertical_layout.setSpacing(0)
         vertical_layout.setContentsMargins(0, 0, 0, 0)
 
-        for row_index, row_letters in enumerate(self.custom_rows):
-            current_letters = [letter for letter in row_letters if letter in letters]
+        for _, row_letters in enumerate(self.ROWS):
+            current_letters = [l for l in row_letters if l in letters]
             if not current_letters:
                 continue
 
-            horizontal_layout = QHBoxLayout()
-            horizontal_layout.setSpacing(0)
-            horizontal_layout.setContentsMargins(0, 0, 0, 0)
+            row_layout = self._create_row_layout(current_letters)
+            vertical_layout.addLayout(row_layout)
 
-            needs_centering = len(current_letters) == 4 or len(current_letters) == 3
+        self.content_layout.addLayout(vertical_layout)
 
-            has_six_pictographs = len(current_letters) == 6 and row_index < 3
-
-            if has_six_pictographs:
-                outer_left_spacer = QSpacerItem(
-                    20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum
-                )
-                horizontal_layout.addSpacerItem(outer_left_spacer)
-                logger.debug(f"Added outer left spacer for row {row_index + 1}.")
-
-            left_spacer = QSpacerItem(
-                40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-            )
-            horizontal_layout.addSpacerItem(left_spacer)
-            logger.debug(f"Added left spacer for centering row {row_index + 1}.")
-
-            for letter_str in current_letters:
-                p_dict = self.codex.data_manager.pictograph_data.get(letter_str, None)
-                if p_dict:
-                    if letter_str not in self.pictograph_views:
-                        scene = BasePictograph(self.codex.main_widget)
-                        view = CodexPictographView(scene, self.codex)
-                        scene.updater.update_pictograph(p_dict)
-                        self.pictograph_views[letter_str] = view
-                        logger.debug(
-                            f"Created new CodexPictographView for letter '{letter_str}'"
-                        )
-                    else:
-                        view = self.pictograph_views[letter_str]
-                        logger.debug(
-                            f"Reusing existing CodexPictographView for letter '{letter_str}'"
-                        )
-
-                    horizontal_layout.addWidget(view)
-                else:
-                    logger.warning(f"Pictograph data missing for letter '{letter_str}'")
-
-            if has_six_pictographs:
-                outer_right_spacer = QSpacerItem(
-                    20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum
-                )
-                horizontal_layout.addSpacerItem(outer_right_spacer)
-                logger.debug(f"Added outer right spacer for row {row_index + 1}.")
-
-            right_spacer = QSpacerItem(
-                40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-            )
-            horizontal_layout.addSpacerItem(right_spacer)
-            logger.debug(f"Added right spacer for centering row {row_index + 1}.")
-
-            vertical_layout.addLayout(horizontal_layout)
-            logger.debug(f"Added horizontal layout and line for row {row_index + 1}.")
-
-        self.codex.scroll_area.content_layout.addLayout(vertical_layout)
-        logger.debug("Added vertical layout with all rows to the content layout.")
-
-    def _setup_spacers(self):
-        self.spacer_1 = QSpacerItem(
-            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+    def _add_heading(self, heading_label: CodexSectionTypeLabel) -> None:
+        self.content_layout.addSpacing(self.VERT_SPACING)
+        self.content_layout.addWidget(
+            heading_label, alignment=Qt.AlignmentFlag.AlignHCenter
         )
-        self.spacer_2 = QSpacerItem(
-            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
-        )
-        self.spacers: list[QSpacerItem] = [self.spacer_1, self.spacer_2]
 
-    def reload_sections(self):
-        """Reload all sections to reflect updated data."""
-        for letter, view in self.pictograph_views.items():
-            if letter in self.codex.data_manager.pictograph_data:
-                pictograph_dict = self.codex.data_manager.pictograph_data[letter]
-                view.pictograph.updater.update_pictograph(pictograph_dict)
-                view.scene().update()
-        logger.debug("Reloaded all sections in Codex.")
+        self.content_layout.addSpacing(self.VERT_SPACING)
+
+    def _create_row_layout(self, row_letters: list[str]) -> QHBoxLayout:
+        layout = QHBoxLayout()
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+
+        for letter_str in row_letters:
+            self._add_pictograph_view(letter_str, layout)
+
+        return layout
+
+    def _add_pictograph_view(self, letter_str: str, layout: QHBoxLayout) -> None:
+        p_dict = self.codex.data_manager.pictograph_data.get(letter_str)
+        if p_dict is None:
+            return
+
+        if letter_str not in self.pictograph_views:
+            scene = BasePictograph(self.codex.main_widget)
+            view = CodexPictographView(scene, self.codex)
+            scene.updater.update_pictograph(p_dict)
+            self.pictograph_views[letter_str] = view
+        else:
+            view = self.pictograph_views[letter_str]
+
+        layout.addWidget(view)

@@ -9,9 +9,11 @@ class Lesson1Widget(BaseLessonWidget):
 
     def __init__(self, learn_widget):
         super().__init__(learn_widget)
+        
         self.question_widget = Lesson1QuestionWidget(self)
         self.answers_widget = Lesson1AnswersWidget(self)
         self.question_generator = Lesson1QuestionGenerator(self)
+        
         self._setup_layout()
 
     

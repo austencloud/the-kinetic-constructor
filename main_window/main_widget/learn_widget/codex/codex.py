@@ -29,20 +29,18 @@ class Codex(QWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
 
-        # Managers
-        self.section_manager = CodexSectionManager(self)
-        self.animation_manager = CodexAnimationManager(self)
-        self.size_manager = CodexSizeManager(self)
-        self.data_manager = CodexDataManager(self)
-
         # Components
         self.toggle_button = CodexToggleButton(self)
         self.control_widget = CodexControlWidget(self)
         self.scroll_area = CodexScrollArea(self)
 
-        # Layout
+        # Managers
+        self.data_manager = CodexDataManager(self)
+        self.section_manager = CodexSectionManager(self)
+        self.animation_manager = CodexAnimationManager(self)
+        self.size_manager = CodexSizeManager(self)
+
         self._setup_layout()
-        self.section_manager.setup_sections()
 
     def _setup_layout(self) -> None:
         self.main_layout = QVBoxLayout(self)
@@ -51,6 +49,4 @@ class Codex(QWidget):
 
     def resizeEvent(self, event) -> None:
         self.size_manager.adjust_pictograph_sizes()
-        for spacer in self.section_manager.spacers:
-            spacer.changeSize(20, self.height() // 30)
         super().resizeEvent(event)
