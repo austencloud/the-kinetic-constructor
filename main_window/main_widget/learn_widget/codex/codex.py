@@ -48,5 +48,7 @@ class Codex(QWidget):
         self.main_layout.addWidget(self.scroll_area)
 
     def resizeEvent(self, event) -> None:
+        width = int(self.learn_widget.width() * 0.4)
+        self.setMaximumWidth(width)
         self.size_manager.adjust_pictograph_sizes()
         super().resizeEvent(event)

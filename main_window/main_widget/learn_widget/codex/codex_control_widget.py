@@ -19,10 +19,8 @@ if TYPE_CHECKING:
 
 
 class CodexControlWidget(QWidget):
-    """Holds Codex buttons: rotate, mirror, color swap, and the orientation selector."""
 
     def __init__(self, codex: "Codex"):
-        """Initializes the CodexControlWidget with references to the codex and managers."""
         super().__init__(codex)
         self.codex = codex
 
@@ -38,16 +36,10 @@ class CodexControlWidget(QWidget):
         self._setup_layout()
 
     def _setup_layout(self) -> None:
-        """Creates and arranges the control buttons and orientation selector."""
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Add the horizontal layout of buttons
         self.main_layout.addLayout(self.button_layout)
-
-        # Add the orientation selector (now includes a label + combo box)
         self.main_layout.addWidget(self.ori_selector)
-
         self.setLayout(self.main_layout)
 
         self.setStyleSheet(

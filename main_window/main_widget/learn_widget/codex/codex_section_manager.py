@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 class CodexSectionManager:
     """Manages the loading and organization of pictograph sections in the Codex."""
-
     VERT_SPACING = 20
     ROWS = [
         ["A", "B", "C", "D", "E", "F"],
@@ -50,8 +49,8 @@ class CodexSectionManager:
                 view.scene().update()
 
     def _load_letter_type_section(self, letter_type: LetterType) -> None:
-        heading_label = CodexSectionTypeLabel(self.codex, letter_type)
-        self._add_heading(heading_label)
+        type_label = CodexSectionTypeLabel(self.codex, letter_type)
+        self._add_type_label(type_label)
 
         letters = letter_type.letters
         if not letters:
@@ -71,10 +70,10 @@ class CodexSectionManager:
 
         self.content_layout.addLayout(vertical_layout)
 
-    def _add_heading(self, heading_label: CodexSectionTypeLabel) -> None:
+    def _add_type_label(self, type_label: CodexSectionTypeLabel) -> None:
         self.content_layout.addSpacing(self.VERT_SPACING)
         self.content_layout.addWidget(
-            heading_label, alignment=Qt.AlignmentFlag.AlignHCenter
+            type_label, alignment=Qt.AlignmentFlag.AlignHCenter
         )
 
         self.content_layout.addSpacing(self.VERT_SPACING)

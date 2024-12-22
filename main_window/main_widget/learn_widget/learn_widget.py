@@ -76,7 +76,7 @@ class LearnWidget(QWidget):
         """Sets up the main QSplitter, holding the Codex panel and right-side widget."""
         self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
         self.main_splitter.setContentsMargins(0, 0, 0, 0)
-        self.main_splitter.setHandleWidth(0)
+        self.main_splitter.setHandleWidth(15)
         self.main_splitter.addWidget(self.codex)
         self.main_splitter.addWidget(self.right_side)
 

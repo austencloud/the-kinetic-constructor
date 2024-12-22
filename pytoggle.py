@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QCheckBox
-from PyQt6.QtCore import QPropertyAnimation, QRect, Qt, pyqtProperty, QEasingCurve
+from PyQt6.QtCore import QPropertyAnimation, QRect, Qt, QEasingCurve
 from PyQt6.QtGui import QColor, QPainter
 
 

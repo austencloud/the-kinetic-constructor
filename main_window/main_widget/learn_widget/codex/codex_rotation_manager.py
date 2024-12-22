@@ -24,10 +24,8 @@ class CodexRotationManager:
             if pictograph:
                 dict = self._rotate_pictograph(pictograph)
                 self.codex.data_manager.pictograph_data[letter] = dict
-        # Update UI or grid modes if needed
         self.update_grid_mode()
         self.codex.section_manager.reload_sections()
-        print("Codex rotated!")  # Replace with a UI message if required
         self._refresh_pictograph_views()
 
     def _rotate_pictograph(self, pictograph_dict: dict) -> dict:
