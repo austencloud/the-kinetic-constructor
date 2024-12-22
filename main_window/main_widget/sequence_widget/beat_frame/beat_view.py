@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPixmapItem
-from PyQt6.QtCore import Qt, QPointF
-from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction
+from PyQt6.QtCore import Qt, QPointF, QEvent
+from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction, QCursor, QMouseEvent, QContextMenuEvent
+from base_widgets.base_pictograph.pictograph_view import PictographView
 from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
     )
 
 
-class BeatView(QGraphicsView):
+class BeatView(PictographView):
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
         super().__init__(beat_frame)
         self.number = number  # Beat number to display
@@ -31,8 +32,31 @@ class BeatView(QGraphicsView):
         self.blank_beat = Beat(self.beat_frame)
         self._setup_blank_beat()
         self.resize_beat_view()
-        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.show_context_menu)
+        # self.setContextMenuPolicy/(Qt.ContextMenuPolicy.CustomContextMenu)
+        # self.customContextMenuRequested.connect(self.show_context_menu)
+
+    def contextMenuEvent(self, event: QEvent) -> None:
+        """
+        Optionally, add more actions specific to BeatView.
+        Then call the base class to include the "Copy Dictionary" action.
+        """
+        if isinstance(event, QContextMenuEvent):
+            context_menu = QMenu(self)
+
+            # Add any specific actions for BeatView here
+
+            # Add a separator
+            context_menu.addSeparator()
+
+            # Call the base class to add "Copy Dictionary"
+            copy_action = QAction("Copy Dictionary", self)
+            copy_action.triggered.connect(self.copy_pictograph_dict)
+            context_menu.addAction(copy_action)
+
+            # Execute the menu
+            context_menu.exec(QCursor.pos())
+        else:
+            super().contextMenuEvent(event)
 
     def display_placeholder_arrow(self):
         arrow_path = get_images_and_data_path("images/placeholder_arrow.png")
@@ -42,15 +66,7 @@ class BeatView(QGraphicsView):
         )
         self.scene().addItem(arrow_item)
 
-    def show_context_menu(self, position):
-        menu = QMenu()
-        one_beat_action = QAction("1 Count", self)
-        one_beat_action.triggered.connect(lambda: self.set_duration(1))
-        two_beats_action = QAction("2 Counts", self)
-        two_beats_action.triggered.connect(lambda: self.set_duration(2))
-        menu.addAction(one_beat_action)
-        menu.addAction(two_beats_action)
-        menu.exec(self.mapToGlobal(position))
+
 
     def set_duration(self, duration):
         self.beat_frame.duration_manager.update_beat_duration(self, duration)

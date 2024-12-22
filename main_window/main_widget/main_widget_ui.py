@@ -5,7 +5,7 @@ from main_window.main_widget.act_tab.act_tab import ActTab
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
-from .sequence_builder.auto_builder.sequence_generator_widget import (
+from .sequence_builder.sequence_generator.sequence_generator_widget import (
     SequenceGeneratorWidget,
 )
 from .sequence_builder.manual_builder import ManualBuilder
@@ -57,7 +57,9 @@ class MainWidgetUI:
 
         # Set equal stretch factors
         build_generate_layout.setStretch(0, 1)  # Index 0 corresponds to sequence_widget
-        build_generate_layout.setStretch(1, 1)  # Index 1 corresponds to builder_stacked_widget
+        build_generate_layout.setStretch(
+            1, 1
+        )  # Index 1 corresponds to builder_stacked_widget
 
         mw.dictionary_learn_widget = QStackedWidget()
         mw.dictionary_learn_widget.addWidget(mw.dictionary_widget)

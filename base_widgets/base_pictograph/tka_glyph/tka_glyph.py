@@ -33,8 +33,8 @@ class TKA_Glyph(QGraphicsItemGroup):
         turns_tuple = self.pictograph.get.turns_tuple()
         direction, top_turn, bottom_turn = parse_turns_tuple_string(turns_tuple)
         self.dot_handler.update_dots(direction)
-        if "-" in self.pictograph.letter.value:
-            self.dash_handler.update_dash()
+        self.dash_handler.update_dash()
+        
         self.turns_column_handler.update_turns(top_turn, bottom_turn)
         visibility_manager = (
             self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager

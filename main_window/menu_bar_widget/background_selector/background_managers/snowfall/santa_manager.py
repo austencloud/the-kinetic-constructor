@@ -28,7 +28,7 @@ class SantaManager:
         }
 
         self.santa_timer = 0  # Timer to control when Santa appears
-        self.santa_interval = random.randint(500, 1000)  # Frames between appearances
+        self.santa_interval = random.randint(1500, 2500)  # Frames between appearances
 
     def animate_santa(self):
         if self.santa["active"]:

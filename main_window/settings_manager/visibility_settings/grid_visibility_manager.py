@@ -36,6 +36,10 @@ class GridVisibilityManager:
                         self.non_radial_visible
                     )
 
+        for option in main_widget.manual_builder.option_picker.pictograph_pool:
+            if hasattr(option, "grid"):
+                option.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
+
         # Apply visibility to additional views
         beat_frame = main_widget.sequence_widget.beat_frame
         for beat_view in beat_frame.beats:

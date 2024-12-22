@@ -18,7 +18,6 @@
 
 Game plan:
 
-- Move the sequence modification controls to a different place.
 - Move the settings into a settings tab with a gear. This means also moving the socials buttons and spreading them out. 
 - move the layout options into the settings.
 - Add an undo feature

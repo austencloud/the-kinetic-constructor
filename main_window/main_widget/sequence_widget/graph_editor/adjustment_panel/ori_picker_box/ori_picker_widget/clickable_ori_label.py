@@ -48,9 +48,7 @@ class ClickableOriLabel(QLabel):
         required_width = text_width + padding
         self.setMinimumWidth(required_width)
 
-        border_size = max(
-            int(required_width / 60), 1
-        )  # Ensure border size is at least 1
+        border_size = max(int(required_width / 60), 1)
         border_color = self._get_border_color(self.ori_picker_widget.color)
         self.setStyleSheet(
             f"QLabel {{ border: {border_size}px solid {border_color}; background-color: white; }}"

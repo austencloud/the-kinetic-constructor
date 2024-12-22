@@ -41,6 +41,7 @@ class Lesson1AnswersWidget(BaseAnswersWidget):
     def disable_answer(self, answer) -> None:
         """Deactivate the button for the incorrect answer."""
         self.buttons[answer].setDisabled(True)
+        self.buttons[answer].setStyleSheet("color: gray;")
 
     def resize_answers_widget(self) -> None:
         for button in self.buttons.values():

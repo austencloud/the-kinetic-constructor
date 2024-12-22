@@ -12,7 +12,16 @@ from PyQt6.QtGui import QPalette, QColor
 def main() -> None:
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-
+    logging.basicConfig(
+        level=logging.DEBUG,  # Set to DEBUG to capture all levels
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.FileHandler("app.log"),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+    logger = logging.getLogger(__name__)
+    
     # Create and set a light color palette to override system defaults
     palette = QPalette()
     palette.setColor(QPalette.ColorRole.Window, QColor(225, 225, 225))
@@ -27,7 +36,9 @@ def main() -> None:
     palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
     palette.setColor(QPalette.ColorRole.Highlight, QColor(76, 163, 224))
     palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
+    # make sure checkboxes are visible
 
+    
     app.setPalette(palette)
 
     # Set up screen and development environment

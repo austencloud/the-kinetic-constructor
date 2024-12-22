@@ -20,6 +20,17 @@ class OptionGetter:
             sequence, all_next_options, selected_filter
         )
 
+        #change the start ori of the next options to reflect the end ori of the last pictograph
+        for option in filtered_options:
+            option["blue_attributes"]["start_ori"] = sequence[-1]["blue_attributes"]["end_ori"]
+            option["red_attributes"]["start_ori"] = sequence[-1]["red_attributes"]["end_ori"]
+            
+            
+        # use the motion ori calculator to determine that end ori of the motion and set it to that. 
+        for option in filtered_options:
+            option["blue_attributes"]["end_ori"] = self.json_manager.ori_calculator.calculate_end_orientation(option, "blue")
+            option["red_attributes"]["end_ori"] = self.json_manager.ori_calculator.calculate_end_orientation(option, "red")
+            
         return filtered_options
 
     def _apply_filter(self, sequence: list, options: list, selected_filter: str):

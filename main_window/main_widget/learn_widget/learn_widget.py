@@ -1,16 +1,22 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QStackedLayout
-
-from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
-    BaseLessonWidget,
+from PyQt6.QtWidgets import (
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QFrame,
+    QStackedLayout,
+    QSplitter,
 )
-from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
-from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
-from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import Lesson3Widget
-from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
+
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
+from main_window.main_widget.learn_widget.codex_widget.codex_data_manager import CodexDataManager
+
+from .codex_widget.codex import Codex
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -25,24 +31,83 @@ class LearnWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
 
-        # QStackedLayout for managing different screens
+        # Initialize PictographDataManager
+        self.codex_data_manager = CodexDataManager(self.main_widget)
+        initial_codex_data = self.codex_data_manager.get_pictograph_data()
+
+        # Lesson widgets
+        self.lesson_selector = self._create_lesson_selector()
+        self.lesson_1_widget = self._create_lesson_1_widget()
+        self.lesson_2_widget = self._create_lesson_2_widget()
+        self.lesson_3_widget = self._create_lesson_3_widget()
+
         self.stack_layout = QStackedLayout()
-        self.setLayout(self.stack_layout)
-
-        # Lesson selection and individual lesson widgets
-        self.lesson_selector = LessonSelector(self)
-        self.lesson_1_widget = Lesson1Widget(self)
-        self.lesson_2_widget = Lesson2Widget(self)
-        self.lesson_3_widget = Lesson3Widget(self)
-
-        # Add widgets to the stacked layout
         self.stack_layout.addWidget(self.lesson_selector)
         self.stack_layout.addWidget(self.lesson_1_widget)
         self.stack_layout.addWidget(self.lesson_2_widget)
         self.stack_layout.addWidget(self.lesson_3_widget)
-
-        # Set the initial screen
         self.stack_layout.setCurrentWidget(self.lesson_selector)
+
+        # Main layout using QSplitter for smoother resizing
+        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.main_splitter.setContentsMargins(0, 0, 0, 0)
+        self.main_splitter.setHandleWidth(0)  # Hide splitter handle for a cleaner look
+
+        # Codex panel
+        self.codex_shown = False
+        self.codex_panel = Codex(self, initial_codex_data)
+        self.codex_panel.setMaximumWidth(0)  # Hidden initially
+
+        # Right side with a top bar (Codex button) and stack_layout
+        right_side = QWidget()
+        right_layout = QVBoxLayout(right_side)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+
+        self.codex_button = QPushButton("Codex", self)
+        self.codex_button.setFixedHeight(30)
+        font = QFont()
+        font.setBold(True)
+        self.codex_button.setFont(font)
+        self.codex_button.clicked.connect(self.toggle_codex)
+
+        top_bar_layout = QHBoxLayout()
+        top_bar_layout.addWidget(self.codex_button)
+        top_bar_layout.addStretch()
+
+        right_layout.addLayout(top_bar_layout)
+        content_frame = QFrame()
+        content_frame.setLayout(self.stack_layout)
+        right_layout.addWidget(content_frame)
+
+        # Add Codex and right_side to splitter
+        self.main_splitter.addWidget(self.codex_panel)
+        self.main_splitter.addWidget(right_side)
+
+        # Wrap the QSplitter in a QVBoxLayout
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.main_splitter)
+        layout.setContentsMargins(0, 0, 0, 0)  # Optional: adjust margins
+        self.setLayout(layout)
+
+    def toggle_codex(self):
+        self.codex_shown = not self.codex_shown
+        self.codex_panel.toggle_codex(self.codex_shown)
+
+    def show_lesson_selection_widget(self) -> None:
+        """Show the lesson selection screen."""
+        self.stack_layout.setCurrentWidget(self.lesson_selector)
+
+    def start_lesson(self, lesson_number: int) -> None:
+        """Start the specified lesson."""
+        lesson_widgets: list[BaseLessonWidget] = [
+            self.lesson_1_widget,
+            self.lesson_2_widget,
+            self.lesson_3_widget,
+        ]
+        if 1 <= lesson_number <= len(lesson_widgets):
+            lesson_widget = lesson_widgets[lesson_number - 1]
+            self.stack_layout.setCurrentWidget(lesson_widget)
+            lesson_widget.prepare_quiz_ui()
 
     def update_background_manager(self, bg_type: str):
         if self.background_manager:
@@ -52,28 +117,29 @@ class LearnWidget(QWidget):
         self.background_manager.start_animation()
         self.update()
 
-    def show_lesson_selection_widget(self) -> None:
-        """Show the lesson selection screen."""
-        self.stack_layout.setCurrentWidget(self.lesson_selector)
+    # Placeholder methods for creating lesson widgets
+    def _create_lesson_selector(self):
+        from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
 
-    def start_lesson(self, lesson_number: int) -> None:
-        """Start the specified lesson."""
-        selected_mode = self.lesson_selector.mode_toggle_widget.get_selected_mode()
-        lesson_widgets: list[BaseLessonWidget] = [
-            self.lesson_1_widget,
-            self.lesson_2_widget,
-            self.lesson_3_widget,
-        ]
-        if lesson_number >= 1 and lesson_number <= len(lesson_widgets):
-            lesson_widget = lesson_widgets[lesson_number - 1]
-            lesson_widget.set_mode(selected_mode)
-            self.stack_layout.setCurrentWidget(lesson_widget)
+        return LessonSelector(self)
 
-    def resizeEvent(self, event) -> None:
-        """Handle resize events for the widget."""
-        super().resizeEvent(event)
-        self.lesson_1_widget.resize_lesson_widget()
-        self.lesson_2_widget.resize_lesson_widget()
-        self.lesson_3_widget.resize_lesson_widget()
-        self.lesson_selector.resize_lesson_selector()
-        # self.resize_learn_widget()
+    def _create_lesson_1_widget(self):
+        from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import (
+            Lesson1Widget,
+        )
+
+        return Lesson1Widget(self)
+
+    def _create_lesson_2_widget(self):
+        from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import (
+            Lesson2Widget,
+        )
+
+        return Lesson2Widget(self)
+
+    def _create_lesson_3_widget(self):
+        from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import (
+            Lesson3Widget,
+        )
+
+        return Lesson3Widget(self)

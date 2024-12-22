@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QCheckBox
 
-from main_window.main_widget.sequence_builder.auto_builder.circular.circular_auto_builder_frame import (
-    CircularAutoBuilderFrame,
+from main_window.main_widget.sequence_builder.sequence_generator.circular.circular_sequence_generator_frame import (
+    CircularSequenceGeneratorFrame,
 )
-from main_window.main_widget.sequence_builder.auto_builder.freeform.freeform_auto_builder_frame import (
-    FreeformAutoBuilderFrame,
+from main_window.main_widget.sequence_builder.sequence_generator.freeform.freeform_sequence_generator_frame import (
+    FreeformSequenceGeneratorFrame,
 )
 
 if TYPE_CHECKING:
@@ -43,13 +43,36 @@ class FontColorUpdater:
             "black" if bg_type in ["Rainbow", "AuroraBorealis", "Aurora"] else "white"
         )
 
-    @staticmethod
-    def _apply_font_color(widget: QWidget, color: str) -> None:
-        widget.setStyleSheet(f"color: {color};")
+    def _apply_font_color(self, widget: QWidget, color: str) -> None:
+        # If it's a QCheckBox, apply a more specific stylesheet
+        if isinstance(widget, QCheckBox):
+            # Apply rules to only the text, and separate rules for the indicator
+            widget.setStyleSheet(
+                f"""
+                QCheckBox {{
+                    color: {color}; /* Apply text color for the checkbox label */
+                }}
+                QCheckBox::indicator {{
+                    background-color: white; /* Ensure a white background for clarity */
+                    border: 2px solid #ccc;
+                    width: 18px;
+                    height: 18px;
+                }}
+                QCheckBox::indicator:checked {{
+                    border: 2px solid #68d4ff;
+                    background-color: white;
+                }}
+                """
+            )
+        else:
+            # For other widgets, append the color rule to their existing stylesheet
+            existing_style = widget.styleSheet()
+            new_style = f"{existing_style} color: {color};"
+            widget.setStyleSheet(new_style)
 
     def _apply_font_colors(self, widgets: list[QWidget], color: str) -> None:
-        for widget in widgets:
-            self._apply_font_color(widget, color)
+        for w in widgets:
+            self._apply_font_color(w, color)
 
     def _apply_main_widget_colors(
         self, main_widget: "MainWidget", font_color: str
@@ -102,48 +125,52 @@ class FontColorUpdater:
     def _update_generate_tab(self, main_widget: "MainWidget", font_color: str) -> None:
         sequence_generator = main_widget.sequence_generator
         freeform_labels = self._get_freeform_builder_labels(
-            sequence_generator.freeform_builder_frame
+            sequence_generator.freeform_generator_frame
         )
         circular_labels = self._get_circular_builder_labels(
-            sequence_generator.circular_builder_frame
+            sequence_generator.circular_generator_frame
         )
 
         self._apply_font_colors(
             freeform_labels + circular_labels,
+            # + [
+            #     sequence_generator.freeform_builder_frame.letter_type_picker.letter_mode_checkbox,
+            #     sequence_generator.overwrite_checkbox,
+            # ],
             font_color,
         )
-        sequence_generator.freeform_builder_frame.continuous_rotation_toggle.update_mode_label_styles()
-        sequence_generator.circular_builder_frame.continuous_rotation_toggle.update_mode_label_styles()
+        sequence_generator.freeform_generator_frame.continuous_rotation_toggle.update_mode_label_styles()
+        sequence_generator.circular_generator_frame.continuous_rotation_toggle.update_mode_label_styles()
+        sequence_generator.overwrite_checkbox.set_label_color(font_color)
 
     def _update_build_tab(self, main_widget: "MainWidget", font_color):
         manual_builder = main_widget.manual_builder
         manual_labels = [
-            # manual_builder.start_pos_picker.choose_your_start_pos_label,
-            # manual_builder.advanced_start_pos_picker.choose_your_start_pos_label,
             manual_builder.option_picker.reversal_selector.combo_box_label,
         ]
         self._apply_font_colors(manual_labels, font_color)
 
     def _get_freeform_builder_labels(
-        self, freeform_builder_frame: "FreeformAutoBuilderFrame"
+        self, freeform_generator_frame: "FreeformSequenceGeneratorFrame"
     ) -> list[QWidget]:
         return [
-            freeform_builder_frame.level_selector.level_label,
-            freeform_builder_frame.length_adjuster.length_label,
-            freeform_builder_frame.length_adjuster.length_value_label,
-            freeform_builder_frame.turn_intensity_adjuster.intensity_label,
-            freeform_builder_frame.turn_intensity_adjuster.intensity_value_label,
+            freeform_generator_frame.level_selector.level_label,
+            freeform_generator_frame.length_adjuster.length_label,
+            freeform_generator_frame.length_adjuster.length_value_label,
+            freeform_generator_frame.turn_intensity_adjuster.intensity_label,
+            freeform_generator_frame.turn_intensity_adjuster.intensity_value_label,
+            freeform_generator_frame.letter_type_picker.filter_label,
         ]
 
     def _get_circular_builder_labels(
-        self, circular_builder_frame: "CircularAutoBuilderFrame"
+        self, circular_generator_frame: "CircularSequenceGeneratorFrame"
     ) -> list[QWidget]:
         return [
-            circular_builder_frame.level_selector.level_label,
-            circular_builder_frame.length_adjuster.length_label,
-            circular_builder_frame.length_adjuster.length_value_label,
-            circular_builder_frame.turn_intensity_adjuster.intensity_label,
-            circular_builder_frame.turn_intensity_adjuster.intensity_value_label,
+            circular_generator_frame.level_selector.level_label,
+            circular_generator_frame.length_adjuster.length_label,
+            circular_generator_frame.length_adjuster.length_value_label,
+            circular_generator_frame.turn_intensity_adjuster.intensity_label,
+            circular_generator_frame.turn_intensity_adjuster.intensity_value_label,
         ]
 
     def _update_browse_tab(self, main_widget: "MainWidget", font_color: str) -> None:

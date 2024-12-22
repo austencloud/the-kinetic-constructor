@@ -38,7 +38,8 @@ class BeatFramePopulator:
         self._update_difficulty_level()
         self._populate_beats()
         self._finalize_sequence()
-
+        # update hte option picker
+        self.manual_builder.option_picker.update_option_picker()
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )

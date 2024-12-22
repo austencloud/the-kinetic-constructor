@@ -7,12 +7,8 @@ from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog im
     LayoutOptionsDialog,
 )
 from main_window.main_widget.sequence_widget.full_screen_viewer import FullScreenViewer
-from main_window.main_widget.sequence_widget.sequence_color_swapper import (
-    SequenceColorSwapper,
-)
-from main_window.main_widget.sequence_widget.sequence_rotater import SequenceRotator
 
-from .sequence_mirror import SequenceMirror
+
 from .button_panel_placeholder import ButtonPanelPlaceholder
 from utilities.path_helpers import get_images_and_data_path
 
@@ -30,7 +26,7 @@ class SequenceWidgetButtonPanel(QFrame):
 
         self.font_size = self.sequence_widget.width() // 45
         self._setup_dependencies()
-        self.colors_swapped = False  # Add this flag
+        self.colors_swapped = False 
         self._setup_buttons()
         self.top_placeholder = ButtonPanelPlaceholder(self)
         self.bottom_placeholder = ButtonPanelPlaceholder(self)

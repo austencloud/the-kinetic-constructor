@@ -40,6 +40,7 @@ class PictographUpdater:
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
 
         self.pictograph.tka_glyph.update_tka_glyph()
+        self.pictograph.elemental_glyph.update_elemental_glyph()
         self._position_objects()
         self.pictograph.reversal_symbol_manager.update_reversal_symbols()
 

@@ -18,10 +18,11 @@ class BeatSelectionOverlay(QWidget):
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4
+        self.beat_frame = beat_frame
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
 
-    def select_beat(self, beat_view: BeatView):
+    def select_beat(self, beat_view: BeatView, toggle_graph_editor = True):
         if self.selected_beat == beat_view:
             return
         else:
@@ -57,6 +58,9 @@ class BeatSelectionOverlay(QWidget):
                 red_start_pos_ori_picker.ori_picker_widget.ori_setter.set_initial_orientation(
                     start_pos_pictograph, "red"
                 )
+        if toggle_graph_editor:
+            if not self.beat_frame.main_widget.sequence_widget.graph_editor.isVisible():
+                self.beat_frame.sequence_widget.toggler.toggle()
 
     def deselect_beat(self):
         if self.selected_beat:

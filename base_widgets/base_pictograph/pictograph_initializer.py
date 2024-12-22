@@ -1,3 +1,4 @@
+import json
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
@@ -7,11 +8,12 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager 
     ReversalSymbolManager,
 )
 from objects.arrow.arrow import Arrow
-from objects.grid import Grid
+from objects.grid import Grid, GridData
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
 from data.constants import *
+from utilities.path_helpers import get_images_and_data_path
 from .prop_factory import PropFactory
 from .elemental_glyph.elemental_glyph import ElementalGlyph
 from .start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
@@ -22,12 +24,23 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
+# pictograph_initializer.py
+
+import json
+from utilities.path_helpers import get_images_and_data_path
+from objects.grid import Grid, GridData
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class PictographInitializer:
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
         self.pictograph.setSceneRect(0, 0, 950, 950)
         self.pictograph.setBackgroundBrush(Qt.GlobalColor.white)
         self.prop_factory = PropFactory()
+        self.grid_initialized = False
 
     ### INIT ###
 
@@ -44,7 +57,6 @@ class PictographInitializer:
         self.pictograph.vtg_glyph = self.init_vtg_glyph()
         self.pictograph.elemental_glyph = self.init_elemental_glyph()
         self.pictograph.start_to_end_pos_glyph = self.init_start_to_end_pos_glyph()
-        # set the nonradial points visibility based on user settings
         self.init_reversal_symbols()
 
         self.set_nonradial_points_visibility(
@@ -61,14 +73,37 @@ class PictographInitializer:
         self.pictograph.grid.toggle_non_radial_points_visibility(visible)
 
     def init_grid(self) -> Grid:
-        grid_mode = (
-            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
-        grid = Grid(self.pictograph, grid_mode)
-        grid_position = QPointF(0, 0)
-        grid.setPos(grid_position)
-        self.pictograph.grid = grid
-        return grid
+        if not self.grid_initialized:
+            try:
+                # Load grid mode
+                grid_mode = (
+                    self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+                )
+
+                # Load grid data from JSON
+                json_path = get_images_and_data_path("data/circle_coords.json")
+                with open(json_path, "r") as file:
+                    data = json.load(file)
+
+                # Create GridData instance
+                grid_data = GridData(data)
+
+                # Initialize Grid with GridData and grid_mode
+                grid = Grid(self.pictograph, grid_data, grid_mode)
+                self.grid_initialized = True
+                return grid
+            except FileNotFoundError:
+                logger.error(f"Grid data file '{json_path}' not found.")
+                raise
+            except json.JSONDecodeError as e:
+                logger.error(f"Error decoding JSON from '{json_path}': {e}")
+                raise
+            except Exception as e:
+                logger.error(f"Unexpected error initializing grid: {e}")
+                raise
+        else:
+            logger.warning("Grid already initialized.")
+            return self.pictograph.grid
 
     def init_motions(self) -> dict[str, Motion]:
         motions: dict[str, Motion] = {}
@@ -148,7 +183,8 @@ class PictographInitializer:
     def init_quadrant_boundaries(
         self, grid: Grid
     ) -> dict[Location, tuple[int, int, int, int]]:
-        grid_center: QPoint = grid.grid_data.center_point.coordinates.toPoint()
+        # Access the center point using the stored grid_mode
+        grid_center: QPoint = grid.center.toPoint()
 
         grid_center_x = grid_center.x()
         grid_center_y = grid_center.y()

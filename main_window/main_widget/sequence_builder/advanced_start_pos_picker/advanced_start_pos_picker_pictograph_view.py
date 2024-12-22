@@ -10,4 +10,3 @@ class AdvancedStartPosPickerPictographView(StartPosPickerPictographView):
 
     def resizeEvent(self, event):
         """Override to prevent automatic resizing."""
-        pass

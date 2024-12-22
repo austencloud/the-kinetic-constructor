@@ -4,11 +4,12 @@ from contextlib import contextmanager
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, END_POS, START_POS
-from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
+
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
     from .start_pos_picker import StartPosPicker

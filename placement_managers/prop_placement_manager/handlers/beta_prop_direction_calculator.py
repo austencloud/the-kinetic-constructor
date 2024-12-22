@@ -187,7 +187,7 @@ class BetaPropDirectionCalculator:
                 (NORTHWEST, BLUE): UPLEFT,
             },
         }
-        grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
+        grid_mode = DIAMOND if prop.loc in [NORTH, SOUTH, EAST, WEST] else BOX
         if grid_mode == DIAMOND:
             if prop.check.is_radial():
                 return diamond_layer_reposition_map[RADIAL][(prop.loc, prop.color)]

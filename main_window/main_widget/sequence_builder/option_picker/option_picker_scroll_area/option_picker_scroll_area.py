@@ -1,6 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtCore import Qt
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
@@ -69,18 +67,26 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for i, pictograph_dict in enumerate(next_options):
             # Get a pictograph from our pool
             if i >= len(self.option_picker.pictograph_pool):
-                break  # If not enough pre-initialized, either increase the pool or handle differently
+                break  
             p = self.option_picker.pictograph_pool[i]
 
-            # Update pictograph with new dict
             p.updater.update_pictograph(pictograph_dict)
-            p.blue_reversal = False  # Reset any special states
-            p.red_reversal = False
+            sequence_so_far = (
+                self.json_manager.loader_saver.load_current_sequence_json()
+            )
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, p.pictograph_dict
+            )
+            p.blue_reversal = reversal_info.get("blue_reversal", False)
+            p.red_reversal = reversal_info.get("red_reversal", False)
+
 
             # Insert into layout
             self.display_manager.add_pictograph_to_section_layout(p)
+            p.view.update_borders()
+            p.updater.update_pictograph(pictograph_dict)
+            p.elemental_glyph.update_elemental_glyph()
             p.view.show()
-
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
         last_pictograph_dict = (
@@ -100,24 +106,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         pictograph_dict["red_attributes"]["blue_ori"] = (
             self.ori_calculator.calculate_end_orientation(pictograph_dict, BLUE)
         )
-
-    def _get_or_create_pictograph(
-        self, pictograph_dict: dict, sequence
-    ) -> BasePictograph:
-        modified_key = self.manual_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
-            pictograph_dict
-        )
-        if modified_key in self.pictograph_cache:
-            return self.pictograph_cache[modified_key]
-        else:
-            pictograph = self.manual_builder.render_and_store_pictograph(
-                pictograph_dict, sequence
-            )
-            self.pictograph_cache[modified_key] = pictograph
-            self.main_widget.pictograph_cache[pictograph.letter][
-                modified_key
-            ] = pictograph
-        return pictograph
 
     def _hide_all_pictographs(self) -> None:
         for pictograph in self.pictograph_cache.values():

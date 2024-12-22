@@ -41,5 +41,13 @@ class DashHandler:
             self.dash_item.setPos(dash_x, dash_y)
 
     def update_dash(self) -> None:
-        self.add_dash()
-        self.position_dash()
+        if "-" in self.glyph.pictograph.letter.value:
+            if self.dash_item:
+                self.position_dash()
+            if not self.dash_item:
+                self.add_dash()
+                self.position_dash()
+        else:
+            if self.dash_item:
+                self.glyph.removeFromGroup(self.dash_item)
+                self.dash_item = None

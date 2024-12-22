@@ -1,4 +1,3 @@
-from typing import Dict
 
 
 class SequenceLevelEvaluator:
@@ -49,7 +48,7 @@ class SequenceLevelEvaluator:
                     has_turns = entry["blue_attributes"]["turns"] > 0
         return has_turns
 
-    def _has_non_radial_orientation(self, entry: Dict) -> bool:
+    def _has_non_radial_orientation(self, entry: dict) -> bool:
         blue_start_ori = entry["blue_attributes"]["start_ori"]
         blue_end_ori = entry["blue_attributes"]["end_ori"]
         red_start_ori = entry["red_attributes"]["start_ori"]

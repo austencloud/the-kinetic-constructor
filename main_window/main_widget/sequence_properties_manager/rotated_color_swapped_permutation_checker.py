@@ -1,4 +1,4 @@
-from typing import Dict, TYPE_CHECKING
+from typing import  TYPE_CHECKING
 
 
 if TYPE_CHECKING:
@@ -173,8 +173,8 @@ class RotatedColorSwappedPermutationChecker:
 
     def _matches_rotated_and_color_swapped(
         self,
-        first_part: list[Dict],
-        second_part: list[Dict],
+        first_part: list[dict],
+        second_part: list[dict],
         repetition_type: str,
         match_type: str,
     ) -> bool:
@@ -190,7 +190,7 @@ class RotatedColorSwappedPermutationChecker:
         return True
 
     def _is_rotated_and_color_swapped(
-        self, first_entry: Dict, second_entry: Dict, rotation_map: dict[str, str]
+        self, first_entry: dict, second_entry: dict, rotation_map: dict[str, str]
     ) -> bool:
         first_entry_rotated_pos = rotation_map.get(first_entry["end_pos"])
 

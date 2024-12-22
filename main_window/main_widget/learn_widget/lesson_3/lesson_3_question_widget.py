@@ -50,6 +50,5 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
 
     def _resize_pictograph(self) -> None:
         if self.pictograph:
-            self.pictograph.view.setFixedSize(
-                self.main_widget.height() // 4, self.main_widget.height() // 4
-            )
+            size = int(self.main_widget.height() // 5.5)
+            self.pictograph.view.setFixedSize(size, size)

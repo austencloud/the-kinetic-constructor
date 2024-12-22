@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
-    from main_window.main_widget.sequence_builder.auto_builder.sequence_generator_widget import (
+    from main_window.main_widget.sequence_builder.sequence_generator.sequence_generator_widget import (
         SequenceGeneratorWidget,
     )
 

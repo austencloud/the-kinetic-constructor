@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
@@ -33,12 +33,12 @@ class LevelSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Difficulty Level:")
         self.main_widget = initial_selection_widget.browser.main_widget
-        self.buttons: Dict[int, QPushButton] = {}
-        self.description_labels: Dict[int, QLabel] = {}
-        self.level_images: Dict[int, QLabel] = {}
+        self.buttons: dict[int, QPushButton] = {}
+        self.description_labels: dict[int, QLabel] = {}
+        self.level_images: dict[int, QLabel] = {}
         self.sequence_count_labels: dict[int, QLabel] = {}
-        self.original_pixmaps: Dict[int, QPixmap] = {}
-        self.sequence_counts: Dict[int, int] = {}
+        self.original_pixmaps: dict[int, QPixmap] = {}
+        self.sequence_counts: dict[int, int] = {}
         self.add_buttons()
 
     def add_buttons(self):
@@ -139,7 +139,7 @@ class LevelSection(FilterSectionBase):
         """Handle clicks on level images."""
         self.handle_level_click(level)
 
-    def _get_all_sequences_with_levels(self) -> list[Tuple[str, list[str], int]]:
+    def _get_all_sequences_with_levels(self) -> list[tuple[str, list[str], int]]:
         """Retrieve and cache all sequences along with their levels."""
         if hasattr(self, "_all_sequences_with_levels"):
             return self._all_sequences_with_levels
@@ -166,9 +166,9 @@ class LevelSection(FilterSectionBase):
         self._all_sequences_with_levels = sequences_with_levels
         return sequences_with_levels
 
-    def _get_sequence_counts_per_level(self) -> Dict[int, int]:
+    def _get_sequence_counts_per_level(self) -> dict[int, int]:
         """Compute the number of sequences available for each level."""
-        level_counts: Dict[int, int] = {}
+        level_counts: dict[int, int] = {}
         sequences_with_levels = self._get_all_sequences_with_levels()
         for _, _, level in sequences_with_levels:
             level_counts[level] = level_counts.get(level, 0) + 1
@@ -176,7 +176,7 @@ class LevelSection(FilterSectionBase):
 
     def get_sequences_that_are_a_specific_level(
         self, level: int
-    ) -> list[Tuple[str, list[str]]]:
+    ) -> list[tuple[str, list[str]]]:
         """Retrieve sequences that correspond to a specific level."""
         sequences_with_levels = self._get_all_sequences_with_levels()
         return [

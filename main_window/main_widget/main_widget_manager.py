@@ -77,7 +77,7 @@ class MainWidgetManager:
         )
         self.main_widget.letter_determiner = LetterDeterminer(self.main_widget)
 
-    def set_grid_mode(self, grid_mode: str) -> None:
+    def set_grid_mode(self, grid_mode: str, clear_sequence=True) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
         self.main_widget.special_placement_loader.refresh_placements()
@@ -100,19 +100,32 @@ class MainWidgetManager:
             should_reset_to_start_pos_picker = False
         else:
             should_reset_to_start_pos_picker = True
-        sequence_clearer.clear_sequence(
-            show_indicator=False,
-            should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
-        )
-        self.main_widget.sequence_widget.graph_editor.adjustment_panel.blue_ori_picker.ori_picker_widget.ori_setter.set_orientation(
-            IN
-        )
-        self.main_widget.sequence_widget.graph_editor.adjustment_panel.red_ori_picker.ori_picker_widget.ori_setter.set_orientation(
-            IN
-        )
-        pictograph_container = (
-            self.main_widget.sequence_widget.graph_editor.pictograph_container
-        )
-        pictograph_container.GE_pictograph_view.set_to_blank_grid()
+        if clear_sequence:
+            sequence_clearer.clear_sequence(
+                show_indicator=False,
+                should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
+            )
+            adjustment_panel = (
+                self.main_widget.sequence_widget.graph_editor.adjustment_panel
+            )
+            for picker in [adjustment_panel.blue_ori_picker, adjustment_panel.red_ori_picker]:
+                picker.ori_picker_widget.ori_setter.set_orientation(IN)
+            pictograph_container = (
+                self.main_widget.sequence_widget.graph_editor.pictograph_container
+            )
+            pictograph_container.GE_pictograph_view.set_to_blank_grid()
         self._setup_special_placements()
+        option_picker = self.main_widget.manual_builder.option_picker
+        for pictograph in option_picker.pictograph_pool:
+            pictograph.grid.hide()
+            pictograph.grid.__init__(pictograph, pictograph.grid.grid_data, grid_mode)
+
+        beat_frame = self.main_widget.sequence_widget.beat_frame
+        for beat in beat_frame.beats:
+            if beat.is_filled:
+                beat.beat.grid.hide()
+                beat.beat.grid.__init__(beat.beat, beat.beat.grid.grid_data, grid_mode)
+        start_pos = beat_frame.start_pos_view.start_pos
+        start_pos.grid.hide()
+        start_pos.grid.__init__(start_pos, start_pos.grid.grid_data, grid_mode)
         QApplication.restoreOverrideCursor()

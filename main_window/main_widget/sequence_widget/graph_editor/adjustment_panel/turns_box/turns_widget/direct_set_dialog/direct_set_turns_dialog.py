@@ -40,7 +40,7 @@ class DirectSetTurnsDialog(QDialog):
             turns_values.insert(0, "fl")
         for value in turns_values:
             button = DirectSetTurnsButton(value, self)
-            button.set_button_styles()
+            # button.resize_direct_set_turn_button()
             button.clicked.connect(
                 lambda _, v=value: self.select_turns(
                     "fl" if v == "fl" else float(v) if "." in v else int(v)
@@ -63,19 +63,18 @@ class DirectSetTurnsDialog(QDialog):
         global_turns_label_pos = self.turns_display_frame.turns_label.mapToGlobal(
             self.turns_display_frame.turns_label.pos()
         )
+        #get the position of the left top corner of the turns widget
+        turns_widget_pos = self.turns_widget.mapToGlobal(self.turns_widget.pos())
         dialog_width = self.width()
-        dialog_x = (
-            global_turns_label_pos.x() + (turns_label_rect.width() - dialog_width) / 2
-        )
+        dialog_x = turns_widget_pos.x()
         dialog_y = global_turns_label_pos.y() + turns_label_rect.height()
         self.move(int(dialog_x), int(dialog_y))
         self.exec()
 
     def resize_direct_set_buttons(self) -> None:
-        for button in self.buttons.values():
-            button.set_button_styles()
-        self.adjustSize()  # Ensure the dialog resizes after button resize
-        self.updateGeometry()  # Force the geometry to update with the new size
+
+        self.adjustSize()
+        self.updateGeometry()
 
     def select_turns(self, value):
         self.turns_widget.adjustment_manager.direct_set_turns(value)

@@ -51,6 +51,11 @@ class GlyphVisibilityManager:
         for beat in beats:
             if beat:
                 self.apply_current_visibility_settings(beat)
+        for (
+            option
+        ) in self.main_window.main_widget.manual_builder.option_picker.pictograph_pool:
+            if option:
+                self.apply_current_visibility_settings(option)
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:
         """Check if a glyph type should be visible based on current settings."""
