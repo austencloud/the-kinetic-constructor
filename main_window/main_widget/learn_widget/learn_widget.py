@@ -74,15 +74,14 @@ class LearnWidget(QWidget):
 
     def _setup_main_splitter(self) -> None:
         """Sets up the main QSplitter, holding the Codex panel and right-side widget."""
-        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
-        self.main_splitter.setContentsMargins(0, 0, 0, 0)
-        self.main_splitter.setHandleWidth(15)
-        self.main_splitter.addWidget(self.codex)
-        self.main_splitter.addWidget(self.right_side)
+        self.main_layout = QHBoxLayout()
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.addWidget(self.codex, 1)
+        self.main_layout.addWidget(self.right_side, 1)
 
     def _setup_main_layout(self) -> None:
         """Sets the final QVBoxLayout for the LearnWidget."""
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.main_splitter)
+        layout.addLayout(self.main_layout)
         self.setLayout(layout)

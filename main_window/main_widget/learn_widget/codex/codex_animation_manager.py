@@ -1,17 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import (
-    QPropertyAnimation,
-    QRect,
-    QEasingCurve,
-    QObject,
-    QAbstractAnimation,
-)
-from PyQt6.QtWidgets import QGraphicsOpacityEffect
-from PyQt6.QtCore import QParallelAnimationGroup
+from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, QObject, QAbstractAnimation
 import logging
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex.codex import Codex
+    from .codex import Codex
 
 logger = logging.getLogger(__name__)
 
@@ -25,25 +17,9 @@ class CodexAnimationManager(QObject):
         super().__init__(codex)
         self.codex = codex
 
-
-        self.opacity_effect = QGraphicsOpacityEffect(self.codex)
-        self.codex.setGraphicsEffect(self.opacity_effect)
-        self.opacity_animation = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.opacity_animation.setDuration(self.ANIMATION_DURATION)
-        self.opacity_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-        self.placeholder = getattr(codex.learn_widget, "placeholder", None)
-        if self.placeholder:
-            self.placeholder_animation = QPropertyAnimation(
-                self.placeholder, b"minimumWidth"
-            )
-            self.placeholder_animation.setDuration(self.ANIMATION_DURATION)
-            self.placeholder_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-        self.animation_group = QParallelAnimationGroup()
-        self.animation_group.addAnimation(self.opacity_animation)
-        if self.placeholder:
-            self.animation_group.addAnimation(self.placeholder_animation)
+        self.animation = QPropertyAnimation(self.codex, b"maximumWidth")
+        self.animation.setDuration(self.ANIMATION_DURATION)
+        self.animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
         self.target_width = 0
 
@@ -51,29 +27,21 @@ class CodexAnimationManager(QObject):
         """Toggle the visibility of the codex with animations for both showing and hiding."""
         logger.debug(f"Toggling codex visibility to {'show' if show else 'hide'}.")
 
-        if self.animation_group.state() == QAbstractAnimation.State.Running:
-            self.animation_group.stop()
+        if self.animation.state() == QAbstractAnimation.State.Running:
+            self.animation.stop()
 
-        parent_widget = self.codex.parentWidget()
-        parent_width = parent_widget.width()
-        current_opacity = self.opacity_effect.opacity()
+        learn_widget = self.codex.learn_widget
+        learn_widget_width = learn_widget.width()
+        current_width = self.codex.width()
 
         if show:
-            self.codex.show()
-            self.target_width = int(parent_width * 0.5)
-            self.opacity_animation.setStartValue(current_opacity)
-            self.opacity_animation.setEndValue(1.0)
+            self.target_width = int(learn_widget_width * 0.5)
+            self.animation.setStartValue(current_width)
+            self.animation.setEndValue(self.target_width)
 
         else:
             self.target_width = 0
-            self.opacity_animation.setStartValue(current_opacity)
-            self.opacity_animation.setEndValue(0.0)
+            self.animation.setStartValue(current_width)
+            self.animation.setEndValue(self.target_width)
 
-        self.animation_group.start()
-
-    def on_animation_finished(self):
-        """Handle post-animation actions."""
-        if self.target_width == 0:
-            self.codex.hide()
-            self.opacity_effect.setOpacity(1.0)
-            logger.debug("Codex hidden after collapse animation.")
+        self.animation.start()

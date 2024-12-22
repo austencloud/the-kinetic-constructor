@@ -15,7 +15,7 @@ class CodexToggleButton(QPushButton):
         super().__init__("Codex", codex)
         self.codex = codex
         self.learn_widget = codex.learn_widget
-        self.codex_shown = False
+        self.codex_shown = True
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.clicked.connect(self.toggle_codex)
 
@@ -31,7 +31,8 @@ class CodexToggleButton(QPushButton):
             button_width = self.learn_widget.main_widget.width() // 14
             self.setFixedHeight(button_height)
             self.setFixedWidth(button_width)
-        font = QFont()
+
+        font = self.font()
         font.setBold(True)
         font_size = self.learn_widget.height() // 60
         font.setPointSize(font_size)

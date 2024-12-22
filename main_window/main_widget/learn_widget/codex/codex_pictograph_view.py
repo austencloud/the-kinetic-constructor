@@ -15,41 +15,10 @@ class CodexPictographView(PictographView):
         self.pictograph = pictograph
         self.pictograph.view = self
         self.codex = codex
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.setStyleSheet("border: 1px solid black;")
 
-    ### EVENTS ###
-
-    def contextMenuEvent(self, event: QEvent) -> None:
-        if isinstance(event, QContextMenuEvent):
-            context_menu = QMenu(self)
-            context_menu.addSeparator()
-            copy_action = QAction("Copy Dictionary", self)
-            copy_action.triggered.connect(self.copy_pictograph_dict)
-            context_menu.addAction(copy_action)
-            context_menu.exec(QCursor.pos())
-        else:
-            super().contextMenuEvent(event)
-
-    def showEvent(self, event):
-        super().showEvent(event)
-        settings_manager = self.pictograph.main_widget.main_window.settings_manager
-        current_prop_type = settings_manager.global_settings.get_prop_type()
-
-        if self.pictograph.prop_type != current_prop_type:
-            settings_manager.global_settings.prop_type_changer.replace_props(
-                current_prop_type, self.pictograph
-            )
-
     def resizeEvent(self, event):
-        size = self.calculate_view_size()
+        size = self.codex.learn_widget.width() // 14
         self.setMinimumSize(size, size)
         self.setMaximumSize(size, size)
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-
-    def calculate_view_size(self) -> int:
-        codex_scroll_area_bar_width = self.codex.scroll_area.verticalScrollBar().width()
-        view_width = int((self.codex.width() // 7)) - (codex_scroll_area_bar_width // 6)
-        return view_width
