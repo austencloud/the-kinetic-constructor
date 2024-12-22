@@ -23,7 +23,7 @@ class CodexToggleButton(QPushButton):
         """Adjusts the toggle button size based on the Codex's parent widget dimensions."""
         if self.learn_widget is not None:
             button_height = self.learn_widget.height() // 30
-            button_width = self.learn_widget.width() // 10
+            button_width = self.learn_widget.width() // 14
             self.setFixedHeight(button_height)
             self.setFixedWidth(button_width)
         font = QFont()

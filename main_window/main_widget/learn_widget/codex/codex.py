@@ -22,7 +22,7 @@ logging.basicConfig(
 
 
 class Codex(QWidget):
-    """Displays all pictographs with a control panel to modify them."""
+    """Displays base pictographs with a control panel to modify them."""
 
     def __init__(self, learn_widget: "LearnWidget"):
         super().__init__(learn_widget)

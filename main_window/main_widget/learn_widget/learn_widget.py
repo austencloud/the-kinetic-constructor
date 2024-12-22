@@ -32,7 +32,7 @@ class LearnWidget(QWidget):
         )
 
         self._setup_components()
-        self._setup_ui()
+        self._setup_layout()
 
     def _setup_components(self):
         self.lesson_selector = LessonSelector(self)
@@ -41,7 +41,7 @@ class LearnWidget(QWidget):
         self.lesson_3_widget = Lesson3Widget(self)
         self.codex = Codex(self)
 
-    def _setup_ui(self) -> None:
+    def _setup_layout(self) -> None:
         """Orchestrates creation of the main UI components and layout."""
         self._setup_stacked_layout()
         self._setup_right_side()
