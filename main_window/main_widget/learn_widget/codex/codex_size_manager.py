@@ -19,8 +19,8 @@ class CodexSizeManager:
     def adjust_pictograph_sizes(self):
         codex_width = (
             self.parent.width()
-            - self.parent.main_vlayout.contentsMargins().left()
-            - self.parent.main_vlayout.contentsMargins().right()
+            - self.parent.main_layout.contentsMargins().left()
+            - self.parent.main_layout.contentsMargins().right()
         )
         square_size = codex_width // 6  # Adjusted to divide by 6 as per requirement
         logger.debug(f"Adjusting pictograph sizes to {square_size}x{square_size}.")

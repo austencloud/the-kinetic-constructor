@@ -11,7 +11,9 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 
-from main_window.main_widget.learn_widget.codex.codex_ori_selector import CodexOriSelector
+from main_window.main_widget.learn_widget.codex.codex_ori_selector import (
+    CodexOriSelector,
+)
 from main_window.main_widget.learn_widget.codex.codex_toggle_button import (
     CodexToggleButton,
 )
@@ -39,12 +41,12 @@ logging.basicConfig(
 
 
 class Codex(QWidget):
-    """ Displays all pictographs with a control panel to modify them. """
+    """Displays all pictographs with a control panel to modify them."""
+
     def __init__(self, learn_widget: "LearnWidget"):
         super().__init__(learn_widget)
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
-
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         self.setMaximumWidth(0)
 
@@ -53,49 +55,35 @@ class Codex(QWidget):
         self.animation_manager = CodexAnimationManager(self)
         self.size_manager = CodexSizeManager(self)
         self.toggle_button = CodexToggleButton(self)
+        self.data_manager = CodexDataManager(self.main_widget)
 
-        self._initialize_data()
-        self._setup_layout()
         self._setup_scroll_area()
-        self._apply_styles()
+        self._setup_layout()
 
         self.section_manager.setup_sections()
 
-    def _initialize_data(self) -> None:
-        """Initializes Codex data from the CodexDataManager."""
-        self.codex_data_manager = CodexDataManager(self.main_widget)
-        self.pictograph_data = self.codex_data_manager.get_pictograph_data()
+
 
     def _setup_layout(self) -> None:
         """Sets up the main Codex layout with control widget and scroll area."""
-        self.main_vlayout = QVBoxLayout(self)
-        self.main_vlayout.setContentsMargins(0, 0, 0, 0)
-        self.main_vlayout.setSpacing(0)
+        self.main_layout = QVBoxLayout(self)
 
-        self.main_vlayout.addWidget(self.control_widget)
+        self.main_layout.addWidget(self.control_widget)
+        self.main_layout.addWidget(self.scroll_area)
 
     def _setup_scroll_area(self) -> None:
         """Sets up the scroll area and content layout."""
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
-        self.main_vlayout.addWidget(self.scroll_area)
+        self.scroll_area.setStyleSheet("background: transparent;")
 
         content_widget = QWidget()
         self.content_layout = QVBoxLayout(content_widget)
         self.scroll_area.setWidget(content_widget)
 
-        self.lower_hbox = QHBoxLayout()
-        self.main_vlayout.addWidget(self.scroll_area)
-
-    def _apply_styles(self) -> None:
-        """Applies styling for the Codex and its scroll area."""
-        self.setStyleSheet("background: transparent;")
-        self.scroll_area.setStyleSheet("background: transparent;")
-        self.scroll_area.viewport().setStyleSheet("background: transparent;")
-
     def resizeEvent(self, event) -> None:
         """Handles resizing events, adjusting pictograph sizes and spacers."""
         self.size_manager.adjust_pictograph_sizes()
-        self.section_manager.spacer_1.changeSize(20, self.height() // 30)
-        self.section_manager.spacer_2.changeSize(20, self.height() // 30)
+        for spacer in self.section_manager.spacers:
+            spacer.changeSize(20, self.height() // 30)
         super().resizeEvent(event)

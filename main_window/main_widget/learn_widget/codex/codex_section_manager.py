@@ -46,12 +46,8 @@ class CodexSectionManager:
     def load_letter_type_section(self, letter_type: LetterType):
         """Load a section for a given LetterType."""
         heading_label = CodexSectionTypeLabel(self.codex, letter_type)
-        self.spacer_1 = QSpacerItem(
-            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
-        )
-        self.spacer_2 = QSpacerItem(
-            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
-        )
+        self._setup_spacers()
+
         self.codex.content_layout.addSpacerItem(self.spacer_1)
         self.codex.content_layout.addWidget(
             heading_label, alignment=Qt.AlignmentFlag.AlignCenter
@@ -95,7 +91,7 @@ class CodexSectionManager:
             logger.debug(f"Added left spacer for centering row {row_index + 1}.")
 
             for letter_str in current_letters:
-                p_dict = self.codex.pictograph_data.get(letter_str, None)
+                p_dict = self.codex.data_manager.pictograph_data.get(letter_str, None)
                 if p_dict:
                     if letter_str not in self.pictograph_views:
                         scene = BasePictograph(self.codex.main_widget)
@@ -134,11 +130,20 @@ class CodexSectionManager:
         self.codex.content_layout.addLayout(vertical_layout)
         logger.debug("Added vertical layout with all rows to the content layout.")
 
+    def _setup_spacers(self):
+        self.spacer_1 = QSpacerItem(
+            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+        )
+        self.spacer_2 = QSpacerItem(
+            20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+        )
+        self.spacers: list[QSpacerItem] = [self.spacer_1, self.spacer_2]
+
     def reload_sections(self):
         """Reload all sections to reflect updated data."""
         for letter, view in self.pictograph_views.items():
-            if letter in self.codex.pictograph_data:
-                pictograph_dict = self.codex.pictograph_data[letter]
+            if letter in self.codex.data_manager.pictograph_data:
+                pictograph_dict = self.codex.data_manager.pictograph_data[letter]
                 view.pictograph.updater.update_pictograph(pictograph_dict)
                 view.scene().update()
         logger.debug("Reloaded all sections in Codex.")

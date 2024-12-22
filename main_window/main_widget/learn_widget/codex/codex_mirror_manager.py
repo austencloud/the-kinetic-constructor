@@ -75,7 +75,7 @@ class CodexMirrorManager:
 
     def mirror_codex(self):
         """Apply mirroring logic to all pictographs in the Codex."""
-        for letter, pictograph in self.codex.pictograph_data.items():
+        for letter, pictograph in self.codex.data_manager.pictograph_data.items():
             if pictograph:
                 self._mirror_pictograph(pictograph)
         self._refresh_pictograph_views()
@@ -114,7 +114,7 @@ class CodexMirrorManager:
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""
         for letter, view in self.codex.section_manager.pictograph_views.items():
-            if letter in self.codex.pictograph_data:
-                pictograph_dict = self.codex.pictograph_data[letter]
+            if letter in self.codex.data_manager.pictograph_data:
+                pictograph_dict = self.codex.data_manager.pictograph_data[letter]
                 view.pictograph.updater.update_pictograph(pictograph_dict)
                 view.scene().update()

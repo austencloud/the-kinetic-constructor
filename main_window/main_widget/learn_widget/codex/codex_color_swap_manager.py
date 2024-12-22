@@ -24,7 +24,7 @@ class CodexColorSwapManager:
 
     def swap_colors_in_codex(self):
         logger.info("Color Swap action triggered.")
-        for pictograph in self.codex.pictograph_data.values():
+        for pictograph in self.codex.data_manager.pictograph_data.values():
             self._swap_colors(pictograph)
         try:
             for letter_str, view in self.codex.section_manager.pictograph_views.items():

@@ -16,14 +16,14 @@ class CodexRotationManager:
 
     def rotate_codex(self):
         """Rotate all pictographs in the Codex by 45° increments."""
-        if not self.codex.pictograph_data:
+        if not self.codex.data_manager.pictograph_data:
             return
 
         self.rotation_steps = 1
-        for letter, pictograph in self.codex.pictograph_data.items():
+        for letter, pictograph in self.codex.data_manager.pictograph_data.items():
             if pictograph:
                 dict = self._rotate_pictograph(pictograph)
-                self.codex.pictograph_data[letter] = dict
+                self.codex.data_manager.pictograph_data[letter] = dict
         # Update UI or grid modes if needed
         self.update_grid_mode()
         self.codex.section_manager.reload_sections()
@@ -81,7 +81,7 @@ class CodexRotationManager:
         intercardinal_set = {"ne", "se", "sw", "nw"}
         all_locs = []
 
-        for pictograph_dict in self.codex.pictograph_data.values():
+        for pictograph_dict in self.codex.data_manager.pictograph_data.values():
             if not pictograph_dict:
                 continue
             if (
@@ -114,8 +114,8 @@ class CodexRotationManager:
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""
         for letter, view in self.codex.section_manager.pictograph_views.items():
-            if letter in self.codex.pictograph_data:
-                pictograph_dict = self.codex.pictograph_data[letter]
+            if letter in self.codex.data_manager.pictograph_data:
+                pictograph_dict = self.codex.data_manager.pictograph_data[letter]
                 grid_mode = self.codex.main_widget.grid_mode_checker.get_grid_mode(
                     pictograph_dict
                 )
