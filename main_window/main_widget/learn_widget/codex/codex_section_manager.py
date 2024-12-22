@@ -48,11 +48,11 @@ class CodexSectionManager:
         heading_label = CodexSectionTypeLabel(self.codex, letter_type)
         self._setup_spacers()
 
-        self.codex.content_layout.addSpacerItem(self.spacer_1)
-        self.codex.content_layout.addWidget(
+        self.codex.scroll_area.content_layout.addSpacerItem(self.spacer_1)
+        self.codex.scroll_area.content_layout.addWidget(
             heading_label, alignment=Qt.AlignmentFlag.AlignCenter
         )
-        self.codex.content_layout.addSpacerItem(self.spacer_2)
+        self.codex.scroll_area.content_layout.addSpacerItem(self.spacer_2)
         logger.debug("Added extra spacer below the heading label.")
 
         letters = letter_type.letters
@@ -127,7 +127,7 @@ class CodexSectionManager:
             vertical_layout.addLayout(horizontal_layout)
             logger.debug(f"Added horizontal layout and line for row {row_index + 1}.")
 
-        self.codex.content_layout.addLayout(vertical_layout)
+        self.codex.scroll_area.content_layout.addLayout(vertical_layout)
         logger.debug("Added vertical layout with all rows to the content layout.")
 
     def _setup_spacers(self):

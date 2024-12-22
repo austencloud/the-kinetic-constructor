@@ -4,14 +4,15 @@ from typing import TYPE_CHECKING, Optional
 from Enums.letters import Letter
 
 if TYPE_CHECKING:
+    from main_window.main_widget.learn_widget.codex.codex import Codex
     from main_window.main_widget.main_widget import MainWidget
 
 
 class CodexDataManager:
     """Manages the initialization and retrieval of pictograph data."""
 
-    def __init__(self, main_widget: "MainWidget"):
-        self.main_widget = main_widget
+    def __init__(self, codex: "Codex"):
+        self.main_widget = codex.main_widget
         self.pictograph_data: dict[str, Optional[dict]] = (
             self._initialize_pictograph_data()
         )

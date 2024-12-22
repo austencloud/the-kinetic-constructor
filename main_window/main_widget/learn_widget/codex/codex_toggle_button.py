@@ -16,31 +16,24 @@ class CodexToggleButton(QPushButton):
         self.codex = codex
         self.learn_widget = codex.learn_widget
         self.codex_shown = False
-
-        self._setup_appearance()
-        self._setup_connections()
-
-    def _setup_appearance(self) -> None:
-        """Applies styling and appearance settings to the toggle button."""
-        font = QFont()
-        font.setBold(True)
-        self.setFont(font)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-
-    def _setup_connections(self) -> None:
-        """Connects the button's click signal to the Codex toggle method."""
         self.clicked.connect(self.toggle_codex)
 
     def resizeEvent(self, event) -> None:
         """Adjusts the toggle button size based on the Codex's parent widget dimensions."""
         if self.learn_widget is not None:
             button_height = self.learn_widget.height() // 30
-            button_width = self.learn_widget.width() // 6
+            button_width = self.learn_widget.width() // 10
             self.setFixedHeight(button_height)
             self.setFixedWidth(button_width)
+        font = QFont()
+        font.setBold(True)
+        font_size = self.learn_widget.height() // 60
+        font.setPointSize(font_size)
+        self.setFont(font)
         super().resizeEvent(event)
 
     def toggle_codex(self) -> None:
         """Toggles the visibility of the codex with an animation."""
         self.codex_shown = not self.codex_shown
-        self.codex.animation_manager.toggle_codex(self.codex_shown)
+        self.codex.animation_manager.animate(self.codex_shown)

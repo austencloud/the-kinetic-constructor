@@ -66,7 +66,7 @@ class CodexAnimationManager(QObject):
         self.codex.setMaximumWidth(0)
         self.codex.hide()
 
-    def toggle_codex(self, show: bool):
+    def animate(self, show: bool):
         """Toggle the visibility of the codex with animations for both showing and hiding."""
         logger.debug(f"Toggling codex visibility to {'show' if show else 'hide'}.")
 
