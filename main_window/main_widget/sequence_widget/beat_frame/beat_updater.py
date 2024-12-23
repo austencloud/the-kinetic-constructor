@@ -1,6 +1,4 @@
-from math import pi
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
 
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,

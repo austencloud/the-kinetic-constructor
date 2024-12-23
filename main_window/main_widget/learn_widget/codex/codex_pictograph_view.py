@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QMenu
-from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QCursor, QAction, QContextMenuEvent
+from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:

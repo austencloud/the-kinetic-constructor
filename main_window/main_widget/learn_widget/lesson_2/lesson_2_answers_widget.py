@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import (
-    QWidget,
     QGridLayout,
-    QSpacerItem,
-    QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 import logging

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPixmapItem
+from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QGraphicsPixmapItem
 from PyQt6.QtCore import Qt, QPointF, QEvent
-from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction, QCursor, QMouseEvent, QContextMenuEvent
+from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction, QCursor, QContextMenuEvent
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat

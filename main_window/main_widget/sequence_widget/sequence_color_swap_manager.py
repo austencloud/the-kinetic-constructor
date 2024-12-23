@@ -1,7 +1,6 @@
 # sequence_color_swap_manager.py
 
 from typing import TYPE_CHECKING
-from data.constants import *
 from data.positions_map import positions_map
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication

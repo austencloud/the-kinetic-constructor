@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem, QApplication
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
 
 from main_window.main_widget.sequence_widget.sequence_color_swap_manager import (
     SequenceColorSwapManager,

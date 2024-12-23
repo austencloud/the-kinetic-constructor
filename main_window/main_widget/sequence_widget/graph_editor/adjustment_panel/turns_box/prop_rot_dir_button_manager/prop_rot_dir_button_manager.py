@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import VTG_Directions
 from PyQt6.QtGui import QIcon
 from Enums.letters import Letter
 from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     ICON_DIR,
-    PROP_ROT_DIR,
 )
 from PyQt6.QtCore import QSize
-from PyQt6.QtWidgets import QApplication
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )

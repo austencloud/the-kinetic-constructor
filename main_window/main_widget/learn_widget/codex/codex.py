@@ -1,7 +1,5 @@
-import logging
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
-from PyQt6.QtCore import QSize
 
 from .codex_scroll_area import CodexScrollArea
 from .codex_toggle_button import CodexToggleButton

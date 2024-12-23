@@ -17,9 +17,6 @@ from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
 from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
     GE_PictographViewMouseEventHandler,
 )
-from main_window.main_widget.sequence_widget.graph_editor.arrow_selection_manager import (
-    ArrowSelectionManager,
-)
 
 
 if TYPE_CHECKING:

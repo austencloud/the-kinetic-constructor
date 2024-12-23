@@ -6,11 +6,9 @@ from PyQt6.QtWidgets import (
     QLabel,
     QVBoxLayout,
     QPushButton,
-    QSpacerItem,
-    QSizePolicy,
     QGridLayout,
 )
-from PyQt6.QtGui import QFont, QIcon, QCursor, QDesktopServices
+from PyQt6.QtGui import QFont, QIcon, QDesktopServices
 from PyQt6.QtCore import Qt, QSize, QUrl
 
 from main_window.menu_bar_widget.base_selector import BaseSelector

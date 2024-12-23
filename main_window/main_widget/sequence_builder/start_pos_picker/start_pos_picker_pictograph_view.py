@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
+from PyQt6.QtWidgets import QSizePolicy, QGraphicsRectItem
 from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
+from PyQt6.QtGui import QCursor, QBrush, QColor, QKeyEvent
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
@@ -9,9 +9,6 @@ from base_widgets.base_pictograph.pictograph_context_menu_handler import (
 )
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
-)
-from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
-    GE_PictographViewMouseEventHandler,
 )
 
 

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:

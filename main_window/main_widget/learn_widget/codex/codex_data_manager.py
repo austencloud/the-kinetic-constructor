@@ -5,7 +5,6 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.codex.codex import Codex
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class CodexDataManager:

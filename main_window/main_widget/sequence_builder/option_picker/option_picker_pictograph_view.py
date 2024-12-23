@@ -10,9 +10,6 @@ from base_widgets.base_pictograph.pictograph_context_menu_handler import (
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
-from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
-    GE_PictographViewMouseEventHandler,
-)
 
 
 if TYPE_CHECKING:

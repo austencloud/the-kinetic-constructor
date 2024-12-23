@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QStackedLayout,
-    QCheckBox,
     QSpacerItem,
     QSizePolicy,
 )
@@ -14,9 +13,6 @@ from typing import TYPE_CHECKING
 
 from main_window.main_widget.sequence_builder.sequence_generator.freeform.custom_checkbox_widget import (
     CustomCheckBoxWidget,
-)
-from main_window.main_widget.sequence_builder.sequence_generator.styled_checkbox import (
-    StyledCheckBox,
 )
 from .base_classes.customize_your_sequence_label import CustomizeSequenceLabel
 from .generate_sequence_button import GenerateSequenceButton

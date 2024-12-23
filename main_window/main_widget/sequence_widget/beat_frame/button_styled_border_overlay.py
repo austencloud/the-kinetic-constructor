@@ -1,10 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QFont, QPainter, QColor
-from typing import TYPE_CHECKING, Optional, Tuple
-import math
+from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPainter, QColor
+from typing import TYPE_CHECKING
 
-from Enums.letters import LetterType
 if TYPE_CHECKING:
 
     from main_window.main_widget.sequence_builder.sequence_generator.freeform.letter_type_button_widget import LetterTypeButtonWidget

@@ -6,9 +6,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import (
         GE_PictographView,
     )
-    from base_widgets.base_pictograph.pictograph_view import (
-        PictographView,
-    )
 
 
 class GE_PictographViewMouseEventHandler:

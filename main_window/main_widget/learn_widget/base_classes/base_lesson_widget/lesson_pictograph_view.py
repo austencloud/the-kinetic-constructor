@@ -1,13 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QApplication, QGraphicsRectItem
-from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor, QKeyEvent
+from PyQt6.QtWidgets import QSizePolicy, QGraphicsRectItem
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QBrush, QColor, QKeyEvent
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
 )
-from base_widgets.base_pictograph.pictograph_view import PictographView
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
@@ -15,7 +14,6 @@ from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
