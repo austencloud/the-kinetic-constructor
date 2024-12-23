@@ -13,7 +13,7 @@ from .choose_your_start_pos_label import ChooseYourStartPosLabel
 from .base_start_pos_picker import BaseStartPosPicker
 
 if TYPE_CHECKING:
-    from main_window.main_widget.build_tab.manual_builder import ManualBuilder
+    from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
 
 
 class StartPosPicker(BaseStartPosPicker):
@@ -21,8 +21,8 @@ class StartPosPicker(BaseStartPosPicker):
     start_position_selected = pyqtSignal(BasePictograph)
     COLUMN_COUNT = 3
 
-    def __init__(self, manual_builder: "ManualBuilder"):
-        super().__init__(manual_builder)
+    def __init__(self, sequence_constructor: "SequenceConstructor"):
+        super().__init__(sequence_constructor)
         self.top_builder_widget = None
         self.pictograph_frame = StartPosPickerPictographFrame(self)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)

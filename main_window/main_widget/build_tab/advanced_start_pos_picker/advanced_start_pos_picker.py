@@ -4,20 +4,26 @@ from typing import TYPE_CHECKING
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import BOX, DIAMOND
-from main_window.main_widget.build_tab.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_view import AdvancedStartPosPickerPictographView
-from main_window.main_widget.build_tab.start_pos_picker.base_start_pos_picker import BaseStartPosPicker
-from main_window.main_widget.build_tab.start_pos_picker.choose_your_start_pos_label import ChooseYourStartPosLabel
+from main_window.main_widget.build_tab.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_view import (
+    AdvancedStartPosPickerPictographView,
+)
+from main_window.main_widget.build_tab.start_pos_picker.base_start_pos_picker import (
+    BaseStartPosPicker,
+)
+from main_window.main_widget.build_tab.start_pos_picker.choose_your_start_pos_label import (
+    ChooseYourStartPosLabel,
+)
 
 
 if TYPE_CHECKING:
-    from ..manual_builder import ManualBuilder
+    from ..sequence_constructor import SequenceConstructor
 
 
 class AdvancedStartPosPicker(BaseStartPosPicker):
     COLUMN_COUNT = 4  # Adjust as needed
 
-    def __init__(self, manual_builder: "ManualBuilder"):
-        super().__init__(manual_builder)
+    def __init__(self, sequence_constructor: "SequenceConstructor"):
+        super().__init__(sequence_constructor)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self._setup_layout()
         self.start_pos_cache: dict[str, list[BasePictograph]] = {}

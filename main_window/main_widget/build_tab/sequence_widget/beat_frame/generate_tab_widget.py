@@ -5,8 +5,8 @@ if TYPE_CHECKING:
     from main_window.main_widget.build_tab.sequence_widget.sequence_widget import (
         SequenceWidget,
     )
-    from main_window.main_widget.build_tab.sequence_generator.sequence_generator_widget import (
-        SequenceGeneratorWidget,
+    from main_window.main_widget.build_tab.sequence_generator.sequence_generator import (
+        SequenceGenerator,
     )
 
 
@@ -14,7 +14,7 @@ class GenerateTabWidget(QWidget):
     def __init__(
         self,
         sequence_widget: "SequenceWidget",
-        sequence_generator: "SequenceGeneratorWidget",
+        sequence_generator: "SequenceGenerator",
     ):
         super().__init__()
         self.sequence_widget = sequence_widget

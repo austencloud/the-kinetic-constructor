@@ -1,12 +1,13 @@
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
+# sequence_constructor.py
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget
 from PyQt6.QtCore import Qt, pyqtSignal
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from Enums.Enums import LetterType, Letter
 from data.constants import BLUE_START_ORI, BLUE_TURNS, DIAMOND, RED_START_ORI, RED_TURNS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker import (
-    StartPosPicker,
-)
+from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker import StartPosPicker
+
 
 from .advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
 
@@ -19,14 +20,15 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class ManualBuilder(QFrame):
+class SequenceConstructor(QFrame):
     start_position_selected = pyqtSignal(object)
 
     def __init__(self, build_tab: "BuildTab") -> None:
         super().__init__(build_tab)
         self.build_tab = build_tab
-        self.last_beat: "BasePictograph" = None
-        self.json_manager = self.build_tab.main_widget.json_manager
+        self.main_widget = build_tab.main_widget
+        self.last_beat: Optional["BasePictograph"] = None
+        self.json_manager = self.main_widget.json_manager
         self.start_position_picked = False
         self.pictograph_cache: dict[Letter, dict[str, BasePictograph]] = {
             letter: {} for letter in Letter
@@ -39,16 +41,23 @@ class ManualBuilder(QFrame):
         self.add_to_sequence_manager = AddToSequenceManager(self)
 
         # Create a QStackedWidget to manage the transitions between widgets
-        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.stacked_widget = QStackedWidget(self)
+
+        self.layout:QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
-        # Add widgets directly based on state
-        self.layout.addWidget(self.start_pos_picker)
-        self.layout.addWidget(self.option_picker)
-        # Initially, show start_pos_picker
-        self.option_picker.hide()
+        # Add widgets to the stacked widget
+        self.stacked_widget.addWidget(self.start_pos_picker)           # Index 0
+        self.stacked_widget.addWidget(self.advanced_start_pos_picker)  # Index 1
+        self.stacked_widget.addWidget(self.option_picker)             # Index 2
+
+        # Add the stacked widget to the main layout
+        self.layout.addWidget(self.stacked_widget)
+
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.setStyleSheet("background: transparent;")
 
         self.initialized = False
         self.start_position_selected.connect(self.transition_to_sequence_building)
@@ -56,31 +65,22 @@ class ManualBuilder(QFrame):
     def transition_to_sequence_building(self) -> None:
         """Transition to the option picker for sequence building."""
         self.start_position_picked = True
+        self.stacked_widget.setCurrentWidget(self.option_picker)
         self.option_picker.show()
-        self.start_pos_picker.hide()
         self.option_picker.scroll_area.section_manager.show_all_sections()
         self.option_picker.update_option_picker()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
-        self.advanced_start_pos_picker.show()
-        self.option_picker.hide()
+        self.stacked_widget.setCurrentWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.display_variations()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
 
     def reset_to_start_pos_picker(self) -> None:
         """Reset the view back to the start position picker."""
         self.start_position_picked = False
+        self.stacked_widget.setCurrentWidget(self.start_pos_picker)
         self.start_pos_picker.show()
-        self.option_picker.hide()
-
-    def reset_to_start_pos_picker(self) -> None:
-        """Reset the view back to the start position picker."""
-        self.start_position_picked = False
-        # self.stacked_widget.setCurrentWidget(self.start_pos_picker)
-        self.option_picker.hide()
-        self.start_pos_picker.show()
-        # self.start_pos_picker.resize_start_pos_picker()
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence
@@ -91,7 +91,7 @@ class ManualBuilder(QFrame):
         letter = Letter.get_letter(letter_str)
         letter_type = LetterType.get_letter_type(letter)
         pictograph_key = (
-            self.build_tab.main_widget.pictograph_key_generator.generate_pictograph_key(
+            self.main_widget.pictograph_key_generator.generate_pictograph_key(
                 pictograph_dict
             )
         )
@@ -104,7 +104,7 @@ class ManualBuilder(QFrame):
             pictograph_key, pictograph_dict
         )
         scroll_area.pictograph_cache[pictograph_key] = new_pictograph
-        self.build_tab.main_widget.pictograph_cache[new_pictograph.letter][
+        self.main_widget.pictograph_cache[new_pictograph.letter][
             pictograph_key
         ] = new_pictograph
         if pictograph_key not in self.pictograph_cache[letter]:
@@ -133,13 +133,3 @@ class ManualBuilder(QFrame):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
 
-    # def resize_manual_builder(self) -> None:
-    #     """Resize the components based on the current state."""
-    # self.start_pos_picker.resize_start_pos_picker()
-    # self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
-    # self.option_picker.resize_option_picker()
-
-    # def resizeEvent(self, event) -> None:
-    #     """Resize the manual builder based on the current state."""
-    #     super().resizeEvent(event)
-    #     # self.resize_manual_builder()

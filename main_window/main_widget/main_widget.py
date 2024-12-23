@@ -4,8 +4,10 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-from main_window.main_widget.build_tab.manual_builder import ManualBuilder
-from main_window.main_widget.build_tab.sequence_generator.sequence_generator_widget import SequenceGeneratorWidget
+from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
+from main_window.main_widget.build_tab.sequence_generator.sequence_generator import (
+    SequenceGenerator,
+)
 from main_window.main_widget.learn_tab.learn_widget import LearnTab
 from main_window.main_widget.write_tab.act_tab import WriteTab
 
@@ -16,7 +18,7 @@ from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 from .main_widget_background_handler import MainWidgetBackgroundHandler
-from main_window.main_widget.main_widget_tabs import MainWidgetTabs
+from main_window.main_widget.main_widget_tabs import MainWidgetTabsHandler
 
 if TYPE_CHECKING:
     from main_window.main_widget.background_widget import BackgroundWidget
@@ -67,7 +69,7 @@ class MainWidget(QWidget):
     write_tab: "WriteTab"
 
     # Handlers
-    tabs_handler: "MainWidgetTabs"
+    tabs_handler: "MainWidgetTabsHandler"
     manager: "MainWidgetManager"
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
@@ -102,11 +104,11 @@ class MainWidget(QWidget):
     background_widget: "BackgroundWidget"
 
     # Indices for tabs
-    build_tab_index: int = 0
-    generate_tab_index: int = 1
-    dictionary_tab_index: int = 2
-    learn_tab_index: int = 3
-    act_tab_index: int = 4
+    construct_tab_index: int = 0
+    generate_tab_index: int = 0
+    browse_tab_index: int = 1
+    learn_tab_index: int = 2
+    write_tab_index: int = 3
 
     # Current state
     current_tab: str
@@ -128,7 +130,7 @@ class MainWidget(QWidget):
         self.settings_manager = main_window.settings_manager
         self.splash_screen = splash_screen
 
-        self.tabs_handler = MainWidgetTabs(self)
+        self.tabs_handler = MainWidgetTabsHandler(self)
         self.manager = MainWidgetManager(self)
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)

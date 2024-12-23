@@ -31,7 +31,7 @@ class OrientationSetter:
             self.json_validation_engine.run(is_current_sequence=True)
             # self.ori_picker_widget.ori_adjusted.emit(orientation)
             start_position_pictographs = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.manual_builder.start_pos_picker.pictograph_frame.start_positions
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.sequence_constructor.start_pos_picker.pictograph_frame.start_positions
             )
             if start_position_pictographs:
                 for pictograph in start_position_pictographs.values():
@@ -44,15 +44,15 @@ class OrientationSetter:
                         }
                     )
             self.option_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.manual_builder.option_picker
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.sequence_constructor.option_picker
             )
             self.option_picker.update_option_picker()
         else:
             start_pos_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.manual_builder.start_pos_picker
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.sequence_constructor.start_pos_picker
             )
             advanced_start_pos_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.manual_builder.advanced_start_pos_picker
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.build_tab.sequence_constructor.advanced_start_pos_picker
             )
             for pictograph in start_pos_picker.start_options.values():
                 pictograph.updater.update_pictograph(

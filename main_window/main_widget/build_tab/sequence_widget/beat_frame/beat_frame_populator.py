@@ -26,7 +26,7 @@ class BeatFramePopulator:
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message("Loading sequence...")
 
-        self.manual_builder = self.main_widget.build_tab.manual_builder
+        self.manual_builder = self.main_widget.build_tab.sequence_constructor
 
         if not self.current_sequence_json:
             return

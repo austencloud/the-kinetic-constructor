@@ -9,9 +9,8 @@ from main_window.main_widget.build_tab.sequence_generator.freeform.freeform_sequ
 )
 
 if TYPE_CHECKING:
-    from ...main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
-        BaseLessonWidget,
-    )
+
+    from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
 
     from ...main_widget.main_widget import MainWidget
 
@@ -119,7 +118,7 @@ class MainWidgetFontColorUpdater:
         sequence_generator.overwrite_checkbox.set_label_color(self.font_color)
 
     def _update_build_tab(self):
-        manual_builder = self.main_widget.build_tab.manual_builder
+        manual_builder = self.main_widget.build_tab.sequence_constructor
         manual_labels = [
             manual_builder.option_picker.reversal_selector.combo_box_label,
         ]

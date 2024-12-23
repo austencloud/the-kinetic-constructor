@@ -10,14 +10,14 @@ from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker_pictogr
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.build_tab.manual_builder import ManualBuilder
+    from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
 
 
 class BaseStartPosPicker(QWidget):
-    def __init__(self, manual_builder: "ManualBuilder"):
-        super().__init__(manual_builder)
-        self.manual_builder = manual_builder
-        self.main_widget = manual_builder.build_tab.main_widget
+    def __init__(self, sequence_constructor: "SequenceConstructor"):
+        super().__init__(sequence_constructor)
+        self.manual_builder = sequence_constructor
+        self.main_widget = sequence_constructor.build_tab.main_widget
 
         # For caching pictographs based on letter, start_pos, end_pos, grid_mode
         self.pictograph_cache: dict[str, BasePictograph] = {}

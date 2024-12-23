@@ -5,11 +5,11 @@ from ..widgets.rotation_type_toggle import RotationTypeToggle
 from .circular_sequence_generator import CircularSequenceGenerator
 
 if TYPE_CHECKING:
-    from ..sequence_generator_widget import SequenceGeneratorWidget
+    from ..sequence_generator import SequenceGenerator
 
 
 class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
-    def __init__(self, sequence_generator_tab: "SequenceGeneratorWidget") -> None:
+    def __init__(self, sequence_generator_tab: "SequenceGenerator") -> None:
         super().__init__(sequence_generator_tab, "circular")
         self.builder = CircularSequenceGenerator(self)
 

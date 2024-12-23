@@ -54,7 +54,7 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
-        manual_builder = self.sequence_widget.main_widget.build_tab.manual_builder
+        manual_builder = self.sequence_widget.main_widget.build_tab.sequence_constructor
         manual_builder.transition_to_sequence_building()
         manual_builder.option_picker.update_option_picker(self.sequence)
         QApplication.restoreOverrideCursor()
@@ -69,7 +69,7 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
         red_rot_dir,
     ):
 
-        options = self.main_widget.build_tab.manual_builder.option_picker.option_getter._load_all_next_options(
+        options = self.main_widget.build_tab.sequence_constructor.option_picker.option_getter._load_all_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

@@ -2,7 +2,9 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.build_tab.option_picker.option_picker_pictograph_view import OptionPickerPictographView
+from main_window.main_widget.build_tab.option_picker.option_picker_pictograph_view import (
+    OptionPickerPictographView,
+)
 
 from .option_picker_reversal_selector import OptionPickerReversalSelector
 from .option_getter import OptionGetter
@@ -11,7 +13,7 @@ from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..manual_builder import ManualBuilder
+    from ..sequence_constructor import SequenceConstructor
 
 
 class OptionPicker(QWidget):
@@ -20,10 +22,10 @@ class OptionPicker(QWidget):
     COLUMN_COUNT = 8
     option_selected = pyqtSignal(str)
 
-    def __init__(self, manual_builder: "ManualBuilder"):
-        super().__init__(manual_builder)
-        self.manual_builder = manual_builder
-        self.main_widget = manual_builder.build_tab.main_widget
+    def __init__(self, sequence_constructor: "SequenceConstructor"):
+        super().__init__(sequence_constructor)
+        self.manual_builder = sequence_constructor
+        self.main_widget = sequence_constructor.build_tab.main_widget
         self.json_manager = self.main_widget.json_manager
         self.disabled = False
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)

@@ -24,7 +24,7 @@ class NavigationWidget(QWidget):
         self.tab_layout = QHBoxLayout()
         self.tab_layout.addStretch(1)
         self.tab_names = [
-            "Build ⚒️",
+            "Construct ⚒️",
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
@@ -41,7 +41,9 @@ class NavigationWidget(QWidget):
 
         # Add the tab layout to the container layout
         self.container_layout.addLayout(self.tab_layout)
-        self.tab_changed.connect(self.main_widget.tabs_handler.on_tab_changed)
+        self.tab_changed.connect(lambda: self.main_widget.tabs_handler.on_tab_selected(
+            self.current_index
+        ))
         # Set the main layout of the NavigationWidget
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
@@ -54,6 +56,7 @@ class NavigationWidget(QWidget):
         self.current_index = index
         for idx, button in self.tab_buttons.items():
             self.set_button_appearance(index, idx, button)
+        self.main_widget.tabs_handler.on_tab_selected(index)
 
     def set_button_appearance(self, index, idx, button: "QPushButton"):
         font_size = self.main_widget.width() // 120

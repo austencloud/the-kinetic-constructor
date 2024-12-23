@@ -33,7 +33,7 @@ class SequenceMirrorManager:
 
     def mirror_option_picker_pictographs(self):
         option_picker = (
-            self.sequence_widget.main_widget.build_tab.manual_builder.option_picker
+            self.sequence_widget.main_widget.build_tab.sequence_constructor.option_picker
         )
         for pictograph in option_picker.option_pool:
             new_dict = self._mirror_dict(pictograph.pictograph_dict.copy())

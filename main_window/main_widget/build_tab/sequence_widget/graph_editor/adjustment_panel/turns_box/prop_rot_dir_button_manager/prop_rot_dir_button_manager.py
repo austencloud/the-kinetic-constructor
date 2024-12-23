@@ -84,7 +84,7 @@ class PropRotDirButtonManager:
 
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
         self.option_picker = (
-            self.turns_box.graph_editor.sequence_widget.main_widget.build_tab.manual_builder.option_picker
+            self.turns_box.graph_editor.sequence_widget.main_widget.build_tab.sequence_constructor.option_picker
         )
         self.option_picker.update_option_picker()
 

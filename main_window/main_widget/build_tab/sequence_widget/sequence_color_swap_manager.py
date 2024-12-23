@@ -34,7 +34,7 @@ class SequenceColorSwapManager:
 
     def swap_option_picker_colors(self):
         option_picker = (
-            self.sequence_widget.main_widget.build_tab.manual_builder.option_picker
+            self.sequence_widget.main_widget.build_tab.sequence_constructor.option_picker
         )
         for pictograph in option_picker.option_pool:
             new_dict = self.swap_dict_values(pictograph.pictograph_dict.copy())

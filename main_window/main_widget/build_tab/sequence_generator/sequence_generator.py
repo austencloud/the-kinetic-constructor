@@ -1,18 +1,23 @@
+# sequence_generator_widget.py
 from PyQt6.QtWidgets import (
+    QWidget,
     QVBoxLayout,
     QPushButton,
-    QWidget,
     QHBoxLayout,
     QStackedLayout,
     QSpacerItem,
     QSizePolicy,
+    QStackedWidget,
+    QGraphicsOpacityEffect,
+    QCheckBox,
 )
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt, pyqtSlot, QPropertyAnimation, QEasingCurve
+from PyQt6.QtGui import QFont, QPainter
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.build_tab.sequence_generator.freeform.custom_checkbox_widget import CustomCheckBoxWidget
-
+from main_window.main_widget.build_tab.sequence_generator.freeform.custom_checkbox_widget import (
+    CustomCheckBoxWidget,
+)
 
 from .base_classes.customize_your_sequence_label import CustomizeSequenceLabel
 from .generate_sequence_button import GenerateSequenceButton
@@ -20,19 +25,23 @@ from .circular.circular_sequence_generator_frame import CircularSequenceGenerato
 from .freeform.freeform_sequence_generator_frame import FreeformSequenceGeneratorFrame
 
 if TYPE_CHECKING:
-    from main_window.main_widget.main_widget import MainWidget
     from main_window.main_widget.build_tab.build_tab import BuildTab
+    from main_window.main_widget.main_widget import MainWidget
 
 
-class SequenceGeneratorWidget(QWidget):
+class SequenceGenerator(QWidget):
     def __init__(self, build_tab: "BuildTab"):
         super().__init__(build_tab)
+        self.build_tab = build_tab
         self.main_widget = build_tab.main_widget
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
         self.overwrite_connected = False
         self.current_sequence_generator = "freeform"
+
+        # Initialize internal stacked widget for Freeform and Circular generators
+        self.internal_stacked_widget = QStackedWidget(self)
 
         self._setup_spacers()
         self._setup_buttons()
@@ -41,7 +50,9 @@ class SequenceGeneratorWidget(QWidget):
         self._connect_signals()
         self._setup_layout()
 
-        self.freeform_generator_frame.show()
+        self.internal_stacked_widget.addWidget(self.freeform_generator_frame)  # Index 0
+        self.internal_stacked_widget.addWidget(self.circular_generator_frame)  # Index 1
+        self.generate_sequence_button.clicked.connect(self.dummy_function)
 
     def _setup_components(self):
         self.customize_sequence_label = CustomizeSequenceLabel(self)
@@ -49,8 +60,8 @@ class SequenceGeneratorWidget(QWidget):
         self.circular_generator_frame = CircularSequenceGeneratorFrame(self)
 
     def _connect_signals(self):
-        self.freeform_button.clicked.connect(self.freeform_generator_frame.show)
-        self.circular_button.clicked.connect(self.circular_generator_frame.show)
+        self.freeform_button.clicked.connect(self.show_freeform)
+        self.circular_button.clicked.connect(self.show_circular)
 
     def _setup_layout(self):
         # Set up main layout
@@ -65,8 +76,7 @@ class SequenceGeneratorWidget(QWidget):
         )
         self.layout.addItem(self.spacer_1)
         self.layout.addLayout(self.button_layout)
-        self.layout.addWidget(self.freeform_generator_frame)
-        self.layout.addWidget(self.circular_generator_frame)
+        self.layout.addWidget(self.internal_stacked_widget)
         self.layout.addItem(self.spacer_2)
         self.layout.addWidget(
             self.generate_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
@@ -75,15 +85,24 @@ class SequenceGeneratorWidget(QWidget):
         self.layout.addItem(self.spacer_3)
 
     def _setup_spacers(self):
-        self.spacers: list[QSpacerItem] = []
-        for _ in range(3):
-            spacer = QSpacerItem(
-                0,
-                self.main_widget.height() // 20,
-                QSizePolicy.Policy.Minimum,
-            )
-            self.spacers.append(spacer)
-        self.spacer_1, self.spacer_2, self.spacer_3 = self.spacers
+        self.spacer_1 = QSpacerItem(
+            0,
+            self.main_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Fixed,
+        )
+        self.spacer_2 = QSpacerItem(
+            0,
+            self.main_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Fixed,
+        )
+        self.spacer_3 = QSpacerItem(
+            0,
+            self.main_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Fixed,
+        )
 
     def _setup_checkbox(self):
         self.overwrite_checkbox = CustomCheckBoxWidget("Overwrite sequence")
@@ -107,10 +126,26 @@ class SequenceGeneratorWidget(QWidget):
             "circular": self.circular_button,
         }
         self.generate_sequence_button = GenerateSequenceButton(self)
-        self.generate_sequence_button.clicked.connect(self.dummy_function)
 
     def dummy_function(self):
         """Placeholder function to ensure there's always a connected slot."""
+        pass
+
+    def show_freeform(self):
+        """Display the FreeformSequenceGeneratorFrame with fade animation."""
+        if self.current_sequence_generator == "freeform":
+            return  # Already showing
+        self.current_sequence_generator = "freeform"
+        self.update_button_styles()
+        self._fade_transition(to_index=0)
+
+    def show_circular(self):
+        """Display the CircularSequenceGeneratorFrame with fade animation."""
+        if self.current_sequence_generator == "circular":
+            return  # Already showing
+        self.current_sequence_generator = "circular"
+        self.update_button_styles()
+        self._fade_transition(to_index=1)
 
     def update_button_styles(self):
         """Apply active and inactive styles across all main buttons."""
@@ -125,6 +160,31 @@ class SequenceGeneratorWidget(QWidget):
                 else inactive_style
             )
             button.setStyleSheet(f"{style} font-size: {font_size}px; padding: 8px;")
+
+    def _fade_transition(self, to_index: int):
+        """Handle fade-out and fade-in animations when switching sequence generators."""
+        self.opacity_effect = QGraphicsOpacityEffect(self.internal_stacked_widget)
+        self.internal_stacked_widget.setGraphicsEffect(self.opacity_effect)
+        self.opacity_effect.setOpacity(1.0)
+
+        self.fade_out = QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.fade_out.setDuration(200)
+        self.fade_out.setStartValue(1.0)
+        self.fade_out.setEndValue(0.0)
+        self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.fade_out.finished.connect(lambda: self._switch_internal_content(to_index))
+        self.fade_out.start()
+
+    def _switch_internal_content(self, to_index: int):
+        """Switch the internal content and start fade-in."""
+        self.internal_stacked_widget.setCurrentIndex(to_index)
+
+        self.fade_in = QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.fade_in.setDuration(200)
+        self.fade_in.setStartValue(0.0)
+        self.fade_in.setEndValue(1.0)
+        self.fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.fade_in.start()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -148,4 +208,20 @@ class SequenceGeneratorWidget(QWidget):
 
     def _resize_spacers(self):
         for spacer in [self.spacer_1, self.spacer_2, self.spacer_3]:
-            spacer.changeSize(0, self.main_widget.height() // 20)
+            spacer.changeSize(
+                0,
+                self.main_widget.height() // 20,
+                QSizePolicy.Policy.Minimum,
+                QSizePolicy.Policy.Fixed,
+            )
+
+    def paintEvent(self, event):
+        """Handle custom painting if necessary."""
+        painter = QPainter(self)
+        painter.save()
+        try:
+            # Custom painting logic here
+            pass  # Replace with actual painting code if needed
+        finally:
+            painter.restore()
+        # No need to call painter.end()

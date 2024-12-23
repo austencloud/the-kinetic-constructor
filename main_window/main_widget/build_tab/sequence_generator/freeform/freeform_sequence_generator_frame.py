@@ -8,11 +8,11 @@ from main_window.main_widget.build_tab.sequence_generator.freeform.freeform_sequ
 from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
 
 if TYPE_CHECKING:
-    from ..sequence_generator_widget import SequenceGeneratorWidget
+    from ..sequence_generator import SequenceGenerator
 
 
 class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
-    def __init__(self, sequence_generator_tab: "SequenceGeneratorWidget") -> None:
+    def __init__(self, sequence_generator_tab: "SequenceGenerator") -> None:
         super().__init__(sequence_generator_tab, "freeform")
 
         self.letter_type_picker = LetterTypePickerWidget(self)
@@ -45,7 +45,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        self.sequence_generator_widget.main_widget.build_tab.manual_builder.option_picker.update_option_picker()
+        self.sequence_generator_widget.main_widget.build_tab.sequence_constructor.option_picker.update_option_picker()
 
     def get_selected_letter_types(self) -> list[LetterType]:
         return self.letter_type_picker.get_selected_letter_types()

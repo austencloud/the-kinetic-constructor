@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.build_tab.sequence_generator.sequence_generator_widget import (
-        SequenceGeneratorWidget,
+    from main_window.main_widget.build_tab.sequence_generator.sequence_generator import (
+        SequenceGenerator,
     )
 
 
 class CustomizeSequenceLabel(QLabel):
-    def __init__(self, generator_widget: "SequenceGeneratorWidget") -> None:
+    def __init__(self, generator_widget: "SequenceGenerator") -> None:
         super().__init__(generator_widget)
         self.generator_widget = generator_widget
         self.setText("Customize your sequence:")

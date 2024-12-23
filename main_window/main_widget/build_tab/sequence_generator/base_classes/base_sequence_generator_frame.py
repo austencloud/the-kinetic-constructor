@@ -9,12 +9,12 @@ from ..widgets.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
-    from ..sequence_generator_widget import SequenceGeneratorWidget
+    from ..sequence_generator import SequenceGenerator
 
 
 class BaseSequenceGeneratorFrame(QFrame):
     def __init__(
-        self, sequence_generator_tab: "SequenceGeneratorWidget", builder_type: str
+        self, sequence_generator_tab: "SequenceGenerator", builder_type: str
     ) -> None:
         super().__init__(sequence_generator_tab)
         self.sequence_generator_widget = sequence_generator_tab

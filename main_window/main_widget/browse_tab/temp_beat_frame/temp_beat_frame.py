@@ -126,7 +126,7 @@ class TempBeatFrame(BaseBeatFrame):
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
 
-        self.manual_builder = self.main_widget.build_tab.manual_builder
+        self.manual_builder = self.main_widget.build_tab.sequence_constructor
         if not current_sequence_json:
             return
         self.clear_sequence(

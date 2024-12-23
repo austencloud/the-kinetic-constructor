@@ -37,7 +37,9 @@ class BeatDeletionManager:
     def _initialize_manual_builder(self) -> None:
         """Initialize the manual builder if not already initialized."""
         if not self.manual_builder:
-            self.manual_builder = self.beat_frame.main_widget.build_tab.manual_builder
+            self.manual_builder = (
+                self.beat_frame.main_widget.build_tab.sequence_constructor
+            )
 
     def _initialize_GE_pictograph_view(self) -> None:
         """Initialize the GE pictograph view."""

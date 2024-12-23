@@ -19,7 +19,7 @@ class SequenceClearer:
     ) -> None:
         if not self.manual_builder:
             self.manual_builder = (
-                self.sequence_widget.main_widget.build_tab.manual_builder
+                self.sequence_widget.main_widget.build_tab.sequence_constructor
             )
         # if the user is on the advanced start pos picker tab, then don't reset to the start pos picker
 
@@ -35,7 +35,7 @@ class SequenceClearer:
     def _initialize_manual_builder(self) -> None:
         if not self.manual_builder:
             self.manual_builder = (
-                self.sequence_widget.main_widget.build_tab.manual_builder
+                self.sequence_widget.main_widget.build_tab.sequence_constructor
             )
 
     def _reset_manual_builder(self, should_reset_to_start_pos_picker: bool) -> None:

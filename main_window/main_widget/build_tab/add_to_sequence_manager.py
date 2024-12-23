@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING
 
 
-
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from main_window.main_widget.build_tab.manual_builder import ManualBuilder
-
+    from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
 
     from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat_view import (
         Beat,
@@ -13,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class AddToSequenceManager:
-    def __init__(self, manual_builder: "ManualBuilder") -> None:
-        self.manual_builder = manual_builder
+    def __init__(self, sequence_constructor: "SequenceConstructor") -> None:
+        self.manual_builder = sequence_constructor
 
     def create_new_beat(self, clicked_option: "BasePictograph") -> "Beat":
         from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat_view import (

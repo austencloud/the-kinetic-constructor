@@ -86,7 +86,7 @@ class CircularSequenceGenerator(BaseSequenceGenerator):
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
-        self.main_widget.build_tab.manual_builder.transition_to_sequence_building()
+        self.main_widget.build_tab.sequence_constructor.transition_to_sequence_building()
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(
@@ -101,7 +101,7 @@ class CircularSequenceGenerator(BaseSequenceGenerator):
         blue_rot_dir,
         red_rot_dir,
     ) -> dict:
-        options = self.main_widget.build_tab.manual_builder.option_picker.option_getter._load_all_next_options(
+        options = self.main_widget.build_tab.sequence_constructor.option_picker.option_getter._load_all_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

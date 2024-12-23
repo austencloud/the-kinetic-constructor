@@ -3,13 +3,13 @@ from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from main_window.main_widget.build_tab.sequence_generator.sequence_generator_widget import (
-        SequenceGeneratorWidget,
+    from main_window.main_widget.build_tab.sequence_generator.sequence_generator import (
+        SequenceGenerator,
     )
 
 
 class GenerateSequenceButton(QPushButton):
-    def __init__(self, sequence_generator_widget: "SequenceGeneratorWidget"):
+    def __init__(self, sequence_generator_widget: "SequenceGenerator"):
         super().__init__(sequence_generator_widget)
         sequence_generator_widget = sequence_generator_widget
         self.main_widget = sequence_generator_widget.main_widget

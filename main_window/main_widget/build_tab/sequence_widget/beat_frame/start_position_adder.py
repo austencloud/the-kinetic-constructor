@@ -28,7 +28,7 @@ class StartPositionAdder:
         )
 
         self.beat_frame.start_pos_view.set_start_pos(start_position_beat)
-        self.main_widget.build_tab.manual_builder.last_beat = start_position_beat
+        self.main_widget.build_tab.sequence_constructor.last_beat = start_position_beat
         start_pos_view = self.beat_frame.start_pos_view
         self.beat_frame.selection_overlay.select_beat(
             start_pos_view, toggle_graph_editor=False
@@ -37,7 +37,7 @@ class StartPositionAdder:
         self.json_manager.start_position_handler.set_start_position_data(
             start_position_beat
         )
-        self.main_widget.build_tab.manual_builder.start_position_picked = True
-        self.main_widget.build_tab.manual_builder.start_position_selected.emit(
+        self.main_widget.build_tab.sequence_constructor.start_position_picked = True
+        self.main_widget.build_tab.sequence_constructor.start_position_selected.emit(
             start_position_beat
         )

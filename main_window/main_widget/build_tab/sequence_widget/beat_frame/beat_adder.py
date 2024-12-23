@@ -70,7 +70,9 @@ class BeatAdder:
         self._update_sequence_builder(index)
 
     def _update_sequence_builder(self, index: int) -> None:
-        self.main_widget.build_tab.manual_builder.last_beat = self.beats[index].beat
+        self.main_widget.build_tab.sequence_constructor.last_beat = self.beats[
+            index
+        ].beat
 
     def calculate_next_beat_number(self) -> int:
         """
