@@ -15,9 +15,10 @@ from PyQt6.QtWidgets import (
 )
 
 
-
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
 
 
 class CustomPrintDialog(QDialog):
@@ -75,7 +76,7 @@ class CustomPrintDialog(QDialog):
         )
         copies_layout = QHBoxLayout()
         self.copies_label = QLabel("Copies:", self)
-        current_word = self.beat_frame.get_current_word()
+        current_word = self.beat_frame.get.current_word()
         self.label_current_word = QLabel(f"Current Word: {current_word}", self)
         self.copies_spinbox = QSpinBox(self)
         self.copies_spinbox.setMinimum(1)

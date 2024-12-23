@@ -50,6 +50,5 @@ class SplashScreen(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        # Ensure painter is active and not already in use
         if self.background_handler.background_manager:
             self.background_handler.background_manager.paint_background(self, painter)

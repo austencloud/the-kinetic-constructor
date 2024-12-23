@@ -1,28 +1,8 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.menu_bar_widget.background_selector.backgrounds.aurora.aurora_background import (
-    AuroraBackground,
-)
-from main_window.menu_bar_widget.background_selector.backgrounds.aurora_borealis_background import (
-    AuroraBorealisBackground,
-)
-from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
-    BaseBackground,
-)
-from main_window.menu_bar_widget.background_selector.backgrounds.bubbles_background import (
-    BubblesBackground,
-)
-from main_window.menu_bar_widget.background_selector.backgrounds.snowfall.snowfall_background import (
-    SnowfallBackground,
-)
-from main_window.menu_bar_widget.background_selector.backgrounds.starfield.starfield_background import (
-    StarfieldBackground,
-)
 from .prop_type_changer import PropTypeChanger
-from .main_widget_font_color_updater import MainWidgetFontColorUpdater
 
 if TYPE_CHECKING:
-    from main_window.main_widget.main_widget import MainWidget
     from ..settings_manager import SettingsManager
 
 
@@ -31,7 +11,8 @@ class GlobalSettings:
         self.settings = settings_manager.settings
         self.settings_manager = settings_manager
         self.prop_type_changer = PropTypeChanger(self.settings_manager)
-        self.main_widget: "MainWidget" = None
+        if settings_manager.main_window:
+            self.main_widget = settings_manager.main_window.main_widget
 
     # Getter and Setter for Grow Sequence
     def get_grow_sequence(self) -> bool:

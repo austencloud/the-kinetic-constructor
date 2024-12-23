@@ -178,17 +178,17 @@ class BeatView(PictographView):
         target_height = original_size.height()
         image = QImage(target_width, target_height, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.transparent)
-        painter = QPainter(image)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        if not self.scene():
-            painter.setPen(QColor(0, 0, 0))
-            painter.setBrush(QColor(0, 255, 255))
-            painter.drawRect(0, 0, target_width - 1, target_height - 1)
-        else:
-            self.scene().render(painter)
-        painter.setPen(QColor(0, 0, 0))
-        painter.drawRect(0, 0, target_width - 1, target_height - 1)
-        painter.end()
+        # painter = QPainter(image)
+        # painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        # if not self.scene():
+        #     painter.setPen(QColor(0, 0, 0))
+        #     painter.setBrush(QColor(0, 255, 255))
+        #     painter.drawRect(0, 0, target_width - 1, target_height - 1)
+        # else:
+        #     self.scene().render(painter)
+        # painter.setPen(QColor(0, 0, 0))
+        # painter.drawRect(0, 0, target_width - 1, target_height - 1)
+        # painter.end()
         return QPixmap.fromImage(image)
 
     def resize_beat_view(self):

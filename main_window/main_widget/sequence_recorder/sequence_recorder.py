@@ -32,13 +32,6 @@ class SequenceRecorder(QWidget):
             self.color_shift = 0
         self.update()
 
-    def paintEvent(self, event) -> None:
-        if not self.background_manager:
-            self.background_manager = self.global_settings.setup_background_manager(
-                self
-            )
-        painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)
 
     def _setup_layout(self) -> None:
         capture_layout_hbox = QHBoxLayout()

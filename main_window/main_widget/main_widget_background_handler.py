@@ -35,27 +35,24 @@ class MainWidgetBackgroundHandler(QObject):
         self.background: Optional[BaseBackground] = None
         self.is_animating = False
 
-    def setup_background(self, is_splash_screen: bool = False):
+    def setup_background(self):
         """Initializes the background based on the current background type."""
         bg_type = (
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
         self.background = self.get_background(bg_type)
-
+        self.main_widget.background = self.background
         if self.background:
-            # Connect the update_required signal to the main widget's update method
             self.background.update_required.connect(self.main_widget.update)
-            # Start the background animation
             self.background.start_animation()
 
-    def apply_background(self, is_splash_screen: bool = False):
+    def apply_background(self,):
         """Applies or reapplies the background."""
         if self.background:
-            # Stop existing animation and disconnect signals
             self.background.stop_animation()
             self.background.update_required.disconnect(self.main_widget.update)
 
-        self.setup_background(is_splash_screen)
+        self.setup_background()
 
     def get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""

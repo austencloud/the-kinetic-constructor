@@ -14,7 +14,6 @@ if TYPE_CHECKING:
     )
 
     from ...main_widget.main_widget import MainWidget
-    from splash_screen.splash_screen import SplashScreen
 
 
 class MainWidgetFontColorUpdater:

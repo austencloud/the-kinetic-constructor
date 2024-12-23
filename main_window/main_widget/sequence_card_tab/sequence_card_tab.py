@@ -77,14 +77,6 @@ class SequenceCardTab(QWidget):
         super().showEvent(event)
         if not self.initialized:
             self.setCursor(Qt.CursorShape.WaitCursor)
-            # self.refresher.refresh_sequence_cards()
             self.initialized = True
             self.setCursor(Qt.CursorShape.ArrowCursor)
 
-    def paintEvent(self, event) -> None:
-        if not self.background_manager:
-            self.background_manager = self.global_settings.setup_background_manager(
-                self
-            )
-        painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)

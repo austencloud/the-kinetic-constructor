@@ -24,7 +24,8 @@ class BackgroundWidget(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.main_widget.background.paint_background(self, painter)
-        painter.end()
+        print("BackgroundWidget.paintEvent done")
+        # painter.end()
 
     def resizeEvent(self, event):
         self.setGeometry(self.main_widget.rect())
