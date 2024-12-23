@@ -64,7 +64,6 @@ class MainWidgetManager:
         prop_type_value = settings.get("global", {}).get("prop_type", "staff")
         self.main_widget.prop_type = PropType.get_prop_type(prop_type_value)
 
-
     def _setup_letters(self) -> None:
         self.main_widget.pictograph_dict_loader = PictographDictLoader(self.main_widget)
         self.main_widget.pictograph_dicts = (
@@ -112,7 +111,7 @@ class MainWidgetManager:
             )
             pictograph_container.GE_pictograph_view.set_to_blank_grid()
         option_picker = self.main_widget.manual_builder.option_picker
-        for pictograph in option_picker.pictograph_pool:
+        for pictograph in option_picker.option_pool:
             pictograph.grid.hide()
             pictograph.grid.__init__(pictograph, pictograph.grid.grid_data, grid_mode)
 

@@ -66,9 +66,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
 
         for i, pictograph_dict in enumerate(next_options):
             # Get a pictograph from our pool
-            if i >= len(self.option_picker.pictograph_pool):
+            if i >= len(self.option_picker.option_pool):
                 break
-            p = self.option_picker.pictograph_pool[i]
+            p = self.option_picker.option_pool[i]
 
             p.updater.update_pictograph(pictograph_dict)
             sequence_so_far = (

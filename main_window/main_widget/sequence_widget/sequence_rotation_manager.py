@@ -15,32 +15,36 @@ class SequenceRotationManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_loader = self.sequence_widget.json_manager.loader_saver
-        self.original_sequence_json = None
+        self.metadata = None
 
     def rotate_beats(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        
-        self.original_sequence_json = self.json_loader.load_current_sequence_json()
-        if self.check_length():
-            return
-        rotated_sequence = self.rotate_sequence(self.original_sequence_json)
+
+        rotated_sequence = self.rotate_sequence()
         self.sequence_widget.update_beats_in_place(rotated_sequence)
+        self.sequence_widget.main_widget.manual_builder.option_picker.update_option_picker()
+
         self.sequence_widget.indicator_label.show_message("Sequence rotated!")
 
         QApplication.restoreOverrideCursor()
 
     def check_length(self):
-        if len(self.original_sequence_json) < 2:
+        if len(self.current_sequence) < 2:
             self.sequence_widget.indicator_label.show_message("No sequence to rotate.")
             QApplication.restoreOverrideCursor()
             return False
 
-    def rotate_sequence(self, sequence_json: list[dict]):
+    def rotate_sequence(self):
         """Rotate the sequence by rotation_steps * 45°."""
+        self.current_sequence = self.json_loader.load_current_sequence_json()
+        metadata = self.current_sequence[0].copy()
+        if self.check_length():
+            return
         rotated_sequence = []
-        metadata = sequence_json[0].copy()
         rotated_sequence.append(metadata)
-        start_pos_beat_dict: dict = sequence_json[1].copy()
+        start_pos_beat_dict: dict = (
+            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict
+        )
 
         self.rotate_pictograph(start_pos_beat_dict)
         rotated_sequence.append(start_pos_beat_dict)

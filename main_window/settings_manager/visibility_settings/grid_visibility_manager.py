@@ -36,7 +36,7 @@ class GridVisibilityManager:
                         self.non_radial_visible
                     )
 
-        for option in main_widget.manual_builder.option_picker.pictograph_pool:
+        for option in main_widget.manual_builder.option_picker.option_pool:
             if hasattr(option, "grid"):
                 option.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
 

@@ -57,7 +57,6 @@ class SequenceWidget(QWidget):
 
         self.current_word_label.update_current_word_label_from_beats()
         self.difficulty_label.update_difficulty_label()
-        self.main_widget.manual_builder.option_picker.update_option_picker()
 
         currently_selected_beat = self.beat_frame.selection_overlay.selected_beat
         blue_motion = currently_selected_beat.beat.blue_motion

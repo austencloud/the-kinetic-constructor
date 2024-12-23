@@ -28,6 +28,8 @@ class SequenceMirrorManager:
 
         mirrored_sequence_json = self.mirror_sequence(current_sequence_json)
         self.sequence_widget.update_beats_in_place(mirrored_sequence_json)
+        self.sequence_widget.main_widget.manual_builder.option_picker.update_option_picker()
+
         self.sequence_widget.indicator_label.show_message("Sequence mirrored!")
         QApplication.restoreOverrideCursor()
 
