@@ -7,11 +7,7 @@ from PyQt6.QtCore import Qt
 from .codex_color_swap_manager import CodexColorSwapManager
 from .codex_mirror_manager import CodexMirrorManager
 from .codex_rotation_manager import CodexRotationManager
-
-# The single button class
 from .codex_control_button import CodexControlButton
-
-# Updated orientation selector
 from .codex_ori_selector import CodexOriSelector
 
 if TYPE_CHECKING:
