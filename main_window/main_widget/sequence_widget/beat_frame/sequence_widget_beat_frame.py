@@ -19,7 +19,7 @@ from .beat_duration_manager import BeatDurationManager
 from .beat_frame_key_event_handler import BeatFrameKeyEventHandler
 from .beat_frame_populator import BeatFramePopulator
 from .beat_frame_resizer import BeatFrameResizer
-from .beat_updater import BeatFrameUpdater
+from .beat_frame_updater import BeatFrameUpdater
 from .sequence_widget_beat_frame_layout_manager import (
     SequenceWidgetBeatFrameLayoutManager,
 )

@@ -33,11 +33,13 @@ class PropPlacementOverrideManager:
                 turn_data[override_key] = True
 
             letter_data[adjustment_key_str] = turn_data
-            self.special_placements[ori_key][self.letter] = letter_data
+            self.special_placements[self.pictograph.grid_mode][ori_key][
+                self.letter
+            ] = letter_data
             self._update_json_entry(self.letter, letter_data)
             self.pictograph.updater.update_pictograph()
 
-        self.pictograph.main_widget.special_placement_loader.refresh_placements()
+        self.pictograph.main_widget.special_placement_loader.load_special_placements()
 
     def _get_keys(self, beta_ori):
         adjustment_key_str = self._generate_adjustment_key_str(self.letter)
@@ -71,9 +73,9 @@ class PropPlacementOverrideManager:
         )
 
     def _get_letter_data(self, ori_key, letter: Letter) -> dict:
-        return self.pictograph.main_widget.special_placements[ori_key].get(
-            letter.value, {}
-        )
+        return self.pictograph.main_widget.special_placements[
+            self.pictograph.grid_mode
+        ][ori_key].get(letter.value, {})
 
     def _get_turn_data(self, letter_data, adjustment_key_str) -> dict:
         return letter_data.get(adjustment_key_str, {})

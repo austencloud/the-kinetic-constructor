@@ -32,7 +32,8 @@
     "(s, 1, 1)": {
       "red_rot_angle_override": true,
       "red": [-70, -70],
-      "swap_beta_nw_radial_blue_static_nw_red_static_nw": true
+      "swap_beta_se_radial_blue_static_se_red_static_se": true,
+      "swap_beta_sw_radial_blue_static_sw_red_static_sw": true
     },
     "(s, 1, 2.5)": {
       "red": [10, 0],
