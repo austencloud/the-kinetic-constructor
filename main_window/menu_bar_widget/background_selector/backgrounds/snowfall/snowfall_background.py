@@ -6,14 +6,14 @@ from PyQt6.QtGui import QColor, QPainter, QLinearGradient
 from PyQt6.QtWidgets import QWidget
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.build_tab_widget import (
+    from main_window.main_widget.build_tab.sequence_widget.beat_frame.build_tab_widget import (
         BuildTabWidget,
     )
-    from main_window.main_widget.dictionary_widget.dictionary_widget import (
-        DictionaryWidget,
+    from main_window.main_widget.browse_tab.browse_tab import (
+        BrowseTab,
     )
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
-    from main_window.main_widget.act_tab.act_tab import ActTab
+    from main_window.main_widget.learn_tab.learn_widget import LearnTab
+    from main_window.main_widget.write_tab.act_tab import WriteTab
 
 
 from .snowflake_manager import SnowflakeManager
@@ -24,7 +24,7 @@ from .shooting_star_manager import ShootingStarManager  # Import the new manager
 class SnowfallBackground(BaseBackground):
     def __init__(
         self,
-        widget: Union["BuildTabWidget", "DictionaryWidget", "LearnWidget", "ActTab"],
+        widget: Union["BuildTabWidget", "BrowseTab", "LearnTab", "WriteTab"],
     ):
         super().__init__(widget)
         self.widget = widget

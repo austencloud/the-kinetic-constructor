@@ -36,12 +36,12 @@ class GridVisibilityManager:
                         self.non_radial_visible
                     )
 
-        for option in main_widget.manual_builder.option_picker.option_pool:
+        for option in main_widget.build_tab.manual_builder.option_picker.option_pool:
             if hasattr(option, "grid"):
                 option.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
 
         # Apply visibility to additional views
-        beat_frame = main_widget.sequence_widget.beat_frame
+        beat_frame = main_widget.build_tab.sequence_widget.beat_frame
         for beat_view in beat_frame.beats:
             if hasattr(beat_view, "beat"):
                 if hasattr(beat_view, "beat") and hasattr(beat_view.beat, "grid"):
@@ -58,7 +58,7 @@ class GridVisibilityManager:
                 )
 
         # Apply to advanced start pos picker and the GE blank pictograph
-        manual_builder = main_widget.manual_builder
+        manual_builder = main_widget.build_tab.manual_builder
         for (
             pictograph_list
         ) in manual_builder.advanced_start_pos_picker.start_pos_cache.values():
@@ -68,7 +68,7 @@ class GridVisibilityManager:
                         self.non_radial_visible
                     )
 
-        graph_editor = main_widget.sequence_widget.graph_editor
+        graph_editor = main_widget.build_tab.sequence_widget.graph_editor
         GE_blank_pictograph = (
             graph_editor.pictograph_container.GE_pictograph_view.blank_pictograph
         )

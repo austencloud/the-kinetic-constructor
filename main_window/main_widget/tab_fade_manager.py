@@ -25,8 +25,6 @@ class TabFadeManager(QObject):
         self.mw = mw
         # References to the top-level stacked widget and sub-stacks
         self.main_stack = mw.main_stacked_widget
-        self.right_stack = mw.right_stacked_widget  # For Build/Generate
-        self.dict_learn_stack = mw.dictionary_learn_widget  # For Dictionary/Learn
 
         # We'll store the old/new widget opacities here:
         self._old_widget_opacity: Optional[QGraphicsOpacityEffect] = None
@@ -34,7 +32,6 @@ class TabFadeManager(QObject):
 
         self._animation_group: Optional[QSequentialAnimationGroup] = None
         self._is_animating = False  # Flag to track animation state
-
 
     def fade_to_tab(self, new_index: int, on_finished: Optional[Callable] = None):
         """
@@ -54,59 +51,21 @@ class TabFadeManager(QObject):
             return  # Prevent starting another animation
         # 1) Determine top-level index + sub-level index from new_index
         #    (matching your existing logic in MainWidgetTabs)
-        if new_index == self.mw.build_tab_index:  # 0
-            main_idx, sub_idx = (0, 0)
-        elif new_index == self.mw.generate_tab_index:  # 1
-            main_idx, sub_idx = (0, 1)
-        elif new_index == self.mw.dictionary_tab_index:  # 2
-            main_idx, sub_idx = (1, 0)
-        elif new_index == self.mw.learn_tab_index:  # 3
-            main_idx, sub_idx = (1, 1)
-        elif new_index == self.mw.act_tab_index:  # 4
-            main_idx, sub_idx = (2, None)
-        else:
-            return  # Unknown index
-
-        # 2) Check if top-level index is changing
-        old_main_idx = self.main_stack.currentIndex()
-        widget_to_fade = None
-        old_sub_idx: Optional[int] = None
-
-        if old_main_idx != main_idx:
-            # If the top-level index changes (e.g. from build/generate to dictionary/learn/act),
-            # we'll fade the main_stack
-            widget_to_fade = self.main_stack
-        else:
-            # The top-level is the same, so likely only sub_idx is changing
-            if main_idx == 0:
-                # Build/Generate sub-stack is self.right_stack
-                widget_to_fade = self.right_stack
-                old_sub_idx = self.right_stack.currentIndex()
-            elif main_idx == 1:
-                # Dictionary/Learn sub-stack is self.dict_learn_stack
-                widget_to_fade = self.dict_learn_stack
-                old_sub_idx = self.dict_learn_stack.currentIndex()
-            elif main_idx == 2:
-                # Act tab has no sub-stack
-                widget_to_fade = self.main_stack  # or just skip fade if you want
-                old_sub_idx = None
-
-        if not widget_to_fade:
-            return
-
-        # 3) If the sub_idx is unchanged, no fade needed
-        #    e.g. user re-clicked the same sub-tab
-        if old_sub_idx is not None and old_sub_idx == sub_idx:
-            return
+        if new_index in [0, 1]:
+            main_idx = 0
+        elif new_index == 2:
+            main_idx = 1
+        elif new_index == 3:
+            main_idx = 2
+        elif new_index == 4:
+            main_idx = 3
 
         # 4) Actually do the fade:
-        self._fade_stack(widget_to_fade, main_idx, sub_idx, on_finished)
+        self._fade_stack(main_idx, on_finished)
 
     def _fade_stack(
         self,
-        stack_widget: QStackedWidget,
         main_idx: int,
-        sub_idx: Optional[int],
         on_finished: Optional[Callable] = None,
     ):
         """
@@ -116,19 +75,15 @@ class TabFadeManager(QObject):
         """
         self._is_animating = True  # Set the flag
 
-        old_idx = stack_widget.currentIndex()
-        old_widget = stack_widget.widget(old_idx)
+        old_idx = self.main_stack.currentIndex()
+        old_widget = self.main_stack.widget(old_idx)
 
-        if sub_idx is not None:
-            new_idx = sub_idx
-        else:
-            # If sub_idx is None, we treat main_idx as the new index for stack_widget
-            new_idx = main_idx
+        new_idx = main_idx
 
         # If top-level, just do new_idx = main_idx
         # If sub-level, do new_idx = sub_idx
 
-        new_widget = stack_widget.widget(new_idx)
+        new_widget = self.main_stack.widget(new_idx)
         if not old_widget or not new_widget:
             return
 
@@ -145,9 +100,11 @@ class TabFadeManager(QObject):
 
         # Chain fade-out → fade-in
         fade_out.finished.connect(
-            lambda: self._switch_and_fade_in(stack_widget, new_idx, on_finished)
+            lambda: self._switch_and_fade_in(self.main_stack, new_idx, on_finished)
         )
-        fade_out.finished.connect(self._animation_finished)  # Reset flag after animation
+        fade_out.finished.connect(
+            self._animation_finished
+        )  # Reset flag after animation
         fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()

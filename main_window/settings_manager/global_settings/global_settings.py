@@ -40,7 +40,7 @@ class GlobalSettings:
 
     # Font Color Management
     def get_current_font_color(self) -> str:
-        return self.main_widget.font_color_updater.get_font_color(
+        return self.settings_manager.main_window.main_widget.font_color_updater.get_font_color(
             self.get_background_type()
         )
 

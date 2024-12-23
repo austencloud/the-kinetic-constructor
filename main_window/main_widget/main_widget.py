@@ -1,16 +1,13 @@
-from PyQt6.QtGui import QKeyEvent, QPainter
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.main_widget.act_tab.act_tab import ActTab
-from main_window.main_widget.background_widget import BackgroundWidget
-from main_window.main_widget.main_widget_tabs import MainWidgetTabs
-from main_window.main_widget.tab_fade_manager import TabFadeManager
-from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
-    MainWidgetFontColorUpdater,
-)
+from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+from main_window.main_widget.build_tab.manual_builder import ManualBuilder
+from main_window.main_widget.build_tab.sequence_generator.sequence_generator_widget import SequenceGeneratorWidget
+from main_window.main_widget.learn_tab.learn_widget import LearnTab
+from main_window.main_widget.write_tab.act_tab import WriteTab
 
 
 # Import the new subclasses
@@ -19,8 +16,15 @@ from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 from .main_widget_background_handler import MainWidgetBackgroundHandler
+from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 
 if TYPE_CHECKING:
+    from main_window.main_widget.background_widget import BackgroundWidget
+    from main_window.main_widget.build_tab.build_tab import BuildTab
+    from main_window.main_widget.tab_fade_manager import TabFadeManager
+    from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
+        MainWidgetFontColorUpdater,
+    )
     from main_window.settings_manager.settings_manager import SettingsManager
     from .navigation_widget import NavigationWidget
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
@@ -30,13 +34,7 @@ if TYPE_CHECKING:
         BaseBackground,
     )
     from .json_manager.json_manager import JsonManager
-    from .sequence_widget.sequence_widget import SequenceWidget
-    from .sequence_builder.manual_builder import ManualBuilder
-    from .sequence_builder.sequence_generator.sequence_generator_widget import (
-        SequenceGeneratorWidget,
-    )
-    from .dictionary_widget.dictionary_widget import DictionaryWidget
-    from .learn_widget.learn_widget import LearnWidget
+
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
         SvgManager,
     )
@@ -63,11 +61,10 @@ class MainWidget(QWidget):
     splash_screen: "SplashScreen"
 
     # Sub-widgets
-    manual_builder: "ManualBuilder"
-    sequence_generator: "SequenceGeneratorWidget"
-    dictionary_widget: "DictionaryWidget"
-    learn_widget: "LearnWidget"
-    act_tab: "ActTab"
+    build_tab: "BuildTab"
+    browse_tab: "BrowseTab"
+    learn_tab: "LearnTab"
+    write_tab: "WriteTab"
 
     # Handlers
     tabs_handler: "MainWidgetTabs"
@@ -87,7 +84,7 @@ class MainWidget(QWidget):
     sequence_properties_manager: "SequencePropertiesManager"
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
-    fade_manager: TabFadeManager
+    fade_manager: "TabFadeManager"
     font_color_updater: "MainWidgetFontColorUpdater"
 
     # Layouts and Widgets
@@ -101,7 +98,7 @@ class MainWidget(QWidget):
     build_generate_layout: QHBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
-    sequence_widget: "SequenceWidget"
+    # sequence_widget: "SequenceWidget"
     background_widget: "BackgroundWidget"
 
     # Indices for tabs

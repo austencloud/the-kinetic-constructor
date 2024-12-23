@@ -39,7 +39,9 @@ class GlyphVisibilityManager:
 
     def apply_glyph_visibility(self):
         # Apply current settings to all visible pictographs
-        beat_views = self.main_window.main_widget.sequence_widget.beat_frame.beats
+        beat_views = (
+            self.main_window.main_widget.build_tab.sequence_widget.beat_frame.beats
+        )
         beats = [beat_view.beat for beat_view in beat_views]
         for pictograph_key_with_scene in list(
             self.main_window.main_widget.pictograph_cache.values()
@@ -53,7 +55,9 @@ class GlyphVisibilityManager:
                 self.apply_current_visibility_settings(beat)
         for (
             option
-        ) in self.main_window.main_widget.manual_builder.option_picker.option_pool:
+        ) in (
+            self.main_window.main_widget.build_tab.manual_builder.option_picker.option_pool
+        ):
             if option:
                 self.apply_current_visibility_settings(option)
 

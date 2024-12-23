@@ -24,12 +24,12 @@ class WASD_AdjustmentManager:
 
     def handle_special_placement_removal(self) -> None:
         selected_arrow = (
-            self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow
+            self.pictograph.main_widget.build_tab.sequence_widget.graph_editor.selection_manager.selected_arrow
         )
         if not selected_arrow:
             return
         letter = self.pictograph.letter
         self.entry_remover.remove_special_placement_entry(letter, selected_arrow)
-        self.pictograph.arrow_placement_manager.update_arrow_placements()   
+        self.pictograph.arrow_placement_manager.update_arrow_placements()
         self.pictograph.updater.update_pictograph()
         self.pictograph.view.repaint()
