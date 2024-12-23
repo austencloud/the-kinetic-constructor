@@ -79,8 +79,8 @@ class ArrowAdjustmentCalculator:
     ) -> Optional[tuple[int, int]]:
         self.special_placements: dict[str, dict] = (
             self.placement_manager.pictograph.main_widget.special_placements.get(
-                ori_key, {}
-            )
+                arrow.pictograph.grid_mode
+            ).get(ori_key, {})
         )
         letter_adjustments: dict[str, dict[str, list]] = self.special_placements.get(
             letter.value, {}

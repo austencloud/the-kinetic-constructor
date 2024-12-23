@@ -23,16 +23,6 @@ class DictionarySequencePopulator:
         self.beat_frame = self.sequence_widget.beat_frame
         self.initialized = True
 
-    def load_sequence_from_file(self, file_path: str) -> None:
-        try:
-            with open(file_path, "r", encoding="utf-8") as file:
-                sequence_data = json.load(file)
-            self.beat_frame.populator.populate_beat_frame_from_json(sequence_data)
-        except Exception as e:
-            QMessageBox.critical(
-                self.main_widget, "Error", f"Failed to load sequence: {str(e)}"
-            )
-
     def load_sequence_from_json(self, metadata: str) -> None:
         if metadata:
             self.beat_frame.populator.populate_beat_frame_from_json(

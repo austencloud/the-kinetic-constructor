@@ -24,7 +24,8 @@ class CodexRotationManager:
             if pictograph:
                 dict = self._rotate_pictograph(pictograph)
                 self.codex.data_manager.pictograph_data[letter] = dict
-        self.update_grid_mode()
+        for view in self.codex.section_manager.views.values():
+            view.pictograph.grid.update_grid_mode()
         self._refresh_pictograph_views()
 
     def _rotate_pictograph(self, pictograph_dict: dict) -> dict:
@@ -73,52 +74,21 @@ class CodexRotationManager:
             return "unknown"  # Handle missing mappings gracefully
 
     def update_grid_mode(self):
-        """Update grid mode for the Codex based on the final orientations of pictographs."""
-        cardinal_set = {"n", "e", "s", "w"}
-        intercardinal_set = {"ne", "se", "sw", "nw"}
-        all_locs = []
-
-        for pictograph_dict in self.codex.data_manager.pictograph_data.values():
-            if not pictograph_dict:
-                continue
-            if (
-                "blue_attributes" in pictograph_dict
-                and "red_attributes" in pictograph_dict
-            ):
-                bl = pictograph_dict["blue_attributes"].get("end_loc")
-                rl = pictograph_dict["red_attributes"].get("end_loc")
-                if bl:
-                    all_locs.append(bl)
-                if rl:
-                    all_locs.append(rl)
-
-        if all(l in cardinal_set for l in all_locs):
-            mode = "diamond"
-        elif all(l in intercardinal_set for l in all_locs):
-            mode = "box"
-
-        else:
-            cardinal_count = sum(l in cardinal_set for l in all_locs)
-            inter_count = sum(l in intercardinal_set for l in all_locs)
-            mode = "diamond" if cardinal_count >= inter_count else "box"
-        for view in self.codex.section_manager.pictograph_views.values():
+        for view in self.codex.section_manager.views.values():
+            grid_mode = self.codex.main_widget.grid_mode_checker.get_grid_mode(
+                view.pictograph.pictograph_dict
+            )
             view.pictograph.grid.hide()
             view.pictograph.grid.__init__(
-                view.pictograph, view.pictograph.grid.grid_data, mode
+                view.pictograph, view.pictograph.grid.grid_data, grid_mode
             )
 
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""
-        for letter, view in self.codex.section_manager.pictograph_views.items():
+        for letter, view in self.codex.section_manager.views.items():
             if letter in self.codex.data_manager.pictograph_data:
                 pictograph_dict = self.codex.data_manager.pictograph_data[letter]
-                grid_mode = self.codex.main_widget.grid_mode_checker.get_grid_mode(
-                    pictograph_dict
-                )
                 view.pictograph.arrow_placement_manager.default_positioner.__init__(
                     view.pictograph.arrow_placement_manager
                 )
-
                 view.pictograph.updater.update_pictograph(pictograph_dict)
-                view.pictograph.updater.update_motions(pictograph_dict)
-                view.scene().update()

@@ -33,6 +33,8 @@ class PictographUpdater:
                 self.pictograph.grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
                     self.pictograph.pictograph_dict
                 )
+                self.pictograph.grid.update_grid_mode()
+
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
                 self.pictograph.vtg_glyph.set_vtg_mode()

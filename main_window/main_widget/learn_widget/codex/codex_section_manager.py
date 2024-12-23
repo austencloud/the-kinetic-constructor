@@ -35,13 +35,12 @@ class CodexSectionManager:
         self.codex = codex
         self.scroll_area = self.codex.scroll_area
         self.content_layout = self.scroll_area.content_layout
-        self.pictograph_views: dict[str, "PictographView"] = {}
+        self.views: dict[str, "CodexPictographView"] = {}
         self.setup_sections()
 
     def setup_sections(self) -> None:
         for letter_type in LetterType:
             self._load_letter_type_section(letter_type)
-
 
     def _load_letter_type_section(self, letter_type: LetterType) -> None:
         type_label = CodexSectionTypeLabel(self.codex, letter_type)
@@ -89,12 +88,12 @@ class CodexSectionManager:
         if p_dict is None:
             return
 
-        if letter_str not in self.pictograph_views:
-            scene = BasePictograph(self.codex.main_widget)
-            view = CodexPictographView(scene, self.codex)
-            scene.updater.update_pictograph(p_dict)
-            self.pictograph_views[letter_str] = view
+        if letter_str not in self.views:
+            pictograph = BasePictograph(self.codex.main_widget)
+            view = CodexPictographView(pictograph, self.codex)
+            pictograph.updater.update_pictograph(p_dict)
+            self.views[letter_str] = view
         else:
-            view = self.pictograph_views[letter_str]
+            view = self.views[letter_str]
 
         layout.addWidget(view)

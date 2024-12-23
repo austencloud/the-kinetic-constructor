@@ -25,7 +25,7 @@ class CodexOriSelector(QWidget):
 
         self.start_ori_label = QLabel("Start Orientation:", self)
         self.start_ori_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
+
         self.combo_box = QComboBox(self)
         self.combo_box.addItems(self.options)
         self.combo_box.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -50,7 +50,7 @@ class CodexOriSelector(QWidget):
         """Updates the 'start_ori' attribute of all pictographs to the selected orientation."""
         logger.info(f"Orientation update triggered to '{orientation}'.")
         try:
-            for letter_str, view in self.codex.section_manager.pictograph_views.items():
+            for letter_str, view in self.codex.section_manager.views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     new_dict = scene.pictograph_dict.copy()

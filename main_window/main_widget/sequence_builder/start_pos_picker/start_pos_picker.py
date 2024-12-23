@@ -127,7 +127,7 @@ class StartPosPicker(BaseStartPosPicker):
         start_pos_beat.updater.update_pictograph(
             start_position_pictograph.pictograph_dict
         )
-
+        
         return start_pos_beat
 
     def get_start_pos_pictograph(self, start_pos_data) -> "BasePictograph":

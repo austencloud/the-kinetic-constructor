@@ -31,38 +31,19 @@ class BeatFramePopulator:
         if not self.current_sequence_json:
             return
 
-        # self._set_grid_mode()
         start_pos_beat = self._set_start_position()
         self._update_sequence_layout(start_pos_beat)
         self._update_sequence_word()
         self._update_difficulty_level()
         self._populate_beats()
         self._finalize_sequence()
-        # update hte option picker
+        
         self.manual_builder.option_picker.update_option_picker()
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )
 
-    def _set_grid_mode(self):
-        grid_mode = self.current_sequence_json[0].get("grid_mode")
-        if grid_mode == "sweked":
-            # raise an error
-            print("Warning - sweked grid mode is not supported yet")
-            return
-        if grid_mode:
-            self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
-                grid_mode
-            )
-        else:
-            grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
-                self.current_sequence_json[2]
-            )
-            self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
-                grid_mode
-            )
-            if not self.current_sequence_json[0].get("grid_mode"):
-                print(" Warning - no grid mode found in sequence metadata")
+
 
     def _set_start_position(self):
         start_pos_picker = self.manual_builder.start_pos_picker
