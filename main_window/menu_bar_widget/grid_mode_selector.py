@@ -41,9 +41,8 @@ class GridModeSelector(QWidget):
         layout.addWidget(self.label)
         self.setLayout(layout)
 
-
     def style_widget(self):
-        font_size = self.menu_bar_widget.menu_bar_font_size
+        font_size = self.menu_bar_widget.selectors_widget.selector_font_size
         font = QFont("Georgia", font_size)
         self.label.setFont(font)
 

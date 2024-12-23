@@ -10,31 +10,27 @@ if TYPE_CHECKING:
 class GridModeChecker:
     """Checks what grid a given pictograph is in by looking at its start and end positions"""
 
-
     def get_grid_mode(
-        self, pictograph_dict
+        self, pictograph_dict: dict
     ) -> None | Literal["box"] | Literal["diamond"]:
         box_mode_positions = self.get_box_mode_positions()
         diamond_mode_positions = self.get_diamond_mode_positions()
 
-        if (
-            pictograph_dict["start_pos"] in box_mode_positions
-            and pictograph_dict["end_pos"] in box_mode_positions
-        ):
+        start_pos = (
+            pictograph_dict.get("end_pos")
+            if pictograph_dict.get("sequence_start_position")
+            else pictograph_dict.get("start_pos")
+        )
+        end_pos = pictograph_dict.get("end_pos")
+
+        if start_pos in box_mode_positions and end_pos in box_mode_positions:
             return BOX
-        elif (
-            pictograph_dict["start_pos"] in diamond_mode_positions
-            and pictograph_dict["end_pos"] in diamond_mode_positions
-        ):
+        elif start_pos in diamond_mode_positions and end_pos in diamond_mode_positions:
             return DIAMOND
 
         elif (
-            pictograph_dict["start_pos"] in box_mode_positions
-            and pictograph_dict["end_pos"] in diamond_mode_positions
-        ) or (
-            pictograph_dict["start_pos"] in diamond_mode_positions
-            and pictograph_dict["end_pos"] in box_mode_positions
-        ):
+            start_pos in box_mode_positions and end_pos in diamond_mode_positions
+        ) or (start_pos in diamond_mode_positions and end_pos in box_mode_positions):
             return "skewed"
 
     def get_diamond_mode_positions(self):

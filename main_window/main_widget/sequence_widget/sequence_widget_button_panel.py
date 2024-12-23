@@ -14,6 +14,7 @@ from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
+from PyQt6.QtWidgets import QSpacerItem, QSizePolicy
 
 
 class SequenceWidgetButtonPanel(QFrame):
@@ -23,7 +24,7 @@ class SequenceWidgetButtonPanel(QFrame):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
         self.placeholder = ButtonPanelPlaceholder(self)
-
+        self.spacers: list[QSpacerItem] = []
         self.font_size = self.sequence_widget.width() // 45
         self._setup_dependencies()
         self.colors_swapped = False
@@ -145,14 +146,26 @@ class SequenceWidgetButtonPanel(QFrame):
             self.layout.addWidget(self.buttons[name])
 
         # Add spacing to separate groups
-        self.layout.addSpacing(self.sequence_widget.height() // 20)
+        self.spacer1 = QSpacerItem(
+            20,
+            self.sequence_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        self.layout.addItem(self.spacer1)
 
         # Group 2 (Transform Tools)
         for name in ["mirror_sequence", "swap_colors", "rotate_sequence"]:
             self.layout.addWidget(self.buttons[name])
 
         # Add spacing before next group
-        self.layout.addSpacing(self.sequence_widget.height() // 20)
+        self.spacer2 = QSpacerItem(
+            20,
+            self.sequence_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        self.layout.addItem(self.spacer2)
 
         # Group 3 (Sequence Management)
         for name in ["layout_options", "delete_beat", "clear_sequence"]:
@@ -162,26 +175,34 @@ class SequenceWidgetButtonPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Initial spacing setup
-        self.layout.setSpacing(self.sequence_widget.height() // 40)
+        self.spacer3 = QSpacerItem(
+            20,
+            self.sequence_widget.height() // 40,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        self.layout.addItem(self.spacer3)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.resize_button_panel()
 
     def resize_button_panel(self):
-        button_size = self.sequence_widget.main_widget.height() // 24
+        button_size = self.sequence_widget.main_widget.height() // 22
         for button in self.buttons.values():
             button.setFixedSize(button_size, button_size)
             button.setIconSize(button.size() * 0.8)
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        # Adjust spacing if needed based on new size
         self.layout.setSpacing(
             self.sequence_widget.beat_frame.main_widget.height() // 120
         )
-        # You can also recalculate the spacing for the groups if needed
-        # For example:
-        # self.layout.itemAt( (index_of_spacing_item) ).changeSize(...)
-        # but for simplicity we'll leave as is.
-
+        spacer_size = self.sequence_widget.beat_frame.main_widget.height() // 20
+        for spacer in self.spacers:
+            spacer.changeSize(
+                20,
+                spacer_size,
+                QSizePolicy.Policy.Minimum,
+                QSizePolicy.Policy.Expanding,
+            )
         self.layout.update()

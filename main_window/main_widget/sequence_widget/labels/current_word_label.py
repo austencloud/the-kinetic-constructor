@@ -13,6 +13,8 @@ from utilities.word_simplifier import WordSimplifier
 if TYPE_CHECKING:
     from ..sequence_widget import SequenceWidget
 
+WORD_LENGTH = 8
+
 
 class CurrentWordLabel(QWidget):
     def __init__(self, sequence_widget: "SequenceWidget"):
@@ -46,7 +48,30 @@ class CurrentWordLabel(QWidget):
     def set_current_word(self, word: str):
         simplified_word = WordSimplifier.simplify_repeated_word(word)
         self.current_word = simplified_word
-        self.line_edit.setText(simplified_word)
+
+        # Get the first 8 letter characters of the word, including the dash
+        count = 0
+        result = []
+        for char in simplified_word:
+            if char.isalpha():
+                count += 1
+            result.append(char)
+            if count == WORD_LENGTH:
+                break
+
+        # Join the result list to form the final string
+        truncated_word = "".join(result)
+
+        # Add "..." if the count is higher than WORD_LENGTH
+        word_without_dashes = simplified_word.replace("-", "")
+        truncated_word_without_dashes = truncated_word.replace("-", "")
+
+        if count == WORD_LENGTH and len(word_without_dashes) > len(
+            truncated_word_without_dashes
+        ):
+            truncated_word += "..."
+
+        self.line_edit.setText(truncated_word)
         self.resizeEvent(None)
 
     def set_font_color(self, color: str):

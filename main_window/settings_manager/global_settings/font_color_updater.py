@@ -106,7 +106,7 @@ class FontColorUpdater:
         self, main_widget: "MainWidget", font_color: str
     ) -> None:
         menu_bar = main_widget.menu_bar_widget
-        for label, _ in menu_bar.sections:
+        for label, _ in menu_bar.selectors_widget.sections:
             self._apply_font_color(label, font_color)
 
     def _update_sequence_widget(
@@ -214,4 +214,6 @@ class FontColorUpdater:
             self._apply_font_color(lesson_widget.progress_label, font_color)
             self._apply_font_color(lesson_widget.result_label, font_color)
 
-        self._apply_font_color(learn_widget.codex.control_widget.ori_selector.start_ori_label, font_color)
+        self._apply_font_color(
+            learn_widget.codex.control_widget.ori_selector.start_ori_label, font_color
+        )
