@@ -81,3 +81,7 @@ class BeatFrameGetter:
     def beat_number(self, beat_view: QGraphicsView) -> int:
         """Get the beat number for a given beat view."""
         return self.beat_frame.beats.index(beat_view) + 1
+    
+    def index_of_beat(self, beat_view: QGraphicsView) -> int:
+        """Get the index of a given beat view."""
+        return self.beat_frame.beats.index(beat_view)

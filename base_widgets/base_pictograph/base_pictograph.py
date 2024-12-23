@@ -60,7 +60,7 @@ class BasePictograph(QGraphicsScene):
     motions: dict[str, Motion]
     letter: Letter = None
     letter_type: LetterType = None
-    pictograph_dict: dict
+    pictograph_dict: dict [str, Union[str, dict[str, str]]]
     motion_dict_list: list[dict]
     start_pos: str
     end_pos: str

@@ -10,6 +10,9 @@ from data.constants import (
 )
 from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QApplication
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+    ReversalDetector,
+)
 from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
 
@@ -57,7 +60,6 @@ class PropRotDirButtonManager:
 
     def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         """Set the prop rotation direction and update the motion and letter."""
-        # if the motion's prop_rot_dir already matches what the user selected, return
         if self.turns_box.prop_rot_dir_btn_state[prop_rot_dir]:
             return
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
@@ -70,6 +72,19 @@ class PropRotDirButtonManager:
                     )
                 )
                 self._update_pictograph_and_json(motion, new_letter)
+
+        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
+
+        sequence_so_far = self.json_manager.loader_saver.load_current_sequence_json()[
+            : pictograph_index + 2
+        ]
+        reversal_info = ReversalDetector.detect_reversal(
+            sequence_so_far, pictograph.pictograph_dict
+        )
+        pictograph.blue_reversal = reversal_info["blue_reversal"]
+        pictograph.red_reversal = reversal_info["red_reversal"]
+        pictograph.reversal_symbol_manager.update_reversal_symbols()
+
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
         self.option_picker = (
             self.turns_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
@@ -79,34 +94,23 @@ class PropRotDirButtonManager:
     def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
         """Update the pictograph and JSON with the new letter and motion attributes."""
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        if new_letter:
-            pictograph_dict = {
-                "letter": new_letter.value,
-                motion.color
-                + "_attributes": {
-                    "motion_type": motion.motion_type,
-                    "prop_rot_dir": motion.prop_rot_dir,
-                    "end_ori": motion.end_ori,
-                },
+        beat = motion.pictograph
+        beat.pictograph_dict[motion.color + "_attributes"].update(
+            {
+                "motion_type": motion.motion_type,
+                "prop_rot_dir": motion.prop_rot_dir,
+                "end_ori": motion.end_ori,
             }
-        else:
-            pictograph_dict = {
-                motion.color
-                + "_attributes": {
-                    "motion_type": motion.motion_type,
-                    "prop_rot_dir": motion.prop_rot_dir,
-                    "end_ori": motion.end_ori,
-                },
-            }
-
-        motion.pictograph.updater.update_pictograph(pictograph_dict)
-        motion.pictograph.view.repaint()
-        GE_pictograph = (
-            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
-        GE_pictograph.view.repaint()
-        QApplication.processEvents()
+
+        if new_letter:
+            beat.pictograph_dict["letter"] = new_letter.value
+            beat.letter = new_letter
+
+        beat.updater.update_pictograph(beat.pictograph_dict)
+        
         json_index = pictograph_index + 2
+        
         self.json_manager.updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir
         )
@@ -121,43 +125,15 @@ class PropRotDirButtonManager:
             motion.motion_type
         )
 
+        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_json()
         # Running the validation engine
         self.graph_editor.main_widget.json_manager.ori_validation_engine.run(
             is_current_sequence=True
         )
 
         # Triggering updates for UI components
-        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_json()
         self.graph_editor.main_widget.sequence_widget.current_word_label.set_current_word(
             self.graph_editor.sequence_widget.beat_frame.get.current_word()
-        )
-
-    def _update_pictographs_prop_rot_dir(self, prop_rot_dir: str) -> None:
-        pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
-        for motion in pictograph.motions.values():
-            if motion.color == self.turns_box.color:
-                self._update_pictograph_prop_rot_dir(motion, prop_rot_dir)
-
-    def _update_pictograph_vtg_dir(
-        self, motion: "Motion", vtg_dir: VTG_Directions
-    ) -> None:
-        motion.prop_rot_dir = vtg_dir
-        pictograph_dict = {
-            motion.color + "_" + PROP_ROT_DIR: vtg_dir,
-        }
-        motion.pictograph.updater.update_pictograph(pictograph_dict)
-
-    def _update_pictograph_prop_rot_dir(
-        self, motion: "Motion", prop_rot_dir: str
-    ) -> None:
-        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        motion.prop_rot_dir = prop_rot_dir
-        pictograph_dict = {
-            motion.color + "_attributes": {"prop_rot_dir": prop_rot_dir},
-        }
-        motion.pictograph.updater.update_pictograph(pictograph_dict)
-        self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
-            pictograph_index + 2, motion.color, prop_rot_dir
         )
 
     def _update_button_states(

@@ -1,5 +1,10 @@
+from math import pi
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
+
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+    ReversalDetector,
+)
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -13,11 +18,9 @@ class BeatFrameUpdater:
         current_sequence_json = (
             self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
         )
-        # Skip the metadata entry
         sequence_entries = current_sequence_json[1:]
 
-        # Update the start position if necessary
-        if sequence_entries and 'sequence_start_position' in sequence_entries[0]:
+        if sequence_entries and "sequence_start_position" in sequence_entries[0]:
             self.update_start_pos_from_current_sequence_json(sequence_entries[0])
             beat_entries = sequence_entries[1:]
         else:
@@ -31,9 +34,20 @@ class BeatFrameUpdater:
             beat_view = self.beat_frame.get.beat_view_by_number(beat_num)
 
             if beat_view and beat_view.beat:
-                if beat_view.beat.pictograph_dict != entry:
+                # if beat_view.beat.pictograph_dict != entry:
                     beat_view.beat.updater.update_pictograph(entry)
-                    QApplication.processEvents()
+                    beat = beat_view.beat
+                    pictograph_index = self.beat_frame.get.index_of_beat(beat_view)
+                    sequence_so_far = self.beat_frame.json_manager.loader_saver.load_current_sequence_json()[
+                        : pictograph_index + 2
+                    ]
+                    reversal_info = ReversalDetector.detect_reversal(
+                        sequence_so_far, beat.pictograph_dict
+                    )
+                    beat.blue_reversal = reversal_info["blue_reversal"]
+                    beat.red_reversal = reversal_info["red_reversal"]
+                    beat.reversal_symbol_manager.update_reversal_symbols()
+                    # QApplication.processEvents()
             else:
                 print(
                     f"Beat with number {beat_num} not found in the beat frame. Skipping."

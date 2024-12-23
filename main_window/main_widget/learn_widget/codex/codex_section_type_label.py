@@ -36,8 +36,7 @@ class CodexSectionTypeLabel(QLabel):
     def resizeEvent(self, event):
         self.label_height = self.get_font_size() * 2
         self.setFixedHeight(self.label_height)
-        # set it to take up the minimum width required for its text
-        self.setFixedWidth(self.fontMetrics().horizontalAdvance(self.text()))
+        # self.setFixedWidth(self.fontMetrics().horizontalAdvance(self.text()))
         border_style = "2px solid black"
         self.setStyleSheet(
             f"QLabel {{"
