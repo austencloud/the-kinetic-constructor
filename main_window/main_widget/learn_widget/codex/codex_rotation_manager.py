@@ -1,30 +1,34 @@
 from typing import TYPE_CHECKING
+from data.positions_map import positions_map
+from data.locations import cw_loc_order
+
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .codex_control_widget import CodexControlWidget
 
 
 class CodexRotationManager:
-    """Handles rotating the sequence in 45° increments and updates grid mode."""
+    """Handles rotating the codex in 45° increments."""
 
     def __init__(self, control_widget: "CodexControlWidget"):
         self.codex = control_widget.codex
-        self.rotation_steps = 0
-        self.loc_order = ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
 
     def rotate_codex(self):
         """Rotate all pictographs in the Codex by 45° increments."""
-        if not self.codex.data_manager.pictograph_data:
-            return
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
-        self.rotation_steps = 1
         for letter, pictograph in self.codex.data_manager.pictograph_data.items():
             if pictograph:
-                dict = self._rotate_pictograph(pictograph)
-                self.codex.data_manager.pictograph_data[letter] = dict
+                pictograph_dict = self._rotate_pictograph(pictograph)
+                self.codex.data_manager.pictograph_data[letter] = pictograph_dict
         for view in self.codex.section_manager.views.values():
             view.pictograph.grid.update_grid_mode()
+
         self._refresh_pictograph_views()
+
+        QApplication.restoreOverrideCursor()
 
     def _rotate_pictograph(self, pictograph_dict: dict) -> dict:
         """Rotate a single pictograph dictionary."""
@@ -33,43 +37,32 @@ class CodexRotationManager:
                 attributes = pictograph_dict[color]
                 if "start_loc" in attributes:
                     attributes["start_loc"] = self._rotate_location(
-                        attributes["start_loc"], self.rotation_steps
+                        attributes["start_loc"]
                     )
                 if "end_loc" in attributes:
-                    attributes["end_loc"] = self._rotate_location(
-                        attributes["end_loc"], self.rotation_steps
-                    )
+                    attributes["end_loc"] = self._rotate_location(attributes["end_loc"])
 
         if "blue_attributes" in pictograph_dict and "red_attributes" in pictograph_dict:
             bl = pictograph_dict["blue_attributes"]
             rl = pictograph_dict["red_attributes"]
             if "start_loc" in bl and "start_loc" in rl:
-                pictograph_dict["start_pos"] = self.get_position_name(
-                    bl["start_loc"], rl["start_loc"]
-                )
+                pictograph_dict["start_pos"] = positions_map[
+                    (bl["start_loc"], rl["start_loc"])
+                ]
             if "end_loc" in bl and "end_loc" in rl:
-                pictograph_dict["end_pos"] = self.get_position_name(
-                    bl["end_loc"], rl["end_loc"]
-                )
+                pictograph_dict["end_pos"] = positions_map[
+                    (bl["end_loc"], rl["end_loc"])
+                ]
         return pictograph_dict
 
-    def _rotate_location(self, location: str, rotation_steps: int) -> str:
+    def _rotate_location(self, location: str) -> str:
         """Rotate a single location by 45° increments."""
-        if location not in self.loc_order:
+        if location not in cw_loc_order:
             return location
-        idx = self.loc_order.index(location)
-        new_idx = (idx + rotation_steps) % len(self.loc_order)
-        new_loc = self.loc_order[new_idx]
+        idx = cw_loc_order.index(location)
+        new_idx = (idx + 1) % len(cw_loc_order)
+        new_loc = cw_loc_order[new_idx]
         return new_loc
-
-    def get_position_name(self, left_loc: str, right_loc: str) -> str:
-        """Retrieve position name from a map based on left and right locations."""
-        try:
-            from data.positions_map import positions_map
-
-            return positions_map[(left_loc, right_loc)]
-        except KeyError:
-            return "unknown"  # Handle missing mappings gracefully
 
     def update_grid_mode(self):
         for view in self.codex.section_manager.views.values():

@@ -64,7 +64,6 @@ class SequenceWidget(QWidget):
         red_motion = currently_selected_beat.beat.red_motion
         self.graph_editor.adjustment_panel.update_turns_panel(blue_motion, red_motion)
 
-        self.rotation_manager.reset_rotation()
 
     def update_beats(self, modified_sequence_json: list[dict]):
         if len(modified_sequence_json) > 1:

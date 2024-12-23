@@ -79,7 +79,7 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "rotate_sequence": {
                 "icon": "rotate.png",
-                "callback": self.sequence_widget.rotation_manager.rotate_current_sequence,
+                "callback": self.sequence_widget.rotation_manager.rotate_beats,
                 "tooltip": "Rotate Sequence",
             },
             "delete_beat": {

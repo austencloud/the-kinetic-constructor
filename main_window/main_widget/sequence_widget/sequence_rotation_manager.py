@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from data.positions_map import positions_map
 from data.locations import cw_loc_order
+
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 
@@ -9,62 +10,69 @@ if TYPE_CHECKING:
 
 
 class SequenceRotationManager:
-    """Handles rotating the sequence in 45° increments and updates grid mode."""
+    """Handles rotating the sequence in 45° increments."""
 
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.rotation_steps = 0
         self.original_sequence_json = None
 
-    def rotate_current_sequence(self):
+    def rotate_beats(self):
         """Rotate the current sequence by 45° increments and update grid mode."""
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if self.original_sequence_json is None:
-            self.original_sequence_json = (
-                self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
-            )
+        self.original_sequence_json = (
+            self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
+        )
 
+        if self.check_length():
+            return
+
+        rotated_sequence = self.rotate_sequence(self.original_sequence_json)
+        self.sequence_widget.update_beats_in_place(rotated_sequence)
+        
+        # self.sequence_widget.indicator_label.show_message("Sequence rotated!")
+        QApplication.restoreOverrideCursor()
+
+    def check_length(self):
         if len(self.original_sequence_json) < 2:
             self.sequence_widget.indicator_label.show_message("No sequence to rotate.")
             QApplication.restoreOverrideCursor()
-            return
+            return False
 
-        self.rotation_steps = (self.rotation_steps + 1) % 8
-        rotated_sequence = self.rotate_sequence(
-            self.original_sequence_json, self.rotation_steps
-        )
-
-        self.sequence_widget.update_beats_in_place(rotated_sequence)
-        self.sequence_widget.indicator_label.show_message("Sequence rotated!")
-        QApplication.restoreOverrideCursor()
-
-    def rotate_sequence(self, sequence_json: list[dict], rotation_steps):
+    def rotate_sequence(self, sequence_json: list[dict]):
         """Rotate the sequence by rotation_steps * 45°."""
         rotated_sequence = []
         metadata = sequence_json[0].copy()
         rotated_sequence.append(metadata)
         start_pos_beat_dict: dict = sequence_json[1].copy()
-        self.rotate_pictograph(start_pos_beat_dict, rotation_steps)
+
+        self.rotate_pictograph(start_pos_beat_dict)
         rotated_sequence.append(start_pos_beat_dict)
-        for beat_dict in sequence_json[2:]:
+        beat_dicts = self._get_beat_dicts_from_beat_frame()
+
+        for beat_dict in beat_dicts:
             rotated_beat = beat_dict.copy()
-            self.rotate_pictograph(rotated_beat, rotation_steps)
+            self.rotate_pictograph(rotated_beat)
             rotated_sequence.append(rotated_beat)
 
         return rotated_sequence
 
-    def rotate_pictograph(self, _dict: dict, rotation_steps):
+    def _get_beat_dicts_from_beat_frame(self):
+        return [
+            beat.beat.get.pictograph_dict()
+            for beat in self.sequence_widget.beat_frame.beats
+            if beat.is_filled
+        ]
+
+    def rotate_pictograph(self, _dict: dict):
         for color in ["blue_attributes", "red_attributes"]:
             if color in _dict:
                 attributes = _dict[color]
                 if "start_loc" in attributes:
                     attributes["start_loc"] = self._rotate_location(
-                        attributes["start_loc"], rotation_steps
+                        attributes["start_loc"]
                     )
                 if "end_loc" in attributes:
-                    attributes["end_loc"] = self._rotate_location(
-                        attributes["end_loc"], rotation_steps
-                    )
+                    attributes["end_loc"] = self._rotate_location(attributes["end_loc"])
 
         if "blue_attributes" in _dict and "red_attributes" in _dict:
             bl = _dict["blue_attributes"]
@@ -76,11 +84,11 @@ class SequenceRotationManager:
             if "end_loc" in bl and "end_loc" in rl:
                 _dict["end_pos"] = self.get_position_name(bl["end_loc"], rl["end_loc"])
 
-    def _rotate_location(self, location, rotation_steps):
+    def _rotate_location(self, location):
         if location not in cw_loc_order:
             return location
         idx = cw_loc_order.index(location)
-        new_idx = (idx + rotation_steps) % len(cw_loc_order)
+        new_idx = (idx + 1) % len(cw_loc_order)
         return cw_loc_order[new_idx]
 
     def get_position_name(self, left_loc, right_loc):
@@ -90,43 +98,3 @@ class SequenceRotationManager:
             raise ValueError(
                 f"Position name not found for locations: {left_loc}, {right_loc}"
             )
-
-    def _determine_grid_mode(self, rotated_sequence):
-        """Return 'diamond' or 'box' based on the final orientation of all end_locs."""
-        cardinal_set = {"n", "e", "s", "w"}
-        intercardinal_set = {"ne", "se", "sw", "nw"}
-        all_locs = []
-
-        start_pos_beat = rotated_sequence[1]
-        if "blue_attributes" in start_pos_beat and "red_attributes" in start_pos_beat:
-            bl = start_pos_beat["blue_attributes"].get("end_loc")
-            rl = start_pos_beat["red_attributes"].get("end_loc")
-            if bl:
-                all_locs.append(bl)
-            if rl:
-                all_locs.append(rl)
-
-        for beat in rotated_sequence[2:]:
-            if "blue_attributes" in beat and "red_attributes" in beat:
-                bl = beat["blue_attributes"].get("end_loc")
-                rl = beat["red_attributes"].get("end_loc")
-                if bl:
-                    all_locs.append(bl)
-                if rl:
-                    all_locs.append(rl)
-
-        if all(l in cardinal_set for l in all_locs):
-            mode = "diamond"
-        elif all(l in intercardinal_set for l in all_locs):
-            mode = "box"
-        else:
-            cardinal_count = sum(l in cardinal_set for l in all_locs)
-            inter_count = sum(l in intercardinal_set for l in all_locs)
-            mode = "diamond" if cardinal_count >= inter_count else "box"
-
-        return mode
-
-    def reset_rotation(self):
-        """Reset rotation to original state."""
-        self.rotation_steps = 0
-        self.original_sequence_json = None

@@ -53,7 +53,7 @@ class SequenceTransformPanel(QFrame):
         self.rotate_button.setIcon(QIcon(rotate_icon))
         self.rotate_button.setToolTip("Rotate Sequence")
         self.rotate_button.clicked.connect(
-            self.sequence_widget.rotation_manager.rotate_current_sequence
+            self.sequence_widget.rotation_manager.rotate_beats
         )
         layout.addWidget(self.rotate_button)
 
