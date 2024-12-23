@@ -16,13 +16,13 @@ class CodexRotationManager:
         self.codex = control_widget.codex
 
     def rotate_codex(self):
-        """Rotate all pictographs in the Codex by 45° increments."""
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
-        for letter, pictograph in self.codex.data_manager.pictograph_data.items():
-            if pictograph:
-                pictograph_dict = self._rotate_pictograph(pictograph)
+        for letter, pictograph_dict in self.codex.data_manager.pictograph_data.items():
+            if pictograph_dict:
+                pictograph_dict = self._rotate_pictograph_dict(pictograph_dict)
                 self.codex.data_manager.pictograph_data[letter] = pictograph_dict
+
         for view in self.codex.section_manager.views.values():
             view.pictograph.grid.update_grid_mode()
 
@@ -30,7 +30,7 @@ class CodexRotationManager:
 
         QApplication.restoreOverrideCursor()
 
-    def _rotate_pictograph(self, pictograph_dict: dict) -> dict:
+    def _rotate_pictograph_dict(self, pictograph_dict: dict) -> dict:
         """Rotate a single pictograph dictionary."""
         for color in ["blue_attributes", "red_attributes"]:
             if color in pictograph_dict:

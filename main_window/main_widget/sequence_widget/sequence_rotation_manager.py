@@ -14,22 +14,19 @@ class SequenceRotationManager:
 
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
+        self.json_loader = self.sequence_widget.json_manager.loader_saver
         self.original_sequence_json = None
 
     def rotate_beats(self):
-        """Rotate the current sequence by 45° increments and update grid mode."""
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.original_sequence_json = (
-            self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
-        )
-
+        
+        self.original_sequence_json = self.json_loader.load_current_sequence_json()
         if self.check_length():
             return
-
         rotated_sequence = self.rotate_sequence(self.original_sequence_json)
         self.sequence_widget.update_beats_in_place(rotated_sequence)
-        
-        # self.sequence_widget.indicator_label.show_message("Sequence rotated!")
+        self.sequence_widget.indicator_label.show_message("Sequence rotated!")
+
         QApplication.restoreOverrideCursor()
 
     def check_length(self):
