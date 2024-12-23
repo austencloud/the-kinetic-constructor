@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 from .permutation_executor_base import PermutationExecutor
 from PyQt6.QtWidgets import QApplication
-
+from data.mirrored_positions import vertical_mirror_map, horizontal_mirror_map
 if TYPE_CHECKING:
     from ..circular_sequence_generator import CircularSequenceGenerator
 
-vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
-horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
+
 
 
 class MirroredPermutationExecutor(PermutationExecutor):

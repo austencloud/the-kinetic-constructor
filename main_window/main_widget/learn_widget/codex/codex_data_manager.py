@@ -1,5 +1,6 @@
 # pictograph_data_manager.py
 
+from copy import deepcopy
 from typing import TYPE_CHECKING, Optional
 from Enums.letters import Letter
 
@@ -47,73 +48,16 @@ class CodexDataManager:
                 and pdict.get("red_attributes", {}).get("motion_type")
                 == red_motion_type
             ):
-                return pdict
-        print(
-            f"Warning: No matching pictograph found for letter '{letter_str}' with specified conditions."
-        )
+                return deepcopy(pdict)
+
         return None
 
     def _initialize_pictograph_data(self) -> dict[str, Optional[dict]]:
         """Initializes the pictograph data for all letters."""
-        letters = [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "Σ",
-            "Δ",
-            "θ",
-            "Ω",
-            "W-",
-            "X-",
-            "Y-",
-            "Z-",
-            "Σ-",
-            "Δ-",
-            "θ-",
-            "Ω-",
-            "Φ",
-            "Ψ",
-            "Λ",
-            "Φ-",
-            "Ψ-",
-            "Λ-",
-            "α",
-            "β",
-            "Γ",
-        ]
+        letters = [letter.value for letter in Letter]
 
         pictograph_data = {}
         for letter in letters:
-            # Define the parameters based on your existing data
-            # Since start_ori is always "in", we don't need to pass it
-            # Adjust start_pos, end_pos, motion types as per your data
-            # Here, we assume that these values are consistent with your initial code
-            # You may need to adjust this based on actual data requirements
-
-            # Example parameters (replace with actual values as needed)
             params = self._get_pictograph_params(letter)
             if params:
                 pictograph_dict = self._find_pictograph_dict(

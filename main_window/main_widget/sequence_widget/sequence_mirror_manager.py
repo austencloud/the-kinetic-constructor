@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
+from data.mirrored_positions import mirrored_positions, vertical_mirror_map
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -11,52 +12,7 @@ if TYPE_CHECKING:
 class SequenceMirrorManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        # Define mappings for mirroring positions and locations
-        self.vertical_mirror_positions = {
-            "alpha1": "alpha1",
-            "alpha2": "alpha8",
-            "alpha3": "alpha7",
-            "alpha4": "alpha6",
-            "alpha5": "alpha5",
-            "alpha6": "alpha4",
-            "alpha7": "alpha3",
-            "alpha8": "alpha2",
-            "beta1": "beta1",
-            "beta2": "beta8",
-            "beta3": "beta7",
-            "beta4": "beta6",
-            "beta5": "beta5",
-            "beta6": "beta4",
-            "beta7": "beta3",
-            "beta8": "beta2",
-            "gamma1": "gamma9",
-            "gamma2": "gamma16",
-            "gamma3": "gamma15",
-            "gamma4": "gamma14",
-            "gamma5": "gamma13",
-            "gamma6": "gamma12",
-            "gamma7": "gamma11",
-            "gamma8": "gamma10",
-            "gamma9": "gamma1",
-            "gamma10": "gamma8",
-            "gamma11": "gamma7",
-            "gamma12": "gamma6",
-            "gamma13": "gamma5",
-            "gamma14": "gamma4",
-            "gamma15": "gamma3",
-            "gamma16": "gamma2",
-        }
-
-        self.vertical_mirror_locations = {
-            "n": "n",
-            "e": "w",
-            "w": "e",
-            "s": "s",
-            "ne": "nw",
-            "nw": "ne",
-            "se": "sw",
-            "sw": "se",
-        }
+        self.vertical_mirror_positions = mirrored_positions["vertical"]
 
     def mirror_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -111,11 +67,11 @@ class SequenceMirrorManager:
                 attributes = beat[color]
                 # Mirror locations
                 if "start_loc" in attributes:
-                    attributes["start_loc"] = self.vertical_mirror_locations.get(
+                    attributes["start_loc"] = self.vertical_mirror_map.get(
                         attributes["start_loc"], attributes["start_loc"]
                     )
                 if "end_loc" in attributes:
-                    attributes["end_loc"] = self.vertical_mirror_locations.get(
+                    attributes["end_loc"] = self.vertical_mirror_map.get(
                         attributes["end_loc"], attributes["end_loc"]
                     )
                 # Reverse prop_rot_dir
