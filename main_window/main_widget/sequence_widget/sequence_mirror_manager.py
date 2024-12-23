@@ -1,9 +1,9 @@
 # sequence_mirror_manager.py
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
-from data.mirrored_positions import mirrored_positions
+from data.mirrored_positions import mirrored_positions, vertical_mirror_map
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -67,11 +67,11 @@ class SequenceMirrorManager:
                 attributes = beat[color]
                 # Mirror locations
                 if "start_loc" in attributes:
-                    attributes["start_loc"] = self.vertical_mirror_map.get(
+                    attributes["start_loc"] = vertical_mirror_map.get(
                         attributes["start_loc"], attributes["start_loc"]
                     )
                 if "end_loc" in attributes:
-                    attributes["end_loc"] = self.vertical_mirror_map.get(
+                    attributes["end_loc"] = vertical_mirror_map.get(
                         attributes["end_loc"], attributes["end_loc"]
                     )
                 # Reverse prop_rot_dir
@@ -80,7 +80,7 @@ class SequenceMirrorManager:
                         attributes["prop_rot_dir"]
                     )
 
-    def reverse_prop_rot_dir(self, prop_rot_dir):
+    def reverse_prop_rot_dir(self, prop_rot_dir: str) -> str:
         if prop_rot_dir == "cw":
             return "ccw"
         elif prop_rot_dir == "ccw":

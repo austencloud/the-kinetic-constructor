@@ -106,7 +106,6 @@ class CodexRotationManager:
             view.pictograph.grid.__init__(
                 view.pictograph, view.pictograph.grid.grid_data, mode
             )
-        self.codex.main_widget.special_placement_loader.refresh_placements(mode)
 
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""
@@ -117,7 +116,7 @@ class CodexRotationManager:
                     pictograph_dict
                 )
                 view.pictograph.arrow_placement_manager.default_positioner.__init__(
-                    view.pictograph.arrow_placement_manager, grid_mode
+                    view.pictograph.arrow_placement_manager
                 )
 
                 view.pictograph.updater.update_pictograph(pictograph_dict)

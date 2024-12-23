@@ -115,9 +115,7 @@ class SpecialPlacementDataUpdater:
     def _update_placement_json_data(
         self, letter: Letter, letter_data: dict, ori_key: str
     ) -> None:
-        grid_mode = (
-            self.positioner.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = self.positioner.pictograph.grid_mode
         file_path = os.path.join(
             "data",
             "arrow_placement",

@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
-from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
+from data.constants import BLUE_START_ORI, BLUE_TURNS, DIAMOND, RED_START_ORI, RED_TURNS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_picker import (
     StartPosPicker,
@@ -64,9 +64,7 @@ class ManualBuilder(QFrame):
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
         self.stacked_widget.setCurrentWidget(self.advanced_start_pos_picker)
-        self.advanced_start_pos_picker.display_variations(
-            self.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        self.advanced_start_pos_picker.display_variations()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
 
     def reset_to_start_pos_picker(self) -> None:
@@ -74,7 +72,6 @@ class ManualBuilder(QFrame):
         self.start_position_picked = False
         self.stacked_widget.setCurrentWidget(self.start_pos_picker)
         self.start_pos_picker.show()
-        # self.start_pos_picker.resize_start_pos_picker()
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence
@@ -129,9 +126,9 @@ class ManualBuilder(QFrame):
 
     # def resize_manual_builder(self) -> None:
     #     """Resize the components based on the current state."""
-        # self.start_pos_picker.resize_start_pos_picker()
-        # self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
-        # self.option_picker.resize_option_picker()
+    # self.start_pos_picker.resize_start_pos_picker()
+    # self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
+    # self.option_picker.resize_option_picker()
 
     # def resizeEvent(self, event) -> None:
     #     """Resize the manual builder based on the current state."""

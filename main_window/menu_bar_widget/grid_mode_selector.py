@@ -36,13 +36,11 @@ class GridModeSelector(QWidget):
         self.label = ClickableLabel(current_grid_mode)
         self.label.clicked.connect(self.on_label_clicked)
 
-        # Set up layout
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.label)
         self.setLayout(layout)
 
-        # self.style_widget()
 
     def style_widget(self):
         font_size = self.menu_bar_widget.menu_bar_font_size

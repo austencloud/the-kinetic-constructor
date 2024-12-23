@@ -31,7 +31,7 @@ class BeatFramePopulator:
         if not self.current_sequence_json:
             return
 
-        self._set_grid_mode()
+        # self._set_grid_mode()
         start_pos_beat = self._set_start_position()
         self._update_sequence_layout(start_pos_beat)
         self._update_sequence_word()

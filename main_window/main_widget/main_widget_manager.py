@@ -35,7 +35,6 @@ class MainWidgetManager:
         self._set_prop_type()
         self._initialize_managers()
         self._setup_letters()
-        self._setup_special_placements()
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
@@ -65,12 +64,6 @@ class MainWidgetManager:
         prop_type_value = settings.get("global", {}).get("prop_type", "staff")
         self.main_widget.prop_type = PropType.get_prop_type(prop_type_value)
 
-    def _setup_special_placements(self) -> None:
-        self.main_widget.special_placements = (
-            self.main_widget.special_placement_loader.load_special_placements(
-                self.main_widget.settings_manager.global_settings.get_grid_mode()
-            )
-        )
 
     def _setup_letters(self) -> None:
         self.main_widget.pictograph_dict_loader = PictographDictLoader(self.main_widget)
@@ -82,7 +75,6 @@ class MainWidgetManager:
     def set_grid_mode(self, grid_mode: str, clear_sequence=True) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
-        self.main_widget.special_placement_loader.refresh_placements()
         self.pictograph_dicts = (
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
         )
@@ -119,7 +111,6 @@ class MainWidgetManager:
                 self.main_widget.sequence_widget.graph_editor.pictograph_container
             )
             pictograph_container.GE_pictograph_view.set_to_blank_grid()
-        self._setup_special_placements()
         option_picker = self.main_widget.manual_builder.option_picker
         for pictograph in option_picker.pictograph_pool:
             pictograph.grid.hide()

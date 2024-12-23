@@ -37,7 +37,6 @@ class StartPosPicker(BaseStartPosPicker):
             self.manual_builder.transition_to_sequence_building
         )
         self.display_variations(
-            self.main_widget.settings_manager.global_settings.get_grid_mode()
         )
 
     def setup_layout(self) -> None:
@@ -70,10 +69,10 @@ class StartPosPicker(BaseStartPosPicker):
         button_layout.addStretch(1)
         return button_layout
 
-    def display_variations(self, grid_mode: str) -> None:
+    def display_variations(self) -> None:
         """Load only the start positions relevant to the current grid mode."""
         self.pictograph_frame.clear_pictographs()
-
+        grid_mode = DIAMOND
         start_pos_keys = (
             ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
             if grid_mode == DIAMOND

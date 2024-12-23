@@ -35,7 +35,6 @@ class ActPopulator:
         act_data = {
             "title": self.beat_frame.act_sheet.act_header.get_title(),
             "prop_type": self.beat_frame.main_widget.prop_type.name,
-            "grid_mode": self.beat_frame.main_widget.settings_manager.global_settings.get_grid_mode(),
             "sequences": [],
         }
 

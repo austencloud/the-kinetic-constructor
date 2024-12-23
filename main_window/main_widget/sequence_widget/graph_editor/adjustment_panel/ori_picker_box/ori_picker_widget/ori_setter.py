@@ -64,9 +64,7 @@ class OrientationSetter:
                     }
                 )
 
-            grid_mode = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.settings_manager.global_settings.get_grid_mode()
-            )
+            grid_mode = DIAMOND
             if grid_mode == BOX:
                 pictograph_list = advanced_start_pos_picker.box_pictographs
             elif grid_mode == DIAMOND:

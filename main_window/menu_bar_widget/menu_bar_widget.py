@@ -30,7 +30,7 @@ class MenuBarWidget(QWidget):
         # Initialize selectors
         self.user_profile_selector = UserProfileSelector(self)
         self.prop_type_selector = PropTypeSelector(self)
-        self.grid_mode_selector = GridModeSelector(self)
+        # self.grid_mode_selector = GridModeSelector(self)
         self.background_selector = BackgroundSelector(self)
         self.visibility_selector = VisibilitySelector(self)
 
@@ -44,7 +44,7 @@ class MenuBarWidget(QWidget):
         self.sections: list[tuple[QLabel, BaseSelector]] = [
             (self.user_profile_label, self.user_profile_selector),
             (self.prop_type_label, self.prop_type_selector),
-            (self.grid_mode_label, self.grid_mode_selector),
+            # (self.grid_mode_label, self.grid_mode_selector),
             (self.background_label, self.background_selector),
             (self.visibility_label, self.visibility_selector),
         ]

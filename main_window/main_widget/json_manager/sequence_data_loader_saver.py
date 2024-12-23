@@ -1,5 +1,6 @@
 import json
 from typing import TYPE_CHECKING
+from data.constants import DIAMOND
 from utilities.path_helpers import get_user_editable_resource_path
 from utilities.word_simplifier import WordSimplifier
 
@@ -38,7 +39,7 @@ class SequenceDataLoaderSaver:
                 "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                 "level": 0,
                 "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-                "grid_mode": self.json_manager.main_widget.settings_manager.global_settings.get_grid_mode(),
+                "grid_mode": DIAMOND,
                 "is_circular": False,
                 "is_permutable": False,
                 "is_strictly_rotated_permutation": False,

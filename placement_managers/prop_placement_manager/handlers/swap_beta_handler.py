@@ -144,11 +144,11 @@ class SwapBetaHandler:
         ori_key = self.pictograph.arrow_placement_manager.special_positioner.data_updater._generate_ori_key(
             self.pictograph.blue_motion
         )
-
+        grid_mode = self.pictograph.grid_mode
         if ori_key:
             letter_data: dict = self.pictograph.main_widget.special_placements[
-                ori_key
-            ].get(self.pictograph.letter.value)
+                grid_mode
+            ][ori_key].get(self.pictograph.letter.value)
 
         turns_tuple = (
             self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(

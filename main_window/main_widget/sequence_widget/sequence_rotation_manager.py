@@ -36,22 +36,22 @@ class SequenceRotationManager:
             self.original_sequence_json, self.rotation_steps
         )
 
-        self.update_grid_mode(rotated_sequence)
+        # self.update_grid_mode(rotated_sequence)
         self.sequence_widget.update_beats_in_place(rotated_sequence)
         self.sequence_widget.indicator_label.show_message("Sequence rotated!")
         QApplication.restoreOverrideCursor()
 
-    def update_grid_mode(self, rotated_sequence):
-        mode = self._determine_grid_mode(rotated_sequence)
-        rotated_sequence[0]["grid_mode"] = mode
-        grid_mode_selector = (
-            self.sequence_widget.main_widget.menu_bar_widget.grid_mode_selector
-        )
-        grid_mode_selector.label.setText(mode.capitalize())
-        grid_mode_selector.settings_manager.global_settings.set_grid_mode(mode.lower())
-        self.sequence_widget.main_widget.manager.set_grid_mode(
-            mode, clear_sequence=False
-        )
+    # def update_grid_mode(self, rotated_sequence):
+    #     mode = self._determine_grid_mode(rotated_sequence)
+    #     rotated_sequence[0]["grid_mode"] = mode
+    #     grid_mode_selector = (
+    #         self.sequence_widget.main_widget.menu_bar_widget.grid_mode_selector
+    #     )
+    #     grid_mode_selector.label.setText(mode.capitalize())
+    #     grid_mode_selector.settings_manager.global_settings.set_grid_mode(mode.lower())
+    #     self.sequence_widget.main_widget.manager.set_grid_mode(
+    #         mode, clear_sequence=False
+    #     )
 
     def rotate_sequence(self, sequence_json: list[dict], rotation_steps):
         """Rotate the sequence by rotation_steps * 45°."""

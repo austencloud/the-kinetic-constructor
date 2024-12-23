@@ -56,9 +56,7 @@ class BaseSequenceGenerator:
 
     def add_start_pos_pictograph(self) -> None:
         """Add a starting position pictograph to the sequence."""
-        grid_mode = (
-            self.sequence_generator_frame.sequence_generator_widget.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = DIAMOND
         if grid_mode == DIAMOND:
             start_pos_keys = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
         elif grid_mode == BOX:

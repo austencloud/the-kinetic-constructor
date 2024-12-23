@@ -1,4 +1,6 @@
 from typing import TYPE_CHECKING
+
+from data.constants import DIAMOND
 from .strictly_color_swapped_permutation_checker import (
     StrictlyColorSwappedPermutationChecker,
 )
@@ -113,7 +115,7 @@ class SequencePropertiesManager:
             "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                 self.sequence
             ),
-            "grid_mode": self.main_widget.settings_manager.global_settings.get_grid_mode(),
+            "grid_mode": self.properties["grid_mode"],
             "is_circular": self.properties["ends_at_start_pos"],
             "is_permutable": self.properties["is_permutable"],
             **{
@@ -128,7 +130,7 @@ class SequencePropertiesManager:
             "word": "",
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": 0,
-            "grid_mode": self.main_widget.settings_manager.global_settings.get_grid_mode(),
+            "grid_mode": DIAMOND,
             "is_circular": False,
             "is_permutable": False,
             "is_strictly_rotated_permutation": False,

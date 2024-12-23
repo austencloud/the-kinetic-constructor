@@ -18,13 +18,12 @@ class BaseQuestionGenerator:
     def filter_pictograph_dicts_by_grid_mode(self) -> dict[Letter, list[dict]]:
         """Filter pictograph dicts by grid mode."""
         valid_dicts: dict[Letter, list[dict]] = {}
-        grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
         for letter in self.main_widget.pictograph_dicts:
             valid_dicts.setdefault(letter, [])
             for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
                 if (
                     self.main_widget.grid_mode_checker.get_grid_mode(pictograph_dict)
-                    == grid_mode
+                    # == grid_mode
                 ):
                     valid_dicts[letter].append(pictograph_dict)
         return valid_dicts
