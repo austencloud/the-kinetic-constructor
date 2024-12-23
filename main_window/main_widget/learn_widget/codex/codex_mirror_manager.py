@@ -1,6 +1,7 @@
 import logging
 from typing import TYPE_CHECKING
-from data.mirrored_positions import mirrored_positions, vertical_mirror_map
+from data.locations import vertical_loc_mirror_map
+from data.positions import mirrored_positions
 
 logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
@@ -49,11 +50,11 @@ class CodexMirrorManager:
             if color in pictograph:
                 attributes = pictograph[color]
                 if "start_loc" in attributes:
-                    attributes["start_loc"] = vertical_mirror_map.get(
+                    attributes["start_loc"] = vertical_loc_mirror_map.get(
                         attributes["start_loc"], attributes["start_loc"]
                     )
                 if "end_loc" in attributes:
-                    attributes["end_loc"] = vertical_mirror_map.get(
+                    attributes["end_loc"] = vertical_loc_mirror_map.get(
                         attributes["end_loc"], attributes["end_loc"]
                     )
                 if "prop_rot_dir" in attributes:

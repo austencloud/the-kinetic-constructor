@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from data.mirrored_positions import mirrored_positions
+from data.positions import mirrored_positions
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (

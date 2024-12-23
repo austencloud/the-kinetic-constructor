@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.codex.codex_control_widget import (
-        CodexControlWidget,
-    )
+    from .codex_control_widget import CodexControlWidget
 
 
 class CodexRotationManager:
-    """Handles rotating the Codex pictographs in 45° increments."""
+    """Handles rotating the sequence in 45° increments and updates grid mode."""
 
     def __init__(self, control_widget: "CodexControlWidget"):
         self.codex = control_widget.codex

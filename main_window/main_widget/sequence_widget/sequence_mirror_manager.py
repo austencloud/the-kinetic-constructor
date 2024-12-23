@@ -3,7 +3,8 @@
 from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
-from data.mirrored_positions import mirrored_positions, vertical_mirror_map
+from data.positions import mirrored_positions
+from data.locations import vertical_loc_mirror_map
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -67,11 +68,11 @@ class SequenceMirrorManager:
                 attributes = beat[color]
                 # Mirror locations
                 if "start_loc" in attributes:
-                    attributes["start_loc"] = vertical_mirror_map.get(
+                    attributes["start_loc"] = vertical_loc_mirror_map.get(
                         attributes["start_loc"], attributes["start_loc"]
                     )
                 if "end_loc" in attributes:
-                    attributes["end_loc"] = vertical_mirror_map.get(
+                    attributes["end_loc"] = vertical_loc_mirror_map.get(
                         attributes["end_loc"], attributes["end_loc"]
                     )
                 # Reverse prop_rot_dir

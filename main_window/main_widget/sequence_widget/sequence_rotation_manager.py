@@ -1,12 +1,11 @@
-# sequence_rotation_manager.py
-
 from typing import TYPE_CHECKING
 from data.positions_map import positions_map
+from data.locations import cw_loc_order
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
+    from .sequence_widget import SequenceWidget
 
 
 class SequenceRotationManager:
@@ -16,7 +15,6 @@ class SequenceRotationManager:
         self.sequence_widget = sequence_widget
         self.rotation_steps = 0
         self.original_sequence_json = None
-        self.loc_order = ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
 
     def rotate_current_sequence(self):
         """Rotate the current sequence by 45° increments and update grid mode."""
@@ -40,7 +38,6 @@ class SequenceRotationManager:
         self.sequence_widget.indicator_label.show_message("Sequence rotated!")
         QApplication.restoreOverrideCursor()
 
-
     def rotate_sequence(self, sequence_json: list[dict], rotation_steps):
         """Rotate the sequence by rotation_steps * 45°."""
         rotated_sequence = []
@@ -53,7 +50,6 @@ class SequenceRotationManager:
             rotated_beat = beat_dict.copy()
             self.rotate_pictograph(rotated_beat, rotation_steps)
             rotated_sequence.append(rotated_beat)
-            
 
         return rotated_sequence
 
@@ -81,11 +77,11 @@ class SequenceRotationManager:
                 _dict["end_pos"] = self.get_position_name(bl["end_loc"], rl["end_loc"])
 
     def _rotate_location(self, location, rotation_steps):
-        if location not in self.loc_order:
+        if location not in cw_loc_order:
             return location
-        idx = self.loc_order.index(location)
-        new_idx = (idx + rotation_steps) % len(self.loc_order)
-        return self.loc_order[new_idx]
+        idx = cw_loc_order.index(location)
+        new_idx = (idx + rotation_steps) % len(cw_loc_order)
+        return cw_loc_order[new_idx]
 
     def get_position_name(self, left_loc, right_loc):
         try:

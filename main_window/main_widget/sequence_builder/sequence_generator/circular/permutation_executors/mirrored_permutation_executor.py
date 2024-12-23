@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 from .permutation_executor_base import PermutationExecutor
 from PyQt6.QtWidgets import QApplication
-from data.mirrored_positions import vertical_mirror_map, horizontal_mirror_map
+from data.locations import vertical_loc_mirror_map, horizontal_loc_mirror_map
+
 if TYPE_CHECKING:
     from ..circular_sequence_generator import CircularSequenceGenerator
-
-
 
 
 class MirroredPermutationExecutor(PermutationExecutor):
@@ -213,7 +212,7 @@ class MirroredPermutationExecutor(PermutationExecutor):
         return rotation
 
     def get_vertical_mirrored_location(self, location: str) -> str:
-        return vertical_mirror_map.get(location, location)
+        return vertical_loc_mirror_map.get(location, location)
 
     def get_horizontal_mirrored_location(self, location: str) -> str:
-        return horizontal_mirror_map.get(location, location)
+        return horizontal_loc_mirror_map.get(location, location)
