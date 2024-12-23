@@ -1,13 +1,15 @@
 import math
 import random
-from main_window.menu_bar_widget.background_selector.background_managers.background_manager import BackgroundManager
+from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+    BaseBackground,
+)
 
 from PyQt6.QtGui import QLinearGradient, QColor, QPainter
 
 from PyQt6.QtWidgets import QWidget
 
 
-class AuroraBorealisBackgroundManager(BackgroundManager):
+class AuroraBorealisBackground(BaseBackground):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.light_waves = [random.random() * 2 * math.pi for _ in range(10)]
@@ -26,5 +28,3 @@ class AuroraBorealisBackgroundManager(BackgroundManager):
             color = QColor(*colors[i % len(colors)])
             gradient.setColorAt(pos, color)
         painter.fillRect(widget.rect(), gradient)
-
-

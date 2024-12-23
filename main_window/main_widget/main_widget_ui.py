@@ -39,7 +39,7 @@ class MainWidgetUI:
 
         mw.fade_manager = TabFadeManager(mw)
         mw.background_widget = BackgroundWidget(mw)
-        mw.background_widget.lower()  # Ensure it's at the bottom
+        mw.background_widget.lower()
         mw.font_color_updater = MainWidgetFontColorUpdater(mw)
 
         splash = self.splash_screen

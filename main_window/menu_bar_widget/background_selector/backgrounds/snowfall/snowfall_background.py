@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
-from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
-    BackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+    BaseBackground,
 )
 from PyQt6.QtGui import QColor, QPainter, QLinearGradient
 from PyQt6.QtWidgets import QWidget
@@ -21,7 +21,7 @@ from .santa_manager import SantaManager
 from .shooting_star_manager import ShootingStarManager  # Import the new manager
 
 
-class SnowfallBackgroundManager(BackgroundManager):
+class SnowfallBackground(BaseBackground):
     def __init__(
         self,
         widget: Union["BuildTabWidget", "DictionaryWidget", "LearnWidget", "ActTab"],

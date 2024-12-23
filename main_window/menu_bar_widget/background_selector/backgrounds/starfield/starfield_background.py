@@ -1,5 +1,5 @@
 # StarfieldBackgroundManager: Combines all managers and handles rendering
-from ..background_manager import BackgroundManager
+from ..base_background import BaseBackground
 from .comet_manager import CometManager
 from .moon_manager import MoonManager
 from .star_manager import StarManager
@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import QWidget
 from .ufo_manager.ufo_manager import UFOManager
 
 
-class StarfieldBackgroundManager(BackgroundManager):
+class StarfieldBackground(BaseBackground):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.star_manager = StarManager()

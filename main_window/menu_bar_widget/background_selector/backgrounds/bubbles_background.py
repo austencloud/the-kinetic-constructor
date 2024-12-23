@@ -1,6 +1,6 @@
 import random
-from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
-    BackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+    BaseBackground,
 )
 from PyQt6.QtGui import (
     QColor,
@@ -16,7 +16,7 @@ from PyQt6.QtCore import Qt, QPointF
 from utilities.path_helpers import get_images_and_data_path
 
 
-class BubblesBackgroundManager(BackgroundManager):
+class BubblesBackground(BaseBackground):
     # Class variable to hold cached images
     _cached_fish_images = None
 
@@ -24,12 +24,12 @@ class BubblesBackgroundManager(BackgroundManager):
         super().__init__(parent)
 
         # Check if the fish images are already cached
-        if BubblesBackgroundManager._cached_fish_images is None:
+        if BubblesBackground._cached_fish_images is None:
             # Define the backgrounds folder path
             backgrounds_folder = get_images_and_data_path("images/backgrounds/")
 
             # Load the fish images and store them in the class variable
-            BubblesBackgroundManager._cached_fish_images = [
+            BubblesBackground._cached_fish_images = [
                 QPixmap(backgrounds_folder + "Tropical-Fish-Sherbert.png"),
                 QPixmap(backgrounds_folder + "Tropical-Fish-Coral.png"),
                 QPixmap(backgrounds_folder + "Tropical-Fish-Seafoam.png"),
@@ -40,7 +40,7 @@ class BubblesBackgroundManager(BackgroundManager):
             ]
 
         # Use the cached images in this instance
-        self.fish_images = BubblesBackgroundManager._cached_fish_images
+        self.fish_images = BubblesBackground._cached_fish_images
 
         # Initialize bubbles and fish
         self._initialize_bubbles()

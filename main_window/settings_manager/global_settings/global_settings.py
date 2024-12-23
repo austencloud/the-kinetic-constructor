@@ -1,22 +1,22 @@
 from typing import Optional, TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.menu_bar_widget.background_selector.background_managers.aurora.aurora_background_manager import (
-    AuroraBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.aurora.aurora_background import (
+    AuroraBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.aurora_borealis_background_manager import (
-    AuroraBorealisBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.aurora_borealis_background import (
+    AuroraBorealisBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
-    BackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+    BaseBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.bubbles_background_manager import (
-    BubblesBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.bubbles_background import (
+    BubblesBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.snowfall.snowfall_background_manager import (
-    SnowfallBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.snowfall.snowfall_background import (
+    SnowfallBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.starfield.starfield_background_manager import (
-    StarfieldBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.starfield.starfield_background import (
+    StarfieldBackground,
 )
 from .prop_type_changer import PropTypeChanger
 from .main_widget_font_color_updater import MainWidgetFontColorUpdater

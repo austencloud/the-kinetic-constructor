@@ -22,4 +22,4 @@ class BackgroundSelector(LabelSelector):
     def set_current_background(self, background: str):
         self.set_display_text(background)
         self.settings_manager.global_settings.set_background_type(background)
-        self.main_widget.background_handler.setup_background_manager()
+        self.main_widget.background_handler.setup_background()

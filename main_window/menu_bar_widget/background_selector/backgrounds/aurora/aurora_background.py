@@ -6,11 +6,12 @@ import math
 
 from .sparkle_manager import SparkleManager
 from .blob_manager import BlobManager
-from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
-    BackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+    BaseBackground,
 )
 
-class AuroraBackgroundManager(BackgroundManager):
+
+class AuroraBackground(BaseBackground):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.gradient_shift = 0

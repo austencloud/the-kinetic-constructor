@@ -26,8 +26,8 @@ if TYPE_CHECKING:
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
-    from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
-        BackgroundManager,
+    from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+        BaseBackground,
     )
     from .json_manager.json_manager import JsonManager
     from .sequence_widget.sequence_widget import SequenceWidget
@@ -113,7 +113,7 @@ class MainWidget(QWidget):
 
     # Current state
     current_tab: str
-    background_manager: "BackgroundManager"
+    background: "BaseBackground"
     json_manager: "JsonManager"
 
     # Other attributes
@@ -139,15 +139,6 @@ class MainWidget(QWidget):
         self.background_handler = MainWidgetBackgroundHandler(self)
 
         QTimer.singleShot(0, self.state_handler.load_state)
-
-    # Event Handlers
-
-    # def paintEvent(self, event):
-    #     super().paintEvent(event)  # Ensure the base class paintEvent is called
-
-    #     painter = QPainter(self)  # Create QPainter on self
-    #     self.background_manager.paint_background(self, painter)
-    #     painter.end()  # Explicitly end the painter (optional but good practice)
 
     def showEvent(self, event):
         self.event_handler.showEvent(event)

@@ -2,23 +2,23 @@ from typing import TYPE_CHECKING, Optional, Callable, Union
 from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import Qt, pyqtSlot
 
-from main_window.menu_bar_widget.background_selector.background_managers.aurora.aurora_background_manager import (
-    AuroraBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.aurora.aurora_background import (
+    AuroraBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.aurora_borealis_background_manager import (
-    AuroraBorealisBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.aurora_borealis_background import (
+    AuroraBorealisBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
-    BackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+    BaseBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.bubbles_background_manager import (
-    BubblesBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.bubbles_background import (
+    BubblesBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.snowfall.snowfall_background_manager import (
-    SnowfallBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.snowfall.snowfall_background import (
+    SnowfallBackground,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.starfield.starfield_background_manager import (
-    StarfieldBackgroundManager,
+from main_window.menu_bar_widget.background_selector.backgrounds.starfield.starfield_background import (
+    StarfieldBackground,
 )
 
 if TYPE_CHECKING:
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 class SplashBackgroundHandler:
     def __init__(self, splash_screen: "SplashScreen"):
         self.splash_screen = splash_screen
-        self.background_manager: Optional[BackgroundManager] = None
+        self.background_manager: Optional[BaseBackground] = None
         self.is_animating = False  # Flag to prevent overlapping animations
 
     def setup_background_manager(self):
@@ -55,16 +55,16 @@ class SplashBackgroundHandler:
 
         self.setup_background_manager()
 
-    def get_background_manager(self) -> Optional[BackgroundManager]:
+    def get_background_manager(self) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate BackgroundManager based on bg_type."""
 
         self.splash_screen.font_color_updater.update_splash_font_colors(self.bg_type)
         background_manager_map = {
-            "Starfield": StarfieldBackgroundManager,
-            "Aurora": AuroraBackgroundManager,
-            "AuroraBorealis": AuroraBorealisBackgroundManager,
-            "Snowfall": SnowfallBackgroundManager,
-            "Bubbles": BubblesBackgroundManager,
+            "Starfield": StarfieldBackground,
+            "Aurora": AuroraBackground,
+            "AuroraBorealis": AuroraBorealisBackground,
+            "Snowfall": SnowfallBackground,
+            "Bubbles": BubblesBackground,
         }
         manager_class = background_manager_map.get(self.bg_type)
         return manager_class(self.splash_screen) if manager_class else None

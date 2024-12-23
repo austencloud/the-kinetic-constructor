@@ -30,10 +30,7 @@ class WordLabel(QWidget):
         self.favorite_button.setFlat(True)  # Remove button border
 
         icons_path = get_images_and_data_path("images/icons")
-        # self.star_icon_empty_path = self.get_star_outline_icon()
-        # self.star_icon_empty = QIcon(
-        #     os.path.join(icons_path, self.star_icon_empty_path)
-        # )
+
         self.star_icon_filled = QIcon(os.path.join(icons_path, "star_filled.png"))
         self.favorite_button.clicked.connect(self.thumbnail_box.toggle_favorite_status)
 

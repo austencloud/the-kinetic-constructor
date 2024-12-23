@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     pass
 
 
-class BackgroundManager(QObject):
+class BaseBackground(QObject):
     update_required = pyqtSignal()
 
     def __init__(self, parent=None):
