@@ -1,6 +1,4 @@
-# sequence_mirror_manager.py
-
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 from data.positions import mirrored_positions

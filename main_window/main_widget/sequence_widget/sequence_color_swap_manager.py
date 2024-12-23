@@ -1,10 +1,11 @@
 # sequence_color_swap_manager.py
 
-from math import pi
 from typing import TYPE_CHECKING
 from data.positions_map import positions_map
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
+
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import ReversalDetector
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -31,6 +32,13 @@ class SequenceColorSwapManager:
         option_picker = self.sequence_widget.main_widget.manual_builder.option_picker
         for pictograph in option_picker.option_pool:
             new_dict = self.swap_dict_values(pictograph.pictograph_dict.copy())
+            sequence_so_far = self.json_loader.load_current_sequence_json()
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, pictograph.pictograph_dict
+            )
+            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
+            pictograph.red_reversal = reversal_info.get("red_reversal", False)
+
             pictograph.updater.update_pictograph(new_dict)
 
     def check_length(self, current_sequence):
