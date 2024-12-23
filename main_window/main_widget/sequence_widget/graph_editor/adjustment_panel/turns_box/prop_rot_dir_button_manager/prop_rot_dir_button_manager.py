@@ -105,9 +105,9 @@ class PropRotDirButtonManager:
             beat.letter = new_letter
 
         beat.updater.update_pictograph(beat.pictograph_dict)
-        
+
         json_index = pictograph_index + 2
-        
+
         self.json_manager.updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir
         )
@@ -122,7 +122,7 @@ class PropRotDirButtonManager:
             motion.motion_type
         )
 
-        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_json()
+        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_current_sequence_json()
         # Running the validation engine
         self.graph_editor.main_widget.json_manager.ori_validation_engine.run(
             is_current_sequence=True

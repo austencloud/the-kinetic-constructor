@@ -22,7 +22,9 @@ class TurnsAdjustmentManager(QObject):
         self.json_validation_engine = self.json_manager.ori_validation_engine
         self.color = self.turns_widget.turns_box.color
 
-        self.turns_adjusted.connect(self.beat_frame.updater.update_beats_from_json)
+        self.turns_adjusted.connect(
+            self.beat_frame.updater.update_beats_from_current_sequence_json
+        )
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

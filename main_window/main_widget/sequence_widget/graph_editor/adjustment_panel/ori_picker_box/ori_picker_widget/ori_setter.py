@@ -81,9 +81,8 @@ class OrientationSetter:
                     }
                 )
 
-
         # propogate the change through the beat frame
-        self.beat_frame.updater.update_beats_from_json()
+        self.beat_frame.updater.update_beats_from_current_sequence_json()
 
     def set_initial_orientation(
         self, start_pos_pictograph: "BasePictograph", color: str

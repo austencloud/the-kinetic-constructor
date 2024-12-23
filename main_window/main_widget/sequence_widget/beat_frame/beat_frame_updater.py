@@ -12,7 +12,7 @@ class BeatFrameUpdater:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = beat_frame
 
-    def update_beats_from_json(self) -> None:
+    def update_beats_from_current_sequence_json(self) -> None:
         current_sequence_json = (
             self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
         )
@@ -33,19 +33,19 @@ class BeatFrameUpdater:
 
             if beat_view and beat_view.beat:
                 # if beat_view.beat.pictograph_dict != entry:
-                    beat_view.beat.updater.update_pictograph(entry)
-                    beat = beat_view.beat
-                    pictograph_index = self.beat_frame.get.index_of_beat(beat_view)
-                    sequence_so_far = self.beat_frame.json_manager.loader_saver.load_current_sequence_json()[
-                        : pictograph_index + 2
-                    ]
-                    reversal_info = ReversalDetector.detect_reversal(
-                        sequence_so_far, beat.pictograph_dict
-                    )
-                    beat.blue_reversal = reversal_info["blue_reversal"]
-                    beat.red_reversal = reversal_info["red_reversal"]
-                    beat.reversal_symbol_manager.update_reversal_symbols()
-                    # QApplication.processEvents()
+                beat_view.beat.updater.update_pictograph(entry)
+                beat = beat_view.beat
+                pictograph_index = self.beat_frame.get.index_of_beat(beat_view)
+                sequence_so_far = self.beat_frame.json_manager.loader_saver.load_current_sequence_json()[
+                    : pictograph_index + 2
+                ]
+                reversal_info = ReversalDetector.detect_reversal(
+                    sequence_so_far, beat.pictograph_dict
+                )
+                beat.blue_reversal = reversal_info["blue_reversal"]
+                beat.red_reversal = reversal_info["red_reversal"]
+                beat.reversal_symbol_manager.update_reversal_symbols()
+                # QApplication.processEvents()
             else:
                 print(
                     f"Beat with number {beat_num} not found in the beat frame. Skipping."
@@ -58,3 +58,28 @@ class BeatFrameUpdater:
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
         entry["start_pos"] = entry["end_pos"]
         self.beat_frame.start_pos_view.start_pos.updater.update_pictograph(entry)
+
+    def update_beats_from(self, modified_sequence_json: list[dict]):
+        if len(modified_sequence_json) > 1:
+            start_pos_dict = modified_sequence_json[1]
+            start_pos = self.beat_frame.start_pos_view.start_pos
+            start_pos.updater.update_pictograph(start_pos_dict)
+            # start_pos.updater.update_motions(start_pos_dict)
+            grid_mode = self.beat_frame.main_widget.grid_mode_checker.get_grid_mode(
+                start_pos_dict
+            )
+            start_pos.grid.hide()
+            start_pos.grid.__init__(start_pos, start_pos.grid.grid_data, grid_mode)
+
+        for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
+            if i < len(self.beat_frame.beats) and self.beat_frame.beats[i].is_filled:
+                beat = self.beat_frame.beats[i].beat
+                beat.updater.update_pictograph(beat_dict)
+                # beat.updater.update_motions(beat_dict)
+                grid_mode = self.beat_frame.main_widget.grid_mode_checker.get_grid_mode(
+                    beat_dict
+                )
+                beat.grid.hide()
+                beat.grid.__init__(beat, beat.grid.grid_data, grid_mode)
+            else:
+                break
