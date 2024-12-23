@@ -46,13 +46,13 @@ class CurrentWordLabel(QWidget):
             self.line_edit.kerning = int(font_size // 8.75)
 
     def set_current_word(self, word: str):
-        simplified_word = WordSimplifier.simplify_repeated_word(word)
-        self.current_word = simplified_word
+        self.simplified_word = WordSimplifier.simplify_repeated_word(word)
+        self.current_word = self.simplified_word
 
         # Get the first 8 letter characters of the word, including the dash
         count = 0
         result = []
-        for char in simplified_word:
+        for char in self.simplified_word:
             if char.isalpha():
                 count += 1
             result.append(char)
@@ -63,7 +63,7 @@ class CurrentWordLabel(QWidget):
         truncated_word = "".join(result)
 
         # Add "..." if the count is higher than WORD_LENGTH
-        word_without_dashes = simplified_word.replace("-", "")
+        word_without_dashes = self.simplified_word.replace("-", "")
         truncated_word_without_dashes = truncated_word.replace("-", "")
 
         if count == WORD_LENGTH and len(word_without_dashes) > len(

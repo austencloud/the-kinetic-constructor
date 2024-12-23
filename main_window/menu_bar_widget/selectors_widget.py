@@ -22,20 +22,20 @@ class SelectorsWidget(QWidget):
 
         # Instantiate selectors
         self.user_profile_selector = UserProfileSelector(menu_bar_widget)
-        # self.prop_type_selector = PropTypeSelector(menu_bar_widget)
+        self.prop_type_selector = PropTypeSelector(menu_bar_widget)
         self.background_selector = BackgroundSelector(menu_bar_widget)
         self.visibility_selector = VisibilitySelector(menu_bar_widget)
 
         # Create labels
         self.user_profile_label = QLabel("User:")
-        # self.prop_type_label = QLabel("Prop:")
+        self.prop_type_label = QLabel("Prop:")
         self.background_label = QLabel("Background:")
         self.visibility_label = QLabel("")
 
         # Pair them up for convenience
         self.sections: list[tuple[QLabel, BaseSelector]] = [
             (self.user_profile_label, self.user_profile_selector),
-            # (self.prop_type_label, self.prop_type_selector),
+            (self.prop_type_label, self.prop_type_selector),
             (self.background_label, self.background_selector),
             (self.visibility_label, self.visibility_selector),
         ]

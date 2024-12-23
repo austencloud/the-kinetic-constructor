@@ -87,4 +87,4 @@ class CurrentWordLineEdit(QLineEdit):
         parent = self.parent()
         if isinstance(parent, CurrentWordLabel):
             indicator_label = parent.sequence_widget.indicator_label
-            indicator_label.show_message(f"'{self.text()}' copied to clipboard")
+            indicator_label.show_message(f"'{self.label.simplified_word}' copied to clipboard")
