@@ -29,14 +29,16 @@ class ResultsWidget(QWidget):
         self.result_section.setObjectName("ResultSection")
 
         # Apply styling for the result section to give it a semi-transparent background
-        self.result_section.setStyleSheet("""
+        self.result_section.setStyleSheet(
+            """
             QFrame#ResultSection {
                 background-color: rgba(0, 0, 0, 150);  /* Semi-transparent dark background */
                 border-radius: 15px;  /* Rounded corners */
                 padding: 20px;  /* Padding around the text for better spacing */
             }
-        """)
-        
+        """
+        )
+
         # Layout for the result section
         result_section_layout = QVBoxLayout(self.result_section)
         result_section_layout.addWidget(self.result_label)
@@ -50,12 +52,16 @@ class ResultsWidget(QWidget):
         # Layout setup
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout.setContentsMargins(20, 20, 20, 20)  # Adjust margins for rounded edges
+        self.layout.setContentsMargins(
+            20, 20, 20, 20
+        )  # Adjust margins for rounded edges
         self.layout.setSpacing(10)
 
         # Add the result section and the start over button to the main layout
         self.layout.addStretch(3)
-        self.layout.addWidget(self.result_section, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout.addWidget(
+            self.result_section, alignment=Qt.AlignmentFlag.AlignCenter
+        )
         self.layout.addStretch(1)
         self.layout.addWidget(
             self.start_over_button, alignment=Qt.AlignmentFlag.AlignCenter
@@ -65,12 +71,14 @@ class ResultsWidget(QWidget):
         self.setLayout(self.layout)
 
         # Apply stylesheet for the entire widget for consistency
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QWidget#ResultsWidget {
                 background-color: rgba(255, 255, 255, 200);  /* Semi-transparent white */
                 border-radius: 15px;
             }
-        """)
+        """
+        )
 
     def set_result_text(self, text: str):
         """Set the result text for the result label."""
@@ -108,9 +116,9 @@ class ResultsWidget(QWidget):
             + f"You successfully completed {self.lesson_widget.current_question - 1} question"
             + f"{'s' if self.lesson_widget.current_question - 1 != 1 else ''}"
             + (
-            f"!\nwithout making any mistakes! Great job!"
-            if incorrect_guesses == 0
-            else f" but you made {incorrect_guesses} mistake"
-                 f"{'s' if incorrect_guesses != 1 else ''}. Keep on practicing!"
+                f"!\nwithout making any mistakes! Great job!"
+                if incorrect_guesses == 0
+                else f" but you made {incorrect_guesses} mistake"
+                f"{'s' if incorrect_guesses != 1 else ''}.\nKeep on practicing!"
             )
         )

@@ -58,7 +58,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.beat_factory = BeatFactory(self)
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = SequenceWidgetBeatFrameLayoutManager(self)
-        self.beat_deletion_manager = BeatDeletionManager(self)
+        self.deletion_manager = BeatDeletionManager(self)
         self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
         self.populator = BeatFramePopulator(self)
         self.beat_adder = BeatAdder(self)

@@ -13,7 +13,7 @@ class BeatFrameKeyEventHandler(QWidget):
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         super().__init__(beat_frame)
         self.beat_frame = beat_frame
-        self.beat_deletion_manager = beat_frame.beat_deletion_manager
+        self.beat_deletion_manager = beat_frame.deletion_manager
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:
         if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:

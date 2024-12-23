@@ -23,7 +23,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
     def on_create_sequence(self, overwrite_sequence: bool):
         if overwrite_sequence:
-            self.sequence_generator_widget.main_widget.sequence_widget.beat_frame.beat_deletion_manager.delete_all_beats()
+            self.sequence_generator_widget.main_widget.sequence_widget.beat_frame.deletion_manager.delete_all_beats()
 
         self.builder.build_sequence(
             int(

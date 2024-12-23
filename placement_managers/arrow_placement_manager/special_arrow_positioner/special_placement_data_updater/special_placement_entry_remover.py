@@ -28,7 +28,6 @@ class SpecialPlacementEntryRemover:
         if os.path.exists(file_path):
             data = self.load_data(file_path)
             self._process_removal(letter, arrow, ori_key, file_path, data)
-            arrow.pictograph.main_widget.special_placement_loader.refresh_placements()
 
     def _process_removal(
         self, letter: Letter, arrow: Arrow, ori_key: str, file_path: str, data: dict

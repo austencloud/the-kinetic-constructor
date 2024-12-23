@@ -40,7 +40,11 @@ class BaseRotAngleCalculator(ABC):
         ori_key = self.data_updater._generate_ori_key(self.arrow.motion)
         letter = self.arrow.pictograph.letter.value
 
-        letter_data = special_placements.get(ori_key, {}).get(letter, {})
+        letter_data: dict[str, dict] = (
+            special_placements.get(self.arrow.pictograph.grid_mode)
+            .get(ori_key, {})
+            .get(letter, {})
+        )
 
         rot_angle_override_key = (
             self.rot_angle_key_generator.generate_rotation_angle_override_key(

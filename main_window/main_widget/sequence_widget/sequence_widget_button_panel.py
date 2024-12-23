@@ -26,7 +26,7 @@ class SequenceWidgetButtonPanel(QFrame):
 
         self.font_size = self.sequence_widget.width() // 45
         self._setup_dependencies()
-        self.colors_swapped = False 
+        self.colors_swapped = False
         self._setup_buttons()
         self.top_placeholder = ButtonPanelPlaceholder(self)
         self.bottom_placeholder = ButtonPanelPlaceholder(self)
@@ -83,7 +83,7 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "delete_beat": {
                 "icon": "delete.svg",
-                "callback": lambda: self.beat_frame.beat_deletion_manager.delete_selected_beat(),
+                "callback": lambda: self.beat_frame.deletion_manager.delete_selected_beat(),
                 "tooltip": "Delete Beat",
             },
             "clear_sequence": {

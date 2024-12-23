@@ -38,8 +38,8 @@ class SpecialPlacementDataUpdater:
     def _get_letter_data(self, letter: Letter, ori_key: str) -> dict:
         letter_data = (
             self.positioner.placement_manager.pictograph.main_widget.special_placements[
-                ori_key
-            ].get(letter.value, {})
+                self.positioner.pictograph.grid_mode
+            ][ori_key].get(letter.value, {})
         )
 
         return letter_data

@@ -31,19 +31,18 @@ class BeatFramePopulator:
         if not self.current_sequence_json:
             return
 
-        start_pos_beat = self._set_start_position()
-        self._update_sequence_layout(start_pos_beat)
+        self.beat_frame.deletion_manager.delete_all_beats()
+        self._set_start_position()
+        self._update_sequence_layout()
         self._update_sequence_word()
         self._update_difficulty_level()
         self._populate_beats()
         self._finalize_sequence()
-        
+
         self.manual_builder.option_picker.update_option_picker()
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )
-
-
 
     def _set_start_position(self):
         start_pos_picker = self.manual_builder.start_pos_picker
@@ -53,9 +52,8 @@ class BeatFramePopulator:
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
         QApplication.processEvents()
         self.start_pos_view.set_start_pos(start_pos_beat)
-        return start_pos_beat
 
-    def _update_sequence_layout(self, start_pos_beat):
+    def _update_sequence_layout(self):
         length = len(self.current_sequence_json) - 2
         self.modify_layout_for_chosen_number_of_beats(length)
 
@@ -77,18 +75,15 @@ class BeatFramePopulator:
         self.sequence_widget.current_word_label.set_current_word(self.current_word)
 
     def _populate_beats(self):
-        previous_beat_dict = None
-        for index, pictograph_dict in enumerate(self.current_sequence_json[1:]):
+        for _, pictograph_dict in enumerate(self.current_sequence_json[1:]):
             if pictograph_dict.get("sequence_start_position"):
                 continue
             if pictograph_dict.get("is_placeholder", False):
                 continue
             else:
-                # Use ReversalDetector
                 reversal_info = ReversalDetector.detect_reversal(
                     self.current_sequence_json, pictograph_dict
                 )
-                # Create the beat with reversal information
                 self.sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                     pictograph_dict,
                     override_grow_sequence=True,
@@ -96,8 +91,6 @@ class BeatFramePopulator:
                     update_level=False,
                     reversal_info=reversal_info,
                 )
-                previous_beat_dict = pictograph_dict
-            # QApplication.processEvents()
 
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat

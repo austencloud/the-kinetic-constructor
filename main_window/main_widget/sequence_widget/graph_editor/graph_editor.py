@@ -43,7 +43,7 @@ class GraphEditor(QFrame):
         self.hide()
 
     def _setup_components(self) -> None:
-        self.arrow_selection_manager = ArrowSelectionManager(self)
+        self.selection_manager = ArrowSelectionManager(self)
         self.pictograph_container = GraphEditorPictographContainer(self)
         self.adjustment_panel = BeatAdjustmentPanel(self)
         self.layout_manager = GraphEditorLayoutManager(self)

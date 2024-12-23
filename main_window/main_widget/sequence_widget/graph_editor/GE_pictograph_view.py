@@ -46,7 +46,7 @@ class GE_PictographView(PictographView):
         self.mouse_event_handler = GE_PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
-        self.graph_editor.arrow_selection_manager.selection_changed.connect(
+        self.graph_editor.selection_manager.selection_changed.connect(
             self.on_selection_changed
         )
 

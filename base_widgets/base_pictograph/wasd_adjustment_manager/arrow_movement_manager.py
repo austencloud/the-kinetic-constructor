@@ -21,7 +21,7 @@ class ArrowMovementManager:
         self, pictograph: "BasePictograph", key, shift_held, ctrl_held
     ) -> None:
         self.graph_editor = pictograph.main_widget.sequence_widget.graph_editor
-        selected_arrow = self.graph_editor.arrow_selection_manager.selected_arrow
+        selected_arrow = self.graph_editor.selection_manager.selected_arrow
 
         if not selected_arrow:
             return

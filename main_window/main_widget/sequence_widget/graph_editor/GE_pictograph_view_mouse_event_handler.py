@@ -12,9 +12,7 @@ class GE_PictographViewMouseEventHandler:
     def __init__(self, pictograph_view: "GE_PictographView") -> None:
         self.pictograph_view = pictograph_view
         self.pictograph = pictograph_view.pictograph
-        self.selection_manager = (
-            self.pictograph_view.graph_editor.arrow_selection_manager
-        )
+        self.selection_manager = self.pictograph_view.graph_editor.selection_manager
 
     def handle_mouse_press(self, event: QMouseEvent) -> None:
         widget_pos = event.pos()
