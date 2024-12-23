@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
-from data.mirrored_positions import mirrored_positions, vertical_mirror_map
+from data.mirrored_positions import mirrored_positions
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget

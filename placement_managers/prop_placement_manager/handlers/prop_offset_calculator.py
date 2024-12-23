@@ -1,13 +1,5 @@
 from Enums.PropTypes import PropType
 from data.constants import (
-    IN,
-    OUT,
-    CLOCK,
-    COUNTER,
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
     LEFT,
     RIGHT,
     UP,
@@ -19,13 +11,11 @@ from data.constants import (
 )
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
-from objects.prop.prop import Prop
 
 if TYPE_CHECKING:
     from placement_managers.prop_placement_manager.handlers.beta_prop_positioner import (
         BetaPropPositioner,
     )
-    from ..prop_placement_manager import PropPlacementManager
 
 
 class BetaOffsetCalculator:

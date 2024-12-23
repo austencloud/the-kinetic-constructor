@@ -2,7 +2,6 @@
 
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
-from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 import logging
 

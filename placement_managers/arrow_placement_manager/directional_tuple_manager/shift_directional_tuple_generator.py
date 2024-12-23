@@ -1,4 +1,3 @@
-from typing import Literal
 from data.constants import (
     BOX,
     CCW_HANDPATH,
@@ -9,9 +8,6 @@ from data.constants import (
     FLOAT,
     PRO,
     ANTI,
-)
-from objects.motion.managers.handpath_calculator import (
-    HandpathCalculator,
 )
 from .base_directional_tuple_generator import BaseDirectionalGenerator
 

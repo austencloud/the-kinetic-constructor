@@ -63,7 +63,7 @@ class CodexMirrorManager:
 
     def _reverse_prop_rot_dir(self, prop_rot_dir):
         """Reverse the rotation direction."""
-        return {"cw": "ccw", "ccw": "cw"}.get(prop_rot_dir, prop_rot_dir)
+        return {"cw": "ccw", "ccw": "cw"}.get(prop_rot_dir)
 
     def _refresh_pictograph_views(self):
         """Refresh all views to reflect the updated pictograph data."""

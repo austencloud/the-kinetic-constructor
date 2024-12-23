@@ -56,9 +56,6 @@ class ArrowAdjustmentCalculator:
             self.placement_manager.quadrant_index_handler.get_quadrant_index(arrow)
         )
 
-        # Add debug logs
-        logger.debug(f"Directional Adjustments: {directional_adjustments}")
-        logger.debug(f"Quadrant Index: {quadrant_index}")
 
         # Check if quadrant_index is within range
         if quadrant_index < 0 or quadrant_index >= len(directional_adjustments):

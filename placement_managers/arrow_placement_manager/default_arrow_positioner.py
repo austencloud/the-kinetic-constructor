@@ -2,7 +2,6 @@ import json
 from Enums.letters import LetterConditions
 from data.constants import (
     ANTI,
-    BLUE,
     BOX,
     DIAMOND,
     FLOAT,
@@ -14,12 +13,10 @@ from data.constants import (
     OUT,
     PRO,
     RADIAL,
-    RED,
     STATIC,
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from Enums.Enums import OrientationTypes
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:

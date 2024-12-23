@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
-from .handlers.beta_prop_direction_calculator import BetaPropDirectionCalculator
 from .handlers.beta_prop_positioner import BetaPropPositioner
 from .handlers.default_prop_positioner import DefaultPropPositioner
-from .handlers.prop_offset_calculator import BetaOffsetCalculator
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
