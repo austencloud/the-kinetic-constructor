@@ -59,7 +59,6 @@ class SequenceRecorder(QWidget):
     def showEvent(self, event) -> None:
         super().showEvent(event)
         if not self.initialized:
-            # set the cursor to loading cursor with Qt.CursorShape.WaitCursor
             self.setCursor(Qt.CursorShape.WaitCursor)
             self.resize_sequence_recorder()
             self.initialized = True

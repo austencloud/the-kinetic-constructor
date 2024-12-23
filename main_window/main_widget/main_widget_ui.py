@@ -2,6 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
 
 from main_window.main_widget.act_tab.act_tab import ActTab
+from main_window.main_widget.background_widget import BackgroundWidget
+from main_window.main_widget.tab_fade_manager import TabFadeManager
+from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
+    MainWidgetFontColorUpdater,
+)
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
@@ -25,7 +30,18 @@ class MainWidgetUI:
         self._setup_indices()
 
     def _setup_components(self):
+
         mw = self.main_widget
+        
+        mw.main_stacked_widget = QStackedWidget()
+        mw.right_stacked_widget = QStackedWidget()
+        mw.dictionary_learn_widget = QStackedWidget()
+
+        mw.fade_manager = TabFadeManager(mw)
+        mw.background_widget = BackgroundWidget(mw)
+        mw.background_widget.lower()  # Ensure it's at the bottom
+        mw.font_color_updater = MainWidgetFontColorUpdater(mw)
+
         splash = self.splash_screen
         splash.updater.update_progress("MenuBarWidget")
         mw.menu_bar_widget = MenuBarWidget(mw)
@@ -46,7 +62,6 @@ class MainWidgetUI:
         splash.updater.update_progress("Finalizing")
 
         # Create stacked widgets and primary layouts
-        mw.right_stacked_widget = QStackedWidget()
         mw.right_stacked_widget.addWidget(mw.manual_builder)
         mw.right_stacked_widget.addWidget(mw.sequence_generator)
 
@@ -61,11 +76,9 @@ class MainWidgetUI:
             1, 1
         )  # Index 1 corresponds to builder_stacked_widget
 
-        mw.dictionary_learn_widget = QStackedWidget()
         mw.dictionary_learn_widget.addWidget(mw.dictionary_widget)
         mw.dictionary_learn_widget.addWidget(mw.learn_widget)
 
-        mw.main_stacked_widget = QStackedWidget()
         mw.main_stacked_widget.addWidget(mw.build_generate_widget)
         mw.main_stacked_widget.addWidget(mw.dictionary_learn_widget)
         mw.main_stacked_widget.addWidget(mw.act_tab)
@@ -91,9 +104,6 @@ class MainWidgetUI:
         self.main_widget.dictionary_tab_index = 2
         self.main_widget.learn_tab_index = 3
         self.main_widget.act_tab_index = 4
-
-    def on_splitter_moved(self):
-        self.main_widget.manual_builder.resize_manual_builder()
 
     def load_current_tab(self):
         mw = self.main_widget

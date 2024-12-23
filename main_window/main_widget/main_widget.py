@@ -1,11 +1,16 @@
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtGui import QKeyEvent, QPainter
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.act_tab.act_tab import ActTab
+from main_window.main_widget.background_widget import BackgroundWidget
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
+from main_window.main_widget.tab_fade_manager import TabFadeManager
+from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
+    MainWidgetFontColorUpdater,
+)
 
 
 # Import the new subclasses
@@ -13,7 +18,7 @@ from .main_widget_manager import MainWidgetManager
 from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
-from .main_widget_background import MainWidgetBackground
+from .main_widget_background_handler import MainWidgetBackgroundHandler
 
 if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
@@ -70,7 +75,7 @@ class MainWidget(QWidget):
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
     state_handler: "MainWidgetState"
-    background_handler: "MainWidgetBackground"
+    background_handler: "MainWidgetBackgroundHandler"
 
     # Managers and Helpers
     svg_manager: "SvgManager"
@@ -82,6 +87,8 @@ class MainWidget(QWidget):
     sequence_properties_manager: "SequencePropertiesManager"
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
+    fade_manager: TabFadeManager
+    font_color_updater: "MainWidgetFontColorUpdater"
 
     # Layouts and Widgets
     top_layout: QHBoxLayout
@@ -95,6 +102,7 @@ class MainWidget(QWidget):
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
+    background_widget: "BackgroundWidget"
 
     # Indices for tabs
     build_tab_index: int = 0
@@ -128,16 +136,18 @@ class MainWidget(QWidget):
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
-        self.background_handler = MainWidgetBackground(self)
+        self.background_handler = MainWidgetBackgroundHandler(self)
 
         QTimer.singleShot(0, self.state_handler.load_state)
 
     # Event Handlers
-    def keyPressEvent(self, event: QKeyEvent) -> None:
-        self.event_handler.keyPressEvent(event)
 
-    def paintEvent(self, event):
-        self.event_handler.paintEvent(event)
+    # def paintEvent(self, event):
+    #     super().paintEvent(event)  # Ensure the base class paintEvent is called
+
+    #     painter = QPainter(self)  # Create QPainter on self
+    #     self.background_manager.paint_background(self, painter)
+    #     painter.end()  # Explicitly end the painter (optional but good practice)
 
     def showEvent(self, event):
         self.event_handler.showEvent(event)

@@ -30,10 +30,10 @@ class WordLabel(QWidget):
         self.favorite_button.setFlat(True)  # Remove button border
 
         icons_path = get_images_and_data_path("images/icons")
-        self.star_icon_empty_path = self.get_star_outline_icon()
-        self.star_icon_empty = QIcon(
-            os.path.join(icons_path, self.star_icon_empty_path)
-        )
+        # self.star_icon_empty_path = self.get_star_outline_icon()
+        # self.star_icon_empty = QIcon(
+        #     os.path.join(icons_path, self.star_icon_empty_path)
+        # )
         self.star_icon_filled = QIcon(os.path.join(icons_path, "star_filled.png"))
         self.favorite_button.clicked.connect(self.thumbnail_box.toggle_favorite_status)
 
@@ -47,12 +47,7 @@ class WordLabel(QWidget):
 
     def reload_favorite_icon(self):
         # Reload the favorite icon based on the current favorite status
-        self.star_icon_empty_path = self.get_star_outline_icon()
-        self.star_icon_empty = QIcon(
-            os.path.join(
-                get_images_and_data_path("images/icons"), self.star_icon_empty_path
-            )
-        )
+
         self.update_favorite_icon(self.thumbnail_box.favorite_status)
 
     def get_star_outline_icon(self):
@@ -97,6 +92,12 @@ class WordLabel(QWidget):
             fm = self.word_label.fontMetrics()
 
     def update_favorite_icon(self, is_favorite: bool):
+        self.star_icon_empty_path = self.get_star_outline_icon()
+        self.star_icon_empty = QIcon(
+            os.path.join(
+                get_images_and_data_path("images/icons"), self.star_icon_empty_path
+            )
+        )
         # Update the favorite icon based on the favorite status
         if is_favorite:
             self.favorite_button.setIcon(self.star_icon_filled)

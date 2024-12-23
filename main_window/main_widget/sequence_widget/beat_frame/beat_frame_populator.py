@@ -50,7 +50,7 @@ class BeatFramePopulator:
             self.current_sequence_json
         )
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
-        QApplication.processEvents()
+        # QApplication.processEvents()
         self.start_pos_view.set_start_pos(start_pos_beat)
 
     def _update_sequence_layout(self):

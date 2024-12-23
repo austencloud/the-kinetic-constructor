@@ -135,7 +135,7 @@ class LetterTypePickerWidget(QWidget):
         f.setPointSize(font_size)
         self.filter_label.setFont(f)
         global_settings = self.generator_frame.sequence_generator_widget.global_settings
-        color = global_settings.font_color_updater.get_font_color(
+        color = self.generator_frame.sequence_generator_widget.main_widget.font_color_updater.get_font_color(
             global_settings.get_background_type()
         )
         # Just apply the color to the label text, not the checkbox

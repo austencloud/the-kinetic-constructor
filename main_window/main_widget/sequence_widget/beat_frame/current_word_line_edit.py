@@ -40,25 +40,6 @@ class CurrentWordLineEdit(QLineEdit):
         self.setFrame(False)
         self.kerning = 0
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
-        font = self.font()
-        painter.setFont(font)
-        metrics = QFontMetrics(font)
-        text = self.text()
-        x = (
-            self.width()
-            - metrics.horizontalAdvance(text)
-            - self.kerning * (len(text) - 1)
-        ) // 2
-        y = (self.height() + metrics.ascent() - metrics.descent()) // 2
-
-        for letter in text:
-            painter.drawText(x, y, letter)
-            x += metrics.horizontalAdvance(letter) + self.kerning
-
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton:
             text_rect = self._text_rect()

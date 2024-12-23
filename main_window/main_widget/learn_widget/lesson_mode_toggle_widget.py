@@ -69,7 +69,7 @@ class LessonModeToggleWidget(QWidget):
         global_settings = (
             self.lesson_selector.main_widget.settings_manager.global_settings
         )
-        font_color_updater = global_settings.font_color_updater
+        font_color_updater = self.lesson_selector.main_widget.font_color_updater
         if self.current_mode == "fixed_question":
             self.fixed_question_label.setStyleSheet(
                 f"font-weight: bold; color: {font_color_updater.get_font_color(global_settings.get_background_type())};"

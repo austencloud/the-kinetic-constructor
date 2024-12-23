@@ -19,7 +19,7 @@ from main_window.menu_bar_widget.background_selector.background_managers.starfie
     StarfieldBackgroundManager,
 )
 from .prop_type_changer import PropTypeChanger
-from .font_color_updater import FontColorUpdater
+from .main_widget_font_color_updater import MainWidgetFontColorUpdater
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -31,7 +31,6 @@ class GlobalSettings:
         self.settings = settings_manager.settings
         self.settings_manager = settings_manager
         self.prop_type_changer = PropTypeChanger(self.settings_manager)
-        self.font_color_updater = FontColorUpdater()
         self.main_widget: "MainWidget" = None
 
     # Getter and Setter for Grow Sequence
@@ -58,44 +57,11 @@ class GlobalSettings:
         self.settings.setValue("global/background_type", background_type)
         self.settings_manager.background_changed.emit(background_type)
 
-    # Background Manager Setup
-    def setup_background_manager(
-        self, widget, is_splash_screen=False
-    ) -> BackgroundManager:
-        bg_type = self.get_background_type()
-        return self.get_background_manager(bg_type, widget, is_splash_screen)
-
-    def get_background_manager(
-        self, bg_type: str, widget, is_splash_screen=False
-    ) -> Optional[BackgroundManager]:
-        if not is_splash_screen:
-            main_widget = getattr(
-                self.settings_manager.main_window, "main_widget", None
-            )
-            if main_widget:
-                self.font_color_updater.update_main_widget_font_colors(
-                    main_widget, bg_type
-                )
-            else:
-                # main_widget is not set yet; skip updating font colors
-                pass
-        else:
-            self.font_color_updater.apply_splash_screen_font_colors(widget, bg_type)
-
-        # Map the background type to the respective manager
-        background_manager_map = {
-            "Starfield": StarfieldBackgroundManager,
-            "Aurora": AuroraBackgroundManager,
-            "AuroraBorealis": AuroraBorealisBackgroundManager,
-            "Snowfall": SnowfallBackgroundManager,
-            "Bubbles": BubblesBackgroundManager,
-        }
-        manager_class = background_manager_map.get(bg_type)
-        return manager_class(widget) if manager_class else None
-
     # Font Color Management
     def get_current_font_color(self) -> str:
-        return self.font_color_updater.get_font_color(self.get_background_type())
+        return self.main_widget.font_color_updater.get_font_color(
+            self.get_background_type()
+        )
 
     # Getter and Setter for Current Tab
     def get_current_tab(self) -> str:

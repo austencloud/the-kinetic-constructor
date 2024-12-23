@@ -38,7 +38,7 @@ class PermutationTypeToggle(QWidget):
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected permutation type."""
         font_color_updater = (
-            self.circular_builder_frame.sequence_generator_widget.main_widget.settings_manager.global_settings.font_color_updater
+            self.circular_builder_frame.sequence_generator_widget.main_widget.font_color_updater
         )
         font_color = font_color_updater.get_font_color(
             self.circular_builder_frame.sequence_generator_widget.main_widget.settings_manager.global_settings.get_background_type()

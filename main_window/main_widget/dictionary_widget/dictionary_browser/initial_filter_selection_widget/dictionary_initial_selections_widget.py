@@ -133,7 +133,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
     def resize_initial_selections_widget(self):
         """Resize the initial selections widget and its components."""
         self.resize_initial_filter_buttons()
-        self.filter_choice_widget.resize_filter_choice_widget()
+        # self.filter_choice_widget.resize_filter_choice_widget()
         for section in self.section_map.values():
             if isinstance(section, FilterSectionBase):
                 section.go_back_button.resize_go_back_button()

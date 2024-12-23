@@ -29,34 +29,27 @@ class SnowfallBackgroundManager(BackgroundManager):
         super().__init__(widget)
         self.widget = widget
 
-        # Initialize managers
         self.snowflake_manager = SnowflakeManager()
         self.santa_manager = SantaManager()
-        self.shooting_star_manager = ShootingStarManager()  # Add shooting star manager
+        self.shooting_star_manager = ShootingStarManager()
 
     def animate_background(self):
-        # Delegate animation to managers
         self.snowflake_manager.animate_snowflakes()
         self.santa_manager.animate_santa()
-        self.shooting_star_manager.animate_shooting_star()  # Animate shooting stars
-        self.shooting_star_manager.manage_shooting_star(
-            self.widget
-        )  # Manage shooting star timing
-        self.update_required.emit()
+        self.shooting_star_manager.animate_shooting_star()
+        self.shooting_star_manager.manage_shooting_star(self.widget)
+        # self.update_required.emit()
 
     def paint_background(self, widget: QWidget, painter: QPainter):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        # Draw the gradient background
         gradient = QLinearGradient(0, 0, 0, widget.height())
-        gradient.setColorAt(0, QColor(20, 30, 48))  # Dark blue at top
-        gradient.setColorAt(1, QColor(50, 80, 120))  # Slightly lighter blue at bottom
+        gradient.setColorAt(0, QColor(20, 30, 48))
+        gradient.setColorAt(1, QColor(50, 80, 120))
         painter.fillRect(widget.rect(), gradient)
 
-        # Delegate drawing to managers
         self.snowflake_manager.draw_snowflakes(painter, widget)
         if self.santa_manager.santa["active"]:
             self.santa_manager.draw_santa(painter, widget)
 
-        # Draw the shooting star if it's active
         self.shooting_star_manager.draw_shooting_star(painter, widget)

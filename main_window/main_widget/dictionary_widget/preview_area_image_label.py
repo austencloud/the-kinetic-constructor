@@ -55,7 +55,7 @@ class PreviewAreaImageLabel(QLabel):
         global_settings = (
             self.preview_area.dictionary_widget.browser.main_widget.main_window.settings_manager.global_settings
         )
-        font_color = global_settings.font_color_updater.get_font_color(
+        font_color = self.preview_area.dictionary_widget.browser.main_widget.font_color_updater.get_font_color(
             global_settings.get_background_type()
         )
         self.setStyleSheet(

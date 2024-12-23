@@ -159,27 +159,25 @@ class FilterChoiceWidget(QWidget):
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()
-        self._resize_all_labels_in_children()
+        # self._resize_all_labels_in_children()
 
-    def _resize_all_labels_in_children(self):
-        """Resize all labels in child sections to match font color."""
-        for filter_choice_section in self.initial_selection_widget.section_map.values():
-            if isinstance(
-                filter_choice_section, FilterSectionBase
-            ):  # Ensure it's a filter section
-                for label in filter_choice_section.findChildren(QLabel):
-                    font_color = (
-                        self.settings_manager.global_settings.get_current_font_color()
-                    )
-                    label.setStyleSheet(f"color: {font_color};")
+    # def _resize_all_labels_in_children(self):
+    #     """Resize all labels in child sections to match font color."""
+    #     for filter_choice_section in self.initial_selection_widget.section_map.values():
+    #         if isinstance(filter_choice_section, FilterSectionBase):
+    #             for label in filter_choice_section.findChildren(QLabel):
+    #                 font_color = (
+    #                     self.settings_manager.global_settings.get_current_font_color()
+    #                 )
+    #                 label.setStyleSheet(f"color: {font_color};")
 
     def _resize_description_label(self):
         """Resize the main description label."""
-        font_color = self.settings_manager.global_settings.get_current_font_color()
+        # font_color = self.settings_manager.global_settings.get_current_font_color()
         font_size = self.main_widget.width() // 30
         font_family = "Monotype Corsiva"
         self.description_label.setStyleSheet(
-            f"font-size: {font_size}px; color: {font_color}; font-family: {font_family};"
+            f"font-size: {font_size}px; font-family: {font_family};"
         )
 
     def _resize_buttons(self):
@@ -194,10 +192,10 @@ class FilterChoiceWidget(QWidget):
     def _resize_buttons_labels(self):
         """Resize the labels under each button."""
         font_size = self.main_widget.width() // 150
-        font_color = self.settings_manager.global_settings.get_current_font_color()
+        # font_color = self.settings_manager.global_settings.get_current_font_color()
         for button_label in self.button_labels.values():
             button_label.setStyleSheet(
-                f"font-size: {font_size}px; color: {font_color};"
+                f"font-size: {font_size}px;"
             )
 
     def resizeEvent(self, event: QResizeEvent) -> None:

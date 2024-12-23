@@ -14,8 +14,7 @@ class BackgroundManager(QObject):
         self.color_shift = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
-        self.timer.start(50)
-# In your background manager's animate_background method
+        self.timer.start(2500)
 
     def animate_background(self):
         self.update_required.emit()
@@ -25,7 +24,7 @@ class BackgroundManager(QObject):
 
     def start_animation(self):
         if not self.timer.isActive():
-            self.timer.start(50)
+            self.timer.start(1000)
 
     def stop_animation(self):
         if self.timer.isActive():

@@ -37,7 +37,7 @@ class ContinuousRotationToggle(QWidget):
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected rotation type."""
         settings_manager = self.main_widget.settings_manager
-        font_color_updater = settings_manager.global_settings.font_color_updater
+        font_color_updater = self.main_widget.font_color_updater
         font_color = font_color_updater.get_font_color(
             settings_manager.global_settings.get_background_type()
         )

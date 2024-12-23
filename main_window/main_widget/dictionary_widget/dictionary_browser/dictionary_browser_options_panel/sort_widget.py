@@ -15,9 +15,8 @@ class SortWidget(QWidget):
     def __init__(self, options_panel: "DictionaryOptionsPanel") -> None:
         super().__init__(options_panel)
         self.browser = options_panel.browser
-        self.settings_manager = (
-            self.browser.dictionary.main_widget.main_window.settings_manager
-        )
+        self.main_widget = self.browser.dictionary.main_widget
+        self.settings_manager = self.main_widget.main_window.settings_manager
         self.selected_button: QPushButton = None  # Track the selected button
         self._setup_sort_buttons()
         self._setup_layout()
@@ -120,10 +119,8 @@ class SortWidget(QWidget):
         self._style_number_of_sequences_label()
 
     def _style_number_of_sequences_label(self):
-        font_color = (
-            self.settings_manager.global_settings.font_color_updater.get_font_color(
-                self.settings_manager.global_settings.get_background_type()
-            )
+        font_color = self.main_widget.font_color_updater.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
         )
         font_size = self.browser.width() // 50
         self.browser.sequence_count_label.setStyleSheet(
@@ -131,10 +128,8 @@ class SortWidget(QWidget):
         )
 
     def _style_currently_displaying_label(self):
-        font_color = (
-            self.settings_manager.global_settings.font_color_updater.get_font_color(
-                self.settings_manager.global_settings.get_background_type()
-            )
+        font_color = self.main_widget.font_color_updater.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
         )
         font_size = self.browser.width() // 50
         self.browser.currently_displaying_label.setStyleSheet(
@@ -146,10 +141,8 @@ class SortWidget(QWidget):
         button_font.setPointSize(self.browser.width() // 65)
         button.setFont(button_font)
         button.setContentsMargins(10, 5, 10, 5)
-        font_color = (
-            self.settings_manager.global_settings.font_color_updater.get_font_color(
-                self.settings_manager.global_settings.get_background_type()
-            )
+        font_color = self.main_widget.font_color_updater.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
         )
         button_background_color = "lightgray" if font_color == "black" else "#555"
         hover_color = "lightgray" if font_color == "black" else "#555"

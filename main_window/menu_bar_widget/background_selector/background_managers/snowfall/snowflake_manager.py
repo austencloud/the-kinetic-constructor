@@ -61,28 +61,31 @@ class SnowflakeManager:
         self.wind = max(-0.002, min(self.wind, 0.002))
 
     def draw_snowflakes(self, painter: QPainter, widget: QWidget):
-        for flake in self.snowflakes:
-            x = int(flake["x"] * widget.width())
-            y = int(flake["y"] * widget.height())
-            size = int(flake["size"])
+        painter.save()
+        try:
+            for flake in self.snowflakes:
+                x = int(flake["x"] * widget.width())
+                y = int(flake["y"] * widget.height())
+                size = int(flake["size"])
 
-            painter.setOpacity(flake["opacity"])
-            painter.setBrush(QColor(255, 255, 255, int(flake["opacity"] * 255)))
-            painter.setPen(Qt.PenStyle.NoPen)
+                painter.setOpacity(flake["opacity"])
+                painter.setBrush(QColor(255, 255, 255, int(flake["opacity"] * 255)))
+                painter.setPen(Qt.PenStyle.NoPen)
 
-            if flake["is_special"]:
-                # Draw special snowflake shapes
-                if flake["snowflake_type"] == 1:
-                    self.draw_star_snowflake(painter, x, y, size)
-                elif flake["snowflake_type"] == 2:
-                    self.draw_spiky_snowflake(painter, x, y, size)
-                elif flake["snowflake_type"] == 3:
-                    self.draw_spiky_snowflake_variant(painter, x, y, size)
-            else:
-                painter.drawEllipse(x, y, size, size)
+                if flake["is_special"]:
+                    # Draw special snowflake shapes
+                    if flake["snowflake_type"] == 1:
+                        self.draw_star_snowflake(painter, x, y, size)
+                    elif flake["snowflake_type"] == 2:
+                        self.draw_spiky_snowflake(painter, x, y, size)
+                    elif flake["snowflake_type"] == 3:
+                        self.draw_spiky_snowflake_variant(painter, x, y, size)
+                else:
+                    painter.drawEllipse(x, y, size, size)
 
-        painter.setOpacity(1.0)
-
+            painter.setOpacity(1.0)
+        finally:
+            painter.restore()
     def draw_star_snowflake(self, painter, x, y, size):
         """Draws an even spikier star-like snowflake."""
         path = QPainterPath()
