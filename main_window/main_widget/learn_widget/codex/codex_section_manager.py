@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 class CodexSectionManager:
     """Manages the loading and organization of pictograph sections in the Codex."""
+
     VERT_SPACING = 20
     ROWS = [
         ["A", "B", "C", "D", "E", "F"],
@@ -41,12 +42,6 @@ class CodexSectionManager:
         for letter_type in LetterType:
             self._load_letter_type_section(letter_type)
 
-    def reload_sections(self) -> None:
-        for letter_str, view in self.pictograph_views.items():
-            if letter_str in self.codex.data_manager.pictograph_data:
-                pictograph_dict = self.codex.data_manager.pictograph_data[letter_str]
-                view.pictograph.updater.update_pictograph(pictograph_dict)
-                view.scene().update()
 
     def _load_letter_type_section(self, letter_type: LetterType) -> None:
         type_label = CodexSectionTypeLabel(self.codex, letter_type)

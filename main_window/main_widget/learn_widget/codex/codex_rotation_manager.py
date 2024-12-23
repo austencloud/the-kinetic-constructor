@@ -25,7 +25,6 @@ class CodexRotationManager:
                 dict = self._rotate_pictograph(pictograph)
                 self.codex.data_manager.pictograph_data[letter] = dict
         self.update_grid_mode()
-        self.codex.section_manager.reload_sections()
         self._refresh_pictograph_views()
 
     def _rotate_pictograph(self, pictograph_dict: dict) -> dict:
