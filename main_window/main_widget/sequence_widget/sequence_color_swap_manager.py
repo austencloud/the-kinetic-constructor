@@ -50,7 +50,7 @@ class SequenceColorSwapManager:
         swapped_sequence.append(metadata)
 
         start_pos_beat_dict: dict = (
-            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict
+            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
         )
         self.swap_dict_values(start_pos_beat_dict)
         swapped_sequence.append(start_pos_beat_dict)

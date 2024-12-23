@@ -31,7 +31,7 @@ class SequenceRotationManager:
     def rotate_option_picker_pictographs(self):
         option_picker = self.sequence_widget.main_widget.manual_builder.option_picker
         for pictograph in option_picker.option_pool:
-            new_dict = self.rotate_dict(pictograph.pictograph_dict.copy())
+            new_dict = self._rotate_dict(pictograph.pictograph_dict.copy())
             pictograph.updater.update_pictograph(new_dict)
 
     def check_length(self, current_sequence):
@@ -44,26 +44,31 @@ class SequenceRotationManager:
         """Rotate the sequence by rotation_steps * 45°."""
         current_sequence = self.json_loader.load_current_sequence_json()
         metadata = current_sequence[0].copy()
-        metadata["grid_mode"] = BOX if metadata["grid_mode"] == DIAMOND else DIAMOND
+        
+        self.swap_grid_mode(metadata)
+        
         if self.check_length(current_sequence):
             return
         rotated_sequence = []
         rotated_sequence.append(metadata)
         start_pos_beat_dict: dict = (
-            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict
+            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
         )
 
-        self.rotate_dict(start_pos_beat_dict)
+        self._rotate_dict(start_pos_beat_dict)
         rotated_sequence.append(start_pos_beat_dict)
 
         beat_dicts = self.sequence_widget.beat_frame.get.beat_dicts()
         for beat_dict in beat_dicts:
-            rotated_beat = beat_dict.copy()
-            self.rotate_dict(rotated_beat)
-            rotated_sequence.append(rotated_beat)
+            rotated_dict = beat_dict.copy()
+            self._rotate_dict(rotated_dict)
+            rotated_sequence.append(rotated_dict)
         return rotated_sequence
 
-    def rotate_dict(self, _dict: dict):
+    def swap_grid_mode(self, metadata):
+        metadata["grid_mode"] = BOX if metadata["grid_mode"] == DIAMOND else DIAMOND
+
+    def _rotate_dict(self, _dict: dict):
         for color in ["blue_attributes", "red_attributes"]:
             if color in _dict:
                 attributes = _dict[color]
@@ -78,11 +83,9 @@ class SequenceRotationManager:
             bl = _dict["blue_attributes"]
             rl = _dict["red_attributes"]
             if "start_loc" in bl and "start_loc" in rl:
-                _dict["start_pos"] = self.get_position_name(
-                    bl["start_loc"], rl["start_loc"]
-                )
+                _dict["start_pos"] = positions_map[(bl["start_loc"], rl["start_loc"])]
             if "end_loc" in bl and "end_loc" in rl:
-                _dict["end_pos"] = self.get_position_name(bl["end_loc"], rl["end_loc"])
+                _dict["end_pos"] = positions_map[(bl["end_loc"], rl["end_loc"])]
 
         return _dict
 
@@ -93,10 +96,3 @@ class SequenceRotationManager:
         new_idx = (idx + 1) % len(cw_loc_order)
         return cw_loc_order[new_idx]
 
-    def get_position_name(self, left_loc, right_loc):
-        try:
-            return positions_map[(left_loc, right_loc)]
-        except KeyError:
-            raise ValueError(
-                f"Position name not found for locations: {left_loc}, {right_loc}"
-            )
