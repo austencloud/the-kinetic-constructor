@@ -1,12 +1,14 @@
 # background_widget.py
+
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
 
+import logging
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-import logging
+from PyQt6.QtWidgets import QSizePolicy
 
 
 class BackgroundWidget(QWidget):
@@ -15,18 +17,22 @@ class BackgroundWidget(QWidget):
         self.main_widget = main_widget
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground)
-
-        self.setGeometry(main_widget.rect())
-        self.setFixedSize(main_widget.size())
+        self.setAttribute(Qt.WidgetAttribute.WA_OpaquePaintEvent, False)
+        self.setStyleSheet("background: transparent;")
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.show()
 
     def paintEvent(self, event):
         logging.debug("BackgroundWidget.paintEvent called")
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        self.main_widget.background.paint_background(self, painter)
+        if self.main_widget.background:
+            self.main_widget.background.paint_background(self, painter)
+        else:
+            logging.warning("No background set in main_widget.background")
+        painter.end()
         print("BackgroundWidget.paintEvent done")
-        # painter.end()
 
     def resizeEvent(self, event):
-        self.setGeometry(self.main_widget.rect())
-        self.setFixedSize(self.main_widget.size())
+        self.resize(self.main_widget.size())
+        super().resizeEvent(event)

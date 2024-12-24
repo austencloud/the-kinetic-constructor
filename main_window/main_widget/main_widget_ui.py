@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
 
+from main_window.main_widget.background_widget import BackgroundWidget
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
 from main_window.main_widget.build_tab.build_tab import BuildTab
 from main_window.main_widget.fade_manager import FadeManager
@@ -19,6 +20,8 @@ if TYPE_CHECKING:
     from .main_widget import MainWidget
 
 
+# main_widget_ui.py
+
 class MainWidgetUI:
     def __init__(self, main_widget: "MainWidget"):
         self.mw = main_widget
@@ -28,13 +31,12 @@ class MainWidgetUI:
         self._setup_indices()
 
     def _setup_components(self):
-
         self.mw.main_stacked_widget = QStackedWidget()
         self.mw.background_handler = MainWidgetBackgroundHandler(self.mw)
         self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
         self.mw.menu_bar_widget = MenuBarWidget(self.mw)
         self.mw.navigation_widget = NavigationWidget(self.mw)
-
+        
         self.mw.build_tab = BuildTab(self.mw)
         self.mw.browse_tab = BrowseTab(self.mw)
         self.mw.learn_tab = LearnTab(self.mw)
@@ -46,6 +48,9 @@ class MainWidgetUI:
         self.mw.main_stacked_widget.addWidget(self.mw.write_tab)
 
         self.mw.fade_manager = FadeManager(self.mw)
+        
+        # Instantiate BackgroundWidget
+        self.mw.background_widget = BackgroundWidget(self.mw)
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)
@@ -53,12 +58,26 @@ class MainWidgetUI:
         self.mw.main_layout.setSpacing(0)
         self.mw.setLayout(self.mw.main_layout)
 
+        # Add BackgroundWidget first to ensure it's at the back
+        self.mw.main_layout.addWidget(self.mw.background_widget)
+
         top_layout = QHBoxLayout()
         top_layout.addWidget(self.mw.menu_bar_widget)
         top_layout.addWidget(self.mw.navigation_widget)
 
-        self.mw.main_layout.addLayout(top_layout)
-        self.mw.main_layout.addWidget(self.mw.main_stacked_widget)
+        # Create a container widget for the main content to overlay on the background
+        self.mw.content_container = QWidget()
+        self.mw.content_layout = QVBoxLayout(self.mw.content_container)
+        self.mw.content_layout.setContentsMargins(0, 0, 0, 0)
+        self.mw.content_layout.setSpacing(0)
+        self.mw.content_container.setLayout(self.mw.content_layout)
+
+        # Add top layout and main stacked widget to the content container
+        self.mw.content_layout.addLayout(top_layout)
+        self.mw.content_layout.addWidget(self.mw.main_stacked_widget)
+
+        # Add the content container to the main layout
+        self.mw.main_layout.addWidget(self.mw.content_container)
 
     def _setup_indices(self):
         self.mw.build_tab_index = 0

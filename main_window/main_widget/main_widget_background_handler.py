@@ -23,8 +23,8 @@ from main_window.menu_bar_widget.background_selector.backgrounds.starfield.starf
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
-
-
+# main_widget_background_handler.py
+import logging
 class MainWidgetBackgroundHandler(QObject):
     """Handles background setup, application, and management for the MainWidget."""
 
@@ -45,8 +45,11 @@ class MainWidgetBackgroundHandler(QObject):
         if self.background:
             self.background.update_required.connect(self.main_widget.update)
             self.background.start_animation()
+            logging.info(f"Background '{bg_type}' has been set up.")
+        else:
+            logging.error(f"Failed to set up background: '{bg_type}' is not recognized.")
 
-    def apply_background(self,):
+    def apply_background(self):
         """Applies or reapplies the background."""
         if self.background:
             self.background.stop_animation()
@@ -64,7 +67,12 @@ class MainWidgetBackgroundHandler(QObject):
             "Bubbles": BubblesBackground,
         }
         manager_class = background_map.get(bg_type)
-        return manager_class(self.main_widget) if manager_class else None
+        if manager_class:
+            logging.info(f"Creating background instance for '{bg_type}'.")
+            return manager_class(self.main_widget)
+        else:
+            logging.warning(f"Background type '{bg_type}' not found.")
+            return None
 
     def stop_animation(self):
         """Stops the background animation."""

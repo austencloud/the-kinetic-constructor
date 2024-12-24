@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
-
+from PyQt6.QtGui import QResizeEvent
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
@@ -12,7 +12,6 @@ from main_window.main_widget.write_tab.act_tab import WriteTab
 # Import the new subclasses
 from .main_widget_manager import MainWidgetManager
 from .main_widget_ui import MainWidgetUI
-from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 from .main_widget_background_handler import MainWidgetBackgroundHandler
 from main_window.main_widget.main_widget_tab_switcher import MainWidgetTabSwitcher
@@ -68,7 +67,6 @@ class MainWidget(QWidget):
     tabs_handler: "MainWidgetTabSwitcher"
     manager: "MainWidgetManager"
     ui_handler: "MainWidgetUI"
-    event_handler: "MainWidgetEvents"
     state_handler: "MainWidgetState"
     background_handler: "MainWidgetBackgroundHandler"
 
@@ -96,7 +94,6 @@ class MainWidget(QWidget):
     build_generate_layout: QHBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
-    # sequence_widget: "SequenceWidget"
     background_widget: "BackgroundWidget"
 
     # Indices for tabs
@@ -118,6 +115,7 @@ class MainWidget(QWidget):
     pictograph_dicts: dict["Letter", list[dict]]
     letter_determiner: "LetterDeterminer"
     special_placements: dict[str, dict[str, dict[str, dict[str, list[int]]]]]
+    content_container: QWidget
 
     def __init__(self, main_window: "MainWindow", splash_screen: "SplashScreen" = None):
         super().__init__(main_window)
@@ -129,20 +127,10 @@ class MainWidget(QWidget):
         self.manager = MainWidgetManager(self)
         self.ui_handler = MainWidgetUI(self)
         self.tabs_handler = MainWidgetTabSwitcher(self)
-        self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
         self.background_handler = MainWidgetBackgroundHandler(self)
-
         QTimer.singleShot(0, self.state_handler.load_state)
 
-    def paintEvent(self, a0):
-        return super().paintEvent(a0)
-
-    def showEvent(self, event):
-        self.event_handler.showEvent(event)
-
-    # def hideEvent(self, event):
-    #     self.event_handler.hideEvent(event)
-
-    # def resizeEvent(self, event) -> None:
-    #     self.event_handler.resizeEvent(event)
+    def resizeEvent(self, event: "QResizeEvent") -> None:
+        self.content_container.setMinimumSize(event.size())
+        super().resizeEvent(event)

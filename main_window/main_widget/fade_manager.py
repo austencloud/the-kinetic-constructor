@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 class FadeManager(QObject):
     """Manages synchronized fade-out and fade-in animations for main and build widgets."""
 
-    duration: int = 350
+    duration: int = 300
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
