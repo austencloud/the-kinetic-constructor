@@ -25,6 +25,8 @@ if TYPE_CHECKING:
     from .main_widget import MainWidget
 # main_widget_background_handler.py
 import logging
+
+
 class MainWidgetBackgroundHandler(QObject):
     """Handles background setup, application, and management for the MainWidget."""
 
@@ -47,7 +49,9 @@ class MainWidgetBackgroundHandler(QObject):
             self.background.start_animation()
             logging.info(f"Background '{bg_type}' has been set up.")
         else:
-            logging.error(f"Failed to set up background: '{bg_type}' is not recognized.")
+            logging.error(
+                f"Failed to set up background: '{bg_type}' is not recognized."
+            )
 
     def apply_background(self):
         """Applies or reapplies the background."""

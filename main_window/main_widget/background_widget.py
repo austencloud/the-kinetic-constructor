@@ -24,6 +24,8 @@ class BackgroundWidget(QWidget):
 
     def paintEvent(self, event):
         logging.debug("BackgroundWidget.paintEvent called")
+        # print(f"{self.__class__.__name__} paintEvent called")
+
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         if self.main_widget.background:

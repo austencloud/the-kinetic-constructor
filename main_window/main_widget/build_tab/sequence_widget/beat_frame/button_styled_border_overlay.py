@@ -32,6 +32,7 @@ class StyledBorderOverlayForButton(QWidget):
 
     def paintEvent(self, event):
         super().paintEvent(event)
+        # print(f"{self.__class__.__name__} paintEvent called")
         if not self.is_set or not self.primary_color or not self.secondary_color:
             return
 

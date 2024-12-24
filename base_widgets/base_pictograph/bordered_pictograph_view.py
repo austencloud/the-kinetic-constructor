@@ -66,6 +66,8 @@ class BorderedPictographView(PictographView):
     def paintEvent(self, event):
         """Draw the pictograph and borders."""
         super().paintEvent(event)
+        # print(f"{self.__class__.__name__} paintEvent called")
+
         painter = QPainter(self.viewport())
         if self.primary_color and self.secondary_color:
             self._draw_borders(painter)

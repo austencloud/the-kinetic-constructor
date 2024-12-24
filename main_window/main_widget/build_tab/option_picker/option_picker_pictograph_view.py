@@ -51,10 +51,6 @@ class OptionPickerPictographView(BorderedPictographView):
     ### EVENTS ###
 
     def contextMenuEvent(self, event: QEvent) -> None:
-        """
-        Optionally, add more actions specific to OptionPickerPictographView.
-        Then call the base class to include the "Copy Dictionary" action.
-        """
         if isinstance(event, QContextMenuEvent):
             context_menu = QMenu(self)
 
@@ -128,7 +124,6 @@ class OptionPickerPictographView(BorderedPictographView):
         self.pictograph.view.reset_border()
 
     def resizeEvent(self, event):
-        """Trigger fitInView whenever the widget is resized."""
         super().resizeEvent(event)
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         size = self.calculate_view_size()

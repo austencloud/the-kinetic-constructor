@@ -8,8 +8,6 @@ from main_window.main_widget.fade_manager import FadeManager
 from main_window.main_widget.learn_tab.learn_widget import LearnTab
 from main_window.main_widget.write_tab.act_tab import WriteTab
 
-
-# Import the new subclasses
 from .main_widget_manager import MainWidgetManager
 from .main_widget_ui import MainWidgetUI
 from .main_widget_state import MainWidgetState

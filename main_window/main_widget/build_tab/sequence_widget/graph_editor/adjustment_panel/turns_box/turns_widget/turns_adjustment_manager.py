@@ -74,6 +74,7 @@ class TurnsAdjustmentManager(QObject):
             return True
         if motion.turns == "fl" and new_turns >= 0:
             return True
+        return False
 
     def _repaint_views(self):
         """Repaint the pictograph and GE pictograph views to reflect the change."""

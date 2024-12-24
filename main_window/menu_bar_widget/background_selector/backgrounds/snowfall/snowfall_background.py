@@ -38,7 +38,7 @@ class SnowfallBackground(BaseBackground):
         self.santa_manager.animate_santa()
         self.shooting_star_manager.animate_shooting_star()
         self.shooting_star_manager.manage_shooting_star(self.widget)
-        # self.update_required.emit()
+        self.update_required.emit()
 
     def paint_background(self, widget: QWidget, painter: QPainter):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
