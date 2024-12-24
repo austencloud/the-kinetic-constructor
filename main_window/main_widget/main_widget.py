@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+from main_window.main_widget.fade_manager import FadeManager
 from main_window.main_widget.learn_tab.learn_widget import LearnTab
 from main_window.main_widget.write_tab.act_tab import WriteTab
 
@@ -82,6 +83,7 @@ class MainWidget(QWidget):
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
     font_color_updater: "MainWidgetFontColorUpdater"
+    fade_manager: "FadeManager"
 
     # Layouts and Widgets
     top_layout: QHBoxLayout
@@ -98,7 +100,7 @@ class MainWidget(QWidget):
     background_widget: "BackgroundWidget"
 
     # Indices for tabs
-    construct_tab_index: int = 0
+    build_tab_index: int = 0
     generate_tab_index: int = 0
     browse_tab_index: int = 1
     learn_tab_index: int = 2
@@ -139,8 +141,8 @@ class MainWidget(QWidget):
     def showEvent(self, event):
         self.event_handler.showEvent(event)
 
-    def hideEvent(self, event):
-        self.event_handler.hideEvent(event)
+    # def hideEvent(self, event):
+    #     self.event_handler.hideEvent(event)
 
-    def resizeEvent(self, event) -> None:
-        self.event_handler.resizeEvent(event)
+    # def resizeEvent(self, event) -> None:
+    #     self.event_handler.resizeEvent(event)

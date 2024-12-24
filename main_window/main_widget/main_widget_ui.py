@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
 from main_window.main_widget.build_tab.build_tab import BuildTab
+from main_window.main_widget.fade_manager import FadeManager
 from main_window.main_widget.learn_tab.learn_widget import LearnTab
 from main_window.main_widget.main_widget_background_handler import (
     MainWidgetBackgroundHandler,
@@ -27,6 +28,7 @@ class MainWidgetUI:
         self._setup_indices()
 
     def _setup_components(self):
+
         self.mw.main_stacked_widget = QStackedWidget()
         self.mw.background_handler = MainWidgetBackgroundHandler(self.mw)
         self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
@@ -43,6 +45,8 @@ class MainWidgetUI:
         self.mw.main_stacked_widget.addWidget(self.mw.learn_tab)
         self.mw.main_stacked_widget.addWidget(self.mw.write_tab)
 
+        self.mw.fade_manager = FadeManager(self.mw)
+
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)
         self.mw.main_layout.setContentsMargins(0, 0, 0, 0)
@@ -57,7 +61,7 @@ class MainWidgetUI:
         self.mw.main_layout.addWidget(self.mw.main_stacked_widget)
 
     def _setup_indices(self):
-        self.mw.construct_tab_index = 0
+        self.mw.build_tab_index = 0
         self.mw.browse_tab_index = 1
         self.mw.learn_tab_index = 2
         self.mw.write_tab_index = 3
@@ -65,13 +69,13 @@ class MainWidgetUI:
     def load_current_tab(self):
         self.mw.current_tab = self.mw.settings_manager.global_settings.get_current_tab()
         if self.mw.current_tab == "construct":
-            index = self.mw.construct_tab_index
+            index = self.mw.build_tab_index
         elif self.mw.current_tab == "generate":
-            index = self.mw.construct_tab_index
+            index = self.mw.build_tab_index
         elif self.mw.current_tab == "browse":
             index = self.mw.browse_tab_index
         elif self.mw.current_tab == "learn":
             index = self.mw.learn_tab_index
         elif self.mw.current_tab == "write":
             index = self.mw.write_tab_index
-        self.mw.tabs_handler.fade_to_tab(index)
+        self.mw.fade_manager.fade_to_tabs(index)

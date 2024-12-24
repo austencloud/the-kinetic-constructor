@@ -33,6 +33,9 @@ class RotatedPermutationExecuter(PermutationExecutor):
         self.circular_sequence_generator = circular_sequence_generator
         self.validation_engine = circular_sequence_generator.validation_engine
         self.hand_rot_dir_calculator = HandpathCalculator()
+        self.sequence_loader = (
+            self.circular_sequence_generator.main_widget.json_manager.sequence_loader_saver
+        )
 
     def create_permutations(self, sequence: list[dict]):
         start_position_entry = (
@@ -63,7 +66,6 @@ class RotatedPermutationExecuter(PermutationExecutor):
             sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
             )
-            # self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
             last_entry = next_pictograph
@@ -83,17 +85,13 @@ class RotatedPermutationExecuter(PermutationExecutor):
         return 0
 
     def is_quartered_permutation(self) -> bool:
-        sequence = (
-            self.circular_sequence_generator.json_manager.sequence_loader_saver.load_current_sequence_json()
-        )
+        sequence = self.sequence_loader.load_current_sequence_json()
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
         return (start_pos, end_pos) in quartered_permutations
 
     def is_halved_permutation(self) -> bool:
-        sequence = (
-            self.circular_sequence_generator.json_manager.sequence_loader_saver.load_current_sequence_json()
-        )
+        sequence = self.sequence_loader.load_current_sequence_json()
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
         return (start_pos, end_pos) in halved_permutations

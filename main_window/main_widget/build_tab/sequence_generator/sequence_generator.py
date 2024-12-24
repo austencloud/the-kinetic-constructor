@@ -211,13 +211,3 @@ class SequenceGenerator(QWidget):
                 QSizePolicy.Policy.Fixed,
             )
 
-    def paintEvent(self, event):
-        """Handle custom painting if necessary."""
-        painter = QPainter(self)
-        painter.save()
-        try:
-            # Custom painting logic here
-            pass  # Replace with actual painting code if needed
-        finally:
-            painter.restore()
-        # No need to call painter.end()
