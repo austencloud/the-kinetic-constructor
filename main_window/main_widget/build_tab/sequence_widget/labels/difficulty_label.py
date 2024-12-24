@@ -28,7 +28,7 @@ class DifficultyLabel(QLabel):
         self.update()
 
     def update_difficulty_label(self):
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
         difficulty_level = (
             self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                 sequence

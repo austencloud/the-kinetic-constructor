@@ -144,26 +144,30 @@ class TurnsUpdater:
 
     def _get_motion_type_from_json(self, index: int, color: str) -> int:
         """Retrieve motion type from JSON at the given index."""
-        return self.json_manager.loader_saver.get_motion_type_from_json_at_index(
-            index, color
-        )
-
-    def _get_prop_rot_dir_from_json(self, index: int, color: str) -> int:
-        """Retrieve prop rotation direction from JSON at the given index."""
-        return self.json_manager.loader_saver.get_prop_rot_dir_from_json(index, color)
-
-    def _get_prefloat_motion_type_from_json(self, index: int, color: str) -> int:
-        """Retrieve prefloat motion type from JSON at the given index."""
         return (
-            self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
+            self.json_manager.sequence_loader_saver.get_motion_type_from_json_at_index(
                 index, color
             )
         )
 
+    def _get_prop_rot_dir_from_json(self, index: int, color: str) -> int:
+        """Retrieve prop rotation direction from JSON at the given index."""
+        return self.json_manager.sequence_loader_saver.get_prop_rot_dir_from_json(
+            index, color
+        )
+
+    def _get_prefloat_motion_type_from_json(self, index: int, color: str) -> int:
+        """Retrieve prefloat motion type from JSON at the given index."""
+        return self.json_manager.sequence_loader_saver.get_prefloat_motion_type_from_json_at_index(
+            index, color
+        )
+
     def _get_prefloat_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         """Retrieve prefloat prop rotation direction from JSON at the given index."""
-        return self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-            index, color
+        return (
+            self.json_manager.sequence_loader_saver.get_prefloat_prop_rot_dir_from_json(
+                index, color
+            )
         )
 
     def _update_prefloat_values_in_json(self, motion: "Motion", index: int) -> None:

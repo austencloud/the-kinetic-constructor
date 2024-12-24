@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
+    from main_window.main_widget.build_tab.sequence_constructor import (
+        SequenceConstructor,
+    )
 
     from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat_view import (
         Beat,
@@ -21,7 +23,7 @@ class AddToSequenceManager:
 
         beat_frame = self.manual_builder.build_tab.sequence_widget.beat_frame
         sequence = (
-            self.manual_builder.build_tab.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.manual_builder.build_tab.main_widget.json_manager.sequence_loader_saver.load_current_sequence_json()
         )
 
         last_beat_dict = None

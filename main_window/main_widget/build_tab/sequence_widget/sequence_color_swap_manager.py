@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class SequenceColorSwapManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.json_loader = self.sequence_widget.json_manager.loader_saver
+        self.json_loader = self.sequence_widget.json_manager.sequence_loader_saver
 
     def swap_colors_in_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

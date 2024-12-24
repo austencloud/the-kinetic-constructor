@@ -23,7 +23,7 @@ class SequenceClearer:
             )
         # if the user is on the advanced start pos picker tab, then don't reset to the start pos picker
 
-        self.json_manager.loader_saver.clear_current_sequence_file()
+        self.json_manager.sequence_loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
         self._initialize_manual_builder()
         self._reset_manual_builder(should_reset_to_start_pos_picker)

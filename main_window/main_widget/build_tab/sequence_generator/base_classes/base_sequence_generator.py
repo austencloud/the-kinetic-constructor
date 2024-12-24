@@ -48,11 +48,15 @@ class BaseSequenceGenerator:
     def _initialize_sequence(self, length):
         if not self.sequence_widget:
             self.sequence_widget = self.main_widget.build_tab.sequence_widget
-        self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        self.sequence = (
+            self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        )
 
         if len(self.sequence) == 1:
             self.add_start_pos_pictograph()
-            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+            self.sequence = (
+                self.json_manager.sequence_loader_saver.load_current_sequence_json()
+            )
 
         self.sequence_widget.beat_frame.populator.modify_layout_for_chosen_number_of_beats(
             int(length)

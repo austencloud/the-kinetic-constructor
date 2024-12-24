@@ -1,3 +1,4 @@
+from turtle import isvisible
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
@@ -18,7 +19,7 @@ class SequenceMirrorManager:
 
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.json_loader = self.sequence_widget.json_manager.loader_saver
+        self.json_loader = self.sequence_widget.json_manager.sequence_loader_saver
 
     def mirror_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -36,15 +37,16 @@ class SequenceMirrorManager:
             self.sequence_widget.main_widget.build_tab.sequence_constructor.option_picker
         )
         for pictograph in option_picker.option_pool:
-            new_dict = self._mirror_dict(pictograph.pictograph_dict.copy())
-            sequence_so_far = self.json_loader.load_current_sequence_json()
-            reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, pictograph.pictograph_dict
-            )
-            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
-            pictograph.red_reversal = reversal_info.get("red_reversal", False)
+            if pictograph.view.isVisible():
+                new_dict = self._mirror_dict(pictograph.pictograph_dict.copy())
+                sequence_so_far = self.json_loader.load_current_sequence_json()
+                reversal_info = ReversalDetector.detect_reversal(
+                    sequence_so_far, pictograph.pictograph_dict
+                )
+                pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
+                pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
-            pictograph.updater.update_pictograph(new_dict)
+                pictograph.updater.update_pictograph(new_dict)
 
     def check_length(self, current_sequence):
         if len(current_sequence) < 2:

@@ -49,7 +49,9 @@ class SequenceWidget(QWidget):
         self.layout_manager.setup_layout()
 
     def update_beats_in_place(self, modified_sequence_json):
-        self.json_manager.loader_saver.save_current_sequence(modified_sequence_json)
+        self.json_manager.sequence_loader_saver.save_current_sequence(
+            modified_sequence_json
+        )
         self.json_manager.ori_validation_engine.run(is_current_sequence=True)
 
         self.update_beats(modified_sequence_json)

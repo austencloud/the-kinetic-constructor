@@ -19,7 +19,7 @@ class JsonTurnsUpdater:
     def update_turns_in_json_at_index(
         self, index: int, color: str, turns: Union[int, float]
     ) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["turns"] = turns
         end_ori = self.json_manager.ori_calculator.calculate_end_orientation(
             sequence[index], color
@@ -47,7 +47,7 @@ class JsonTurnsUpdater:
                 prop_rot_dir = NO_ROT
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
-        self.json_manager.loader_saver.save_current_sequence(sequence)
+        self.json_manager.sequence_loader_saver.save_current_sequence(sequence)
         self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
@@ -70,7 +70,7 @@ class JsonTurnsUpdater:
         )
 
     def get_number_of_placeholders_before_current_beat(self, current_beat_number):
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
         number_of_placeholders = 0
         for beat in sequence[2:]:
             if beat["beat"] < current_beat_number and beat.get("is_placeholder"):
@@ -82,14 +82,12 @@ class JsonTurnsUpdater:
             self.main_widget.build_tab.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
-        motion.motion_type = (
-            self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
-                json_index,
-                motion.color,
-            )
+        motion.motion_type = self.json_manager.sequence_loader_saver.get_prefloat_motion_type_from_json_at_index(
+            json_index,
+            motion.color,
         )
         motion.prop_rot_dir = (
-            self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            self.json_manager.sequence_loader_saver.get_prefloat_prop_rot_dir_from_json(
                 json_index,
                 motion.color,
             )
@@ -111,14 +109,14 @@ class JsonTurnsUpdater:
         self.json_updater.motion_type_updater.update_prefloat_motion_type_in_json(
             json_index,
             motion.color,
-            self.json_manager.loader_saver.get_motion_type_from_json_at_index(
+            self.json_manager.sequence_loader_saver.get_motion_type_from_json_at_index(
                 json_index, motion.color
             ),
         )
         self.json_updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(
             json_index,
             motion.color,
-            self.json_manager.loader_saver.get_prop_rot_dir_from_json(
+            self.json_manager.sequence_loader_saver.get_prop_rot_dir_from_json(
                 json_index, motion.color
             ),
         )

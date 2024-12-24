@@ -74,4 +74,4 @@ class MainWidgetUI:
             index = self.mw.learn_tab_index
         elif self.mw.current_tab == "write":
             index = self.mw.write_tab_index
-        self.mw.tabs_handler.fade_manager.fade_to_tab(index)
+        self.mw.tabs_handler.fade_to_tab(index)

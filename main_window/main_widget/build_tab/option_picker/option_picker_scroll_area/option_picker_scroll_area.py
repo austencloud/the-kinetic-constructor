@@ -72,7 +72,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
 
             p.updater.update_pictograph(pictograph_dict)
             sequence_so_far = (
-                self.json_manager.loader_saver.load_current_sequence_json()
+                self.json_manager.sequence_loader_saver.load_current_sequence_json()
             )
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, p.pictograph_dict

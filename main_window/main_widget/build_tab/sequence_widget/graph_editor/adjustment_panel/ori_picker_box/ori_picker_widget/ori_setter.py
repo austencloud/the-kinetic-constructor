@@ -24,7 +24,10 @@ class OrientationSetter:
             self.ori_picker_widget.orientations.index(orientation)
         )
         self.ori_picker_widget.clickable_ori_label.setText(orientation)
-        if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
+        if (
+            len(self.json_manager.sequence_loader_saver.load_current_sequence_json())
+            > 1
+        ):
             self.json_manager.start_position_handler.update_start_pos_ori(
                 self.color, orientation
             )

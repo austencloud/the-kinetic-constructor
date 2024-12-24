@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING, Optional
 from Enums.Enums import LetterType, Letter
 from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker import StartPosPicker
+from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker import (
+    StartPosPicker,
+)
 
 
 from .advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
@@ -42,15 +44,15 @@ class SequenceConstructor(QFrame):
         # Create a QStackedWidget to manage the transitions between widgets
         self.stacked_widget = QStackedWidget(self)
 
-        self.layout:QHBoxLayout = QHBoxLayout(self)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
         # Add widgets to the stacked widget
-        self.stacked_widget.addWidget(self.start_pos_picker)           # Index 0
+        self.stacked_widget.addWidget(self.start_pos_picker)  # Index 0
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)  # Index 1
-        self.stacked_widget.addWidget(self.option_picker)             # Index 2
+        self.stacked_widget.addWidget(self.option_picker)  # Index 2
 
         # Add the stacked widget to the main layout
         self.layout.addWidget(self.stacked_widget)
@@ -115,11 +117,11 @@ class SequenceConstructor(QFrame):
 
     def _add_turns_and_start_ori(self, pictograph_dict, sequence):
         """Add turn and start orientation information to the pictograph."""
-        self.current_end_red_ori = self.json_manager.loader_saver.get_red_end_ori(
-            sequence
+        self.current_end_red_ori = (
+            self.json_manager.sequence_loader_saver.get_red_end_ori(sequence)
         )
-        self.current_end_blue_ori = self.json_manager.loader_saver.get_blue_end_ori(
-            sequence
+        self.current_end_blue_ori = (
+            self.json_manager.sequence_loader_saver.get_blue_end_ori(sequence)
         )
 
         pictograph_dict["red_attributes"][RED_START_ORI] = self.current_end_red_ori
@@ -131,4 +133,3 @@ class SequenceConstructor(QFrame):
     def get_last_added_pictograph(self, sequence):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
-

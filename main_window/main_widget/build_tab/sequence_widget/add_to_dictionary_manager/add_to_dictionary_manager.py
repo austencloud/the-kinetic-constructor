@@ -21,7 +21,9 @@ class AddToDictionaryManager:
         self.thumbnail_generator = ThumbnailGenerator(self)
 
     def add_to_dictionary(self):
-        current_sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        current_sequence = (
+            self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        )
         if self.is_sequence_invalid(current_sequence):
             self.display_message(
                 "You must build a sequence to add it to your dictionary."

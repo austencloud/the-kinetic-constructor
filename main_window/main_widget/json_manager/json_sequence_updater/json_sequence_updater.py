@@ -26,7 +26,9 @@ class JsonSequenceUpdater:
         self.duration_updater = JsonDurationUpdater(self)
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
-        sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence_data = (
+            self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        )
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
 
@@ -51,7 +53,7 @@ class JsonSequenceUpdater:
         sequence_beats.sort(key=lambda entry: entry.get("beat", float("inf")))
         sequence_data = [sequence_metadata] + sequence_beats
 
-        self.json_manager.loader_saver.save_current_sequence(sequence_data)
+        self.json_manager.sequence_loader_saver.save_current_sequence(sequence_data)
 
     def get_next_beat_number(self, sequence_beats):
         if not sequence_beats:
@@ -61,7 +63,9 @@ class JsonSequenceUpdater:
     def add_placeholder_entry_to_current_sequence(
         self, beat_num: int, parent_beat: int
     ):
-        sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence_data = (
+            self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        )
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
 
@@ -75,10 +79,10 @@ class JsonSequenceUpdater:
         sequence_beats.sort(key=lambda entry: entry.get("beat", float("inf")))
         sequence_data = [sequence_metadata] + sequence_beats
 
-        self.json_manager.loader_saver.save_current_sequence(sequence_data)
+        self.json_manager.sequence_loader_saver.save_current_sequence(sequence_data)
 
     def clear_and_repopulate_the_current_sequence(self):
-        self.json_manager.loader_saver.clear_current_sequence_file()
+        self.json_manager.sequence_loader_saver.clear_current_sequence_file()
         beat_frame = self.json_manager.main_widget.build_tab.sequence_widget.beat_frame
         beat_views = beat_frame.beats
         start_pos = beat_frame.start_pos_view.start_pos

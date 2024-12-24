@@ -14,7 +14,7 @@ from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 from .main_widget_background_handler import MainWidgetBackgroundHandler
-from main_window.main_widget.main_widget_tabs import MainWidgetTabsHandler
+from main_window.main_widget.main_widget_tab_switcher import MainWidgetTabSwitcher
 
 if TYPE_CHECKING:
     from main_window.main_widget.background_widget import BackgroundWidget
@@ -64,7 +64,7 @@ class MainWidget(QWidget):
     write_tab: "WriteTab"
 
     # Handlers
-    tabs_handler: "MainWidgetTabsHandler"
+    tabs_handler: "MainWidgetTabSwitcher"
     manager: "MainWidgetManager"
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
@@ -126,7 +126,7 @@ class MainWidget(QWidget):
 
         self.manager = MainWidgetManager(self)
         self.ui_handler = MainWidgetUI(self)
-        self.tabs_handler = MainWidgetTabsHandler(self)
+        self.tabs_handler = MainWidgetTabSwitcher(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
         self.background_handler = MainWidgetBackgroundHandler(self)

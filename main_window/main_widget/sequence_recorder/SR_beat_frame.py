@@ -125,7 +125,9 @@ class SR_BeatFrame(QFrame):
             beat_view.is_filled = False
 
     def populate_beat_frame_scenes_from_json(self) -> None:
-        sequence_json = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence_json = (
+            self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        )
         self.clear_beat_frame()
         for pictograph_dict in sequence_json:
             if pictograph_dict.get("sequence_start_position") or pictograph_dict.get(

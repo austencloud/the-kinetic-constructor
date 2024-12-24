@@ -34,7 +34,7 @@ class BeatDurationManager:
         Update beat numbers for all beats based on the JSON data.
         """
         sequence_data = (
-            self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+            self.beat_frame.json_manager.sequence_loader_saver.load_current_sequence_json()
         )
         sequence_beats = sequence_data[1:]  # Skip metadata
 

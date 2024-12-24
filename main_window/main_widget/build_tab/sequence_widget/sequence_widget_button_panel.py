@@ -57,7 +57,7 @@ class SequenceWidgetButtonPanel(QFrame):
             "save_image": {
                 "icon": "save_image.svg",
                 "callback": lambda: self.export_manager.dialog_executor.exec_dialog(
-                    self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
+                    self.sequence_widget.json_manager.sequence_loader_saver.load_current_sequence_json()
                 ),
                 "tooltip": "Save Image",
             },

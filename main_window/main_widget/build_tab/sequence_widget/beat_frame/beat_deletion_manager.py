@@ -101,7 +101,7 @@ class BeatDeletionManager:
         for beat in self.beats:
             self.delete_beat(beat)
         self.selection_overlay.deselect_beat()
-        self.json_manager.loader_saver.clear_current_sequence_file()
+        self.json_manager.sequence_loader_saver.clear_current_sequence_file()
         self.manual_builder.last_beat = None
         self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.option_picker.update_option_picker()

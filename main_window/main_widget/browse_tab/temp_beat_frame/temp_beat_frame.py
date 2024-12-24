@@ -99,7 +99,7 @@ class TempBeatFrame(BaseBeatFrame):
 
     def on_beat_adjusted(self) -> None:
         current_sequence_json = (
-            self.json_manager.loader_saver.load_current_sequence_json()
+            self.json_manager.sequence_loader_saver.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
 
@@ -175,7 +175,7 @@ class TempBeatFrame(BaseBeatFrame):
         if should_reset_to_start_pos_picker:
             self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.last_beat = self.start_pos
-        self.json_manager.loader_saver.clear_current_sequence_file()
+        self.json_manager.sequence_loader_saver.clear_current_sequence_file()
 
         # Reset the layout to the smallest possible amount
         if self.settings_manager.global_settings.get_grow_sequence():

@@ -14,7 +14,7 @@ class BeatFrameUpdater:
 
     def update_beats_from_current_sequence_json(self) -> None:
         current_sequence_json = (
-            self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+            self.beat_frame.json_manager.sequence_loader_saver.load_current_sequence_json()
         )
         sequence_entries = current_sequence_json[1:]
 
@@ -32,11 +32,10 @@ class BeatFrameUpdater:
             beat_view = self.beat_frame.get.beat_view_by_number(beat_num)
 
             if beat_view and beat_view.beat:
-                # if beat_view.beat.pictograph_dict != entry:
                 beat_view.beat.updater.update_pictograph(entry)
                 beat = beat_view.beat
                 pictograph_index = self.beat_frame.get.index_of_beat(beat_view)
-                sequence_so_far = self.beat_frame.json_manager.loader_saver.load_current_sequence_json()[
+                sequence_so_far = self.beat_frame.json_manager.sequence_loader_saver.load_current_sequence_json()[
                     : pictograph_index + 2
                 ]
                 reversal_info = ReversalDetector.detect_reversal(
@@ -45,7 +44,6 @@ class BeatFrameUpdater:
                 beat.blue_reversal = reversal_info["blue_reversal"]
                 beat.red_reversal = reversal_info["red_reversal"]
                 beat.reversal_symbol_manager.update_reversal_symbols()
-                # QApplication.processEvents()
             else:
                 print(
                     f"Beat with number {beat_num} not found in the beat frame. Skipping."
@@ -60,11 +58,15 @@ class BeatFrameUpdater:
         self.beat_frame.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def update_beats_from(self, modified_sequence_json: list[dict]):
+        self.json_manager = self.beat_frame.main_widget.json_manager
+        self.json_manager.sequence_loader_saver.clear_current_sequence_file()
+
         if len(modified_sequence_json) > 1:
             start_pos_dict = modified_sequence_json[1]
             start_pos = self.beat_frame.start_pos_view.start_pos
             start_pos.updater.update_pictograph(start_pos_dict)
-            # start_pos.updater.update_motions(start_pos_dict)
+            self.json_manager.start_position_handler.set_start_position_data(start_pos)
+
             grid_mode = self.beat_frame.main_widget.grid_mode_checker.get_grid_mode(
                 start_pos_dict
             )
@@ -75,7 +77,6 @@ class BeatFrameUpdater:
             if i < len(self.beat_frame.beats) and self.beat_frame.beats[i].is_filled:
                 beat = self.beat_frame.beats[i].beat
                 beat.updater.update_pictograph(beat_dict)
-                # beat.updater.update_motions(beat_dict)
                 grid_mode = self.beat_frame.main_widget.grid_mode_checker.get_grid_mode(
                     beat_dict
                 )
@@ -83,3 +84,10 @@ class BeatFrameUpdater:
                 beat.grid.__init__(beat, beat.grid.grid_data, grid_mode)
             else:
                 break
+            
+        beat_views = self.beat_frame.beats
+        for beat_view in beat_views:
+            if beat_view.is_filled:
+                self.json_manager.updater.update_current_sequence_file_with_beat(
+                    beat_view
+                )

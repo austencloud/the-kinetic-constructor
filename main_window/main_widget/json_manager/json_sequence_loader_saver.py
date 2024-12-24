@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
-class SequenceDataLoaderSaver:
+class JsonSequenceLoaderSaver:
     def __init__(self, json_manager: "JsonManager") -> None:
         self.json_manager = json_manager
         self.current_sequence_json = get_user_editable_resource_path(

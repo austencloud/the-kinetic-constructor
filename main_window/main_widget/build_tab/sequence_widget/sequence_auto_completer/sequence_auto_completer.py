@@ -1,7 +1,11 @@
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.build_tab.sequence_generator.circular.permutation_executors.mirrored_permutation_executor import MirroredPermutationExecutor
-from main_window.main_widget.build_tab.sequence_generator.circular.permutation_executors.rotated_permutation_executor import RotatedPermutationExecuter
+from main_window.main_widget.build_tab.sequence_generator.circular.permutation_executors.mirrored_permutation_executor import (
+    MirroredPermutationExecutor,
+)
+from main_window.main_widget.build_tab.sequence_generator.circular.permutation_executors.rotated_permutation_executor import (
+    RotatedPermutationExecuter,
+)
 
 from .permutation_dialog import PermutationDialog
 
@@ -25,7 +29,7 @@ class SequenceAutoCompleter:
 
     def auto_complete_sequence(self):
         sequence = (
-            self.sequence_widget.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+            self.sequence_widget.beat_frame.json_manager.sequence_loader_saver.load_current_sequence_json()
         )
         self.sequence_properties_manager = self.main_widget.sequence_properties_manager
         self.sequence_properties_manager.instantiate_sequence(sequence)
