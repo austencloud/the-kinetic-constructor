@@ -26,7 +26,6 @@ from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:
     from main_window.main_widget.build_tab.build_tab import BuildTab
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class SequenceWidget(QWidget):

@@ -1,6 +1,5 @@
 # main_widget_background_handler.py
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import QObject
 
 from main_window.menu_bar_widget.background_selector.backgrounds.aurora.aurora_background import (
@@ -34,6 +33,7 @@ class MainWidgetBackgroundHandler(QObject):
         self.main_widget = main_widget
         self.background: Optional[BaseBackground] = None
         self.is_animating = False
+        self.setup_background()
 
     def setup_background(self):
         """Initializes the background based on the current background type."""

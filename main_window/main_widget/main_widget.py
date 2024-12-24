@@ -4,10 +4,6 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
-from main_window.main_widget.build_tab.sequence_generator.sequence_generator import (
-    SequenceGenerator,
-)
 from main_window.main_widget.learn_tab.learn_widget import LearnTab
 from main_window.main_widget.write_tab.act_tab import WriteTab
 
@@ -23,7 +19,6 @@ from main_window.main_widget.main_widget_tabs import MainWidgetTabsHandler
 if TYPE_CHECKING:
     from main_window.main_widget.background_widget import BackgroundWidget
     from main_window.main_widget.build_tab.build_tab import BuildTab
-    from main_window.main_widget.tab_fade_manager import TabFadeManager
     from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
         MainWidgetFontColorUpdater,
     )
@@ -86,7 +81,6 @@ class MainWidget(QWidget):
     sequence_properties_manager: "SequencePropertiesManager"
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
-    fade_manager: "TabFadeManager"
     font_color_updater: "MainWidgetFontColorUpdater"
 
     # Layouts and Widgets
@@ -130,9 +124,9 @@ class MainWidget(QWidget):
         self.settings_manager = main_window.settings_manager
         self.splash_screen = splash_screen
 
-        self.tabs_handler = MainWidgetTabsHandler(self)
         self.manager = MainWidgetManager(self)
         self.ui_handler = MainWidgetUI(self)
+        self.tabs_handler = MainWidgetTabsHandler(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
         self.background_handler = MainWidgetBackgroundHandler(self)

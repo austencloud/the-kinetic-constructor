@@ -2,10 +2,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedWidget, QGraphicsOpacityEffect
 from PyQt6.QtGui import QPainter
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, pyqtSlot
+from PyQt6.QtCore import QPropertyAnimation, QEasingCurve
 
 from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
-from main_window.main_widget.build_tab.sequence_generator.sequence_generator import SequenceGenerator
+from main_window.main_widget.build_tab.sequence_generator.sequence_generator import (
+    SequenceGenerator,
+)
 
 from main_window.main_widget.build_tab.sequence_widget.sequence_widget import (
     SequenceWidget,
@@ -19,7 +21,7 @@ class BuildTab(QWidget):
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.layout:QHBoxLayout = QHBoxLayout(self)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
@@ -33,7 +35,7 @@ class BuildTab(QWidget):
         self.sequence_generator = SequenceGenerator(self)
 
         self.content_stack.addWidget(self.sequence_constructor)  # Index 0
-        self.content_stack.addWidget(self.sequence_generator)   # Index 1
+        self.content_stack.addWidget(self.sequence_generator)  # Index 1
 
         # Apply opacity effect to the content stack for fade animations
         self.opacity_effect = QGraphicsOpacityEffect(self.content_stack)
@@ -44,7 +46,7 @@ class BuildTab(QWidget):
         self.layout.addWidget(self.sequence_widget)
         self.layout.addWidget(self.content_stack)
 
-    def show_build(self):
+    def show_construct(self):
         """Display the Build (SequenceConstructor) content with fade animation."""
         if self.content_stack.currentWidget() == self.sequence_constructor:
             return  # Already showing

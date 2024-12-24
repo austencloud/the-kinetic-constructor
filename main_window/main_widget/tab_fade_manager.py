@@ -1,16 +1,16 @@
 # tab_fade_manager.py
 from typing import TYPE_CHECKING, Optional, Callable
-from PyQt6.QtWidgets import QStackedWidget, QWidget, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QGraphicsOpacityEffect
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
     QEasingCurve,
     pyqtSlot,
 )
-import logging
+
 
 if TYPE_CHECKING:
-    from main_window.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget_tabs import MainWidgetTabsHandler
 
 
 class TabFadeManager(QObject):
@@ -18,10 +18,10 @@ class TabFadeManager(QObject):
 
     duration = 350
 
-    def __init__(self, mw: "MainWidget"):
-        super().__init__(mw.main_stacked_widget)
-        self.mw = mw
-        self.main_stack = mw.main_stacked_widget
+    def __init__(self, tabs_handler: "MainWidgetTabsHandler"):
+        super().__init__(tabs_handler.main_widget.main_stacked_widget)
+        self.mw = tabs_handler.main_widget
+        self.main_stack = tabs_handler.main_widget.main_stacked_widget
 
         # Opacity effect for main_stack
         self.opacity_effect = QGraphicsOpacityEffect(self.main_stack)
@@ -34,13 +34,10 @@ class TabFadeManager(QObject):
     def fade_to_tab(self, new_index: int, on_finished: Optional[Callable] = None):
         """Fades out the current tab and fades in the new tab."""
         if self._is_animating:
-            logging.debug("Fade animation already in progress.")
-            return  # Prevent overlapping animations
-
+            return 
         if new_index == self.main_stack.currentIndex():
-            logging.debug("Selected tab is already active. No fade needed.")
-            return  # No need to fade if the same tab is selected
-
+            return  
+        
         self._is_animating = True
 
         # Fade-out animation

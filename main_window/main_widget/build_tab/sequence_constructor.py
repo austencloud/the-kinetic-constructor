@@ -1,10 +1,10 @@
 # sequence_constructor.py
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING, Optional
 
 from Enums.Enums import LetterType, Letter
-from data.constants import BLUE_START_ORI, BLUE_TURNS, DIAMOND, RED_START_ORI, RED_TURNS
+from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker import StartPosPicker
 
@@ -17,7 +17,6 @@ from .option_picker.option_picker_click_handler import OptionPickerClickHandler
 
 if TYPE_CHECKING:
     from main_window.main_widget.build_tab.build_tab import BuildTab
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class SequenceConstructor(QFrame):

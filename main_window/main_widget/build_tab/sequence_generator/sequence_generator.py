@@ -4,14 +4,12 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,
-    QStackedLayout,
     QSpacerItem,
     QSizePolicy,
     QStackedWidget,
     QGraphicsOpacityEffect,
-    QCheckBox,
 )
-from PyQt6.QtCore import Qt, pyqtSlot, QPropertyAnimation, QEasingCurve
+from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt6.QtGui import QFont, QPainter
 from typing import TYPE_CHECKING
 
@@ -26,7 +24,6 @@ from .freeform.freeform_sequence_generator_frame import FreeformSequenceGenerato
 
 if TYPE_CHECKING:
     from main_window.main_widget.build_tab.build_tab import BuildTab
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class SequenceGenerator(QWidget):
@@ -129,7 +126,6 @@ class SequenceGenerator(QWidget):
 
     def dummy_function(self):
         """Placeholder function to ensure there's always a connected slot."""
-        pass
 
     def show_freeform(self):
         """Display the FreeformSequenceGeneratorFrame with fade animation."""

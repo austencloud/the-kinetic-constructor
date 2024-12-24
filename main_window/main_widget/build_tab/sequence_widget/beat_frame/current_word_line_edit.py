@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
 )
 from PyQt6.QtCore import Qt, QRectF
-from PyQt6.QtGui import QFontMetrics, QMouseEvent, QPainter
+from PyQt6.QtGui import QFontMetrics, QMouseEvent
 
 
 if TYPE_CHECKING:
