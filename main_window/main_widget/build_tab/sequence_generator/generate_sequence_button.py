@@ -26,3 +26,4 @@ class GenerateSequenceButton(QPushButton):
         self.repaint()
         self.setFixedWidth(self.main_widget.width() // 4)
         self.setFixedHeight(self.main_widget.height() // 14)
+

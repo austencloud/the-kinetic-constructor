@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class TabFadeManager(QObject):
     """Manages fade-out/fade-in animations for primary stacked widgets."""
 
-    duration = 370
+    duration = 350
 
     def __init__(self, mw: "MainWidget"):
         super().__init__(mw.main_stacked_widget)
