@@ -2,7 +2,6 @@
 
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
-from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 import logging
 
@@ -20,14 +19,14 @@ class DefaultPropPositioner:
         self.prop_placement_manager = prop_placement_manager
         self.location_points_cache = {}
 
-    def set_prop_to_default_loc(self, prop: Prop, grid_mode:str = None) -> None:
+    def set_prop_to_default_loc(self, prop: Prop) -> None:
         """
         Sets the prop to its default location based on its `loc` attribute.
         """
         strict = self.pictograph.check.has_strictly_placed_props()
 
         point_suffix = "_strict" if strict else ""
-        point_name = f"{prop.loc}_{grid_mode}_hand_point{point_suffix}"
+        point_name = f"{prop.loc}_{prop.pictograph.grid_mode}_hand_point{point_suffix}"
 
         logger.debug(f"Attempting to place prop '{prop}' at point '{point_name}'.")
 

@@ -35,4 +35,5 @@ class DirectionalTupleManager:
             )
 
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        return self.generator.generate_directional_tuples(x, y)
+        new_var = self.generator.generate_directional_tuples(x, y)
+        return new_var

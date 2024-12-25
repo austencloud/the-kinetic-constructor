@@ -63,25 +63,23 @@ class NonHybridShiftLetterDeterminer:
     def _get_json_index_for_current_beat(self) -> int:
         """Calculate the JSON index for the currently selected beat."""
         return (
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+            self.main_widget.build_tab.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
             + 2
         )
 
     def _get_prop_rot_dir(self, json_index: int, other_motion: "Motion") -> str:
         """Retrieve the prop rotation direction from JSON."""
         if other_motion.motion_type == FLOAT:
-            prop_rot_dir = self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            prop_rot_dir = self.main_widget.json_manager.sequence_loader_saver.get_prefloat_prop_rot_dir_from_json(
                 json_index,
                 other_motion.color,
             )
             if other_motion.pictograph.direction == OPP:
                 prop_rot_dir = self._get_opposite_rotation_direction(prop_rot_dir)
         elif other_motion.motion_type in [PRO, ANTI]:
-            prop_rot_dir = (
-                self.main_widget.json_manager.loader_saver.get_prop_rot_dir_from_json(
-                    json_index,
-                    other_motion.color,
-                )
+            prop_rot_dir = self.main_widget.json_manager.sequence_loader_saver.get_prop_rot_dir_from_json(
+                json_index,
+                other_motion.color,
             )
             if other_motion.pictograph.direction == OPP:
                 prop_rot_dir = self._get_opposite_rotation_direction(prop_rot_dir)
@@ -125,16 +123,16 @@ class NonHybridShiftLetterDeterminer:
     def _is_shift_prop_rot_dir_matching(self, motion: "Motion", example):
         is_rot_dir_matching = example[f"{motion.color}_attributes"][
             "prop_rot_dir"
-        ] == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+        ] == self.main_widget.json_manager.sequence_loader_saver.get_prefloat_prop_rot_dir_from_json(
+            self.main_widget.build_tab.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
             + 2,
             motion.color,
         ) or example[
             f"{motion.color}_attributes"
         ][
             "prop_rot_dir"
-        ] == self.main_widget.json_manager.loader_saver.get_prop_rot_dir_from_json(
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+        ] == self.main_widget.json_manager.sequence_loader_saver.get_prop_rot_dir_from_json(
+            self.main_widget.build_tab.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
             + 2,
             motion.color,
         )

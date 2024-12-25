@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QCheckBox
-from PyQt6.QtCore import QPropertyAnimation, QRect, Qt, pyqtProperty, QEasingCurve
+from PyQt6.QtCore import QPropertyAnimation, QRect, Qt, QEasingCurve, pyqtProperty
 from PyQt6.QtGui import QColor, QPainter
 
 
@@ -7,11 +7,11 @@ class PyToggle(QCheckBox):
     def __init__(
         self,
         width=60,
-        bg_color="#00BCff",        # Default background color
-        active_color="#00BCff",     # Background color when checked (if changing)
+        bg_color="#00BCff",  # Default background color
+        active_color="#00BCff",  # Background color when checked (if changing)
         circle_color="#DDD",
         animation_curve=QEasingCurve.Type.OutBounce,
-        change_bg_on_state=False,   # New parameter to control background color change
+        change_bg_on_state=False,  # New parameter to control background color change
     ):
         super().__init__()
         self.setFixedSize(width, 28)

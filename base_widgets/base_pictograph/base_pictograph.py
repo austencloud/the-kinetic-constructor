@@ -5,20 +5,13 @@ from Enums.MotionAttributes import Location
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
-from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.lesson_pictograph_view import (
-    LessonPictographView,
-)
 
-from main_window.main_widget.learn_widget.codex_widget.codex_pictograph_view import (
-    CodexPictographView,
-)
-from main_window.main_widget.sequence_builder.start_pos_picker.start_pos_picker_pictograph_view import (
-    StartPosPickerPictographView,
-)
 
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
-)
+
+from main_window.main_widget.build_tab.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
+from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker_pictograph_view import StartPosPickerPictographView
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import LessonPictographView
+from main_window.main_widget.learn_tab.codex.codex_pictograph_view import CodexPictographView
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -48,6 +41,79 @@ if TYPE_CHECKING:
 
 
 class BasePictograph(QGraphicsScene):
+    # dicts
+    arrows: dict[str, Arrow]
+    locations: dict[Location, tuple[int, int, int, int]]
+    motions: dict[str, Motion]
+    motion_dict_list: list[dict]
+    pictograph_dict: dict[str, Union[str, dict[str, str]]]
+    props: dict[str, Prop]
+
+    # int
+    arrow_turns: int
+
+    # managers
+    attr_manager: PictographAttrManager
+    arrow_placement_manager: ArrowPlacementManager
+    prop_placement_manager: PropPlacementManager
+    reversal_symbol_manager: ReversalSymbolManager
+    wasd_manager: WASD_AdjustmentManager
+
+    # bool
+    blue_reversal = False
+    disable_gold_overlay: bool = False
+    image_loaded: bool
+    is_blank: bool = False
+    quiz_mode: bool = False
+    red_reversal = False
+
+    # str
+    direction: str
+    end_pos: str
+    start_pos: str
+    timing: str
+    turns_tuple: str = None
+    grid_mode: str
+
+    # enums
+    letter: Letter = None
+    letter_type: LetterType = None
+    open_close_state: OpenCloseStates
+    prop_type: PropType = None
+    vtg_mode: VTG_Modes = None
+
+    # items
+    blue_arrow: Arrow
+    blue_motion: Motion
+    blue_prop: Prop
+    dragged_arrow: Arrow
+    dragged_prop: Prop
+    red_arrow: Arrow
+    red_motion: Motion
+    red_prop: Prop
+    selected_arrow: Arrow = None
+    grid: Grid
+
+    # symbols
+    blue_reversal_symbol: "QGraphicsTextItem" = None
+    red_reversal_symbol: "QGraphicsTextItem" = None
+
+    # glyphs
+    elemental_glyph: ElementalGlyph
+    start_to_end_pos_glyph: StartToEndPosGlyph
+    tka_glyph: TKA_Glyph
+    vtg_glyph: VTG_Glyph
+
+    # components
+    check: PictographChecker
+    get: PictographGetter
+    image_renderer: PictographImageRenderer
+    initializer: PictographInitializer
+    updater: PictographUpdater
+
+    # others
+    main_widget: "MainWidget"
+    pixmap: QGraphicsPixmapItem
     view: Union[
         PictographView,
         BorderedPictographView,
@@ -55,47 +121,6 @@ class BasePictograph(QGraphicsScene):
         StartPosPickerPictographView,
         CodexPictographView,
     ]
-    arrows: dict[str, Arrow]
-    props: dict[str, Prop]
-    motions: dict[str, Motion]
-    letter: Letter = None
-    letter_type: LetterType = None
-    pictograph_dict: dict
-    motion_dict_list: list[dict]
-    start_pos: str
-    end_pos: str
-    image_loaded: bool
-    pixmap: QGraphicsPixmapItem
-    arrow_turns: int
-    vtg_mode: VTG_Modes = None
-    timing: str
-    direction: str
-    vtg_glyph: VTG_Glyph
-    elemental_glyph: ElementalGlyph
-    open_close_state: OpenCloseStates
-    dragged_arrow: Arrow
-    dragged_prop: Prop
-    tka_glyph: TKA_Glyph
-    start_to_end_pos_glyph: StartToEndPosGlyph
-    grid: Grid
-    locations: dict[Location, tuple[int, int, int, int]]
-    red_motion: Motion
-    blue_motion: Motion
-    red_arrow: Arrow
-    blue_arrow: Arrow
-    red_prop: Prop
-    blue_prop: Prop
-    selected_arrow: Arrow = None
-    turns_tuple: str = None
-    prop_type: PropType = None
-    is_blank: bool = False
-    disable_gold_overlay: bool = False
-    quiz_mode: bool = False
-    blue_reversal = False
-    blue_reversal_symbol: "QGraphicsTextItem" = None
-    red_reversal = False
-    red_reversal_symbol: "QGraphicsTextItem" = None
-    # styled_border_overlay: "StyledBorderOverlay"
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()

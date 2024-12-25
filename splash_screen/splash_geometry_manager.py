@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from splash_screen.splash_screen import SplashScreen
 
 
-class SplashScreenGeometryManager:
+class SplashGeometryManager:
     def __init__(self, splash_screen: "SplashScreen"):
         self.splash_screen = splash_screen
         self.target_screen = splash_screen.target_screen

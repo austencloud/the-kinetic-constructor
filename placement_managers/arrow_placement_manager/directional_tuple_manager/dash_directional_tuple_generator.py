@@ -21,6 +21,7 @@ from data.constants import (
     STATIC,
     WEST,
 )
+from objects.motion import motion
 from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 
@@ -108,9 +109,7 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
             (RED, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, -x), (-x, -y), (-y, -x)],
             (RED, (SOUTHEAST, NORTHWEST)): [(-x, y), (-y, -x), (-x, y), (y, x)],
         }
-        grid_mode = (
-            self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = self.motion.pictograph.grid_mode
         if grid_mode == DIAMOND:
             return diamond_Type5_zero_turns_directional_tuples.get(
                 (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []

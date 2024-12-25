@@ -151,8 +151,8 @@ logger = logging.getLogger(__name__)
 GRID_DIR = "images/grid/"
 
 class Grid:
-    def __init__(self, scene: "BasePictograph", grid_data: GridData, grid_mode: str):
-        self.scene = scene
+    def __init__(self, pictograph: "BasePictograph", grid_data: GridData, grid_mode: str):
+        self.pictograph = pictograph
         self.grid_data = grid_data
         self.grid_mode = grid_mode  # Store the current grid mode
         self.items: dict[str, GridItem] = {}
@@ -175,7 +175,7 @@ class Grid:
 
         for mode, path in paths.items():
             grid_item = GridItem(path)
-            self.scene.addItem(grid_item)
+            self.pictograph.addItem(grid_item)
             grid_item.setVisible(mode == self.grid_mode)  # Show only the current grid mode
             self.items[mode] = grid_item
 
@@ -189,7 +189,7 @@ class Grid:
         if non_radial_path:
             non_radial_item = QGraphicsSvgItem(non_radial_path)
             non_radial_item.setVisible(False)  # Initially hidden
-            self.scene.addItem(non_radial_item)
+            self.pictograph.addItem(non_radial_item)
             self.items[f"{self.grid_mode}_nonradial"] = non_radial_item
 
     def set_layer_visibility(self, layer_id: str, visibility: bool):
@@ -253,3 +253,12 @@ class Grid:
         """
         for item in self.items.values():
             item.setVisible(False)
+            
+    def update_grid_mode(self):
+        grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
+            self.pictograph.pictograph_dict
+        )
+        self.pictograph.grid.hide()
+        self.pictograph.grid.__init__(
+            self.pictograph, self.pictograph.grid.grid_data, grid_mode
+        )

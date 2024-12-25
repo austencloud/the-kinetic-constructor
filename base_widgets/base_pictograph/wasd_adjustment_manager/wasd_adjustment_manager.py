@@ -23,10 +23,13 @@ class WASD_AdjustmentManager:
         self.prop_placement_override_manager = PropPlacementOverrideManager(self)
 
     def handle_special_placement_removal(self) -> None:
-        if not self.pictograph.selected_arrow:
+        selected_arrow = (
+            self.pictograph.main_widget.build_tab.sequence_widget.graph_editor.selection_manager.selected_arrow
+        )
+        if not selected_arrow:
             return
         letter = self.pictograph.letter
-        self.entry_remover.remove_special_placement_entry(
-            letter, self.pictograph.selected_arrow
-        )
+        self.entry_remover.remove_special_placement_entry(letter, selected_arrow)
+        self.pictograph.arrow_placement_manager.update_arrow_placements()
         self.pictograph.updater.update_pictograph()
+        self.pictograph.view.repaint()

@@ -35,7 +35,6 @@ class MainWidgetManager:
         self._set_prop_type()
         self._initialize_managers()
         self._setup_letters()
-        self._setup_special_placements()
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
@@ -65,13 +64,6 @@ class MainWidgetManager:
         prop_type_value = settings.get("global", {}).get("prop_type", "staff")
         self.main_widget.prop_type = PropType.get_prop_type(prop_type_value)
 
-    def _setup_special_placements(self) -> None:
-        self.main_widget.special_placements = (
-            self.main_widget.special_placement_loader.load_special_placements(
-                self.main_widget.settings_manager.global_settings.get_grid_mode()
-            )
-        )
-
     def _setup_letters(self) -> None:
         self.main_widget.pictograph_dict_loader = PictographDictLoader(self.main_widget)
         self.main_widget.pictograph_dicts = (
@@ -82,22 +74,23 @@ class MainWidgetManager:
     def set_grid_mode(self, grid_mode: str, clear_sequence=True) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
-        self.main_widget.special_placement_loader.refresh_placements()
         self.pictograph_dicts = (
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
         )
 
-        start_pos_picker = self.main_widget.manual_builder.start_pos_picker
+        start_pos_picker = (
+            self.main_widget.build_tab.sequence_constructor.start_pos_picker
+        )
         start_pos_picker.display_variations(grid_mode)
         advanced_start_pos_picker = (
-            self.main_widget.manual_builder.advanced_start_pos_picker
+            self.main_widget.build_tab.sequence_constructor.advanced_start_pos_picker
         )
         advanced_start_pos_picker.display_variations(grid_mode)
 
-        sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
+        sequence_clearer = self.main_widget.build_tab.sequence_widget.sequence_clearer
         if (
-            self.main_widget.manual_builder.stacked_widget.currentWidget()
-            == self.main_widget.manual_builder.advanced_start_pos_picker
+            self.main_widget.build_tab.sequence_constructor.stacked_widget.currentWidget()
+            == self.main_widget.build_tab.sequence_constructor.advanced_start_pos_picker
         ):
             should_reset_to_start_pos_picker = False
         else:
@@ -108,7 +101,7 @@ class MainWidgetManager:
                 should_reset_to_start_pos_picker=should_reset_to_start_pos_picker,
             )
             adjustment_panel = (
-                self.main_widget.sequence_widget.graph_editor.adjustment_panel
+                self.main_widget.build_tab.sequence_widget.graph_editor.adjustment_panel
             )
             for picker in [
                 adjustment_panel.blue_ori_picker,
@@ -116,16 +109,15 @@ class MainWidgetManager:
             ]:
                 picker.ori_picker_widget.ori_setter.set_orientation(IN)
             pictograph_container = (
-                self.main_widget.sequence_widget.graph_editor.pictograph_container
+                self.main_widget.build_tab.sequence_widget.graph_editor.pictograph_container
             )
             pictograph_container.GE_pictograph_view.set_to_blank_grid()
-        self._setup_special_placements()
-        option_picker = self.main_widget.manual_builder.option_picker
-        for pictograph in option_picker.pictograph_pool:
+        option_picker = self.main_widget.build_tab.sequence_constructor.option_picker
+        for pictograph in option_picker.option_pool:
             pictograph.grid.hide()
             pictograph.grid.__init__(pictograph, pictograph.grid.grid_data, grid_mode)
 
-        beat_frame = self.main_widget.sequence_widget.beat_frame
+        beat_frame = self.main_widget.build_tab.sequence_widget.beat_frame
         for beat in beat_frame.beats:
             if beat.is_filled:
                 beat.beat.grid.hide()

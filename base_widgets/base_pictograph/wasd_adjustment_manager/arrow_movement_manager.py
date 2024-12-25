@@ -20,8 +20,10 @@ class ArrowMovementManager:
     def handle_arrow_movement(
         self, pictograph: "BasePictograph", key, shift_held, ctrl_held
     ) -> None:
-        self.graph_editor = pictograph.main_widget.sequence_widget.graph_editor
-        selected_arrow = self.graph_editor.arrow_selection_manager.selected_arrow
+        self.graph_editor = (
+            pictograph.main_widget.build_tab.sequence_widget.graph_editor
+        )
+        selected_arrow = self.graph_editor.selection_manager.selected_arrow
 
         if not selected_arrow:
             return

@@ -4,9 +4,7 @@ from PyQt6.QtCore import QPointF, QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
-)
+from main_window.main_widget.build_tab.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid, GridData
 from objects.motion.motion import Motion
@@ -35,6 +33,8 @@ logger = logging.getLogger(__name__)
 
 
 class PictographInitializer:
+    default_grid_mode = DIAMOND
+
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
         self.pictograph.setSceneRect(0, 0, 950, 950)
@@ -47,10 +47,8 @@ class PictographInitializer:
     def init_all_components(self) -> None:
         self.pictograph.dragged_prop = None
         self.pictograph.dragged_arrow = None
-        grid_mode = (
-            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
-        self.pictograph.grid = self.init_grid(grid_mode)
+
+        self.pictograph.grid = self.init_grid(self.default_grid_mode)
         self.pictograph.locations = self.init_quadrant_boundaries(self.pictograph.grid)
         self.pictograph.motions = self.init_motions()
         self.pictograph.arrows = self.init_arrows()

@@ -124,7 +124,6 @@
       "swap_beta_sw_radial_blue_dash_se_red_static_sw": true
     },
     "(o, 1, 1)": {
-      "static_rot_angle_override": true,
       "swap_beta_s_radial_blue_static_s_red_dash_e": true,
       "swap_beta_s_radial_blue_dash_w_red_static_s": true,
       "swap_beta_e_radial_blue_dash_s_red_static_e": true,
@@ -135,7 +134,8 @@
       "swap_beta_nw_radial_blue_dash_ne_red_static_nw": true,
       "swap_beta_ne_radial_blue_dash_se_red_static_ne": true,
       "swap_beta_sw_radial_blue_static_sw_red_dash_nw": true,
-      "swap_beta_se_radial_blue_static_se_red_dash_sw": true
+      "swap_beta_se_radial_blue_static_se_red_dash_sw": true,
+      "static_rot_angle_override": true
     },
     "(ccw, 0, 1)": {
       "static_rot_angle_override": true,

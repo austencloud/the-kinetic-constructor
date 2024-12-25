@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from data.constants import BLUE, special_placements_parent_directory, RED
+from data.constants import BLUE, RED
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
@@ -28,7 +28,10 @@ class SpecialPlacementEntryRemover:
         if os.path.exists(file_path):
             data = self.load_data(file_path)
             self._process_removal(letter, arrow, ori_key, file_path, data)
-            arrow.pictograph.main_widget.special_placement_loader.refresh_placements()
+            special_placement_loader = (
+                arrow.pictograph.main_widget.special_placement_loader
+            )
+            special_placement_loader.load_special_placements()
 
     def _process_removal(
         self, letter: Letter, arrow: Arrow, ori_key: str, file_path: str, data: dict
@@ -119,7 +122,7 @@ class SpecialPlacementEntryRemover:
         return self.data_updater.json_handler.load_json_data(file_path)
 
     def _generate_file_path(self, ori_key: str, letter: Letter) -> str:
-        grid_mode = self.positioner.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        grid_mode = self.positioner.placement_manager.pictograph.grid_mode
         file_path = os.path.join(
             "data",
             "arrow_placement",

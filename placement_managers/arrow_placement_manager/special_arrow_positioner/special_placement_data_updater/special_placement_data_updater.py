@@ -38,8 +38,8 @@ class SpecialPlacementDataUpdater:
     def _get_letter_data(self, letter: Letter, ori_key: str) -> dict:
         letter_data = (
             self.positioner.placement_manager.pictograph.main_widget.special_placements[
-                ori_key
-            ].get(letter.value, {})
+                self.positioner.pictograph.grid_mode
+            ][ori_key].get(letter.value, {})
         )
 
         return letter_data
@@ -115,9 +115,7 @@ class SpecialPlacementDataUpdater:
     def _update_placement_json_data(
         self, letter: Letter, letter_data: dict, ori_key: str
     ) -> None:
-        grid_mode = (
-            self.positioner.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
-        )
+        grid_mode = self.positioner.pictograph.grid_mode
         file_path = os.path.join(
             "data",
             "arrow_placement",

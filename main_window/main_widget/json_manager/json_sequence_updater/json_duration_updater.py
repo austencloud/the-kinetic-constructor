@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
+    from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat_view import (
         BeatView,
     )
     from .json_sequence_updater import JsonSequenceUpdater
@@ -44,7 +44,7 @@ class JsonDurationUpdater:
 
     def _load_sequence_data(self) -> list[dict]:
         """Load the current sequence JSON data."""
-        return self.json_manager.loader_saver.load_current_sequence_json()
+        return self.json_manager.sequence_loader_saver.load_current_sequence_json()
 
     def _extract_metadata_and_beats(
         self, sequence_data: list[dict]
@@ -111,7 +111,9 @@ class JsonDurationUpdater:
 
     def _update_beat_view_numbers(self, beat_number_mapping: dict[int, int]) -> None:
         """Update the BeatView numbers based on the provided mapping."""
-        for beat_view in self.json_manager.main_widget.sequence_widget.beat_frame.beats:
+        for (
+            beat_view
+        ) in self.json_manager.main_widget.build_tab.sequence_widget.beat_frame.beats:
             if beat_view.number in beat_number_mapping:
                 old_number = beat_view.number
                 beat_view.number = beat_number_mapping[old_number]
@@ -163,4 +165,4 @@ class JsonDurationUpdater:
     def _save_sequence(self, metadata: dict, beats: list[dict]) -> None:
         """Save the updated sequence."""
         sequence_data = [metadata] + beats
-        self.json_manager.loader_saver.save_current_sequence(sequence_data)
+        self.json_manager.sequence_loader_saver.save_current_sequence(sequence_data)

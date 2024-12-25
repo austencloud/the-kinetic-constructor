@@ -11,14 +11,14 @@ if TYPE_CHECKING:
     from .arrow_placement_manager import ArrowPlacementManager
 logger = logging.getLogger(__name__)
 
+
 class ArrowAdjustmentCalculator:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
 
-
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         if not arrow.motion.pictograph.letter:
-            return QPointF(0, 0)  # or some default value
+            return QPointF(0, 0)
 
         turns_tuple = (
             arrow.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
@@ -52,15 +52,14 @@ class ArrowAdjustmentCalculator:
         directional_adjustments = directional_tuple_manager.generate_directional_tuples(
             x, y
         )
+        if not directional_adjustments:
+            print(
+                f"Directional adjustments not found for motion type: {arrow.motion.motion_type}"
+            )
         quadrant_index = (
             self.placement_manager.quadrant_index_handler.get_quadrant_index(arrow)
         )
 
-        # Add debug logs
-        logger.debug(f"Directional Adjustments: {directional_adjustments}")
-        logger.debug(f"Quadrant Index: {quadrant_index}")
-
-        # Check if quadrant_index is within range
         if quadrant_index < 0 or quadrant_index >= len(directional_adjustments):
             logger.error(
                 f"Quadrant index {quadrant_index} out of range for directional_adjustments with length {len(directional_adjustments)}."
@@ -68,7 +67,6 @@ class ArrowAdjustmentCalculator:
             return QPointF(0, 0)  # Return a default value or handle appropriately
 
         return QPointF(*directional_adjustments[quadrant_index])
-
 
     def _find_special_rotation(self, turn_data: dict) -> Optional[dict]:
         for key, value in turn_data.items():
@@ -81,8 +79,8 @@ class ArrowAdjustmentCalculator:
     ) -> Optional[tuple[int, int]]:
         self.special_placements: dict[str, dict] = (
             self.placement_manager.pictograph.main_widget.special_placements.get(
-                ori_key, {}
-            )
+                arrow.pictograph.grid_mode
+            ).get(ori_key, {})
         )
         letter_adjustments: dict[str, dict[str, list]] = self.special_placements.get(
             letter.value, {}
