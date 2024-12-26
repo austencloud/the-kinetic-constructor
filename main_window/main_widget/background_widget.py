@@ -6,6 +6,7 @@ from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import Qt, QSize
 
 import logging
+
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 from PyQt6.QtWidgets import QSizePolicy
@@ -23,17 +24,10 @@ class BackgroundWidget(QWidget):
         self.show()
 
     def paintEvent(self, event):
-        logging.debug("BackgroundWidget.paintEvent called")
-        # print(f"{self.__class__.__name__} paintEvent called")
-
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        if self.main_widget.background:
-            self.main_widget.background.paint_background(self, painter)
-        else:
-            logging.warning("No background set in main_widget.background")
+        self.main_widget.background.paint_background(self, painter)
         painter.end()
-        print("BackgroundWidget.paintEvent done")
 
     def resizeEvent(self, event):
         self.resize(self.main_widget.size())

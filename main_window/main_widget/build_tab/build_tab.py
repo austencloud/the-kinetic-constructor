@@ -17,8 +17,7 @@ if TYPE_CHECKING:
 
 class BuildTab(QWidget):
     """
-    Unified BuildTab managing SequenceConstructor and SequenceGeneratorWidget.
-    Utilizes BuildTabFadeManager for internal transitions to ensure consistent fade animations.
+    Manages SequenceConstructor and SequenceGeneratorWidget.
     """
 
     def __init__(self, main_widget: "MainWidget") -> None:

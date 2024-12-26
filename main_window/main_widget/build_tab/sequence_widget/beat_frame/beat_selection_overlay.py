@@ -80,6 +80,7 @@ class BeatSelectionOverlay(QWidget):
         return self.selected_beat
 
     def paintEvent(self, event):
+        super().paintEvent(event)
         if not self.selected_beat:
             return
 

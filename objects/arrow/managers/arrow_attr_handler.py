@@ -17,9 +17,7 @@ class ArrowAttrManager:
         self.arrow.color = self.arrow.arrow_dict[COLOR]
         self.arrow.turns = self.arrow.arrow_dict[TURNS]
 
-    def update_attributes(
-        self, arrow_dict: dict[str, Union[str, Location, MotionType, Turns]]
-    ) -> None:
+    def update_attributes(self, arrow_dict: dict[str, str]) -> None:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         for attr in arrow_attributes:
             value = arrow_dict.get(attr)
@@ -32,6 +30,6 @@ class ArrowAttrManager:
         for attr in arrow_attributes:
             setattr(self.arrow, attr, None)
 
-    def get_arrow_attributes(self) -> dict[str, Union[str, Location, MotionType]]:
+    def get_arrow_attributes(self) -> dict[str, str]:
         arrow_attributes = [COLOR, LOC]
         return {attr: getattr(self.arrow, attr) for attr in arrow_attributes}

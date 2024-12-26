@@ -36,7 +36,6 @@ class OptionPickerPictographView(BorderedPictographView):
         self.grabGesture(Qt.GestureType.TapGesture)
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
 
-        # self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
 
@@ -53,18 +52,12 @@ class OptionPickerPictographView(BorderedPictographView):
     def contextMenuEvent(self, event: QEvent) -> None:
         if isinstance(event, QContextMenuEvent):
             context_menu = QMenu(self)
-
-            # Add any specific actions for OptionPicker here
-
-            # Add a separator
             context_menu.addSeparator()
 
-            # Call the base class to add "Copy Dictionary"
             copy_action = QAction("Copy Dictionary", self)
             copy_action.triggered.connect(self.copy_pictograph_dict)
             context_menu.addAction(copy_action)
 
-            # Execute the menu
             context_menu.exec(QCursor.pos())
         else:
             super().contextMenuEvent(event)

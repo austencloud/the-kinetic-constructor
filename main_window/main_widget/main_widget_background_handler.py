@@ -47,11 +47,6 @@ class MainWidgetBackgroundHandler(QObject):
         if self.background:
             self.background.update_required.connect(self.main_widget.update)
             self.background.start_animation()
-            logging.info(f"Background '{bg_type}' has been set up.")
-        else:
-            logging.error(
-                f"Failed to set up background: '{bg_type}' is not recognized."
-            )
 
     def apply_background(self):
         """Applies or reapplies the background."""

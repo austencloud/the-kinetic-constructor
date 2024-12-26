@@ -1,16 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QGraphicsPixmapItem
-from PyQt6.QtCore import Qt, QPointF, QEvent
-from PyQt6.QtGui import (
-    QFont,
-    QPainter,
-    QColor,
-    QPixmap,
-    QImage,
-    QAction,
-    QCursor,
-    QContextMenuEvent,
-)
+from PyQt6.QtWidgets import QGraphicsTextItem, QGraphicsPixmapItem
+from PyQt6.QtCore import Qt, QPointF
+from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat import Beat
@@ -23,7 +14,7 @@ if TYPE_CHECKING:
 
 class BeatView(PictographView):
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
-        super().__init__(beat_frame)
+        super().__init__(None)
         self.number = number  # Beat number to display
         self._disable_scrollbars()
         self.beat: "Beat" = None
@@ -41,31 +32,6 @@ class BeatView(PictographView):
         self.blank_beat = Beat(self.beat_frame)
         self._setup_blank_beat()
         self.resize_beat_view()
-        # self.setContextMenuPolicy/(Qt.ContextMenuPolicy.CustomContextMenu)
-        # self.customContextMenuRequested.connect(self.show_context_menu)
-
-    def contextMenuEvent(self, event: QEvent) -> None:
-        """
-        Optionally, add more actions specific to BeatView.
-        Then call the base class to include the "Copy Dictionary" action.
-        """
-        if isinstance(event, QContextMenuEvent):
-            context_menu = QMenu(self)
-
-            # Add any specific actions for BeatView here
-
-            # Add a separator
-            context_menu.addSeparator()
-
-            # Call the base class to add "Copy Dictionary"
-            copy_action = QAction("Copy Dictionary", self)
-            copy_action.triggered.connect(self.copy_pictograph_dict)
-            context_menu.addAction(copy_action)
-
-            # Execute the menu
-            context_menu.exec(QCursor.pos())
-        else:
-            super().contextMenuEvent(event)
 
     def display_placeholder_arrow(self):
         arrow_path = get_images_and_data_path("images/placeholder_arrow.png")
@@ -163,14 +129,6 @@ class BeatView(PictographView):
         self.is_selected = False
         self.update()
 
-    def paintEvent(self, event):
-        super().paintEvent(event)
-        painter = QPainter(self.viewport())
-        if self.is_selected:
-            painter.setPen(QColor(0, 0, 0))
-            painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
-        painter.end()
-
     def enterEvent(self, event):
         if self.is_filled:
             if not self.is_selected:
@@ -185,17 +143,17 @@ class BeatView(PictographView):
         target_height = original_size.height()
         image = QImage(target_width, target_height, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.transparent)
-        # painter = QPainter(image)
-        # painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        # if not self.scene():
-        #     painter.setPen(QColor(0, 0, 0))
-        #     painter.setBrush(QColor(0, 255, 255))
-        #     painter.drawRect(0, 0, target_width - 1, target_height - 1)
-        # else:
-        #     self.scene().render(painter)
-        # painter.setPen(QColor(0, 0, 0))
-        # painter.drawRect(0, 0, target_width - 1, target_height - 1)
-        # painter.end()
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        if not self.scene():
+            painter.setPen(QColor(0, 0, 0))
+            painter.setBrush(QColor(0, 255, 255))
+            painter.drawRect(0, 0, target_width - 1, target_height - 1)
+        else:
+            self.scene().render(painter)
+        painter.setPen(QColor(0, 0, 0))
+        painter.drawRect(0, 0, target_width - 1, target_height - 1)
+        painter.end()
         return QPixmap.fromImage(image)
 
     def resize_beat_view(self):

@@ -1,11 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
-
-
 from Enums.letters import Letter
-from data.constants import (
-    FLOAT,
-)
+from data.constants import FLOAT
 
 from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.build_tab.sequence_widget.beat_frame.start_pos_beat import (
