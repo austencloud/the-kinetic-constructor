@@ -29,21 +29,27 @@ class MainWidgetUI:
         self._setup_indices()
 
     def _setup_components(self):
+        
         self.mw.main_stacked_widget = QStackedWidget()
         self.mw.background_handler = MainWidgetBackgroundHandler(self.mw)
         self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
         self.mw.menu_bar_widget = MenuBarWidget(self.mw)
         self.mw.navigation_widget = NavigationWidget(self.mw)
         
+        self.splash_screen.updater.update_progress("BuildTab")
         self.mw.build_tab = BuildTab(self.mw)
+        self.splash_screen.updater.update_progress("BrowseTab")
         self.mw.browse_tab = BrowseTab(self.mw)
+        self.splash_screen.updater.update_progress("LearnTab")
         self.mw.learn_tab = LearnTab(self.mw)
+        self.splash_screen.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
 
         self.mw.main_stacked_widget.addWidget(self.mw.build_tab)
         self.mw.main_stacked_widget.addWidget(self.mw.browse_tab)
         self.mw.main_stacked_widget.addWidget(self.mw.learn_tab)
         self.mw.main_stacked_widget.addWidget(self.mw.write_tab)
+
 
         self.mw.fade_manager = FadeManager(self.mw)
         self.mw.background_widget = BackgroundWidget(self.mw)
