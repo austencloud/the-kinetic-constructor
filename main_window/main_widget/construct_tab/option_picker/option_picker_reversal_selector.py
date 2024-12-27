@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.construct_tab.option_picker.reversal_combobox import (
-    ReversalCombobox,
-)
+from main_window.main_widget.construct_tab.option_picker.reversal_combobox import ReversalCombobox
 
 if TYPE_CHECKING:
     from main_window.main_widget.construct_tab.option_picker.option_picker import (
@@ -19,10 +16,9 @@ class OptionPickerReversalSelector(QWidget):
         self.option_picker = option_picker
 
         self.reversal_combobox = ReversalCombobox(self)
-        self.combo_box_label = QLabel("Show")
-
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
         self.combo_box_label: QLabel = QLabel("Show:")
         self.layout.addWidget(self.combo_box_label)
         self.layout.addWidget(self.reversal_combobox)

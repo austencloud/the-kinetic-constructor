@@ -37,13 +37,13 @@ class ConstructTab(QFrame):
         self.option_picker = OptionPicker(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
 
-        # Create a QStackedWidget to manage the transitions between widgets
         self.stacked_widget = QStackedWidget(self)
-        self.setLayout(QHBoxLayout())
-        self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().setSpacing(0)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.layout.addWidget(self.stacked_widget)
+        self.setLayout(self.layout)
         self.setContentsMargins(0, 0, 0, 0)
-        self.layout().addWidget(self.stacked_widget)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setStyleSheet("background: transparent;")
 
@@ -125,13 +125,3 @@ class ConstructTab(QFrame):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
 
-    # def resize_manual_builder(self) -> None:
-    #     """Resize the components based on the current state."""
-    # self.start_pos_picker.resize_start_pos_picker()
-    # self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
-    # self.option_picker.resize_option_picker()
-
-    # def resizeEvent(self, event) -> None:
-    #     """Resize the manual builder based on the current state."""
-    #     super().resizeEvent(event)
-    #     # self.resize_manual_builder()

@@ -149,7 +149,7 @@ class MainWidgetFontColorUpdater:
         ]
 
     def _update_browse_tab(self) -> None:
-        dictionary = self.main_widget.brwose_tab
+        dictionary = self.main_widget.browse_tab
         sort_widget = dictionary.browser.options_widget.sort_widget
 
         dictionary_labels = [

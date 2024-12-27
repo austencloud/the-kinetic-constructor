@@ -24,7 +24,7 @@ class NavigationWidget(QWidget):
         self.tab_layout = QHBoxLayout()
         self.tab_layout.addStretch(1)
         self.tab_names = [
-            "Build ⚒️",
+            "Construct ⚒️",
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
@@ -39,10 +39,8 @@ class NavigationWidget(QWidget):
             self.tab_layout.addWidget(button)
         self.tab_layout.addStretch(1)
 
-        # Add the tab layout to the container layout
         self.container_layout.addLayout(self.tab_layout)
         self.tab_changed.connect(self.main_widget.tabs_handler.on_tab_changed)
-        # Set the main layout of the NavigationWidget
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
 

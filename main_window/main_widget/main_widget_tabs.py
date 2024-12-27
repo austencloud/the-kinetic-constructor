@@ -16,30 +16,27 @@ class MainWidgetTabs:
 
     def on_tab_changed(self, index: int) -> None:
         tab_names = {
-            self.main_widget.build_tab_index: "build",
+            self.main_widget.construct_tab_index: "build",
             self.main_widget.generate_tab_index: "generate",
-            self.main_widget.dictionary_tab_index: "dictionary",
+            self.main_widget.browse_tab_index: "dictionary",
             self.main_widget.learn_tab_index: "learn",
-            self.main_widget.act_tab_index: "write",
+            self.main_widget.write_tab_index: "write",
         }
         if index in tab_names:
             self.main_widget.settings_manager.global_settings.set_current_tab(
                 tab_names[index]
             )
 
-        self.main_widget.fade_manager.fade_to_tab(
-            self.main_widget.content_stack, index
-        )
-
+        self.main_widget.fade_manager.fade_to_tab(self.main_widget.content_stack, index)
 
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""
         tab_indices = {
-            "build": self.main_widget.build_tab_index,
+            "build": self.main_widget.construct_tab_index,
             "generate": self.main_widget.generate_tab_index,
-            "dictionary": self.main_widget.dictionary_tab_index,
+            "dictionary": self.main_widget.browse_tab_index,
             "learn": self.main_widget.learn_tab_index,
-            "write": self.main_widget.act_tab_index,
+            "write": self.main_widget.write_tab_index,
         }
         current_tab_name = self.main_widget.current_tab
         if current_tab_name in tab_indices:

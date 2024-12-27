@@ -130,16 +130,16 @@ class OptionPickerPictographView(BorderedPictographView):
     def resizeEvent(self, event):
         """Trigger fitInView whenever the widget is resized."""
         super().resizeEvent(event)
-        self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-        size = self.calculate_view_size()
-        self.pictograph.view.update_border_widths()
-        self.setMinimumWidth(size)
-        self.setMaximumWidth(size)
-        self.setMinimumHeight(size)
-        self.setMaximumHeight(size)
-        self.view_scale = size / self.pictograph.width()
-        self.resetTransform()
-        self.scale(self.view_scale, self.view_scale)
+        # self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        # size = self.calculate_view_size()
+        # self.pictograph.view.update_border_widths()
+        # self.setMinimumWidth(size)
+        # self.setMaximumWidth(size)
+        # self.setMinimumHeight(size)
+        # self.setMaximumHeight(size)
+        # self.view_scale = size / self.pictograph.width()
+        # self.resetTransform()
+        # self.scale(self.view_scale, self.view_scale)
 
     def calculate_view_size(self) -> int:
         spacing = self.option_picker.scroll_area.spacing

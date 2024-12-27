@@ -103,3 +103,16 @@ class OptionPicker(QWidget):
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
         self.scroll_area.set_disabled(disabled)
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        spacing = 10
+        for option in self.option_pool:
+            view_width = int((self.width() // 8) - spacing)
+
+            option.view.setFixedSize(view_width, view_width)
+            option.view.view_scale = view_width / option.width()
+            option.view.resetTransform()
+            option.view.scale(
+                option.view.view_scale, option.view.view_scale
+            )

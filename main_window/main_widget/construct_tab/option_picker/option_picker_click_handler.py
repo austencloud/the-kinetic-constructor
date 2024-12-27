@@ -24,14 +24,14 @@ class OptionPickerClickHandler:
         )
         next_beat_number = beat_frame.beat_adder.calculate_next_beat_number()
         num_beats = int(
-            beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
+            beat_frame.sequence_widget.main_widget.settings_manager.sequence_layout.get_layout_setting(
                 "num_beats"
             )
         )
 
         if (
             next_beat_number > num_beats
-        ) and not beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
+        ) and not beat_frame.sequence_widget.main_widget.settings_manager.sequence_layout.get_layout_setting(
             "grow_sequence"
         ):
             self.sequence_widget = self.manual_builder.main_widget.sequence_widget

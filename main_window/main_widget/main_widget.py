@@ -62,7 +62,7 @@ class MainWidget(QWidget):
     # Sub-widgets
     construct_tab: "ConstructTab"
     generate_tab: "GenerateTab"
-    brwose_tab: "BrowseTab"
+    browse_tab: "BrowseTab"
     learn_tab: "LearnTab"
     write_tab: "WriteTab"
 
@@ -104,11 +104,11 @@ class MainWidget(QWidget):
     content_stack: QStackedWidget
 
     # Indices for tabs
-    build_tab_index: int = 0
+    construct_tab_index: int = 0
     generate_tab_index: int = 1
-    dictionary_tab_index: int = 2
+    browse_tab_index: int = 2
     learn_tab_index: int = 3
-    act_tab_index: int = 4
+    write_tab_index: int = 4
 
     # Current state
     current_tab: str

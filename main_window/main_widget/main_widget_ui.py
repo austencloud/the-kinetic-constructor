@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSplitter
-from PyQt6.QtCore import Qt
-from main_window.main_widget.construct_tab.construct_tab import ConstructTab
-from main_window.main_widget.generate_tab.generate_tab import GenerateTab
-from main_window.main_widget.write_tab.write_tab import WriteTab
-from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-from main_window.main_widget.learn_tab.learn_tab import LearnTab
-from main_window.main_widget.main_background_widget import MainBackgroundWidget
-from main_window.main_widget.tab_fade_manager import TabFadeManager
-from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
+from .construct_tab.construct_tab import ConstructTab
+from .generate_tab.generate_tab import GenerateTab
+from .write_tab.write_tab import WriteTab
+from .browse_tab.browse_tab import BrowseTab
+from .learn_tab.learn_tab import LearnTab
+from .main_background_widget import MainBackgroundWidget
+from .tab_fade_manager import TabFadeManager
+from ..settings_manager.global_settings.main_widget_font_color_updater import (
     MainWidgetFontColorUpdater,
 )
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
@@ -22,72 +21,73 @@ if TYPE_CHECKING:
 
 class MainWidgetUI:
     def __init__(self, main_widget: "MainWidget"):
-        self.main_widget = main_widget
+        self.mw = main_widget
         self.splash_screen = main_widget.splash_screen
         self._setup_components()
         self._setup_layout()
         self._setup_indices()
 
     def _setup_components(self):
-        mw = self.main_widget
-        mw.content_stack = QStackedWidget()  # <--- NEW
+        self.mw.content_stack = QStackedWidget()  # <--- NEW
 
-        mw.fade_manager = TabFadeManager(mw)
-        mw.background_widget = MainBackgroundWidget(mw)
-        mw.background_widget.lower()
-        mw.font_color_updater = MainWidgetFontColorUpdater(mw)
+        self.mw.fade_manager = TabFadeManager(self.mw)
+        self.mw.background_widget = MainBackgroundWidget(self.mw)
+        self.mw.background_widget.lower()
+        self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
 
         splash = self.splash_screen
         splash.updater.update_progress("MenuBarWidget")
-        mw.menu_bar_widget = MenuBarWidget(mw)
+        self.mw.menu_bar_widget = MenuBarWidget(self.mw)
         splash.updater.update_progress("NavigationWidget")
-        mw.navigation_widget = NavigationWidget(mw)
+        self.mw.navigation_widget = NavigationWidget(self.mw)
         splash.updater.update_progress("SequenceWidget")
-        mw.sequence_widget = SequenceWidget(mw)
+        self.mw.sequence_widget = SequenceWidget(self.mw)
         splash.updater.update_progress("ConstructTab")
-        mw.construct_tab = ConstructTab(mw)
+        self.mw.construct_tab = ConstructTab(self.mw)
         splash.updater.update_progress("GenerateTab")
-        mw.generate_tab = GenerateTab(mw)
+        self.mw.generate_tab = GenerateTab(self.mw)
         splash.updater.update_progress("BrowseTab")
-        mw.brwose_tab = BrowseTab(mw)
+        self.mw.browse_tab = BrowseTab(self.mw)
         splash.updater.update_progress("LearnTab")
-        mw.learn_tab = LearnTab(mw)
+        self.mw.learn_tab = LearnTab(self.mw)
         splash.updater.update_progress("WriteTab")
-        mw.write_tab = WriteTab(mw)
+        self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Finalizing")
 
-        mw.content_stack.addWidget(mw.construct_tab)  # index 0: Construct
-        mw.content_stack.addWidget(mw.generate_tab)  # index 1: Generate
-        mw.content_stack.addWidget(mw.brwose_tab)  # index 2: Browse
-        mw.content_stack.addWidget(mw.learn_tab)  # index 3: Learn
-        mw.content_stack.addWidget(mw.write_tab)  # index 4: Write
+        self.mw.content_stack.addWidget(self.mw.construct_tab)
+        self.mw.content_stack.addWidget(self.mw.generate_tab)
+        self.mw.content_stack.addWidget(self.mw.browse_tab)
+        self.mw.content_stack.addWidget(self.mw.learn_tab)
+        self.mw.content_stack.addWidget(self.mw.write_tab)
 
     def _setup_layout(self):
-        mw = self.main_widget
-
-        mw.main_layout = QVBoxLayout(mw)
-        mw.main_layout.setContentsMargins(0, 0, 0, 0)
-        mw.main_layout.setSpacing(0)
-        mw.setLayout(mw.main_layout)
+        self.mw.main_layout = QVBoxLayout(self.mw)
+        self.mw.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.mw.main_layout.setSpacing(0)
+        self.mw.setLayout(self.mw.main_layout)
 
         top_layout = QHBoxLayout()
-        top_layout.addWidget(mw.menu_bar_widget, 1)
-        top_layout.addWidget(mw.navigation_widget, 1)
+        top_layout.addWidget(self.mw.menu_bar_widget, 1)
+        top_layout.addWidget(self.mw.navigation_widget, 1)
 
         content_splitter = QSplitter()
-        content_splitter.addWidget(mw.sequence_widget)
-        content_splitter.addWidget(mw.content_stack)
-        mw.main_layout.addLayout(top_layout)
-        mw.main_layout.addWidget(content_splitter)
+        content_splitter.addWidget(self.mw.sequence_widget)
+        content_splitter.addWidget(self.mw.content_stack)
+        content_splitter.setSizes([1, 1])
+        self.mw.main_layout.addLayout(top_layout)
+        self.mw.main_layout.addWidget(content_splitter)
+
+        # content_splitter.splitterMoved.connect(self.mw.sequence_widget.beat_frame.resizer.resize_beat_frame())
+        # content_splitter.splitterMoved.connect(self.mw.content_stack.resizeEvent)
 
     def _setup_indices(self):
-        self.main_widget.build_tab_index = 0
-        self.main_widget.generate_tab_index = 1
-        self.main_widget.dictionary_tab_index = 2
-        self.main_widget.learn_tab_index = 3
-        self.main_widget.act_tab_index = 4
+        self.mw.construct_tab_index = 0
+        self.mw.generate_tab_index = 1
+        self.mw.browse_tab_index = 2
+        self.mw.learn_tab_index = 3
+        self.mw.write_tab_index = 4
 
     def load_current_tab(self):
-        mw = self.main_widget
+        mw = self.mw
         mw.current_tab = mw.settings_manager.global_settings.get_current_tab()
         mw.tabs_handler.update_tab_based_on_settings()
