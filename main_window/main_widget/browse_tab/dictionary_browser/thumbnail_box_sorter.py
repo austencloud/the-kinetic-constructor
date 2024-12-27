@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 from typing import TYPE_CHECKING
-
 from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import (
     ThumbnailBox,
 )
@@ -25,7 +24,7 @@ class ThumbnailBoxSorter:
 
     def reload_currently_displayed_filtered_sequences(self):
         current_filter = (
-            self.browser.browse_tab.dictionary_settings.get_current_filter()
+            self.browser.dictionary.dictionary_settings.get_current_filter()
         )
         self.browser.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter

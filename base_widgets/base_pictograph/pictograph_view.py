@@ -2,16 +2,8 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QFrame, QMenu, QToolTip, QApplication
-from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import (
-    QPainter,
-    QCursor,
-    QKeyEvent,
-    QMouseEvent,
-    QClipboard,
-    QAction,
-    QContextMenuEvent,
-)
+from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QCursor, QClipboard, QAction, QContextMenuEvent
 
 
 if TYPE_CHECKING:
@@ -45,6 +37,12 @@ class PictographView(QGraphicsView):
         self.setSceneRect(self.scene().itemsBoundingRect())
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
+    def enterEvent(self, event: QEvent) -> None:
+        pass
+
+    def leaveEvent(self, event: QEvent) -> None:
+        pass
+
     def contextMenuEvent(self, event: QEvent) -> None:
         if isinstance(event, QContextMenuEvent):
             context_menu = QMenu(self)
@@ -66,7 +64,7 @@ class PictographView(QGraphicsView):
                 clipboard: QClipboard = QApplication.clipboard()
                 clipboard.setText(pictograph_json)
                 indicator_label = (
-                    self.pictograph.main_widget.build_tab.sequence_widget.indicator_label
+                    self.pictograph.main_widget.sequence_widget.indicator_label
                 )
                 indicator_label.show_message("Dictionary copied to clipboard!")
                 QToolTip.showText(

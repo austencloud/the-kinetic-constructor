@@ -10,7 +10,7 @@ from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_less
 from .lesson_mode_toggle_widget import LessonModeToggleWidget
 
 if TYPE_CHECKING:
-    from .learn_widget import LearnTab
+    from .learn_tab import LearnTab
 
 
 class LessonSelector(QWidget):

@@ -2,11 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QApplication
-
 from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box_nav_btns import (
     ThumbnailBoxNavButtonsWidget,
 )
-
 from .word_label import WordLabel
 from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
@@ -24,7 +22,7 @@ class ThumbnailBox(QWidget):
         self.word = word
         self.thumbnails: list[str] = thumbnails
         self.browser = browser
-        self.main_widget = browser.browse_tab.main_widget
+        self.main_widget = browser.dictionary.main_widget
         self.initial_size_set = False
         self.current_index = 0
         self.browser = browser
@@ -68,7 +66,7 @@ class ThumbnailBox(QWidget):
         self.save_favorite_status()
 
         current_filter = (
-            self.browser.browse_tab.dictionary_settings.get_current_filter()
+            self.browser.dictionary.dictionary_settings.get_current_filter()
         )
         if current_filter and current_filter.get("favorites"):
             if not self.favorite_status:
@@ -106,8 +104,8 @@ class ThumbnailBox(QWidget):
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
-        if self == self.browser.browse_tab.preview_area.current_thumbnail_box:
-            self.browser.browse_tab.preview_area.update_thumbnails(self.thumbnails)
+        if self == self.browser.dictionary.preview_area.current_thumbnail_box:
+            self.browser.dictionary.preview_area.update_thumbnails(self.thumbnails)
         self.image_label.thumbnails = thumbnails
         self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
         if len(self.thumbnails) == 1:

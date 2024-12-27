@@ -4,9 +4,10 @@ from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_preview_area import DictionaryPreviewArea
+    from main_window.main_widget.browse_tab.dictionary_preview_area import (
+        DictionaryPreviewArea,
+    )
 
 
 class PreviewAreaNavButtonsWidget(QWidget):
@@ -31,7 +32,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
         self.layout.addWidget(self.left_button, 6)
         self.layout.addWidget(self.right_button, 6)
         self.layout.addStretch(1)
-        
+
     def handle_button_click(self):
         if not self.preview_area.thumbnails:
             return
@@ -55,7 +56,9 @@ class PreviewAreaNavButtonsWidget(QWidget):
         box_nav_buttons_widget = (
             self.preview_area.current_thumbnail_box.nav_buttons_widget
         )
-        box_nav_buttons_widget.thumbnail_box.current_index = self.preview_area.current_index
+        box_nav_buttons_widget.thumbnail_box.current_index = (
+            self.preview_area.current_index
+        )
         box_nav_buttons_widget.update_thumbnail(self.preview_area.current_index)
 
     def update_thumbnail(self):
@@ -81,11 +84,10 @@ class PreviewAreaNavButtonsWidget(QWidget):
         for button in self.buttons:
             button.setFont(QFont("Arial", font_size, QFont.Weight.Bold))
 
+
 class PreviewAreaNavButton(QPushButton):
     def __init__(self, text: str, parent: PreviewAreaNavButtonsWidget):
         super().__init__(text, parent)
         self.clicked.connect(parent.handle_button_click)
         self.setStyleSheet("background-color: white;")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-
-    

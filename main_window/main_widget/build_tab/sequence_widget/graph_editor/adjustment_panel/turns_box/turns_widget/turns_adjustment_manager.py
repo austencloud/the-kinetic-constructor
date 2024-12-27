@@ -21,6 +21,9 @@ class TurnsAdjustmentManager(QObject):
         self.json_manager = self.main_widget.json_manager
         self.json_validation_engine = self.json_manager.ori_validation_engine
         self.color = self.turns_widget.turns_box.color
+        self.GE_pictograph_view = (
+            self.graph_editor.pictograph_container.GE_pictograph_view
+        )
 
         self.turns_adjusted.connect(
             self.beat_frame.updater.update_beats_from_current_sequence_json
@@ -79,18 +82,13 @@ class TurnsAdjustmentManager(QObject):
     def _repaint_views(self):
         """Repaint the pictograph and GE pictograph views to reflect the change."""
         self.pictograph.view.repaint()
-        GE_pictograph = (
-            self.turns_widget.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
-        )
+        GE_pictograph = self.GE_pictograph_view.get_current_pictograph()
         GE_pictograph.view.repaint()
-        # GE_pictograph.updater.update_pictograph()
         QApplication.processEvents()
 
     def direct_set_turns(self, new_turns: Turns) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.pictograph = (
-            self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
-        )
+        self.pictograph = self.GE_pictograph_view.get_current_pictograph()
         self._update_motion_properties(new_turns)
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.turns_updater.update_turns_in_json_at_index(

@@ -3,11 +3,14 @@ from PyQt6.QtWidgets import QLabel
 
 from typing import TYPE_CHECKING, Union
 
+
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
-    from main_window.main_widget.browse_tab.dictionary_preview_area import DictionaryPreviewArea
-
-
+    from main_window.main_widget.browse_tab.dictionary_preview_area import (
+        DictionaryPreviewArea,
+    )
+    from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import (
+        ThumbnailBox,
+    )
 
 
 class VariationNumberLabel(QLabel):

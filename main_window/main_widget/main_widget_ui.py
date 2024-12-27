@@ -1,20 +1,20 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
-from main_window.main_widget.background_widget import BackgroundWidget
+from main_window.main_widget.construct_tab.construct_tab import ConstructTab
+from main_window.main_widget.generate_tab.generate_tab import GenerateTab
+from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-from main_window.main_widget.build_tab.build_tab import BuildTab
-from main_window.main_widget.fade_manager import FadeManager
-from main_window.main_widget.learn_tab.learn_widget import LearnTab
-from main_window.main_widget.main_widget_background_handler import (
-    MainWidgetBackgroundHandler,
-)
-from main_window.main_widget.write_tab.act_tab import WriteTab
+from main_window.main_widget.learn_tab.learn_tab import LearnTab
+from main_window.main_widget.main_background_widget import MainBackgroundWidget
+from main_window.main_widget.tab_fade_manager import TabFadeManager
 from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
     MainWidgetFontColorUpdater,
 )
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
+from .sequence_widget.sequence_widget import SequenceWidget
+
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
@@ -22,71 +22,72 @@ if TYPE_CHECKING:
 
 class MainWidgetUI:
     def __init__(self, main_widget: "MainWidget"):
-        self.mw = main_widget
+        self.main_widget = main_widget
         self.splash_screen = main_widget.splash_screen
         self._setup_components()
         self._setup_layout()
         self._setup_indices()
 
     def _setup_components(self):
-        self.mw.main_stacked_widget = QStackedWidget()
-        self.mw.background_handler = MainWidgetBackgroundHandler(self.mw)
-        self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
-        self.mw.menu_bar_widget = MenuBarWidget(self.mw)
-        self.mw.navigation_widget = NavigationWidget(self.mw)
-        
-        self.mw.build_tab = BuildTab(self.mw)
-        self.mw.browse_tab = BrowseTab(self.mw)
-        self.mw.learn_tab = LearnTab(self.mw)
-        self.mw.write_tab = WriteTab(self.mw)
+        mw = self.main_widget
+        mw.content_stack = QStackedWidget()  # <--- NEW
 
-        self.mw.main_stacked_widget.addWidget(self.mw.build_tab)
-        self.mw.main_stacked_widget.addWidget(self.mw.browse_tab)
-        self.mw.main_stacked_widget.addWidget(self.mw.learn_tab)
-        self.mw.main_stacked_widget.addWidget(self.mw.write_tab)
+        mw.fade_manager = TabFadeManager(mw)
+        mw.background_widget = MainBackgroundWidget(mw)
+        mw.background_widget.lower()
+        mw.font_color_updater = MainWidgetFontColorUpdater(mw)
 
-        self.mw.fade_manager = FadeManager(self.mw)
-        self.mw.background_widget = BackgroundWidget(self.mw)
+        splash = self.splash_screen
+        splash.updater.update_progress("MenuBarWidget")
+        mw.menu_bar_widget = MenuBarWidget(mw)
+        splash.updater.update_progress("NavigationWidget")
+        mw.navigation_widget = NavigationWidget(mw)
+        splash.updater.update_progress("SequenceWidget")
+        mw.sequence_widget = SequenceWidget(mw)
+        splash.updater.update_progress("ConstructTab")
+        mw.construct_tab = ConstructTab(mw)
+        splash.updater.update_progress("GenerateTab")
+        mw.generate_tab = GenerateTab(mw)
+        splash.updater.update_progress("BrowseTab")
+        mw.brwose_tab = BrowseTab(mw)
+        splash.updater.update_progress("LearnTab")
+        mw.learn_tab = LearnTab(mw)
+        splash.updater.update_progress("WriteTab")
+        mw.write_tab = WriteTab(mw)
+        splash.updater.update_progress("Finalizing")
+
+        mw.content_stack.addWidget(mw.construct_tab)  # index 0: Construct
+        mw.content_stack.addWidget(mw.generate_tab)  # index 1: Generate
+        mw.content_stack.addWidget(mw.brwose_tab)  # index 2: Browse
+        mw.content_stack.addWidget(mw.learn_tab)  # index 3: Learn
+        mw.content_stack.addWidget(mw.write_tab)  # index 4: Write
 
     def _setup_layout(self):
-        self.mw.main_layout = QVBoxLayout(self.mw)
-        self.mw.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.mw.main_layout.setSpacing(0)
-        self.mw.setLayout(self.mw.main_layout)
+        mw = self.main_widget
 
-        self.mw.main_layout.addWidget(self.mw.background_widget)
+        mw.main_layout = QVBoxLayout(mw)
+        mw.main_layout.setContentsMargins(0, 0, 0, 0)
+        mw.main_layout.setSpacing(0)
+        mw.setLayout(mw.main_layout)
 
         top_layout = QHBoxLayout()
-        top_layout.addWidget(self.mw.menu_bar_widget)
-        top_layout.addWidget(self.mw.navigation_widget)
+        top_layout.addWidget(mw.menu_bar_widget, 1)
+        top_layout.addWidget(mw.navigation_widget, 1)
 
-        self.mw.content_container = QWidget()
-        self.mw.content_layout = QVBoxLayout(self.mw.content_container)
-        self.mw.content_layout.setContentsMargins(0, 0, 0, 0)
-        self.mw.content_layout.setSpacing(0)
-        self.mw.content_container.setLayout(self.mw.content_layout)
-
-        self.mw.content_layout.addLayout(top_layout)
-        self.mw.content_layout.addWidget(self.mw.main_stacked_widget)
-
-        self.mw.main_layout.addWidget(self.mw.content_container)
+        content_layout = QHBoxLayout() 
+        content_layout.addWidget(mw.sequence_widget, 1) 
+        content_layout.addWidget(mw.content_stack, 1) 
+        mw.main_layout.addLayout(top_layout)
+        mw.main_layout.addLayout(content_layout)
 
     def _setup_indices(self):
-        self.mw.build_tab_index = 0
-        self.mw.browse_tab_index = 1
-        self.mw.learn_tab_index = 2
-        self.mw.write_tab_index = 3
+        self.main_widget.build_tab_index = 0
+        self.main_widget.generate_tab_index = 1
+        self.main_widget.dictionary_tab_index = 2
+        self.main_widget.learn_tab_index = 3
+        self.main_widget.act_tab_index = 4
 
     def load_current_tab(self):
-        self.mw.current_tab = self.mw.settings_manager.global_settings.get_current_tab()
-        if self.mw.current_tab == "construct":
-            index = self.mw.build_tab_index
-        elif self.mw.current_tab == "generate":
-            index = self.mw.build_tab_index
-        elif self.mw.current_tab == "browse":
-            index = self.mw.browse_tab_index
-        elif self.mw.current_tab == "learn":
-            index = self.mw.learn_tab_index
-        elif self.mw.current_tab == "write":
-            index = self.mw.write_tab_index
-        self.mw.fade_manager.fade_to_tabs(index)
+        mw = self.main_widget
+        mw.current_tab = mw.settings_manager.global_settings.get_current_tab()
+        mw.tabs_handler.update_tab_based_on_settings()

@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_image_label import ThumbnailImageLabel
+from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_image_label import (
+    ThumbnailImageLabel,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import (

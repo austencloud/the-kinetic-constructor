@@ -11,7 +11,7 @@ class DictionaryOptionsPanel(QWidget):
     def __init__(self, browser: "DictionaryBrowser") -> None:
         super().__init__(browser)
         self.browser = browser
-        self.main_widget = browser.browse_tab.main_widget
+        self.main_widget = browser.dictionary.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.sort_widget = SortWidget(self)
         self._setup_layout()

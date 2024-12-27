@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedWidget
 
 if TYPE_CHECKING:
-    from main_window.main_widget.build_tab.sequence_widget.sequence_widget import (
-        SequenceWidget,
-    )
+    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 from PyQt6.QtWidgets import QWidget, QSplitter
 from PyQt6.QtCore import Qt

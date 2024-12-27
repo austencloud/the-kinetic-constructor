@@ -7,8 +7,9 @@ from typing import TYPE_CHECKING
 from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_image_label import (
     ThumbnailImageLabel,
 )
+
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_browser.act_thumbnail_box import (
+    from main_window.main_widget.write_tab.act_browser.act_browser import (
         ActThumbnailBox,
     )
 

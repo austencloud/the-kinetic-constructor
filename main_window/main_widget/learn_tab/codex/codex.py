@@ -9,7 +9,7 @@ from .codex_animation_manager import CodexAnimationManager
 from .codex_data_manager import CodexDataManager
 
 if TYPE_CHECKING:
-    from ..learn_widget import LearnTab
+    from ..learn_tab import LearnTab
 
 
 class Codex(QWidget):

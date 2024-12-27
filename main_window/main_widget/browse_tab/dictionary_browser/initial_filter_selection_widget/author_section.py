@@ -155,7 +155,7 @@ class AuthorSection(FilterSectionBase):
 
     def display_only_thumbnails_by_author(self, author: str):
         """Display only the thumbnails that match the selected author."""
-        self.initial_selection_widget.browser.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browser.dictionary.dictionary_settings.set_current_filter(
             {"author": author}
         )
         self.browser.filter_manager.prepare_ui_for_filtering(f"sequences by {author}")

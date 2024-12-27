@@ -4,22 +4,20 @@ from PyQt6.QtCore import Qt
 
 
 from base_widgets.base_beat_frame import BaseBeatFrame
-
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame_layout_manager import (
     TempBeatFrameLayoutManager,
 )
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat import Beat
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.beat_view import (
-    BeatView,
-)
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
+from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.start_pos_beat import (
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.start_pos_beat_view import (
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
 
@@ -99,7 +97,7 @@ class TempBeatFrame(BaseBeatFrame):
 
     def on_beat_adjusted(self) -> None:
         current_sequence_json = (
-            self.json_manager.sequence_loader_saver.load_current_sequence_json()
+            self.json_manager.loader_saver.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
 
@@ -126,7 +124,7 @@ class TempBeatFrame(BaseBeatFrame):
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
 
-        self.manual_builder = self.main_widget.build_tab.sequence_constructor
+        self.manual_builder = self.main_widget.manual_builder
         if not current_sequence_json:
             return
         self.clear_sequence(
@@ -175,7 +173,7 @@ class TempBeatFrame(BaseBeatFrame):
         if should_reset_to_start_pos_picker:
             self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.last_beat = self.start_pos
-        self.json_manager.sequence_loader_saver.clear_current_sequence_file()
+        self.json_manager.loader_saver.clear_current_sequence_file()
 
         # Reset the layout to the smallest possible amount
         if self.settings_manager.global_settings.get_grow_sequence():

@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from ..base_classes.base_question_widget import BaseQuestionWidget
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_tab.learn_widget import LearnTab
+    from main_window.main_widget.learn_tab.learn_tab import LearnTab
 
 
 class Lesson3QuestionWidget(BaseQuestionWidget):

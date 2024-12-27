@@ -2,12 +2,13 @@ from typing import Union, TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
+
 if TYPE_CHECKING:
-    from main_window.main_widget.build_tab.option_picker.option_picker import (
-        OptionPicker,
-    )
-    from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker import (
+    from main_window.main_widget.construct_tab.components.start_pos_picker.start_pos_picker import (
         StartPosPicker,
+    )
+    from main_window.main_widget.construct_tab.option_picker.option_picker import (
+        OptionPicker,
     )
 
 

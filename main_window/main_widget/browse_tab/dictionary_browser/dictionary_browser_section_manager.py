@@ -2,16 +2,17 @@ from datetime import datetime
 import json
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser_section_header import DictionaryBrowserSectionHeader
-
-
+from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser_section_header import (
+    DictionaryBrowserSectionHeader,
+)
 from ..sorting_order import sorting_order, lowercase_letters
 from PIL import Image
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser import DictionaryBrowser
-
+    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser import (
+        DictionaryBrowser,
+    )
 
 
 class SectionManager:

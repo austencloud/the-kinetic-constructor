@@ -2,10 +2,8 @@
 
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtGui import QPainter
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt
 
-import logging
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -23,11 +21,12 @@ class BackgroundWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.show()
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        self.main_widget.background.paint_background(self, painter)
-        painter.end()
+    # def paintEvent(self, event):
+        # painter = QPainter(self)
+        # painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        # # self.main_widget.background.paint_background(self, painter)
+        # painter.end()
+        # pass
 
     def resizeEvent(self, event):
         self.resize(self.main_widget.size())

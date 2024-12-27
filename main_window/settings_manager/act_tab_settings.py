@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
 
 
-class ActTabSettings:
+class WriteTabSettings:
     DEFAULT_act_tab_SETTINGS = {
         "act_title": "Untitled Act",
         "last_saved_act": None,

@@ -16,11 +16,9 @@ class DictionarySequencePopulator:
 
     def _init_references(self) -> None:
         self.json_manager = self.main_widget.json_manager
-        self.start_pos_view = (
-            self.main_widget.build_tab.sequence_widget.beat_frame.start_pos_view
-        )
+        self.start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
 
-        self.sequence_widget = self.main_widget.build_tab.sequence_widget
+        self.sequence_widget = self.main_widget.sequence_widget
         self.beat_frame = self.sequence_widget.beat_frame
         self.initialized = True
 

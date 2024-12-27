@@ -14,6 +14,6 @@ class JsonPropTypeUpdater:
         self.json_manager = json_updater.json_manager
 
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
-        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[0]["prop_type"] = prop_type.name.lower()
-        self.json_manager.sequence_loader_saver.save_current_sequence(sequence)
+        self.json_manager.loader_saver.save_current_sequence(sequence)

@@ -2,8 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont, QPixmap
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.browse_tab.dictionary_browser.rainbow_progress_bar import RainbowProgressBar
+from main_window.main_widget.browse_tab.dictionary_browser.rainbow_progress_bar import (
+    RainbowProgressBar,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -16,8 +17,12 @@ class SplashComponents:
     def __init__(self, splash_screen: "SplashScreen"):
         self.splash_screen = splash_screen
         self.splash_screen.title_label = self._create_title_label()
-        self.splash_screen.currently_loading_label = self._create_label("Importing modules...")
-        self.splash_screen.created_by_label = self._create_label("Created by Austen Cloud", bold=True)
+        self.splash_screen.currently_loading_label = self._create_label(
+            "Importing modules..."
+        )
+        self.splash_screen.created_by_label = self._create_label(
+            "Created by Austen Cloud", bold=True
+        )
         self.splash_screen.progress_bar = self._create_progress_bar()
         self.splash_screen.logo_label = self._setup_logo()
 

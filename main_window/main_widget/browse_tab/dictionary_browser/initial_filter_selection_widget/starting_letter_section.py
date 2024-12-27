@@ -111,7 +111,7 @@ class StartingLetterSection(FilterSectionBase):
 
     def display_only_thumbnails_starting_with_letter(self, letter: str):
         """Display thumbnails of sequences starting with the specified letter."""
-        self.browser.browse_tab.dictionary_settings.set_current_filter(
+        self.browser.dictionary.dictionary_settings.set_current_filter(
             {"starting_letter": letter}
         )
 

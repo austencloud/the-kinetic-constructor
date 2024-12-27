@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     )
 
 
+
 class JsonMotionTypeUpdater:
     def __init__(self, json_updater: "JsonSequenceUpdater"):
         self.json_updater = json_updater
@@ -16,16 +17,16 @@ class JsonMotionTypeUpdater:
     def update_motion_type_in_json_at_index(
         self, index: int, color: str, motion_type: str
     ) -> None:
-        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["motion_type"] = motion_type
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if "prefloat_motion_type" in sequence[index][f"{color}_attributes"]:
                 del sequence[index][f"{color}_attributes"]["prefloat_motion_type"]
-        self.json_manager.sequence_loader_saver.save_current_sequence(sequence)
+        self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def update_prefloat_motion_type_in_json(
         self, index: int, color: str, motion_type: str
     ) -> None:
-        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["prefloat_motion_type"] = motion_type
-        self.json_manager.sequence_loader_saver.save_current_sequence(sequence)
+        self.json_manager.loader_saver.save_current_sequence(sequence)

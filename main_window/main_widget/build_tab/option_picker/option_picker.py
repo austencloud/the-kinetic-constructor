@@ -33,12 +33,11 @@ class OptionPicker(QWidget):
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_selector = OptionPickerReversalSelector(self)
         self.option_pool: list[BasePictograph] = []
-        # Decide on a max number based on the largest number of options typically displayed.
         MAX_PICTOGRAPHS = 36
         for _ in range(MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
             option.view = OptionPickerPictographView(option, self)
-            option.view.hide()  # Keep them hidden until needed
+            option.view.hide()
             self.option_pool.append(option)
 
         self._load_filter()

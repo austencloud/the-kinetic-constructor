@@ -5,8 +5,6 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.browse_tab.dictionary_browser.initial_filter_selection_widget.grid_mode_section import (
     GridModeSection,
 )
-
-
 from .author_section import AuthorSection
 from .filter_choice_widget import FilterChoiceWidget
 from .filter_section_base import FilterSectionBase
@@ -83,7 +81,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
                 resize_method = getattr(section, f"resize_{section_name}_section", None)
                 if callable(resize_method):
                     resize_method()
-            self.browser.browse_tab.dictionary_settings.set_current_section(
+            self.browser.dictionary.dictionary_settings.set_current_section(
                 section_name
             )
             self.current_filter_section = section_name
@@ -101,7 +99,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
             filter_key (str): The filter key (e.g., 'level', 'author').
             filter_value: The value for the filter key.
         """
-        self.browser.browse_tab.dictionary_settings.set_current_section("browser")
+        self.browser.dictionary.dictionary_settings.set_current_section("browser")
         self.browser.filter_manager.apply_current_filter({filter_key: filter_value})
 
     # Event Handlers

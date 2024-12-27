@@ -1,9 +1,7 @@
 # build_tab.py
 
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedWidget, QGraphicsOpacityEffect
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPainter
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.build_tab.sequence_constructor import SequenceConstructor
 
@@ -17,7 +15,7 @@ if TYPE_CHECKING:
 
 class BuildTab(QWidget):
     """
-    Manages SequenceConstructor and SequenceGeneratorWidget.
+    Manages SequenceConstructor and Generator.
     """
 
     def __init__(self, main_widget: "MainWidget") -> None:

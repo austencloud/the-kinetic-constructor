@@ -8,13 +8,14 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.browse_tab.dictionary_browser.go_back_button import GoBackToFilterChoiceButton
-
-
-
+from main_window.main_widget.browse_tab.dictionary_browser.go_back_button import (
+    GoBackToFilterChoiceButton,
+)
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
+    from main_window.main_widget.browse_tab.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
+        DictionaryInitialSelectionsWidget,
+    )
 
 
 class FilterSectionBase(QWidget):

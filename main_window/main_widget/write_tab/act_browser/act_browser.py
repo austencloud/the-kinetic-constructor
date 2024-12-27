@@ -1,14 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QScrollArea, QGridLayout, QSizePolicy
-
 from main_window.main_widget.write_tab.act_browser.act_thumbnail_box import (
     ActThumbnailBox,
 )
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.act_tab import WriteTab
+    from main_window.main_widget.write_tab.write_tab import WriteTab
 
 
 class ActBrowser(QScrollArea):
@@ -47,7 +45,7 @@ class ActBrowser(QScrollArea):
 
         self.thumbnail_boxes = []
 
-        sequences = self.act_tab.main_widget.browse_tab.browser.get.all_sequences()
+        sequences = self.act_tab.main_widget.brwose_tab.browser.get.all_sequences()
 
         row, col = 0, 0
         max_columns = 2

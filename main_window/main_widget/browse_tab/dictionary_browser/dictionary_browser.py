@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 class DictionaryBrowser(QWidget):
     def __init__(self, dictioanry: "BrowseTab") -> None:
         super().__init__(dictioanry)
-        self.browse_tab = dictioanry
+        self.dictionary = dictioanry
         self.main_widget = dictioanry.main_widget
         self.initialized = False
         self.currently_displayed_sequences = []

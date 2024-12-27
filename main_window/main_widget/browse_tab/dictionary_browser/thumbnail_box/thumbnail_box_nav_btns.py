@@ -48,9 +48,9 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
 
         if (
             self.thumbnail_box.image_label
-            == self.thumbnail_box.browser.browse_tab.selection_handler.currently_selected_thumbnail
+            == self.thumbnail_box.browser.dictionary.selection_handler.currently_selected_thumbnail
         ):
-            preview_area = self.thumbnail_box.browser.browse_tab.preview_area
+            preview_area = self.thumbnail_box.browser.dictionary.preview_area
             preview_area.variation_number_label.setText(
                 f"{self.thumbnail_box.current_index + 1}/{len(self.thumbnails)}"
             )
