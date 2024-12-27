@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class StackFadeManager(QObject):
     """Manages fade-out/fade-in animations for your single stacked widget."""
 
-    duration = 370
+    duration = 350
 
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
@@ -29,7 +29,6 @@ class StackFadeManager(QObject):
         self,
         stack: QStackedLayout,
         new_index: int,
-        on_finished: Optional[Callable] = None,
     ):
         """
         new_index corresponds to the pages in mw.content_stack:
@@ -46,10 +45,10 @@ class StackFadeManager(QObject):
         if old_index == new_index:
             return  # Already on that page
 
-        self._fade_stack(old_index, new_index, on_finished)
+        self._fade_stack(old_index, new_index)
 
     def _fade_stack(
-        self, old_index: int, new_index: int, on_finished: Optional[Callable] = None
+        self, old_index: int, new_index: int
     ):
         self._is_animating = True
 
@@ -69,13 +68,13 @@ class StackFadeManager(QObject):
         fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
         fade_out.finished.connect(
-            lambda: self._switch_and_fade_in(new_index, on_finished)
+            lambda: self._switch_and_fade_in(new_index)
         )
 
         fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()
-    def _switch_and_fade_in(self, new_index: int, on_finished: Optional[Callable]):
+    def _switch_and_fade_in(self, new_index: int):
         # Switch stack page
         self.stack.setCurrentIndex(new_index)
 
@@ -93,11 +92,8 @@ class StackFadeManager(QObject):
         fade_in.setStartValue(0.0)
         fade_in.setEndValue(1.0)
         fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-        if on_finished:
-            fade_in.finished.connect(on_finished)
-
         fade_in.finished.connect(self._on_fade_in_finished)
+        
         fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()

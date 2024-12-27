@@ -30,19 +30,9 @@ class StartPosPicker(BaseStartPosPicker):
         self.setStyleSheet("background-color: white;")
         self.initialized = False
         self.start_options: dict[str, BasePictograph] = {}
-        self.start_position_adder = (
-            self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
-        )
-        self.start_position_selected.connect(self.transition_to_sequence_building)
+
         self.display_variations()
 
-    def transition_to_sequence_building(self) -> None:
-        """Transition to the option picker for sequence building."""
-        self.start_position_picked = True
-        self.construct_tab.stacked_widget.setCurrentWidget(self.construct_tab.option_picker)
-        self.construct_tab.option_picker.show()
-        self.construct_tab.option_picker.scroll_area.section_manager.show_all_sections()
-        self.construct_tab.option_picker.update_option_picker()
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -98,6 +88,9 @@ class StartPosPicker(BaseStartPosPicker):
         self, position_key: str, grid_mode: str
     ) -> None:
         """Adds an option for the specified start position based on the current grid mode."""
+        self.start_position_adder = (
+            self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
+        )
         start_pos, end_pos = position_key.split("_")
         for letter, pictograph_dicts in self.main_widget.pictograph_dicts.items():
             for pictograph_dict in pictograph_dicts:

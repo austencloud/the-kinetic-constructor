@@ -52,6 +52,18 @@ class ConstructTab(QFrame):
         self.stacked_widget.addWidget(self.option_picker)
 
 
+    def transition_to_option_picker(self):
+        """Transition to the option picker for sequence building."""
+        option_picker_index = 2
+        self.main_widget.fade_manager.fade_to_tab(
+            self.stacked_widget, option_picker_index
+        )
+        # self.stacked_widget.setCurrentWidget(
+        #     self.option_picker
+        # )
+        self.option_picker.scroll_area.section_manager.show_all_sections()
+        self.option_picker.update_option_picker()
+
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
         self.stacked_widget.setCurrentWidget(self.advanced_start_pos_picker)
@@ -60,7 +72,6 @@ class ConstructTab(QFrame):
 
     def reset_to_start_pos_picker(self) -> None:
         """Reset the view back to the start position picker."""
-        self.start_position_picked = False
         self.stacked_widget.setCurrentWidget(self.start_pos_picker)
         self.start_pos_picker.show()
 

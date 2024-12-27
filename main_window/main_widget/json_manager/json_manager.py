@@ -27,7 +27,7 @@ class JsonManager:
         # current sequence
         self.loader_saver = SequenceDataLoaderSaver(self)
         self.updater = JsonSequenceUpdater(self)
-        self.start_position_handler = JsonStartPositionHandler(self)
+        self.start_pos_handler = JsonStartPositionHandler(self)
         self.ori_calculator = JsonOriCalculator(self)
         self.ori_validation_engine = JsonOrientationValidationEngine(self)
         self.act_saver = JsonActSaver(self)

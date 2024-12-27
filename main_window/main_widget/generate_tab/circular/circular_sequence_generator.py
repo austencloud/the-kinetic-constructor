@@ -86,7 +86,7 @@ class CircularSequenceGenerator(BaseSequenceGenerator):
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
-        self.main_widget.construct_tab.transition_to_sequence_building()
+        self.main_widget.construct_tab.transition_to_option_picker()
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(

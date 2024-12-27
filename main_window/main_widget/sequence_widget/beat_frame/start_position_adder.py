@@ -21,21 +21,14 @@ class StartPositionAdder:
 
     def add_start_pos_to_sequence(self, clicked_start_option: "BasePictograph") -> None:
         """Handle adding the start position to the sequence."""
-        start_position_beat = StartPositionBeat(self.beat_frame)
+        start_pos_beat = StartPositionBeat(self.beat_frame)
+        self.construct_tab = self.main_widget.construct_tab
+        start_pos_dict = clicked_start_option.pictograph_dict
+        start_pos_beat.updater.update_pictograph(deepcopy(start_pos_dict))
+        self.construct_tab.transition_to_option_picker()
         clicked_start_option.updater.update_dict_from_attributes()
-        start_position_beat.updater.update_pictograph(
-            deepcopy(clicked_start_option.pictograph_dict)
-        )
-
-        self.beat_frame.start_pos_view.set_start_pos(start_position_beat)
-        self.main_widget.construct_tab.last_beat = start_position_beat
+        self.beat_frame.start_pos_view.set_start_pos(start_pos_beat)
+        self.main_widget.construct_tab.last_beat = start_pos_beat
         start_pos_view = self.beat_frame.start_pos_view
-        self.beat_frame.selection_overlay.select_beat(
-            start_pos_view, toggle_graph_editor=False
-        )
-
-        self.json_manager.start_position_handler.set_start_position_data(
-            start_position_beat
-        )
-        self.main_widget.construct_tab.start_position_picked = True
-        self.main_widget.construct_tab.start_pos_picker.start_position_selected.emit(start_position_beat)
+        self.beat_frame.selection_overlay.select_beat(start_pos_view, False)
+        self.json_manager.start_pos_handler.set_start_position_data(start_pos_beat)

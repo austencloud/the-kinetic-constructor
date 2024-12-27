@@ -44,7 +44,7 @@ class StartPosManager(QObject):
 
         # When user picks a start position, proceed
         self.start_position_selected.connect(
-            self.manual_builder.transition_to_sequence_building
+            self.manual_builder.transition_to_option_picker
         )
 
         # Load whichever mode we want to show initially
@@ -168,7 +168,7 @@ class StartPosManager(QObject):
         beat_frame.selection_overlay.select_beat(start_pos_view)
 
         # If you store data in a JSON manager:
-        self.main_widget.json_manager.start_position_handler.set_start_position_data(
+        self.main_widget.json_manager.start_pos_handler.set_start_position_data(
             start_position_beat
         )
         self.start_position_selected.emit(start_position_beat)

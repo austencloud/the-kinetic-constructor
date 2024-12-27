@@ -55,7 +55,7 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
             QApplication.processEvents()
 
         manual_builder = self.sequence_widget.main_widget.construct_tab
-        manual_builder.transition_to_sequence_building()
+        manual_builder.transition_to_option_picker()
         manual_builder.option_picker.update_option_picker(self.sequence)
         QApplication.restoreOverrideCursor()
 

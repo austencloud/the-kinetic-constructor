@@ -83,7 +83,7 @@ class BaseSequenceGenerator:
                         deepcopy(pictograph_dict)
                     )
 
-                    self.main_widget.json_manager.start_position_handler.set_start_position_data(
+                    self.main_widget.json_manager.start_pos_handler.set_start_position_data(
                         start_position_beat
                     )
                     self.sequence_widget.beat_frame.start_pos_view.set_start_pos(

@@ -140,7 +140,7 @@ class TempBeatFrame(BaseBeatFrame):
         start_pos_beat = self.manual_builder.start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )
-        self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
+        self.json_manager.start_pos_handler.set_start_position_data(start_pos_beat)
         self.start_pos_view.set_start_pos(start_pos_beat)
         for pictograph_dict in current_sequence_json[1:]:
             if pictograph_dict.get("sequence_start_position"):
@@ -151,7 +151,7 @@ class TempBeatFrame(BaseBeatFrame):
         self.manual_builder.last_beat = last_beat
 
         if self.manual_builder.start_pos_picker.isVisible():
-            self.manual_builder.transition_to_sequence_building()
+            self.manual_builder.transition_to_option_picker()
 
         scroll_area = self.manual_builder.option_picker.scroll_area
         scroll_area.hide_all_pictographs()

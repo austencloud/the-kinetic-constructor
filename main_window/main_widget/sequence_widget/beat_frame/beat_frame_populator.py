@@ -48,7 +48,7 @@ class BeatFramePopulator:
         start_pos_beat = start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             self.current_sequence_json
         )
-        self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
+        self.json_manager.start_pos_handler.set_start_position_data(start_pos_beat)
         # QApplication.processEvents()
         self.start_pos_view.set_start_pos(start_pos_beat)
 
@@ -95,13 +95,11 @@ class BeatFramePopulator:
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
         self.construct_tab.last_beat = last_beat
 
-        # Transition to sequence building if necessary
-        self.construct_tab.start_pos_picker.transition_to_sequence_building()
+        self.construct_tab.transition_to_option_picker()
 
         scroll_area = self.construct_tab.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
 
-        # Retrieve filters from settings
         filters = (
             self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
         )
