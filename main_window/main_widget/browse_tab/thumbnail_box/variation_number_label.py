@@ -31,8 +31,9 @@ class VariationNumberLabel(QLabel):
     def clear(self) -> None:
         self.setText("")
 
-    def resize_variation_number_label(self):
+    def resizeEvent(self, event):
         font = self.font()
         font.setPointSize(self.parent.browse_tab.main_widget.width() // 100)
         font.setBold(True)
         self.setFont(font)
+        super().resizeEvent(event)

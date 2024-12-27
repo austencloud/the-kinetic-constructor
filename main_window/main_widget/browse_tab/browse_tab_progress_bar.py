@@ -10,6 +10,7 @@ class BrowseTabProgressBar(RainbowProgressBar):
     def __init__(self, browse_tab: "BrowseTab"):
         super().__init__(browse_tab)
         self.browse_tab = browse_tab
+        self.hide()
 
     def resizeEvent(self, event):
         self.setFixedWidth(self.browse_tab.width() // 3)

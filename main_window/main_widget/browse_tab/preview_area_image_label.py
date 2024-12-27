@@ -64,9 +64,6 @@ class PreviewAreaImageLabel(QLabel):
             f"font: {placeholder_text_font_size}pt Arial; font-weight: bold; color: {font_color};"
         )
 
-    def adjust_label_height_for_text(self):
-        min_height = int(max(self.preview_area.height() / 5, 50))
-        self.setMinimumHeight(min_height)
 
     def scale_pixmap_to_label(self, pixmap: QPixmap):
         label_width = int(self.preview_area.width() * 0.9)
@@ -85,7 +82,10 @@ class PreviewAreaImageLabel(QLabel):
         self.setPixmap(scaled_pixmap)
         self.setMinimumHeight(new_height)
 
-    def resize_image_label(self):
+    def resizeEvent(self, event):
+        min_height = int(max(self.preview_area.height() / 5, 50))
+        self.setMinimumHeight(min_height)
+
         if self.pixmap().width():
             self.update_thumbnail()
         else:

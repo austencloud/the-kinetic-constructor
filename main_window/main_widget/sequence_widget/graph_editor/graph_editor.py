@@ -59,7 +59,9 @@ class GraphEditor(QFrame):
         )
         self.adjustment_panel.setMinimumHeight(0)
 
-    def resize_graph_editor(self) -> None:
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+
         graph_editor_height = self.get_graph_editor_height()
         width = self.sequence_widget.width()
 

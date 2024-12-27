@@ -69,13 +69,6 @@ class BrowseTab(QWidget):
         self.preview_area = BrowseTabPreviewArea(self)
         self.initial_selection_widget = BrowseTabInitialSelectionsWidget(self)
 
-    def resize_dictionary_widget(self) -> None:
-        self.preview_area.resize_preview_area()
-
-    def resizeEvent(self, event: QResizeEvent) -> None:
-        super().resizeEvent(event)
-        self.resize_dictionary_widget()
-
     def show_initial_section(self):
         current_section = self.dictionary_settings.get_current_section()
         initial_selection_widget = self.initial_selection_widget

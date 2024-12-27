@@ -128,9 +128,3 @@ class BrowseTabInitialSelectionsWidget(QWidget):
 
     def on_grid_mode_button_clicked(self, grid_mode: str):
         self.apply_filter("grid_mode", grid_mode)
-
-    def resizeEvent(self, event):
-        """Resize the initial selections widget and its components."""
-        """Resize the filter choice buttons based on the browser's width."""
-        for button in self.filter_choice_widget.buttons.values():
-            button.setFixedWidth(self.browse_tab.width() // 5)

@@ -157,7 +157,6 @@ class DictionaryButtonPanel(QWidget):
             except RuntimeError:
                 self.full_screen_overlay = None
 
-    def resize_buttons(self):
         btn_size = int(self.browse_tab.width() // 24)
         icon_size = int(btn_size * 0.8)
         for button_name in [

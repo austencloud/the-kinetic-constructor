@@ -2,22 +2,14 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from main_window.main_widget.browse_tab.preview_area_image_label import (
-    PreviewAreaImageLabel,
-)
-from main_window.main_widget.browse_tab.dictionary_button_panel import (
-    DictionaryButtonPanel,
-)
-from main_window.main_widget.browse_tab.thumbnail_box.browse_tab_preview_area_base_word_label import (
+from .preview_area_image_label import PreviewAreaImageLabel
+from .dictionary_button_panel import DictionaryButtonPanel
+from .thumbnail_box.browse_tab_preview_area_base_word_label import (
     BrowseTabPreviewAreaWordLabel,
 )
-from main_window.main_widget.browse_tab.thumbnail_box.preview_area_nav_btns import (
-    PreviewAreaNavButtonsWidget,
-)
-from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import ThumbnailBox
-from main_window.main_widget.browse_tab.thumbnail_box.variation_number_label import (
-    VariationNumberLabel,
-)
+from .thumbnail_box.preview_area_nav_btns import PreviewAreaNavButtonsWidget
+from .thumbnail_box.thumbnail_box import ThumbnailBox
+from .thumbnail_box.variation_number_label import VariationNumberLabel
 
 
 if TYPE_CHECKING:
@@ -37,7 +29,6 @@ class BrowseTabPreviewArea(QWidget):
         self.initialized = False
         self.current_thumbnail_box: ThumbnailBox = None
         self._setup_components()
-        # self._hide_components()
         self._setup_layout()
         self.hide()
 
@@ -87,26 +78,17 @@ class BrowseTabPreviewArea(QWidget):
 
         elif len(self.thumbnails) == 0:
             self.image_label.show_placeholder()
-            self.image_label.adjust_label_height_for_text()
             self.variation_number_label.clear()
             self.word_label.clear()
 
     def _show_components(self):
         self.word_label.show()
-        self.word_label.resize_word_label()
         self.variation_number_label.show()
         self.button_panel.show_buttons()
-
-    def _hide_components(self):
-        # self.word_label.hide()
-        # self.variation_number_label.hide()
-        # self.button_panel.hide_buttons()
-        self.update_preview(None)
 
     def update_preview(self, index):
         if index is None:
             self.image_label.show_placeholder()
-            self.image_label.adjust_label_height_for_text()
             self.variation_number_label.clear()
             return
 
@@ -140,15 +122,9 @@ class BrowseTabPreviewArea(QWidget):
         super().showEvent(event)
         if self.thumbnails and self.current_index is not None:
             self.update_preview(self.current_index)
-        else:
-            self.image_label.adjust_label_height_for_text()
-        self.word_label.resize_word_label()
-        # if not self.initialized:
-        #     self.image_label.show_placeholder()
 
     def clear_preview(self):
         self.image_label.show_placeholder()
-        self.image_label.adjust_label_height_for_text()
         self.variation_number_label.clear()
         self.word_label.clear()
         self.current_index = 0
@@ -157,14 +133,3 @@ class BrowseTabPreviewArea(QWidget):
         self.nav_buttons_widget.hide()
         self.variation_number_label.hide()
         self.initialized = False
-
-    def resize_preview_area(self):
-        self.word_label.resize_word_label()
-        self.variation_number_label.resize_variation_number_label()
-        self.nav_buttons_widget.resize_nav_buttons()
-        self.image_label.adjust_label_height_for_text()
-        self.image_label.resize_image_label()
-        self.button_panel.resize_buttons()
-
-    def resizeEvent(self, event):
-        super().resizeEvent(event)

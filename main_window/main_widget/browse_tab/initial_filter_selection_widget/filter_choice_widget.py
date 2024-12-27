@@ -19,6 +19,7 @@ class FilterChoiceWidget(QWidget):
         self.button_labels: dict[str, QLabel] = {}
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
+        self.browse_tab = initial_selection_widget.browse_tab
         self._setup_ui()
 
     def _setup_ui(self):
@@ -171,6 +172,8 @@ class FilterChoiceWidget(QWidget):
         font_size = self.main_widget.width() // 150
         for button_label in self.button_labels.values():
             button_label.setStyleSheet(f"font-size: {font_size}px;")
+        for button in self.buttons.values():
+            button.setFixedWidth(self.browse_tab.width() // 5)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Handle resize events to adjust UI components."""

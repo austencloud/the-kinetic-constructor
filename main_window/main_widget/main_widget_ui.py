@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
-
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSplitter
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.write_tab.write_tab import WriteTab
@@ -74,11 +73,11 @@ class MainWidgetUI:
         top_layout.addWidget(mw.menu_bar_widget, 1)
         top_layout.addWidget(mw.navigation_widget, 1)
 
-        content_layout = QHBoxLayout() 
-        content_layout.addWidget(mw.sequence_widget, 1) 
-        content_layout.addWidget(mw.content_stack, 1) 
+        content_splitter = QSplitter()
+        content_splitter.addWidget(mw.sequence_widget)
+        content_splitter.addWidget(mw.content_stack)
         mw.main_layout.addLayout(top_layout)
-        mw.main_layout.addLayout(content_layout)
+        mw.main_layout.addWidget(content_splitter)
 
     def _setup_indices(self):
         self.main_widget.build_tab_index = 0

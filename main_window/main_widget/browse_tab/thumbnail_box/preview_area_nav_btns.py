@@ -76,14 +76,13 @@ class PreviewAreaNavButtonsWidget(QWidget):
         else:
             self.variation_number_label.show()
             self.show()
-            self.resize_nav_buttons()
             self.variation_number_label.update_index(self.current_index + 1)
 
-    def resize_nav_buttons(self):
+    def resizeEvent(self, event):
         font_size = self.preview_area.main_widget.width() // 20
         for button in self.buttons:
             button.setFont(QFont("Arial", font_size, QFont.Weight.Bold))
-
+        super().resizeEvent(event)
 
 class PreviewAreaNavButton(QPushButton):
     def __init__(self, text: str, parent: PreviewAreaNavButtonsWidget):

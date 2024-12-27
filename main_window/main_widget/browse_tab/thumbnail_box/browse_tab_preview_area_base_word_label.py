@@ -21,11 +21,11 @@ class BrowseTabPreviewAreaWordLabel(QLabel):
     def update_word_label(self, word: str):
         self.word = word
         self.setText(word)
-        self.resize_word_label()
 
-    def resize_word_label(self):
+    def resizeEvent(self, event):
         font_size = self.preview_area.width() // 20
         self.setFont(QFont("Georgia", font_size, QFont.Weight.DemiBold))
         while self.fontMetrics().horizontalAdvance(self.word) > self.width():
             font_size -= 1
             self.setFont(QFont("Georgia", font_size, QFont.Weight.DemiBold))
+        super().resizeEvent(event)

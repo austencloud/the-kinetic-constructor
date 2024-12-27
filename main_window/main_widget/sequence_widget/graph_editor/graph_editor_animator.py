@@ -1,78 +1,98 @@
+from PyQt6.QtCore import QPropertyAnimation, QRect, QPoint, QEasingCurve, QObject
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import (
-    QObject,
-    QPropertyAnimation,
-    QEasingCurve,
-    QSequentialAnimationGroup,
-    QPoint,
-)
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.graph_editor.graph_editor import (
-        GraphEditor,
-    )
+    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class GraphEditorAnimator(QObject):
-    def __init__(self, graph_editor: "GraphEditor"):
-        super().__init__()
-        self.graph_editor = graph_editor
-        self.sequence_widget = graph_editor.sequence_widget
-        self.toggle_tab = self.graph_editor.toggle_tab
-        self.is_animating = False
-
-        # Initialize animations
-        self.graph_editor_animation = QPropertyAnimation(
-            self.graph_editor, b"maximumHeight"
+    def __init__(self, sequence_widget: "SequenceWidget"):
+        super().__init__(sequence_widget)
+        self.sequence_widget = sequence_widget
+        self.graph_editor = sequence_widget.graph_editor
+        self.toggle_tab = sequence_widget.toggle_tab
+        self.graph_editor_placeholder = (
+            sequence_widget.layout_manager.graph_editor_placeholder
         )
-        self.graph_editor_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        self.graph_editor_animation.setDuration(300)
+        self.button_panel_bottom_placeholder = (
+            sequence_widget.button_panel.bottom_placeholder
+        )  # Bottom spacer in button panel
 
-        self.toggle_tab_animation = QPropertyAnimation(self.toggle_tab, b"pos")
-        self.toggle_tab_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        self.toggle_tab_animation.setDuration(300)
-
-        # Group both animations
-        self.animation_group = QSequentialAnimationGroup()
-        self.animation_group.addAnimation(self.graph_editor_animation)
-        self.animation_group.addAnimation(self.toggle_tab_animation)
-        self.animation_group.finished.connect(self.animation_finished)
-
-    def animate_toggle(self):
-        self.graph_editor.show()
-        self.is_animating = True
-        editor_height = self.sequence_widget.main_widget.height() // 4
-
-        if self.graph_editor.state.is_graph_editor_visible:
-            # Collapse to zero height
-            self.graph_editor.setMinimumHeight(0)
-            self.graph_editor_animation.setStartValue(self.graph_editor.height())
-            self.graph_editor_animation.setEndValue(0)
-
-            # Move toggle to bottom
-            toggle_bottom_position = QPoint(
-                self.toggle_tab.pos().x(),
-                self.sequence_widget.height() - self.toggle_tab.height(),
-            )
-            self.toggle_tab_animation.setStartValue(self.toggle_tab.pos())
-            self.toggle_tab_animation.setEndValue(toggle_bottom_position)
-            self.graph_editor.state.is_graph_editor_visible = False
+    def toggle(self):
+        if self.graph_editor.isVisible():
+            self.animate_graph_editor(show=False)
         else:
-            # Expand graph editor to full height
-            self.graph_editor.setMinimumHeight(0)
-            self.graph_editor_animation.setStartValue(0)
-            self.graph_editor_animation.setEndValue(editor_height)
-
-            # Reset toggle tab to above GraphEditor
-            toggle_top_position = self.graph_editor.pos() - QPoint(
-                0, self.toggle_tab.height()
+            self.sequence_widget.layout_manager.main_layout.addWidget(
+                self.graph_editor_placeholder
             )
-            self.toggle_tab_animation.setStartValue(self.toggle_tab.pos())
-            self.toggle_tab_animation.setEndValue(toggle_top_position)
-            self.graph_editor.state.is_graph_editor_visible = True
 
-        self.animation_group.start()
+            self.graph_editor.show()
+            self.animate_graph_editor(show=True)
 
-    def animation_finished(self):
-        self.is_animating = False
-        self.graph_editor.state.save_graph_editor_state()
+    def animate_graph_editor(self, show):
+        parent_height = self.sequence_widget.height()
+        parent_width = self.sequence_widget.width()
+        desired_height = self.sequence_widget.graph_editor.get_graph_editor_height()
+
+        if show:
+            editor_start_rect = QRect(0, parent_height, parent_width, 0)
+            editor_end_rect = QRect(
+                0, parent_height - desired_height, parent_width, desired_height
+            )
+            toggle_start_pos = QPoint(0, parent_height - self.toggle_tab.height())
+            toggle_end_pos = QPoint(
+                0, parent_height - desired_height - self.toggle_tab.height()
+            )
+            placeholder_start_height = 0
+            placeholder_end_height = desired_height
+        else:
+            editor_start_rect = QRect(
+                0, parent_height - desired_height, parent_width, desired_height
+            )
+            editor_end_rect = QRect(0, parent_height, parent_width, 0)
+            toggle_start_pos = QPoint(
+                0, parent_height - desired_height - self.toggle_tab.height()
+            )
+            toggle_end_pos = QPoint(0, parent_height - self.toggle_tab.height())
+            placeholder_start_height = desired_height
+            placeholder_end_height = 0
+
+        # Animate GraphEditor geometry
+        self.graph_editor_animation = QPropertyAnimation(self.graph_editor, b"geometry")
+        self.graph_editor_animation.setStartValue(editor_start_rect)
+        self.graph_editor_animation.setEndValue(editor_end_rect)
+        self.graph_editor_animation.setDuration(300)
+        self.graph_editor_animation.setEasingCurve(QEasingCurve.Type.OutQuad)
+
+        # Animate graph editor placeholder height
+        self.graph_editor_placeholder_animation = QPropertyAnimation(
+            self.graph_editor_placeholder, b"minimumHeight"
+        )
+        self.graph_editor_placeholder_animation.setStartValue(placeholder_start_height)
+        self.graph_editor_placeholder_animation.setEndValue(placeholder_end_height)
+        self.graph_editor_placeholder_animation.setDuration(300)
+        self.graph_editor_placeholder_animation.setEasingCurve(
+            QEasingCurve.Type.OutQuad
+        )
+
+        # Remove placeholder on collapse
+        if not show:
+            self.graph_editor_animation.finished.connect(
+                lambda: self.sequence_widget.layout_manager.main_layout.removeWidget(
+                    self.graph_editor_placeholder
+                )
+            )
+            self.graph_editor_animation.finished.connect(self.graph_editor.hide)
+
+        # Animate toggle tab position
+        self.toggle_tab_animation = QPropertyAnimation(self.toggle_tab, b"pos")
+        self.toggle_tab_animation.setStartValue(toggle_start_pos)
+        self.toggle_tab_animation.setEndValue(toggle_end_pos)
+        self.toggle_tab_animation.setDuration(300)
+        self.toggle_tab_animation.setEasingCurve(QEasingCurve.Type.OutQuad)
+
+        # Start all animations simultaneously
+        self.graph_editor_animation.start()
+        self.graph_editor_placeholder_animation.start()
+        self.toggle_tab_animation.start()
+        # self.sequence_widget.button_panel.resize_button_panel()

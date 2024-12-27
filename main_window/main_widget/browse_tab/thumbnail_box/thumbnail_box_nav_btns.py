@@ -3,11 +3,9 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
-if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import (
-        ThumbnailBox,
-    )
 
+if TYPE_CHECKING:
+    from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import ThumbnailBox
 
 class ThumbnailBoxNavButtonsWidget(QWidget):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
