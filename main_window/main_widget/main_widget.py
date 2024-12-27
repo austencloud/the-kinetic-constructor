@@ -91,16 +91,18 @@ class MainWidget(QWidget):
     # Layouts and Widgets
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
-    content_layout: QHBoxLayout
-    right_stacked_widget: QStackedWidget
-    main_stacked_widget: QStackedWidget
-    dictionary_learn_widget: QStackedWidget
-    build_generate_widget: QWidget
-    build_generate_layout: QHBoxLayout
+    # central_layout: QHBoxLayout
+    # content_layout: QHBoxLayout
+    # right_stacked_widget: QStackedWidget
+    # main_stacked_widget: QStackedWidget
+    # dictionary_learn_widget: QStackedWidget
+    # build_generate_widget: QWidget
+    # build_generate_layout: QHBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
     background_widget: "MainBackgroundWidget"
+    content_stack: QStackedWidget
 
     # Indices for tabs
     build_tab_index: int = 0
@@ -143,9 +145,6 @@ class MainWidget(QWidget):
 
     def showEvent(self, event):
         self.event_handler.showEvent(event)
-
-    def hideEvent(self, event):
-        self.event_handler.hideEvent(event)
 
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)

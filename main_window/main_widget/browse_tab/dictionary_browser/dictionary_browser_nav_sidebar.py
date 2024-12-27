@@ -251,7 +251,7 @@ class DictionaryBrowserNavSidebar(QWidget):
     def style_header_label(self, label: QLabel):
         font_size = self.browser.height() // 40
         font_color = (
-            self.settings_manager.global_settings.font_color_updater.get_font_color(
+            self.browser.main_widget.font_color_updater.get_font_color(
                 self.settings_manager.global_settings.get_background_type()
             )
         )

@@ -20,7 +20,7 @@ class LearnTab(QWidget):
     """Widget for the learning module, managing lesson selection and individual lessons."""
 
     def __init__(self, main_widget: "MainWidget") -> None:
-        """Initializes LearnWidget with references to the main widget and settings."""
+        """Initializes LearnTab with references to the main widget and settings."""
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.background_manager = None
@@ -77,7 +77,7 @@ class LearnTab(QWidget):
         self.main_layout.addWidget(self.right_side, 1)
 
     def _setup_main_layout(self) -> None:
-        """Sets the final QVBoxLayout for the LearnWidget."""
+        """Sets the final QVBoxLayout for the LearnTab."""
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addLayout(self.main_layout)

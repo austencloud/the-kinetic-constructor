@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class BuildTab(QWidget):
     """
-    Manages SequenceConstructor and SequenceGeneratorWidget.
+    Manages SequenceConstructor and Generator.
     """
 
     def __init__(self, main_widget: "MainWidget") -> None:

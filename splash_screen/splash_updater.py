@@ -14,12 +14,11 @@ class SplashUpdater:
             "MenuBarWidget": "Initializing menu...",
             "NavigationWidget": "Setting up navigation...",
             "SequenceWidget": "Loading sequences...",
-            "DictionaryWidget": "Building dictionary...",
-            "LearnWidget": "Preparing lessons...",
-            "ActTab": "Setting up Act Tab...",
-            "ManualBuilderWidget": "Loading manual builder...",
-            "SequenceGeneratorWidget": "Setting up sequence generator...",
-            "MainWidgetUI": "Configuring main UI...",
+            "BrowseTab": "Building dictionary...",
+            "LearnTab": "Preparing lessons...",
+            "WriteTab": "Setting up Act Tab...",
+            "ConstructTab": "Loading construct tab...",
+            "GenerateTab": "Setting up generate tab...",
             "Finalizing": "Finalizing setup...",
         }
         self.current_progress = 0

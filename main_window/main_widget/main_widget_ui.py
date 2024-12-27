@@ -32,9 +32,10 @@ class MainWidgetUI:
 
         mw = self.main_widget
 
-        mw.main_stacked_widget = QStackedWidget()
-        mw.right_stacked_widget = QStackedWidget()
-        mw.dictionary_learn_widget = QStackedWidget()
+        # mw.main_stacked_widget = QStackedWidget()
+        # mw.right_stacked_widget = QStackedWidget()
+        # mw.dictionary_learn_widget = QStackedWidget()
+        mw.content_stack = QStackedWidget()  # <--- NEW
 
         mw.fade_manager = TabFadeManager(mw)
         mw.background_widget = MainBackgroundWidget(mw)
@@ -48,35 +49,27 @@ class MainWidgetUI:
         mw.navigation_widget = NavigationWidget(mw)
         splash.updater.update_progress("SequenceWidget")
         mw.sequence_widget = SequenceWidget(mw)
-        splash.updater.update_progress("ManualBuilderWidget")
+        splash.updater.update_progress("ConstructTab")
         mw.constructor_tab = ConstructTab(mw)
-        splash.updater.update_progress("SequenceGeneratorWidget")
+        splash.updater.update_progress("GenerateTab")
         mw.generator_tab = GenerateTab(mw)
-        splash.updater.update_progress("DictionaryWidget")
+        splash.updater.update_progress("BrowseTab")
         mw.dictionary_widget = BrowseTab(mw)
-        splash.updater.update_progress("LearnWidget")
+        splash.updater.update_progress("LearnTab")
         mw.learn_widget = LearnTab(mw)
-        splash.updater.update_progress("ActTab")
+        splash.updater.update_progress("WriteTab")
         mw.act_tab = WriteTab(mw)
         splash.updater.update_progress("Finalizing")
 
-        mw.right_stacked_widget.addWidget(mw.constructor_tab)
-        mw.right_stacked_widget.addWidget(mw.generator_tab)
+        mw.content_stack.addWidget(mw.constructor_tab)  # index 0: Build
+        mw.content_stack.addWidget(mw.generator_tab)  # index 1: Generate
+        mw.content_stack.addWidget(mw.dictionary_widget)  # index 2: Dictionary
+        mw.content_stack.addWidget(mw.learn_widget)  # index 3: Learn
+        mw.content_stack.addWidget(mw.act_tab)  # index 4: Act
 
-        mw.build_generate_widget = QWidget()
-        build_generate_layout = QHBoxLayout(mw.build_generate_widget)
-        build_generate_layout.addWidget(mw.sequence_widget)
-        build_generate_layout.addWidget(mw.right_stacked_widget)
-
-        build_generate_layout.setStretch(0, 1)
-        build_generate_layout.setStretch(1, 1)
-
-        mw.dictionary_learn_widget.addWidget(mw.dictionary_widget)
-        mw.dictionary_learn_widget.addWidget(mw.learn_widget)
-
-        mw.main_stacked_widget.addWidget(mw.build_generate_widget)
-        mw.main_stacked_widget.addWidget(mw.dictionary_learn_widget)
-        mw.main_stacked_widget.addWidget(mw.act_tab)
+        # # set stretches equally
+        # mw.central_layout.setStretch(0, 1)
+        # mw.central_layout.setStretch(1, 1)
 
     def _setup_layout(self):
         mw = self.main_widget
@@ -90,8 +83,12 @@ class MainWidgetUI:
         top_layout.addWidget(mw.menu_bar_widget, 1)
         top_layout.addWidget(mw.navigation_widget, 1)
 
+        # Main content area: SequenceWidget on the left, stacked widget on the right
+        content_layout = QHBoxLayout()  # <--- NEW
+        content_layout.addWidget(mw.sequence_widget, 1)  # left side
+        content_layout.addWidget(mw.content_stack, 1)  # right side
         mw.main_layout.addLayout(top_layout)
-        mw.main_layout.addWidget(mw.main_stacked_widget)
+        mw.main_layout.addLayout(content_layout)
 
     def _setup_indices(self):
         self.main_widget.build_tab_index = 0
