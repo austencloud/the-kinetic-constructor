@@ -18,7 +18,7 @@ class SequenceClearer:
         self, show_indicator=True, should_reset_to_start_pos_picker=True
     ) -> None:
         if not self.manual_builder:
-            self.manual_builder = self.sequence_widget.main_widget.constructor_tab
+            self.manual_builder = self.sequence_widget.main_widget.construct_tab
         # if the user is on the advanced start pos picker tab, then don't reset to the start pos picker
 
         self.json_manager.loader_saver.clear_current_sequence_file()
@@ -32,7 +32,7 @@ class SequenceClearer:
 
     def _initialize_manual_builder(self) -> None:
         if not self.manual_builder:
-            self.manual_builder = self.sequence_widget.main_widget.constructor_tab
+            self.manual_builder = self.sequence_widget.main_widget.construct_tab
 
     def _reset_manual_builder(self, should_reset_to_start_pos_picker: bool) -> None:
         if should_reset_to_start_pos_picker:

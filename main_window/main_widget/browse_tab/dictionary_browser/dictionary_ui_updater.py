@@ -58,7 +58,7 @@ class DictionaryUIUpdater:
             self.browser.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
         )
 
-        font_color = self.browser.main_widget.main_window.settings_manager.global_settings.font_color_updater.get_font_color(
+        font_color = self.browser.main_widget.font_color_updater.get_font_color(
             self.browser.main_widget.main_window.settings_manager.global_settings.get_background_type()
         )
 

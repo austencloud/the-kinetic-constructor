@@ -45,7 +45,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        self.sequence_generator_widget.main_widget.constructor_tab.option_picker.update_option_picker()
+        self.sequence_generator_widget.main_widget.construct_tab.option_picker.update_option_picker()
 
     def get_selected_letter_types(self) -> list[LetterType]:
         return self.letter_type_picker.get_selected_letter_types()

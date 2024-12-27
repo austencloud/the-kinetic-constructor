@@ -53,7 +53,7 @@ class GlyphVisibilityManager:
                 self.apply_current_visibility_settings(beat)
         for (
             option
-        ) in self.main_window.main_widget.constructor_tab.option_picker.option_pool:
+        ) in self.main_window.main_widget.construct_tab.option_picker.option_pool:
             if option:
                 self.apply_current_visibility_settings(option)
 

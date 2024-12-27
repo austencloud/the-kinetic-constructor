@@ -65,7 +65,7 @@ class TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
         self.json_validation_engine.run(is_current_sequence=True)
-        self.main_widget.constructor_tab.option_picker.update_option_picker()
+        self.main_widget.construct_tab.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
 
@@ -100,7 +100,7 @@ class TurnsAdjustmentManager(QObject):
             self.pictograph.motions[self.color], new_turns
         )
         self.json_validation_engine.run(is_current_sequence=True)
-        self.main_widget.constructor_tab.option_picker.update_option_picker()
+        self.main_widget.construct_tab.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
 

@@ -31,7 +31,7 @@ class ImageExportBeatFactory:
             )
         elif self.beat_frame_class.__name__ == "TempBeatFrame":
             temp_beat_frame = self.beat_frame_class(
-                self.export_manager.main_widget.dictionary_widget
+                self.export_manager.main_widget.brwose_tab
             )
 
         filled_beats = []

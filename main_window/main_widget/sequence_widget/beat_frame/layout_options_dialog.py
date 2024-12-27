@@ -106,7 +106,7 @@ class LayoutOptionsDialog(QDialog):
         self.accept()
 
     def check_option_picker_state(self):
-        option_picker = self.sequence_widget.main_widget.constructor_tab.option_picker
+        option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
         if (
             not self.settings_manager.global_settings.get_grow_sequence()
             and self.sequence_widget.beat_frame.get.next_available_beat() - 1

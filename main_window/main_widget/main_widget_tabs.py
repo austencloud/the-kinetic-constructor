@@ -15,20 +15,6 @@ class MainWidgetTabs:
         # (or pass in an existing TabFadeManager if you already made it in main_widget)
 
     def on_tab_changed(self, index: int) -> None:
-        """
-        Switch top-level / sub-level indexes,
-        then tell the fade_manager to animate the relevant portion.
-        """
-        # 1) Switch top-level & sub-level as normal (like your old code):
-        tab_mapping = {
-            self.main_widget.build_tab_index: (0, 0),
-            self.main_widget.generate_tab_index: (0, 1),
-            self.main_widget.dictionary_tab_index: (1, 0),
-            self.main_widget.learn_tab_index: (1, 1),
-            self.main_widget.act_tab_index: (2, None),
-        }
-
-        # 2) Save user preference
         tab_names = {
             self.main_widget.build_tab_index: "build",
             self.main_widget.generate_tab_index: "generate",
@@ -41,21 +27,10 @@ class MainWidgetTabs:
                 tab_names[index]
             )
 
-        # 3) Now call fade_manager to animate.
-        self.main_widget.fade_manager.fade_to_tab(index)
-        
-        # if index in tab_mapping:
-            # main_index, sub_index = tab_mapping[index]
-            # # Immediately set the main_stacked_widget if needed
-            # self.main_widget.main_stacked_widget.setCurrentIndex(main_index)
-            # # If sub_index is not None, set the sub-stacked index
-            # if sub_index is not None:
-            #     if main_index == 0:
-            #         # Switch right_stacked
-            #         self.main_widget.right_stacked_widget.setCurrentIndex(sub_index)
-            #     elif main_index == 1:
-            #         # Switch dictionary_learn_widget
-            #         self.main_widget.dictionary_learn_widget.setCurrentIndex(sub_index)
+        self.main_widget.fade_manager.fade_to_tab(
+            self.main_widget.content_stack, index
+        )
+
 
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""

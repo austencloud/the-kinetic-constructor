@@ -18,11 +18,11 @@ class DictionaryBrowserNavSidebar(QWidget):
         self.buttons: list[QPushButton] = []
         self.year_labels: dict[str, QPushButton] = {}
         self.spacer_lines: list[QLabel] = []
-        self.length_label: QLabel = None  # New attribute for the length label
-        self.length_spacer_line: QLabel = None  # Spacer line for length label
-        self.letter_label: QLabel = None  # New attribute for the letter label
-        self.letter_spacer_line: QLabel = None  # Spacer line for letter label
-        self.selected_button: QPushButton = None  # Track the selected button
+        self.length_label: QLabel = None
+        self.length_spacer_line: QLabel = None
+        self.letter_label: QLabel = None
+        self.letter_spacer_line: QLabel = None
+        self.selected_button: QPushButton = None
         self.settings_manager = (
             self.browser.dictionary.main_widget.main_window.settings_manager
         )
@@ -53,19 +53,16 @@ class DictionaryBrowserNavSidebar(QWidget):
                 Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignVCenter
             )
 
-            # Create and style the length label
             self.length_label = QLabel("Length")
             self.style_header_label(self.length_label)
             self.layout.addWidget(self.length_label)
 
-            # Add a spacer line below the length label
             self.length_spacer_line = QLabel()
             self.length_spacer_line.setStyleSheet(
                 "border: 1px solid black; margin: 0px 0; background: black;"
             )
             self.layout.addWidget(self.length_spacer_line)
 
-            # Add buttons for each section (sequence length)
             for section in sections:
                 button = QPushButton(str(section))
                 button.clicked.connect(
@@ -82,19 +79,16 @@ class DictionaryBrowserNavSidebar(QWidget):
                 Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignVCenter
             )
 
-            # Create and style the letter label
             self.letter_label = QLabel("Letter")
             self.style_header_label(self.letter_label)
             self.layout.addWidget(self.letter_label)
 
-            # Add a spacer line below the letter label
             self.letter_spacer_line = QLabel()
             self.letter_spacer_line.setStyleSheet(
                 "border: 1px solid black; margin: 0px 0; background: black;"
             )
             self.layout.addWidget(self.letter_spacer_line)
 
-            # Add buttons for each section (letters)
             for section in sections:
                 button = QPushButton(str(section))
                 button.clicked.connect(
@@ -210,10 +204,8 @@ class DictionaryBrowserNavSidebar(QWidget):
 
     def style_button(self, button: QPushButton, selected: bool = False):
         font_size = self.browser.height() // 40
-        font_color = (
-            self.settings_manager.global_settings.font_color_updater.get_font_color(
-                self.settings_manager.global_settings.get_background_type()
-            )
+        font_color = self.browser.main_widget.font_color_updater.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
         )
         button_background_color = "lightgray" if font_color == "black" else "#555"
         hover_color = "lightgray" if font_color == "black" else "#555"
@@ -250,10 +242,8 @@ class DictionaryBrowserNavSidebar(QWidget):
 
     def style_header_label(self, label: QLabel):
         font_size = self.browser.height() // 40
-        font_color = (
-            self.browser.main_widget.font_color_updater.get_font_color(
-                self.settings_manager.global_settings.get_background_type()
-            )
+        font_color = self.browser.main_widget.font_color_updater.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
         )
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(

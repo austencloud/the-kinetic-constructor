@@ -49,7 +49,7 @@ class AddToDictionaryManager:
                 f"New variation added to '{base_word}' as version {variation_number}."
             )
 
-        thumbnail_box = self.sequence_widget.main_widget.dictionary_widget.browser.scroll_widget.thumbnail_boxes.get(
+        thumbnail_box = self.sequence_widget.main_widget.brwose_tab.browser.scroll_widget.thumbnail_boxes.get(
             base_word
         )
         if thumbnail_box:
@@ -92,7 +92,7 @@ class AddToDictionaryManager:
         return thumbnails
 
     def find_thumbnail_box(self, base_word):
-        return self.sequence_widget.main_widget.dictionary_widget.browser.scroll_widget.thumbnail_boxes.get(
+        return self.sequence_widget.main_widget.brwose_tab.browser.scroll_widget.thumbnail_boxes.get(
             base_word
         )
 

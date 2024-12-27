@@ -78,17 +78,17 @@ class MainWidgetManager:
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
         )
 
-        start_pos_picker = self.main_widget.constructor_tab.start_pos_picker
+        start_pos_picker = self.main_widget.construct_tab.start_pos_picker
         start_pos_picker.display_variations(grid_mode)
         advanced_start_pos_picker = (
-            self.main_widget.constructor_tab.advanced_start_pos_picker
+            self.main_widget.construct_tab.advanced_start_pos_picker
         )
         advanced_start_pos_picker.display_variations(grid_mode)
 
         sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
         if (
-            self.main_widget.constructor_tab.stacked_widget.currentWidget()
-            == self.main_widget.constructor_tab.advanced_start_pos_picker
+            self.main_widget.construct_tab.stacked_widget.currentWidget()
+            == self.main_widget.construct_tab.advanced_start_pos_picker
         ):
             should_reset_to_start_pos_picker = False
         else:
@@ -110,7 +110,7 @@ class MainWidgetManager:
                 self.main_widget.sequence_widget.graph_editor.pictograph_container
             )
             pictograph_container.GE_pictograph_view.set_to_blank_grid()
-        option_picker = self.main_widget.constructor_tab.option_picker
+        option_picker = self.main_widget.construct_tab.option_picker
         for pictograph in option_picker.option_pool:
             pictograph.grid.hide()
             pictograph.grid.__init__(pictograph, pictograph.grid.grid_data, grid_mode)

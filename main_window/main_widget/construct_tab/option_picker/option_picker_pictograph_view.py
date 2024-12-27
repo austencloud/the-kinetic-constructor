@@ -106,7 +106,7 @@ class OptionPickerPictographView(BorderedPictographView):
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
-            self.pictograph.main_widget.constructor_tab.option_picker.manual_builder.option_click_handler.on_option_clicked(
+            self.pictograph.main_widget.construct_tab.option_picker.manual_builder.option_click_handler.on_option_clicked(
                 self.pictograph
             )
         QApplication.restoreOverrideCursor()
@@ -145,14 +145,14 @@ class OptionPickerPictographView(BorderedPictographView):
         spacing = self.option_picker.scroll_area.spacing
 
         calculated_width = int(
-            (self.pictograph.main_widget.constructor_tab.width() / 8) - spacing
+            (self.pictograph.main_widget.construct_tab.width() / 8) - spacing
         )
 
         view_width = (
             calculated_width
             if calculated_width
-            < self.pictograph.main_widget.constructor_tab.height() // 8
-            else self.pictograph.main_widget.constructor_tab.height() // 8
+            < self.pictograph.main_widget.construct_tab.height() // 8
+            else self.pictograph.main_widget.construct_tab.height() // 8
         )
 
         outer_border_width = max(1, int(view_width * 0.015))

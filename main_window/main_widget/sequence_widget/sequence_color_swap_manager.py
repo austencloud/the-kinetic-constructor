@@ -31,7 +31,7 @@ class SequenceColorSwapManager:
         QApplication.restoreOverrideCursor()
 
     def swap_option_picker_colors(self):
-        option_picker = self.sequence_widget.main_widget.constructor_tab.option_picker
+        option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
         for pictograph in option_picker.option_pool:
             new_dict = self.swap_dict_values(pictograph.pictograph_dict.copy())
             sequence_so_far = self.json_loader.load_current_sequence_json()

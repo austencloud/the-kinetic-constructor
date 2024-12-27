@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional, Callable
 from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QStackedLayout
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
@@ -20,12 +21,11 @@ class TabFadeManager(QObject):
     def __init__(self, mw: "MainWidget"):
         super().__init__(mw)
         self.mw = mw
-        self.stack = mw.content_stack  # <--- your single stack
         self._old_opacity: Optional[QGraphicsOpacityEffect] = None
         self._new_opacity: Optional[QGraphicsOpacityEffect] = None
         self._is_animating = False
 
-    def fade_to_tab(self, new_index: int, on_finished: Optional[Callable] = None):
+    def fade_to_tab(self, stack:QStackedLayout, new_index: int, on_finished: Optional[Callable] = None):
         """
         new_index corresponds to the pages in mw.content_stack:
           0 -> Build
@@ -36,7 +36,7 @@ class TabFadeManager(QObject):
         """
         if self._is_animating:
             return
-
+        self.stack = stack
         old_index = self.stack.currentIndex()
         if old_index == new_index:
             return  # Already on that page

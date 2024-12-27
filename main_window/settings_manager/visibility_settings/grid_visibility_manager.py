@@ -36,7 +36,7 @@ class GridVisibilityManager:
                         self.non_radial_visible
                     )
 
-        for option in main_widget.constructor_tab.option_picker.option_pool:
+        for option in main_widget.construct_tab.option_picker.option_pool:
             if hasattr(option, "grid"):
                 option.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
 
@@ -58,7 +58,7 @@ class GridVisibilityManager:
                 )
 
         # Apply to advanced start pos picker and the GE blank pictograph
-        manual_builder = main_widget.constructor_tab
+        manual_builder = main_widget.construct_tab
         for (
             pictograph_list
         ) in manual_builder.advanced_start_pos_picker.start_pos_cache.values():

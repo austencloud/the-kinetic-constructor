@@ -29,7 +29,7 @@ class SequenceRotationManager:
         QApplication.restoreOverrideCursor()
 
     def rotate_option_picker_pictographs(self):
-        option_picker = self.sequence_widget.main_widget.constructor_tab.option_picker
+        option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
         for pictograph in option_picker.option_pool:
             new_dict = self._rotate_dict(pictograph.pictograph_dict.copy())
             pictograph.updater.update_pictograph(new_dict)

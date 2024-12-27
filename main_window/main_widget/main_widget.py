@@ -60,11 +60,11 @@ class MainWidget(QWidget):
     splash_screen: "SplashScreen"
 
     # Sub-widgets
-    constructor_tab: "ConstructTab"
-    generator_tab: "GenerateTab"
-    dictionary_widget: "BrowseTab"
-    learn_widget: "LearnTab"
-    act_tab: "WriteTab"
+    construct_tab: "ConstructTab"
+    generate_tab: "GenerateTab"
+    brwose_tab: "BrowseTab"
+    learn_tab: "LearnTab"
+    write_tab: "WriteTab"
 
     # Handlers
     tabs_handler: "MainWidgetTabs"

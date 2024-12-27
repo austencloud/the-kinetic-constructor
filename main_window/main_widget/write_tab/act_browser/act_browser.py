@@ -45,9 +45,7 @@ class ActBrowser(QScrollArea):
 
         self.thumbnail_boxes = []
 
-        sequences = (
-            self.act_tab.main_widget.dictionary_widget.browser.get.all_sequences()
-        )
+        sequences = self.act_tab.main_widget.brwose_tab.browser.get.all_sequences()
 
         row, col = 0, 0
         max_columns = 2

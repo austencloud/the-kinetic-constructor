@@ -1,4 +1,3 @@
-# sequence_generator_widget.py
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -37,7 +36,6 @@ class SequenceGenerator(QWidget):
         self.overwrite_connected = False
         self.current_sequence_generator = "freeform"
 
-        # Initialize internal stacked widget for Freeform and Circular generators
         self.internal_stacked_widget = QStackedWidget(self)
 
         self._setup_spacers()
@@ -47,8 +45,8 @@ class SequenceGenerator(QWidget):
         self._connect_signals()
         self._setup_layout()
 
-        self.internal_stacked_widget.addWidget(self.freeform_generator_frame)  # Index 0
-        self.internal_stacked_widget.addWidget(self.circular_generator_frame)  # Index 1
+        self.internal_stacked_widget.addWidget(self.freeform_generator_frame)
+        self.internal_stacked_widget.addWidget(self.circular_generator_frame)
         self.generate_sequence_button.clicked.connect(self.dummy_function)
 
     def _setup_components(self):
@@ -61,13 +59,11 @@ class SequenceGenerator(QWidget):
         self.circular_button.clicked.connect(self.show_circular)
 
     def _setup_layout(self):
-        # Set up main layout
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
-        # Add widgets to layout
         self.layout.addWidget(
             self.customize_sequence_label, alignment=Qt.AlignmentFlag.AlignCenter
         )
@@ -189,7 +185,6 @@ class SequenceGenerator(QWidget):
         self.customize_sequence_label.resize_customize_sequence_label()
         self.generate_sequence_button.resize_generate_sequence_button()
 
-        # Update button sizes
         for button in self.buttons.values():
             button.setMinimumHeight(self.main_widget.height() // 16)
             button.setFixedWidth(self.main_widget.width() // 10)
