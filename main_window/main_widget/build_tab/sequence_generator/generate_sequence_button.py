@@ -9,10 +9,10 @@ if TYPE_CHECKING:
 
 
 class GenerateSequenceButton(QPushButton):
-    def __init__(self, sequence_generator_widget: "SequenceGenerator"):
-        super().__init__(sequence_generator_widget)
-        sequence_generator_widget = sequence_generator_widget
-        self.main_widget = sequence_generator_widget.main_widget
+    def __init__(self, sequence_generator: "SequenceGenerator"):
+        super().__init__(sequence_generator)
+        sequence_generator = sequence_generator
+        self.main_widget = sequence_generator.main_widget
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setStyleSheet("font-size: 16px; padding: 8px;")
         self.setText("Generate Sequence")

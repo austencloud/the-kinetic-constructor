@@ -1,4 +1,3 @@
-from PyQt6.QtGui import QKeyEvent, QPainter
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 

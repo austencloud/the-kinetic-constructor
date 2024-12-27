@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab

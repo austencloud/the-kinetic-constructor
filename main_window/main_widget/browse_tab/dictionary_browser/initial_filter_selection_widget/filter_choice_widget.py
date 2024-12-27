@@ -5,9 +5,6 @@ from PyQt6.QtCore import Qt
 from functools import partial
 from datetime import datetime, timedelta
 
-from main_window.main_widget.browse_tab.dictionary_browser.initial_filter_selection_widget.filter_section_base import (
-    FilterSectionBase,
-)
 
 if TYPE_CHECKING:
     from .dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget

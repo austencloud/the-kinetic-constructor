@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional, Callable
-from PyQt6.QtWidgets import QStackedWidget, QWidget, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,

@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QGraphicsOpacityEffect,
 )
 from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
-from PyQt6.QtGui import QFont, QPainter
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.build_tab.sequence_generator.freeform.custom_checkbox_widget import (
