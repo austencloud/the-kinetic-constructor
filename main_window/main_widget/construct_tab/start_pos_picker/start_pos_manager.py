@@ -29,7 +29,7 @@ class StartPosManager(QObject):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__()
         self.start_pos_picker = start_pos_picker
-        self.manual_builder = start_pos_picker.manual_builder
+        self.manual_builder = start_pos_picker.construct_tab
         self.main_widget = self.manual_builder.main_widget
         self.start_pos_frame = start_pos_picker.pictograph_frame
 

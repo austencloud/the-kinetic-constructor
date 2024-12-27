@@ -6,7 +6,7 @@ from .write_tab.write_tab import WriteTab
 from .browse_tab.browse_tab import BrowseTab
 from .learn_tab.learn_tab import LearnTab
 from .main_background_widget import MainBackgroundWidget
-from .tab_fade_manager import TabFadeManager
+from .stack_fade_manager import StackFadeManager
 from ..settings_manager.global_settings.main_widget_font_color_updater import (
     MainWidgetFontColorUpdater,
 )
@@ -30,7 +30,7 @@ class MainWidgetUI:
     def _setup_components(self):
         self.mw.content_stack = QStackedWidget()  # <--- NEW
 
-        self.mw.fade_manager = TabFadeManager(self.mw)
+        self.mw.fade_manager = StackFadeManager(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
         self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
@@ -73,7 +73,7 @@ class MainWidgetUI:
         content_layout = QHBoxLayout()
         content_layout.addWidget(self.mw.sequence_widget)
         content_layout.addWidget(self.mw.content_stack)
-        
+
         self.mw.main_layout.addLayout(top_layout)
         self.mw.main_layout.addLayout(content_layout)
 

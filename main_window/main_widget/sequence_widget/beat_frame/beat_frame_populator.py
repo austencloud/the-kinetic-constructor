@@ -25,7 +25,7 @@ class BeatFramePopulator:
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message("Loading sequence...")
 
-        self.manual_builder = self.main_widget.construct_tab
+        self.construct_tab = self.main_widget.construct_tab
 
         if not self.current_sequence_json:
             return
@@ -38,13 +38,13 @@ class BeatFramePopulator:
         self._populate_beats()
         self._finalize_sequence()
 
-        self.manual_builder.option_picker.update_option_picker()
+        self.construct_tab.option_picker.update_option_picker()
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )
 
     def _set_start_position(self):
-        start_pos_picker = self.manual_builder.start_pos_picker
+        start_pos_picker = self.construct_tab.start_pos_picker
         start_pos_beat = start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             self.current_sequence_json
         )
@@ -93,12 +93,12 @@ class BeatFramePopulator:
 
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
-        self.manual_builder.last_beat = last_beat
+        self.construct_tab.last_beat = last_beat
 
         # Transition to sequence building if necessary
-        self.manual_builder.transition_to_sequence_building()
+        self.construct_tab.start_pos_picker.transition_to_sequence_building()
 
-        scroll_area = self.manual_builder.option_picker.scroll_area
+        scroll_area = self.construct_tab.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
 
         # Retrieve filters from settings
@@ -106,7 +106,7 @@ class BeatFramePopulator:
             self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
         )
 
-        next_options = self.manual_builder.option_picker.option_getter.get_next_options(
+        next_options = self.construct_tab.option_picker.option_getter.get_next_options(
             self.current_sequence_json, filters
         )
 

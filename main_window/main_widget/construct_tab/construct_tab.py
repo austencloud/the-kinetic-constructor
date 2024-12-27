@@ -51,16 +51,6 @@ class ConstructTab(QFrame):
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)
         self.stacked_widget.addWidget(self.option_picker)
 
-        self.initialized = False
-        self.start_position_selected.connect(self.transition_to_sequence_building)
-
-    def transition_to_sequence_building(self) -> None:
-        """Transition to the option picker for sequence building."""
-        self.start_position_picked = True
-        self.stacked_widget.setCurrentWidget(self.option_picker)
-        self.option_picker.show()
-        self.option_picker.scroll_area.section_manager.show_all_sections()
-        self.option_picker.update_option_picker()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""

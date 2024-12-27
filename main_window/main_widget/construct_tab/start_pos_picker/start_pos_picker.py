@@ -19,9 +19,9 @@ class StartPosPicker(BaseStartPosPicker):
     start_position_selected = pyqtSignal(BasePictograph)
     COLUMN_COUNT = 3
 
-    def __init__(self, manual_builder: "ConstructTab"):
-        super().__init__(manual_builder)
-        self.top_builder_widget = None
+    def __init__(self, construct_tab: "ConstructTab"):
+        super().__init__(construct_tab)
+        self.construct_tab = construct_tab
         self.pictograph_frame = StartPosPickerPictographFrame(self)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self.button_layout = self._setup_variations_button_layout()
@@ -31,12 +31,18 @@ class StartPosPicker(BaseStartPosPicker):
         self.initialized = False
         self.start_options: dict[str, BasePictograph] = {}
         self.start_position_adder = (
-            self.manual_builder.main_widget.sequence_widget.beat_frame.start_position_adder
+            self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
         )
-        self.start_position_selected.connect(
-            self.manual_builder.transition_to_sequence_building
-        )
+        self.start_position_selected.connect(self.transition_to_sequence_building)
         self.display_variations()
+
+    def transition_to_sequence_building(self) -> None:
+        """Transition to the option picker for sequence building."""
+        self.start_position_picked = True
+        self.construct_tab.stacked_widget.setCurrentWidget(self.construct_tab.option_picker)
+        self.construct_tab.option_picker.show()
+        self.construct_tab.option_picker.scroll_area.section_manager.show_all_sections()
+        self.construct_tab.option_picker.update_option_picker()
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -60,7 +66,7 @@ class StartPosPicker(BaseStartPosPicker):
     def _setup_variations_button_layout(self) -> QHBoxLayout:
         self.variations_button = StartPosVariationsButton(self)
         self.variations_button.clicked.connect(
-            self.manual_builder.transition_to_advanced_start_pos_picker
+            self.construct_tab.transition_to_advanced_start_pos_picker
         )
         button_layout = QHBoxLayout()
         button_layout.addStretch(1)

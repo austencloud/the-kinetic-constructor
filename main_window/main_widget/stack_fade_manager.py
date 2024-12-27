@@ -13,19 +13,24 @@ if TYPE_CHECKING:
     from main_widget.main_widget import MainWidget
 
 
-class TabFadeManager(QObject):
+class StackFadeManager(QObject):
     """Manages fade-out/fade-in animations for your single stacked widget."""
 
     duration = 370
 
-    def __init__(self, mw: "MainWidget"):
-        super().__init__(mw)
-        self.mw = mw
+    def __init__(self, main_widget: "MainWidget"):
+        super().__init__(main_widget)
+        self.main_widget = main_widget
         self._old_opacity: Optional[QGraphicsOpacityEffect] = None
         self._new_opacity: Optional[QGraphicsOpacityEffect] = None
         self._is_animating = False
 
-    def fade_to_tab(self, stack:QStackedLayout, new_index: int, on_finished: Optional[Callable] = None):
+    def fade_to_tab(
+        self,
+        stack: QStackedLayout,
+        new_index: int,
+        on_finished: Optional[Callable] = None,
+    ):
         """
         new_index corresponds to the pages in mw.content_stack:
           0 -> Build
@@ -44,10 +49,7 @@ class TabFadeManager(QObject):
         self._fade_stack(old_index, new_index, on_finished)
 
     def _fade_stack(
-        self,
-        old_index: int,
-        new_index: int,
-        on_finished: Optional[Callable] = None
+        self, old_index: int, new_index: int, on_finished: Optional[Callable] = None
     ):
         self._is_animating = True
 

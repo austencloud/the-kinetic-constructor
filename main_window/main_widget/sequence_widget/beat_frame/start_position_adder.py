@@ -38,4 +38,4 @@ class StartPositionAdder:
             start_position_beat
         )
         self.main_widget.construct_tab.start_position_picked = True
-        self.main_widget.construct_tab.start_position_selected.emit(start_position_beat)
+        self.main_widget.construct_tab.start_pos_picker.start_position_selected.emit(start_position_beat)
