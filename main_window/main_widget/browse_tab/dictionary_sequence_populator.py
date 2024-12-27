@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionarySequencePopulator:
+class BrowseTabEditSequenceHandler:
     def __init__(self, dictionary: "BrowseTab"):
         self.dictionary = dictionary
         self.main_widget = dictionary.main_widget

@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_preview_area import (
-        DictionaryPreviewArea,
+    from main_window.main_widget.browse_tab.browse_tab_preview_area import (
+        BrowseTabPreviewArea,
     )
 
 
 class PreviewAreaImageLabel(QLabel):
-    def __init__(self, preview_area: "DictionaryPreviewArea"):
+    def __init__(self, preview_area: "BrowseTabPreviewArea"):
         super().__init__()
         self.preview_area = preview_area
         self.thumbnails = preview_area.thumbnails
@@ -53,10 +53,12 @@ class PreviewAreaImageLabel(QLabel):
     def style_placeholder(self):
         placeholder_text_font_size = self.preview_area.width() // 50
         global_settings = (
-            self.preview_area.dictionary_widget.browser.main_widget.main_window.settings_manager.global_settings
+            self.preview_area.browse_tab.main_widget.main_window.settings_manager.global_settings
         )
-        font_color = self.preview_area.dictionary_widget.browser.main_widget.font_color_updater.get_font_color(
-            global_settings.get_background_type()
+        font_color = (
+            self.preview_area.browse_tab.main_widget.font_color_updater.get_font_color(
+                global_settings.get_background_type()
+            )
         )
         self.setStyleSheet(
             f"font: {placeholder_text_font_size}pt Arial; font-weight: bold; color: {font_color};"

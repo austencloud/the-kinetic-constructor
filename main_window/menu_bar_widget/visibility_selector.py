@@ -51,7 +51,8 @@ class VisibilitySelector(ButtonSelector):
         options["Non-Radial Points"] = self.grid_visibility_manager.non_radial_visible
 
         font = QFont()
-        font.setPointSize(self.menu_bar_widget.menu_bar_font_size)
+        self.selector_font_size = self.main_widget.height() // 50
+        font.setPointSize(self.selector_font_size)
 
         for option_text, checked in options.items():
             checkbox = QCheckBox(option_text)

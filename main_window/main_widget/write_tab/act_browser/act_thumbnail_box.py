@@ -2,12 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QApplication
 from PyQt6.QtGui import QPixmap
 
+from main_window.main_widget.browse_tab.thumbnail_box.word_label import WordLabel
 from main_window.main_widget.write_tab.act_browser.act_thumbnail_image_label import (
     ActThumbnailImageLabel,
 )
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.word_label import (
-    WordLabel,
-)
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_browser.act_browser import ActBrowser

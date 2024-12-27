@@ -18,8 +18,8 @@ from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_preview_area import (
-        DictionaryPreviewArea,
+    from main_window.main_widget.browse_tab.browse_tab_preview_area import (
+        BrowseTabPreviewArea,
     )
 
 
@@ -28,12 +28,11 @@ class DictionaryButtonPanel(QWidget):
     edit_sequence_button: QPushButton
     save_image_button: QPushButton
 
-    def __init__(self, preview_area: "DictionaryPreviewArea"):
+    def __init__(self, preview_area: "BrowseTabPreviewArea"):
         super().__init__(preview_area)
         self.preview_area = preview_area
-        self.dictionary_widget = preview_area.dictionary_widget
-        self.deletion_handler = self.dictionary_widget.deletion_handler
-        self.temp_beat_frame = TempBeatFrame(self.dictionary_widget)
+        self.browse_tab = preview_area.browse_tab
+        self.temp_beat_frame = TempBeatFrame(self.browse_tab)
         self.full_screen_overlay = None
         self._setup_buttons()
 
@@ -57,7 +56,7 @@ class DictionaryButtonPanel(QWidget):
                 "icon": "delete.svg",
                 "tooltip": "Delete Variation",
                 "action": lambda: (
-                    self.deletion_handler.delete_variation(
+                    self.browse_tab.deletion_handler.delete_variation(
                         self.preview_area.current_thumbnail_box,
                         ((self.preview_area.current_thumbnail_box.current_index)),
                     )
@@ -84,7 +83,7 @@ class DictionaryButtonPanel(QWidget):
             self.layout.addWidget(button)
             self.layout.addStretch(1)
             setattr(self, f"{key}_button", button)
-            btn_size = int(self.dictionary_widget.width() // 10)
+            btn_size = int(self.browse_tab.width() // 10)
             icon_size = int(btn_size * 0.8)
             button.setMinimumSize(QSize(btn_size, btn_size))
             button.setMaximumSize(QSize(btn_size, btn_size))
@@ -108,7 +107,7 @@ class DictionaryButtonPanel(QWidget):
 
     def edit_sequence(self):
         if not hasattr(self, "sequence_populator"):
-            self.sequence_populator = self.dictionary_widget.sequence_populator
+            self.sequence_populator = self.browse_tab.edit_sequence_handler
         if self.preview_area.sequence_json:
             self.preview_area.main_widget.navigation_widget.on_button_clicked(0)
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -159,7 +158,7 @@ class DictionaryButtonPanel(QWidget):
                 self.full_screen_overlay = None
 
     def resize_buttons(self):
-        btn_size = int(self.dictionary_widget.width() // 24)
+        btn_size = int(self.browse_tab.width() // 24)
         icon_size = int(btn_size * 0.8)
         for button_name in [
             "edit_sequence",

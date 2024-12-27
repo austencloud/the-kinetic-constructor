@@ -4,9 +4,7 @@ from PyQt6.QtCore import Qt, QMimeData, QEvent, QByteArray
 from PyQt6.QtGui import QCursor, QMouseEvent, QDrag
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_image_label import (
-    ThumbnailImageLabel,
-)
+from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_image_label import ThumbnailImageLabel
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_browser.act_browser import (
