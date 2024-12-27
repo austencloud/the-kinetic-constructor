@@ -15,7 +15,7 @@ class SequenceRotationManager:
 
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.json_loader = self.sequence_widget.json_manager.loader_saver
+        self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
 
     def rotate_beats(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 class SequenceClearer:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.json_manager = sequence_widget.json_manager
+        self.json_manager = sequence_widget.main_widget.json_manager
         self.manual_builder = None
-        self.settings_manager = sequence_widget.settings_manager
+        self.settings_manager = sequence_widget.main_widget.settings_manager
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 class DifficultyLabel(QLabel):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
-        self.json_manager = sequence_widget.json_manager
         self.main_widget = sequence_widget.main_widget
+        self.json_manager = self.main_widget.json_manager
         self.difficulty_level = 1
         self.setFont(QFont("Arial", sequence_widget.width() // 40))
         self.setToolTip("Difficulty Level")

@@ -11,12 +11,10 @@ class GraphEditorAnimator(QObject):
         self.sequence_widget = sequence_widget
         self.graph_editor = sequence_widget.graph_editor
         self.toggle_tab = sequence_widget.toggle_tab
-        self.graph_editor_placeholder = (
-            sequence_widget.layout_manager.graph_editor_placeholder
-        )
+        self.graph_editor_placeholder = self.sequence_widget.graph_editor_placeholder
         self.button_panel_bottom_placeholder = (
             sequence_widget.button_panel.bottom_placeholder
-        )  # Bottom spacer in button panel
+        )
 
     def toggle(self):
         if self.graph_editor.isVisible():

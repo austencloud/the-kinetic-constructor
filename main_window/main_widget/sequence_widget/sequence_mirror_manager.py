@@ -16,7 +16,7 @@ class SequenceMirrorManager:
 
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.json_loader = self.sequence_widget.json_manager.loader_saver
+        self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
 
     def mirror_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

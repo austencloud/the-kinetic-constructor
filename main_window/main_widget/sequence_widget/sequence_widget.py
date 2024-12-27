@@ -1,6 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
 
+from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
+    GraphEditorPlaceholder,
+)
+
 from .sequence_color_swap_manager import SequenceColorSwapManager
 from .sequence_mirror_manager import SequenceMirrorManager
 from .sequence_rotation_manager import SequenceRotationManager
@@ -30,24 +34,16 @@ class SequenceWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.settings_manager = self.main_widget.main_window.settings_manager
-        self.json_manager = self.main_widget.json_manager
-        self.default_beat_quantity = 16
 
-        # Initialize managers
-        self.mirror_manager = SequenceMirrorManager(self)
-        self.color_swap_manager = SequenceColorSwapManager(self)
-        self.rotation_manager = SequenceRotationManager(self)
-
-        self._setup_components()
-        self.layout_manager.setup_layout()
-
-    def _setup_components(self) -> None:
         # Managers
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
         self.sequence_clearer = SequenceClearer(self)
-        self.layout_manager = SequenceWidgetLayoutManager(self)
+
+        # Modification Managers
+        self.mirror_manager = SequenceMirrorManager(self)
+        self.color_swap_manager = SequenceColorSwapManager(self)
+        self.rotation_manager = SequenceRotationManager(self)
 
         # Labels
         self.indicator_label = SequenceWidgetIndicatorLabel(self)
@@ -61,9 +57,13 @@ class SequenceWidget(QWidget):
 
         # Graph Editor
         self.graph_editor = GraphEditor(self)
+        self.graph_editor_placeholder = GraphEditorPlaceholder(self)
         self.toggle_tab = GraphEditorToggleTab(self)
         self.toggler = GraphEditorAnimator(self)
 
-    # def showEvent(self, event) -> None:
-    #     super().showEvent(event)
-    #     self.current_word_label.update_current_word_label_from_beats()
+        # Layout
+        self.layout_manager = SequenceWidgetLayoutManager(self)
+
+    def resizeEvent(self, event):
+        self.toggle_tab.reposition_toggle_tab()
+        super().resizeEvent(event)

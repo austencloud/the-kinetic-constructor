@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class SequenceWidgetLayoutManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.graph_editor_placeholder = GraphEditorPlaceholder(sequence_widget)
+        self.setup_layout()
 
     def setup_layout(self):
         self.setup_beat_frame_layout()
@@ -28,7 +28,7 @@ class SequenceWidgetLayoutManager:
         self.main_layout.addLayout(current_word_layout, 1)
         self.main_layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
         self.main_layout.addWidget(self.sequence_widget.indicator_label, 1)
-        self.main_layout.addWidget(self.graph_editor_placeholder)
+        self.main_layout.addWidget(self.sequence_widget.graph_editor_placeholder)
 
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSplitter
+from PyQt6.QtCore import Qt
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.write_tab.write_tab import WriteTab
