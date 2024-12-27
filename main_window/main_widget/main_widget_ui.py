@@ -70,15 +70,12 @@ class MainWidgetUI:
         top_layout.addWidget(self.mw.menu_bar_widget, 1)
         top_layout.addWidget(self.mw.navigation_widget, 1)
 
-        content_splitter = QSplitter()
-        content_splitter.addWidget(self.mw.sequence_widget)
-        content_splitter.addWidget(self.mw.content_stack)
-        content_splitter.setSizes([1, 1])
+        content_layout = QHBoxLayout()
+        content_layout.addWidget(self.mw.sequence_widget)
+        content_layout.addWidget(self.mw.content_stack)
+        
         self.mw.main_layout.addLayout(top_layout)
-        self.mw.main_layout.addWidget(content_splitter)
-
-        # content_splitter.splitterMoved.connect(self.mw.sequence_widget.beat_frame.resizer.resize_beat_frame())
-        # content_splitter.splitterMoved.connect(self.mw.content_stack.resizeEvent)
+        self.mw.main_layout.addLayout(content_layout)
 
     def _setup_indices(self):
         self.mw.construct_tab_index = 0

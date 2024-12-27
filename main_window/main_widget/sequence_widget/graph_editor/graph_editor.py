@@ -68,7 +68,7 @@ class GraphEditor(QFrame):
         self.setFixedSize(width, graph_editor_height)
 
         if self.sequence_widget.graph_editor.isVisible():
-            self.sequence_widget.layout_manager.graph_editor_placeholder.resize_graph_editor_placeholder()
+            self.sequence_widget.graph_editor_placeholder.resize_graph_editor_placeholder()
 
         self.adjustment_panel.update_adjustment_panel()
         self.raise_()

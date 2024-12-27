@@ -30,15 +30,15 @@ class CurrentWordLabel(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        sequence_widget_width = self.sequence_widget.width()
-        font_size = sequence_widget_width // 30
+        main_widget_width = self.sequence_widget.main_widget.width()
+        font_size = main_widget_width // 60
         self.font: QFont = QFont()
         self.font.setPointSize(int(font_size))
         self.line_edit.setFont(self.font)
         self.line_edit.kerning = int(font_size // 8.75)
         while (
             self.line_edit.fontMetrics().horizontalAdvance(self.current_word)
-            > sequence_widget_width * 0.8
+            > main_widget_width * 0.8
         ):
             font_size -= 1
             self.font.setPointSize(int(font_size))

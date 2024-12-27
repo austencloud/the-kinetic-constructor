@@ -29,7 +29,6 @@ if TYPE_CHECKING:
 class SequenceWidget(QWidget):
     beat_frame_layout: QHBoxLayout
     indicator_label_layout: QHBoxLayout
-    graph_editor_placeholder: "QSpacerItem"
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
@@ -65,5 +64,6 @@ class SequenceWidget(QWidget):
         self.layout_manager = SequenceWidgetLayoutManager(self)
 
     def resizeEvent(self, event):
-        self.toggle_tab.reposition_toggle_tab()
         super().resizeEvent(event)
+        self.graph_editor.resizeEvent(event)
+        self.toggle_tab.reposition_toggle_tab()
