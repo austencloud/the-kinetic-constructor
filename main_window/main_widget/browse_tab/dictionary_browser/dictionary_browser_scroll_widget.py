@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
 
-
+from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import (
+    ThumbnailBox,
+)
 
 from PyQt6.QtWidgets import (
     QWidget,
@@ -11,12 +13,13 @@ from PyQt6.QtWidgets import (
     QGridLayout,
 )
 
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
-
-
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser_section_header import DictionaryBrowserSectionHeader
-    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser import DictionaryBrowser
+    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser import (
+        DictionaryBrowser,
+    )
+    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser_section_header import (
+        DictionaryBrowserSectionHeader,
+    )
 
 
 class DictionaryBrowserScrollWidget(QWidget):

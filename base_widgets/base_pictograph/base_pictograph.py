@@ -5,13 +5,20 @@ from Enums.MotionAttributes import Location
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import (
+    LessonPictographView,
+)
 
+from main_window.main_widget.learn_tab.codex.codex_pictograph_view import (
+    CodexPictographView,
+)
+from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker_pictograph_view import (
+    StartPosPickerPictographView,
+)
 
-
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
-from main_window.main_widget.build_tab.start_pos_picker.start_pos_picker_pictograph_view import StartPosPickerPictographView
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import LessonPictographView
-from main_window.main_widget.learn_tab.codex.codex_pictograph_view import CodexPictographView
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
+    ReversalSymbolManager,
+)
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion

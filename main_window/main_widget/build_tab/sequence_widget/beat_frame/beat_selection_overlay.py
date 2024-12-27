@@ -79,20 +79,20 @@ class BeatSelectionOverlay(QWidget):
     def get_selected_beat(self) -> Optional[BeatView]:
         return self.selected_beat
 
-    def paintEvent(self, event):
-        super().paintEvent(event)
-        if not self.selected_beat:
-            return
+    # def paintEvent(self, event):
+    #     super().paintEvent(event)
+    #     if not self.selected_beat:
+    #         return
 
-        painter = QPainter(self)
-        pen = QPen(self.border_color, self.border_width)
-        pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
-        painter.setPen(pen)
+        # painter = QPainter(self)
+        # pen = QPen(self.border_color, self.border_width)
+        # pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
+        # painter.setPen(pen)
 
-        rect = self.rect().adjusted(
-            self.border_width // 2,
-            self.border_width // 2,
-            -self.border_width // 2,
-            -self.border_width // 2,
-        )
-        painter.drawRect(rect)
+        # rect = self.rect().adjusted(
+        #     self.border_width // 2,
+        #     self.border_width // 2,
+        #     -self.border_width // 2,
+        #     -self.border_width // 2,
+        # )
+        # painter.drawRect(rect)

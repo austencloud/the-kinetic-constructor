@@ -8,7 +8,7 @@ from .act_saver import ActSaver
 from .sequence_collector import SequenceCollector
 
 if TYPE_CHECKING:
-    from ..act_tab import WriteTab
+    from ..write_tab import WriteTab
 
 
 class ActSheet(QWidget):

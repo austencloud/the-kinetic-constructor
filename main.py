@@ -46,24 +46,29 @@ def main() -> None:
     screens = app.screens()
     target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
 
+    # Import SettingsManager after QApplication is initialized
     from main_window.settings_manager.settings_manager import SettingsManager
 
     settings_manager = SettingsManager(None)
 
+    # Load SplashScreen with periodic QApplication processing
     from splash_screen.splash_screen import SplashScreen
 
     splash_screen = SplashScreen(target_screen, settings_manager)
     app.processEvents()
 
+    # Load Profiler and MainWindow only after splash screen appears
     from profiler import Profiler
 
     profiler = Profiler()
 
+    # Import MainWindow and ensure no blocking tasks in __init__
     from main_window.main_window import MainWindow
 
     main_window = MainWindow(profiler, splash_screen)
     main_window.show()
     main_window.raise_()
+    # Close the splash screen after showing the main window
     QTimer.singleShot(0, lambda: splash_screen.close())
 
     sys.exit(app.exec())

@@ -6,7 +6,7 @@ from ..base_classes.base_answers_widget import BaseAnswersWidget
 
 
 if TYPE_CHECKING:
-    from ..learn_widget import LearnTab
+    from ..learn_tab import LearnTab
 
 
 class Lesson1AnswersWidget(BaseAnswersWidget):

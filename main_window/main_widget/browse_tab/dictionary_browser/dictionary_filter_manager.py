@@ -97,7 +97,7 @@ class DictionaryFilterManager:
         self.browser.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )
-        self.browser.browse_tab.preview_area.update_preview(None)
+        self.browser.dictionary.preview_area.update_preview(None)
         QApplication.processEvents()
 
     def prepare_ui_for_filtering(self, description: str):

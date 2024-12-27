@@ -43,18 +43,18 @@ class DictionaryBrowserLayoutManager:
     def switch_to_main_content(self):
         """Switch to the main content page in the stacked layout."""
         self.browser.go_back_button.show()
-        self.browser.browse_tab.preview_area.show()
+        self.browser.dictionary.preview_area.show()
         self.stacked_layout.setCurrentIndex(1)
         self.browser.resize_dictionary_browser()
 
     def switch_to_initial_filter_selection(self):
         """Switch to the initial selection page in the stacked layout."""
         self.stacked_layout.setCurrentIndex(0)
-        preview_area = self.browser.browse_tab.preview_area
+        preview_area = self.browser.dictionary.preview_area
         preview_area.word_label.setText("")
         self.browser.initial_selection_widget.show()
-        self.browser.browse_tab.preview_area.hide()
+        self.browser.dictionary.preview_area.hide()
         self.browser.sequence_count_label.hide()
-        self.browser.browse_tab.dictionary_settings.set_current_section("filter_choice")
-        self.browser.browse_tab.dictionary_settings.set_current_filter(None)
+        self.browser.dictionary.dictionary_settings.set_current_section("filter_choice")
+        self.browser.dictionary.dictionary_settings.set_current_filter(None)
         self.browser.initial_selection_widget.show_section("filter_choice")

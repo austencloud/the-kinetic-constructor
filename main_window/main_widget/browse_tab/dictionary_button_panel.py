@@ -9,14 +9,18 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon, QPixmap, QResizeEvent
 
-
-from main_window.main_widget.browse_tab.full_screen_image_overlay import FullScreenImageOverlay
-from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import TempBeatFrame
+from main_window.main_widget.browse_tab.full_screen_image_overlay import (
+    FullScreenImageOverlay,
+)
+from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
+    TempBeatFrame,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_preview_area import DictionaryPreviewArea
-
+    from main_window.main_widget.browse_tab.dictionary_preview_area import (
+        DictionaryPreviewArea,
+    )
 
 
 class DictionaryButtonPanel(QWidget):

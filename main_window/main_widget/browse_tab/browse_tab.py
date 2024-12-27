@@ -15,7 +15,7 @@ class BrowseTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.indicator_label = main_widget.build_tab.sequence_widget.indicator_label
+        self.indicator_label = main_widget.sequence_widget.indicator_label
         self.selected_sequence_dict = None
 
         self.global_settings = (
@@ -54,7 +54,7 @@ class BrowseTab(QWidget):
 
     def show_initial_section(self):
         current_section = (
-            self.browser.browse_tab.dictionary_settings.get_current_section()
+            self.browser.dictionary.dictionary_settings.get_current_section()
         )
         initial_selection_widget = self.browser.initial_selection_widget
 

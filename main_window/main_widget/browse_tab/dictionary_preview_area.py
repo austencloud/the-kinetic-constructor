@@ -2,14 +2,25 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
+from main_window.main_widget.browse_tab.preview_area_image_label import (
+    PreviewAreaImageLabel,
+)
+from main_window.main_widget.browse_tab.dictionary_button_panel import (
+    DictionaryButtonPanel,
+)
+from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.dictionary_preview_area_base_word_label import (
+    DictionaryPreviewAreaWordLabel,
+)
+from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.preview_area_nav_btns import (
+    PreviewAreaNavButtonsWidget,
+)
+from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import (
+    ThumbnailBox,
+)
 
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.dictionary_preview_area_base_word_label import DictionaryPreviewAreaWordLabel
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.preview_area_nav_btns import PreviewAreaNavButtonsWidget
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.variation_number_label import VariationNumberLabel
-from main_window.main_widget.browse_tab.dictionary_button_panel import DictionaryButtonPanel
-from main_window.main_widget.browse_tab.preview_area_image_label import PreviewAreaImageLabel
-
+from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.variation_number_label import (
+    VariationNumberLabel,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import (

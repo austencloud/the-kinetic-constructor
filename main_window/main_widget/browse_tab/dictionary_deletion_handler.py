@@ -1,17 +1,21 @@
 import os
 import shutil
 from typing import TYPE_CHECKING
-
-from main_window.main_widget.browse_tab.delete_confirmation_dialog import DeleteConfirmationDialog
-from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
-from main_window.main_widget.browse_tab.variation_number_fixer import VariationNumberFixer
+from main_window.main_widget.browse_tab.variation_number_fixer import (
+    VariationNumberFixer,
+)
+from main_window.main_widget.browse_tab.delete_confirmation_dialog import (
+    DeleteConfirmationDialog,
+)
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QDialog
 
 if TYPE_CHECKING:
-
+    from main_window.main_widget.browse_tab.dictionary_browser.thumbnail_box.thumbnail_box import (
+        ThumbnailBox,
+    )
     from main_window.main_widget.browse_tab.browse_tab import (
         BrowseTab,
     )

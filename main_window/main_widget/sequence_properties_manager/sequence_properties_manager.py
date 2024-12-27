@@ -55,7 +55,7 @@ class SequencePropertiesManager:
         self.sequence = sequence[1:]
 
     def update_sequence_properties(self):
-        sequence = self.json_manager.sequence_loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if len(sequence) <= 1:
             return
 
@@ -63,13 +63,11 @@ class SequencePropertiesManager:
         # properties = self.check_all_properties()
         # sequence[0].update(properties)
 
-        self.json_manager.sequence_loader_saver.save_current_sequence(sequence)
+        self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def calculate_word(self, sequence):
         if sequence is None or not isinstance(sequence, list):
-            sequence = (
-                self.json_manager.sequence_loader_saver.load_current_sequence_json()
-            )
+            sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(sequence) < 2:
             return ""
@@ -111,7 +109,7 @@ class SequencePropertiesManager:
     def _gather_properties(self):
         return {
             "word": self.calculate_word(
-                self.json_manager.sequence_loader_saver.load_current_sequence_json()
+                self.json_manager.loader_saver.load_current_sequence_json()
             ),
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
@@ -157,3 +155,5 @@ class SequencePropertiesManager:
             return self.sequence[-1]["end_pos"].rstrip("0123456789") == self.sequence[
                 0
             ]["end_pos"].rstrip("0123456789")
+
+    

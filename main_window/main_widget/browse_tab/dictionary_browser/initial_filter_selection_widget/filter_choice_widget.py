@@ -5,7 +5,9 @@ from PyQt6.QtCore import Qt
 from functools import partial
 from datetime import datetime, timedelta
 
-
+from main_window.main_widget.browse_tab.dictionary_browser.initial_filter_selection_widget.filter_section_base import (
+    FilterSectionBase,
+)
 
 if TYPE_CHECKING:
     from .dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
@@ -192,9 +194,7 @@ class FilterChoiceWidget(QWidget):
         font_size = self.main_widget.width() // 150
         # font_color = self.settings_manager.global_settings.get_current_font_color()
         for button_label in self.button_labels.values():
-            button_label.setStyleSheet(
-                f"font-size: {font_size}px;"
-            )
+            button_label.setStyleSheet(f"font-size: {font_size}px;")
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Handle resize events to adjust UI components."""

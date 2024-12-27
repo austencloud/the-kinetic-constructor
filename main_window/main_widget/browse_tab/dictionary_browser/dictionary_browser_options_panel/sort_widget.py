@@ -15,7 +15,7 @@ class SortWidget(QWidget):
     def __init__(self, options_panel: "DictionaryOptionsPanel") -> None:
         super().__init__(options_panel)
         self.browser = options_panel.browser
-        self.main_widget = self.browser.browse_tab.main_widget
+        self.main_widget = self.browser.dictionary.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.selected_button: QPushButton = None  # Track the selected button
         self._setup_sort_buttons()

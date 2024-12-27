@@ -10,11 +10,11 @@ class MainWidgetState:
 
     def load_state(self):
         current_sequence = (
-            self.main_widget.json_manager.sequence_loader_saver.load_current_sequence_json()
+            self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
         if len(current_sequence) > 1:
-            self.main_widget.build_tab.sequence_constructor.transition_to_sequence_building()
-            self.main_widget.build_tab.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
+            self.main_widget.constructor_tab.transition_to_sequence_building()
+            self.main_widget.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
                 current_sequence
             )
-            self.main_widget.build_tab.sequence_constructor.option_picker.update_option_picker()
+            self.main_widget.constructor_tab.option_picker.update_option_picker()

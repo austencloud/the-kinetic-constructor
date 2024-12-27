@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 

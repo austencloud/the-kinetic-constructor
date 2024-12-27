@@ -10,7 +10,7 @@ from ...lesson_widget_indicator_label import LessonWidgetIndicatorLabel
 from .results_widget import ResultsWidget
 
 if TYPE_CHECKING:
-    from ...learn_widget import LearnTab
+    from ...learn_tab import LearnTab
 
 
 class BaseLessonWidget(QWidget):

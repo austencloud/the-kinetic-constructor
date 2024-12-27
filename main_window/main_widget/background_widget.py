@@ -23,11 +23,12 @@ class BackgroundWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.show()
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        self.main_widget.background.paint_background(self, painter)
-        painter.end()
+    # def paintEvent(self, event):
+        # painter = QPainter(self)
+        # painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        # # self.main_widget.background.paint_background(self, painter)
+        # painter.end()
+        # pass
 
     def resizeEvent(self, event):
         self.resize(self.main_widget.size())

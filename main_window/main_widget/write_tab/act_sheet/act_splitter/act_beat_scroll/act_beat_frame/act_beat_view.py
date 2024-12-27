@@ -3,9 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QFont, QAction
-from main_window.main_widget.build_tab.sequence_widget.beat_frame.act_beat import (
-    ActBeat,
-)
+from main_window.main_widget.sequence_widget.beat_frame.act_beat import ActBeat
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_sheet.act_splitter.act_beat_scroll.act_beat_frame.act_beat_frame import (

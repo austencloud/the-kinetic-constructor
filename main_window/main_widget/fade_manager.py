@@ -42,37 +42,37 @@ class FadeManager(QObject):
         on_finished: Optional[Callable] = None,
     ) -> None:
         """Fades out the current main and build tabs and fades in the new ones."""
-        if self._is_animating:
-            return
+        # if self._is_animating:
+        #     return
 
-        self._is_animating = True
+        # self._is_animating = True
 
-        animation_group = QParallelAnimationGroup(self)
+        # animation_group = QParallelAnimationGroup(self)
 
-        # Fade-out main
-        fade_out_main = QPropertyAnimation(self.main_opacity_effect, b"opacity")
-        fade_out_main.setDuration(self.duration)
-        fade_out_main.setStartValue(1.0)
-        fade_out_main.setEndValue(0.0)
-        fade_out_main.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        animation_group.addAnimation(fade_out_main)
+        # # Fade-out main
+        # fade_out_main = QPropertyAnimation(self.main_opacity_effect, b"opacity")
+        # fade_out_main.setDuration(self.duration)
+        # fade_out_main.setStartValue(1.0)
+        # fade_out_main.setEndValue(0.0)
+        # fade_out_main.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        # animation_group.addAnimation(fade_out_main)
 
-        # Fade-out build if applicable
-        if new_build_index is not None:
-            fade_out_build = QPropertyAnimation(self.build_opacity_effect, b"opacity")
-            fade_out_build.setDuration(self.duration)
-            fade_out_build.setStartValue(1.0)
-            fade_out_build.setEndValue(0.0)
-            fade_out_build.setEasingCurve(QEasingCurve.Type.InOutQuad)
-            animation_group.addAnimation(fade_out_build)
+        # # Fade-out build if applicable
+        # if new_build_index is not None:
+        #     fade_out_build = QPropertyAnimation(self.build_opacity_effect, b"opacity")
+        #     fade_out_build.setDuration(self.duration)
+        #     fade_out_build.setStartValue(1.0)
+        #     fade_out_build.setEndValue(0.0)
+        #     fade_out_build.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        #     animation_group.addAnimation(fade_out_build)
 
-        # Connect the end of fade-out to switch tabs
-        animation_group.finished.connect(
-            lambda: self._switch_tabs(new_main_index, new_build_index, on_finished)
-        )
+        # # Connect the end of fade-out to switch tabs
+        # animation_group.finished.connect(
+        #     lambda: self._switch_tabs(new_main_index, new_build_index, on_finished)
+        # )
 
-        animation_group.start()
-
+        # animation_group.start()
+        self._switch_tabs(new_main_index, new_build_index, on_finished)
     def _switch_tabs(
         self,
         new_main_index: int,
@@ -84,29 +84,29 @@ class FadeManager(QObject):
         if new_build_index is not None:
             self.build_stacked_widget.setCurrentIndex(new_build_index)
 
-        # Start fade-in animations
-        animation_group = QParallelAnimationGroup(self)
+        # # Start fade-in animations
+        # animation_group = QParallelAnimationGroup(self)
 
-        fade_in_main = QPropertyAnimation(self.main_opacity_effect, b"opacity")
-        fade_in_main.setDuration(self.duration)
-        fade_in_main.setStartValue(0.0)
-        fade_in_main.setEndValue(1.0)
-        fade_in_main.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        animation_group.addAnimation(fade_in_main)
+        # fade_in_main = QPropertyAnimation(self.main_opacity_effect, b"opacity")
+        # fade_in_main.setDuration(self.duration)
+        # fade_in_main.setStartValue(0.0)
+        # fade_in_main.setEndValue(1.0)
+        # fade_in_main.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        # animation_group.addAnimation(fade_in_main)
 
-        if new_build_index is not None:
-            fade_in_build = QPropertyAnimation(self.build_opacity_effect, b"opacity")
-            fade_in_build.setDuration(self.duration)
-            fade_in_build.setStartValue(0.0)
-            fade_in_build.setEndValue(1.0)
-            fade_in_build.setEasingCurve(QEasingCurve.Type.InOutQuad)
-            animation_group.addAnimation(fade_in_build)
+        # if new_build_index is not None:
+        #     fade_in_build = QPropertyAnimation(self.build_opacity_effect, b"opacity")
+        #     fade_in_build.setDuration(self.duration)
+        #     fade_in_build.setStartValue(0.0)
+        #     fade_in_build.setEndValue(1.0)
+        #     fade_in_build.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        #     animation_group.addAnimation(fade_in_build)
 
-        if on_finished:
-            animation_group.finished.connect(on_finished)
+        # if on_finished:
+        #     animation_group.finished.connect(on_finished)
 
-        animation_group.finished.connect(self._animation_finished)
-        animation_group.start()
+        # animation_group.finished.connect(self._animation_finished)
+        # animation_group.start()
 
     @pyqtSlot()
     def _animation_finished(self) -> None:

@@ -76,4 +76,6 @@ class FullScreenImageOverlay(QWidget):
     def close(self):
         """Close the overlay."""
         super().close()
-        self.main_widget.browse_tab.preview_area.button_panel.full_screen_overlay = None
+        self.main_widget.dictionary_widget.preview_area.button_panel.full_screen_overlay = (
+            None
+        )

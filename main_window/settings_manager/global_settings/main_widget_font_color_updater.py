@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QCheckBox
 
-from main_window.main_widget.build_tab.sequence_generator.circular.circular_sequence_generator_frame import (
+from main_window.main_widget.generate_tab.circular.circular_sequence_generator_frame import (
     CircularSequenceGeneratorFrame,
 )
-from main_window.main_widget.build_tab.sequence_generator.freeform.freeform_sequence_generator_frame import (
+from main_window.main_widget.generate_tab.freeform.freeform_sequence_generator_frame import (
     FreeformSequenceGeneratorFrame,
 )
 
 if TYPE_CHECKING:
-
-    from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
+    from ...main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
+        BaseLessonWidget,
+    )
 
     from ...main_widget.main_widget import MainWidget
 
@@ -73,7 +74,7 @@ class MainWidgetFontColorUpdater:
         self._update_act_tab()
 
     def _update_act_tab(self) -> None:
-        act_tab = self.main_widget.write_tab
+        act_tab = self.main_widget.act_tab
         self._apply_font_color(act_tab.act_sheet.act_header)
         self._apply_font_color(act_tab.act_sheet.act_container)
         for thumbnail_box in act_tab.act_browser.thumbnail_boxes:
@@ -94,7 +95,7 @@ class MainWidgetFontColorUpdater:
             self._apply_font_color(label)
 
     def _update_sequence_widget(self) -> None:
-        sequence_widget = self.main_widget.build_tab.sequence_widget
+        sequence_widget = self.main_widget.sequence_widget
         self._apply_font_colors(
             [
                 sequence_widget.current_word_label,
@@ -104,7 +105,7 @@ class MainWidgetFontColorUpdater:
         )
 
     def _update_generate_tab(self) -> None:
-        sequence_generator = self.main_widget.sequence_generator
+        sequence_generator = self.main_widget.generator_tab
         freeform_labels = self._get_freeform_builder_labels(
             sequence_generator.freeform_generator_frame
         )
@@ -118,7 +119,7 @@ class MainWidgetFontColorUpdater:
         sequence_generator.overwrite_checkbox.set_label_color(self.font_color)
 
     def _update_build_tab(self):
-        manual_builder = self.main_widget.build_tab.sequence_constructor
+        manual_builder = self.main_widget.constructor_tab
         manual_labels = [
             manual_builder.option_picker.reversal_selector.combo_box_label,
         ]
@@ -148,7 +149,7 @@ class MainWidgetFontColorUpdater:
         ]
 
     def _update_browse_tab(self) -> None:
-        dictionary = self.main_widget.browse_tab
+        dictionary = self.main_widget.dictionary_widget
         sort_widget = dictionary.browser.options_widget.sort_widget
 
         dictionary_labels = [
@@ -172,7 +173,7 @@ class MainWidgetFontColorUpdater:
             self._apply_font_color(thumbnail_box.variation_number_label)
 
     def _update_learn_widget(self) -> None:
-        learn_widget = self.main_widget.learn_tab
+        learn_widget = self.main_widget.learn_widget
         self._apply_font_color(learn_widget.lesson_selector.title_label)
         self._apply_font_colors(
             list(learn_widget.lesson_selector.description_labels.values())

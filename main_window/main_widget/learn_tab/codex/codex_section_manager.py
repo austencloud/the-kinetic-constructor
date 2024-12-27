@@ -10,6 +10,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
     from .codex import Codex
+    from base_widgets.base_pictograph.pictograph_view import PictographView
 
 
 class CodexSectionManager:
