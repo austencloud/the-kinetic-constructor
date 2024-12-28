@@ -1,5 +1,3 @@
-# sequence_color_swap_manager.py
-
 from typing import TYPE_CHECKING
 from data.positions_map import positions_map
 from PyQt6.QtCore import Qt
@@ -32,16 +30,17 @@ class SequenceColorSwapManager:
 
     def swap_option_picker_colors(self):
         option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
-        for option in option_picker.option_pool:
-            new_dict = self._swap_dict_values(option.pictograph_dict.copy())
-            sequence_so_far = self.json_loader.load_current_sequence_json()
-            reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, option.pictograph_dict
-            )
-            option.blue_reversal = reversal_info.get("blue_reversal", False)
-            option.red_reversal = reversal_info.get("red_reversal", False)
+        # for option in option_picker.option_pool:
+        #     new_dict = self._swap_dict_values(option.pictograph_dict.copy())
+        #     sequence_so_far = self.json_loader.load_current_sequence_json()
+        #     reversal_info = ReversalDetector.detect_reversal(
+        #         sequence_so_far, option.pictograph_dict
+        #     )
+        #     option.blue_reversal = reversal_info.get("blue_reversal", False)
+        #     option.red_reversal = reversal_info.get("red_reversal", False)
 
-            option.updater.update_pictograph(new_dict)
+        #     option.updater.update_pictograph(new_dict)
+        option_picker.update_option_picker()
 
     def check_length(self, current_sequence):
         if len(current_sequence) < 2:

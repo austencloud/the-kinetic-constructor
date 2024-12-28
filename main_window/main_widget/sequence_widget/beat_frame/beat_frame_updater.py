@@ -74,7 +74,7 @@ class BeatFrameUpdater:
             start_pos.grid.hide()
             start_pos.grid.__init__(start_pos, start_pos.grid.grid_data, grid_mode)
             self.json_manager.start_pos_handler.set_start_position_data(start_pos)
-            
+
         for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
             if i < len(self.beat_frame.beats) and self.beat_frame.beats[i].is_filled:
                 beat = self.beat_frame.beats[i].beat
@@ -89,3 +89,8 @@ class BeatFrameUpdater:
                 )
             else:
                 break
+
+        # update the beat adjustment panel in the graph editor
+        self.beat_frame.main_widget.sequence_widget.graph_editor.adjustment_panel.update_turns_panel(
+            beat.blue_motion, beat.red_motion
+        )

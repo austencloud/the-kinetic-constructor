@@ -19,7 +19,7 @@ class SequenceMirrorManager:
         json_manager = self.sequence_widget.main_widget.json_manager
         self.json_loader = json_manager.loader_saver
         self.json_updater = json_manager.updater
-        
+
     def mirror_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
@@ -33,8 +33,9 @@ class SequenceMirrorManager:
 
     def mirror_option_picker_pictographs(self):
         option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
+        option_picker.update_option_picker()
         for option in option_picker.option_pool:
-            new_dict = self._mirror_dict(option.pictograph_dict.copy())
+            # new_dict = self._mirror_dict(option.pictograph_dict.copy())
             sequence_so_far = self.json_loader.load_current_sequence_json()
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, option.pictograph_dict
@@ -42,7 +43,7 @@ class SequenceMirrorManager:
             option.blue_reversal = reversal_info.get("blue_reversal", False)
             option.red_reversal = reversal_info.get("red_reversal", False)
 
-            option.updater.update_pictograph(new_dict)
+            # option.updater.update_pictograph(new_dict)
 
     def check_length(self, current_sequence):
         if len(current_sequence) < 2:
