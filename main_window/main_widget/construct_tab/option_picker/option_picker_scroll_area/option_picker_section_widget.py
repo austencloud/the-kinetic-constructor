@@ -68,11 +68,9 @@ class OptionPickerSectionWidget(QGroupBox):
             )
         ] = pictograph
 
-        # Suppose we keep a count of how many pictographs we've added:
         count = len(self.pictographs)
         row, col = divmod(count - 1, self.scroll_area.option_picker.COLUMN_COUNT)
         self.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-        pictograph.view.show()
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""

@@ -4,8 +4,8 @@ from PyQt6.QtCore import QPointF, QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
+from main_window.main_widget.sequence_widget.beat_frame.beat_reversal_manager import (
+    BeatReversalManager,
 )
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid, GridData
@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 class PictographInitializer:
     default_grid_mode = DIAMOND
-    
+
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
         self.pictograph.setSceneRect(0, 0, 950, 950)
@@ -68,7 +68,7 @@ class PictographInitializer:
         )
 
     def init_reversal_symbols(self) -> tuple[QGraphicsTextItem, QGraphicsTextItem]:
-        self.reversal_symbol_manager = ReversalSymbolManager(self.pictograph)
+        self.reversal_symbol_manager = BeatReversalManager(self.pictograph)
         self.reversal_symbol_manager.update_reversal_symbols()
 
     def set_nonradial_points_visibility(self, visible: bool) -> None:

@@ -69,7 +69,6 @@ class BorderedPictographView(PictographView):
         painter = QPainter(self.viewport())
         if self.primary_color and self.secondary_color:
             self._draw_borders(painter)
-        painter.end()
 
     def _draw_borders(self, painter: QPainter):
         """Draw the outer and inner borders."""

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class ReversalSymbolManager:
+class BeatReversalManager:
     def __init__(self, pictograph: "BasePictograph"):
         self.pictograph = pictograph
         self.reversal_items: dict[str, QGraphicsTextItem] = {}

@@ -25,8 +25,7 @@ class BeatView(PictographView):
         self.beat_frame = beat_frame
         self.setStyleSheet("border: none; border: 1px solid black;")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.beat_grabber = BeatGrabber(self)
+        
         self._setup_blank_beat()
 
     def _setup_blank_beat(self):
@@ -47,9 +46,6 @@ class BeatView(PictographView):
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
             self.beat_frame.selection_overlay.select_beat(self)
-
-    def grab(self) -> QPixmap:
-        return self.beat_grabber.grab()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

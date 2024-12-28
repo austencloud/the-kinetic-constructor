@@ -91,8 +91,6 @@ class OptionPickerPictographView(BorderedPictographView):
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
-
-
         if isinstance(self.parent(), GraphEditorPictographContainer):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:

@@ -60,7 +60,7 @@ class BeatDrawer:
         painter.end()
 
     def _grab_pixmap(self, view: "BeatView", width: int, height: int) -> QPixmap:
-        return view.grab().scaled(
+        return view.beat.grabber.grab().scaled(
             width,
             height,
             Qt.AspectRatioMode.KeepAspectRatio,

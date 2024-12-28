@@ -16,8 +16,8 @@ from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker_pic
     StartPosPickerPictographView,
 )
 
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
+from main_window.main_widget.sequence_widget.beat_frame.beat_reversal_manager import (
+    BeatReversalManager,
 )
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -63,7 +63,7 @@ class BasePictograph(QGraphicsScene):
     attr_manager: PictographAttrManager
     arrow_placement_manager: ArrowPlacementManager
     prop_placement_manager: PropPlacementManager
-    reversal_symbol_manager: ReversalSymbolManager
+    reversal_symbol_manager: BeatReversalManager
     wasd_manager: WASD_AdjustmentManager
 
     # bool
@@ -142,4 +142,4 @@ class BasePictograph(QGraphicsScene):
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
-        self.reversal_symbol_manager = ReversalSymbolManager(self)
+        self.reversal_symbol_manager = BeatReversalManager(self)
