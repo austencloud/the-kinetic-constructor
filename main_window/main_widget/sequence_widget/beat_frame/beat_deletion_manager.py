@@ -60,7 +60,7 @@ class BeatDeletionManager:
 
     def _post_deletion_updates(self) -> None:
         """Perform updates after deletion."""
-        self.json_manager.updater.clear_and_repopulate_the_current_sequence()
+        self.json_manager.updater.clear_and_repopulate_json_from_beat_view()
         if self.settings_manager.global_settings.get_grow_sequence():
             self.beat_frame.layout_manager.adjust_layout_to_sequence_length()
         self.beat_frame.sequence_widget.current_word_label.update_current_word_label_from_beats()

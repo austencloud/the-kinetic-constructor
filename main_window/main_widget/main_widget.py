@@ -90,13 +90,6 @@ class MainWidget(QWidget):
     # Layouts and Widgets
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
-    # central_layout: QHBoxLayout
-    # content_layout: QHBoxLayout
-    # right_stacked_widget: QStackedWidget
-    # main_stacked_widget: QStackedWidget
-    # dictionary_learn_widget: QStackedWidget
-    # build_generate_widget: QWidget
-    # build_generate_layout: QHBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
@@ -136,12 +129,7 @@ class MainWidget(QWidget):
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
         self.background_handler = MainWidgetBackgroundHandler(self)
-
         QTimer.singleShot(0, self.state_handler.load_state)
-
-
-    # def showEvent(self, event):
-    #     self.event_handler.showEvent(event)
 
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)

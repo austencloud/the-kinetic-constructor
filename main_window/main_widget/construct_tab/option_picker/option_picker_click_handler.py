@@ -10,16 +10,16 @@ if TYPE_CHECKING:
 
 
 class OptionPickerClickHandler:
-    def __init__(self, manual_builder: "ConstructTab") -> None:
-        self.manual_builder = manual_builder
+    def __init__(self, construct_tab: "ConstructTab") -> None:
+        self.construct_tab = construct_tab
 
     def get_click_handler(self, start_pos: "BasePictograph") -> callable:
         return lambda event: self.on_option_clicked(start_pos)
 
     def on_option_clicked(self, clicked_option: "BasePictograph") -> None:
 
-        beat_frame = self.manual_builder.main_widget.sequence_widget.beat_frame
-        new_beat = self.manual_builder.add_to_sequence_manager.create_new_beat(
+        beat_frame = self.construct_tab.main_widget.sequence_widget.beat_frame
+        new_beat = self.construct_tab.add_to_sequence_manager.create_new_beat(
             clicked_option
         )
         next_beat_number = beat_frame.beat_adder.calculate_next_beat_number()
@@ -34,18 +34,19 @@ class OptionPickerClickHandler:
         ) and not beat_frame.sequence_widget.main_widget.settings_manager.sequence_layout.get_layout_setting(
             "grow_sequence"
         ):
-            self.sequence_widget = self.manual_builder.main_widget.sequence_widget
+            self.sequence_widget = self.construct_tab.main_widget.sequence_widget
             self.sequence_widget.indicator_label.show_message(
                 f"Can't add the beat. Sequence length is set to {next_beat_number - 1} beats."
             )
             return
         beat_frame.beat_adder.add_beat_to_sequence(new_beat)
+        
         if new_beat.view:
-            self.manual_builder.option_picker.choose_your_next_pictograph_label.set_text_to_loading()
+            self.construct_tab.option_picker.choose_your_next_pictograph_label.set_text_to_loading()
             selection_manager = beat_frame.selection_overlay
             selection_manager.select_beat(new_beat.view)
             QApplication.processEvents()
-            self.manual_builder.option_picker.update_option_picker()
+            self.construct_tab.option_picker.update_option_picker()
             new_beat.view.is_filled = True
-            self.manual_builder.option_picker.scroll_area.display_manager.order_and_display_pictographs()
-            self.manual_builder.option_picker.choose_your_next_pictograph_label.set_default_text()
+            self.construct_tab.option_picker.scroll_area.display_manager.order_and_display_pictographs()
+            self.construct_tab.option_picker.choose_your_next_pictograph_label.set_default_text()

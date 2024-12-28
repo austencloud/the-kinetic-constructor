@@ -80,7 +80,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
 
             self.display_manager.add_pictograph_to_section_layout(p)
             p.view.update_borders()
-            p.updater.update_pictograph(pictograph_dict)
             p.elemental_glyph.update_elemental_glyph()
             p.view.show()
 

@@ -83,8 +83,7 @@ class OptionPicker(QWidget):
     def update_option_picker(self, sequence=None):
         if self.disabled:
             return
-        if not sequence:
-            sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(sequence) > 2:
             selected_filter = self.reversal_selector.reversal_combobox.currentData()

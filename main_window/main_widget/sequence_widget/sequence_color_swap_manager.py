@@ -32,16 +32,16 @@ class SequenceColorSwapManager:
 
     def swap_option_picker_colors(self):
         option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
-        for pictograph in option_picker.option_pool:
-            new_dict = self.swap_dict_values(pictograph.pictograph_dict.copy())
+        for option in option_picker.option_pool:
+            new_dict = self._swap_dict_values(option.pictograph_dict.copy())
             sequence_so_far = self.json_loader.load_current_sequence_json()
             reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, pictograph.pictograph_dict
+                sequence_so_far, option.pictograph_dict
             )
-            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
-            pictograph.red_reversal = reversal_info.get("red_reversal", False)
+            option.blue_reversal = reversal_info.get("blue_reversal", False)
+            option.red_reversal = reversal_info.get("red_reversal", False)
 
-            pictograph.updater.update_pictograph(new_dict)
+            option.updater.update_pictograph(new_dict)
 
     def check_length(self, current_sequence):
         if len(current_sequence) < 2:
@@ -62,17 +62,17 @@ class SequenceColorSwapManager:
         start_pos_beat_dict: dict = (
             self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
         )
-        self.swap_dict_values(start_pos_beat_dict)
+        self._swap_dict_values(start_pos_beat_dict)
         swapped_sequence.append(start_pos_beat_dict)
 
         beat_dicts = self.sequence_widget.beat_frame.get.beat_dicts()
         for beat in beat_dicts:
             swapped_beat = beat.copy()
-            self.swap_dict_values(swapped_beat)
+            self._swap_dict_values(swapped_beat)
             swapped_sequence.append(swapped_beat)
         return swapped_sequence
 
-    def swap_dict_values(self, pictograph_dict):
+    def _swap_dict_values(self, pictograph_dict):
         pictograph_dict["blue_attributes"], pictograph_dict["red_attributes"] = (
             pictograph_dict["red_attributes"],
             pictograph_dict["blue_attributes"],
