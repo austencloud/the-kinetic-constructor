@@ -8,8 +8,6 @@ if TYPE_CHECKING:
     from .mirrored_entry_manager import MirroredEntryManager
 from data.constants import DASH, STATIC
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-
 
 class MirroredEntryRotAngleManager:
     def __init__(self, manager: "MirroredEntryManager"):

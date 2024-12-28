@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from PyQt6.QtCore import Qt
 
+from palette_manager import PaletteManager
+
 
 from .settings_manager.settings_manager import SettingsManager
 from .main_widget.main_widget import MainWidget
@@ -20,6 +22,8 @@ class MainWindow(QMainWindow):
         self.profiler = profiler
         self.main_widget = None  # Initialize main_widget to None
         self.settings_manager = SettingsManager(self)
+        self.palette_manager = PaletteManager(self)
+
         self.geometry_manager = MainWindowGeometryManager(self)
         self.main_widget = MainWidget(self, splash_screen)  # Set main_widget here
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)

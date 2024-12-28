@@ -1,5 +1,6 @@
+import sys
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QLabel
+from PyQt6.QtWidgets import QWidget, QLabel, QApplication
 from PyQt6.QtGui import QScreen, QPainter
 
 from splash_screen.splash_geometry_manager import SplashGeometryManager
@@ -25,8 +26,12 @@ class SplashScreen(QWidget):
     progress_bar: "RainbowProgressBar"
     logo_label: QLabel
 
-    def __init__(self, target_screen: QScreen, settings_manager: "SettingsManager"):
+    def __init__(self, app: QApplication, settings_manager: "SettingsManager"):
         super().__init__()
+        screens = app.screens()
+        dev_environment = not getattr(sys, "frozen", False)
+
+        target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
         self.target_screen = target_screen
         self.settings_manager = settings_manager
 
