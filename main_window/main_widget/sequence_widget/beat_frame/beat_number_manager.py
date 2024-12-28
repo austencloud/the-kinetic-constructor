@@ -20,11 +20,8 @@ class BeatNumberManager:
     def add_beat_number(self, beat_number_text=None) -> None:
         if self.beat_number_item:
             self.beat_number_item.setVisible(False)
-
-        if not self.beat_number_text:
-            self.beat_number_text = self.beat.number_manager.get_beat_number_text()
-        else:
-            self.beat_number_text = beat_number_text
+            
+        self.beat_number_text = beat_number_text
         self.beat_number_item = QGraphicsTextItem(str(self.beat_number_text))
         self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
         self.beat_number_item.setPos(

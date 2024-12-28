@@ -150,20 +150,20 @@ class MainWidgetFontColorUpdater:
         browse_tab = self.main_widget.browse_tab
         sort_widget = browse_tab.options_widget.sort_widget
 
-        dictionary_labels = [
+        browse_tab_labels = [
             sort_widget.sort_by_label,
             browse_tab.preview_area.word_label,
             browse_tab.preview_area.variation_number_label,
             browse_tab.progress_bar.loading_label,
             browse_tab.progress_bar.percentage_label,
+            browse_tab.initial_selection_widget.filter_choice_widget.description_label,
         ]
-        self._apply_font_colors(dictionary_labels)
+        self._apply_font_colors(browse_tab_labels)
 
         sort_widget.style_buttons()
         sort_widget.style_labels()
         browse_tab.nav_sidebar.set_styles()
         browse_tab.preview_area.image_label.style_placeholder()
-        # dictionary.browser.initial_selection_widget.filter_choice_widget.resize_filter_choice_widget()
 
         for thumbnail_box in browse_tab.scroll_widget.thumbnail_boxes.values():
             self._apply_font_color(thumbnail_box.word_label)

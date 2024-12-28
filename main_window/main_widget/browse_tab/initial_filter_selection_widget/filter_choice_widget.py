@@ -144,12 +144,6 @@ class FilterChoiceWidget(QWidget):
         """Return the datetime of one week ago from today."""
         return datetime.now() - timedelta(weeks=1)
 
-    def resize_filter_choice_widget(self):
-        """Resize the filter choice widget and its components."""
-        self._resize_buttons_labels()
-        self._resize_buttons()
-        self._resize_description_label()
-
     def _resize_description_label(self):
         """Resize the main description label."""
         font_size = self.main_widget.width() // 30
@@ -177,5 +171,7 @@ class FilterChoiceWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Handle resize events to adjust UI components."""
-        self.resize_filter_choice_widget()
+        self._resize_buttons_labels()
+        self._resize_buttons()
+        self._resize_description_label()
         super().resizeEvent(event)

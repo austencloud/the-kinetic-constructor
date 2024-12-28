@@ -21,7 +21,6 @@ class Beat(BasePictograph):
         self.grabber = BeatGrabber(self)
 
         self.view: "BeatView" = None
-        self.beat_number_item: QGraphicsTextItem = None
         self.duration = duration
         self.is_placeholder = False
         self.parent_beat = None

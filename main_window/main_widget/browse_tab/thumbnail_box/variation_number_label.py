@@ -36,4 +36,7 @@ class VariationNumberLabel(QLabel):
         font.setPointSize(self.parent.browse_tab.main_widget.width() // 100)
         font.setBold(True)
         self.setFont(font)
+        color = self.parent.main_widget.main_window.settings_manager.global_settings.get_current_font_color()
+        self.setStyleSheet(f"color: {color};")
+
         super().resizeEvent(event)

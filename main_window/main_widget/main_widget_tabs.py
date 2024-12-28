@@ -1,3 +1,4 @@
+from turtle import left
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QWidget
 
@@ -18,18 +19,21 @@ class MainWidgetTabs:
             and self.mw.right_stack.currentIndex() == index
         ):
             return
-
+        right_new_index = None
         if index == self.mw.learn_tab_index:
             left_new_index = 1
+            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
         elif index == self.mw.write_tab_index:
             left_new_index = 2
+            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
+        elif index == self.mw.browse_tab_index:
+            left_new_index = 3
+            right_new_index = 2
+            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 3))
         else:
             left_new_index = 0
+            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
 
-        # if index == self.mw.browse_tab_index:
-        #     self.mw.left_stack.hide()
-        # else:
-        #     self.mw.left_stack.show()
         if (
             index in [self.mw.generate_tab_index, self.mw.construct_tab_index]
             and self.mw.left_stack.currentIndex() == 0
@@ -38,11 +42,12 @@ class MainWidgetTabs:
             self.mw.stack_fade_manager.fade_to_tab(
                 stack=self.mw.right_stack, new_index=new_index
             )
-
         else:
+            if not right_new_index:
+                right_new_index = index
             self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
                 right_stack=self.mw.right_stack,
-                right_new_index=index,
+                right_new_index=right_new_index,
                 left_stack=self.mw.left_stack,
                 left_new_index=left_new_index,
             )

@@ -72,7 +72,8 @@ class WordLabel(QWidget):
 
         # Manually offset the word label's position to account for the star button width
         offset = self.favorite_button.width()
-        self.word_label.setStyleSheet(f"padding-left: {offset}px;")
+        color = self.thumbnail_box.main_widget.main_window.settings_manager.global_settings.get_current_font_color()
+        self.word_label.setStyleSheet(f"padding-left: {offset}px; color: {color};")
 
         # Check if the word label fits within the available space
         available_width = self.thumbnail_box.width() - (

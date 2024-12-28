@@ -69,7 +69,7 @@ class BrowseTabInitialSelectionsWidget(QWidget):
 
         Args:
             section_name (str): The name of the section to display.
-        """
+        """ 
         index = self.section_indexes.get(section_name)
         if index is not None:
             self.stacked_widget.setCurrentIndex(index)

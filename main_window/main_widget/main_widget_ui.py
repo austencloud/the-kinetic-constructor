@@ -66,10 +66,11 @@ class MainWidgetUI:
         self.mw.left_stack.addWidget(self.mw.sequence_widget)
         self.mw.left_stack.addWidget(self.mw.codex)
         self.mw.left_stack.addWidget(self.mw.act_sheet)
-
+        self.mw.left_stack.addWidget(self.mw.browse_tab)
+        
         self.mw.right_stack.addWidget(self.mw.construct_tab)
         self.mw.right_stack.addWidget(self.mw.generate_tab)
-        self.mw.right_stack.addWidget(self.mw.browse_tab)
+        self.mw.right_stack.addWidget(self.mw.browse_tab.preview_area)
         self.mw.right_stack.addWidget(self.mw.learn_tab)
         self.mw.right_stack.addWidget(self.mw.write_tab)
 

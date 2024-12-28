@@ -48,7 +48,7 @@ class FullScreenViewer:
     def create_thumbnail(self):
         # Use the image export manager to create a thumbnail
         return self.sequence_widget.add_to_dictionary_manager.thumbnail_generator.generate_and_save_thumbnail(
-            self.sequence_widget.json_manager.loader_saver.load_current_sequence_json(),
+            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json(),
             0,
             get_images_and_data_path("temp"),
         )

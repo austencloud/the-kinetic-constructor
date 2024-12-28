@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 
 class GE_TurnsLabel(QLabel):
     """This class is the colored box that displays the turns number inside the turns box display frame of the graph editor."""
-
     clicked = pyqtSignal()
 
     def __init__(self, turns_display_frame: "TurnsDisplayFrame") -> None:
@@ -19,18 +18,11 @@ class GE_TurnsLabel(QLabel):
         self.turns_box = turns_display_frame.turns_box
         self.turns_display_font_size = 20
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
         self.clicked.emit()
-
-    def enterEvent(self, event) -> None:
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        # self.resize_turns_label(mouse_over=True)
-
-    def leaveEvent(self, event) -> None:
-        self.setCursor(Qt.CursorShape.ArrowCursor)
-        # self.resize_turns_label()
 
     def resizeEvent(self, event) -> None:
         self.turns_display_font_size = int(

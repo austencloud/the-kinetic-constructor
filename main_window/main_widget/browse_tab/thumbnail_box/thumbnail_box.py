@@ -97,7 +97,7 @@ class ThumbnailBox(QWidget):
 
         width = parent_width // 3
         self.setFixedWidth(width)
-        self.image_label.update_thumbnail(self.current_index)
+        # self.image_label.update_thumbnail(self.current_index)
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails

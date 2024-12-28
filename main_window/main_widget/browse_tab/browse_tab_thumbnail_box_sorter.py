@@ -163,7 +163,8 @@ class BrowseTabThumbnailBoxSorter:
 
         if not hidden:
             thumbnail_box.show()
-
+            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
+            
     def get_sorted_base_words(self, sort_order) -> list[tuple[str, list[str], None]]:
         dictionary_dir = get_images_and_data_path("dictionary")
         base_words = [

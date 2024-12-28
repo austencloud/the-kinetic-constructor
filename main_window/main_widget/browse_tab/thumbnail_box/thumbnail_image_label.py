@@ -49,6 +49,7 @@ class ThumbnailImageLabel(QLabel):
         )
         self.setPixmap(scaled_pixmap)
         self.adjustSize()
+        QApplication.processEvents()
 
     def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:

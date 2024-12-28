@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QTextEdit, QSizePolicy
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QTextOption
+from PyQt6.QtGui import QTextOption, QKeyEvent
 
 
 class CueLabelEdit(QTextEdit):
@@ -15,9 +15,8 @@ class CueLabelEdit(QTextEdit):
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.MinimumExpanding
         )
 
-    def keyPressEvent(self, event):
-        """Capture Enter key to trigger acceptance if desired."""
+    def keyPressEvent(self, event: "QKeyEvent"):
         if event.key() == Qt.Key.Key_Return:
-            self.clearFocus()  # Or custom behavior
+            self.clearFocus()
         else:
             super().keyPressEvent(event)

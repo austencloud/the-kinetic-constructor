@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 class AuthorSection(FilterSectionBase):
     IMAGE_DIR = get_images_and_data_path("images/author_images")
-    MAX_COLUMNS = 4  # Number of columns in the grid layout
+    MAX_COLUMNS = 3 
 
     def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Author:")
@@ -62,7 +62,6 @@ class AuthorSection(FilterSectionBase):
 
         layout.addLayout(grid_layout)
         layout.addStretch(1)
-        self.resize_author_section()
 
     def create_author_vbox(self, author: str) -> QVBoxLayout:
         """Create a vertical box layout containing all components for an author."""
@@ -155,7 +154,7 @@ class AuthorSection(FilterSectionBase):
 
     def display_only_thumbnails_by_author(self, author: str):
         """Display only the thumbnails that match the selected author."""
-        self.initial_selection_widget.browser.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
             {"author": author}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
@@ -180,15 +179,15 @@ class AuthorSection(FilterSectionBase):
                 return length
         return 0
 
-    def resize_author_section(self):
+    def resizeEvent(self, event):
         """Handle resizing of the author section."""
         self.resize_buttons()
         self.resize_labels()
 
     def resize_labels(self):
         """Adjust font sizes of labels during resizing."""
-        font_size_label = max(10, self.main_widget.width() // 140)
-        font_size_header = max(12, self.main_widget.width() // 100)
+        font_size_label = max(10, self.initial_selection_widget.width() // 140)
+        font_size_header = max(12, self.initial_selection_widget.width() // 100)
 
         for label in self.sequence_count_labels.values():
             font = label.font()
@@ -201,9 +200,9 @@ class AuthorSection(FilterSectionBase):
 
     def resize_buttons(self):
         """Adjust button sizes and fonts during resizing."""
-        button_width = max(1, self.main_widget.width() // 5)
-        button_height = max(1, self.main_widget.height() // 20)
-        font_size_button = max(10, self.main_widget.width() // 100)
+        button_width = max(1, self.initial_selection_widget.width() // 5)
+        button_height = max(1, self.initial_selection_widget.height() // 20)
+        font_size_button = max(10, self.initial_selection_widget.width() // 100)
 
         for button in self.buttons.values():
             font = button.font()
