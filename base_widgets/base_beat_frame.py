@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class BaseBeatFrame(QFrame):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget"):  
         super().__init__()
         self.main_widget = main_widget
         self.json_manager = main_widget.json_manager

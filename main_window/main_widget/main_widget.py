@@ -8,6 +8,7 @@ from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.learn_tab.codex.codex import Codex
 from main_window.main_widget.learn_tab.learn_tab import LearnTab
+from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.main_background_widget.main_background_widget import (
     MainBackgroundWidget,
@@ -57,7 +58,6 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-
     main_window: "MainWindow"
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
@@ -65,6 +65,7 @@ class MainWidget(QWidget):
     # Left Widgets
     sequence_widget: "SequenceWidget"
     codex: "Codex"
+    act_sheet: "ActSheet"
 
     # Right Widgets
     construct_tab: "ConstructTab"
@@ -138,4 +139,6 @@ class MainWidget(QWidget):
         QTimer.singleShot(0, self.state_handler.load_state)
 
     def resizeEvent(self, event) -> None:
-        self.event_handler.resizeEvent(event)
+        super().resizeEvent(event)
+        # self.background_widget.resize_background()
+        # self.navigation_widget.resize_navigation_widget()

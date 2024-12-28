@@ -175,7 +175,7 @@ class ContainsLettersSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
-        self.initial_selection_widget.browser.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
             {"contains_letters": letters}
         )
 

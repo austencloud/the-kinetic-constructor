@@ -23,7 +23,8 @@ class Timestamp(EditableLabel):
         self.edit = TimestampLineEdit(self, label_text)
         self.layout.addWidget(self.edit)  # Add it to the layout
 
-    def resize_timestamp(self):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         self.setFixedWidth(self.sizeHint().width())
         self.edit.setFixedWidth(self.edit.sizeHint().width())
 

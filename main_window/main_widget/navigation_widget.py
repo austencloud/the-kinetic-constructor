@@ -47,18 +47,20 @@ class NavigationWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
 
+        self.set_active_tab(self.current_index)
+
     def on_button_clicked(self, index):
         self.set_active_tab(index)
         self.tab_changed.emit(index)
 
     def set_active_tab(self, index):
         self.current_index = index
-        for idx, button in self.tab_buttons.items():
+        for idx, button in enumerate(self.tab_buttons.values()):
             self.set_button_appearance(index, idx, button)
 
-    def set_button_appearance(self, index, idx, button: "QPushButton"):
+    def set_button_appearance(self, active_index, idx, button: "QPushButton"):
         font_size = self.mw.width() // 120
-        if idx == index:
+        if idx == active_index:
             button.setStyleSheet(
                 f"background-color: lightblue; font-size: {font_size}pt; font-family: Georgia;"
             )
@@ -67,5 +69,7 @@ class NavigationWidget(QWidget):
         button.setMinimumWidth(self.mw.width() // 10)
         button.setMinimumHeight(self.mw.height() // 22)
 
-    def resize_navigation_widget(self):
-        self.set_active_tab(self.current_index)
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        for idx, button in enumerate(self.tab_buttons.values()):
+            self.set_button_appearance(self.current_index, idx, button)

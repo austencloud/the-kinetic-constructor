@@ -58,8 +58,9 @@ class ActBeatFrame(BaseBeatFrame):
             self.drag_drop_handler.dropEvent(event)
         return True
 
-    def resize_act_beat_frame(self):
+    def resizeEvent(self, event):
         """Resize each beat and label, adjusting the layout dynamically."""
+        super().resizeEvent(event)
         scrollbar_width = (
             self.act_sheet.act_container.beat_scroll.verticalScrollBar().width()
         )

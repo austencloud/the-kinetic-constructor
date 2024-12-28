@@ -53,7 +53,7 @@ class ActThumbnailBox(QWidget):
                 thumbnail, self.favorite_status
             )
 
-    def resize_thumbnail_box(self):
+    def resizeEvent(self, event):
         """Dynamically adjust the size of the thumbnail box."""
 
         scroll_bar_width = self.browser.verticalScrollBar().width()
@@ -64,4 +64,3 @@ class ActThumbnailBox(QWidget):
         image = QPixmap(self.thumbnails[0])
         image = image.scaledToWidth(thumbnail_width)
         self.image_label.setPixmap(image)
-        self.word_label.resize_word_label()

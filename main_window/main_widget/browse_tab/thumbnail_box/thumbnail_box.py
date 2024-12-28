@@ -64,9 +64,7 @@ class ThumbnailBox(QWidget):
         QApplication.processEvents()
         self.save_favorite_status()
 
-        current_filter = (
-            self.browse_tab.dictionary_settings.get_current_filter()
-        )
+        current_filter = self.browse_tab.dictionary_settings.get_current_filter()
         if current_filter and current_filter.get("favorites"):
             if not self.favorite_status:
                 self.hide()
@@ -88,17 +86,18 @@ class ThumbnailBox(QWidget):
                 thumbnail, self.favorite_status
             )
 
-    def resize_thumbnail_box(self):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         scrollbar_width = (
             self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().width()
         )
-        parent_width = self.browse_tab.scroll_widget.width() - scrollbar_width
+        parent_width = (
+            self.browse_tab.scroll_widget.scroll_content.width() - scrollbar_width
+        )
 
         width = parent_width // 3
         self.setFixedWidth(width)
         self.image_label.update_thumbnail(self.current_index)
-        self.word_label.resize_word_label()
-        self.resize_variation_number_label()
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
@@ -114,9 +113,3 @@ class ThumbnailBox(QWidget):
 
     def refresh_ui(self):
         self.update_thumbnails(self.thumbnails)
-
-    def resize_variation_number_label(self):
-        font = self.font()
-        font.setPointSize(self.width() // 35)
-        font.setBold(True)
-        self.variation_number_label.setFont(font)

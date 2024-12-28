@@ -23,6 +23,3 @@ class CueScroll(QScrollArea):
         self.cue_frame = CueFrame(self)
         self.setWidget(self.cue_frame)
         self.setStyleSheet("background: transparent; padding: 0px; margin: 0px;")
-
-    def resize_cue_scroll(self):
-        self.cue_frame.resize_cue_frame()

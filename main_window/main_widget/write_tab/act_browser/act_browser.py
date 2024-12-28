@@ -65,10 +65,8 @@ class ActBrowser(QScrollArea):
                     col = 0
                     row += 1
 
-    def resize_browser(self):
-        """Dynamically resize each thumbnail to fit half of the ActBrowser's width."""
+    def resizeEvent(self, event):
+        super().resizeEvent(event)        
         scroll_bar_width = self.verticalScrollBar().width()
         browser_width = self.width() - scroll_bar_width
-        for box in self.thumbnail_boxes:
-            box.resize_thumbnail_box()
         self.scroll_content.setMinimumWidth(browser_width)

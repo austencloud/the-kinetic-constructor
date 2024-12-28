@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 class ActLoader:
     def __init__(self, act_sheet: "ActSheet") -> None:
         self.act_sheet = act_sheet
-
+        self.load_act()
+        
     def load_act(self, filename="current_act.json") -> None:
         """Load an act from a JSON file in the acts directory."""
         file_path = get_user_editable_resource_path(filename)

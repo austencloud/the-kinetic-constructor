@@ -149,7 +149,6 @@ class BrowseTabThumbnailBoxSorter:
     ):
         if word not in self.browse_tab.scroll_widget.thumbnail_boxes:
             thumbnail_box = ThumbnailBox(self.browse_tab, word, thumbnails)
-            thumbnail_box.resize_thumbnail_box()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
             self.browse_tab.scroll_widget.thumbnail_boxes[word] = thumbnail_box
         else:

@@ -20,6 +20,7 @@ class SplashUpdater:
             "WriteTab": "Setting up Act Tab...",
             "ConstructTab": "Loading construct tab...",
             "GenerateTab": "Setting up generate tab...",
+            "ActSheet": "Loading Act Sheet...",
             "Finalizing": "Finalizing setup...",
         }
         self.current_progress = 0

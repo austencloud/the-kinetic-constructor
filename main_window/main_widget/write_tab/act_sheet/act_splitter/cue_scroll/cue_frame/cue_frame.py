@@ -36,7 +36,3 @@ class CueFrame(QWidget):
             self.layout.addWidget(cue_box)
             cue_box.timestamp.label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-    def resize_cue_frame(self):
-        """Applies calculated size settings to all elements in the cue frame."""
-        for cue_box in self.cue_boxes.values():
-            cue_box.resize_cue_box()

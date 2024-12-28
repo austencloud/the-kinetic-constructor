@@ -19,8 +19,17 @@ class MainWidgetTabs:
         ):
             return
 
-        left_new_index = 1 if index == self.mw.learn_tab_index else 0
+        if index == self.mw.learn_tab_index:
+            left_new_index = 1
+        elif index == self.mw.write_tab_index:
+            left_new_index = 2
+        else:
+            left_new_index = 0
 
+        # if index == self.mw.browse_tab_index:
+        #     self.mw.left_stack.hide()
+        # else:
+        #     self.mw.left_stack.show()
         if (
             index in [self.mw.generate_tab_index, self.mw.construct_tab_index]
             and self.mw.left_stack.currentIndex() == 0
@@ -29,6 +38,7 @@ class MainWidgetTabs:
             self.mw.stack_fade_manager.fade_to_tab(
                 stack=self.mw.right_stack, new_index=new_index
             )
+
         else:
             self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
                 right_stack=self.mw.right_stack,

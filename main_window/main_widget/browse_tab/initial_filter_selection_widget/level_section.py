@@ -43,9 +43,6 @@ class LevelSection(FilterSectionBase):
 
     def add_buttons(self):
         """Initialize the UI components for the level selection."""
-        # Clear existing widgets to prevent duplication
-        # self.clear_layout()
-
         self.go_back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
@@ -195,7 +192,7 @@ class LevelSection(FilterSectionBase):
 
     def display_only_thumbnails_with_level(self, level: int):
         """Display only the thumbnails that match the selected level."""
-        self.initial_selection_widget.browser.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
             {"level": level}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

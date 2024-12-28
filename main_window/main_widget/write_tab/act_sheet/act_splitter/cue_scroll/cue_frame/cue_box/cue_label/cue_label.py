@@ -17,7 +17,8 @@ class CueLabel(EditableLabel):
         )
         self.cue_box = cue_box
 
-    def resize_cue_label(self):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         width = int(self.cue_box.cue_frame.cue_scroll.act_sheet.width() // 9)
         self.setFixedWidth(width)
         self.label.setFixedWidth(width)

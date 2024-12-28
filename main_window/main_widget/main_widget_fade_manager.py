@@ -213,3 +213,4 @@ class MainWidgetFadeManager(QObject):
 
         self.fade_in_group.finished.connect(self._on_fade_in_finished)
         self.fade_in_group.start()
+

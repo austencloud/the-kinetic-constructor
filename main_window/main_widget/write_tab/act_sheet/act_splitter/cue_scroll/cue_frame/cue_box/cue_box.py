@@ -36,12 +36,19 @@ class CueBox(QWidget):
         self.setStyleSheet("#cue_box {border-top: 1px solid black;}")
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
-    def resize_cue_box(self):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         beat_frame = (
             self.cue_frame.cue_scroll.act_sheet.act_container.beat_scroll.act_beat_frame
         )
-        height = beat_frame.beat_size + beat_frame.steps_label_height
-        self.setFixedHeight(height)
+        scrollbar_width = (
+            beat_frame.act_sheet.act_container.beat_scroll.verticalScrollBar().width()
+        )
+        width_without_scrollbar = beat_frame.width() - scrollbar_width
+        self.beat_size = int(
+            width_without_scrollbar // beat_frame.act_sheet.DEFAULT_COLUMNS
+        )
+        self.steps_label_height = int(self.beat_size * (2 / 3))
 
-        self.timestamp.resize_timestamp()
-        self.cue_label.resize_cue_label()
+        height = self.beat_size + self.steps_label_height
+        self.setFixedHeight(height)

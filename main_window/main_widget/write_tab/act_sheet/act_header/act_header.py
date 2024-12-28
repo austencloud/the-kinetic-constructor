@@ -75,8 +75,9 @@ class ActHeader(QWidget):
         new_title = self.title_label.label.text()
         self.settings_manager.write_tab_settings.save_act_title(new_title)
 
-    def resize_header_widget(self):
+    def resizeEvent(self, event):
         """Adjust the size of each label based on the width of the act sheet."""
+        super().resizeEvent(event)
         self.title_label.resize_title_label()
         self._resize_label(self.date_label, self.act_sheet.width() // 50)
         self._resize_label(self.author_label, self.act_sheet.width() // 50)

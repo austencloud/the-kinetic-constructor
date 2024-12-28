@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 
 class MainBackgroundWidget(QWidget):
+    background: Optional[BaseBackground] = None
+
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -24,6 +26,8 @@ class MainBackgroundWidget(QWidget):
 
         self.setGeometry(main_widget.rect())
         self.setFixedSize(main_widget.size())
+        self.start_timer()
+        self.apply_background()
 
     def start_timer(self):
         self.animation_timer = QTimer(self)
@@ -69,9 +73,10 @@ class MainBackgroundWidget(QWidget):
         return manager_class(self.main_widget) if manager_class else None
 
     def resizeEvent(self, event):
+        self.resize_background()
+
+    def resize_background(self):
         self.setGeometry(self.main_widget.rect())
         self.setFixedSize(self.main_widget.size())
         self.background: Optional[BaseBackground] = None
         self.is_animating = False
-        self.apply_background()
-        self.start_timer()

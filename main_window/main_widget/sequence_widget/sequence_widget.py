@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-
-from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
-    GraphEditorPlaceholder,
-)
-
+from .graph_editor_placeholder import GraphEditorPlaceholder
 from .sequence_color_swap_manager import SequenceColorSwapManager
 from .sequence_mirror_manager import SequenceMirrorManager
 from .sequence_rotation_manager import SequenceRotationManager

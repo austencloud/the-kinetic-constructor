@@ -44,8 +44,3 @@ class BrowseTabScrollWidget(QWidget):
             if item.widget():
                 item.widget().setParent(None)
 
-    def resize_dictionary_browser_scroll_widget(self):
-        if self.is_initialized:
-            thumbnail_boxes: list[ThumbnailBox] = self.thumbnail_boxes.values()
-            for box in thumbnail_boxes:
-                box.resize_thumbnail_box()

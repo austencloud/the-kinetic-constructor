@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.learn_tab.codex.codex import Codex
+from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .write_tab.write_tab import WriteTab
@@ -56,12 +57,15 @@ class MainWidgetUI:
         splash.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Codex")
-        self.mw.codex = Codex(self.mw)
+        self.mw.act_sheet = ActSheet(self.mw)
         splash.updater.update_progress("Finalizing")
+        self.mw.codex = Codex(self.mw)
+        splash.updater.update_progress("ActSheet")
 
         self.mw.left_stack.addWidget(self.mw.sequence_widget)
         self.mw.left_stack.addWidget(self.mw.codex)
-
+        self.mw.left_stack.addWidget(self.mw.act_sheet)
+        
         self.mw.right_stack.addWidget(self.mw.construct_tab)
         self.mw.right_stack.addWidget(self.mw.generate_tab)
         self.mw.right_stack.addWidget(self.mw.browse_tab)
