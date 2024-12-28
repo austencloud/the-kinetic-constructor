@@ -105,8 +105,8 @@ class FilterChoiceWidget(QWidget):
             vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
             vbox.addWidget(description_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
-            row = index // 3 
-            col = index % 3 
+            row = index // 3
+            col = index % 3
 
             grid_layout.addLayout(vbox, row, col)
 
@@ -148,8 +148,10 @@ class FilterChoiceWidget(QWidget):
         """Resize the main description label."""
         font_size = self.main_widget.width() // 30
         font_family = "Monotype Corsiva"
+        color = self.settings_manager.global_settings.get_current_font_color()
+
         self.description_label.setStyleSheet(
-            f"font-size: {font_size}px; font-family: {font_family};"
+            f"font-size: {font_size}px; font-family: {font_family}; color: {color};"
         )
 
     def _resize_buttons(self):
@@ -165,7 +167,8 @@ class FilterChoiceWidget(QWidget):
         """Resize the labels under each button."""
         font_size = self.main_widget.width() // 150
         for button_label in self.button_labels.values():
-            button_label.setStyleSheet(f"font-size: {font_size}px;")
+            color = self.settings_manager.global_settings.get_current_font_color()
+            button_label.setStyleSheet(f"font-size: {font_size}px; color: {color};")
         for button in self.buttons.values():
             button.setFixedWidth(self.browse_tab.width() // 5)
 

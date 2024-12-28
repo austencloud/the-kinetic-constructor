@@ -157,6 +157,9 @@ class MainWidgetFontColorUpdater:
             browse_tab.progress_bar.loading_label,
             browse_tab.progress_bar.percentage_label,
             browse_tab.initial_selection_widget.filter_choice_widget.description_label,
+        ] + [
+            button_label
+            for button_label in browse_tab.initial_selection_widget.filter_choice_widget.button_labels.values()
         ]
         self._apply_font_colors(browse_tab_labels)
 
