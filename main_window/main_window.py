@@ -15,7 +15,6 @@ if TYPE_CHECKING:
     from splash_screen.splash_screen import SplashScreen
 
 
-# In main_window.py
 class MainWindow(QMainWindow):
     def __init__(self, profiler: "Profiler", splash_screen: "SplashScreen") -> None:
         super().__init__()

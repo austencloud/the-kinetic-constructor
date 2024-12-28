@@ -22,7 +22,8 @@ def main() -> None:
     main_window.raise_()
 
     QTimer.singleShot(0, lambda: splash_screen.close())
-    sys.exit(app.exec())
-
+    exit_code = main_window.exec(app)
+    sys.exit(exit_code)
+    
 if __name__ == "__main__":
     main()

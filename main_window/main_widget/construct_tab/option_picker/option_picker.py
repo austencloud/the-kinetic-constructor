@@ -6,7 +6,7 @@ from main_window.main_widget.construct_tab.option_picker.option_picker_fade_mana
     OptionPickerFadeManager,
 )
 from .option_picker_pictograph_view import OptionPickerPictographView
-from .option_picker_reversal_selector import OptionPickerReversalSelector
+from .option_picker_reversal_filter import OptionPickerReversalFilter
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
 from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
@@ -20,6 +20,7 @@ class OptionPicker(QWidget):
     """Contains the 'Choose Your Next Pictograph' label, filter combo box, and the OptionPickerScrollArea."""
 
     COLUMN_COUNT = 8
+    MAX_PICTOGRAPHS = 36
     option_selected = pyqtSignal(str)
 
     def __init__(self, construct_tab: "ConstructTab"):
@@ -31,20 +32,20 @@ class OptionPicker(QWidget):
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.option_getter = OptionGetter(self)
         self.scroll_area = OptionPickerScrollArea(self)
-        self.reversal_selector = OptionPickerReversalSelector(self)
+        self.reversal_filter = OptionPickerReversalFilter(self)
         self.fade_manager = OptionPickerFadeManager(self)
-        self.option_pool: list[BasePictograph] = []
-        MAX_PICTOGRAPHS = 36
 
-        for _ in range(MAX_PICTOGRAPHS):
+        self.initialize_option_pool()
+        self.setup_layout()
+        self.hide()
+
+    def initialize_option_pool(self):
+        self.option_pool: list[BasePictograph] = []
+        for _ in range(self.MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
             option.view = OptionPickerPictographView(option, self)
             option.view.hide()
             self.option_pool.append(option)
-
-        self._load_filter()
-        self.setup_layout()
-        self.hide()
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -57,48 +58,18 @@ class OptionPicker(QWidget):
         header_label_layout = QHBoxLayout()
         header_label_layout.addWidget(self.choose_your_next_pictograph_label)
         header_layout.addLayout(header_label_layout)
+        
         self.layout.addLayout(header_layout)
-        self.layout.addWidget(self.reversal_selector)
+        self.layout.addWidget(self.reversal_filter)
         self.layout.addWidget(self.scroll_area, 14)
-
-    def on_filter_changed(self):
-        """Called when the filter combo box selection changes."""
-        self.save_filter()
-        self.update_option_picker()
-
-    def save_filter(self):
-        selected_filter = self.reversal_selector.reversal_combobox.currentData()
-        self.main_widget.settings_manager.construct_tab_settings.set_filters(
-            selected_filter
-        )
-
-    def _load_filter(self):
-        selected_filter = (
-            self.main_widget.settings_manager.construct_tab_settings.get_filters()
-        )
-        index = self.reversal_selector.reversal_combobox.findData(selected_filter)
-        if index != -1:
-            self.reversal_selector.reversal_combobox.setCurrentIndex(index)
-        else:
-            self.reversal_selector.reversal_combobox.setCurrentIndex(0)
 
     def update_option_picker(self, sequence=None):
         if self.disabled:
             return
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
-
-        if len(sequence) > 2:
-            selected_filter = self.reversal_selector.reversal_combobox.currentData()
-
-            next_options: list = self.option_getter.get_next_options(
-                sequence, selected_filter
-            )
-            self.fade_manager.fade_option_picker(
-                self.scroll_area.option_picker, next_options
-            )
-
-        elif len(sequence) == 2:
-            next_options: list = self.option_getter.get_next_options(
+        if len(sequence) > 1:
+            selected_filter = self.reversal_filter.reversal_combobox.currentData()
+            next_options = self.option_getter.get_next_options(
                 sequence, selected_filter
             )
             self.fade_manager.fade_option_picker(

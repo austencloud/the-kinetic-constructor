@@ -7,10 +7,11 @@ from main_window.main_widget.generate_tab.circular.circular_sequence_generator_f
 from main_window.main_widget.generate_tab.freeform.freeform_sequence_generator_frame import (
     FreeformSequenceGeneratorFrame,
 )
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
+    BaseLessonWidget,
+)
 
 if TYPE_CHECKING:
-
 
     from ...main_widget.main_widget import MainWidget
 
@@ -120,7 +121,7 @@ class MainWidgetFontColorUpdater:
     def _update_build_tab(self):
         construct_tab = self.main_widget.construct_tab
         manual_labels = [
-            construct_tab.option_picker.reversal_selector.combo_box_label,
+            construct_tab.option_picker.reversal_filter.combo_box_label,
         ]
         self._apply_font_colors(manual_labels)
 

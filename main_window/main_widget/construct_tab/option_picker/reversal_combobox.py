@@ -6,15 +6,15 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
 
-    from main_window.main_widget.construct_tab.option_picker.option_picker_reversal_selector import (
-        OptionPickerReversalSelector,
+    from main_window.main_widget.construct_tab.option_picker.option_picker_reversal_filter import (
+        OptionPickerReversalFilter,
     )
 
 
 class ReversalCombobox(QComboBox):
-    def __init__(self, reversal_selector: "OptionPickerReversalSelector"):
-        super().__init__(reversal_selector)
-        self.reversal_selector = reversal_selector
+    def __init__(self, reversal_filter: "OptionPickerReversalFilter"):
+        super().__init__(reversal_filter)
+        self.reversal_filter = reversal_filter
 
         self.addItem("All", userData=None)
         self.addItem("Continuous", userData="continuous")
@@ -22,18 +22,13 @@ class ReversalCombobox(QComboBox):
         self.addItem("Two Reversals", userData="two_reversals")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
-        self.currentTextChanged.connect(
-            self.reversal_selector.option_picker.on_filter_changed
-        )
-        # when
+        self.currentTextChanged.connect(self.reversal_filter.on_filter_changed)
 
-    # on reswize, make the text bigger, a fraction of the width of the main widget
     def resizeEvent(self, event):
         super().resizeEvent(event)
         font = self.font()
         font_size = int(
-            self.reversal_selector.option_picker.construct_tab.main_widget.width()
-            // 100
+            self.reversal_filter.option_picker.construct_tab.main_widget.width() // 100
         )
         font.setPointSize(font_size)
         font.setFamily("Georgia")
