@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QWidget
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -13,20 +13,29 @@ class MainWidgetTabs:
         self.mw = main_widget
 
     def on_tab_changed(self, index: int) -> None:
-        if index == self.mw.learn_tab_index and self.mw.right_stack.currentIndex() == index:
+        if (
+            index == self.mw.learn_tab_index
+            and self.mw.right_stack.currentIndex() == index
+        ):
             return
 
-        if index == self.mw.learn_tab_index:
-            left_new_index = 1
-        else:
-            left_new_index = 0
+        left_new_index = 1 if index == self.mw.learn_tab_index else 0
 
-        self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
-            right_stack=self.mw.right_stack,
-            right_new_index=index,
-            left_stack=self.mw.left_stack,
-            left_new_index=left_new_index,
-        )
+        if (
+            index in [self.mw.generate_tab_index, self.mw.construct_tab_index]
+            and self.mw.left_stack.currentIndex() == 0
+        ):
+            new_index = 1 if index == self.mw.generate_tab_index else 0
+            self.mw.stack_fade_manager.fade_to_tab(
+                stack=self.mw.right_stack, new_index=new_index
+            )
+        else:
+            self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
+                right_stack=self.mw.right_stack,
+                right_new_index=index,
+                left_stack=self.mw.left_stack,
+                left_new_index=left_new_index,
+            )
 
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""

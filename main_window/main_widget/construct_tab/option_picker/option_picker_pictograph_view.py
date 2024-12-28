@@ -31,13 +31,9 @@ class OptionPickerPictographView(BorderedPictographView):
         self.option_picker = option_picker
         self.click_handler = self.option_picker.construct_tab.option_click_handler
 
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.grabGesture(Qt.GestureType.TapGesture)
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
 
-        self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
 
         self._gestureInProgress = False
@@ -49,17 +45,6 @@ class OptionPickerPictographView(BorderedPictographView):
         self._touchTimeout.setInterval(100)
 
     ### EVENTS ###
-
-    def contextMenuEvent(self, event: QEvent) -> None:
-        if isinstance(event, QContextMenuEvent):
-            context_menu = QMenu(self)
-            context_menu.addSeparator()
-            copy_action = QAction("Copy Dictionary", self)
-            copy_action.triggered.connect(self.copy_pictograph_dict)
-            context_menu.addAction(copy_action)
-            context_menu.exec(QCursor.pos())
-        else:
-            super().contextMenuEvent(event)
 
     def set_enabled(self, enabled: bool) -> None:
         self._ignoreMouseEvents = not enabled

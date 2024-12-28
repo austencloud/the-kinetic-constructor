@@ -14,7 +14,7 @@ class NavigationWidget(QWidget):
 
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
-        self.main_widget = main_widget
+        self.mw = main_widget
 
         self.container_frame = QFrame(self)
         self.container_layout = QVBoxLayout(self.container_frame)
@@ -40,7 +40,10 @@ class NavigationWidget(QWidget):
         self.tab_layout.addStretch(1)
 
         self.container_layout.addLayout(self.tab_layout)
-        self.tab_changed.connect(self.main_widget.tabs_handler.on_tab_changed)
+
+        self.tab_changed.connect(
+            lambda: self.mw.tabs_handler.on_tab_changed(self.current_index)
+        )
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
 
@@ -54,15 +57,15 @@ class NavigationWidget(QWidget):
             self.set_button_appearance(index, idx, button)
 
     def set_button_appearance(self, index, idx, button: "QPushButton"):
-        font_size = self.main_widget.width() // 120
+        font_size = self.mw.width() // 120
         if idx == index:
             button.setStyleSheet(
                 f"background-color: lightblue; font-size: {font_size}pt; font-family: Georgia;"
             )
         else:
             button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
-        button.setMinimumWidth(self.main_widget.width() // 10)
-        button.setMinimumHeight(self.main_widget.height() // 22)
+        button.setMinimumWidth(self.mw.width() // 10)
+        button.setMinimumHeight(self.mw.height() // 22)
 
     def resize_navigation_widget(self):
         self.set_active_tab(self.current_index)

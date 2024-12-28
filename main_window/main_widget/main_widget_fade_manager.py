@@ -184,7 +184,7 @@ class MainWidgetFadeManager(QObject):
         # old_left_effect.setOpacity(1.0)
 
         # 4) Create parallel fade-in group
-        self.fade_in_group = QParallelAnimationGroup()
+        fade_in_group = QParallelAnimationGroup()
 
         new_right_effect = self._ensure_opacity_effect(new_right_widget)
         new_right_effect.setOpacity(0.0)
@@ -202,8 +202,8 @@ class MainWidgetFadeManager(QObject):
         anim_in_left.setEndValue(1.0)
         anim_in_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        self.fade_in_group.addAnimation(anim_in_right)
-        self.fade_in_group.addAnimation(anim_in_left)
+        fade_in_group.addAnimation(anim_in_right)
+        fade_in_group.addAnimation(anim_in_left)
 
-        self.fade_in_group.finished.connect(self._on_fade_in_finished)
-        self.fade_in_group.start()
+        fade_in_group.finished.connect(self._on_fade_in_finished)
+        fade_in_group.start()
