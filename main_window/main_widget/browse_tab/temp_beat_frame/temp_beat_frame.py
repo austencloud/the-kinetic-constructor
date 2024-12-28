@@ -124,7 +124,7 @@ class TempBeatFrame(BaseBeatFrame):
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
 
-        self.manual_builder = self.main_widget.manual_builder
+        self.construct_tab = self.main_widget.construct_tab
         if not current_sequence_json:
             return
         self.clear_sequence(
@@ -137,7 +137,7 @@ class TempBeatFrame(BaseBeatFrame):
             grid_mode
         )
 
-        start_pos_beat = self.manual_builder.start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
+        start_pos_beat = self.construct_tab.start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )
         self.json_manager.start_pos_handler.set_start_position_data(start_pos_beat)
@@ -148,12 +148,12 @@ class TempBeatFrame(BaseBeatFrame):
             self.populate_sequence(pictograph_dict)
 
         last_beat = self.get_last_filled_beat().beat
-        self.manual_builder.last_beat = last_beat
+        self.construct_tab.last_beat = last_beat
 
-        if self.manual_builder.start_pos_picker.isVisible():
-            self.manual_builder.transition_to_option_picker()
+        if self.construct_tab.start_pos_picker.isVisible():
+            self.construct_tab.transition_to_option_picker()
 
-        scroll_area = self.manual_builder.option_picker.scroll_area
+        scroll_area = self.construct_tab.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
@@ -171,8 +171,8 @@ class TempBeatFrame(BaseBeatFrame):
         self._reset_beat_frame()
 
         if should_reset_to_start_pos_picker:
-            self.manual_builder.reset_to_start_pos_picker()
-        self.manual_builder.last_beat = self.start_pos
+            self.construct_tab.reset_to_start_pos_picker()
+        self.construct_tab.last_beat = self.start_pos
         self.json_manager.loader_saver.clear_current_sequence_file()
 
         # Reset the layout to the smallest possible amount

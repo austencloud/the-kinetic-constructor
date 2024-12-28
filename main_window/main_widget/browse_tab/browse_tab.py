@@ -38,7 +38,7 @@ class BrowseTab(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
         self.dictionary_settings = (
-            self.main_widget.main_window.settings_manager.dictionary_settings
+            self.main_widget.main_window.settings_manager.browse_tab_settings
         )
         self._setup_ui()
         self.initialized = False

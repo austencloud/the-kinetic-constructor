@@ -1,7 +1,5 @@
 import random
-from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
-    BaseBackground,
-)
+
 from PyQt6.QtGui import (
     QColor,
     QPainter,
@@ -13,6 +11,7 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import Qt, QPointF
 
+from main_window.main_widget.main_background_widget.backgrounds.base_background import BaseBackground
 from utilities.path_helpers import get_images_and_data_path
 
 

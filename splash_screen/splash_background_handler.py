@@ -2,24 +2,25 @@ from typing import TYPE_CHECKING, Optional, Callable, Union
 from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import Qt, pyqtSlot
 
-from main_window.menu_bar_widget.background_selector.backgrounds.aurora.aurora_background import (
+from main_window.main_widget.main_background_widget.backgrounds.aurora.aurora_background import (
     AuroraBackground,
 )
-from main_window.menu_bar_widget.background_selector.backgrounds.aurora_borealis_background import (
+from main_window.main_widget.main_background_widget.backgrounds.aurora_borealis_background import (
     AuroraBorealisBackground,
 )
-from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
+from main_window.main_widget.main_background_widget.backgrounds.base_background import (
     BaseBackground,
 )
-from main_window.menu_bar_widget.background_selector.backgrounds.bubbles_background import (
+from main_window.main_widget.main_background_widget.backgrounds.bubbles_background import (
     BubblesBackground,
 )
-from main_window.menu_bar_widget.background_selector.backgrounds.snowfall.snowfall_background import (
+from main_window.main_widget.main_background_widget.backgrounds.snowfall.snowfall_background import (
     SnowfallBackground,
 )
-from main_window.menu_bar_widget.background_selector.backgrounds.starfield.starfield_background import (
+from main_window.main_widget.main_background_widget.backgrounds.starfield.starfield_background import (
     StarfieldBackground,
 )
+
 
 if TYPE_CHECKING:
     from .splash_screen import SplashScreen

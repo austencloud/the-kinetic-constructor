@@ -7,11 +7,10 @@ from main_window.main_widget.generate_tab.circular.circular_sequence_generator_f
 from main_window.main_widget.generate_tab.freeform.freeform_sequence_generator_frame import (
     FreeformSequenceGeneratorFrame,
 )
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
 
 if TYPE_CHECKING:
-    from ...main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
-        BaseLessonWidget,
-    )
+
 
     from ...main_widget.main_widget import MainWidget
 
@@ -119,9 +118,9 @@ class MainWidgetFontColorUpdater:
         sequence_generator.overwrite_checkbox.set_label_color(self.font_color)
 
     def _update_build_tab(self):
-        manual_builder = self.main_widget.construct_tab
+        construct_tab = self.main_widget.construct_tab
         manual_labels = [
-            manual_builder.option_picker.reversal_selector.combo_box_label,
+            construct_tab.option_picker.reversal_selector.combo_box_label,
         ]
         self._apply_font_colors(manual_labels)
 
@@ -149,25 +148,25 @@ class MainWidgetFontColorUpdater:
         ]
 
     def _update_browse_tab(self) -> None:
-        dictionary = self.main_widget.browse_tab
-        sort_widget = dictionary.browser.options_widget.sort_widget
+        browse_tab = self.main_widget.browse_tab
+        sort_widget = browse_tab.options_widget.sort_widget
 
         dictionary_labels = [
             sort_widget.sort_by_label,
-            dictionary.preview_area.word_label,
-            dictionary.preview_area.variation_number_label,
-            dictionary.browser.progress_bar.loading_label,
-            dictionary.browser.progress_bar.percentage_label,
+            browse_tab.preview_area.word_label,
+            browse_tab.preview_area.variation_number_label,
+            browse_tab.progress_bar.loading_label,
+            browse_tab.progress_bar.percentage_label,
         ]
         self._apply_font_colors(dictionary_labels)
 
         sort_widget.style_buttons()
         sort_widget.style_labels()
-        dictionary.browser.nav_sidebar.set_styles()
-        dictionary.preview_area.image_label.style_placeholder()
+        browse_tab.nav_sidebar.set_styles()
+        browse_tab.preview_area.image_label.style_placeholder()
         # dictionary.browser.initial_selection_widget.filter_choice_widget.resize_filter_choice_widget()
 
-        for thumbnail_box in dictionary.browser.scroll_widget.thumbnail_boxes.values():
+        for thumbnail_box in browse_tab.scroll_widget.thumbnail_boxes.values():
             self._apply_font_color(thumbnail_box.word_label)
             thumbnail_box.word_label.reload_favorite_icon()
             self._apply_font_color(thumbnail_box.variation_number_label)

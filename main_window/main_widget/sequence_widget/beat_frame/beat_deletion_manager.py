@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class BeatDeletionManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = beat_frame
-        self.manual_builder = None
+        self.construct_tab = None
         self.selection_overlay = self.beat_frame.selection_overlay
         self.json_manager = self.beat_frame.json_manager  # Access json manager
         self.settings_manager = self.beat_frame.settings_manager
@@ -21,7 +21,7 @@ class BeatDeletionManager:
     def delete_selected_beat(self) -> None:
         """Delete the currently selected beat."""
         self.beats = self.beat_frame.beats
-        self._initialize_manual_builder()
+        self._initialize_construct_tab()
         self._initialize_GE_pictograph_view()
 
         selected_beat = self.beat_frame.selection_overlay.get_selected_beat()
@@ -32,10 +32,10 @@ class BeatDeletionManager:
         self._delete_beat_based_on_type(selected_beat)
         self._post_deletion_updates()
 
-    def _initialize_manual_builder(self) -> None:
+    def _initialize_construct_tab(self) -> None:
         """Initialize the manual builder if not already initialized."""
-        if not self.manual_builder:
-            self.manual_builder = self.beat_frame.main_widget.construct_tab
+        if not self.construct_tab:
+            self.construct_tab = self.beat_frame.main_widget.construct_tab
 
     def _initialize_GE_pictograph_view(self) -> None:
         """Initialize the GE pictograph view."""
@@ -64,7 +64,7 @@ class BeatDeletionManager:
         if self.settings_manager.global_settings.get_grow_sequence():
             self.beat_frame.layout_manager.adjust_layout_to_sequence_length()
         self.beat_frame.sequence_widget.current_word_label.update_current_word_label_from_beats()
-        self.manual_builder.option_picker.update_option_picker()
+        self.construct_tab.option_picker.update_option_picker()
 
     def _delete_non_first_beat(self, selected_beat: BeatView) -> None:
         """Delete a non-first beat."""
@@ -73,13 +73,13 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get.last_filled_beat()
         self.selection_overlay.select_beat(last_beat)
-        self.manual_builder.last_beat = last_beat.beat
+        self.construct_tab.last_beat = last_beat.beat
 
     def _delete_first_beat(self, selected_beat: BeatView) -> None:
         """Delete the first beat."""
         self.start_pos_view = self.beat_frame.start_pos_view
         self.selection_overlay.select_beat(self.start_pos_view)
-        self.manual_builder.last_beat = self.start_pos_view.beat
+        self.construct_tab.last_beat = self.start_pos_view.beat
         self.delete_beat(selected_beat)
 
         for i in range(self.beats.index(selected_beat) + 1, len(self.beats)):
@@ -98,9 +98,9 @@ class BeatDeletionManager:
             self.delete_beat(beat)
         self.selection_overlay.deselect_beat()
         self.json_manager.loader_saver.clear_current_sequence_file()
-        self.manual_builder.last_beat = None
-        self.manual_builder.reset_to_start_pos_picker()
-        self.manual_builder.option_picker.update_option_picker()
+        self.construct_tab.last_beat = None
+        self.construct_tab.reset_to_start_pos_picker()
+        self.construct_tab.option_picker.update_option_picker()
         graph_editor = self.beat_frame.main_widget.sequence_widget.graph_editor
         graph_editor.adjustment_panel.update_adjustment_panel()
 
@@ -112,7 +112,7 @@ class BeatDeletionManager:
     def delete_all_beats(self) -> None:
         """Delete all beats."""
         self.beats = self.beat_frame.beats
-        self._initialize_manual_builder()
+        self._initialize_construct_tab()
         self._initialize_GE_pictograph_view()
         self._delete_start_pos()
         self._post_deletion_updates()

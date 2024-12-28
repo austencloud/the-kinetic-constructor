@@ -47,7 +47,7 @@ class OptionPickerDisplayManager:
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
     ) -> dict[str, BasePictograph]:
-        last_beat = self.scroll_area.manual_builder.last_beat
+        last_beat = self.scroll_area.construct_tab.last_beat
         relevant_pictographs: dict[str, BasePictograph] = {}
 
         for key, cached_pictograph in self.scroll_area.pictograph_cache.items():

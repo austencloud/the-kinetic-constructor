@@ -129,7 +129,7 @@ class ContainsLettersSection(FilterSectionBase):
         )
 
         sort_method = (
-            self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
+            self.main_widget.main_window.settings_manager.browse_tab_settings.get_sort_method()
         )
         base_words = self.browse_tab.thumbnail_box_sorter.get_sorted_base_words(
             "sequence_length"

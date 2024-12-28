@@ -2,16 +2,15 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 
+
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.dictionary_browser import (
-        DictionaryBrowser,
-    )
+    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
 
 
 class BrowseTabCurrentlyDisplayingLabel(QLabel):
-    def __init__(self, browser: "DictionaryBrowser") -> None:
-        super().__init__(browser)
-        self.browser = browser
+    def __init__(self, browse_tab: "BrowseTab") -> None:
+        super().__init__(browse_tab)
+        self.browse_tab = browse_tab
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def show_message(self, description):
@@ -19,6 +18,5 @@ class BrowseTabCurrentlyDisplayingLabel(QLabel):
 
     def resizeEvent(self, event):
         font = self.font()
-        font.setPointSize(self.browser.width() // 65)
+        font.setPointSize(self.browse_tab.main_widget.width() // 65)
         self.setFont(font)
-        

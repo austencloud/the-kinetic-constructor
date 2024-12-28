@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
 
 
-class SequenceGeneratorSettings:
+class GenerateTabSettings:
     DEFAULT_FREEFORM_SETTINGS = {
         "sequence_type": "freeform",
         "sequence_length": 16,
@@ -23,7 +23,6 @@ class SequenceGeneratorSettings:
         "permutation_type": "rotated",
         "continuous_rotation": False,
         "overwrite_sequence": False,
-
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:

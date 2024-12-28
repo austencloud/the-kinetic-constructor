@@ -13,10 +13,10 @@ if TYPE_CHECKING:
 
 
 class BaseStartPosPicker(QWidget):
-    def __init__(self, manual_builder: "ConstructTab"):
-        super().__init__(manual_builder)
-        self.manual_builder = manual_builder
-        self.main_widget = manual_builder.main_widget
+    def __init__(self, construct_tab: "ConstructTab"):
+        super().__init__(construct_tab)
+        self.construct_tab = construct_tab
+        self.main_widget = construct_tab.main_widget
 
         # For caching pictographs based on letter, start_pos, end_pos, grid_mode
         self.pictograph_cache: dict[str, BasePictograph] = {}

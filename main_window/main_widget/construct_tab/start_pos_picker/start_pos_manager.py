@@ -29,8 +29,8 @@ class StartPosManager(QObject):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__()
         self.start_pos_picker = start_pos_picker
-        self.manual_builder = start_pos_picker.construct_tab
-        self.main_widget = self.manual_builder.main_widget
+        self.construct_tab = start_pos_picker.construct_tab
+        self.main_widget = self.construct_tab.main_widget
         self.start_pos_frame = start_pos_picker.pictograph_frame
 
         self.top_builder_widget = None
@@ -44,7 +44,7 @@ class StartPosManager(QObject):
 
         # When user picks a start position, proceed
         self.start_position_selected.connect(
-            self.manual_builder.transition_to_option_picker
+            self.construct_tab.transition_to_option_picker
         )
 
         # Load whichever mode we want to show initially
@@ -160,7 +160,7 @@ class StartPosManager(QObject):
         )
 
         seq_widget.beat_frame.start_pos_view.set_start_pos(start_position_beat)
-        self.manual_builder.last_beat = start_position_beat
+        self.construct_tab.last_beat = start_position_beat
 
         # For selection
         beat_frame = seq_widget.beat_frame

@@ -21,13 +21,13 @@ if TYPE_CHECKING:
 class AdvancedStartPosPicker(BaseStartPosPicker):
     COLUMN_COUNT = 4  # Adjust as needed
 
-    def __init__(self, manual_builder: "ConstructTab"):
-        super().__init__(manual_builder)
+    def __init__(self, construct_tab: "ConstructTab"):
+        super().__init__(construct_tab)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self._setup_layout()
         self.start_pos_cache: dict[str, list[BasePictograph]] = {}
         self.start_position_adder = (
-            self.manual_builder.main_widget.sequence_widget.beat_frame.start_position_adder
+            self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
         )
         self.generate_variations()
 
@@ -111,7 +111,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 variation.view.update_borders()
 
     def _resize_variation(self, variation: BasePictograph) -> None:
-        view_width = self.manual_builder.width() // 5
+        view_width = self.construct_tab.width() // 5
         variation.view.setFixedSize(view_width, view_width)
         variation.view.view_scale = view_width / variation.width()
         variation.view.resetTransform()

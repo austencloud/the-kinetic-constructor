@@ -25,13 +25,11 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         """Apply settings to the modular widgets."""
         super().apply_settings()
 
-        rotation_type = self.sequence_generator_settings.get_sequence_generator_setting(
+        rotation_type = self.generate_tab_settings.get_sequence_generator_setting(
             "rotation_type", self.builder_type
         )
-        permutation_type = (
-            self.sequence_generator_settings.get_sequence_generator_setting(
-                "permutation_type", self.builder_type
-            )
+        permutation_type = self.generate_tab_settings.get_sequence_generator_setting(
+            "permutation_type", self.builder_type
         )
 
         # Update state of the toggles
@@ -41,13 +39,13 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
     def _update_rotation_type(self, rotation_type: str):
         """Update the rotation type based on the toggle."""
-        self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab_settings.set_sequence_generator_setting(
             "rotation_type", rotation_type, self.builder_type
         )
 
     def _update_permutation_type(self, permutation_type: str):
         """Update the permutation type based on the toggle."""
-        self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab_settings.set_sequence_generator_setting(
             "permutation_type", permutation_type, self.builder_type
         )
         if permutation_type == "mirrored":
@@ -62,31 +60,31 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def on_create_sequence(self, overwrite_sequence: bool):
         """Trigger sequence creation for Circular."""
         if overwrite_sequence:
-            self.sequence_generator_widget.main_widget.sequence_widget.beat_frame.deletion_manager.delete_all_beats()
+            self.generate_tab.main_widget.sequence_widget.beat_frame.deletion_manager.delete_all_beats()
 
         self.builder.build_sequence(
-            self.sequence_generator_settings.get_sequence_generator_setting(
+            self.generate_tab_settings.get_sequence_generator_setting(
                 "sequence_length", self.builder_type
             ),
             float(
-                self.sequence_generator_settings.get_sequence_generator_setting(
+                self.generate_tab_settings.get_sequence_generator_setting(
                     "max_turn_intensity", self.builder_type
                 )
             ),
-            self.sequence_generator_settings.get_sequence_generator_setting(
+            self.generate_tab_settings.get_sequence_generator_setting(
                 "sequence_level", self.builder_type
             ),
-            self.sequence_generator_settings.get_sequence_generator_setting(
+            self.generate_tab_settings.get_sequence_generator_setting(
                 "rotation_type", self.builder_type
             ),
-            self.sequence_generator_settings.get_sequence_generator_setting(
+            self.generate_tab_settings.get_sequence_generator_setting(
                 "permutation_type", self.builder_type
             ),
-            self.sequence_generator_settings.get_sequence_generator_setting(
+            self.generate_tab_settings.get_sequence_generator_setting(
                 "continuous_rotation", self.builder_type
             ),
         )
-        # self.sequence_generator.sequence_builder.manual_builder.option_picker.update_option_picker()
+        # self.sequence_generator.sequence_builder.construct_tab.option_picker.update_option_picker()
 
     def _resize_sequence_generator_frame(self):
         super()._resize_sequence_generator_frame()
@@ -95,22 +93,20 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
     def show(self):
         """Display Circular frame by setting it in the stacked layout."""
-        self.sequence_generator_widget.stacked_layout.setCurrentWidget(self)
-        self.sequence_generator_widget.current_sequence_generator = "circular"
-        self.sequence_generator_widget.update_button_styles()
+        self.generate_tab.stacked_layout.setCurrentWidget(self)
+        self.generate_tab.current_sequence_generator = "circular"
+        self.generate_tab.update_button_styles()
 
-        if self.sequence_generator_widget.overwrite_connected:
+        if self.generate_tab.overwrite_connected:
             try:
-                self.sequence_generator_widget.overwrite_checkbox.stateChanged.disconnect()
+                self.generate_tab.overwrite_checkbox.stateChanged.disconnect()
             except TypeError:
                 pass
-            self.sequence_generator_widget.overwrite_connected = False
+            self.generate_tab.overwrite_connected = False
 
-        overwrite_value = (
-            self.sequence_generator_settings.get_sequence_generator_setting(
-                "overwrite_sequence",
-                self.sequence_generator_widget.current_sequence_generator,
-            )
+        overwrite_value = self.generate_tab_settings.get_sequence_generator_setting(
+            "overwrite_sequence",
+            self.generate_tab.current_sequence_generator,
         )
 
         if isinstance(overwrite_value, bool):
@@ -120,20 +116,20 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         else:
             overwrite_bool = False
 
-        self.sequence_generator_widget.overwrite_checkbox.setChecked(overwrite_bool)
+        self.generate_tab.overwrite_checkbox.setChecked(overwrite_bool)
 
-        self.sequence_generator_widget.overwrite_checkbox.checkbox.stateChanged.connect(
-            lambda state: self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab.overwrite_checkbox.checkbox.stateChanged.connect(
+            lambda state: self.generate_tab_settings.set_sequence_generator_setting(
                 "overwrite_sequence",
                 state == 2,
-                self.sequence_generator_widget.current_sequence_generator,
+                self.generate_tab.current_sequence_generator,
             )
         )
-        self.sequence_generator_widget.overwrite_connected = True
+        self.generate_tab.overwrite_connected = True
 
-        self.sequence_generator_widget.generate_sequence_button.clicked.disconnect()
-        self.sequence_generator_widget.generate_sequence_button.clicked.connect(
+        self.generate_tab.generate_sequence_button.clicked.disconnect()
+        self.generate_tab.generate_sequence_button.clicked.connect(
             lambda: self.on_create_sequence(
-                self.sequence_generator_widget.overwrite_checkbox.isChecked()
+                self.generate_tab.overwrite_checkbox.isChecked()
             )
         )

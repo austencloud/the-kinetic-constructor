@@ -17,7 +17,7 @@ class LetterTypePickerWidget(QWidget):
     def __init__(self, generator_frame: "FreeformSequenceGeneratorFrame"):
         super().__init__(generator_frame)
         self.generator_frame = generator_frame
-        self.sequence_generator_settings = generator_frame.sequence_generator_settings
+        self.sequence_generator_settings = generator_frame.generate_tab_settings
         self.builder_type = generator_frame.builder_type
 
         # Instead of a checkbox, use a label
@@ -121,7 +121,7 @@ class LetterTypePickerWidget(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        font_size = self.generator_frame.sequence_generator_widget.height() // 50
+        font_size = self.generator_frame.generate_tab.main_widget.height() // 50
         self.filter_label.setFont(QFont("Arial", font_size))
         self.layout().setSpacing(self.generator_frame.height() // 50)
         width = self.generator_frame.width() // 16
@@ -134,8 +134,8 @@ class LetterTypePickerWidget(QWidget):
         f = self.filter_label.font()
         f.setPointSize(font_size)
         self.filter_label.setFont(f)
-        global_settings = self.generator_frame.sequence_generator_widget.global_settings
-        color = self.generator_frame.sequence_generator_widget.main_widget.font_color_updater.get_font_color(
+        global_settings = self.generator_frame.generate_tab.global_settings
+        color = self.generator_frame.generate_tab.main_widget.font_color_updater.get_font_color(
             global_settings.get_background_type()
         )
         # Just apply the color to the label text, not the checkbox

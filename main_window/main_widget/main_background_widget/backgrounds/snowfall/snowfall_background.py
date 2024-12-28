@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Union
-from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
-    BaseBackground,
-)
+
 from PyQt6.QtGui import QColor, QPainter, QLinearGradient
 from PyQt6.QtWidgets import QWidget
+
+from main_window.main_widget.main_background_widget.backgrounds.base_background import BaseBackground
 
 if TYPE_CHECKING:
 

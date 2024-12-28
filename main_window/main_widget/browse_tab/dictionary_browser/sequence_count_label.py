@@ -20,5 +20,5 @@ class BrowseTabSequenceCountLabel(QLabel):
     def resizeEvent(self, event):
         label = self.browse_tab.sequence_count_label
         font = label.font()
-        font.setPointSize(self.browse_tab.width() // 80)
+        font.setPointSize(self.browse_tab.main_widget.width() // 80)
         label.setFont(font)

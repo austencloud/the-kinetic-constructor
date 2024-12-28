@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 
 class OptionPickerReversalSelector(QWidget):
-
     def __init__(self, option_picker: "OptionPicker"):
         super().__init__(option_picker)
         self.option_picker = option_picker
@@ -28,7 +27,7 @@ class OptionPickerReversalSelector(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         font = self.font()
-        font_size = int(self.option_picker.construct_tab.main_widget.width() * 0.0075)
+        font_size = int(self.option_picker.construct_tab.main_widget.width() // 130)
         font.setPointSize(font_size)
         font.setFamily("Georgia")
         self.setFont(font)

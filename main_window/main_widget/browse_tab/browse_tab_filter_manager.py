@@ -87,7 +87,7 @@ class BrowseTabFilterManager:
     def show_browser_with_filters_from_settings(self):
         """Show browser with filters from settings."""
         current_filter = (
-            self.browse_tab.main_widget.main_window.settings_manager.dictionary_settings.get_current_filter()
+            self.browse_tab.main_widget.main_window.settings_manager.browse_tab_settings.get_current_filter()
         )
 
         self.apply_current_filter(current_filter)

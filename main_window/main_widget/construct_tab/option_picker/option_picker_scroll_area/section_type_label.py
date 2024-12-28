@@ -38,8 +38,8 @@ class SectionTypeLabel(QLabel):
 
     def get_font_size(self):
         scroll_area = self.section_widget.scroll_area
-        manual_builder = scroll_area.manual_builder
-        font_size = manual_builder.height() // 45
+        construct_tab = scroll_area.construct_tab
+        font_size = construct_tab.height() // 45
         return font_size
 
     def set_label_style(self, outline=False):

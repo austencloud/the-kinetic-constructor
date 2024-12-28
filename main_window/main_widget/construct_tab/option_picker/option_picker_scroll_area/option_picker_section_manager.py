@@ -15,7 +15,7 @@ class OptionPickerSectionManager:
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.manual_builder = scroll_area.manual_builder
+        self.construct_tab = scroll_area.construct_tab
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []

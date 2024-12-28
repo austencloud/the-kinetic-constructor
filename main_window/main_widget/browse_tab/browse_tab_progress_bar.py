@@ -18,7 +18,7 @@ class BrowseTabProgressBar(RainbowProgressBar):
 
         font = self.percentage_label.font()
         font.setFamily("Monotype Corsiva")
-        font.setPointSize(self.browse_tab.width() // 40)
+        font.setPointSize(self.browse_tab.main_widget.width() // 80)
         self.percentage_label.setFont(font)
         self.loading_label.setFont(font)
         super().resizeEvent(event)

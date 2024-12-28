@@ -64,7 +64,7 @@ class BaseAdjustmentBoxHeaderWidget(QWidget):
         self._resize_header_label()
 
     def _resize_header_label(self) -> None:
-        font_size = self.graph_editor.width() // 40
+        font_size = self.graph_editor.sequence_widget.main_widget.width() // 80
         self.header_label_font.setPointSize(font_size)
         self.header_label.setFont(self.header_label_font)
         self.header_label.repaint()

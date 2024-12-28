@@ -41,7 +41,7 @@ class GraphEditorToggleTab(QWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.setFixedHeight(self.sequence_widget.height() // 20)
+        self.setFixedHeight(self.sequence_widget.main_widget.height() // 20)
         font_size = self.height() // 3
         font = QFont()
         font.setPointSize(font_size)

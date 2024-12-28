@@ -11,33 +11,33 @@ class SequenceClearer:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_manager = sequence_widget.main_widget.json_manager
-        self.manual_builder = None
+        self.construct_tab = None
         self.settings_manager = sequence_widget.main_widget.settings_manager
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True
     ) -> None:
-        if not self.manual_builder:
-            self.manual_builder = self.sequence_widget.main_widget.construct_tab
+        if not self.construct_tab:
+            self.construct_tab = self.sequence_widget.main_widget.construct_tab
         # if the user is on the advanced start pos picker tab, then don't reset to the start pos picker
 
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
-        self._initialize_manual_builder()
-        self._reset_manual_builder(should_reset_to_start_pos_picker)
+        self._initialize_construct_tab()
+        self._reset_construct_tab(should_reset_to_start_pos_picker)
         self._show_clear_indicator(show_indicator)
         self.sequence_widget.graph_editor.state.reset_graph_editor()
         self._configure_beat_frame()
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
-    def _initialize_manual_builder(self) -> None:
-        if not self.manual_builder:
-            self.manual_builder = self.sequence_widget.main_widget.construct_tab
+    def _initialize_construct_tab(self) -> None:
+        if not self.construct_tab:
+            self.construct_tab = self.sequence_widget.main_widget.construct_tab
 
-    def _reset_manual_builder(self, should_reset_to_start_pos_picker: bool) -> None:
+    def _reset_construct_tab(self, should_reset_to_start_pos_picker: bool) -> None:
         if should_reset_to_start_pos_picker:
-            self.manual_builder.reset_to_start_pos_picker()
-        self.manual_builder.last_beat = self.sequence_widget.beat_frame.start_pos
+            self.construct_tab.reset_to_start_pos_picker()
+        self.construct_tab.last_beat = self.sequence_widget.beat_frame.start_pos
         self.graph_editor = self.sequence_widget.graph_editor
         # self.graph_editor.adjustment_panel.blue_ori_picker.set_initial_orientation(IN)
         # self.graph_editor.adjustment_panel.red_ori_picker.set_initial_orientation(IN)

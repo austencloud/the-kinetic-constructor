@@ -177,7 +177,6 @@ class StartingLetterSection(FilterSectionBase):
         font_metrics = QFontMetrics(font)
         return int(font_metrics.height() * 2.1)
 
-    # Event filter to handle hover events
     def eventFilter(self, obj: QObject, event: QEvent):
         if event.type() == QEvent.Type.Enter:
             letter = obj.property("letter")

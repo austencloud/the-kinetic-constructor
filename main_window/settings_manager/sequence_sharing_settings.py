@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
 
 
-class SequenceSharingSettings:
+class SequenceShareSettings:
     DEFAULT_SEQUENCE_SHARING_SETTINGS = {"recipients": []}
 
     def __init__(self, settings_manager: "SettingsManager") -> None:

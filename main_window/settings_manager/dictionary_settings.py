@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
 
 
-class DictionarySettings:
+class BrowseTabSettings:
     DEFAULT_DICTIONARY_SETTINGS = {
         "sort_method": "sequence_length",
         "current_section": "starting_letter",
@@ -18,8 +18,7 @@ class DictionarySettings:
     def get_sort_method(self) -> str:
         # Retrieve the sort method or use the default
         return self.settings.value(
-            "dictionary/sort_method",
-            self.DEFAULT_DICTIONARY_SETTINGS["sort_method"]
+            "dictionary/sort_method", self.DEFAULT_DICTIONARY_SETTINGS["sort_method"]
         )
 
     def set_sort_method(self, sort_method: str) -> None:
@@ -31,7 +30,7 @@ class DictionarySettings:
         return self.settings.value(
             "dictionary/current_filter",
             self.DEFAULT_DICTIONARY_SETTINGS["current_filter"],
-            type=dict
+            type=dict,
         )
 
     def set_current_filter(self, current_filter: dict) -> None:
@@ -42,7 +41,7 @@ class DictionarySettings:
         # Retrieve the current section or use the default
         return self.settings.value(
             "dictionary/current_section",
-            self.DEFAULT_DICTIONARY_SETTINGS["current_section"]
+            self.DEFAULT_DICTIONARY_SETTINGS["current_section"],
         )
 
     def set_current_section(self, section: str) -> None:

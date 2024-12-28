@@ -14,7 +14,7 @@ class AdvancedStartPosManager(QObject):
 
     def __init__(self, advanced_start_pos_picker: "AdvancedStartPosPicker") -> None:
         super().__init__()
-        self.sequence_builder = advanced_start_pos_picker.manual_builder
+        self.sequence_builder = advanced_start_pos_picker.construct_tab
         self.advanced_start_pos_picker = advanced_start_pos_picker
         self.pictograph_frame = advanced_start_pos_picker.pictograph_frame
         self.start_pos_cache = advanced_start_pos_picker.start_pos_cache

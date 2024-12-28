@@ -1,12 +1,11 @@
 import math
 import random
-from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
-    BaseBackground,
-)
 
 from PyQt6.QtGui import QLinearGradient, QColor, QPainter
 
 from PyQt6.QtWidgets import QWidget
+
+from .base_background import BaseBackground
 
 
 class AuroraBorealisBackground(BaseBackground):

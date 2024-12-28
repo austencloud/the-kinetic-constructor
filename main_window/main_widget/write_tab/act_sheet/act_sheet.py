@@ -19,7 +19,9 @@ class ActSheet(QWidget):
         super().__init__(act_tab)
         self.act_tab = act_tab
         self.main_widget = act_tab.main_widget
-        self.settings_manager = self.main_widget.main_window.settings_manager.act_sheet
+        self.settings_manager = (
+            self.main_widget.main_window.settings_manager.write_tab_settings
+        )
         self.act_header = ActHeader(self)
         self.act_container = ActContainer(self)
         self.setAcceptDrops(False)

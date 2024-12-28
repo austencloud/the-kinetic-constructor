@@ -54,9 +54,9 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
-        manual_builder = self.sequence_widget.main_widget.construct_tab
-        manual_builder.transition_to_option_picker()
-        manual_builder.option_picker.update_option_picker(self.sequence)
+        construct_tab = self.sequence_widget.main_widget.construct_tab
+        construct_tab.transition_to_option_picker()
+        construct_tab.option_picker.update_option_picker(self.sequence)
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(

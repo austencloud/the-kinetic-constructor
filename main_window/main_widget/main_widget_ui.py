@@ -5,7 +5,7 @@ from .generate_tab.generate_tab import GenerateTab
 from .write_tab.write_tab import WriteTab
 from .browse_tab.browse_tab import BrowseTab
 from .learn_tab.learn_tab import LearnTab
-from .main_background_widget import MainBackgroundWidget
+from .main_background_widget.main_background_widget import MainBackgroundWidget
 from .stack_fade_manager import StackFadeManager
 from ..settings_manager.global_settings.main_widget_font_color_updater import (
     MainWidgetFontColorUpdater,

@@ -8,7 +8,7 @@ from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.learn_tab.learn_tab import LearnTab
 from main_window.main_widget.write_tab.write_tab import WriteTab
-from main_window.main_widget.main_background_widget import MainBackgroundWidget
+from main_window.main_widget.main_background_widget.main_background_widget import MainBackgroundWidget
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 from main_window.main_widget.stack_fade_manager import StackFadeManager
 from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
@@ -20,7 +20,6 @@ from .main_widget_manager import MainWidgetManager
 from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
-from .main_widget_background_handler import MainWidgetBackgroundHandler
 
 if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
@@ -28,15 +27,14 @@ if TYPE_CHECKING:
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
-    from main_window.menu_bar_widget.background_selector.backgrounds.base_background import (
-        BaseBackground,
-    )
+
     from .json_manager.json_manager import JsonManager
     from .sequence_widget.sequence_widget import SequenceWidget
 
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
         SvgManager,
     )
+    from main_window.main_widget.main_background_widget.backgrounds.base_background import BaseBackground
     from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
     from .pictograph_key_generator import PictographKeyGenerator
     from .special_placement_loader import SpecialPlacementLoader
@@ -72,7 +70,6 @@ class MainWidget(QWidget):
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
     state_handler: "MainWidgetState"
-    background_handler: "MainWidgetBackgroundHandler"
 
     # Managers and Helpers
     svg_manager: "SvgManager"
@@ -128,7 +125,7 @@ class MainWidget(QWidget):
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
-        self.background_handler = MainWidgetBackgroundHandler(self)
+        
         QTimer.singleShot(0, self.state_handler.load_state)
 
     def resizeEvent(self, event) -> None:

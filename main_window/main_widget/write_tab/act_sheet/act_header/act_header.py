@@ -39,7 +39,7 @@ class ActHeader(QWidget):
         self.date_label = QLabel(self)
         self.date_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        saved_title = self.settings_manager.act_sheet.get_act_title()
+        saved_title = self.settings_manager.write_tab_settings.get_act_title()
         self.title_label = TitleLabel(self, saved_title)
         self.title_label.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -73,7 +73,7 @@ class ActHeader(QWidget):
     def save_title(self):
         """Save the current title to settings."""
         new_title = self.title_label.label.text()
-        self.settings_manager.act_sheet.save_act_title(new_title)
+        self.settings_manager.write_tab_settings.save_act_title(new_title)
 
     def resize_header_widget(self):
         """Adjust the size of each label based on the width of the act sheet."""
@@ -92,7 +92,7 @@ class ActHeader(QWidget):
     def get_title(self) -> str:
         """Return the current title of the act."""
         return self.title_label.label.text()
-    
+
     def set_title(self, title: str):
         """Set the title of the act."""
         self.title_label.label.setText(title)

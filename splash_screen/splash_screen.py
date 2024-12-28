@@ -2,9 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtGui import QScreen, QPainter
 
-from main_window.main_widget.main_widget_background_handler import (
-    MainWidgetBackgroundHandler,
-)
 from splash_screen.splash_geometry_manager import SplashGeometryManager
 from splash_screen.splash_background_handler import SplashBackgroundHandler
 from splash_screen.splash_font_color_updater import SplashFontColorUpdater

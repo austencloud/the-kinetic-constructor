@@ -2,9 +2,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.option_picker_pictograph_view import (
-    OptionPickerPictographView,
-)
+from .option_picker_pictograph_view import OptionPickerPictographView
 from .option_picker_reversal_selector import OptionPickerReversalSelector
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
@@ -32,12 +30,12 @@ class OptionPicker(QWidget):
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_selector = OptionPickerReversalSelector(self)
         self.option_pool: list[BasePictograph] = []
-        # Decide on a max number based on the largest number of options typically displayed.
         MAX_PICTOGRAPHS = 36
+
         for _ in range(MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
             option.view = OptionPickerPictographView(option, self)
-            option.view.hide()  # Keep them hidden until needed
+            option.view.hide()
             self.option_pool.append(option)
 
         self._load_filter()
@@ -66,13 +64,13 @@ class OptionPicker(QWidget):
 
     def save_filter(self):
         selected_filter = self.reversal_selector.reversal_combobox.currentData()
-        self.main_widget.settings_manager.builder_settings.manual_builder.set_filters(
+        self.main_widget.settings_manager.construct_tab_settings.set_filters(
             selected_filter
         )
 
     def _load_filter(self):
         selected_filter = (
-            self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
+            self.main_widget.settings_manager.construct_tab_settings.get_filters()
         )
         index = self.reversal_selector.reversal_combobox.findData(selected_filter)
         if index != -1:

@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab
 
 
-
 class BrowseTabUIUpdater:
     def __init__(self, browse_tab: "BrowseTab"):
         self.browse_tab = browse_tab
@@ -55,7 +54,7 @@ class BrowseTabUIUpdater:
     def _apply_sorting_and_styling(self):
         """Apply sorting to thumbnails and style elements based on current settings."""
         self.browse_tab.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-            self.browse_tab.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
+            self.browse_tab.main_widget.main_window.settings_manager.browse_tab_settings.get_sort_method()
         )
 
         font_color = self.browse_tab.main_widget.font_color_updater.get_font_color(

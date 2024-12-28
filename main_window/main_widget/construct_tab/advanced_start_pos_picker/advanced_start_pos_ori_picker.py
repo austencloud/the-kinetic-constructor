@@ -58,9 +58,7 @@ class AdvancedStartPosOriPicker(QWidget):
         self.set_orientation("in", self.buttons["blue"][0], "blue")
         self.set_orientation("in", self.buttons["red"][0], "red")
 
-    def setup_orientation_buttons(
-        self, hand_label_text: str, color: str
-    ) -> QLabel:
+    def setup_orientation_buttons(self, hand_label_text: str, color: str) -> QLabel:
         layout = QVBoxLayout()
         header = QLabel(hand_label_text)
         header.setStyleSheet(f"color: {color}; font-weight: bold;")
@@ -120,7 +118,7 @@ class AdvancedStartPosOriPicker(QWidget):
                 pictograph.updater.update_pictograph(pictograph.pictograph_dict)
 
     def resize_default_ori_picker(self) -> None:
-        width = int(self.advanced_start_pos_picker.manual_builder.width())
+        width = int(self.advanced_start_pos_picker.construct_tab.width())
         header_font_size = width // 35
         for header in self.header_labels:
             header.setFont(QFont("Arial", header_font_size, QFont.Weight.Bold))

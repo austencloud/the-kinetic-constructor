@@ -22,9 +22,10 @@ class ReversalCombobox(QComboBox):
         self.addItem("Two Reversals", userData="two_reversals")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
-        self.currentIndexChanged.connect(
+        self.currentTextChanged.connect(
             self.reversal_selector.option_picker.on_filter_changed
         )
+        # when
 
     # on reswize, make the text bigger, a fraction of the width of the main widget
     def resizeEvent(self, event):
@@ -32,7 +33,7 @@ class ReversalCombobox(QComboBox):
         font = self.font()
         font_size = int(
             self.reversal_selector.option_picker.construct_tab.main_widget.width()
-            * 0.01
+            // 100
         )
         font.setPointSize(font_size)
         font.setFamily("Georgia")

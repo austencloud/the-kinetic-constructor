@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QSettings, QObject, pyqtSignal
-from .builder_settings import BuilderSettings
-from .sequence_sharing_settings import SequenceSharingSettings
+
+from main_window.settings_manager.construct_tab_settings import ConstructTabSettings
+from main_window.settings_manager.generate_tab_settings import GenerateTabSettings
+from .sequence_sharing_settings import SequenceShareSettings
 from .act_tab_settings import WriteTabSettings
-from .dictionary_settings import DictionarySettings
+from .dictionary_settings import BrowseTabSettings
 from .image_export_settings import ImageExportSettings
 from .sequence_layout_settings import SequenceLayoutSettings
 from .user_profile_settings.user_profile_settings import UserProfileSettings
@@ -26,8 +28,11 @@ class SettingsManager(QObject):
         self.image_export = ImageExportSettings(self)
         self.users = UserProfileSettings(self)
         self.visibility = VisibilitySettings(self)
-        self.dictionary_settings = DictionarySettings(self)
         self.sequence_layout = SequenceLayoutSettings(self)
-        self.builder_settings = BuilderSettings(self)
-        self.sequence_sharing = SequenceSharingSettings(self)
-        self.act_sheet = WriteTabSettings(self)
+        self.sequence_share_settings = SequenceShareSettings(self)
+        
+        # Tabs
+        self.construct_tab_settings = ConstructTabSettings(self)
+        self.generate_tab_settings = GenerateTabSettings(self)
+        self.browse_tab_settings = BrowseTabSettings(self)
+        self.write_tab_settings = WriteTabSettings(self)

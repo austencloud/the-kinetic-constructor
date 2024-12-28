@@ -30,20 +30,11 @@ class CurrentWordLabel(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        main_widget_width = self.sequence_widget.main_widget.width()
-        font_size = main_widget_width // 60
+        font_size = self.sequence_widget.main_widget.width() // 60
         self.font: QFont = QFont()
         self.font.setPointSize(int(font_size))
         self.line_edit.setFont(self.font)
         self.line_edit.kerning = int(font_size // 8.75)
-        while (
-            self.line_edit.fontMetrics().horizontalAdvance(self.current_word)
-            > main_widget_width * 0.8
-        ):
-            font_size -= 1
-            self.font.setPointSize(int(font_size))
-            self.line_edit.setFont(self.font)
-            self.line_edit.kerning = int(font_size // 8.75)
 
     def set_current_word(self, word: str):
         self.simplified_word = WordSimplifier.simplify_repeated_word(word)

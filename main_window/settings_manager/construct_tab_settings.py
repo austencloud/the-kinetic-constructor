@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
 
-class ManualBuilderSettings:
+
+class ConstructTabSettings:
     DEFAULT_SETTINGS = {
         "filters": {
             "continuous_motions": True,
@@ -18,8 +19,8 @@ class ManualBuilderSettings:
 
     def get_filters(self) -> dict:
         # Attempt to load filters setting as a dictionary
-        filters = self.settings.value("builder/manual_builder/filters", None)
-        
+        filters = self.settings.value("builder/construct_tab/filters", None)
+
         # Check if filters loaded successfully; otherwise, use defaults
         if isinstance(filters, dict):
             return filters
@@ -28,4 +29,4 @@ class ManualBuilderSettings:
             return self.DEFAULT_SETTINGS["filters"]
 
     def set_filters(self, filters: dict):
-        self.settings.setValue("builder/manual_builder/filters", filters)
+        self.settings.setValue("builder/construct_tab/filters", filters)

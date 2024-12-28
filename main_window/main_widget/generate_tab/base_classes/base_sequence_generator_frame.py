@@ -13,14 +13,12 @@ if TYPE_CHECKING:
 
 
 class BaseSequenceGeneratorFrame(QFrame):
-    def __init__(
-        self, sequence_generator_tab: "GenerateTab", builder_type: str
-    ) -> None:
-        super().__init__(sequence_generator_tab)
-        self.sequence_generator_widget = sequence_generator_tab
+    def __init__(self, generate_tab: "GenerateTab", builder_type: str) -> None:
+        super().__init__(generate_tab)
+        self.generate_tab = generate_tab
         self.builder_type = builder_type
-        self.sequence_generator_settings = (
-            sequence_generator_tab.main_widget.main_window.settings_manager.builder_settings.sequence_generator
+        self.generate_tab_settings = (
+            generate_tab.main_widget.main_window.settings_manager.generate_tab_settings
         )
 
         # Create Layout
@@ -46,19 +44,17 @@ class BaseSequenceGeneratorFrame(QFrame):
 
     def apply_settings(self):
         """Apply settings to modular widgets."""
-        level = self.sequence_generator_settings.get_sequence_generator_setting(
+        level = self.generate_tab_settings.get_sequence_generator_setting(
             "sequence_level", self.builder_type
         )
-        length = self.sequence_generator_settings.get_sequence_generator_setting(
+        length = self.generate_tab_settings.get_sequence_generator_setting(
             "sequence_length", self.builder_type
         )
-        intensity = self.sequence_generator_settings.get_sequence_generator_setting(
+        intensity = self.generate_tab_settings.get_sequence_generator_setting(
             "max_turn_intensity", self.builder_type
         )
-        continuous_rotation = (
-            self.sequence_generator_settings.get_sequence_generator_setting(
-                "continuous_rotation", self.builder_type
-            )
+        continuous_rotation = self.generate_tab_settings.get_sequence_generator_setting(
+            "continuous_rotation", self.builder_type
         )
         continuous_rotation = (
             continuous_rotation.lower() == "true"
@@ -83,21 +79,21 @@ class BaseSequenceGeneratorFrame(QFrame):
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
 
     def _update_sequence_length(self, length: int):
-        self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab_settings.set_sequence_generator_setting(
             "sequence_length", length, self.builder_type
         )
 
     def _update_sequence_level(self, level: int):
-        self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab_settings.set_sequence_generator_setting(
             "sequence_level", level, self.builder_type
         )
 
     def _update_max_turn_intensity(self, intensity: int):
-        self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab_settings.set_sequence_generator_setting(
             "max_turn_intensity", intensity, self.builder_type
         )
 
     def _update_continuous_rotation(self, state: bool):
-        self.sequence_generator_settings.set_sequence_generator_setting(
+        self.generate_tab_settings.set_sequence_generator_setting(
             "continuous_rotation", state, self.builder_type
         )

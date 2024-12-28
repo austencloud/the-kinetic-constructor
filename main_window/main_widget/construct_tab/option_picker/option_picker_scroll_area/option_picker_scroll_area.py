@@ -30,7 +30,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
     def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
-        self.manual_builder = option_picker.construct_tab
+        self.construct_tab = option_picker.construct_tab
         self.option_manager = self.option_picker.option_getter
 
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
@@ -43,7 +43,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         self.section_manager = OptionPickerSectionManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
         self.pictograph_factory = OptionPickerPictographFactory(
-            self, self.manual_builder.pictograph_cache
+            self, self.construct_tab.pictograph_cache
         )
         self.setStyleSheet("background-color: transparent; border: none;")
         self.setContentsMargins(0, 0, 0, 0)

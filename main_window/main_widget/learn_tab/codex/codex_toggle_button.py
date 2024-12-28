@@ -33,7 +33,7 @@ class CodexToggleButton(QPushButton):
 
         font = self.font()
         font.setBold(True)
-        font_size = self.learn_widget.height() // 60
+        font_size = self.learn_widget.main_widget.height() // 60
         font.setPointSize(font_size)
         self.setFont(font)
         super().resizeEvent(event)

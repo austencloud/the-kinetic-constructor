@@ -38,10 +38,10 @@ class PermutationTypeToggle(QWidget):
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected permutation type."""
         font_color_updater = (
-            self.circular_builder_frame.sequence_generator_widget.main_widget.font_color_updater
+            self.circular_builder_frame.generate_tab.main_widget.font_color_updater
         )
         font_color = font_color_updater.get_font_color(
-            self.circular_builder_frame.sequence_generator_widget.main_widget.settings_manager.global_settings.get_background_type()
+            self.circular_builder_frame.generate_tab.main_widget.settings_manager.global_settings.get_background_type()
         )
         if self.permutation_type_toggle.isChecked():
             self.mirrored_label.setStyleSheet("font-weight: normal; color: gray;")
@@ -58,10 +58,7 @@ class PermutationTypeToggle(QWidget):
         self.update_mode_label_styles()
 
     def resize_permutation_type_toggle(self):
-        font_size = (
-            self.circular_builder_frame.sequence_generator_widget.main_widget.width()
-            // 75
-        )
+        font_size = self.circular_builder_frame.generate_tab.main_widget.width() // 75
         self.mirrored_label.setStyleSheet(f"font-size: {font_size}px;")
         self.rotated_label.setStyleSheet(f"font-size: {font_size}px;")
         self.mirrored_label.updateGeometry()

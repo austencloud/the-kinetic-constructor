@@ -56,7 +56,9 @@ class SequenceSharerDialog(QDialog):
         layout.addWidget(self.recipient_label)
 
         self.recipient_checkboxes: list[QCheckBox] = []
-        for recipient in self.settings_manager.sequence_sharing.get_saved_recipients():
+        for (
+            recipient
+        ) in self.settings_manager.sequence_share_settings.get_saved_recipients():
             checkbox = QCheckBox(f"{recipient['name']} ({recipient['email']})")
             layout.addWidget(checkbox)
             self.recipient_checkboxes.append(checkbox)
@@ -164,7 +166,7 @@ class SequenceSharerDialog(QDialog):
         email = self.new_email_input.text().strip()
 
         if name and email:
-            self.settings_manager.sequence_sharing.add_recipient(name, email)
+            self.settings_manager.sequence_share_settings.add_recipient(name, email)
             QMessageBox.information(
                 self, "Success", f"Added recipient: {name} ({email})"
             )
@@ -192,10 +194,8 @@ class SequenceSharerDialog(QDialog):
             )
             return
 
-
         from_email = os.getenv("GMAIL_USER")
         password = os.getenv("GMAIL_PASS")
-
 
         if not from_email or not password:
             QMessageBox.critical(
