@@ -71,8 +71,8 @@ class MainWidgetUI:
         top_layout.addWidget(self.mw.navigation_widget, 1)
 
         content_layout = QHBoxLayout()
-        content_layout.addWidget(self.mw.sequence_widget)
-        content_layout.addWidget(self.mw.content_stack)
+        content_layout.addWidget(self.mw.sequence_widget, 1)
+        content_layout.addWidget(self.mw.content_stack, 1)
 
         self.mw.main_layout.addLayout(top_layout)
         self.mw.main_layout.addLayout(content_layout)
