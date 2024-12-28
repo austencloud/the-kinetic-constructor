@@ -28,7 +28,7 @@ class RotationTypeToggle(QWidget):
         self.layout.addWidget(self.quartered_label)
 
         # Initial style update
-        self.update_mode_label_styles()
+        # self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
         rotation_type = "quartered" if state else "halved"

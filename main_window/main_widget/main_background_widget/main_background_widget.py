@@ -59,7 +59,10 @@ class MainBackgroundWidget(QWidget):
             self.background.stop_animation()
 
         self._setup_background()
-
+        self.main_widget.font_color_updater.update_main_widget_font_colors(
+            self.main_widget.settings_manager.global_settings.get_background_type()
+        )
+        
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""
         background_map = {

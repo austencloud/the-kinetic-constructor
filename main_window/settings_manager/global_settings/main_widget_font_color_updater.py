@@ -21,7 +21,6 @@ class MainWidgetFontColorUpdater:
         self.main_widget = main_widget
 
     def update_main_widget_font_colors(self, bg_type):
-
         self.font_color = self.get_font_color(bg_type)
         self._apply_main_widget_colors()
 
@@ -67,7 +66,7 @@ class MainWidgetFontColorUpdater:
         """Apply font colors to all relevant sections of the main widget."""
         self._update_menu_bar_widget()
         self._update_sequence_widget()
-        self._update_build_tab()
+        self._update_construct_tab()
         self._update_generate_tab()
         self._update_browse_tab()
         self._update_learn_widget()
@@ -75,13 +74,12 @@ class MainWidgetFontColorUpdater:
 
     def _update_act_tab(self) -> None:
         act_tab = self.main_widget.write_tab
-        self._apply_font_color(act_tab.act_sheet.act_header)
-        self._apply_font_color(act_tab.act_sheet.act_container)
+        act_sheet = self.main_widget.act_sheet
+        self._apply_font_color(act_sheet.act_header)
+        self._apply_font_color(act_sheet.act_container)
         for thumbnail_box in act_tab.act_browser.thumbnail_boxes:
             self._apply_font_color(thumbnail_box.word_label)
-        for (
-            box
-        ) in act_tab.act_sheet.act_container.cue_scroll.cue_frame.cue_boxes.values():
+        for box in act_sheet.act_container.cue_scroll.cue_frame.cue_boxes.values():
             for widget in [box.timestamp, box.cue_label]:
                 self._apply_font_color(widget)
             for edit in [box.timestamp.edit, box.cue_label.edit]:
@@ -118,12 +116,12 @@ class MainWidgetFontColorUpdater:
         sequence_generator.circular_generator_frame.continuous_rotation_toggle.update_mode_label_styles()
         sequence_generator.overwrite_checkbox.set_label_color(self.font_color)
 
-    def _update_build_tab(self):
+    def _update_construct_tab(self):
         construct_tab = self.main_widget.construct_tab
-        manual_labels = [
+        construct_labels = [
             construct_tab.option_picker.reversal_filter.combo_box_label,
         ]
-        self._apply_font_colors(manual_labels)
+        self._apply_font_colors(construct_labels)
 
     def _get_freeform_builder_labels(
         self, freeform_generator_frame: "FreeformSequenceGeneratorFrame"
@@ -190,5 +188,5 @@ class MainWidgetFontColorUpdater:
             self._apply_font_color(lesson_widget.result_label)
 
         self._apply_font_color(
-            learn_widget.codex.control_widget.ori_selector.start_ori_label
+            self.main_widget.codex.control_widget.ori_selector.start_ori_label
         )

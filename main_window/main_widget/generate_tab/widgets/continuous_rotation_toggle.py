@@ -26,7 +26,7 @@ class ContinuousRotationToggle(QWidget):
         self.layout.addWidget(self.continuous_label)
         self.layout.addStretch(1)
 
-        self.update_mode_label_styles()
+        # self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
         self.sequence_generator_frame._update_continuous_rotation(bool(state))

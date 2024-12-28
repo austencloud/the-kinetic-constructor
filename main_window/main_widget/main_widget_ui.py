@@ -35,8 +35,6 @@ class MainWidgetUI:
         self.mw.right_stack = QStackedWidget()
 
         self.mw.stack_fade_manager = MainWidgetFadeManager(self.mw)
-        self.mw.background_widget = MainBackgroundWidget(self.mw)
-        self.mw.background_widget.lower()
         self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
 
         splash = self.splash_screen
@@ -62,10 +60,13 @@ class MainWidgetUI:
         self.mw.codex = Codex(self.mw)
         splash.updater.update_progress("ActSheet")
 
+        self.mw.background_widget = MainBackgroundWidget(self.mw)
+        self.mw.background_widget.lower()
+
         self.mw.left_stack.addWidget(self.mw.sequence_widget)
         self.mw.left_stack.addWidget(self.mw.codex)
         self.mw.left_stack.addWidget(self.mw.act_sheet)
-        
+
         self.mw.right_stack.addWidget(self.mw.construct_tab)
         self.mw.right_stack.addWidget(self.mw.generate_tab)
         self.mw.right_stack.addWidget(self.mw.browse_tab)
