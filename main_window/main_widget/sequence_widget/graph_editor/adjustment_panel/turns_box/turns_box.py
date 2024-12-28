@@ -24,13 +24,14 @@ class TurnsBox(QFrame):
         self.color = color
         self.pictograph = pictograph
         self.graph_editor = self.adjustment_panel.graph_editor
-        self.border_width = self.graph_editor.sequence_widget.width() // 100
         self.matching_motion = self.pictograph.get.motion_by_color(self.color)
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.prop_rot_dir_btn_state: dict[str, bool] = {
             CLOCKWISE: False,
             COUNTER_CLOCKWISE: False,
         }
+        self.setObjectName(self.__class__.__name__)
+
         self._setup_widgets()
         self._setup_layout()
 
@@ -46,14 +47,10 @@ class TurnsBox(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-    def update_styles(self) -> None:
-        self.setObjectName(self.__class__.__name__)
+    def resizeEvent(self, event):
+        self.border_width = self.graph_editor.sequence_widget.width() // 200
         self.setStyleSheet(
             f"#{self.__class__.__name__} {{ border: {self.border_width}px solid "
             f"{self.color}; background-color: white;}}"
         )
-
-
-    def resizeEvent(self, event):
-        self.update_styles()
         super().resizeEvent(event)

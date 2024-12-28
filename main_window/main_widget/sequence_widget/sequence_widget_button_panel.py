@@ -1,11 +1,19 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QApplication, QSpacerItem, QSizePolicy
+from PyQt6.QtWidgets import (
+    QPushButton,
+    QFrame,
+    QVBoxLayout,
+    QApplication,
+    QSpacerItem,
+    QSizePolicy,
+)
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .full_screen_viewer import FullScreenViewer
 from .button_panel_placeholder import ButtonPanelPlaceholder
 from utilities.path_helpers import get_images_and_data_path
+
 if TYPE_CHECKING:
     from .sequence_widget import SequenceWidget
 
@@ -165,7 +173,9 @@ class SequenceWidgetButtonPanel(QFrame):
             self.layout.addWidget(self.buttons[name])
 
         self.layout.addWidget(self.bottom_placeholder)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignRight
+        )
 
         # Initial spacing setup
         self.spacer3 = QSpacerItem(
