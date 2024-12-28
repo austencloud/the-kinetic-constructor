@@ -51,17 +51,14 @@ class ConstructTab(QFrame):
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)
         self.stacked_widget.addWidget(self.option_picker)
 
-
     def transition_to_option_picker(self):
         """Transition to the option picker for sequence building."""
         option_picker_index = 2
         self.main_widget.fade_manager.fade_to_tab(
             self.stacked_widget, option_picker_index
         )
-        # self.stacked_widget.setCurrentWidget(
-        #     self.option_picker
-        # )
-        self.option_picker.scroll_area.section_manager.show_all_sections()
+
+        self.option_picker.scroll_area.section_manager.display_sections()
         self.option_picker.update_option_picker()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
@@ -125,4 +122,3 @@ class ConstructTab(QFrame):
     def get_last_added_pictograph(self, sequence):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
-

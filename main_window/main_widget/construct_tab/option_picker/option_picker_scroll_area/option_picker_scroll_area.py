@@ -61,11 +61,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.view.hide()
 
     def add_and_display_relevant_pictographs(self, next_options: list[dict]):
-        # Clear current pictographs from layout
         self.display_manager.clear_all_section_layouts()
 
         for i, pictograph_dict in enumerate(next_options):
-            # Get a pictograph from our pool
             if i >= len(self.option_picker.option_pool):
                 break
             p = self.option_picker.option_pool[i]
@@ -80,7 +78,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             p.blue_reversal = reversal_info.get("blue_reversal", False)
             p.red_reversal = reversal_info.get("red_reversal", False)
 
-            # Insert into layout
             self.display_manager.add_pictograph_to_section_layout(p)
             p.view.update_borders()
             p.updater.update_pictograph(pictograph_dict)

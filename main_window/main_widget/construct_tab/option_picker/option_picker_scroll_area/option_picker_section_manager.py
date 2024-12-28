@@ -13,15 +13,6 @@ if TYPE_CHECKING:
 class OptionPickerSectionManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the OptionPickerSectionWidget class."""
 
-    SECTION_ORDER = [
-        LetterType.Type1,
-        LetterType.Type2,
-        LetterType.Type3,
-        LetterType.Type4,
-        LetterType.Type5,
-        LetterType.Type6,
-    ]
-
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
         self.manual_builder = scroll_area.manual_builder
@@ -29,6 +20,7 @@ class OptionPickerSectionManager:
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
         self.initialized = False
+        self.initialize_sections()
 
     def initialize_sections(self) -> None:
         for letter_type in LetterType:
@@ -46,36 +38,25 @@ class OptionPickerSectionManager:
         grouped_sections = [LetterType.Type4, LetterType.Type5, LetterType.Type6]
         group_widget = None
 
-        for section_type in self.SECTION_ORDER:
-            section = self.sections.get(section_type)
+        for letter_type in list(LetterType):
+            section = self.sections.get(letter_type)
             if section:
-                if section_type in grouped_sections:
+                if letter_type in grouped_sections:
                     if group_widget is None:
-                        # Create a group widget instance
                         group_widget = OptionPickerSectionGroupWidget(self.scroll_area)
-
-                        # Create an HBox layout with stretch around the group widget
                         group_layout = QHBoxLayout()
-                        group_layout.addStretch()  # Left spacer
-
-                        # Add the group widget to the layout
+                        group_layout.addStretch()
                         group_layout.addWidget(group_widget)
-
-                        group_layout.addStretch()  # Right spacer
-
-                        # Add the entire group layout directly to the scroll area
+                        group_layout.addStretch()
                         self.scroll_area.layout.addLayout(group_layout)
-
-                    # Add the section to the group widget
                     group_widget.add_section_widget(section)
                 else:
-                    # For other sections, directly add them to the main layout
                     self.scroll_area.layout.addWidget(section)
 
     def get_correct_index_for_section(self, letter_type: LetterType) -> int:
-        desired_position = self.SECTION_ORDER.index(letter_type)
+        desired_position = list(LetterType).index(letter_type)
         current_positions = [
-            self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
+            list(LetterType).index(typ) for typ in self.ordered_section_types
         ]
         current_positions.sort()
         for i, pos in enumerate(current_positions):
@@ -96,11 +77,9 @@ class OptionPickerSectionManager:
                 return letter_type
         return "Unknown"
 
-    def show_all_sections(self) -> None:
+    def display_sections(self) -> None:
         if not self.initialized:
-            self.initialize_sections()
             self.add_sections_to_layout()
             self.initialized = True
         for section in self.sections.values():
             section.show()
-            # section.resize_option_picker_section_widget()
