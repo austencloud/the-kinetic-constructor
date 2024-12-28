@@ -1,11 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QPushButton,
-    QLabel,
-    QGridLayout,
-    QWidget,
-)
+from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QLabel, QGridLayout, QWidget
 from PyQt6.QtCore import Qt
 from functools import partial
 from .filter_section_base import FilterSectionBase
