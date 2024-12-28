@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from data.constants import END_POS, START_POS
 
 if TYPE_CHECKING:
@@ -6,171 +6,120 @@ if TYPE_CHECKING:
 
 
 class OptionGetter:
+    """Fetches and filters next pictograph options based on the current sequence."""
+
     def __init__(self, option_picker: "OptionPicker"):
+        """Initialize with references to OptionPicker, JsonManager, and MainWidget."""
         self.option_picker = option_picker
-        self.json_manager = self.option_picker.json_manager
-        self.main_widget = self.option_picker.main_widget
+        self.json_manager = option_picker.json_manager
+        self.main_widget = option_picker.main_widget
 
-    def get_next_options(self, sequence: list, selected_filter: str) -> list:
-        # Load all possible next options based on the current sequence
-        all_next_options = self._load_all_next_options(sequence)
+    def get_next_options(
+        self, sequence: list, selected_filter: Optional[str] = None
+    ) -> list[dict]:
+        """Return next possible pictographs for the current sequence, applying filters."""
+        all_options = self._load_all_next_options(sequence)
+        filtered = (
+            self._apply_filter(sequence, all_options, selected_filter)
+            if selected_filter is not None
+            else all_options
+        )
 
-        # Apply filter to the options
-        if selected_filter != None:
-            filtered_options = self._apply_filter(
-                sequence, all_next_options, selected_filter
+        # Update start orientations
+        for opt in filtered:
+            opt["blue_attributes"]["start_ori"] = sequence[-1]["blue_attributes"][
+                "end_ori"
+            ]
+            opt["red_attributes"]["start_ori"] = sequence[-1]["red_attributes"][
+                "end_ori"
+            ]
+
+        # Update end orientations
+        for opt in filtered:
+            opt["blue_attributes"]["end_ori"] = (
+                self.json_manager.ori_calculator.calculate_end_orientation(opt, "blue")
             )
-        else:
-            filtered_options = all_next_options
-        #change the start ori of the next options to reflect the end ori of the last pictograph
-        for option in filtered_options:
-            option["blue_attributes"]["start_ori"] = sequence[-1]["blue_attributes"]["end_ori"]
-            option["red_attributes"]["start_ori"] = sequence[-1]["red_attributes"]["end_ori"]
-            
-            
-        # use the motion ori calculator to determine that end ori of the motion and set it to that. 
-        for option in filtered_options:
-            option["blue_attributes"]["end_ori"] = self.json_manager.ori_calculator.calculate_end_orientation(option, "blue")
-            option["red_attributes"]["end_ori"] = self.json_manager.ori_calculator.calculate_end_orientation(option, "red")
-            
-        return filtered_options
+            opt["red_attributes"]["end_ori"] = (
+                self.json_manager.ori_calculator.calculate_end_orientation(opt, "red")
+            )
 
-    def _apply_filter(self, sequence: list, options: list, selected_filter: str):
-        filtered_options = []
+        return filtered
 
+    def _apply_filter(
+        self, sequence: list, options: list, selected_filter: str
+    ) -> list[dict]:
+        """Apply a reversal-based filter to the given list of options."""
+        result = []
         for pictograph_dict in options:
-            # Include options based on the selected filter
-            if selected_filter is None:
-                # "All" selected, include all options
-                filtered_options.append(pictograph_dict)
-                continue
+            if (
+                self._determine_reversal_filter(sequence, pictograph_dict)
+                == selected_filter
+            ):
+                result.append(pictograph_dict)
+        return result
 
-            # Implement your existing logic to categorize pictographs
-            category = self._determine_category(sequence, pictograph_dict)
+    def _determine_reversal_filter(self, sequence: list, pictograph: dict) -> str:
+        """Determine if pictograph is 'continuous', 'one_reversal', or 'two_reversals'."""
+        blue_cont, red_cont = self._check_continuity(sequence, pictograph)
+        if blue_cont and red_cont:
+            return "continuous"
+        elif blue_cont ^ red_cont:  # XOR
+            return "one_reversal"
+        return "two_reversals"
 
-            if category == selected_filter:
-                filtered_options.append(pictograph_dict)
-
-        return filtered_options
-
-    def _determine_category(self, sequence: list, pictograph_dict: dict) -> str:
-
-        # Proceed with continuity checks
-        blue_continuous, red_continuous = self._check_continuity(
-            sequence, pictograph_dict
+    def _load_all_next_options(self, sequence: list) -> list[dict]:
+        """Return all possible next pictographs whose start_pos matches the sequence end."""
+        next_opts = []
+        last_pictograph = (
+            sequence[-1] if not sequence[-1].get("is_placeholder") else sequence[-2]
         )
-
-        # Determine the category
-        if blue_continuous and red_continuous:
-            category = "continuous"
-        elif (blue_continuous and not red_continuous) or (
-            not blue_continuous and red_continuous
-        ):
-            category = "one_reversal"
-        else:
-            category = "two_reversals"
-        return category
-
-    def _load_all_next_options(self, sequence: list) -> list:
-        # Logic to load all possible next options based on the current sequence
-        # This involves analyzing the last pictograph and determining valid next steps
-        next_options = []
-
-        last_pictograph_dict = (
-            sequence[-1]
-            if sequence[-1].get("is_placeholder", "") != True
-            else sequence[-2]
-        )
-        start_pos = last_pictograph_dict[END_POS]
+        start_pos = last_pictograph[END_POS]
 
         if start_pos:
             for dict_list in self.main_widget.pictograph_dicts.values():
-                for dict in dict_list:
-                    if dict[START_POS] == start_pos:
-                        next_options.append(dict)
-                        
-        # we need to get the end orientation of the last item in the sequence and set the start otientations of 
-        # each next option to it, then use the JsonOrientationValidationEngine to validate and update the new end ori for each option
-        for option in next_options:
-            option["blue_attributes"]["start_ori"] = last_pictograph_dict["blue_attributes"]["end_ori"]
-            option["red_attributes"]["start_ori"] = last_pictograph_dict["red_attributes"]["end_ori"]
+                for pict_dict in dict_list:
+                    if pict_dict[START_POS] == start_pos:
+                        next_opts.append(pict_dict)
+
+        # Update start orientations and validate
+        for opt in next_opts:
+            for color in ("blue", "red"):
+                opt[f"{color}_attributes"]["start_ori"] = last_pictograph[
+                    f"{color}_attributes"
+                ]["end_ori"]
             self.json_manager.ori_validation_engine.validate_single_pictograph(
-                option, last_pictograph_dict
-            )
-                        
-        return next_options
-
-    def _apply_filters(self, sequence: list, options: list, filters: dict):
-        filtered_options = []
-
-        for pictograph_dict in options:
-            # Check if both prop_rot_dir are "no_rot"
-            blue_prop_rot_dir = pictograph_dict["blue_attributes"]["prop_rot_dir"]
-            red_prop_rot_dir = pictograph_dict["red_attributes"]["prop_rot_dir"]
-            if blue_prop_rot_dir == "no_rot" and red_prop_rot_dir == "no_rot":
-                # Always include pictographs with both prop_rot_dir as "no_rot"
-                filtered_options.append(pictograph_dict)
-                continue  # Skip further checks
-
-            # Proceed with continuity checks
-            blue_continuous, red_continuous = self._check_continuity(
-                sequence, pictograph_dict
+                opt, last_pictograph
             )
 
-            # Determine the category
-            if blue_continuous and red_continuous:
-                category = "continuous"
-            elif (blue_continuous and not red_continuous) or (
-                not blue_continuous and red_continuous
-            ):
-                category = "one_reversal"
-            else:
-                category = "two_reversals"
+        return next_opts
 
-            # Include pictograph if its category is selected in filters
-            include_pictograph = False
-            if filters.get("continuous") and category == "continuous":
-                include_pictograph = True
-            elif filters.get("one_reversal") and category == "one_reversal":
-                include_pictograph = True
-            elif filters.get("two_reversals") and category == "two_reversals":
-                include_pictograph = True
-
-            if include_pictograph:
-                filtered_options.append(pictograph_dict)
-
-        return filtered_options
-
-    def _check_continuity(self, sequence: list, pictograph_dict: dict):
+    def _check_continuity(self, sequence: list, pictograph: dict):
+        """Check if this pictograph's prop_rot_dir is continuous with the last known directions."""
         last_blue_dir = self._get_last_prop_rot_dir(sequence[1:], "blue")
         last_red_dir = self._get_last_prop_rot_dir(sequence[1:], "red")
 
-        current_blue_dir = pictograph_dict["blue_attributes"]["prop_rot_dir"]
-        current_red_dir = pictograph_dict["red_attributes"]["prop_rot_dir"]
+        curr_blue_dir = pictograph["blue_attributes"]["prop_rot_dir"]
+        curr_red_dir = pictograph["red_attributes"]["prop_rot_dir"]
 
-        # For "no_rot", use last known direction
-        if current_blue_dir == "no_rot":
-            current_blue_dir = last_blue_dir
-        if current_red_dir == "no_rot":
-            current_red_dir = last_red_dir
+        if curr_blue_dir == "no_rot":
+            curr_blue_dir = last_blue_dir
+        if curr_red_dir == "no_rot":
+            curr_red_dir = last_red_dir
 
-        # If still None, consider continuous
-        if last_blue_dir is None or current_blue_dir is None:
-            blue_continuous = True
-        else:
-            blue_continuous = current_blue_dir == last_blue_dir
+        blue_cont = (
+            last_blue_dir is None
+            or curr_blue_dir is None
+            or curr_blue_dir == last_blue_dir
+        )
+        red_cont = (
+            last_red_dir is None or curr_red_dir is None or curr_red_dir == last_red_dir
+        )
+        return blue_cont, red_cont
 
-        if last_red_dir is None or current_red_dir is None:
-            red_continuous = True
-        else:
-            red_continuous = current_red_dir == last_red_dir
-
-        return blue_continuous, red_continuous
-
-    def _get_last_prop_rot_dir(self, sequence: list, color: str) -> str:
-        # color should be "blue" or "red"
+    def _get_last_prop_rot_dir(self, sequence: list, color: str) -> Optional[str]:
+        """Return the most recent prop_rot_dir for the given color, ignoring 'no_rot'."""
         for pictograph in reversed(sequence):
-            prop_rot_dir = pictograph[f"{color}_attributes"].get("prop_rot_dir")
-            if prop_rot_dir != "no_rot":
-                return prop_rot_dir
-        return None  # No previous direction found
+            direction = pictograph[f"{color}_attributes"].get("prop_rot_dir")
+            if direction != "no_rot":
+                return direction
+        return None

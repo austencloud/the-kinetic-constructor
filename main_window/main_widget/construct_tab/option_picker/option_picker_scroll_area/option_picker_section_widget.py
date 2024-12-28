@@ -60,31 +60,35 @@ class OptionPickerSectionWidget(QGroupBox):
             pictograph = self.pictographs.pop(pictograph_key)
             pictograph.view.setParent(None)
             pictograph.view.hide()
-
+        self.pictographs = {}
+        
     def add_pictograph(self, pictograph: BasePictograph) -> None:
+        COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
         self.pictographs[
             self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
                 pictograph.pictograph_dict
             )
         ] = pictograph
 
+        # Suppose we keep a count of how many pictographs we've added:
         count = len(self.pictographs)
-        row, col = divmod(count - 1, self.scroll_area.option_picker.COLUMN_COUNT)
+        row, col = divmod(count - 1, COLUMN_COUNT)
         self.pictograph_frame.layout.addWidget(pictograph.view, row, col)
+        pictograph.view.show()
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""
-        section_width = self.scroll_area.construct_tab.width()
+        width = self.scroll_area.construct_tab.width()
 
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
-            self.setFixedWidth(section_width)
+            self.setFixedWidth(width)
+            
         elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
             COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
             sections = self.scroll_area.section_manager.sections
 
             calculated_width = int(
-                (self.scroll_area.option_picker.width() / COLUMN_COUNT)
-                - ((self.scroll_area.spacing))
+                (width / COLUMN_COUNT) - ((self.scroll_area.spacing))
             )
 
             view_width = (

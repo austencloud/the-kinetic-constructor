@@ -44,7 +44,6 @@ class OptionPicker(QWidget):
         for _ in range(self.MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
             option.view = OptionPickerPictographView(option, self)
-            # option.view.hide()
             self.option_pool.append(option)
 
     def setup_layout(self) -> None:
@@ -72,9 +71,8 @@ class OptionPicker(QWidget):
             next_options = self.option_getter.get_next_options(
                 sequence, selected_filter
             )
-            self.fade_manager.fade_option_picker(
-                self.scroll_area.option_picker, next_options
-            )
+            self.scroll_area.clear_pictographs()
+            self.scroll_area.add_and_display_relevant_pictographs(next_options)
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

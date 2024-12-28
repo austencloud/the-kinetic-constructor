@@ -90,12 +90,12 @@ class OptionPickerScrollArea(QScrollArea):
             pictograph.view.hide()
 
     def add_and_display_relevant_pictographs(self, next_options: list[dict]):
-
+        for section in self.section_manager.sections.values():
+            section.clear_pictographs()
         for i, pictograph_dict in enumerate(next_options):
             if i >= len(self.option_picker.option_pool):
                 break
             pictograph = self.option_picker.option_pool[i]
-
             pictograph.updater.update_pictograph(pictograph_dict)
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()
@@ -133,7 +133,7 @@ class OptionPickerScrollArea(QScrollArea):
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
         for section in self.section_manager.sections.values():
-            for pictograph in section.pictographs.values():
+            for pictograph in section.pictographs_list.values():
                 pictograph.view.set_enabled(not disabled)
 
     def add_section_to_layout(

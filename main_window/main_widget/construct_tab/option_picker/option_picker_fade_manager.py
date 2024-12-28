@@ -44,8 +44,8 @@ class OptionPickerFadeManager(QObject):
         self, option_picker: "OptionPicker", next_options: list[dict]
     ):
 
-        option_picker.scroll_area.clear_pictographs()
-        option_picker.scroll_area.add_and_display_relevant_pictographs(next_options)
+        # option_picker.scroll_area.clear_pictographs()
+        # option_picker.scroll_area.add_and_display_relevant_pictographs(next_options)
         
         
         self._new_opacity = self._ensure_opacity_effect(option_picker)

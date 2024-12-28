@@ -18,7 +18,9 @@ class OptionPickerPictographFactory:
         pictograph_cache: dict[str, BasePictograph],
     ) -> None:
         self.scroll_area = scroll_area
-        self.pictograph_cache: dict[Letter, dict[str, BasePictograph]] = pictograph_cache
+        self.pictograph_cache: dict[Letter, dict[str, BasePictograph]] = (
+            pictograph_cache
+        )
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
@@ -43,7 +45,7 @@ class OptionPickerPictographFactory:
                     break
 
             section = self.scroll_area.section_manager.get_section(letter_type)
-            section.pictographs[pictograph_key] = pictograph
+            section.pictographs_list[pictograph_key] = pictograph
 
             return pictograph
 

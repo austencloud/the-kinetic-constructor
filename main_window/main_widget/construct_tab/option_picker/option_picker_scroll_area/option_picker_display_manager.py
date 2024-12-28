@@ -97,4 +97,5 @@ class OptionPickerDisplayManager:
         )
 
         if section:
+            # section.clear_pictographs()
             section.add_pictograph(pictograph)

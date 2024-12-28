@@ -46,7 +46,7 @@ class OptionPickerPictographFactory:
                     break
 
             section = self.scroll_area.section_manager.get_section(letter_type)
-            section.pictographs[pictograph_key] = pictograph
+            section.pictographs_list[pictograph_key] = pictograph
 
             return pictograph
 
