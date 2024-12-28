@@ -44,11 +44,6 @@ class OptionPickerSectionWidget(QGroupBox):
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
 
-    def clear_pictographs(self) -> None:
-        for pictograph_key in list(self.pictographs.keys()):
-            pictograph = self.pictographs.pop(pictograph_key)
-            pictograph.view.setParent(None)
-            pictograph.view.hide()
 
     def set_size_policy(self, horizontal, vertical) -> None:
         size_policy = QSizePolicy(horizontal, vertical)

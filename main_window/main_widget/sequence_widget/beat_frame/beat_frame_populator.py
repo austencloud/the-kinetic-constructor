@@ -98,12 +98,20 @@ class BeatFramePopulator:
         self.construct_tab.transition_to_option_picker()
 
         scroll_area = self.construct_tab.option_picker.scroll_area
-        scroll_area.hide_all_pictographs()
+        # scroll_area.hide_all_pictographs()
 
         filters = self.main_widget.settings_manager.construct_tab_settings.get_filters()
 
+        if filters["continuous"]:
+            filter = "continuous"
+        elif filters["one_reversal"]:
+            filter = "one_reversal"
+        elif filters["two_reversals"]:
+            filter = "two_reversals"
+        else:
+            filter = None
         next_options = self.construct_tab.option_picker.option_getter.get_next_options(
-            self.current_sequence_json, filters
+            self.current_sequence_json, filter
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)

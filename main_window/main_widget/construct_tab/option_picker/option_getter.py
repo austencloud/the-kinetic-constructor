@@ -16,10 +16,12 @@ class OptionGetter:
         all_next_options = self._load_all_next_options(sequence)
 
         # Apply filter to the options
-        filtered_options = self._apply_filter(
-            sequence, all_next_options, selected_filter
-        )
-
+        if selected_filter != None:
+            filtered_options = self._apply_filter(
+                sequence, all_next_options, selected_filter
+            )
+        else:
+            filtered_options = all_next_options
         #change the start ori of the next options to reflect the end ori of the last pictograph
         for option in filtered_options:
             option["blue_attributes"]["start_ori"] = sequence[-1]["blue_attributes"]["end_ori"]

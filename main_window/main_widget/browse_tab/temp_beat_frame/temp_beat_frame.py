@@ -153,8 +153,8 @@ class TempBeatFrame(BaseBeatFrame):
         if self.construct_tab.start_pos_picker.isVisible():
             self.construct_tab.transition_to_option_picker()
 
-        scroll_area = self.construct_tab.option_picker.scroll_area
-        scroll_area.hide_all_pictographs()
+        # scroll_area = self.construct_tab.option_picker.scroll_area
+        # scroll_area.hide_all_pictographs()
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self)

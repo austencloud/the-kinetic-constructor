@@ -7,9 +7,9 @@ if TYPE_CHECKING:
 class ConstructTabSettings:
     DEFAULT_SETTINGS = {
         "filters": {
-            "continuous_motions": True,
-            "prop_reversals": True,
-            "hand_reversals": True,
+            "continuous": False,
+            "one_reversal": False,
+            "two_reversals": False,
         }
     }
 

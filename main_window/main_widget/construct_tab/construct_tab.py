@@ -77,53 +77,6 @@ class ConstructTab(QFrame):
             self.stacked_widget, self.start_pos_picker_index
         )
 
-    def render_and_store_pictograph(
-        self, pictograph_dict: dict, sequence
-    ) -> BasePictograph:
-        """Render and store a new pictograph based on the provided dictionary and sequence."""
-        pictograph_dict = self._add_turns_and_start_ori(pictograph_dict, sequence)
-        letter_str = pictograph_dict["letter"]
-        letter = Letter.get_letter(letter_str)
-        letter_type = LetterType.get_letter_type(letter)
-        pictograph_key = (
-            self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                pictograph_dict
-            )
-        )
 
-        scroll_area = self.option_picker.scroll_area
-        if pictograph_key in scroll_area.pictograph_cache:
-            return scroll_area.pictograph_cache[pictograph_key]
 
-        new_pictograph = scroll_area.pictograph_factory.get_or_create_pictograph(
-            pictograph_key, pictograph_dict
-        )
-        scroll_area.pictograph_cache[pictograph_key] = new_pictograph
-        self.main_widget.pictograph_cache[new_pictograph.letter][
-            pictograph_key
-        ] = new_pictograph
-        if pictograph_key not in self.pictograph_cache[letter]:
-            self.pictograph_cache[letter][pictograph_key] = new_pictograph
-        section = scroll_area.section_manager.get_section(letter_type)
-        section.pictographs[pictograph_key] = new_pictograph
-        scroll_area.pictograph_cache[pictograph_key] = new_pictograph
-        return new_pictograph
 
-    def _add_turns_and_start_ori(self, pictograph_dict, sequence):
-        """Add turn and start orientation information to the pictograph."""
-        self.current_end_red_ori = self.json_manager.loader_saver.get_red_end_ori(
-            sequence
-        )
-        self.current_end_blue_ori = self.json_manager.loader_saver.get_blue_end_ori(
-            sequence
-        )
-
-        pictograph_dict["red_attributes"][RED_START_ORI] = self.current_end_red_ori
-        pictograph_dict["blue_attributes"][BLUE_START_ORI] = self.current_end_blue_ori
-        pictograph_dict["red_attributes"][RED_TURNS] = 0
-        pictograph_dict["blue_attributes"][BLUE_TURNS] = 0
-        return pictograph_dict
-
-    def get_last_added_pictograph(self, sequence):
-        """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
-        return sequence[-1]

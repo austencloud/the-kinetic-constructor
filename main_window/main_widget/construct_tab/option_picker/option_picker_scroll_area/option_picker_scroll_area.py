@@ -94,22 +94,22 @@ class OptionPickerScrollArea(QScrollArea):
         for i, pictograph_dict in enumerate(next_options):
             if i >= len(self.option_picker.option_pool):
                 break
-            p = self.option_picker.option_pool[i]
+            pictograph = self.option_picker.option_pool[i]
 
-            p.updater.update_pictograph(pictograph_dict)
+            pictograph.updater.update_pictograph(pictograph_dict)
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()
             )
             reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, p.pictograph_dict
+                sequence_so_far, pictograph.pictograph_dict
             )
-            p.blue_reversal = reversal_info.get("blue_reversal", False)
-            p.red_reversal = reversal_info.get("red_reversal", False)
+            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
+            pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
-            self.display_manager.add_pictograph_to_section_layout(p)
-            p.view.update_borders()
-            p.elemental_glyph.update_elemental_glyph()
-            p.view.show()
+            self.display_manager.add_pictograph_to_section_layout(pictograph)
+            pictograph.view.update_borders()
+            pictograph.elemental_glyph.update_elemental_glyph()
+            pictograph.view.show()
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
         last_pictograph_dict = (
@@ -129,10 +129,6 @@ class OptionPickerScrollArea(QScrollArea):
         pictograph_dict["red_attributes"]["blue_ori"] = (
             self.ori_calculator.calculate_end_orientation(pictograph_dict, BLUE)
         )
-
-    def _hide_all_pictographs(self) -> None:
-        for pictograph in self.pictograph_cache.values():
-            pictograph.view.hide()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

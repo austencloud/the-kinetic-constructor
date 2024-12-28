@@ -1,5 +1,10 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import (
+    QWidget,
+    QGraphicsOpacityEffect,
+    QStackedLayout,
+    QApplication,
+)
 from PyQt6.QtWidgets import QStackedLayout
 from PyQt6.QtCore import (
     QObject,
@@ -64,15 +69,15 @@ class MainWidgetFadeManager(QObject):
         self._new_opacity = self._ensure_opacity_effect(new_widget)
 
         # Fade out
-        fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
-        fade_out.setDuration(self.duration)
-        fade_out.setStartValue(1.0)
-        fade_out.setEndValue(0.0)
-        fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
+        self.fade_out.setDuration(self.duration)
+        self.fade_out.setStartValue(1.0)
+        self.fade_out.setEndValue(0.0)
+        self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index))
+        self.fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index))
 
-        fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
+        self.fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()
     def _switch_and_fade_in(self, new_index: int):
@@ -88,14 +93,14 @@ class MainWidgetFadeManager(QObject):
             self._new_opacity.setOpacity(0.0)
 
         # Fade in
-        fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
-        fade_in.setDuration(self.duration)
-        fade_in.setStartValue(0.0)
-        fade_in.setEndValue(1.0)
-        fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        fade_in.finished.connect(self._on_fade_in_finished)
+        self.fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
+        self.fade_in.setDuration(self.duration)
+        self.fade_in.setStartValue(0.0)
+        self.fade_in.setEndValue(1.0)
+        self.fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.fade_in.finished.connect(self._on_fade_in_finished)
 
-        fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
+        self.fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()
     def _on_fade_in_finished(self):
@@ -132,24 +137,24 @@ class MainWidgetFadeManager(QObject):
 
         # 2) Create parallel fade-out group
         self.fade_out_group = QParallelAnimationGroup(self)  # Pass `self` as parent
-    
+
         old_right_effect = self._ensure_opacity_effect(old_right_widget)
         old_left_effect = self._ensure_opacity_effect(old_left_widget)
 
-        anim_out_right = QPropertyAnimation(old_right_effect, b"opacity", self)
-        anim_out_right.setDuration(self.duration)
-        anim_out_right.setStartValue(1.0)
-        anim_out_right.setEndValue(0.0)
-        anim_out_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.anim_out_right = QPropertyAnimation(old_right_effect, b"opacity", self)
+        self.anim_out_right.setDuration(self.duration)
+        self.anim_out_right.setStartValue(1.0)
+        self.anim_out_right.setEndValue(0.0)
+        self.anim_out_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        anim_out_left = QPropertyAnimation(old_left_effect, b"opacity", self)
-        anim_out_left.setDuration(self.duration)
-        anim_out_left.setStartValue(1.0)
-        anim_out_left.setEndValue(0.0)
-        anim_out_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.anim_out_left = QPropertyAnimation(old_left_effect, b"opacity", self)
+        self.anim_out_left.setDuration(self.duration)
+        self.anim_out_left.setStartValue(1.0)
+        self.anim_out_left.setEndValue(0.0)
+        self.anim_out_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        self.fade_out_group.addAnimation(anim_out_right)
-        self.fade_out_group.addAnimation(anim_out_left)
+        self.fade_out_group.addAnimation(self.anim_out_right)
+        self.fade_out_group.addAnimation(self.anim_out_left)
 
         self.fade_out_group.finished.connect(
             lambda: self._switch_and_fade_in_both(
@@ -184,26 +189,27 @@ class MainWidgetFadeManager(QObject):
         # old_left_effect.setOpacity(1.0)
 
         # 4) Create parallel fade-in group
-        fade_in_group = QParallelAnimationGroup()
+        QApplication.processEvents()  # Ensure the new widgets are visible before fading in
+        self.fade_in_group = QParallelAnimationGroup()
 
         new_right_effect = self._ensure_opacity_effect(new_right_widget)
         new_right_effect.setOpacity(0.0)
-        anim_in_right = QPropertyAnimation(new_right_effect, b"opacity", self)
-        anim_in_right.setDuration(self.duration)
-        anim_in_right.setStartValue(0.0)
-        anim_in_right.setEndValue(1.0)
-        anim_in_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.anim_in_right = QPropertyAnimation(new_right_effect, b"opacity", self)
+        self.anim_in_right.setDuration(self.duration)
+        self.anim_in_right.setStartValue(0.0)
+        self.anim_in_right.setEndValue(1.0)
+        self.anim_in_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
         new_left_effect = self._ensure_opacity_effect(new_left_widget)
         new_left_effect.setOpacity(0.0)
-        anim_in_left = QPropertyAnimation(new_left_effect, b"opacity", self)
-        anim_in_left.setDuration(self.duration)
-        anim_in_left.setStartValue(0.0)
-        anim_in_left.setEndValue(1.0)
-        anim_in_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.anim_in_left = QPropertyAnimation(new_left_effect, b"opacity", self)
+        self.anim_in_left.setDuration(self.duration)
+        self.anim_in_left.setStartValue(0.0)
+        self.anim_in_left.setEndValue(1.0)
+        self.anim_in_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        fade_in_group.addAnimation(anim_in_right)
-        fade_in_group.addAnimation(anim_in_left)
+        self.fade_in_group.addAnimation(self.anim_in_right)
+        self.fade_in_group.addAnimation(self.anim_in_left)
 
-        fade_in_group.finished.connect(self._on_fade_in_finished)
-        fade_in_group.start()
+        self.fade_in_group.finished.connect(self._on_fade_in_finished)
+        self.fade_in_group.start()

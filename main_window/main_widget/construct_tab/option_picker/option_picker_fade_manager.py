@@ -46,6 +46,8 @@ class OptionPickerFadeManager(QObject):
 
         option_picker.scroll_area.clear_pictographs()
         option_picker.scroll_area.add_and_display_relevant_pictographs(next_options)
+        
+        
         self._new_opacity = self._ensure_opacity_effect(option_picker)
         self.fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
         self.fade_in.setDuration(self.duration)

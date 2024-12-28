@@ -37,14 +37,14 @@ class OptionPicker(QWidget):
 
         self.initialize_option_pool()
         self.setup_layout()
-        self.hide()
+        # self.hide()
 
     def initialize_option_pool(self):
         self.option_pool: list[BasePictograph] = []
         for _ in range(self.MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
             option.view = OptionPickerPictographView(option, self)
-            option.view.hide()
+            # option.view.hide()
             self.option_pool.append(option)
 
     def setup_layout(self) -> None:
@@ -58,7 +58,7 @@ class OptionPicker(QWidget):
         header_label_layout = QHBoxLayout()
         header_label_layout.addWidget(self.choose_your_next_pictograph_label)
         header_layout.addLayout(header_label_layout)
-        
+
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.reversal_filter)
         self.layout.addWidget(self.scroll_area, 14)
