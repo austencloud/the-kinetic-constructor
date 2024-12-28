@@ -10,7 +10,9 @@ from base_widgets.base_pictograph.pictograph_context_menu_handler import (
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
-
+from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+    GraphEditorPictographContainer,
+)
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -89,9 +91,7 @@ class OptionPickerPictographView(BorderedPictographView):
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
-        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
-            GraphEditorPictographContainer,
-        )
+
 
         if isinstance(self.parent(), GraphEditorPictographContainer):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))

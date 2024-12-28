@@ -59,20 +59,19 @@ class BeatAdjustmentPanel(QFrame):
     def _create_box_set(self, blue_box, red_box):
         """Creates a container with a horizontal layout for a pair of boxes."""
         box_set = QWidget(self)
-        layout = QHBoxLayout(box_set)  # Initialize layout without extra parameters
-        layout.setContentsMargins(0, 0, 0, 0)  # Set margins separately
-        layout.setSpacing(0)  # Set spacing separately
+        layout = QHBoxLayout(box_set) 
+        layout.setContentsMargins(0, 0, 0, 0)  
+        layout.setSpacing(0) 
         layout.addWidget(blue_box)
         layout.addWidget(red_box)
         return box_set
 
     def update_adjustment_panel(self) -> None:
         """Update the panel view based on the current pictograph state."""
-        pictograph_view = self.graph_editor.pictograph_container.GE_pictograph_view
-        is_blank = pictograph_view.get_current_pictograph().is_blank
-        is_start = pictograph_view.is_start_pos
+        view = self.graph_editor.pictograph_container.GE_pictograph_view
+        is_blank = view.get_current_pictograph().is_blank
         self._set_current_stack_widgets(
-            ORI_WIDGET_INDEX if is_blank or is_start else TURNS_WIDGET_INDEX
+            ORI_WIDGET_INDEX if is_blank or view.is_start_pos else TURNS_WIDGET_INDEX
         )
 
     def _set_current_stack_widgets(self, index):

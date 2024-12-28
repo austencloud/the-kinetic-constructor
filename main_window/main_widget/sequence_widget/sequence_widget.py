@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
 from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
     GraphEditorPlaceholder,

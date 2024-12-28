@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QResizeEvent
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget
 
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_layout_manager import BrowseTabLayoutManager

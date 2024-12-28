@@ -1,15 +1,18 @@
 from typing import TYPE_CHECKING
-
-
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QGraphicsTextItem
+from PyQt6.QtCore import QPointF
+from PyQt6.QtGui import QFont
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
-
-
-
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+)
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
 
 
 class StartPositionBeatView(BeatView):
@@ -35,3 +38,11 @@ class StartPositionBeatView(BeatView):
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
         self.start_pos.add_start_text()
+
+    def _add_start_text(self):
+        self.start_text_item = QGraphicsTextItem("Start")
+        self.start_text_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+        text_padding = self.scene().height() // 28
+        self.start_text_item.setPos(QPointF(text_padding, text_padding))
+        self.scene().addItem(self.start_text_item)
+        self.start_text_item.setVisible(self.is_start_pos)

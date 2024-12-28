@@ -58,7 +58,6 @@ class LayoutOptionsBeatFrame(QFrame):
                         False
                     )
                     start_pos_view.setFixedSize(beat_size, beat_size)
-                    start_pos_view.resize_beat_view()
 
                     beat_index = 0
                     for row in range(rows):
@@ -68,7 +67,6 @@ class LayoutOptionsBeatFrame(QFrame):
                                 beat_view.setParent(self)  # Ensure proper parenting
                                 self.layout.addWidget(beat_view, row, col)
                                 beat_view.setFixedSize(beat_size, beat_size)
-                                beat_view.resize_beat_view()
                                 beat_index += 1
                                 beat_view.blank_beat.initializer.set_nonradial_points_visibility(
                                     False

@@ -1,20 +1,13 @@
-from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QApplication
-
-from main_window.main_widget.sequence_widget.beat_frame.layout_options_dialog import (
-    LayoutOptionsDialog,
-)
-from main_window.main_widget.sequence_widget.full_screen_viewer import FullScreenViewer
-
-
+from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QApplication, QSpacerItem, QSizePolicy
+from .beat_frame.layout_options_dialog import LayoutOptionsDialog
+from .full_screen_viewer import FullScreenViewer
 from .button_panel_placeholder import ButtonPanelPlaceholder
 from utilities.path_helpers import get_images_and_data_path
-
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
-from PyQt6.QtWidgets import QSpacerItem, QSizePolicy
+    from .sequence_widget import SequenceWidget
 
 
 class SequenceWidgetButtonPanel(QFrame):
@@ -53,7 +46,7 @@ class SequenceWidgetButtonPanel(QFrame):
             "save_image": {
                 "icon": "save_image.svg",
                 "callback": lambda: self.export_manager.dialog_executor.exec_dialog(
-                    self.sequence_widget.json_manager.loader_saver.load_current_sequence_json()
+                    self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
                 ),
                 "tooltip": "Save Image",
             },

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Callable
+from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
 from PyQt6.QtWidgets import QStackedLayout
 from PyQt6.QtCore import (

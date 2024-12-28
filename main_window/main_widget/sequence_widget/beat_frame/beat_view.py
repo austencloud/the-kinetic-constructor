@@ -1,19 +1,16 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QGraphicsPixmapItem
-from PyQt6.QtCore import Qt, QPointF, QEvent
+from PyQt6.QtWidgets import QGraphicsTextItem
+from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import (
     QFont,
     QPainter,
     QColor,
     QPixmap,
     QImage,
-    QAction,
-    QCursor,
-    QContextMenuEvent,
 )
 from base_widgets.base_pictograph.pictograph_view import PictographView
-from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
@@ -22,103 +19,39 @@ if TYPE_CHECKING:
 
 
 class BeatView(PictographView):
+    is_start_pos = False
+    is_filled = False
+    is_selected = False
+    is_start = False
+    is_placeholder = False
+    beat_number_item: QGraphicsTextItem
+    beat: "Beat" = None
+    
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
         super().__init__(beat_frame)
-        self.number = number  # Beat number to display
-        self._disable_scrollbars()
-        self.beat: "Beat" = None
+        self.number = number
         self.beat_frame = beat_frame
-        self.beat_number_item = None
-        self.is_start_pos = False
-        self.is_filled = False
-        self.is_selected = False
-        self.part_of_multibeat = False
-        self.is_start = False
-        self.is_end = False
-        self.is_placeholder = False
-        self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("border: none; border: 1px solid black;")
-        self.blank_beat = Beat(self.beat_frame)
         self._setup_blank_beat()
-        self.resize_beat_view()
-        # self.setContextMenuPolicy/(Qt.ContextMenuPolicy.CustomContextMenu)
-        # self.customContextMenuRequested.connect(self.show_context_menu)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
-    def contextMenuEvent(self, event: QEvent) -> None:
-        """
-        Optionally, add more actions specific to BeatView.
-        Then call the base class to include the "Copy Dictionary" action.
-        """
-        if isinstance(event, QContextMenuEvent):
-            context_menu = QMenu(self)
-
-            # Add any specific actions for BeatView here
-
-            # Add a separator
-            context_menu.addSeparator()
-
-            # Call the base class to add "Copy Dictionary"
-            copy_action = QAction("Copy Dictionary", self)
-            copy_action.triggered.connect(self.copy_pictograph_dict)
-            context_menu.addAction(copy_action)
-
-            # Execute the menu
-            context_menu.exec(QCursor.pos())
-        else:
-            super().contextMenuEvent(event)
-
-    def display_placeholder_arrow(self):
-        arrow_path = get_images_and_data_path("images/placeholder_arrow.png")
-        arrow_item = QGraphicsPixmapItem(QPixmap(arrow_path))
-        arrow_item.setPos(
-            self.sceneRect().center() - arrow_item.boundingRect().center()
-        )
-        self.scene().addItem(arrow_item)
-
-    def set_duration(self, duration):
-        self.beat_frame.duration_manager.update_beat_duration(self, duration)
-
-    def clear_beat(self):
-        """Clear the beat from this view."""
-        self.setScene(self.blank_beat)
-        self.is_filled = False
-        self.beat = None
-        self.part_of_multibeat = False
-        self.is_end = False
-        self.remove_beat_number()
-
     def _setup_blank_beat(self):
+        self.blank_beat = StartPositionBeat(self.beat_frame)
         self.setScene(self.blank_beat)
-        self.blank_beat.view = self
-        self.blank_beat = self.blank_beat
         self.blank_beat.grid.hide()
         self.add_beat_number()
-        self._add_start_text()
 
-    def _disable_scrollbars(self) -> None:
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-
-    def set_beat(self, beat: "Beat", number: int, is_end=False) -> None:
+    def set_beat(self, beat: "Beat", number: int) -> None:
         self.beat = beat
         self.beat.view = self
         self.is_filled = True
         self.beat.beat_number = number
-        self.is_end = is_end
-
-        self.part_of_multibeat = self.beat.duration > 1
         self.setScene(self.beat)
-        self.resize_beat_view()
         self.remove_beat_number()
         self.add_beat_number()
-
         self.beat.reversal_symbol_manager.update_reversal_symbols()
 
     def add_beat_number(self, beat_number_text=None) -> None:
-        """
-        Add a beat number or a range of beat numbers to represent the beat.
-        """
         if not beat_number_text:
             beat_number_text = (
                 self.beat.get_beat_number_text()
@@ -139,17 +72,6 @@ class BeatView(PictographView):
     def remove_beat_number(self):
         if self.beat_number_item:
             self.beat_number_item.setVisible(False)
-
-    def _add_start_text(self):
-        self.start_text_item = QGraphicsTextItem("Start")
-        self.start_text_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
-        text_padding = self.scene().height() // 28
-        self.start_text_item.setPos(QPointF(text_padding, text_padding))
-        self.scene().addItem(self.start_text_item)
-        self.start_text_item.setVisible(self.is_start_pos)
-
-    def mouseDoubleClickEvent(self, event) -> None:
-        self.mousePressEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
@@ -174,7 +96,8 @@ class BeatView(PictographView):
         painter.end()
         return QPixmap.fromImage(image)
 
-    def resize_beat_view(self):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         beat_scene_size = (950, 950)
         view_size = self.size()
 
@@ -184,15 +107,3 @@ class BeatView(PictographView):
         )
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-
-    def clear_beat(self) -> None:
-        self.is_filled = False
-        self.blank_beat = None
-
-    def set_temporary_beat(self, pictograph_dict: dict) -> None:
-        self.setStyleSheet("border: 2px solid yellow;")
-        self.beat.updater.update_pictograph(pictograph_dict)
-
-    def remove_temporary_beat(self) -> None:
-        self.setStyleSheet("")
-        self.beat.clear()

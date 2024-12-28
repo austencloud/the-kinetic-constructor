@@ -56,6 +56,7 @@ class BeatAdder:
             elif not grow_sequence or override_grow_sequence:
                 self._update_sequence_builder(next_beat_index)
 
+            new_beat.reversal_symbol_manager.update_reversal_symbols()
             self.beat_frame.selection_overlay.select_beat(
                 self.beats[next_beat_index], toggle_graph_editor=False
             )

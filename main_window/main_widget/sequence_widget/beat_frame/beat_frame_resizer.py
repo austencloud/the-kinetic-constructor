@@ -57,7 +57,4 @@ class BeatFrameResizer(QWidget):
         self.beat_frame.start_pos_view.setFixedSize(beat_size, beat_size)
 
     def update_views(self, beat_size: int) -> None:
-        for beat in self.beat_frame.beats:
-            beat.resize_beat_view()
-        self.beat_frame.start_pos_view.resize_beat_view()
         self.beat_frame.selection_overlay.update_overlay_position()
