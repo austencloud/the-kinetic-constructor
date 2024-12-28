@@ -139,11 +139,9 @@ class MainWidget(QWidget):
 
         QTimer.singleShot(0, self.state_handler.load_state)
 
-    def paintEvent(self, a0):
-        return super().paintEvent(a0)
 
-    def showEvent(self, event):
-        self.event_handler.showEvent(event)
+    # def showEvent(self, event):
+    #     self.event_handler.showEvent(event)
 
     def resizeEvent(self, event) -> None:
         self.event_handler.resizeEvent(event)

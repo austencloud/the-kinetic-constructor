@@ -33,6 +33,9 @@ class MainWidgetBackgroundHandler(QObject):
         self.main_widget = main_widget
         self.background: Optional[BaseBackground] = None
         self.is_animating = False
+        self.apply_background()
+        self.setup_background()
+        self.main_widget.background_widget.start_timer()
 
     def setup_background(self):
         """Initializes the background based on the current background type."""

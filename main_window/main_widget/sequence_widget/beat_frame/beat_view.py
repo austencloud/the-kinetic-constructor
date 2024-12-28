@@ -1,7 +1,16 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsTextItem, QMenu, QGraphicsPixmapItem
 from PyQt6.QtCore import Qt, QPointF, QEvent
-from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction, QCursor, QContextMenuEvent
+from PyQt6.QtGui import (
+    QFont,
+    QPainter,
+    QColor,
+    QPixmap,
+    QImage,
+    QAction,
+    QCursor,
+    QContextMenuEvent,
+)
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
@@ -34,6 +43,7 @@ class BeatView(PictographView):
         self.resize_beat_view()
         # self.setContextMenuPolicy/(Qt.ContextMenuPolicy.CustomContextMenu)
         # self.customContextMenuRequested.connect(self.show_context_menu)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
 
     def contextMenuEvent(self, event: QEvent) -> None:
         """
@@ -65,8 +75,6 @@ class BeatView(PictographView):
             self.sceneRect().center() - arrow_item.boundingRect().center()
         )
         self.scene().addItem(arrow_item)
-
-
 
     def set_duration(self, duration):
         self.beat_frame.duration_manager.update_beat_duration(self, duration)
@@ -100,7 +108,6 @@ class BeatView(PictographView):
         self.is_end = is_end
 
         self.part_of_multibeat = self.beat.duration > 1
-        # Update beat number visually
         self.setScene(self.beat)
         self.resize_beat_view()
         self.remove_beat_number()
@@ -112,10 +119,6 @@ class BeatView(PictographView):
         """
         Add a beat number or a range of beat numbers to represent the beat.
         """
-        # if self.beat_number_item:
-        #     self.remove_beat_number()  # Remove any existing beat number item first
-
-        # Display the beat number text (as a range if necessary)
         if not beat_number_text:
             beat_number_text = (
                 self.beat.get_beat_number_text()
@@ -151,26 +154,6 @@ class BeatView(PictographView):
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
             self.beat_frame.selection_overlay.select_beat(self)
-
-    def deselect(self) -> None:
-        self.is_selected = False
-        self.update()
-
-    def paintEvent(self, event):
-        super().paintEvent(event)
-        painter = QPainter(self.viewport())
-        if self.is_selected:
-            painter.setPen(QColor(0, 0, 0))
-            painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
-        painter.end()
-
-    def enterEvent(self, event):
-        if self.is_filled:
-            if not self.is_selected:
-                self.setCursor(Qt.CursorShape.PointingHandCursor)
-
-    def leaveEvent(self, event):
-        self.setCursor(Qt.CursorShape.ArrowCursor)
 
     def grab(self) -> QPixmap:
         original_size = self.sceneRect().size().toSize()

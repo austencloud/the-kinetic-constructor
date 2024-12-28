@@ -93,48 +93,48 @@ class SR_BeatSelectionManager(QWidget):
         else:
             return None
 
-    def select_beat(self, beat_view: BeatView) -> None:
-        if self.selected_beat == beat_view:
-            return
-        else:
-            if self.selected_beat:
-                self.selected_beat.deselect()
-            self.selected_beat = beat_view
-            blue_turns = self.selected_beat.beat.blue_motion.turns
-            red_turns = self.selected_beat.beat.red_motion.turns
-            self.selected_beat.is_selected = True
-            graph_editor = (
-                self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
-            )
-            graph_editor.update_GE_pictograph(self.selected_beat.beat)
+    # def select_beat(self, beat_view: BeatView) -> None:
+    #     if self.selected_beat == beat_view:
+    #         return
+    #     else:
+    #         if self.selected_beat:
+    #             self.selected_beat.deselect()
+    #         self.selected_beat = beat_view
+    #         blue_turns = self.selected_beat.beat.blue_motion.turns
+    #         red_turns = self.selected_beat.beat.red_motion.turns
+    #         self.selected_beat.is_selected = True
+    #         graph_editor = (
+    #             self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
+    #         )
+    #         graph_editor.update_GE_pictograph(self.selected_beat.beat)
 
-            graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
-            graph_editor.adjustment_panel.update_adjustment_panel()
+    #         graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
+    #         graph_editor.adjustment_panel.update_adjustment_panel()
 
-            # Set the orientations in the graph editor's orientation changer
-            if isinstance(beat_view, StartPositionBeatView):
-                start_pos_pictograph = beat_view.beat
-                blue_start_pos_ori_picker = (
-                    graph_editor.adjustment_panel.blue_ori_picker
-                )
-                red_start_pos_ori_picker = graph_editor.adjustment_panel.red_ori_picker
+    #         # Set the orientations in the graph editor's orientation changer
+    #         if isinstance(beat_view, StartPositionBeatView):
+    #             start_pos_pictograph = beat_view.beat
+    #             blue_start_pos_ori_picker = (
+    #                 graph_editor.adjustment_panel.blue_ori_picker
+    #             )
+    #             red_start_pos_ori_picker = graph_editor.adjustment_panel.red_ori_picker
 
-                blue_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
-                    start_pos_pictograph, "blue"
-                )
-                red_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
-                    start_pos_pictograph, "red"
-                )
+    #             blue_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
+    #                 start_pos_pictograph, "blue"
+    #             )
+    #             red_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
+    #                 start_pos_pictograph, "red"
+    #             )
 
-            self.update()
-            self.update_overlay_position()
-            self.show()
+    #         self.update()
+    #         self.update_overlay_position()
+    #         self.show()
 
-    def deselect_beat(self) -> None:
-        if self.selected_beat:
-            self.selected_beat.deselect()
-        self.selected_beat = None
-        self.hide()
+    # def deselect_beat(self) -> None:
+    #     if self.selected_beat:
+    #         self.selected_beat.deselect()
+    #     self.selected_beat = None
+    #     self.hide()
 
     def update_overlay_position(self) -> None:
         if self.selected_beat:

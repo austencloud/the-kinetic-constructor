@@ -31,7 +31,7 @@ class ReversalCombobox(QComboBox):
         super().resizeEvent(event)
         font = self.font()
         font_size = int(
-            self.reversal_selector.option_picker.manual_builder.main_widget.width()
+            self.reversal_selector.option_picker.construct_tab.main_widget.width()
             * 0.01
         )
         font.setPointSize(font_size)

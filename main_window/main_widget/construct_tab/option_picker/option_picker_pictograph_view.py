@@ -20,8 +20,6 @@ if TYPE_CHECKING:
 
 
 class OptionPickerPictographView(BorderedPictographView):
-    original_style: str
-
     def __init__(
         self, pictograph: "BasePictograph", option_picker: "OptionPicker"
     ) -> None:
@@ -29,14 +27,14 @@ class OptionPickerPictographView(BorderedPictographView):
         self.pictograph = pictograph
         self.pictograph.view = self
         self.option_picker = option_picker
-        self.original_style = ""
+        self.click_handler = self.option_picker.construct_tab.option_click_handler
+
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.grabGesture(Qt.GestureType.TapGesture)
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
 
-        # self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.key_event_handler = PictographViewKeyEventHandler(self)
 
@@ -51,24 +49,12 @@ class OptionPickerPictographView(BorderedPictographView):
     ### EVENTS ###
 
     def contextMenuEvent(self, event: QEvent) -> None:
-        """
-        Optionally, add more actions specific to OptionPickerPictographView.
-        Then call the base class to include the "Copy Dictionary" action.
-        """
         if isinstance(event, QContextMenuEvent):
             context_menu = QMenu(self)
-
-            # Add any specific actions for OptionPicker here
-
-            # Add a separator
             context_menu.addSeparator()
-
-            # Call the base class to add "Copy Dictionary"
             copy_action = QAction("Copy Dictionary", self)
             copy_action.triggered.connect(self.copy_pictograph_dict)
             context_menu.addAction(copy_action)
-
-            # Execute the menu
             context_menu.exec(QCursor.pos())
         else:
             super().contextMenuEvent(event)
@@ -84,18 +70,9 @@ class OptionPickerPictographView(BorderedPictographView):
         super().showEvent(event)
         settings_manager = self.pictograph.main_widget.main_window.settings_manager
         current_prop_type = settings_manager.global_settings.get_prop_type()
-
-        if (
-            self.pictograph.prop_type != current_prop_type
-            and self.pictograph.__class__.__name__ != "GE_BlankPictograph"
-        ):
-            settings_manager.global_settings.prop_type_changer.replace_props(
-                current_prop_type, self.pictograph
-            )
-        if not self.pictograph.quiz_mode:
-            settings_manager.visibility.glyph_visibility_manager.apply_current_visibility_settings(
-                self.pictograph
-            )
+        settings_manager.global_settings.prop_type_changer.replace_props(
+            current_prop_type, self.pictograph
+        )
 
     def _resetTouchState(self) -> None:
         self._ignoreNextMousePress = False
@@ -106,7 +83,7 @@ class OptionPickerPictographView(BorderedPictographView):
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
-            self.pictograph.main_widget.construct_tab.option_picker.manual_builder.option_click_handler.on_option_clicked(
+            self.click_handler.on_option_clicked(
                 self.pictograph
             )
         QApplication.restoreOverrideCursor()
@@ -126,20 +103,6 @@ class OptionPickerPictographView(BorderedPictographView):
         self.setStyleSheet("")
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.pictograph.view.reset_border()
-
-    def resizeEvent(self, event):
-        """Trigger fitInView whenever the widget is resized."""
-        super().resizeEvent(event)
-        # self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-        # size = self.calculate_view_size()
-        # self.pictograph.view.update_border_widths()
-        # self.setMinimumWidth(size)
-        # self.setMaximumWidth(size)
-        # self.setMinimumHeight(size)
-        # self.setMaximumHeight(size)
-        # self.view_scale = size / self.pictograph.width()
-        # self.resetTransform()
-        # self.scale(self.view_scale, self.view_scale)
 
     def calculate_view_size(self) -> int:
         spacing = self.option_picker.scroll_area.spacing

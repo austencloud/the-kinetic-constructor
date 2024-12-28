@@ -30,7 +30,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
     def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
-        self.manual_builder = option_picker.manual_builder
+        self.manual_builder = option_picker.construct_tab
         self.option_manager = self.option_picker.option_getter
 
         self.ori_calculator = self.main_widget.json_manager.ori_calculator

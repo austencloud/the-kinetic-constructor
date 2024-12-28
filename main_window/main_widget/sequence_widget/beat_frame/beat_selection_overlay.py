@@ -22,12 +22,12 @@ class BeatSelectionOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
 
-    def select_beat(self, beat_view: BeatView, toggle_graph_editor = True):
+    def select_beat(self, beat_view: BeatView, toggle_graph_editor=True):
         if self.selected_beat == beat_view:
             return
         else:
             if self.selected_beat:
-                self.selected_beat.deselect()
+                self.deselect_beat()
             self.selected_beat = beat_view
             blue_motion = self.selected_beat.beat.blue_motion
             red_motion = self.selected_beat.beat.red_motion
@@ -61,11 +61,16 @@ class BeatSelectionOverlay(QWidget):
         if toggle_graph_editor:
             if not self.beat_frame.main_widget.sequence_widget.graph_editor.isVisible():
                 self.beat_frame.sequence_widget.toggler.toggle()
+        beat_view.setCursor(Qt.CursorShape.ArrowCursor)
 
     def deselect_beat(self):
         if self.selected_beat:
-            self.selected_beat.deselect()
+            self.selected_beat.is_selected = False
+            self.selected_beat.setCursor(Qt.CursorShape.PointingHandCursor)
+            self.selected_beat.update()
+            
         self.selected_beat = None
+        
         self.hide()
 
     def update_overlay_position(self):

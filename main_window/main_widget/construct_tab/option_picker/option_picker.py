@@ -21,10 +21,10 @@ class OptionPicker(QWidget):
     COLUMN_COUNT = 8
     option_selected = pyqtSignal(str)
 
-    def __init__(self, manual_builder: "ConstructTab"):
-        super().__init__(manual_builder)
-        self.manual_builder = manual_builder
-        self.main_widget = manual_builder.main_widget
+    def __init__(self, construct_tab: "ConstructTab"):
+        super().__init__(construct_tab)
+        self.construct_tab = construct_tab
+        self.main_widget = construct_tab.main_widget
         self.json_manager = self.main_widget.json_manager
         self.disabled = False
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
@@ -113,6 +113,4 @@ class OptionPicker(QWidget):
             option.view.setFixedSize(view_width, view_width)
             option.view.view_scale = view_width / option.width()
             option.view.resetTransform()
-            option.view.scale(
-                option.view.view_scale, option.view.view_scale
-            )
+            option.view.scale(option.view.view_scale, option.view.view_scale)
