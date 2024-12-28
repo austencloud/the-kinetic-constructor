@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsTextItem
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
-)
+from .beat_number_manager import BeatNumberManager
+from .reversal_symbol_manager import ReversalSymbolManager
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
-    )
+    from .beat_view import BeatView
+    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
 class Beat(BasePictograph):
@@ -19,6 +16,7 @@ class Beat(BasePictograph):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
         self.reversal_symbol_manager = ReversalSymbolManager(self)
+        self.number_manager = BeatNumberManager(self)
         self.view: "BeatView" = None
         self.beat_number_item: QGraphicsTextItem = None
         self.duration = duration
@@ -27,14 +25,3 @@ class Beat(BasePictograph):
         self.beat_number = 0
         self.blue_reversal = False
         self.red_reversal = False
-
-    def get_beat_number_text(self) -> str:
-        """
-        Return the beat number or range of numbers if this beat spans multiple beats.
-        """
-        if self.duration > 1:
-            end_beat = self.beat_number + self.duration - 1
-            return f"{self.beat_number},{end_beat}"
-        else:
-            return str(self.beat_number)
-
