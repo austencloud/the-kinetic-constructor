@@ -1,9 +1,10 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
+from PyQt6.QtCore import Qt
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
 
-from base_widgets.base_picker_scroll_area import BasePickerScrollArea
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
@@ -14,14 +15,12 @@ from .option_picker_display_manager import OptionPickerDisplayManager
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_section_widget import (
-        OptionPickerSectionWidget,
-    )
+    from .option_picker_section_widget import OptionPickerSectionWidget
 
     from ..option_picker import OptionPicker
 
 
-class OptionPickerScrollArea(BasePickerScrollArea):
+class OptionPickerScrollArea(QScrollArea):
     MAX_COLUMN_COUNT: int = 8
     MIN_COLUMN_COUNT: int = 3
     spacing = 3
@@ -32,22 +31,52 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         self.option_picker: "OptionPicker" = option_picker
         self.construct_tab = option_picker.construct_tab
         self.option_manager = self.option_picker.option_getter
+        self.setContentsMargins(0, 0, 0, 0)
+        self.container = QWidget()
+        self.container.setAutoFillBackground(True)
+        self.container.setStyleSheet("background: transparent;")
+        self.container.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
+
+        self.main_widget = option_picker.main_widget
+        self.layout: Union[QVBoxLayout, QHBoxLayout] = None
+        self.setWidgetResizable(True)
+        self.setup_ui()
 
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
         self.json_manager = self.main_widget.json_manager
         self.pictograph_cache: dict[str, BasePictograph] = {}
         self.stretch_index: int = -1
         self.disabled = False
+        self.viewport().setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setStyleSheet("background-color: transparent; border: none;")
 
         self.set_layout("VBox")  # Ensure correct layout
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.section_manager = OptionPickerSectionManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
         self.pictograph_factory = OptionPickerPictographFactory(
             self, self.construct_tab.pictograph_cache
         )
-        self.setStyleSheet("background-color: transparent; border: none;")
-        self.setContentsMargins(0, 0, 0, 0)
+
+    def setup_ui(self):
+        self.setWidget(self.container)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+
+    def set_layout(self, layout_type: str):
+        if layout_type == "VBox":
+            new_layout = QVBoxLayout()
+        elif layout_type == "HBox":
+            new_layout = QHBoxLayout()
+        else:
+            raise ValueError("Invalid layout type specified.")
+
+        self.layout = new_layout
+        self.container.setLayout(self.layout)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
 
     def fix_stretch(self) -> None:
         if self.stretch_index >= 0:
@@ -61,7 +90,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.view.hide()
 
     def add_and_display_relevant_pictographs(self, next_options: list[dict]):
-        self.display_manager.clear_all_section_layouts()
 
         for i, pictograph_dict in enumerate(next_options):
             if i >= len(self.option_picker.option_pool):

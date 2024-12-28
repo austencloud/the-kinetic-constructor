@@ -98,3 +98,4 @@ class BeatSelectionOverlay(QWidget):
             -self.border_width // 2,
         )
         painter.drawRect(rect)
+        painter.end()

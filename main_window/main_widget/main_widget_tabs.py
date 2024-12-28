@@ -27,7 +27,9 @@ class MainWidgetTabs:
                 tab_names[index]
             )
 
-        self.main_widget.fade_manager.fade_to_tab(self.main_widget.content_stack, index)
+        self.main_widget.stack_fade_manager.fade_to_tab(
+            self.main_widget.content_stack, index
+        )
 
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""

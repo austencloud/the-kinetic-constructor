@@ -2,6 +2,9 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.construct_tab.option_picker.option_picker_fade_manager import (
+    OptionPickerFadeManager,
+)
 from .option_picker_pictograph_view import OptionPickerPictographView
 from .option_picker_reversal_selector import OptionPickerReversalSelector
 from .option_getter import OptionGetter
@@ -29,6 +32,7 @@ class OptionPicker(QWidget):
         self.option_getter = OptionGetter(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_selector = OptionPickerReversalSelector(self)
+        self.fade_manager = OptionPickerFadeManager(self)
         self.option_pool: list[BasePictograph] = []
         MAX_PICTOGRAPHS = 36
 
@@ -89,13 +93,17 @@ class OptionPicker(QWidget):
             next_options: list = self.option_getter.get_next_options(
                 sequence, selected_filter
             )
-            self.scroll_area.clear_pictographs()
-            self.scroll_area.add_and_display_relevant_pictographs(next_options)
+            self.fade_manager.fade_option_picker(
+                self.scroll_area.option_picker, next_options
+            )
 
         elif len(sequence) == 2:
-            self.scroll_area.clear_pictographs()
-            next_options = self.option_getter._load_all_next_options(sequence)
-            self.scroll_area.add_and_display_relevant_pictographs(next_options)
+            next_options: list = self.option_getter.get_next_options(
+                sequence, selected_filter
+            )
+            self.fade_manager.fade_option_picker(
+                self.scroll_area.option_picker, next_options
+            )
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

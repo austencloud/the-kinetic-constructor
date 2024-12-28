@@ -1,55 +1,108 @@
-# main_widget_fade_manager.py
+from typing import TYPE_CHECKING, Optional
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QStackedLayout
+from PyQt6.QtCore import (
+    QObject,
+    QPropertyAnimation,
+    QAbstractAnimation,
+    QEasingCurve,
+    pyqtSlot,
+)
 
-from typing import Optional, Callable
-from PyQt6.QtCore import QObject, QPropertyAnimation, QEasingCurve, pyqtSlot
-from PyQt6.QtWidgets import QStackedWidget, QGraphicsOpacityEffect
+from main_window.main_widget.construct_tab.option_picker.option_picker import (
+    OptionPicker,
+)
+
+if TYPE_CHECKING:
+    from main_widget.main_widget import MainWidget
+
 
 class MainWidgetFadeManager(QObject):
-    """Manages fade-out and fade-in animations for the main widget's QStackedWidget."""
-    def __init__(self, stacked_widget: QStackedWidget, duration: int = 350) -> None:
-        super().__init__(stacked_widget)
-        self.stacked_widget = stacked_widget
-        self.duration = duration
-        self.opacity_effect = QGraphicsOpacityEffect(self.stacked_widget)
-        self.stacked_widget.setGraphicsEffect(self.opacity_effect)
-        self.opacity_effect.setOpacity(1.0)
+    """Manages fade-out/fade-in animations for your single stacked widget."""
+
+    duration = 300
+
+    def __init__(self, main_widget: "MainWidget"):
+        super().__init__(main_widget)
+        self.main_widget = main_widget
+        self._old_opacity: Optional[QGraphicsOpacityEffect] = None
+        self._new_opacity: Optional[QGraphicsOpacityEffect] = None
         self._is_animating = False
 
-    def fade_to_tab(self, new_index: int, on_finished: Optional[Callable] = None) -> None:
-        """Fades out the current tab and fades in the new tab."""
-        if self._is_animating or new_index == self.stacked_widget.currentIndex():
+    def fade_to_tab(
+        self,
+        stack: QStackedLayout,
+        new_index: int,
+    ):
+        """
+        new_index corresponds to the pages in mw.content_stack:
+          0 -> Build
+          1 -> Generate
+          2 -> Browse
+          3 -> Learn
+          4 -> Write
+        """
+        if self._is_animating:
             return
+        self.stack = stack
+        old_index = self.stack.currentIndex()
+        if old_index == new_index:
+            return  # Already on that page
 
+        self._fade_stack(old_index, new_index)
+
+    def _fade_stack(self, old_index: int, new_index: int):
         self._is_animating = True
 
-        # Fade-out animation
-        self.fade_out = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.fade_out.setDuration(self.duration)
-        self.fade_out.setStartValue(1.0)
-        self.fade_out.setEndValue(0.0)
-        self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        self.fade_out.finished.connect(lambda: self._switch_tab(new_index, on_finished))
-        self.fade_out.finished.connect(self._animation_finished)
-        self.fade_out.start()
+        old_widget = self.stack.widget(old_index)
+        new_widget = self.stack.widget(new_index)
+        if not old_widget or not new_widget:
+            return
 
-    def _switch_tab(self, new_index: int, on_finished: Optional[Callable]) -> None:
-        """Switches to the new tab and initiates the fade-in animation."""
-        self.stacked_widget.setCurrentIndex(new_index)
+        self._old_opacity = self._ensure_opacity_effect(old_widget)
+        self._new_opacity = self._ensure_opacity_effect(new_widget)
 
-        # Fade-in animation
-        self.fade_in = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.fade_in.setDuration(self.duration)
-        self.fade_in.setStartValue(0.0)
-        self.fade_in.setEndValue(1.0)
-        self.fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        # Fade out
+        fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
+        fade_out.setDuration(self.duration)
+        fade_out.setStartValue(1.0)
+        fade_out.setEndValue(0.0)
+        fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        if on_finished:
-            self.fade_in.finished.connect(on_finished)
+        fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index))
 
-        self.fade_in.finished.connect(self._animation_finished)
-        self.fade_in.start()
+        fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()
-    def _animation_finished(self) -> None:
-        """Resets the animation flag after completion."""
+    def _switch_and_fade_in(self, new_index: int):
+        # Switch stack page
+        self.stack.setCurrentIndex(new_index)
+
+        # Reset the old widget to full opacity so next time it fades out properly
+        if self._old_opacity:
+            self._old_opacity.setOpacity(1.0)
+
+        new_widget = self.stack.currentWidget()
+        if new_widget and self._new_opacity:
+            self._new_opacity.setOpacity(0.0)
+
+        # Fade in
+        fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
+        fade_in.setDuration(self.duration)
+        fade_in.setStartValue(0.0)
+        fade_in.setEndValue(1.0)
+        fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        fade_in.finished.connect(self._on_fade_in_finished)
+
+        fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
+
+    @pyqtSlot()
+    def _on_fade_in_finished(self):
         self._is_animating = False
+
+    def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
+        effect = widget.graphicsEffect()
+        if not effect or not isinstance(effect, QGraphicsOpacityEffect):
+            effect = QGraphicsOpacityEffect(widget)
+            widget.setGraphicsEffect(effect)
+        return effect

@@ -59,5 +59,5 @@ class BlobManager:
             painter.drawPath(blob_path)
 
         painter.setOpacity(1.0)  # Reset opacity
-
+        
 

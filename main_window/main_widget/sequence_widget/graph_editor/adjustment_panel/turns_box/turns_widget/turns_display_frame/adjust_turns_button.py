@@ -62,7 +62,8 @@ class AdjustTurnsButton(QAbstractButton):
         y = (self.height() - icon_size) / 2
         icon_rect = QRectF(x, y, icon_size, icon_size)
         self.svg_renderer.render(painter, icon_rect)
-
+        painter.end()
+        
     def mousePressEvent(self, event):
         self.pressed = True
         self.update()

@@ -21,6 +21,10 @@ if TYPE_CHECKING:
 class ConstructTab(QFrame):
     start_position_selected = pyqtSignal(object)
 
+    start_pos_picker_index = 0
+    advanced_start_pos_picker_index = 1
+    option_picker_index = 2
+
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -53,9 +57,8 @@ class ConstructTab(QFrame):
 
     def transition_to_option_picker(self):
         """Transition to the option picker for sequence building."""
-        option_picker_index = 2
-        self.main_widget.fade_manager.fade_to_tab(
-            self.stacked_widget, option_picker_index
+        self.main_widget.stack_fade_manager.fade_to_tab(
+            self.stacked_widget, self.option_picker_index
         )
 
         self.option_picker.scroll_area.section_manager.display_sections()
@@ -63,14 +66,16 @@ class ConstructTab(QFrame):
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
-        self.stacked_widget.setCurrentWidget(self.advanced_start_pos_picker)
+        self.main_widget.stack_fade_manager.fade_to_tab(
+            self.stacked_widget, self.advanced_start_pos_picker_index
+        )
         self.advanced_start_pos_picker.display_variations()
-        self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
 
     def reset_to_start_pos_picker(self) -> None:
         """Reset the view back to the start position picker."""
-        self.stacked_widget.setCurrentWidget(self.start_pos_picker)
-        self.start_pos_picker.show()
+        self.main_widget.stack_fade_manager.fade_to_tab(
+            self.stacked_widget, self.start_pos_picker_index
+        )
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence

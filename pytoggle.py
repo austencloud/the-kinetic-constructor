@@ -58,20 +58,20 @@ class PyToggle(QCheckBox):
 
     def paintEvent(self, e):
         """Custom paint for drawing the toggle switch."""
-        p = QPainter(self)
-        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         # Determine background color based on toggle state and parameter
         rect = QRect(0, 0, self.width(), self.height())
         if self._change_bg_on_state and self.isChecked():
-            p.setBrush(self._active_color)
+            painter.setBrush(self._active_color)
         else:
-            p.setBrush(self._bg_color)
+            painter.setBrush(self._bg_color)
 
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawRoundedRect(rect, self.height() / 2, self.height() / 2)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.drawRoundedRect(rect, self.height() / 2, self.height() / 2)
 
         # Draw the circle using the animated position
-        p.setBrush(self._circle_color)
-        p.drawEllipse(int(self._circle_position), 3, 22, 22)
-        p.end()
+        painter.setBrush(self._circle_color)
+        painter.drawEllipse(int(self._circle_position), 3, 22, 22)
+        painter.end()

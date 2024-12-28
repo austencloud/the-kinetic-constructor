@@ -31,13 +31,13 @@ class QtDebugMessageHandler:
         Raise an exception or show a traceback if the message matches our patterns.
         """
         # Check if any known error pattern is in the message
-        for pattern in self.error_patterns:
-            if pattern in message:
+        # for pattern in self.error_patterns:
+        #     if pattern in message:
                 # Option A: Print stack trace, then raise an error
-                print("==== Intercepted Qt Warning ====")
-                print(f"Message: {message}")
-                print("Stack trace:\n", "".join(traceback.format_stack()))
-                raise RuntimeError(f"Qt Warning: {message}")
+                # print("==== Intercepted Qt Warning ====")
+                # print(f"Message: {message}")
+                # print("Stack trace:\n", "".join(traceback.format_stack()))
+                # raise RuntimeError(f"Qt Warning: {message}")
 
                 # If you prefer not to crash your app:
                 # print("Stack trace:\n", "".join(traceback.format_stack()))

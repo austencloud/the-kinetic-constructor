@@ -68,3 +68,4 @@ class StyledBorderOverlayForButton(QWidget):
         pen.setWidth(self.inner_border_width)
         painter.setPen(pen)
         painter.drawRect(inner_rect)
+        painter.end()

@@ -102,7 +102,7 @@ class GE_PictographView(PictographView):
             )
         )
         painter.drawRect(overlay_rect)
-
+        painter.end()
     def get_current_pictograph(self) -> BasePictograph:
         return self.scene()
 

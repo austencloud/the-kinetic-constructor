@@ -38,7 +38,6 @@ from .pictograph_checker import PictographChecker
 from .pictograph_getter import PictographGetter
 from .pictograph_view import PictographView
 from .wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
-from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_updater import PictographUpdater
 from .pictograph_initializer import PictographInitializer
 
@@ -114,7 +113,6 @@ class BasePictograph(QGraphicsScene):
     # components
     check: PictographChecker
     get: PictographGetter
-    image_renderer: PictographImageRenderer
     initializer: PictographInitializer
     updater: PictographUpdater
 
@@ -134,7 +132,6 @@ class BasePictograph(QGraphicsScene):
         self.main_widget = main_widget
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
-        self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
         self.initializer.init_all_components()

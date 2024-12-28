@@ -121,13 +121,11 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
     def on_variation_selected(self, variation: BasePictograph) -> None:
         self.start_position_adder.add_start_pos_to_sequence(variation)
 
-    def resize_advanced_start_pos_picker(self) -> None:
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         self.grid_layout.setHorizontalSpacing(20)
         self.grid_layout.setVerticalSpacing(20)
         for grid_mode, variations in self.all_variations.items():
             for variation in variations:
                 self._resize_variation(variation)
-
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        self.resize_advanced_start_pos_picker()

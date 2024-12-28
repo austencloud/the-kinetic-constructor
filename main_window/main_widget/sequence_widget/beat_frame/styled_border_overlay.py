@@ -130,7 +130,8 @@ class StyledBorderOverlay(QWidget):
         if self.primary_color and self.secondary_color:
             painter = QPainter(self)
             self._draw_borders(painter)
-
+            painter.end()
+            
     def update_borders(self) -> None:
         primary_color, secondary_color = self.get_border_colors()
         self.update_border_color_and_width(primary_color, secondary_color)

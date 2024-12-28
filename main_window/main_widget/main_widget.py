@@ -8,9 +8,11 @@ from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.learn_tab.learn_tab import LearnTab
 from main_window.main_widget.write_tab.write_tab import WriteTab
-from main_window.main_widget.main_background_widget.main_background_widget import MainBackgroundWidget
+from main_window.main_widget.main_background_widget.main_background_widget import (
+    MainBackgroundWidget,
+)
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
-from main_window.main_widget.stack_fade_manager import StackFadeManager
+from main_window.main_widget.main_widget_fade_manager import MainWidgetFadeManager
 from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
     MainWidgetFontColorUpdater,
 )
@@ -34,7 +36,9 @@ if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
         SvgManager,
     )
-    from main_window.main_widget.main_background_widget.backgrounds.base_background import BaseBackground
+    from main_window.main_widget.main_background_widget.backgrounds.base_background import (
+        BaseBackground,
+    )
     from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
     from .pictograph_key_generator import PictographKeyGenerator
     from .special_placement_loader import SpecialPlacementLoader
@@ -81,7 +85,7 @@ class MainWidget(QWidget):
     sequence_properties_manager: "SequencePropertiesManager"
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
-    fade_manager: StackFadeManager
+    stack_fade_manager: MainWidgetFadeManager
     font_color_updater: "MainWidgetFontColorUpdater"
 
     # Layouts and Widgets
@@ -125,7 +129,7 @@ class MainWidget(QWidget):
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
-        
+
         QTimer.singleShot(0, self.state_handler.load_state)
 
     def resizeEvent(self, event) -> None:

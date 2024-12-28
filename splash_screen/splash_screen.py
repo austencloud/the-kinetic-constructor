@@ -54,3 +54,4 @@ class SplashScreen(QWidget):
         painter = QPainter(self)
         if self.background_handler.background_manager:
             self.background_handler.background_manager.paint_background(self, painter)
+        painter.end()
