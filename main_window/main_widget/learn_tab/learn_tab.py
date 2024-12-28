@@ -27,7 +27,6 @@ class LearnTab(QWidget):
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
-
         self._setup_components()
         self._setup_layout()
 
@@ -36,7 +35,6 @@ class LearnTab(QWidget):
         self.lesson_1_widget = Lesson1Widget(self)
         self.lesson_2_widget = Lesson2Widget(self)
         self.lesson_3_widget = Lesson3Widget(self)
-        self.codex = Codex(self)
 
     def _setup_layout(self) -> None:
         """Orchestrates creation of the main UI components and layout."""
@@ -61,7 +59,7 @@ class LearnTab(QWidget):
         right_layout.setContentsMargins(0, 0, 0, 0)
 
         top_bar_layout = QHBoxLayout()
-        top_bar_layout.addWidget(self.codex.toggle_button)
+        # top_bar_layout.addWidget(self.main_widget.codex.toggle_button)
         top_bar_layout.addStretch()
         right_layout.addLayout(top_bar_layout)
 
@@ -73,7 +71,7 @@ class LearnTab(QWidget):
         """Sets up the main QSplitter, holding the Codex panel and right-side widget."""
         self.main_layout = QHBoxLayout()
         self.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.main_layout.addWidget(self.codex, 1)
+        # self.main_layout.addWidget(self.main_widget.codex, 1)
         self.main_layout.addWidget(self.right_side, 1)
 
     def _setup_main_layout(self) -> None:

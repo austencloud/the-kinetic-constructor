@@ -14,6 +14,7 @@ class SplashUpdater:
             "MenuBarWidget": "Initializing menu...",
             "NavigationWidget": "Setting up navigation...",
             "SequenceWidget": "Loading sequences...",
+            "Codex": "Setting up codex...",
             "BrowseTab": "Building dictionary...",
             "LearnTab": "Preparing lessons...",
             "WriteTab": "Setting up Act Tab...",

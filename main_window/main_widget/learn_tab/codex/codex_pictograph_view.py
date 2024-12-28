@@ -16,7 +16,7 @@ class CodexPictographView(PictographView):
         self.setStyleSheet("border: 1px solid black;")
 
     def resizeEvent(self, event):
-        size = self.codex.learn_widget.main_widget.width() // 14
+        size = self.codex.learn_tab.main_widget.width() // 14
         self.setMinimumSize(size, size)
         self.setMaximumSize(size, size)
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

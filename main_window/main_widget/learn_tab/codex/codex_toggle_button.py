@@ -13,7 +13,7 @@ class CodexToggleButton(QPushButton):
         """Initializes the toggle button with a reference to the parent Codex."""
         super().__init__("Codex", codex)
         self.codex = codex
-        self.learn_widget = codex.learn_widget
+        self.learn_widget = codex.learn_tab
         self.codex_shown = True
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.clicked.connect(self.toggle_codex)

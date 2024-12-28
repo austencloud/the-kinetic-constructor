@@ -113,7 +113,7 @@ class MetaDataExtractor:
         if metadata and "sequence" in metadata:
             return metadata["sequence"][0]["grid_mode"]
         return
-    
+
     def get_full_metadata(self, file_path: str) -> dict:
         """Extract all available metadata for a given file."""
         return self.extract_metadata_from_file(file_path) or {}

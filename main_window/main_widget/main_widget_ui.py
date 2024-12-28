@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
+
+from main_window.main_widget.learn_tab.codex.codex import Codex
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .write_tab.write_tab import WriteTab
@@ -28,7 +30,8 @@ class MainWidgetUI:
         self._setup_indices()
 
     def _setup_components(self):
-        self.mw.content_stack = QStackedWidget()  # <--- NEW
+        self.mw.left_stack = QStackedWidget()
+        self.mw.right_stack = QStackedWidget()
 
         self.mw.stack_fade_manager = MainWidgetFadeManager(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
@@ -52,13 +55,18 @@ class MainWidgetUI:
         self.mw.learn_tab = LearnTab(self.mw)
         splash.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
+        splash.updater.update_progress("Codex")
+        self.mw.codex = Codex(self.mw)
         splash.updater.update_progress("Finalizing")
 
-        self.mw.content_stack.addWidget(self.mw.construct_tab)
-        self.mw.content_stack.addWidget(self.mw.generate_tab)
-        self.mw.content_stack.addWidget(self.mw.browse_tab)
-        self.mw.content_stack.addWidget(self.mw.learn_tab)
-        self.mw.content_stack.addWidget(self.mw.write_tab)
+        self.mw.left_stack.addWidget(self.mw.sequence_widget)
+        self.mw.left_stack.addWidget(self.mw.codex)
+
+        self.mw.right_stack.addWidget(self.mw.construct_tab)
+        self.mw.right_stack.addWidget(self.mw.generate_tab)
+        self.mw.right_stack.addWidget(self.mw.browse_tab)
+        self.mw.right_stack.addWidget(self.mw.learn_tab)
+        self.mw.right_stack.addWidget(self.mw.write_tab)
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)
@@ -71,8 +79,8 @@ class MainWidgetUI:
         top_layout.addWidget(self.mw.navigation_widget, 1)
 
         content_layout = QHBoxLayout()
-        content_layout.addWidget(self.mw.sequence_widget, 1)
-        content_layout.addWidget(self.mw.content_stack, 1)
+        content_layout.addWidget(self.mw.left_stack, 1)
+        content_layout.addWidget(self.mw.right_stack, 1)
 
         self.mw.main_layout.addLayout(top_layout)
         self.mw.main_layout.addLayout(content_layout)

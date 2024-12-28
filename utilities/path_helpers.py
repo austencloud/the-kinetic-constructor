@@ -52,10 +52,10 @@ def get_user_editable_resource_path(filename) -> str:
 def get_dictionary_path() -> str:
     if getattr(sys, "frozen", False):
         dictionary_path = os.path.join(
-            os.getenv("LOCALAPPDATA"), "The Kinetic Alphabet", "dictionary"
+            os.getenv("LOCALAPPDATA"), "The Kinetic Alphabet", "browse"
         )
     else:
-        dictionary_path = os.path.join(os.getcwd(), "dictionary")
+        dictionary_path = os.path.join(os.getcwd(), "browse")
     os.makedirs(dictionary_path, exist_ok=True)
     return dictionary_path
 

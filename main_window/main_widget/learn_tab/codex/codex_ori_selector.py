@@ -73,14 +73,12 @@ class CodexOriSelector(QWidget):
 
     def _resize_start_ori_label(self):
         label_font = self.start_ori_label.font()
-        label_font.setPointSize(
-            int(self.codex.learn_widget.main_widget.height() * 0.018)
-        )
+        label_font.setPointSize(int(self.codex.learn_tab.main_widget.height() * 0.018))
         self.start_ori_label.setFont(label_font)
 
     def _resize_combo_box(self):
-        combo_width = int(self.codex.learn_widget.main_widget.width() * 0.06)
-        combo_height = int(self.codex.learn_widget.main_widget.height() * 0.04)
+        combo_width = int(self.codex.learn_tab.main_widget.width() * 0.06)
+        combo_height = int(self.codex.learn_tab.main_widget.height() * 0.04)
 
         combo_font = self.combo_box.font()
         combo_font_size = combo_height // 2

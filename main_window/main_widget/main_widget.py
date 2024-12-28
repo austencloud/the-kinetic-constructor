@@ -6,6 +6,7 @@ from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
+from main_window.main_widget.learn_tab.codex.codex import Codex
 from main_window.main_widget.learn_tab.learn_tab import LearnTab
 from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.main_background_widget.main_background_widget import (
@@ -61,7 +62,11 @@ class MainWidget(QWidget):
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
 
-    # Sub-widgets
+    # Left Widgets
+    sequence_widget: "SequenceWidget"
+    codex: "Codex"
+
+    # Right Widgets
     construct_tab: "ConstructTab"
     generate_tab: "GenerateTab"
     browse_tab: "BrowseTab"
@@ -93,9 +98,9 @@ class MainWidget(QWidget):
     main_layout: QVBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
-    sequence_widget: "SequenceWidget"
     background_widget: "MainBackgroundWidget"
-    content_stack: QStackedWidget
+    left_stack: QStackedWidget
+    right_stack: QStackedWidget
 
     # Indices for tabs
     construct_tab_index: int = 0

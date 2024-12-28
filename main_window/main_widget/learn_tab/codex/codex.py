@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
+
 from .codex_scroll_area import CodexScrollArea
 from .codex_toggle_button import CodexToggleButton
 from .codex_control_widget import CodexControlWidget
@@ -10,15 +11,16 @@ from .codex_data_manager import CodexDataManager
 
 if TYPE_CHECKING:
     from ..learn_tab import LearnTab
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class Codex(QWidget):
-    """Displays base pictographs with a control panel to modify them."""
+    """Displays pictographs with a control panel to modify them."""
 
-    def __init__(self, learn_widget: "LearnTab"):
-        super().__init__(learn_widget)
-        self.learn_widget = learn_widget
-        self.main_widget = learn_widget.main_widget
+    def __init__(self, main_widget: "MainWidget") -> None:
+        super().__init__(main_widget)
+        self.main_widget = main_widget
+        self.learn_tab = main_widget.learn_tab
 
         # Components
         self.toggle_button = CodexToggleButton(self)
