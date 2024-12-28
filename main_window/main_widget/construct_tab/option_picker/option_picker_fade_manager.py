@@ -30,15 +30,15 @@ class OptionPickerFadeManager(QObject):
     ):
 
         self._old_opacity = self._ensure_opacity_effect(option_picker)
-        fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
-        fade_out.setDuration(self.duration)
-        fade_out.setStartValue(1.0)
-        fade_out.setEndValue(0.0)
-        fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        fade_out.finished.connect(
+        self.fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
+        self.fade_out.setDuration(self.duration)
+        self.fade_out.setStartValue(1.0)
+        self.fade_out.setEndValue(0.0)
+        self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.fade_out.finished.connect(
             lambda: self._update_and_fade_in_option_picker(option_picker, next_options)
         )
-        fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
+        self.fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     def _update_and_fade_in_option_picker(
         self, option_picker: "OptionPicker", next_options: list[dict]
@@ -47,13 +47,13 @@ class OptionPickerFadeManager(QObject):
         option_picker.scroll_area.clear_pictographs()
         option_picker.scroll_area.add_and_display_relevant_pictographs(next_options)
         self._new_opacity = self._ensure_opacity_effect(option_picker)
-        fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
-        fade_in.setDuration(self.duration)
-        fade_in.setStartValue(0.0)
-        fade_in.setEndValue(1.0)
-        fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        fade_in.finished.connect(self._on_fade_in_finished)
-        fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
+        self.fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
+        self.fade_in.setDuration(self.duration)
+        self.fade_in.setStartValue(0.0)
+        self.fade_in.setEndValue(1.0)
+        self.fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.fade_in.finished.connect(self._on_fade_in_finished)
+        self.fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
         effect = widget.graphicsEffect()
