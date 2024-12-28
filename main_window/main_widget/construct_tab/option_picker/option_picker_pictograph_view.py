@@ -1,24 +1,20 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QApplication, QMenu
-from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QMouseEvent, QCursor, QKeyEvent, QAction, QContextMenuEvent
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QMouseEvent, QCursor, QKeyEvent
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
-from base_widgets.base_pictograph.pictograph_context_menu_handler import (
-    PictographContextMenuHandler,
-)
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
+from .option_picker_touch_handler import OptionPickerTouchHandler
 from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
     GraphEditorPictographContainer,
 )
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from main_window.main_widget.construct_tab.option_picker.option_picker import (
-        OptionPicker,
-    )
+    from .option_picker import OptionPicker
 
 
 class OptionPickerPictographView(BorderedPictographView):
@@ -35,44 +31,21 @@ class OptionPickerPictographView(BorderedPictographView):
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
 
         self.key_event_handler = PictographViewKeyEventHandler(self)
-
-        self._gestureInProgress = False
-        self._ignoreMouseEvents = False
-        self._ignoreNextMousePress = False
-        self._touchTimeout = QTimer(self)
-        self._touchTimeout.setSingleShot(True)
-        self._touchTimeout.timeout.connect(self._resetTouchState)
-        self._touchTimeout.setInterval(100)
+        self.touch_handler = OptionPickerTouchHandler(self)
 
     ### EVENTS ###
 
     def set_enabled(self, enabled: bool) -> None:
-        self._ignoreMouseEvents = not enabled
+        self.touch_handler.set_enabled(enabled)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self.key_event_handler.handle_key_press(event):
             super().keyPressEvent(event)
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        settings_manager = self.pictograph.main_widget.main_window.settings_manager
-        current_prop_type = settings_manager.global_settings.get_prop_type()
-        settings_manager.global_settings.prop_type_changer.replace_props(
-            current_prop_type, self.pictograph
-        )
-
-    def _resetTouchState(self) -> None:
-        self._ignoreNextMousePress = False
-
     def mousePressEvent(self, event: QMouseEvent) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if self._ignoreMouseEvents or self._ignoreNextMousePress:
-            event.ignore()
+        if not self.touch_handler.handle_mouse_press(event):
             return
-        elif event.button() == Qt.MouseButton.LeftButton:
-            self.click_handler.on_option_clicked(
-                self.pictograph
-            )
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
@@ -86,24 +59,3 @@ class OptionPickerPictographView(BorderedPictographView):
         self.setStyleSheet("")
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.pictograph.view.reset_border()
-
-    def calculate_view_size(self) -> int:
-        spacing = self.option_picker.scroll_area.spacing
-
-        calculated_width = int(
-            (self.pictograph.main_widget.construct_tab.width() / 8) - spacing
-        )
-
-        view_width = (
-            calculated_width
-            if calculated_width
-            < self.pictograph.main_widget.construct_tab.height() // 8
-            else self.pictograph.main_widget.construct_tab.height() // 8
-        )
-
-        outer_border_width = max(1, int(view_width * 0.015))
-        inner_border_width = max(1, int(view_width * 0.015))
-
-        view_width = view_width - (outer_border_width) - (inner_border_width) - spacing
-
-        return view_width

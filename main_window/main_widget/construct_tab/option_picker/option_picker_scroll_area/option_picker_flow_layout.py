@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLayout, QSizePolicy, QLayoutItem, QWidget
+from PyQt6.QtWidgets import QLayout, QLayoutItem
 from PyQt6.QtCore import QRect, QSize, QPoint
 
 class FlowLayout(QLayout):
