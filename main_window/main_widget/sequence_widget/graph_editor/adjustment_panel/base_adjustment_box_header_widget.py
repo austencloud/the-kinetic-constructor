@@ -58,17 +58,14 @@ class BaseAdjustmentBoxHeaderWidget(QWidget):
         else:
             return "", QColor("#000000")
 
-    def resize_header(self) -> None:
+
+    def resizeEvent(self, event) -> None:
         self.setMinimumHeight(self.adjustment_box.graph_editor.height() // 4)
         self.setMaximumHeight(self.adjustment_box.graph_editor.height() // 4)
-        self._resize_header_label()
-
-    def _resize_header_label(self) -> None:
+        
         font_size = self.graph_editor.sequence_widget.main_widget.width() // 80
         self.header_label_font.setPointSize(font_size)
         self.header_label.setFont(self.header_label_font)
         self.header_label.repaint()
-
-    def resizeEvent(self, event) -> None:
-        self.resize_header()
+        
         super().resizeEvent(event)

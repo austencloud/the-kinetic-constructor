@@ -76,6 +76,7 @@ class MainBackgroundWidget(QWidget):
         return manager_class(self.main_widget) if manager_class else None
 
     def resizeEvent(self, event):
+        super().resizeEvent(event)
         self.resize_background()
 
     def resize_background(self):

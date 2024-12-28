@@ -56,4 +56,4 @@ class MotionTurnsManager:
             f"{self.motion.color}_attributes": {"turns": turns},
             f"{other_motion_color}_attributes": {"turns": other_motion.turns},
         }
-        # self.motion.arrow.updater.update_arrow(arrow_dict)
+        self.motion.arrow.updater.update_arrow(arrow_dict)

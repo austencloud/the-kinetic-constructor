@@ -176,32 +176,15 @@ class TurnsUpdater:
         )
 
     def _adjust_turns_for_pictograph(
-        self, pictograph: "BasePictograph", adjustment: Turns
+        self, pictograph: "BasePictograph", new_turns: Union[int, float, str]
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""
         for motion in pictograph.motions.values():
             if motion.color == self.turns_box.color:
-                new_turns = self._calculate_new_turns(motion.turns, adjustment)
                 if new_turns == "fl":
                     motion.motion_type = FLOAT
                     motion.prop_rot_dir = NO_ROT
                 self.set_motion_turns(motion, new_turns)
-
-    def _calculate_new_turns(
-        self, current_turns: Union[int, float], adjustment: Union[int, float]
-    ) -> Turns:
-        """Calculate the new turns value based on the adjustment."""
-        if current_turns == 0 and adjustment < 0:
-            return "fl"
-        if current_turns == "fl" and adjustment > 0:
-            return 0
-        if current_turns == "fl":
-            current_turns = 0
-        new_turns = current_turns + adjustment
-        if new_turns.is_integer():
-            new_turns = int(new_turns)
-
-        return max(0, min(3, new_turns))
 
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value within the allowable range."""

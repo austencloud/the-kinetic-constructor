@@ -53,11 +53,7 @@ class TurnsBox(QFrame):
             f"{self.color}; background-color: white;}}"
         )
 
-    def resize_turns_box(self) -> None:
-        self.header.resize_header()
-        self.turns_widget.resize_turns_widget()
-        self.update_styles()
 
     def resizeEvent(self, event):
-        self.resize_turns_box()
+        self.update_styles()
         super().resizeEvent(event)

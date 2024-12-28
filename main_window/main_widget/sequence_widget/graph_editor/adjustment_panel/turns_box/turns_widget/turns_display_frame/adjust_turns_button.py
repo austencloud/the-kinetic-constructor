@@ -96,7 +96,8 @@ class AdjustTurnsButton(QAbstractButton):
         self.svg_renderer.load(svgData)
         self.update()
 
-    def resize_adjust_turns_button(self) -> None:
+    def resizeEvent(self, event) -> None:
         size = int(self.turns_box.graph_editor.height() * 0.25)
         self.setMaximumWidth(size)
         self.setMaximumHeight(size)
+        super().resizeEvent(event)

@@ -24,12 +24,13 @@ class ArrowSvgManager:
 
     def _get_arrow_svg_file(self, arrow: "Arrow") -> str:
         start_ori = arrow.motion.start_ori
-        if arrow.motion.motion_type == FLOAT: 
+        if arrow.motion.motion_type == FLOAT:
             return get_images_and_data_path("images/arrows/float.svg")
         arrow_turns: Union[str, int, float] = arrow.motion.turns
         if isinstance(arrow_turns, (int, float)):
             turns = float(arrow_turns)
-            
+        else:
+            turns = arrow_turns
         if not turns == "fl":
             if start_ori in [IN, OUT]:
                 return get_images_and_data_path(

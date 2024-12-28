@@ -140,5 +140,4 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        # self.background_widget.resize_background()
-        # self.navigation_widget.resize_navigation_widget()
+        self.background_widget.resize_background()

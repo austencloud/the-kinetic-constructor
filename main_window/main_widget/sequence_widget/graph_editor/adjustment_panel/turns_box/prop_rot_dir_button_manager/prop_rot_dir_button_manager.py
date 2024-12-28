@@ -50,7 +50,7 @@ class PropRotDirButtonManager:
     def create_prop_rot_dir_button(
         self, icon_path: str, callback, prop_rot_dir
     ) -> PropRotDirButton:
-        button = PropRotDirButton(prop_rot_dir)
+        button = PropRotDirButton(self.turns_box, prop_rot_dir)
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button
@@ -97,6 +97,7 @@ class PropRotDirButtonManager:
                 "motion_type": motion.motion_type,
                 "prop_rot_dir": motion.prop_rot_dir,
                 "end_ori": motion.end_ori,
+                "turns": motion.turns,
             }
         )
 
@@ -163,10 +164,3 @@ class PropRotDirButtonManager:
     def unpress_prop_rot_dir_buttons(self) -> None:
         self.cw_button.unpress()
         self.ccw_button.unpress()
-
-    def resize_prop_rot_dir_buttons(self) -> None:
-        button_size = int(self.turns_box.graph_editor.height() * 0.25)
-        icon_size = int(button_size * 0.8)
-        for button in self.prop_rot_dir_buttons:
-            button.setFixedSize(button_size, button_size)
-            button.setIconSize(QSize(icon_size, icon_size))

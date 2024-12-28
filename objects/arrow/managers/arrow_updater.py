@@ -18,5 +18,5 @@ class ArrowUpdater:
         self.arrow.mirror_manager.update_mirror()
         self.arrow.location_manager.update_location()
         self.arrow.rot_angle_manager.update_rotation()
-        self.arrow.update()
-        self.arrow.pictograph.update()
+        # self.arrow.update()
+        # self.arrow.pictograph.update()

@@ -54,29 +54,26 @@ class TurnsWidget(QWidget):
         self.turns_box.matching_motion = motion
         display_value = "fl" if new_turns == "fl" else str(new_turns)
         self.turns_display_frame.turns_label.setText(display_value)
-        
+
         if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
             self.turns_display_frame.decrement_button.setEnabled(
                 new_turns not in ["fl"]
             )
         else:
             self.turns_display_frame.decrement_button.setEnabled(new_turns != 0)
-        
+
         if display_value == "3":
             self.turns_display_frame.increment_button.setEnabled(False)
         else:
             self.turns_display_frame.increment_button.setEnabled(True)
-        
+
         self.motion_type_label.update_display(motion.motion_type)
 
-    def resize_turns_widget(self) -> None:
-        self.turns_display_frame.resize_turns_display_frame()
-        self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
-        self._resize_turns_text()
-        self.motion_type_label.resize_buttons()
-
-    def _resize_turns_text(self) -> None:
+    def resizeEvent(self, event) -> None:
         font_size = self.turns_box.graph_editor.width() // 50
         font = QFont("Cambria", font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.turns_text.setFont(font)
+
+        self.motion_type_label.resize_buttons()
+        super().resizeEvent(event)

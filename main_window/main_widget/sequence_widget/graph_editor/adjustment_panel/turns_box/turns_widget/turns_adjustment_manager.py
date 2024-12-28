@@ -46,10 +46,10 @@ class TurnsAdjustmentManager(QObject):
 
         motion = self.pictograph.motions[self.color]
         self.turns_widget.turns_updater._adjust_turns_for_pictograph(
-            self.pictograph, adjustment
+            self.pictograph, new_turns
         )
         self.turns_widget.update_turns_display(matching_motion, new_turns)
-        self._repaint_views()
+        # self._repaint_views()
         need_to_determine_new_letter: bool = self.determine_if_new_letter_is_necessary(
             motion, new_turns
         )
@@ -57,6 +57,7 @@ class TurnsAdjustmentManager(QObject):
             new_letter = self.main_widget.letter_determiner.determine_letter(motion)
         else:
             new_letter = None
+        motion.turns = new_turns
         self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
             motion, new_letter
         )

@@ -51,10 +51,3 @@ class TurnsDisplayFrame(QFrame):
         )
         self.turns_label.clicked.connect(self.turns_widget.on_turns_label_clicked)
 
-    def resize_turns_display_frame(self) -> None:
-        self.turns_label.resize_turns_label()
-        self.resize_adjust_turns_buttons()
-
-    def resize_adjust_turns_buttons(self) -> None:
-        for button in [self.increment_button, self.decrement_button]:
-            button.resize_adjust_turns_button()

@@ -32,7 +32,7 @@ class GE_TurnsLabel(QLabel):
         self.setCursor(Qt.CursorShape.ArrowCursor)
         # self.resize_turns_label()
 
-    def resize_turns_label(self, mouse_over=False) -> None:
+    def resizeEvent(self, event) -> None:
         self.turns_display_font_size = int(
             (self.turns_box.adjustment_panel.graph_editor.width() / 22)
         )
@@ -66,7 +66,4 @@ class GE_TurnsLabel(QLabel):
             }}
             """
         )
-
-    def resizeEvent(self, a0: QResizeEvent | None) -> None:
-        super().resizeEvent(a0)
-        self.resize_turns_label()
+        super().resizeEvent(event)
