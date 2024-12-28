@@ -9,7 +9,6 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
-from .option_picker_pictograph_factory import OptionPickerPictographFactory
 from .option_picker_section_manager import OptionPickerSectionManager
 from .option_picker_display_manager import OptionPickerDisplayManager
 
@@ -54,9 +53,6 @@ class OptionPickerScrollArea(QScrollArea):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.section_manager = OptionPickerSectionManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
-        self.pictograph_factory = OptionPickerPictographFactory(
-            self, self.construct_tab.pictograph_cache
-        )
 
     def setup_ui(self):
         self.setWidget(self.container)
@@ -133,7 +129,7 @@ class OptionPickerScrollArea(QScrollArea):
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
         for section in self.section_manager.sections.values():
-            for pictograph in section.pictographs_list.values():
+            for pictograph in section.pictographs.values():
                 pictograph.view.set_enabled(not disabled)
 
     def add_section_to_layout(
@@ -151,3 +147,4 @@ class OptionPickerScrollArea(QScrollArea):
     def clear_pictographs(self) -> None:
         self.display_manager.clear_all_section_layouts()
         self.pictograph_cache.clear()
+

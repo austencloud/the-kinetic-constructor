@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QStackedLayout,
     QApplication,
 )
-from PyQt6.QtWidgets import QStackedLayout
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
@@ -14,11 +13,6 @@ from PyQt6.QtCore import (
     pyqtSlot,
     QParallelAnimationGroup,
 )
-
-from main_window.main_widget.construct_tab.option_picker.option_picker import (
-    OptionPicker,
-)
-
 if TYPE_CHECKING:
     from main_widget.main_widget import MainWidget
 
@@ -60,13 +54,13 @@ class MainWidgetFadeManager(QObject):
     def _fade_stack(self, old_index: int, new_index: int):
         self._is_animating = True
 
-        old_widget = self.stack.widget(old_index)
-        new_widget = self.stack.widget(new_index)
-        if not old_widget or not new_widget:
+        self.old_widget = self.stack.widget(old_index)
+        self.new_widget = self.stack.widget(new_index)
+        if not self.old_widget or not self.new_widget:
             return
 
-        self._old_opacity = self._ensure_opacity_effect(old_widget)
-        self._new_opacity = self._ensure_opacity_effect(new_widget)
+        self._old_opacity = self._ensure_opacity_effect(self.old_widget)
+        self._new_opacity = self._ensure_opacity_effect(self.new_widget)
 
         # Fade out
         self.fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
@@ -88,8 +82,8 @@ class MainWidgetFadeManager(QObject):
         if self._old_opacity:
             self._old_opacity.setOpacity(1.0)
 
-        new_widget = self.stack.currentWidget()
-        if new_widget and self._new_opacity:
+        self.new_widget = self.stack.currentWidget()
+        if self.new_widget and self._new_opacity:
             self._new_opacity.setOpacity(0.0)
 
         # Fade in
@@ -127,27 +121,27 @@ class MainWidgetFadeManager(QObject):
         if old_right_idx == right_new_index and old_left_idx == left_new_index:
             return  # Already on those pages, do nothing
 
-        old_right_widget = right_stack.widget(old_right_idx)
-        old_left_widget = left_stack.widget(old_left_idx)
-        new_right_widget = right_stack.widget(right_new_index)
-        new_left_widget = left_stack.widget(left_new_index)
+        self.old_right_widget = right_stack.widget(old_right_idx)
+        self.old_left_widget = left_stack.widget(old_left_idx)
+        self.new_right_widget = right_stack.widget(right_new_index)
+        self.new_left_widget = left_stack.widget(left_new_index)
 
-        if not old_right_widget or not old_left_widget:
+        if not self.old_right_widget or not self.old_left_widget:
             return
 
         # 2) Create parallel fade-out group
         self.fade_out_group = QParallelAnimationGroup(self)  # Pass `self` as parent
 
-        old_right_effect = self._ensure_opacity_effect(old_right_widget)
-        old_left_effect = self._ensure_opacity_effect(old_left_widget)
+        self.old_right_effect = self._ensure_opacity_effect(self.old_right_widget)
+        self.old_left_effect = self._ensure_opacity_effect(self.old_left_widget)
 
-        self.anim_out_right = QPropertyAnimation(old_right_effect, b"opacity", self)
+        self.anim_out_right = QPropertyAnimation(self.old_right_effect, b"opacity", self)
         self.anim_out_right.setDuration(self.duration)
         self.anim_out_right.setStartValue(1.0)
         self.anim_out_right.setEndValue(0.0)
         self.anim_out_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        self.anim_out_left = QPropertyAnimation(old_left_effect, b"opacity", self)
+        self.anim_out_left = QPropertyAnimation(self.old_left_effect, b"opacity", self)
         self.anim_out_left.setDuration(self.duration)
         self.anim_out_left.setStartValue(1.0)
         self.anim_out_left.setEndValue(0.0)
@@ -160,10 +154,10 @@ class MainWidgetFadeManager(QObject):
             lambda: self._switch_and_fade_in_both(
                 right_stack,
                 right_new_index,
-                new_right_widget,
+                self.new_right_widget,
                 left_stack,
                 left_new_index,
-                new_left_widget,
+                self.new_left_widget,
             )
         )
 
@@ -192,17 +186,17 @@ class MainWidgetFadeManager(QObject):
         QApplication.processEvents()  # Ensure the new widgets are visible before fading in
         self.fade_in_group = QParallelAnimationGroup()
 
-        new_right_effect = self._ensure_opacity_effect(new_right_widget)
-        new_right_effect.setOpacity(0.0)
-        self.anim_in_right = QPropertyAnimation(new_right_effect, b"opacity", self)
+        self.new_right_effect = self._ensure_opacity_effect(new_right_widget)
+        self.new_right_effect.setOpacity(0.0)
+        self.anim_in_right = QPropertyAnimation(self.new_right_effect, b"opacity", self)
         self.anim_in_right.setDuration(self.duration)
         self.anim_in_right.setStartValue(0.0)
         self.anim_in_right.setEndValue(1.0)
         self.anim_in_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        new_left_effect = self._ensure_opacity_effect(new_left_widget)
-        new_left_effect.setOpacity(0.0)
-        self.anim_in_left = QPropertyAnimation(new_left_effect, b"opacity", self)
+        self.new_left_effect = self._ensure_opacity_effect(new_left_widget)
+        self.new_left_effect.setOpacity(0.0)
+        self.anim_in_left = QPropertyAnimation(self.new_left_effect, b"opacity", self)
         self.anim_in_left.setDuration(self.duration)
         self.anim_in_left.setStartValue(0.0)
         self.anim_in_left.setEndValue(1.0)
@@ -213,4 +207,3 @@ class MainWidgetFadeManager(QObject):
 
         self.fade_in_group.finished.connect(self._on_fade_in_finished)
         self.fade_in_group.start()
-

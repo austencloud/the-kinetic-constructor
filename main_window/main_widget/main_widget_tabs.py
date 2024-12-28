@@ -22,16 +22,24 @@ class MainWidgetTabs:
         right_new_index = None
         if index == self.mw.learn_tab_index:
             left_new_index = 1
+            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
             self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
         elif index == self.mw.write_tab_index:
             left_new_index = 2
+            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
             self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
         elif index == self.mw.browse_tab_index:
             left_new_index = 3
             right_new_index = 2
+            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 2 / 3))
             self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 3))
-        else:
+        elif index == self.mw.generate_tab_index:
             left_new_index = 0
+            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
+            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
+        elif index == self.mw.construct_tab_index:
+            left_new_index = 0
+            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
             self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
 
         if (
