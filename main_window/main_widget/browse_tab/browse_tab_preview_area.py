@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from .preview_area_image_label import PreviewAreaImageLabel
-from .dictionary_button_panel import DictionaryButtonPanel
+from .browse_tab_preview_area_image_label import BrowseTabPreviewAreaImageLabel
+from .browse_tab_button_panel import BrowseTabButtonPanel
 from .thumbnail_box.browse_tab_preview_area_word_label import (
     BrowseTabPreviewAreaWordLabel,
 )
@@ -51,10 +51,10 @@ class BrowseTabPreviewArea(QWidget):
 
     def _setup_components(self):
         self.variation_number_label = VariationNumberLabel(self)
-        self.image_label = PreviewAreaImageLabel(self)
+        self.image_label = BrowseTabPreviewAreaImageLabel(self)
         self.nav_buttons_widget = PreviewAreaNavButtonsWidget(self)
         self.word_label = BrowseTabPreviewAreaWordLabel(self)
-        self.button_panel = DictionaryButtonPanel(self)
+        self.button_panel = BrowseTabButtonPanel(self)
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails

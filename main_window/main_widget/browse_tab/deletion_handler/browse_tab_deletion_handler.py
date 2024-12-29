@@ -2,7 +2,7 @@ import os
 import shutil
 from typing import TYPE_CHECKING
 from .variation_number_fixer import VariationNumberFixer
-from ..delete_confirmation_dialog import DeleteConfirmationDialog
+from ..browse_tab_delete_confirmation_dialog import BrowseTabDeleteConfirmationDialog
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QTimer
@@ -22,7 +22,7 @@ class BrowseTabDeletionHandler:
         return not any(os.scandir(folder_path))
 
     def delete_variation(self, thumbnail_box: "ThumbnailBox", index):
-        dialog = DeleteConfirmationDialog(self.browse_tab)
+        dialog = BrowseTabDeleteConfirmationDialog(self.browse_tab)
         if dialog.exec() == QDialog.DialogCode.Accepted:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             current_scroll_position = (

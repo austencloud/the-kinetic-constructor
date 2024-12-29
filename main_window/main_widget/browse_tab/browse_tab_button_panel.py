@@ -1,29 +1,16 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QPushButton,
-    QApplication,
-    QMessageBox,
-)
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon, QPixmap, QResizeEvent
-
-from main_window.main_widget.browse_tab.full_screen_image_overlay import (
-    FullScreenImageOverlay,
-)
-from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
-    TempBeatFrame,
-)
+from .full_screen_image_overlay import FullScreenImageOverlay
+from .temp_beat_frame.temp_beat_frame import TempBeatFrame
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab_preview_area import (
-        BrowseTabPreviewArea,
-    )
+    from .browse_tab_preview_area import BrowseTabPreviewArea
 
 
-class DictionaryButtonPanel(QWidget):
+class BrowseTabButtonPanel(QWidget):
     delete_variation_button: QPushButton
     edit_sequence_button: QPushButton
     save_image_button: QPushButton
@@ -40,7 +27,6 @@ class DictionaryButtonPanel(QWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(10)
 
-        # Define button data
         buttons_data = {
             "edit_sequence": {
                 "icon": "edit.svg",
@@ -94,14 +80,13 @@ class DictionaryButtonPanel(QWidget):
     def view_full_screen(self):
         """Display the current image in full screen mode."""
         current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
+        mw = self.preview_area.main_widget
         if current_thumbnail:
             pixmap = QPixmap(current_thumbnail)
-            if self.full_screen_overlay:
-                self.full_screen_overlay.close()  # Close any existing overlay
-            self.full_screen_overlay = FullScreenImageOverlay(
-                self.preview_area.main_widget, pixmap
-            )
-            self.full_screen_overlay.show()
+            # if mw.full_screen_overlay:
+            #     mw.full_screen_overlay.close()
+            mw.full_screen_overlay = FullScreenImageOverlay(mw)
+            mw.full_screen_overlay.show(pixmap)
         else:
             QMessageBox.warning(self, "No Image", "Please select an image first.")
 

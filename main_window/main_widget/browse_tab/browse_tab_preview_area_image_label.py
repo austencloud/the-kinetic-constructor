@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     )
 
 
-class PreviewAreaImageLabel(QLabel):
+class BrowseTabPreviewAreaImageLabel(QLabel):
     def __init__(self, preview_area: "BrowseTabPreviewArea"):
         super().__init__()
         self.preview_area = preview_area
@@ -63,7 +63,6 @@ class PreviewAreaImageLabel(QLabel):
         self.setStyleSheet(
             f"font: {placeholder_text_font_size}pt Arial; font-weight: bold; color: {font_color};"
         )
-
 
     def scale_pixmap_to_label(self, pixmap: QPixmap):
         label_width = int(self.preview_area.width() * 0.9)

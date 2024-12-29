@@ -1,6 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
+from main_window.main_widget.browse_tab.full_screen_image_overlay import (
+    FullScreenImageOverlay,
+)
 from main_window.main_widget.learn_tab.codex.codex import Codex
 from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from .construct_tab.construct_tab import ConstructTab
@@ -16,7 +19,7 @@ from ..settings_manager.global_settings.main_widget_font_color_updater import (
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
-
+from PyQt6.QtGui import QPixmap
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
@@ -60,6 +63,7 @@ class MainWidgetUI:
         self.mw.codex = Codex(self.mw)
         splash.updater.update_progress("ActSheet")
 
+        # self.mw.full_screen_overlay = FullScreenImageOverlay(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
 

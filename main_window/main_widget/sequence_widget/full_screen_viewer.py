@@ -22,7 +22,7 @@ class FullScreenViewer:
 
     def view_full_screen(self):
         """Display the current image in full screen mode."""
-        # Set mouse cursor to waiting
+        mw = self.main_widget
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         last_beat = self.beat_frame.get.last_filled_beat()
         if last_beat.__class__.__name__ == "StartPositionBeatView":
@@ -33,13 +33,8 @@ class FullScreenViewer:
             current_thumbnail = self.create_thumbnail()
             if current_thumbnail:
                 pixmap = QPixmap(current_thumbnail)
-                if self.full_screen_overlay:
-                    self.full_screen_overlay.close()  # Close any existing overlay
-                self.full_screen_overlay = FullScreenImageOverlay(
-                    self.main_widget, pixmap
-                )
-                self.full_screen_overlay.show()
-                # Set mouse cursor back to normal
+                mw.full_screen_overlay = FullScreenImageOverlay(mw)
+                mw.full_screen_overlay.show(pixmap)
                 QApplication.restoreOverrideCursor()
             else:
                 QMessageBox.warning(None, "No Image", "Please select an image first.")

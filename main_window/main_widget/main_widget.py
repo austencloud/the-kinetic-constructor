@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+from main_window.main_widget.browse_tab.full_screen_image_overlay import FullScreenImageOverlay
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.learn_tab.codex.codex import Codex
@@ -102,7 +103,8 @@ class MainWidget(QWidget):
     background_widget: "MainBackgroundWidget"
     left_stack: QStackedWidget
     right_stack: QStackedWidget
-
+    full_screen_overlay: "FullScreenImageOverlay"
+    
     # Indices for tabs
     construct_tab_index: int = 0
     generate_tab_index: int = 1

@@ -20,7 +20,7 @@ from .browse_tab_sequence_count_label import BrowseTabSequenceCountLabel
 from .deletion_handler.browse_tab_deletion_handler import BrowseTabDeletionHandler
 from .browse_tab_selection_handler import BrowseTabSelectionHandler
 from .browse_tab_preview_area import BrowseTabPreviewArea
-from .dictionary_sequence_populator import BrowseTabEditSequenceHandler
+from .browse_tab_edit_sequence_handler import BrowseTabEditSequenceHandler
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget

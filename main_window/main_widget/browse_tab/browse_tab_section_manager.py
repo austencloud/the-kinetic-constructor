@@ -1,17 +1,12 @@
-from datetime import datetime
 import json
+from datetime import datetime
 from typing import TYPE_CHECKING
-
 from Enums.letters import LetterType
-from main_window.main_widget.browse_tab.browse_tab_section_header import (
-    BrowseTabSectionHeader,
-)
-
+from .browse_tab_section_header import BrowseTabSectionHeader
 from PIL import Image
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+    from .browse_tab import BrowseTab
 
 
 class BrowseTabSectionManager:
@@ -26,7 +21,7 @@ class BrowseTabSectionManager:
             header, row_index, 0, 1, num_columns
         )
 
-    def get_sorted_sections(self, sort_method, sections) -> list[str]:
+    def get_sorted_sections(self, sort_method: str, sections: list[str]) -> list[str]:
         if sort_method == "sequence_length":
             sorted_sections = sorted(
                 sections, key=lambda x: int(x) if x.isdigit() else x
