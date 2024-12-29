@@ -161,7 +161,7 @@ class ContainsLettersSection(FilterSectionBase):
                     hidden=True,
                 )
                 percentage = int(((index + 1) / total_sequences) * 100)
-                self.browse_tab.progress_bar.setValue(percentage)
+                self.browse_tab.progress_bar.set_value(percentage)
                 self.browse_tab.sequence_count_label.setText(
                     f"Number of words: {index + 1}"
                 )

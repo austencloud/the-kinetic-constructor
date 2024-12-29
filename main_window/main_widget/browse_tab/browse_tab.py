@@ -15,9 +15,9 @@ from .browse_tab_scroll_widget import BrowseTabScrollWidget
 from .browse_tab_progress_bar import BrowseTabProgressBar
 from .browse_tab_options_panel import BrowseTabOptionsPanel
 from .browse_tab_ui_updater import BrowseTabUIUpdater
-from .dictionary_browser.go_back_button import BrowseTabGoBackButton
-from .dictionary_browser.sequence_count_label import BrowseTabSequenceCountLabel
-from .browse_tab_deletion_handler import BrowseTabDeletionHandler
+from .browse_tab_go_back_button import BrowseTabGoBackButton
+from .browse_tab_sequence_count_label import BrowseTabSequenceCountLabel
+from .deletion_handler.browse_tab_deletion_handler import BrowseTabDeletionHandler
 from .browse_tab_selection_handler import BrowseTabSelectionHandler
 from .browse_tab_preview_area import BrowseTabPreviewArea
 from .dictionary_sequence_populator import BrowseTabEditSequenceHandler

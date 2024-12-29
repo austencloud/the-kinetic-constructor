@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 
-
 from .image_export_layout_handler import ImageExportLayoutHandler
 from .image_creator.image_creator import ImageCreator
 from .image_export_beat_factory import ImageExportBeatFactory
@@ -30,7 +29,7 @@ class ImageExportManager:
         if beat_frame_class.__name__ == "SequenceWidgetBeatFrame":
             self.sequence_widget = beat_frame.sequence_widget
         elif beat_frame_class.__name__ == "TempBeatFrame":
-            self.dictionary_widget = beat_frame.dictionary_widget
+            self.dictionary_widget = beat_frame.browse_tab
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.include_start_pos = (
             self.settings_manager.image_export.get_image_export_setting(
@@ -42,4 +41,3 @@ class ImageExportManager:
         self.image_creator = ImageCreator(self)
         self.image_saver = ImageSaver(self)
         self.dialog_executor = ImageExportDialogExecutor(self)
-

@@ -476,36 +476,13 @@ class Letter(Enum):
     def get_letter_type(self) -> "LetterType":
         return LetterType.get_letter_type(self)
 
-
 from enum import Enum
-
+from functools import lru_cache
 
 class LetterType(Enum):
     Type1 = (
-        [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-        ],
+        ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+         "P", "Q", "R", "S", "T", "U", "V"],
         "Dual-Shift",
     )
     Type2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Shift")
@@ -514,7 +491,7 @@ class LetterType(Enum):
     Type5 = (["Φ-", "Ψ-", "Λ-"], "Dual-Dash")
     Type6 = (["α", "β", "Γ"], "Static")
 
-    def __init__(self, letters, description):
+    def __init__(self, letters: list[str], description: str):
         self._letters = letters
         self._description = description
 
@@ -526,11 +503,6 @@ class LetterType(Enum):
     def description(self):
         return self._description
 
-    @property
-    def type_map(self):
-        """Return the description directly, as type_map is no longer necessary."""
-        return self.description
-
     @staticmethod
     def get_letter_type(letter: "Letter") -> "LetterType":
         """Takes a letter enum and returns the corresponding letter type."""
@@ -538,3 +510,31 @@ class LetterType(Enum):
         for letter_type in LetterType:
             if letter_str in letter_type.letters:
                 return letter_type
+        return None
+
+    @classmethod
+    def sort_key(cls, letter_str: str) -> tuple[int, int]:
+        """
+        Return a tuple (type_index, letter_index).
+        If letter_str isn't found in any type, return a large tuple (999,999).
+        """
+        # 1) Convert the string to your Letter enum
+        from_string_letter = Letter.from_string(letter_str)
+        if not from_string_letter:
+            return (999, 999)
+
+        # 2) Find which LetterType it belongs to
+        letter_type = cls.get_letter_type(from_string_letter)
+        if letter_type is None:
+            return (999, 999)
+
+        # 3) Figure out the LetterType's index among all LetterTypes
+        type_index = list(cls).index(letter_type)
+
+        # 4) Find position of letter_str in that type's .letters
+        try:
+            letter_index = letter_type.letters.index(letter_str)
+        except ValueError:
+            letter_index = 999
+
+        return (type_index, letter_index)

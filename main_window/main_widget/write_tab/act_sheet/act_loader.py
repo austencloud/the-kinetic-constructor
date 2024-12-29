@@ -30,7 +30,6 @@ class ActLoader:
         current_row = 0  # Track the current row across sequences
 
         for sequence in act_data["sequences"]:
-            start_marker = sequence.get("sequence_start_marker", False)
             sequence_length = sequence.get("sequence_length", 8)
             beats = sequence["beats"]
 

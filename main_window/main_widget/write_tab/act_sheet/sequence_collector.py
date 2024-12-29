@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
@@ -14,30 +14,23 @@ class SequenceCollector:
         total_rows = self.act_sheet.DEFAULT_ROWS
 
         for row in range(total_rows):
-            # Start a new sequence for each row and collect beats
-            sequence_data = {
+            sequence_data: dict[str, Union[str, int, list[dict]]] = {
                 "sequence_start_marker": row == 0,
                 "cue": "",
                 "timestamp": "",
                 "beats": [],
             }
 
-            # Retrieve each beat view in the current row
             beat_views = self.act_sheet.act_container.get_beats_in_row(row)
             for beat_view in beat_views:
                 if not beat_view.is_populated():
                     continue
 
-                # Extract metadata once, ensuring there's no redundant `pictograph_dict`
                 raw_beat_data = beat_view.extract_metadata()
-                if "pictograph_dict" in raw_beat_data:
-                    raw_beat_data = raw_beat_data["pictograph_dict"]
-
-                # Build beat data dictionary with flattened structure
                 sequence_data["beats"].append(
                     {
                         "beat_number": beat_view.beat_number,
-                        "pictograph_dict": raw_beat_data,  # Ensure no nested dict here
+                        "pictograph_dict": raw_beat_data["pictograph_dict"], 
                         "step_label": (
                             self.act_container.beat_scroll.act_beat_frame.beat_step_map[
                                 beat_view

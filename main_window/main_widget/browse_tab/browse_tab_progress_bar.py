@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from .dictionary_browser.rainbow_progress_bar import RainbowProgressBar
+from ..rainbow_progress_bar import RainbowProgressBar
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab

@@ -69,7 +69,7 @@ class MainWidgetFontColorUpdater:
         self._update_construct_tab()
         self._update_generate_tab()
         self._update_browse_tab()
-        self._update_learn_widget()
+        self._update_learn_tab()
         self._update_act_tab()
 
     def _update_act_tab(self) -> None:
@@ -173,17 +173,17 @@ class MainWidgetFontColorUpdater:
             thumbnail_box.word_label.reload_favorite_icon()
             self._apply_font_color(thumbnail_box.variation_number_label)
 
-    def _update_learn_widget(self) -> None:
-        learn_widget = self.main_widget.learn_tab
-        self._apply_font_color(learn_widget.lesson_selector.title_label)
+    def _update_learn_tab(self) -> None:
+        learn_tab = self.main_widget.learn_tab
+        self._apply_font_color(learn_tab.lesson_selector.title_label)
         self._apply_font_colors(
-            list(learn_widget.lesson_selector.description_labels.values())
+            list(learn_tab.lesson_selector.description_labels.values())
         )
-        learn_widget.lesson_selector.mode_toggle_widget.update_mode_label_styles()
+        learn_tab.lesson_selector.mode_toggle_widget.update_mode_label_styles()
         lesson_widgets: list[BaseLessonWidget] = [
-            learn_widget.lesson_1_widget,
-            learn_widget.lesson_2_widget,
-            learn_widget.lesson_3_widget,
+            learn_tab.lesson_1_widget,
+            learn_tab.lesson_2_widget,
+            learn_tab.lesson_3_widget,
         ]
         for lesson_widget in lesson_widgets:
             self._apply_font_color(lesson_widget.question_widget)

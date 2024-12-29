@@ -1,37 +1,42 @@
+from typing import LiteralString
 from PyQt6.QtWidgets import QProgressBar, QVBoxLayout, QLabel, QWidget
 from PyQt6.QtCore import Qt
 
 
 class RainbowProgressBar(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self._setup_components()
+        self._setup_layout()
 
-        # Create the progress bar
-        self.progress_bar = QProgressBar(self)
-        self.progress_bar.setTextVisible(False)  # Hide the text on the bar itself
-
-        self.loading_label = QLabel("Loading...", self)
-
-        # Create the label for percentage text
-        self.percentage_label = QLabel("0%", self)
-        self.percentage_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.loading_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Layout to position the progress bar and percentage label
+    def _setup_layout(self) -> None:
         layout = QVBoxLayout(self)
         layout.addWidget(self.loading_label)
         layout.addStretch(1)
         layout.addWidget(self.percentage_label)
-        # add a spacer
         layout.addStretch(1)
         layout.addWidget(self.progress_bar)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(5)
         self.setLayout(layout)
 
-        # Set the rainbow gradient style
-        self.progress_bar.setStyleSheet(
-            """
+    def _setup_components(self) -> None:
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setTextVisible(False)
+        self.progress_bar.setStyleSheet(self._get_stylesheet())
+
+        self.loading_label = QLabel("Loading...", self)
+        self.loading_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.percentage_label = QLabel("0%", self)
+        self.percentage_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def set_value(self, value) -> None:
+        self.progress_bar.setValue(value)
+        self.percentage_label.setText(f"{value}%")
+
+    def _get_stylesheet(self) -> LiteralString:
+        stylesheet = """
             QProgressBar {
                 border: 2px solid #4CAF50;
                 border-radius: 5px;
@@ -52,13 +57,4 @@ class RainbowProgressBar(QWidget):
                 );
             }
         """
-        )
-
-    def setValue(self, value):
-        """Update the progress bar value and the percentage label"""
-        self.progress_bar.setValue(value)
-        self.percentage_label.setText(f"{value}%")
-
-    def setMaximum(self, value):
-        """Set the maximum value for the progress bar"""
-        self.progress_bar.setMaximum(value)
+        return stylesheet

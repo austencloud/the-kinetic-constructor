@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from .preview_area_image_label import PreviewAreaImageLabel
 from .dictionary_button_panel import DictionaryButtonPanel
-from .thumbnail_box.browse_tab_preview_area_base_word_label import (
+from .thumbnail_box.browse_tab_preview_area_word_label import (
     BrowseTabPreviewAreaWordLabel,
 )
 from .thumbnail_box.preview_area_nav_btns import PreviewAreaNavButtonsWidget

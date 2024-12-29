@@ -43,12 +43,9 @@ class WordLabel(QWidget):
         self.setLayout(layout)
 
     def reload_favorite_icon(self):
-        # Reload the favorite icon based on the current favorite status
-
         self.update_favorite_icon(self.thumbnail_box.favorite_status)
 
     def get_star_outline_icon(self):
-        # Get the star outline icon based on the current theme
         if (
             self.thumbnail_box.main_widget.main_window.settings_manager.global_settings.get_current_font_color()
             == "black"
@@ -61,21 +58,17 @@ class WordLabel(QWidget):
             return "white_star_outline.png"
 
     def resizeEvent(self, event):
-        # Adjust the font size of the word label and the star button's icon size
         font_size = self.thumbnail_box.width() // 18
         font = QFont("Georgia", font_size, QFont.Weight.DemiBold)
         self.word_label.setFont(font)
         icon_size = QSize(font_size + 10, font_size + 10)
         self.favorite_button.setIconSize(icon_size)
-        # Make sure the button is big enough to fit the icon
         self.favorite_button.setFixedSize(icon_size.width(), icon_size.height())
 
-        # Manually offset the word label's position to account for the star button width
         offset = self.favorite_button.width()
         color = self.thumbnail_box.main_widget.main_window.settings_manager.global_settings.get_current_font_color()
         self.word_label.setStyleSheet(f"padding-left: {offset}px; color: {color};")
 
-        # Check if the word label fits within the available space
         available_width = self.thumbnail_box.width() - (
             self.favorite_button.width() * 3
         )
@@ -96,7 +89,6 @@ class WordLabel(QWidget):
                 get_images_and_data_path("images/icons"), self.star_icon_empty_path
             )
         )
-        # Update the favorite icon based on the favorite status
         if is_favorite:
             self.favorite_button.setIcon(self.star_icon_filled)
         else:

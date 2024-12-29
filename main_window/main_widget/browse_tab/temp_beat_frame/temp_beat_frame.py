@@ -32,11 +32,11 @@ class TempBeatFrame(BaseBeatFrame):
     """The purpose of this class is to create images for use within the dictionary or the sequence card tab.
     This beat frame is never seen by the user."""
 
-    def __init__(self, dictionary: "BrowseTab") -> None:
-        super().__init__(dictionary.main_widget)
-        self.main_widget = dictionary.main_widget
+    def __init__(self, browse_tab: "BrowseTab") -> None:
+        super().__init__(browse_tab.main_widget)
+        self.main_widget = browse_tab.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.dictionary_widget = dictionary
+        self.browse_tab = browse_tab
         # self.top_builder_widget = self.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 

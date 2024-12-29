@@ -2,11 +2,11 @@ from datetime import datetime
 import json
 from typing import TYPE_CHECKING
 
+from Enums.letters import LetterType
 from main_window.main_widget.browse_tab.browse_tab_section_header import (
     BrowseTabSectionHeader,
 )
 from main_window.main_widget.browse_tab.sorting_order import (
-    sorting_order,
     lowercase_letters,
 )
 from PIL import Image
@@ -14,7 +14,6 @@ from PIL import Image
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-
 
 
 class BrowseTabSectionManager:
@@ -47,11 +46,8 @@ class BrowseTabSectionManager:
             sorted_sections = sorted(sections, key=self.custom_sort_key)
         return sorted_sections
 
-    def custom_sort_key(self, section):
-        try:
-            return sorting_order.index(section)
-        except ValueError:
-            return len(sorting_order)  # put unknown sections at the end
+    def custom_sort_key(self, section_str: str) -> tuple[int, int]:
+        return LetterType.sort_key(section_str)
 
     def get_section_from_word(
         self, word, sort_order, sequence_length=None, thumbnails=None
@@ -66,7 +62,7 @@ class BrowseTabSectionManager:
         else:
             section: str = word[:2] if len(word) > 1 and word[1] == "-" else word[0]
             if not section.isdigit():
-                if section[0] in lowercase_letters:
+                if section[0] in set(["α", "β", "θ"]):
                     section = section.lower()
                 else:
                     section = section.upper()

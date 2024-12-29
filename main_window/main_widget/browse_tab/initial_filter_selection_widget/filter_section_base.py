@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.browse_tab.dictionary_browser.go_back_button import (
+from main_window.main_widget.browse_tab.browse_tab_go_back_button import (
     BrowseTabGoBackButton,
 )
 

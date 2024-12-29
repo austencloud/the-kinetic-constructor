@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont, QPixmap
 from PyQt6.QtCore import Qt
-from main_window.main_widget.browse_tab.dictionary_browser.rainbow_progress_bar import (
+from main_window.main_widget.rainbow_progress_bar import (
     RainbowProgressBar,
 )
 from utilities.path_helpers import get_images_and_data_path
@@ -43,8 +43,8 @@ class SplashComponents:
 
     def _create_progress_bar(self) -> RainbowProgressBar:
         progress_bar = RainbowProgressBar(self.splash_screen)
-        progress_bar.setMaximum(100)
-        progress_bar.setValue(0)
+        progress_bar.progress_bar.setMaximum(100)
+        progress_bar.set_value(0)
         font = QFont("Monotype Corsiva")
         font.setPointSize(self.splash_screen.width() // 40)
         progress_bar.percentage_label.setFont(font)

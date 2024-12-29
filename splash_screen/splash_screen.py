@@ -13,7 +13,7 @@ from .splash_layout_manager import SplashLayoutManager
 from .splash_updater import SplashUpdater
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.dictionary_browser.rainbow_progress_bar import (
+    from main_window.main_widget.rainbow_progress_bar import (
         RainbowProgressBar,
     )
     from main_window.settings_manager.settings_manager import SettingsManager

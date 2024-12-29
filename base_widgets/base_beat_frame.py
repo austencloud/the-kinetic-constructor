@@ -19,13 +19,13 @@ if TYPE_CHECKING:
 
 
 class BaseBeatFrame(QFrame):
-    def __init__(self, main_widget: "MainWidget"):  
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__()
         self.main_widget = main_widget
         self.json_manager = main_widget.json_manager
         self.settings_manager = main_widget.main_window.settings_manager
         self.sequence_widget: "SequenceWidget" = None
-        self.dictionary_widget: "BrowseTab" = None
+        self.browse_tab: "BrowseTab" = None
         self.start_pos_view: "StartPositionBeatView" = None
         self.initialized = True
         self.sequence_changed = False
