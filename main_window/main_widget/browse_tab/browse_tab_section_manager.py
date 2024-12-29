@@ -6,9 +6,7 @@ from Enums.letters import LetterType
 from main_window.main_widget.browse_tab.browse_tab_section_header import (
     BrowseTabSectionHeader,
 )
-from main_window.main_widget.browse_tab.sorting_order import (
-    lowercase_letters,
-)
+
 from PIL import Image
 
 
