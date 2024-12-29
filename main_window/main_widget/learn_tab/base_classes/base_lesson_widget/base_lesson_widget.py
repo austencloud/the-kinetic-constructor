@@ -122,7 +122,7 @@ class BaseLessonWidget(QWidget):
         else:
             self.indicator_label.show_message("Wrong! Try again.")
             self.indicator_label.setStyleSheet("color: red;")
-            self.answers_widget.disable_answer(selected_answer)
+            self.answers_widget.disable_answers(selected_answer)
             self.incorrect_guesses += 1
 
     def start_new_question(self):

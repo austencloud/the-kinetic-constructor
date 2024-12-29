@@ -25,7 +25,7 @@ class BaseAnswersWidget(QWidget):
             "This function should be implemented by the subclass."
         )
 
-    def disable_answer(self, answer) -> None:
+    def disable_answers(self, answer) -> None:
         raise NotImplementedError(
             "This function should be implemented by the subclass."
         )

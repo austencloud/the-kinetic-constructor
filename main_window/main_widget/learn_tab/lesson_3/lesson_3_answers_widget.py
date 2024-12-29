@@ -95,3 +95,10 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
             view.setFixedSize(size, size)
         spacing = self.main_widget.width() // 100
         self.layout.setSpacing(spacing)
+
+    def disable_answers(self, answer):
+        """Disable a specific pictograph answer."""
+        pictograph_key = self.key_generator.generate_pictograph_key(answer)
+        wrong_answer = self.pictographs[pictograph_key]
+        wrong_answer.view.setEnabled(False)
+        wrong_answer.view.set_overlay_color("red")

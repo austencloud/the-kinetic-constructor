@@ -38,7 +38,7 @@ class Lesson1AnswersWidget(BaseAnswersWidget):
             button.deleteLater()
         self.buttons.clear()
 
-    def disable_answer(self, answer) -> None:
+    def disable_answers(self, answer) -> None:
         """Deactivate the button for the incorrect answer."""
         self.buttons[answer].setDisabled(True)
         palette = self.buttons[answer].palette()

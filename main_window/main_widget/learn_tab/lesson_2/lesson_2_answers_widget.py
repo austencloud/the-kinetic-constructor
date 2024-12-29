@@ -86,7 +86,7 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
             f"Displayed {num_pictographs} pictographs in {rows} rows and {self.columns} columns."
         )
 
-    def disable_answer(self, answer):
+    def disable_answers(self, answer):
         """Disable a specific pictograph answer."""
         pictograph_key = self.key_generator.generate_pictograph_key(answer)
         wrong_answer = self.pictographs[pictograph_key]
