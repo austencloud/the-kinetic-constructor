@@ -1,79 +1,7 @@
 {
   "Λ": {
-    "(0, 1, cl)": {
-      "static_from_layer1": [-70, 0],
-      "static_from_layer1_rot_angle_override": true
-    },
-    "(o, 1, 0.5, , )": {
-      "dash_from_layer2_rot_angle_override": true
-    },
-    "(s, 1, 1.5, , )": {
-      "static_from_layer1_rot_angle_override": true,
-      "dash_from_layer2_rot_angle_override": true,
-      "dash_from_layer2": [120, 120]
-    },
-    "(o, 1.5, 0.5, , )": {
-      "static_from_layer2": {}
-    },
-    "(o, 1, 1, cl, cl)": {
-      "dash_from_layer2_rot_angle_override": true
-    },
     "(o, 1, 1, op, op)": {
-      "static_from_layer1": [60, 45],
-      "dash_from_layer2_rot_angle_override": true
-    },
-    "(o, 0.5, 1, op, op)": {
-      "static_from_layer1_rot_angle_override": true,
-      "static_from_layer1": [-50, -50]
-    },
-    "(o, 2, 1, op, op)": {
-      "dash_from_layer2": {},
-      "static_from_layer1": {}
-    },
-    "(o, 3, 2.5, op, op)": {
-      "dash_from_layer1": [90, 25],
-      "static_from_layer2": [15, -15]
-    },
-    "(s, 2, 2.5, op, cl)": {
-      "dash_from_layer1": [15, 85]
-    },
-    "(s, 2.5, 1, op, cl)": {
-      "static_from_layer1_rot_angle_override": true,
-      "static_from_layer1": [-50, -50],
       "dash_from_layer2": {}
-    },
-    "(s, 3, 2, cl, op)": {
-      "dash_from_layer2_rot_angle_override": true,
-      "dash_from_layer2": [95, 95]
-    },
-    "(o, 0.5, 2.5, op, op)": {
-      "dash_from_layer1": [30, 100],
-      "static_from_layer2": [15, -15]
-    },
-    "(o, 0.5, 3, op, op)": {
-      "dash_from_layer1": [35, 115]
-    },
-    "(o, 0.5, 2, op, op)": {
-      "static_from_layer2_rot_angle_override": true,
-      "dash_from_layer1": [40, 115]
-    },
-    "(o, 0.5, 1.5, op, op)": {
-      "dash_from_layer1": [20, 95],
-      "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": [-10, 20]
-    },
-    "(s, 1, 1, op, cl)": {
-      "static_from_layer1_rot_angle_override": true,
-      "static_from_layer1": [-50, -50],
-      "dash_from_layer2_rot_angle_override": true
-    },
-    "(s, 1.5, 1, op, cl)": {
-      "static_from_layer1_rot_angle_override": true,
-      "static_from_layer1": [-50, -50]
-    },
-    "(o, 2.5, 1.5, op, op)": {
-      "static_from_layer2_rot_angle_override": true,
-      "dash_from_layer1": [25, 110]
     }
   }
 }
