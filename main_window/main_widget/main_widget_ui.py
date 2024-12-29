@@ -67,7 +67,7 @@ class MainWidgetUI:
         self.mw.left_stack.addWidget(self.mw.codex)
         self.mw.left_stack.addWidget(self.mw.act_sheet)
         self.mw.left_stack.addWidget(self.mw.browse_tab)
-        
+
         self.mw.right_stack.addWidget(self.mw.construct_tab)
         self.mw.right_stack.addWidget(self.mw.generate_tab)
         self.mw.right_stack.addWidget(self.mw.browse_tab.preview_area)
@@ -101,4 +101,4 @@ class MainWidgetUI:
     def load_current_tab(self):
         mw = self.mw
         mw.current_tab = mw.settings_manager.global_settings.get_current_tab()
-        mw.tabs_handler.update_tab_based_on_settings()
+        mw.tab_switcher.update_tab_based_on_settings()

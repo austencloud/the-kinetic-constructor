@@ -42,7 +42,7 @@ class NavigationWidget(QWidget):
         self.container_layout.addLayout(self.tab_layout)
 
         self.tab_changed.connect(
-            lambda: self.mw.tabs_handler.on_tab_changed(self.current_index)
+            lambda: self.mw.tab_switcher.on_tab_changed(self.current_index)
         )
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)

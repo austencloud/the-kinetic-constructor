@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class MainWidgetTabs:
+class MainWidgetTabSwitcher:
     """Handles tab-switch logic, referencing the TabFadeManager for fade animations."""
 
     def __init__(self, main_widget: "MainWidget"):

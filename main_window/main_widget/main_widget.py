@@ -13,7 +13,7 @@ from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.main_background_widget.main_background_widget import (
     MainBackgroundWidget,
 )
-from main_window.main_widget.main_widget_tabs import MainWidgetTabs
+from main_window.main_widget.main_widget_tab_switcher import MainWidgetTabSwitcher
 from main_window.main_widget.main_widget_fade_manager import MainWidgetFadeManager
 from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
     MainWidgetFontColorUpdater,
@@ -75,7 +75,7 @@ class MainWidget(QWidget):
     write_tab: "WriteTab"
 
     # Handlers
-    tabs_handler: "MainWidgetTabs"
+    tab_switcher: "MainWidgetTabSwitcher"
     manager: "MainWidgetManager"
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
@@ -130,13 +130,14 @@ class MainWidget(QWidget):
         self.settings_manager = main_window.settings_manager
         self.splash_screen = splash_screen
 
-        self.tabs_handler = MainWidgetTabs(self)
+        self.tab_switcher = MainWidgetTabSwitcher(self)
         self.manager = MainWidgetManager(self)
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
 
         QTimer.singleShot(0, self.state_handler.load_state)
+        QTimer.singleShot(0, self.ui_handler.load_current_tab)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
