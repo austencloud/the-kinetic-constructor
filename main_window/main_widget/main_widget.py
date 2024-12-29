@@ -16,8 +16,8 @@ from main_window.main_widget.main_background_widget.main_background_widget impor
 )
 from main_window.main_widget.main_widget_tab_switcher import MainWidgetTabSwitcher
 from main_window.main_widget.main_widget_fade_manager import MainWidgetFadeManager
-from main_window.settings_manager.global_settings.main_widget_font_color_updater import (
-    MainWidgetFontColorUpdater,
+from main_window.main_widget.font_color_updater.font_color_updater import (
+    FontColorUpdater,
 )
 
 
@@ -93,7 +93,7 @@ class MainWidget(QWidget):
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
     fade_manager: MainWidgetFadeManager
-    font_color_updater: "MainWidgetFontColorUpdater"
+    font_color_updater: "FontColorUpdater"
 
     # Layouts and Widgets
     top_layout: QHBoxLayout

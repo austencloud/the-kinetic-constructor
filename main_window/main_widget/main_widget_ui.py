@@ -13,8 +13,8 @@ from .browse_tab.browse_tab import BrowseTab
 from .learn_tab.learn_tab import LearnTab
 from .main_background_widget.main_background_widget import MainBackgroundWidget
 from .main_widget_fade_manager import MainWidgetFadeManager
-from ..settings_manager.global_settings.main_widget_font_color_updater import (
-    MainWidgetFontColorUpdater,
+from .font_color_updater.font_color_updater import (
+    FontColorUpdater,
 )
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
@@ -38,7 +38,7 @@ class MainWidgetUI:
         self.mw.right_stack = QStackedWidget()
 
         self.mw.fade_manager = MainWidgetFadeManager(self.mw)
-        self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
+        self.mw.font_color_updater = FontColorUpdater(self.mw)
 
         splash = self.splash_screen
         splash.updater.update_progress("MenuBarWidget")
@@ -70,7 +70,9 @@ class MainWidgetUI:
         self.mw.left_stack.addWidget(self.mw.sequence_widget)  # 0
         self.mw.left_stack.addWidget(self.mw.codex)  # 1
         self.mw.left_stack.addWidget(self.mw.act_sheet)  # 2
-        self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker.filter_selector)  # 3
+        self.mw.left_stack.addWidget(
+            self.mw.browse_tab.sequence_picker.filter_selector
+        )  # 3
         self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker)  # 4
 
         self.mw.right_stack.addWidget(self.mw.construct_tab)  # 0

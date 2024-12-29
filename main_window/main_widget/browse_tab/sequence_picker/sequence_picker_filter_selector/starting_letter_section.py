@@ -13,9 +13,7 @@ from .filter_section_base import FilterSectionBase
 from functools import partial
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
-    )
+    from .sequence_picker_filter_selector import SequencePickerFilterSelector
 
 
 class StartingLetterSection(FilterSectionBase):
@@ -45,20 +43,13 @@ class StartingLetterSection(FilterSectionBase):
         self.initialized = True
         self.go_back_button.show()
         self.header_label.show()
-
         layout: QVBoxLayout = self.layout()
         self.create_letter_buttons(layout)
-
-        # Add stretch after buttons
         layout.addStretch(1)
-
-        # Initialize sequence tally
         self.sequence_tally = self._get_starting_letter_sequence_counts()
-
-        # Label to display the sequence count when hovering
         self.sequence_tally_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.sequence_tally_label)
-
+        
         layout.addStretch(1)
         self.resize_starting_letter_section()
 

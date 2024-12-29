@@ -27,7 +27,6 @@ if TYPE_CHECKING:
 
 class GridModeSection(FilterSectionBase):
     GRID_MODES = ["Box", "Diamond"]
-    # Update IMAGE_DIR to point to the directory containing your SVGs
     IMAGE_DIR = get_images_and_data_path("images/grid")
 
     def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
@@ -37,8 +36,8 @@ class GridModeSection(FilterSectionBase):
         self.description_labels: dict[str, QLabel] = {}
         self.grid_mode_images: dict[str, QLabel] = {}
         self.original_pixmaps: dict[str, QPixmap] = {}
-        self.sequence_counts: dict[str, int] = {}
-        self.sequence_count_labels: dict[str, QLabel] = {}
+        self.tally: dict[str, int] = {}
+        self.tally_labels: dict[str, QLabel] = {}
         self.spacers: dict[str, QSpacerItem] = {}
         self.add_buttons()
 
@@ -48,8 +47,7 @@ class GridModeSection(FilterSectionBase):
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
-        # Get sequence counts for each grid mode
-        self.sequence_counts = self._get_sequence_counts_per_grid_mode()
+        self.tally = self._get_sequence_counts_per_grid_mode()
 
         grid_layout = QGridLayout()
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -153,11 +151,11 @@ class GridModeSection(FilterSectionBase):
 
     def create_sequence_count_label(self, grid_mode: str) -> QLabel:
         """Create a label displaying the sequence count for a grid mode."""
-        count = self.sequence_counts.get(grid_mode.lower(), 0)
+        count = self.tally.get(grid_mode.lower(), 0)
         sequence_text = "sequence" if count == 1 else "sequences"
         sequence_count_label = QLabel(f"{count} {sequence_text}")
         sequence_count_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.sequence_count_labels[grid_mode] = sequence_count_label
+        self.tally_labels[grid_mode] = sequence_count_label
         return sequence_count_label
 
     def handle_grid_mode_click(self, grid_mode: str):
@@ -340,7 +338,7 @@ class GridModeSection(FilterSectionBase):
             font.setPointSize(font_size_description)
             label.setFont(font)
 
-        for label in self.sequence_count_labels.values():
+        for label in self.tally_labels.values():
             font = label.font()
             font.setPointSize(font_size_description)
             label.setFont(font)

@@ -29,8 +29,8 @@ class AuthorSection(FilterSectionBase):
         super().__init__(initial_selection_widget, "Select by Author:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
-        self.sequence_count_labels: dict[str, QLabel] = {}
-        self.author_images: dict[str, QLabel] = {}
+        self.tally_labels: dict[str, QLabel] = {}
+        self.author_labels: dict[str, QLabel] = {}
         self.original_pixmaps: dict[str, QPixmap] = {}
         self.sequence_counts: dict[str, int] = {}
         self.add_buttons()
@@ -93,7 +93,7 @@ class AuthorSection(FilterSectionBase):
         sequence_text = "sequence" if count == 1 else "sequences"
         sequence_count_label = QLabel(f"{count} {sequence_text}")
         sequence_count_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.sequence_count_labels[author] = sequence_count_label
+        self.tally_labels[author] = sequence_count_label
         return sequence_count_label
 
     def handle_author_click(self, author: str):
@@ -183,13 +183,14 @@ class AuthorSection(FilterSectionBase):
         """Handle resizing of the author section."""
         self.resize_buttons()
         self.resize_labels()
-
+        super().resizeEvent(event)
+        
     def resize_labels(self):
         """Adjust font sizes of labels during resizing."""
-        font_size_label = max(10, self.filter_selector.width() // 140)
-        font_size_header = max(12, self.filter_selector.width() // 100)
+        font_size_label = max(10, self.main_widget.width() // 140)
+        font_size_header = max(12, self.main_widget.width() // 100)
 
-        for label in self.sequence_count_labels.values():
+        for label in self.tally_labels.values():
             font = label.font()
             font.setPointSize(font_size_label)
             label.setFont(font)
@@ -200,9 +201,9 @@ class AuthorSection(FilterSectionBase):
 
     def resize_buttons(self):
         """Adjust button sizes and fonts during resizing."""
-        button_width = max(1, self.filter_selector.width() // 5)
-        button_height = max(1, self.filter_selector.height() // 20)
-        font_size_button = max(10, self.filter_selector.width() // 100)
+        button_width = max(1, self.main_widget.width() // 6)
+        button_height = max(1, self.main_widget.height() // 16)
+        font_size_button = max(10, self.main_widget.width() // 100)
 
         for button in self.buttons.values():
             font = button.font()

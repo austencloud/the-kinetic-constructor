@@ -16,7 +16,7 @@ class FilterChoiceWidget(QWidget):
         super().__init__(initial_selection_widget)
         self.initial_selection_widget = initial_selection_widget
         self.buttons: dict[str, QPushButton] = {}
-        self.button_labels: dict[str, QLabel] = {}
+        self.description_labels: dict[str, QLabel] = {}
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.browse_tab = initial_selection_widget.browse_tab
@@ -99,7 +99,7 @@ class FilterChoiceWidget(QWidget):
 
             description_label = QLabel(description)
             description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.button_labels[label] = description_label
+            self.description_labels[label] = description_label
 
             vbox = QVBoxLayout()
             vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -121,7 +121,7 @@ class FilterChoiceWidget(QWidget):
 
         show_all_description_label = QLabel("Display every sequence in the dictionary.")
         show_all_description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.button_labels["Show All Sequences"] = show_all_description_label
+        self.description_labels["Show All Sequences"] = show_all_description_label
 
         show_all_vbox = QVBoxLayout()
         show_all_vbox.addWidget(
@@ -166,7 +166,7 @@ class FilterChoiceWidget(QWidget):
     def _resize_buttons_labels(self):
         """Resize the labels under each button."""
         font_size = self.main_widget.width() // 150
-        for button_label in self.button_labels.values():
+        for button_label in self.description_labels.values():
             color = self.settings_manager.global_settings.get_current_font_color()
             button_label.setStyleSheet(f"font-size: {font_size}px; color: {color};")
         for button in self.buttons.values():

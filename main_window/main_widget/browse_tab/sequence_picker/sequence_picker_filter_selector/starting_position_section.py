@@ -36,7 +36,7 @@ class StartingPositionSection(FilterSectionBase):
         self.buttons: dict[str, QPushButton] = {}
         self.description_labels: dict[str, QLabel] = {}
         self.position_images: dict[str, QLabel] = {}
-        self.sequence_count_labels: dict[str, QLabel] = {}
+        self.tally_labels: dict[str, QLabel] = {}
         self.original_pixmaps: dict[str, QPixmap] = {}
         self.sequence_counts: dict[str, int] = {}
         self.add_buttons()
@@ -132,7 +132,7 @@ class StartingPositionSection(FilterSectionBase):
         sequence_text = "sequence" if count == 1 else "sequences"
         sequence_count_label = QLabel(f"{count} {sequence_text}")
         sequence_count_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.sequence_count_labels[position] = sequence_count_label
+        self.tally_labels[position] = sequence_count_label
         return sequence_count_label
 
     def handle_position_click(self, position: str):
@@ -311,7 +311,7 @@ class StartingPositionSection(FilterSectionBase):
             font.setPointSize(font_size_description)
             label.setFont(font)
 
-        for label in self.sequence_count_labels.values():
+        for label in self.tally_labels.values():
             font = label.font()
             font.setPointSize(font_size_description)
             label.setFont(font)

@@ -36,7 +36,7 @@ class LevelSection(FilterSectionBase):
         self.buttons: dict[int, QPushButton] = {}
         self.description_labels: dict[int, QLabel] = {}
         self.level_images: dict[int, QLabel] = {}
-        self.sequence_count_labels: dict[int, QLabel] = {}
+        self.tally_labels: dict[int, QLabel] = {}
         self.original_pixmaps: dict[int, QPixmap] = {}
         self.sequence_counts: dict[int, int] = {}
         self.add_buttons()
@@ -125,7 +125,7 @@ class LevelSection(FilterSectionBase):
         sequence_text = "sequence" if count == 1 else "sequences"
         sequence_count_label = QLabel(f"{count} {sequence_text}")
         sequence_count_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.sequence_count_labels[level] = sequence_count_label
+        self.tally_labels[level] = sequence_count_label
         return sequence_count_label
 
     def handle_level_click(self, level: int):
@@ -302,7 +302,7 @@ class LevelSection(FilterSectionBase):
             font.setPointSize(font_size_description)
             label.setFont(font)
 
-        for label in self.sequence_count_labels.values():
+        for label in self.tally_labels.values():
             font = label.font()
             font.setPointSize(font_size_description)
             label.setFont(font)

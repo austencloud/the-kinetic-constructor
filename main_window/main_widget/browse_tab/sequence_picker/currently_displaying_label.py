@@ -5,7 +5,8 @@ from PyQt6.QtCore import Qt
 if TYPE_CHECKING:
     from .sequence_picker import SequencePicker
 
-class SequencePickerCurrentlyDisplayingLabel(QLabel):
+
+class CurrentlyDisplayingLabel(QLabel):
     def __init__(self, sequence_picker: "SequencePicker") -> None:
         super().__init__(sequence_picker)
         self.sequence_picker = sequence_picker
@@ -16,5 +17,7 @@ class SequencePickerCurrentlyDisplayingLabel(QLabel):
 
     def resizeEvent(self, event):
         font = self.font()
-        font.setPointSize(self.sequence_picker.width() // 65)
+        font_size = self.sequence_picker.main_widget.width() // 65
+        font.setPointSize(font_size)
         self.setFont(font)
+        super().resizeEvent(event)
