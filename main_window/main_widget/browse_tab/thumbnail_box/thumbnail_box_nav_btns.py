@@ -50,7 +50,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             self.thumbnail_box.image_label
             == self.thumbnail_box.browse_tab.selection_handler.currently_selected_thumbnail
         ):
-            preview_area = self.thumbnail_box.browse_tab.preview_area
+            preview_area = self.thumbnail_box.browse_tab.sequence_viewer
             preview_area.variation_number_label.setText(
                 f"{self.thumbnail_box.current_index + 1}/{len(self.thumbnails)}"
             )

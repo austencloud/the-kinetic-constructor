@@ -11,18 +11,17 @@ from .sequence_length_section import SequenceLengthSection
 from .starting_letter_section import StartingLetterSection
 from .starting_position_section import StartingPositionSection
 
-
-
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+    from ..sequence_picker import SequencePicker
 
 
-class BrowseTabInitialSelectionsWidget(QWidget):
+class SequencePickerFilterSelector(QWidget):
     """Widget for initial filter selections in the dictionary browser."""
 
-    def __init__(self, browse_tab: "BrowseTab"):
-        super().__init__(browse_tab)
-        self.browse_tab = browse_tab
+    def __init__(self, sequence_picker: "SequencePicker") -> None:
+        super().__init__(sequence_picker)
+        self.sequence_picker = sequence_picker
+        self.browse_tab = sequence_picker.browse_tab
         self.selected_letters: set[str] = set()
 
         # Initialize sections
@@ -34,7 +33,7 @@ class BrowseTabInitialSelectionsWidget(QWidget):
         self.starting_position_section = StartingPositionSection(self)
         self.author_section = AuthorSection(self)
         self.grid_mode_section = GridModeSection(self)
-        
+
         self.section_map: dict[str, QWidget] = {
             "filter_choice": self.filter_choice_widget,
             "starting_letter": self.starting_letter_section,
@@ -69,7 +68,7 @@ class BrowseTabInitialSelectionsWidget(QWidget):
 
         Args:
             section_name (str): The name of the section to display.
-        """ 
+        """
         index = self.section_indexes.get(section_name)
         if index is not None:
             self.stacked_widget.setCurrentIndex(index)
@@ -80,9 +79,7 @@ class BrowseTabInitialSelectionsWidget(QWidget):
                 resize_method = getattr(section, f"resize_{section_name}_section", None)
                 if callable(resize_method):
                     resize_method()
-            self.browse_tab.dictionary_settings.set_current_section(
-                section_name
-            )
+            self.browse_tab.browse_tab_settings.set_current_section(section_name)
             self.current_filter_section = section_name
         else:
             print(f"Section '{section_name}' not found.")
@@ -98,7 +95,7 @@ class BrowseTabInitialSelectionsWidget(QWidget):
             filter_key (str): The filter key (e.g., 'level', 'author').
             filter_value: The value for the filter key.
         """
-        self.browse_tab.dictionary_settings.set_current_section("browser")
+        self.browse_tab.browse_tab_settings.set_current_section("browser")
         self.browse_tab.filter_manager.apply_current_filter({filter_key: filter_value})
 
     # Event Handlers

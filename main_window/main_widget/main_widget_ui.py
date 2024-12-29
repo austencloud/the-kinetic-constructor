@@ -37,7 +37,7 @@ class MainWidgetUI:
         self.mw.left_stack = QStackedWidget()
         self.mw.right_stack = QStackedWidget()
 
-        self.mw.stack_fade_manager = MainWidgetFadeManager(self.mw)
+        self.mw.fade_manager = MainWidgetFadeManager(self.mw)
         self.mw.font_color_updater = MainWidgetFontColorUpdater(self.mw)
 
         splash = self.splash_screen
@@ -67,16 +67,17 @@ class MainWidgetUI:
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
 
-        self.mw.left_stack.addWidget(self.mw.sequence_widget)
-        self.mw.left_stack.addWidget(self.mw.codex)
-        self.mw.left_stack.addWidget(self.mw.act_sheet)
-        self.mw.left_stack.addWidget(self.mw.browse_tab)
+        self.mw.left_stack.addWidget(self.mw.sequence_widget)  # 0
+        self.mw.left_stack.addWidget(self.mw.codex)  # 1
+        self.mw.left_stack.addWidget(self.mw.act_sheet)  # 2
+        self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker.filter_selector)  # 3
+        self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker)  # 4
 
-        self.mw.right_stack.addWidget(self.mw.construct_tab)
-        self.mw.right_stack.addWidget(self.mw.generate_tab)
-        self.mw.right_stack.addWidget(self.mw.browse_tab.preview_area)
-        self.mw.right_stack.addWidget(self.mw.learn_tab)
-        self.mw.right_stack.addWidget(self.mw.write_tab)
+        self.mw.right_stack.addWidget(self.mw.construct_tab)  # 0
+        self.mw.right_stack.addWidget(self.mw.generate_tab)  # 1
+        self.mw.right_stack.addWidget(self.mw.learn_tab)  # 2
+        self.mw.right_stack.addWidget(self.mw.write_tab)  # 3
+        self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 4
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)
@@ -96,11 +97,11 @@ class MainWidgetUI:
         self.mw.main_layout.addLayout(content_layout)
 
     def _setup_indices(self):
-        self.mw.construct_tab_index = 0
-        self.mw.generate_tab_index = 1
-        self.mw.browse_tab_index = 2
-        self.mw.learn_tab_index = 3
-        self.mw.write_tab_index = 4
+        self.mw.main_construct_tab_index = 0
+        self.mw.main_generate_tab_index = 1
+        self.mw.main_browse_tab_index = 2
+        self.mw.main_learn_tab_index = 3
+        self.mw.main_write_tab_index = 4
 
     def load_current_tab(self):
         mw = self.mw

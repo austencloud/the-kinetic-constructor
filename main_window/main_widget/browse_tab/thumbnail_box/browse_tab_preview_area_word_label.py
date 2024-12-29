@@ -4,13 +4,13 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab_preview_area import (
-        BrowseTabPreviewArea,
+    from main_window.main_widget.browse_tab.sequence_viewer import (
+        SequenceViewer,
     )
 
 
 class BrowseTabPreviewAreaWordLabel(QLabel):
-    def __init__(self, preview_area: "BrowseTabPreviewArea"):
+    def __init__(self, preview_area: "SequenceViewer"):
         super().__init__(preview_area)
         self.preview_area = preview_area
         self.word = ""

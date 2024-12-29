@@ -13,8 +13,8 @@ from .filter_section_base import FilterSectionBase
 from functools import partial
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
@@ -33,7 +33,7 @@ class StartingLetterSection(FilterSectionBase):
         [["α", "β", "Γ"]],
     ]
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget, "Select by starting letter:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -111,7 +111,7 @@ class StartingLetterSection(FilterSectionBase):
 
     def display_only_thumbnails_starting_with_letter(self, letter: str):
         """Display thumbnails of sequences starting with the specified letter."""
-        self.browse_tab.dictionary_settings.set_current_filter(
+        self.browse_tab.browse_tab_settings.set_current_filter(
             {"starting_letter": letter}
         )
 
@@ -120,7 +120,7 @@ class StartingLetterSection(FilterSectionBase):
             if letter != "show_all"
             else "all sequences"
         )
-        self.browse_tab.nav_sidebar.clear_sidebar()
+        self.browse_tab.sequence_picker.nav_sidebar.clear_sidebar()
         QApplication.processEvents()
         self.browse_tab.filter_manager.prepare_ui_for_filtering(description)
 

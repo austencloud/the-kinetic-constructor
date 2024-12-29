@@ -16,8 +16,8 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
@@ -30,7 +30,7 @@ class StartingPositionSection(FilterSectionBase):
     AVAILABLE_POSITIONS = ["Alpha", "Beta", "Gamma"]
     IMAGE_DIR = get_images_and_data_path("images/position_images")
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget, "Select by Starting Position:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -201,7 +201,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         """Display only the thumbnails that match the selected starting position."""
-        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
             {"starting_position": position.lower()}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

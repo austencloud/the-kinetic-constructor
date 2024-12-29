@@ -13,15 +13,15 @@ from main_window.main_widget.browse_tab.browse_tab_go_back_button import (
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
 class FilterSectionBase(QWidget):
     def __init__(
         self,
-        initial_selection_widget: "BrowseTabInitialSelectionsWidget",
+        initial_selection_widget: "SequencePickerFilterSelector",
         label_text: str,
     ):
         super().__init__(initial_selection_widget)

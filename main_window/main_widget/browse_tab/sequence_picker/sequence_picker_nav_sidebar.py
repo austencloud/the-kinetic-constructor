@@ -4,16 +4,14 @@ from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtWidgets import QApplication
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab import (
-        BrowseTab,
-    )
+    from .sequence_picker import SequencePicker
 
-
-class BrowseTabNavSidebar(QWidget):
-    def __init__(self, browse_tab: "BrowseTab") -> None:
-        super().__init__()
-        self.browse_tab = browse_tab
+class SequencePickerNavSidebar(QWidget):
+    def __init__(self, sequence_picker: "SequencePicker"):
+        super().__init__(sequence_picker)
+        self.sequence_picker = sequence_picker
         self._setup_scroll_area()
         self.buttons: list[QPushButton] = []
         self.year_labels: dict[str, QPushButton] = {}
@@ -23,7 +21,7 @@ class BrowseTabNavSidebar(QWidget):
         self.letter_label: QLabel = None
         self.letter_spacer_line: QLabel = None
         self.selected_button: QPushButton = None
-        self.settings_manager = self.browse_tab.main_widget.main_window.settings_manager
+        self.settings_manager = self.sequence_picker.main_widget.main_window.settings_manager
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.scroll_area)
@@ -201,8 +199,8 @@ class BrowseTabNavSidebar(QWidget):
         return day
 
     def style_button(self, button: QPushButton, selected: bool = False):
-        font_size = self.browse_tab.height() // 40
-        font_color = self.browse_tab.main_widget.font_color_updater.get_font_color(
+        font_size = self.sequence_picker.height() // 40
+        font_color = self.sequence_picker.main_widget.font_color_updater.get_font_color(
             self.settings_manager.global_settings.get_background_type()
         )
         button_background_color = "lightgray" if font_color == "black" else "#555"
@@ -239,8 +237,8 @@ class BrowseTabNavSidebar(QWidget):
             )
 
     def style_header_label(self, label: QLabel):
-        font_size = self.browse_tab.height() // 40
-        font_color = self.browse_tab.main_widget.font_color_updater.get_font_color(
+        font_size = self.sequence_picker.height() // 40
+        font_color = self.sequence_picker.main_widget.font_color_updater.get_font_color(
             self.settings_manager.global_settings.get_background_type()
         )
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -267,9 +265,9 @@ class BrowseTabNavSidebar(QWidget):
                 + "-"
                 + section.split("-")[1].lstrip("0")
             )
-        header = self.browse_tab.scroll_widget.section_headers.get(section)
+        header = self.sequence_picker.scroll_widget.section_headers.get(section)
         if header:
-            scroll_area = self.browse_tab.scroll_widget.scroll_area
+            scroll_area = self.sequence_picker.scroll_widget.scroll_area
             header_global_pos = header.mapToGlobal(QPoint(0, 0))
             content_widget_pos = scroll_area.widget().mapFromGlobal(header_global_pos)
             vertical_pos = content_widget_pos.y()

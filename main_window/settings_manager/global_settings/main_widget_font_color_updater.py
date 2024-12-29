@@ -32,9 +32,7 @@ class MainWidgetFontColorUpdater:
         )
 
     def _apply_font_color(self, widget: QWidget) -> None:
-        # If it's a QCheckBox, apply a more specific stylesheet
         if isinstance(widget, QCheckBox):
-            # Apply rules to only the text, and separate rules for the indicator
             widget.setStyleSheet(
                 f"""
                 QCheckBox {{
@@ -53,7 +51,6 @@ class MainWidgetFontColorUpdater:
                 """
             )
         else:
-            # For other widgets, append the color rule to their existing stylesheet
             existing_style = widget.styleSheet()
             new_style = f"{existing_style} color: {self.font_color};"
             widget.setStyleSheet(new_style)
@@ -147,28 +144,35 @@ class MainWidgetFontColorUpdater:
         ]
 
     def _update_browse_tab(self) -> None:
-        browse_tab = self.main_widget.browse_tab
-        sort_widget = browse_tab.sort_widget
+        self._update_sequence_viewer()
+        self._update_sequence_picker()
 
-        browse_tab_labels = [
-            sort_widget.sort_by_label,
-            browse_tab.preview_area.word_label,
-            browse_tab.preview_area.variation_number_label,
-            browse_tab.progress_bar.loading_label,
-            browse_tab.progress_bar.percentage_label,
-            browse_tab.initial_selection_widget.filter_choice_widget.description_label,
+    def _update_sequence_viewer(self) -> None:
+        sequence_viewer = self.main_widget.browse_tab.sequence_viewer
+        sequence_viewer_labels = [
+            sequence_viewer.word_label,
+            sequence_viewer.variation_number_label,
+        ]
+        self._apply_font_colors(sequence_viewer_labels)
+        sequence_viewer.image_label.resize_placeholder()
+
+    def _update_sequence_picker(self) -> None:
+        sequence_picker = self.main_widget.browse_tab.sequence_picker
+        sequence_picker_labels = [
+            sequence_picker.sort_widget.sort_by_label,
+            sequence_picker.progress_bar.loading_label,
+            sequence_picker.progress_bar.percentage_label,
+            sequence_picker.filter_selector.filter_choice_widget.description_label,
         ] + [
             button_label
-            for button_label in browse_tab.initial_selection_widget.filter_choice_widget.button_labels.values()
+            for button_label in sequence_picker.filter_selector.filter_choice_widget.button_labels.values()
         ]
-        self._apply_font_colors(browse_tab_labels)
+        self._apply_font_colors(sequence_picker_labels)
+        sequence_picker.sort_widget.style_buttons()
+        sequence_picker.sort_widget.style_labels()
+        sequence_picker.nav_sidebar.set_styles()
 
-        sort_widget.style_buttons()
-        sort_widget.style_labels()
-        browse_tab.nav_sidebar.set_styles()
-        browse_tab.preview_area.image_label.resize_placeholder()
-
-        for thumbnail_box in browse_tab.scroll_widget.thumbnail_boxes.values():
+        for thumbnail_box in sequence_picker.scroll_widget.thumbnail_boxes.values():
             self._apply_font_color(thumbnail_box.word_label)
             thumbnail_box.word_label.reload_favorite_icon()
             self._apply_font_color(thumbnail_box.variation_number_label)

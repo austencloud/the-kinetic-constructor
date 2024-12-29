@@ -18,7 +18,7 @@ class BrowseTabThumbnailBoxSorter:
         self.num_columns = 3
 
     def reload_currently_displayed_filtered_sequences(self):
-        current_filter = self.browse_tab.dictionary_settings.get_current_filter()
+        current_filter = self.browse_tab.browse_tab_settings.get_current_filter()
         self.browse_tab.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )
@@ -26,7 +26,7 @@ class BrowseTabThumbnailBoxSorter:
     def sort_and_display_currently_filtered_sequences_by_method(
         self, sort_method: str
     ) -> None:
-        self.browse_tab.scroll_widget.clear_layout()
+        self.browse_tab.sequence_picker.scroll_widget.clear_layout()
         self.browse_tab.sections = {}
         if sort_method == "sequence_length":
             self.browse_tab.currently_displayed_sequences.sort(
@@ -60,10 +60,14 @@ class BrowseTabThumbnailBoxSorter:
             sort_method, self.browse_tab.sections.keys()
         )
 
-        self.browse_tab.nav_sidebar.update_sidebar(sorted_sections, sort_method)
+        self.browse_tab.sequence_picker.nav_sidebar.update_sidebar(
+            sorted_sections, sort_method
+        )
         current_section = None
 
-        self.browse_tab.sort_widget.highlight_appropriate_button(sort_method)
+        self.browse_tab.sequence_picker.sort_widget.highlight_appropriate_button(
+            sort_method
+        )
 
         for section in sorted_sections:
             if sort_method == "date_added":
@@ -102,7 +106,7 @@ class BrowseTabThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.browse_tab.sequence_count_label.setText(
+        self.browse_tab.sequence_picker.count_label.setText(
             f"Number of words: {len(self.browse_tab.currently_displayed_sequences)}"
         )
         QApplication.restoreOverrideCursor()
@@ -110,15 +114,15 @@ class BrowseTabThumbnailBoxSorter:
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
     ) -> None:
-        initial_selection_widget = self.browse_tab.initial_selection_widget
+        filter_selector = self.browse_tab.sequence_picker.filter_selector
 
-        starting_position_section = initial_selection_widget.starting_position_section
-        contains_letter_section = initial_selection_widget.contains_letter_section
-        starting_letter_section = initial_selection_widget.starting_letter_section
-        level_section = initial_selection_widget.level_section
-        length_section = initial_selection_widget.length_section
-        author_section = initial_selection_widget.author_section
-        grid_mode_section = initial_selection_widget.grid_mode_section
+        starting_position_section = filter_selector.starting_position_section
+        contains_letter_section = filter_selector.contains_letter_section
+        starting_letter_section = filter_selector.starting_letter_section
+        level_section = filter_selector.level_section
+        length_section = filter_selector.length_section
+        author_section = filter_selector.author_section
+        grid_mode_section = filter_selector.grid_mode_section
         display_functions = {
             "starting_letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
             "sequence_length": length_section.display_only_thumbnails_with_sequence_length,
@@ -145,17 +149,21 @@ class BrowseTabThumbnailBoxSorter:
     def add_thumbnail_box(
         self, row_index, column_index, word, thumbnails, hidden: bool = False
     ):
-        if word not in self.browse_tab.scroll_widget.thumbnail_boxes:
+        if word not in self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes:
             thumbnail_box = ThumbnailBox(self.browse_tab, word, thumbnails)
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-            self.browse_tab.scroll_widget.thumbnail_boxes[word] = thumbnail_box
+            self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes[word] = (
+                thumbnail_box
+            )
         else:
-            thumbnail_box = self.browse_tab.scroll_widget.thumbnail_boxes[word]
+            thumbnail_box = (
+                self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes[word]
+            )
 
         if hidden:
             thumbnail_box.hide()
 
-        self.browse_tab.scroll_widget.grid_layout.addWidget(
+        self.browse_tab.sequence_picker.scroll_widget.grid_layout.addWidget(
             thumbnail_box, row_index, column_index
         )
 

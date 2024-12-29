@@ -1,27 +1,34 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
-from main_window.main_widget.browse_tab.browse_tab_sort_widget import BrowseTabSortWidget
+from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_sort_widget import (
+    SequencePickerSortWidget,
+)
+from main_window.main_widget.browse_tab.sequence_picker.sequence_picker import (
+    SequencePicker,
+)
 
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_layout_manager import BrowseTabLayoutManager
 from .browse_tab_getter import BrowseTabGetter
-from .initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-    BrowseTabInitialSelectionsWidget,
+from .sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+    SequencePickerFilterSelector,
 )
-from .browse_tab_nav_sidebar import BrowseTabNavSidebar
+from .sequence_picker.sequence_picker_nav_sidebar import SequencePickerNavSidebar
 from .browse_tab_section_manager import BrowseTabSectionManager
 from .browse_tab_thumbnail_box_sorter import BrowseTabThumbnailBoxSorter
-from .browse_tab_currently_displaying_label import BrowseTabCurrentlyDisplayingLabel
-from .browse_tab_scroll_widget import BrowseTabScrollWidget
-from .browse_tab_progress_bar import BrowseTabProgressBar
+from .sequence_picker.sequence_picker_currently_displaying_label import (
+    SequencePickerCurrentlyDisplayingLabel,
+)
+from .sequence_picker.sequence_picker_scroll_widget import SequencePickerScrollWidget
+from .sequence_picker.sequence_picker_progress_bar import SequencePickerPirogressBar
 from .browse_tab_options_panel import BrowseTabOptionsPanel
 from .browse_tab_ui_updater import BrowseTabUIUpdater
 from .browse_tab_go_back_button import BrowseTabGoBackButton
-from .browse_tab_sequence_count_label import BrowseTabSequenceCountLabel
+from .sequence_picker.sequence_picker_count_label import SequencePickerCountLabel
 from .deletion_handler.browse_tab_deletion_handler import BrowseTabDeletionHandler
 from .browse_tab_selection_handler import BrowseTabSelectionHandler
-from .browse_tab_preview_area import BrowseTabPreviewArea
+from .sequence_viewer import SequenceViewer
 from .browse_tab_edit_sequence_handler import BrowseTabEditSequenceHandler
 
 if TYPE_CHECKING:
@@ -39,7 +46,7 @@ class BrowseTab(QWidget):
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
-        self.dictionary_settings = (
+        self.browse_tab_settings = (
             self.main_widget.main_window.settings_manager.browse_tab_settings
         )
         self._setup_ui()
@@ -60,18 +67,13 @@ class BrowseTab(QWidget):
         self.ui_updater = BrowseTabUIUpdater(self)
 
         # Components
-        self.currently_displaying_label = BrowseTabCurrentlyDisplayingLabel(self)
-        self.sequence_count_label = BrowseTabSequenceCountLabel(self)
-        self.progress_bar = BrowseTabProgressBar(self)
-        self.sort_widget = BrowseTabSortWidget(self)
+        self.sequence_picker = SequencePicker(self)
+        self.sequence_viewer = SequenceViewer(self)
+
         self.go_back_button = BrowseTabGoBackButton(self)
-        self.scroll_widget = BrowseTabScrollWidget(self)
-        self.nav_sidebar = BrowseTabNavSidebar(self)
-        self.preview_area = BrowseTabPreviewArea(self)
-        self.initial_selection_widget = BrowseTabInitialSelectionsWidget(self)
 
     def show_initial_section(self):
-        current_section = self.dictionary_settings.get_current_section()
+        current_section = self.browse_tab_settings.get_current_section()
         initial_selection_widget = self.initial_selection_widget
 
         section_map = {

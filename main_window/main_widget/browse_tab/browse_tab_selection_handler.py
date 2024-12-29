@@ -33,7 +33,7 @@ class BrowseTabSelectionHandler:
         thumbnail_index,
     ) -> None:
         self.dictionary_widget.selected_sequence_dict = metadata
-        self.preview_area = self.dictionary_widget.preview_area
+        self.preview_area = self.dictionary_widget.sequence_viewer
         self.preview_area.thumbnails = thumbnail_collection
         self.preview_area.image_label.setPixmap(
             thumbnail_pixmap.scaled(

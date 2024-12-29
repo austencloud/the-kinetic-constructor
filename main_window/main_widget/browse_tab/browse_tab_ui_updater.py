@@ -14,9 +14,9 @@ class BrowseTabUIUpdater:
     def update_and_display_ui(self, total_sequences: int):
         """Update the UI to display the sequences based on filter criteria."""
         if total_sequences == 0:
-            total_sequences = 1  
+            total_sequences = 1
 
-        self.browse_tab.sequence_count_label.setText(
+        self.browse_tab.sequence_picker.count_label.setText(
             f"Number of words to be displayed: {total_sequences}"
         )
 
@@ -37,14 +37,14 @@ class BrowseTabUIUpdater:
                 num_words += 1
 
                 percentage = int((num_words / total_sequences) * 100)
-                self.browse_tab.progress_bar.set_value(percentage)
-                self.browse_tab.sequence_count_label.setText(
+                self.browse_tab.sequence_picker.progress_bar.set_value(percentage)
+                self.browse_tab.sequence_picker.count_label.setText(
                     f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
 
             # Finalize display and update colors
-            self.browse_tab.progress_bar.setVisible(False)
+            self.browse_tab.sequence_picker.progress_bar.setVisible(False)
             self._apply_sorting_and_styling()
             QApplication.restoreOverrideCursor()
 
@@ -61,7 +61,9 @@ class BrowseTabUIUpdater:
         )
 
         # Update style for each thumbnail box
-        for thumbnail_box in self.browse_tab.scroll_widget.thumbnail_boxes.values():
+        for (
+            thumbnail_box
+        ) in self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes.values():
             thumbnail_box.word_label.setStyleSheet(f"color: {font_color};")
             thumbnail_box.word_label.star_icon_empty_path = (
                 "star_empty_white.png"

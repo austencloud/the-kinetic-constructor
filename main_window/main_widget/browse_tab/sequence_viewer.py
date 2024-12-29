@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     )
 
 
-class BrowseTabPreviewArea(QWidget):
+class SequenceViewer(QWidget):
     def __init__(self, browse_tab: "BrowseTab"):
         super().__init__(browse_tab)
         self.thumbnails = []
@@ -123,7 +123,7 @@ class BrowseTabPreviewArea(QWidget):
         if self.thumbnails and self.current_index is not None:
             self.update_preview(self.current_index)
 
-    def clear_preview(self):
+    def clear(self):
         self.image_label.show_placeholder()
         self.variation_number_label.clear()
         self.word_label.clear()

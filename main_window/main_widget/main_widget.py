@@ -92,7 +92,7 @@ class MainWidget(QWidget):
     sequence_properties_manager: "SequencePropertiesManager"
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
-    stack_fade_manager: MainWidgetFadeManager
+    fade_manager: MainWidgetFadeManager
     font_color_updater: "MainWidgetFontColorUpdater"
 
     # Layouts and Widgets
@@ -104,13 +104,27 @@ class MainWidget(QWidget):
     left_stack: QStackedWidget
     right_stack: QStackedWidget
     full_screen_overlay: "FullScreenImageOverlay"
-    
+
     # Indices for tabs
-    construct_tab_index: int = 0
-    generate_tab_index: int = 1
-    browse_tab_index: int = 2
-    learn_tab_index: int = 3
-    write_tab_index: int = 4
+    main_construct_tab_index: int = 0
+    main_generate_tab_index: int = 1
+    main_browse_tab_index: int = 2
+    main_learn_tab_index: int = 3
+    main_write_tab_index: int = 4
+
+    # Left Indices
+    left_sequence_widget_index: int = 0
+    left_codex_index: int = 1
+    left_act_sheet_index: int = 2
+    left_filter_selector_index: int = 3
+    left_sequence_picker_index: int = 4
+
+    # Right Indices
+    right_construct_tab_index: int = 0
+    right_generate_tab_index: int = 1
+    right_learn_tab_index: int = 2
+    right_write_tab_index: int = 3
+    right_sequence_viewer_index: int = 4
 
     # Current state
     current_tab: str

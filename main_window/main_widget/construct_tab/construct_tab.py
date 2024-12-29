@@ -56,7 +56,7 @@ class ConstructTab(QFrame):
 
     def transition_to_option_picker(self):
         """Transition to the option picker for sequence building."""
-        self.main_widget.stack_fade_manager.fade_to_tab(
+        self.main_widget.fade_manager.fade_to_tab(
             self.stacked_widget, self.option_picker_index
         )
 
@@ -65,17 +65,13 @@ class ConstructTab(QFrame):
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
-        self.main_widget.stack_fade_manager.fade_to_tab(
+        self.main_widget.fade_manager.fade_to_tab(
             self.stacked_widget, self.advanced_start_pos_picker_index
         )
         self.advanced_start_pos_picker.display_variations()
 
     def reset_to_start_pos_picker(self) -> None:
         """Reset the view back to the start position picker."""
-        self.main_widget.stack_fade_manager.fade_to_tab(
+        self.main_widget.fade_manager.fade_to_tab(
             self.stacked_widget, self.start_pos_picker_index
         )
-
-
-
-

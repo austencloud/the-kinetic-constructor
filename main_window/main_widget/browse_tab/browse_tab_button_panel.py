@@ -7,7 +7,7 @@ from .temp_beat_frame.temp_beat_frame import TempBeatFrame
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from .browse_tab_preview_area import BrowseTabPreviewArea
+    from .sequence_viewer import SequenceViewer
 
 
 class BrowseTabButtonPanel(QWidget):
@@ -15,7 +15,7 @@ class BrowseTabButtonPanel(QWidget):
     edit_sequence_button: QPushButton
     save_image_button: QPushButton
 
-    def __init__(self, preview_area: "BrowseTabPreviewArea"):
+    def __init__(self, preview_area: "SequenceViewer"):
         super().__init__(preview_area)
         self.preview_area = preview_area
         self.browse_tab = preview_area.browse_tab

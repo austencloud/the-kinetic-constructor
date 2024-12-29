@@ -3,21 +3,18 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QApplicat
 from PyQt6.QtCore import Qt
 
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-    from main_window.main_widget.browse_tab.browse_tab_options_panel import (
-        BrowseTabOptionsPanel,
-    )
+    from .sequence_picker import SequencePicker
 
 
-class BrowseTabSortWidget(QWidget):
+class SequencePickerSortWidget(QWidget):
     """Widget for sorting the dictionary entries by sequence length, alphabetical order, or date added"""
 
-    def __init__(self, browse_tab: "BrowseTab") -> None:
-        super().__init__(browse_tab)
-        self.browse_tab = browse_tab
-        self.main_widget = self.browse_tab.main_widget
+    def __init__(self, sequence_picker: "SequencePicker") -> None:
+        super().__init__(sequence_picker)
+        self.sequence_picker = sequence_picker
+        self.main_widget = self.sequence_picker.main_widget
+        self.browse_tab = self.sequence_picker.browse_tab
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.selected_button: QPushButton = None  # Track the selected button
         self._setup_sort_buttons()
@@ -76,7 +73,9 @@ class BrowseTabSortWidget(QWidget):
         self.browse_tab.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
             "sequence_length"
         )
-        self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
+        self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().setValue(
+            0
+        )
         QApplication.restoreOverrideCursor()
 
     def on_sort_alphabetically(self):
@@ -86,7 +85,9 @@ class BrowseTabSortWidget(QWidget):
         self.browse_tab.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
             "alphabetical"
         )
-        self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
+        self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().setValue(
+            0
+        )
         QApplication.restoreOverrideCursor()
 
     def on_sort_by_date_added(self):
@@ -96,7 +97,9 @@ class BrowseTabSortWidget(QWidget):
         self.browse_tab.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
             "date_added"
         )
-        self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
+        self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().setValue(
+            0
+        )
         QApplication.restoreOverrideCursor()
 
     def update_selected_button(self, button: QPushButton):
@@ -125,7 +128,7 @@ class BrowseTabSortWidget(QWidget):
             self.settings_manager.global_settings.get_background_type()
         )
         font_size = self.browse_tab.width() // 50
-        self.browse_tab.sequence_count_label.setStyleSheet(
+        self.sequence_picker.count_label.setStyleSheet(
             f"font-size: {font_size}px; color: {font_color};"
         )
 
@@ -134,7 +137,7 @@ class BrowseTabSortWidget(QWidget):
             self.settings_manager.global_settings.get_background_type()
         )
         font_size = self.browse_tab.width() // 50
-        self.browse_tab.currently_displaying_label.setStyleSheet(
+        self.sequence_picker.currently_displaying_label.setStyleSheet(
             f"font-size: {font_size}px; color: {font_color};"
         )
 

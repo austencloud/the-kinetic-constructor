@@ -26,24 +26,28 @@ class BrowseTabDeletionHandler:
         if dialog.exec() == QDialog.DialogCode.Accepted:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             current_scroll_position = (
-                self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().value()
+                self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().value()
             )
             file_path = thumbnail_box.thumbnails.pop(index)
             os.remove(file_path)
             if len(thumbnail_box.thumbnails) == 0:
                 self.delete_word(thumbnail_box.word)
-                self.browse_tab.preview_area.update_thumbnails()
-                self.browse_tab.scroll_widget.thumbnail_boxes.pop(thumbnail_box.word)
+                self.browse_tab.sequence_viewer.update_thumbnails()
+                self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes.pop(
+                    thumbnail_box.word
+                )
             else:
                 self.delete_empty_folders(get_images_and_data_path("dictionary"))
                 thumbnail_box.current_index = 0
                 self.browse_tab.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
                 thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-                self.browse_tab.preview_area.update_thumbnails(thumbnail_box.thumbnails)
+                self.browse_tab.sequence_viewer.update_thumbnails(
+                    thumbnail_box.thumbnails
+                )
                 thumbnail_box.update_thumbnails(thumbnail_box.thumbnails)
 
             def restore_scroll_position():
-                self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().setValue(
+                self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().setValue(
                     current_scroll_position
                 )
                 QApplication.restoreOverrideCursor()

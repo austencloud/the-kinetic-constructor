@@ -5,15 +5,15 @@ from functools import partial
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
 class SequenceLengthSection(FilterSectionBase):
     AVAILABLE_LENGTHS = [4, 6, 8, 10, 12, 16, 20, 24, 28, 32]
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget, "Select by Sequence Length:")
         self.buttons: dict[int, QPushButton] = {}
         self.sequence_tally_labels: dict[int, QLabel] = {}
@@ -105,7 +105,7 @@ class SequenceLengthSection(FilterSectionBase):
 
     def display_only_thumbnails_with_sequence_length(self, length: int):
         """Display sequences of a specific length."""
-        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
             {"sequence_length": length}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

@@ -37,9 +37,7 @@ class BrowseTabFilterManager:
         ]
 
         self.browse_tab.currently_displayed_sequences = favorites
-        self.browse_tab.ui_updater.update_and_display_ui(
-            len(favorites)
-        )
+        self.browse_tab.ui_updater.update_and_display_ui(len(favorites))
 
     def show_all_sequences(self):
         """Show all sequences."""
@@ -58,9 +56,7 @@ class BrowseTabFilterManager:
         ]
 
         self.browse_tab.currently_displayed_sequences = sequences
-        self.browse_tab.ui_updater.update_and_display_ui(
-            len(sequences)
-        )
+        self.browse_tab.ui_updater.update_and_display_ui(len(sequences))
 
     def show_most_recent_sequences(self, date: datetime):
         """Show most recent sequences based on date."""
@@ -80,9 +76,7 @@ class BrowseTabFilterManager:
         ]
 
         self.browse_tab.currently_displayed_sequences = most_recent
-        self.browse_tab.ui_updater.update_and_display_ui(
-            len(most_recent)
-        )
+        self.browse_tab.ui_updater.update_and_display_ui(len(most_recent))
 
     def show_browser_with_filters_from_settings(self):
         """Show browser with filters from settings."""
@@ -94,29 +88,31 @@ class BrowseTabFilterManager:
 
     def apply_current_filter(self, current_filter):
         self.current_filter = current_filter
-        self.browse_tab.layout_manager.switch_to_main_content()
+        self.browse_tab.layout_manager.switch_to_sequence_picker()
         self.browse_tab.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )
-        self.browse_tab.preview_area.update_preview(None)
+        self.browse_tab.sequence_viewer.update_preview(None)
         QApplication.processEvents()
 
     def prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.browse_tab.currently_displaying_label.setText("")
+        self.browse_tab.sequence_picker.currently_displaying_label.setText("")
         QApplication.processEvents()
-        self.browse_tab.currently_displaying_label.show_message(description)
-        self.browse_tab.sequence_count_label.setText("")
-        self.browse_tab.scroll_widget.clear_layout()
-        self.browse_tab.scroll_widget.grid_layout.addWidget(
-            self.browse_tab.progress_bar,
+        self.browse_tab.sequence_picker.currently_displaying_label.show_message(
+            description
+        )
+        self.browse_tab.sequence_picker.count_label.setText("")
+        self.browse_tab.sequence_picker.scroll_widget.clear_layout()
+        self.browse_tab.sequence_picker.scroll_widget.grid_layout.addWidget(
+            self.browse_tab.sequence_picker.progress_bar,
             0,
             0,
             1,
             self.browse_tab.thumbnail_box_sorter.num_columns,
             Qt.AlignmentFlag.AlignCenter,
         )
-        self.browse_tab.progress_bar.setVisible(True)
-        self.browse_tab.progress_bar.resize_progress_bar()
-        
+        self.browse_tab.sequence_picker.progress_bar.setVisible(True)
+        self.browse_tab.sequence_picker.progress_bar.resize_progress_bar()
+
         QApplication.processEvents()

@@ -64,7 +64,7 @@ class ThumbnailBox(QWidget):
         QApplication.processEvents()
         self.save_favorite_status()
 
-        current_filter = self.browse_tab.dictionary_settings.get_current_filter()
+        current_filter = self.browse_tab.browse_tab_settings.get_current_filter()
         if current_filter and current_filter.get("favorites"):
             if not self.favorite_status:
                 self.hide()
@@ -89,10 +89,11 @@ class ThumbnailBox(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         scrollbar_width = (
-            self.browse_tab.scroll_widget.scroll_area.verticalScrollBar().width()
+            self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().width()
         )
         parent_width = (
-            self.browse_tab.scroll_widget.scroll_content.width() - scrollbar_width
+            self.browse_tab.sequence_picker.scroll_widget.scroll_content.width()
+            - scrollbar_width
         )
 
         width = parent_width // 3
@@ -102,8 +103,8 @@ class ThumbnailBox(QWidget):
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
-        if self == self.browse_tab.preview_area.current_thumbnail_box:
-            self.browse_tab.preview_area.update_thumbnails(self.thumbnails)
+        if self == self.browse_tab.sequence_viewer.current_thumbnail_box:
+            self.browse_tab.sequence_viewer.update_thumbnails(self.thumbnails)
         self.image_label.thumbnails = thumbnails
         self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
         if len(self.thumbnails) == 1:

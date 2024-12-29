@@ -12,8 +12,8 @@ from PyQt6.QtCore import Qt, QTimer
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
@@ -38,7 +38,7 @@ class ContainsLettersSection(FilterSectionBase):
     BUTTON_SIZE_FACTOR = 20
     APPLY_BUTTON_WIDTH_FACTOR = 6
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget, "Select letters to be contained:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.selected_letters: set[str] = set()
@@ -145,7 +145,7 @@ class ContainsLettersSection(FilterSectionBase):
 
         total_sequences = len(matching_sequences) or 1
         self.browse_tab.currently_displayed_sequences = matching_sequences
-        self.browse_tab.sequence_count_label.setText(
+        self.browse_tab.sequence_picker.count_label.setText(
             f"Number of words to be displayed: {len(matching_sequences)}"
         )
 
@@ -161,21 +161,19 @@ class ContainsLettersSection(FilterSectionBase):
                     hidden=True,
                 )
                 percentage = int(((index + 1) / total_sequences) * 100)
-                self.browse_tab.progress_bar.set_value(percentage)
-                self.browse_tab.sequence_count_label.setText(
+                self.browse_tab.sequence_picker.progress_bar.set_value(percentage)
+                self.browse_tab.sequence_picker.count_label.setText(
                     f"Number of words: {index + 1}"
                 )
                 QApplication.processEvents()
 
-            self.browse_tab.progress_bar.setVisible(False)
-            self.browse_tab.ui_updater.update_and_display_ui(
-                total_sequences
-            )
+            self.browse_tab.sequence_picker.progress_bar.setVisible(False)
+            self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
-        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
             {"contains_letters": letters}
         )
 

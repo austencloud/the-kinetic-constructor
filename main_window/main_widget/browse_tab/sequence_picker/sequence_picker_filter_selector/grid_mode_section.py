@@ -20,8 +20,8 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
@@ -30,7 +30,7 @@ class GridModeSection(FilterSectionBase):
     # Update IMAGE_DIR to point to the directory containing your SVGs
     IMAGE_DIR = get_images_and_data_path("images/grid")
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget, "Select by Grid Mode:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -224,7 +224,7 @@ class GridModeSection(FilterSectionBase):
 
     def display_only_thumbnails_with_grid_mode(self, grid_mode: str):
         """Display only the thumbnails that match the selected grid mode."""
-        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
             {"grid_mode": grid_mode.lower()}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

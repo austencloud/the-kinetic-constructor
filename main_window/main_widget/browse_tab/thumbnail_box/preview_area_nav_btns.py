@@ -5,13 +5,13 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab_preview_area import (
-        BrowseTabPreviewArea,
+    from main_window.main_widget.browse_tab.sequence_viewer import (
+        SequenceViewer,
     )
 
 
 class PreviewAreaNavButtonsWidget(QWidget):
-    def __init__(self, preview_area: "BrowseTabPreviewArea"):
+    def __init__(self, preview_area: "SequenceViewer"):
         super().__init__(preview_area)
         self.preview_area = preview_area
         self.thumbnails = preview_area.thumbnails
@@ -83,6 +83,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
         for button in self.buttons:
             button.setFont(QFont("Arial", font_size, QFont.Weight.Bold))
         super().resizeEvent(event)
+
 
 class PreviewAreaNavButton(QPushButton):
     def __init__(self, text: str, parent: PreviewAreaNavButtonsWidget):

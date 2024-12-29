@@ -1,23 +1,21 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QGridLayout
-from .thumbnail_box.thumbnail_box import ThumbnailBox
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QGridLayout, QSizePolicy
+
+from ..thumbnail_box.thumbnail_box import ThumbnailBox
 
 if TYPE_CHECKING:
-    from .browse_tab import BrowseTab
-    from .browse_tab_section_header import BrowseTabSectionHeader
+    from .sequence_picker import SequencePicker
+    from ..browse_tab_section_header import BrowseTabSectionHeader
 
 
-class BrowseTabScrollWidget(QWidget):
-    def __init__(self, browse_tab: "BrowseTab"):
-        super().__init__(browse_tab)
-        self.is_initialized = False
-        self.browse_tab = browse_tab
+class SequencePickerScrollWidget(QWidget):
+    def __init__(self, sequence_picker: "SequencePicker"):
+        super().__init__(sequence_picker)
+        self.sequence_picker = sequence_picker
         self.thumbnail_boxes: dict[str, ThumbnailBox] = {}
-        self.scroll_content = QWidget()
-        self.setStyleSheet("background: transparent;")
-        self.is_initialized = True
         self.section_headers: dict[int, "BrowseTabSectionHeader"] = {}
+        self.setStyleSheet("background: transparent;")
         self._setup_scroll_area()
         self._setup_layout()
 
@@ -31,6 +29,7 @@ class BrowseTabScrollWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def _setup_scroll_area(self):
+        self.scroll_content = QWidget()
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setHorizontalScrollBarPolicy(

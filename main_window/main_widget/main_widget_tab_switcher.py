@@ -13,35 +13,39 @@ class MainWidgetTabSwitcher:
 
     def on_tab_changed(self, index: int) -> None:
         if (
-            index == self.mw.learn_tab_index
+            index == self.mw.main_learn_tab_index
             and self.mw.right_stack.currentIndex() == index
         ):
             return
 
         left_new_index = {
-            self.mw.learn_tab_index: 1,
-            self.mw.write_tab_index: 2,
-            self.mw.browse_tab_index: 3,
-            self.mw.generate_tab_index: 0,
-            self.mw.construct_tab_index: 0,
+            self.mw.main_learn_tab_index: 1,
+            self.mw.main_write_tab_index: 2,
+            self.mw.main_browse_tab_index: 3,
+            self.mw.main_generate_tab_index: 0,
+            self.mw.main_construct_tab_index: 0,
         }.get(index, None)
 
-        right_new_index = 2 if index == self.mw.browse_tab_index else index
+        right_new_index = (
+            self.mw.right_sequence_viewer_index
+            if index == self.mw.main_browse_tab_index
+            else index
+        )
 
         width_ratio = (
-            (2 / 3, 1 / 3) if index == self.mw.browse_tab_index else (1 / 2, 1 / 2)
+            (2 / 3, 1 / 3) if index == self.mw.main_browse_tab_index else (1 / 2, 1 / 2)
         )
 
         if (
-            index in [self.mw.generate_tab_index, self.mw.construct_tab_index]
+            index in [self.mw.main_generate_tab_index, self.mw.main_construct_tab_index]
             and self.mw.left_stack.currentIndex() == 0
         ):
-            new_index = 1 if index == self.mw.generate_tab_index else 0
-            self.mw.stack_fade_manager.fade_to_tab(
+            new_index = 1 if index == self.mw.main_generate_tab_index else 0
+            self.mw.fade_manager.fade_to_tab(
                 stack=self.mw.right_stack, new_index=new_index
             )
         else:
-            self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
+            self.mw.fade_manager.fade_both_stacks_in_parallel(
                 right_stack=self.mw.right_stack,
                 right_new_index=right_new_index,
                 left_stack=self.mw.left_stack,
@@ -52,11 +56,11 @@ class MainWidgetTabSwitcher:
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""
         tab_indices = {
-            "build": self.mw.construct_tab_index,
-            "generate": self.mw.generate_tab_index,
-            "browse": self.mw.browse_tab_index,
-            "learn": self.mw.learn_tab_index,
-            "write": self.mw.write_tab_index,
+            "build": self.mw.main_construct_tab_index,
+            "generate": self.mw.main_generate_tab_index,
+            "browse": self.mw.main_browse_tab_index,
+            "learn": self.mw.main_learn_tab_index,
+            "write": self.mw.main_write_tab_index,
         }
         current_tab_name = self.mw.current_tab
         if current_tab_name in tab_indices:

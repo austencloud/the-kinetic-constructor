@@ -6,13 +6,13 @@ from functools import partial
 from datetime import datetime, timedelta
 
 if TYPE_CHECKING:
-    from .browse_tab_initial_selections_widget import BrowseTabInitialSelectionsWidget
+    from .sequence_picker_filter_selector import SequencePickerFilterSelector
 
 
 class FilterChoiceWidget(QWidget):
     """Widget to display filter options for the dictionary browser."""
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget)
         self.initial_selection_widget = initial_selection_widget
         self.buttons: dict[str, QPushButton] = {}

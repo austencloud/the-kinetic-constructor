@@ -16,16 +16,16 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.initial_filter_selection_widget.browse_tab_initial_selections_widget import (
-        BrowseTabInitialSelectionsWidget,
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+        SequencePickerFilterSelector,
     )
 
 
 class AuthorSection(FilterSectionBase):
     IMAGE_DIR = get_images_and_data_path("images/author_images")
-    MAX_COLUMNS = 3 
+    MAX_COLUMNS = 3
 
-    def __init__(self, initial_selection_widget: "BrowseTabInitialSelectionsWidget"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
         super().__init__(initial_selection_widget, "Select by Author:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -154,7 +154,7 @@ class AuthorSection(FilterSectionBase):
 
     def display_only_thumbnails_by_author(self, author: str):
         """Display only the thumbnails that match the selected author."""
-        self.initial_selection_widget.browse_tab.dictionary_settings.set_current_filter(
+        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
             {"author": author}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

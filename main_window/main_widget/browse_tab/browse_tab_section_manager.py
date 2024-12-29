@@ -16,8 +16,8 @@ class BrowseTabSectionManager:
     def add_header(self, row_index, num_columns, section):
         header_title = f"{section}"
         header = BrowseTabSectionHeader(header_title)
-        self.browse_tab.scroll_widget.section_headers[section] = header
-        self.browse_tab.scroll_widget.grid_layout.addWidget(
+        self.browse_tab.sequence_picker.scroll_widget.section_headers[section] = header
+        self.browse_tab.sequence_picker.scroll_widget.grid_layout.addWidget(
             header, row_index, 0, 1, num_columns
         )
 
