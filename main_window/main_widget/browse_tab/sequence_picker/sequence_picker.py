@@ -11,7 +11,6 @@ from .sequence_picker_scroll_widget import SequencePickerScrollWidget
 from .sequence_picker_currently_displaying_label import (
     SequencePickerCurrentlyDisplayingLabel,
 )
-from ..browse_tab_go_back_button import BrowseTabGoBackButton
 from .sequence_picker_progress_bar import SequencePickerPirogressBar
 from .sequence_picker_count_label import SequencePickerCountLabel
 from .sequence_picker_sort_widget import SequencePickerSortWidget

@@ -162,7 +162,7 @@ class GridModeSection(FilterSectionBase):
 
     def handle_grid_mode_click(self, grid_mode: str):
         """Handle clicks on grid mode buttons."""
-        self.initial_selection_widget.on_grid_mode_button_clicked(grid_mode)
+        self.filter_selector.on_grid_mode_button_clicked(grid_mode)
 
     def handle_image_click(self, grid_mode: str, event):
         """Handle clicks on grid mode images."""
@@ -224,7 +224,7 @@ class GridModeSection(FilterSectionBase):
 
     def display_only_thumbnails_with_grid_mode(self, grid_mode: str):
         """Display only the thumbnails that match the selected grid mode."""
-        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"grid_mode": grid_mode.lower()}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

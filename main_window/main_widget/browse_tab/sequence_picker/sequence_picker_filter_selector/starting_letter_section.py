@@ -82,7 +82,7 @@ class StartingLetterSection(FilterSectionBase):
         # Use partial to pass the letter to the slot
         button.clicked.connect(
             partial(
-                self.initial_selection_widget.on_starting_letter_button_clicked,
+                self.filter_selector.on_starting_letter_button_clicked,
                 letter,
             )
         )

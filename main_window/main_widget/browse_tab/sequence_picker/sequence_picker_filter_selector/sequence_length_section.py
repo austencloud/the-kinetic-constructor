@@ -77,7 +77,7 @@ class SequenceLengthSection(FilterSectionBase):
         self.buttons[length] = button
         button.clicked.connect(
             partial(
-                self.initial_selection_widget.on_length_button_clicked,
+                self.filter_selector.on_length_button_clicked,
                 length,
             )
         )
@@ -105,7 +105,7 @@ class SequenceLengthSection(FilterSectionBase):
 
     def display_only_thumbnails_with_sequence_length(self, length: int):
         """Display sequences of a specific length."""
-        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"sequence_length": length}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

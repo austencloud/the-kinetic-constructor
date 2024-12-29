@@ -130,7 +130,7 @@ class LevelSection(FilterSectionBase):
 
     def handle_level_click(self, level: int):
         """Handle clicks on level buttons."""
-        self.initial_selection_widget.on_level_button_clicked(level)
+        self.filter_selector.on_level_button_clicked(level)
 
     def handle_image_click(self, level: int, event):
         """Handle clicks on level images."""
@@ -192,7 +192,7 @@ class LevelSection(FilterSectionBase):
 
     def display_only_thumbnails_with_level(self, level: int):
         """Display only the thumbnails that match the selected level."""
-        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"level": level}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

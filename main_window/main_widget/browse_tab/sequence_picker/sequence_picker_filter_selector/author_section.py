@@ -98,7 +98,7 @@ class AuthorSection(FilterSectionBase):
 
     def handle_author_click(self, author: str):
         """Handle clicks on author buttons."""
-        self.initial_selection_widget.on_author_button_clicked(author)
+        self.filter_selector.on_author_button_clicked(author)
 
     def _get_all_sequences_with_authors(self) -> list[Tuple[str, list[str], str]]:
         """Retrieve and cache all sequences along with their authors."""
@@ -154,7 +154,7 @@ class AuthorSection(FilterSectionBase):
 
     def display_only_thumbnails_by_author(self, author: str):
         """Display only the thumbnails that match the selected author."""
-        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"author": author}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
@@ -186,8 +186,8 @@ class AuthorSection(FilterSectionBase):
 
     def resize_labels(self):
         """Adjust font sizes of labels during resizing."""
-        font_size_label = max(10, self.initial_selection_widget.width() // 140)
-        font_size_header = max(12, self.initial_selection_widget.width() // 100)
+        font_size_label = max(10, self.filter_selector.width() // 140)
+        font_size_header = max(12, self.filter_selector.width() // 100)
 
         for label in self.sequence_count_labels.values():
             font = label.font()
@@ -200,9 +200,9 @@ class AuthorSection(FilterSectionBase):
 
     def resize_buttons(self):
         """Adjust button sizes and fonts during resizing."""
-        button_width = max(1, self.initial_selection_widget.width() // 5)
-        button_height = max(1, self.initial_selection_widget.height() // 20)
-        font_size_button = max(10, self.initial_selection_widget.width() // 100)
+        button_width = max(1, self.filter_selector.width() // 5)
+        button_height = max(1, self.filter_selector.height() // 20)
+        font_size_button = max(10, self.filter_selector.width() // 100)
 
         for button in self.buttons.values():
             font = button.font()

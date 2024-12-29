@@ -137,7 +137,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def handle_position_click(self, position: str):
         """Handle clicks on position buttons."""
-        self.initial_selection_widget.on_position_button_clicked(position)
+        self.filter_selector.on_position_button_clicked(position)
 
     def handle_image_click(self, position: str, event):
         """Handle clicks on position images."""
@@ -201,7 +201,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         """Display only the thumbnails that match the selected starting position."""
-        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"starting_position": position.lower()}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(

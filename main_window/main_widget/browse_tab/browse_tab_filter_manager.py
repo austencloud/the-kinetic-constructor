@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 class BrowseTabFilterManager:
     def __init__(self, browse_tab: "BrowseTab"):
         self.browse_tab = browse_tab
+        self.main_widget = self.browse_tab.main_widget
 
     def show_favorites(self):
         """Show only favorite sequences."""
@@ -88,7 +89,11 @@ class BrowseTabFilterManager:
 
     def apply_current_filter(self, current_filter):
         self.current_filter = current_filter
-        self.browse_tab.layout_manager.switch_to_sequence_picker()
+        self.main_widget.fade_manager.fade_to_tab(
+            self.main_widget.left_stack,
+            self.main_widget.left_sequence_picker_index,
+        )
+
         self.browse_tab.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )

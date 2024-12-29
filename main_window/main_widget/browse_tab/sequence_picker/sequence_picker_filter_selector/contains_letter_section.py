@@ -115,9 +115,7 @@ class ContainsLettersSection(FilterSectionBase):
 
     def apply_filter(self):
         """Apply the filter based on the selected letters."""
-        self.initial_selection_widget.apply_contains_letter_filter(
-            list(self.selected_letters)
-        )
+        self.filter_selector.apply_contains_letter_filter(list(self.selected_letters))
 
     def display_only_thumbnails_containing_letters(self, letters: list[str]):
         """Display only the thumbnails that contain the specified letters."""
@@ -173,7 +171,7 @@ class ContainsLettersSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
-        self.initial_selection_widget.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"contains_letters": letters}
         )
 

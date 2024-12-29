@@ -1,34 +1,21 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.browse_tab.browse_tab_go_back_button import (
-    BrowseTabGoBackButton,
-)
+from ..sequence_picker_go_back_button import SequencePickerGoBackButton
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
-    )
+    from .sequence_picker_filter_selector import SequencePickerFilterSelector
 
 
 class FilterSectionBase(QWidget):
     def __init__(
-        self,
-        initial_selection_widget: "SequencePickerFilterSelector",
-        label_text: str,
+        self, filter_selector: "SequencePickerFilterSelector", label_text: str
     ):
-        super().__init__(initial_selection_widget)
-        self.initial_selection_widget = initial_selection_widget
+        super().__init__(filter_selector)
+        self.filter_selector = filter_selector
         self.buttons: dict[str, QPushButton] = {}
-        self.browse_tab = initial_selection_widget.browse_tab
-        self.main_widget = initial_selection_widget.browse_tab.main_widget
+        self.browse_tab = filter_selector.browse_tab
+        self.main_widget = filter_selector.browse_tab.main_widget
         self.metadata_extractor = self.main_widget.metadata_extractor
         self._setup_ui(label_text)
 
@@ -37,12 +24,13 @@ class FilterSectionBase(QWidget):
     def _setup_ui(self, label_text: str):
         layout = QVBoxLayout(self)
 
-        # Create a top bar with the back button on the left
         top_bar_layout = QHBoxLayout()
-        self.go_back_button = BrowseTabGoBackButton(self.browse_tab)
+        self.go_back_button = SequencePickerGoBackButton(
+            self.filter_selector.sequence_picker
+        )
         self.go_back_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.go_back_button.connect_button(
-            self.initial_selection_widget.show_filter_choice_widget
+            self.filter_selector.show_filter_choice_widget
         )
         top_bar_layout.addWidget(
             self.go_back_button, alignment=Qt.AlignmentFlag.AlignLeft
@@ -51,7 +39,6 @@ class FilterSectionBase(QWidget):
 
         layout.addLayout(top_bar_layout)
 
-        # Add the label centered below the top bar
         self.header_label = QLabel(label_text)
         self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.header_label)
