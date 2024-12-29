@@ -5,7 +5,10 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import ThumbnailBox
+    from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import (
+        ThumbnailBox,
+    )
+
 
 class ThumbnailBoxNavButtonsWidget(QWidget):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
@@ -43,12 +46,11 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             ) % len(self.thumbnails)
 
         self.update_thumbnail(self.thumbnail_box.current_index)
-
         if (
             self.thumbnail_box.image_label
-            == self.thumbnail_box.browser.browse_tab.selection_handler.currently_selected_thumbnail
+            == self.thumbnail_box.browse_tab.selection_handler.currently_selected_thumbnail
         ):
-            preview_area = self.thumbnail_box.browser.browse_tab.preview_area
+            preview_area = self.thumbnail_box.browse_tab.preview_area
             preview_area.variation_number_label.setText(
                 f"{self.thumbnail_box.current_index + 1}/{len(self.thumbnails)}"
             )
@@ -64,18 +66,6 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.right_button = NavButton(">", self)
         self.layout.addWidget(self.left_button)
         self.layout.addWidget(self.right_button)
-
-    # def refresh(self):
-    #     self.update_thumbnail(self.thumbnail_box.current_index)
-    #     if len(self.thumbnail_box.thumbnails) == 1:
-    #         self.variation_number_label.hide()
-    #         self.hide()
-    #     else:
-    #         self.variation_number_label.show()
-    #         self.show()
-    #         self.variation_number_label.update_index(
-    #             self.thumbnail_box.current_index + 1
-    #         )
 
 
 class NavButton(QPushButton):

@@ -31,8 +31,6 @@ class MainWidgetTabSwitcher:
         width_ratio = (
             (2 / 3, 1 / 3) if index == self.mw.browse_tab_index else (1 / 2, 1 / 2)
         )
-        self.mw.left_stack.setMaximumWidth(int(self.mw.width() * width_ratio[0]))
-        self.mw.right_stack.setMaximumWidth(int(self.mw.width() * width_ratio[1]))
 
         if (
             index in [self.mw.generate_tab_index, self.mw.construct_tab_index]
@@ -44,10 +42,11 @@ class MainWidgetTabSwitcher:
             )
         else:
             self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
-                self.mw.right_stack,
-                right_new_index,
-                self.mw.left_stack,
-                left_new_index,
+                right_stack=self.mw.right_stack,
+                right_new_index=right_new_index,
+                left_stack=self.mw.left_stack,
+                left_new_index=left_new_index,
+                width_ratio=width_ratio,
             )
 
     def update_tab_based_on_settings(self) -> None:
