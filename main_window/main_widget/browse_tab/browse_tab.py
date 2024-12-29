@@ -58,13 +58,13 @@ class BrowseTab(QWidget):
         self.thumbnail_box_sorter = BrowseTabThumbnailBoxSorter(self)
         self.section_manager = BrowseTabSectionManager(self)
         self.ui_updater = BrowseTabUIUpdater(self)
+
+        # Components
         self.currently_displaying_label = BrowseTabCurrentlyDisplayingLabel(self)
         self.sequence_count_label = BrowseTabSequenceCountLabel(self)
         self.progress_bar = BrowseTabProgressBar(self)
         self.sort_widget = BrowseTabSortWidget(self)
         self.go_back_button = BrowseTabGoBackButton(self)
-
-        # Components
         self.scroll_widget = BrowseTabScrollWidget(self)
         self.nav_sidebar = BrowseTabNavSidebar(self)
         self.preview_area = BrowseTabPreviewArea(self)

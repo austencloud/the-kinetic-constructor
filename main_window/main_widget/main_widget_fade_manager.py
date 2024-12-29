@@ -1,10 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import (
-    QWidget,
-    QGraphicsOpacityEffect,
-    QStackedLayout,
-    QApplication,
-)
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedLayout
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
@@ -158,9 +153,11 @@ class MainWidgetFadeManager(QObject):
 
     def _switch_resize_and_fade_in_both(
         self,
-        right_stack: QStackedLayout, right_new_index: int,
-        left_stack: QStackedLayout, left_new_index: int,
-        width_ratio: tuple[float, float]
+        right_stack: QStackedLayout,
+        right_new_index: int,
+        left_stack: QStackedLayout,
+        left_new_index: int,
+        width_ratio: tuple[float, float],
     ):
         right_stack.setCurrentIndex(right_new_index)
         left_stack.setCurrentIndex(left_new_index)

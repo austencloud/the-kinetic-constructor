@@ -38,7 +38,6 @@ class BrowseTabLayoutManager:
         self.stacked_layout.addWidget(self.browse_tab.initial_selection_widget)
         self.stacked_layout.addWidget(self.main_content_widget)
         self.layout.addLayout(self.stacked_layout)
-        # self.layout.addWidget(self.browse_tab.preview_area)
         self.stacked_layout.setCurrentIndex(0)
 
     def switch_to_main_content(self):
