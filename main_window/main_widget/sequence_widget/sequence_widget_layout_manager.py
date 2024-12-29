@@ -25,7 +25,9 @@ class SequenceWidgetLayoutManager:
         self.main_layout.addLayout(current_word_layout, 1)
         self.main_layout.addLayout(self.sequence_widget.beat_frame_layout, 12)
         self.main_layout.addWidget(self.sequence_widget.indicator_label, 1)
-        self.main_layout.addWidget(self.sequence_widget.graph_editor_placeholder)
+        self.main_layout.addWidget(
+            self.sequence_widget.graph_editor.graph_editor_placeholder
+        )
 
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 

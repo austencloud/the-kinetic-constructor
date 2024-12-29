@@ -8,10 +8,16 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.sequence_widget.graph_editor.arrow_selection_manager import (
-    ArrowSelectionManager,
+from main_window.main_widget.sequence_widget.graph_editor.graph_editor_animator import (
+    GraphEditorAnimator,
 )
-
+from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_tab import (
+    GraphEditorToggleTab,
+)
+from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
+    GraphEditorPlaceholder,
+)
+from .arrow_selection_manager import ArrowSelectionManager
 from .graph_editor_layout_manager import GraphEditorLayoutManager
 from .graph_editor_state_manager import GraphEditorStateManager
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
@@ -35,7 +41,7 @@ class GraphEditor(QFrame):
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.setMinimumHeight(0)  # Allow to shrink to zero height
+        self.setMinimumHeight(0)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
         self._setup_components()
@@ -48,16 +54,9 @@ class GraphEditor(QFrame):
         self.adjustment_panel = BeatAdjustmentPanel(self)
         self.layout_manager = GraphEditorLayoutManager(self)
         self.state = GraphEditorStateManager(self)
-
-        self.pictograph_container.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-        self.pictograph_container.setMinimumHeight(0)
-
-        self.adjustment_panel.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-        )
-        self.adjustment_panel.setMinimumHeight(0)
+        self.toggle_tab = GraphEditorToggleTab(self)
+        self.graph_editor_placeholder = GraphEditorPlaceholder(self)
+        self.toggler = GraphEditorAnimator(self)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -67,8 +66,8 @@ class GraphEditor(QFrame):
 
         self.setFixedSize(width, graph_editor_height)
 
-        if self.sequence_widget.graph_editor.isVisible():
-            self.sequence_widget.graph_editor_placeholder.resize_graph_editor_placeholder()
+        if self.isVisible():
+            self.graph_editor_placeholder.resize_graph_editor_placeholder()
 
         self.adjustment_panel.update_adjustment_panel()
         self.raise_()

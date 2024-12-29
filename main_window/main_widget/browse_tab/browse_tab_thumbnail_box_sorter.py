@@ -63,9 +63,7 @@ class BrowseTabThumbnailBoxSorter:
         self.browse_tab.nav_sidebar.update_sidebar(sorted_sections, sort_method)
         current_section = None
 
-        self.browse_tab.options_widget.sort_widget.highlight_appropriate_button(
-            sort_method
-        )
+        self.browse_tab.sort_widget.highlight_appropriate_button(sort_method)
 
         for section in sorted_sections:
             if sort_method == "date_added":
@@ -164,7 +162,7 @@ class BrowseTabThumbnailBoxSorter:
         if not hidden:
             thumbnail_box.show()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-            
+
     def get_sorted_base_words(self, sort_order) -> list[tuple[str, list[str], None]]:
         dictionary_dir = get_images_and_data_path("dictionary")
         base_words = [

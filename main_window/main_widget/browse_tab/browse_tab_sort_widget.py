@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QApplicat
 from PyQt6.QtCore import Qt
 
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
     from main_window.main_widget.browse_tab.browse_tab_options_panel import (
         BrowseTabOptionsPanel,
     )
@@ -12,9 +14,9 @@ if TYPE_CHECKING:
 class BrowseTabSortWidget(QWidget):
     """Widget for sorting the dictionary entries by sequence length, alphabetical order, or date added"""
 
-    def __init__(self, options_panel: "BrowseTabOptionsPanel") -> None:
-        super().__init__(options_panel)
-        self.browse_tab = options_panel.browse_tab
+    def __init__(self, browse_tab: "BrowseTab") -> None:
+        super().__init__(browse_tab)
+        self.browse_tab = browse_tab
         self.main_widget = self.browse_tab.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.selected_button: QPushButton = None  # Track the selected button

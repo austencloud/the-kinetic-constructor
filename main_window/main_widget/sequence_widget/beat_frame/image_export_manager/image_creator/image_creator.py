@@ -3,8 +3,8 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
-from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_creator.reversal_processor import (
-    ReversalProcessor,
+from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_creator.beat_reversal_processor import (
+    BeatReversalProcessor,
 )
 
 from .height_determiner import HeightDeterminer
@@ -30,7 +30,7 @@ class ImageCreator:
         self.beat_factory = export_manager.beat_factory
         self.beat_scale = 1
         self._setup_drawers()
-        self.reversal_processor = ReversalProcessor()
+        self.reversal_processor = BeatReversalProcessor()
 
     def _setup_drawers(self):
         """Set up drawer instances."""

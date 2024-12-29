@@ -14,7 +14,7 @@ class GraphEditorPictographContainer(QWidget):
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
 
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.setMinimumHeight(0)
         self.setup_pictograph()
 

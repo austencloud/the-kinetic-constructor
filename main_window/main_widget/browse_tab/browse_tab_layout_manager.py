@@ -27,7 +27,7 @@ class BrowseTabLayoutManager:
         self.main_content_layout.addWidget(self.browse_tab.go_back_button)
         self.main_content_layout.addWidget(self.browse_tab.currently_displaying_label)
         self.main_content_layout.addWidget(self.browse_tab.sequence_count_label)
-        self.main_content_layout.addWidget(self.browse_tab.options_widget)
+        self.main_content_layout.addWidget(self.browse_tab.sort_widget)
 
         self.scroll_widget_container = QWidget()
         self.scroll_layout = QHBoxLayout(self.scroll_widget_container)

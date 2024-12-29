@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
+from main_window.main_widget.browse_tab.browse_tab_sort_widget import BrowseTabSortWidget
+
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_layout_manager import BrowseTabLayoutManager
 from .browse_tab_getter import BrowseTabGetter
@@ -59,7 +61,7 @@ class BrowseTab(QWidget):
         self.currently_displaying_label = BrowseTabCurrentlyDisplayingLabel(self)
         self.sequence_count_label = BrowseTabSequenceCountLabel(self)
         self.progress_bar = BrowseTabProgressBar(self)
-        self.options_widget = BrowseTabOptionsPanel(self)
+        self.sort_widget = BrowseTabSortWidget(self)
         self.go_back_button = BrowseTabGoBackButton(self)
 
         # Components

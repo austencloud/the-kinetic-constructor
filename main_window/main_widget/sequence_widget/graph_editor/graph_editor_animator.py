@@ -1,19 +1,21 @@
 from PyQt6.QtCore import QPropertyAnimation, QRect, QPoint, QEasingCurve, QObject
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.graph_editor.graph_editor import GraphEditor
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class GraphEditorAnimator(QObject):
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(sequence_widget)
-        self.sequence_widget = sequence_widget
-        self.graph_editor = sequence_widget.graph_editor
-        self.toggle_tab = sequence_widget.toggle_tab
-        self.graph_editor_placeholder = self.sequence_widget.graph_editor_placeholder
+    def __init__(self, graph_editor: "GraphEditor"):
+        super().__init__(graph_editor)
+        self.sequence_widget = graph_editor.sequence_widget
+        self.graph_editor = graph_editor
+        self.toggle_tab = graph_editor.toggle_tab
+        self.graph_editor_placeholder = self.graph_editor.graph_editor_placeholder
         self.button_panel_bottom_placeholder = (
-            sequence_widget.button_panel.bottom_placeholder
+            self.sequence_widget.button_panel.bottom_placeholder
         )
 
     def toggle(self):

@@ -49,12 +49,7 @@ class SequenceWidget(QWidget):
         self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.button_panel = SequenceWidgetButtonPanel(self)
-
-        # Graph Editor
         self.graph_editor = GraphEditor(self)
-        self.graph_editor_placeholder = GraphEditorPlaceholder(self)
-        self.toggle_tab = GraphEditorToggleTab(self)
-        self.toggler = GraphEditorAnimator(self)
 
         # Layout
         self.layout_manager = SequenceWidgetLayoutManager(self)
@@ -62,4 +57,4 @@ class SequenceWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.graph_editor.resizeEvent(event)
-        self.toggle_tab.reposition_toggle_tab()
+        self.graph_editor.toggle_tab.reposition_toggle_tab()

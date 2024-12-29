@@ -1,16 +1,18 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QFrame
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.graph_editor.graph_editor import GraphEditor
     from .sequence_widget import SequenceWidget
 
 
 class GraphEditorPlaceholder(QFrame):
     """This frame allows the sequence widget's items to reposition when toggling the graph editor's visibility."""
 
-    def __init__(self, sequence_widget: "SequenceWidget") -> None:
-        super().__init__(sequence_widget)
-        self.sequence_widget = sequence_widget
+    def __init__(self, graph_editor: "GraphEditor") -> None:
+        super().__init__(graph_editor)
+        self.sequence_widget = graph_editor.sequence_widget
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setFixedHeight(0) 
 

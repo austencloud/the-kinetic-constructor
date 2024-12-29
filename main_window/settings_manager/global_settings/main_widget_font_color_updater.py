@@ -148,7 +148,7 @@ class MainWidgetFontColorUpdater:
 
     def _update_browse_tab(self) -> None:
         browse_tab = self.main_widget.browse_tab
-        sort_widget = browse_tab.options_widget.sort_widget
+        sort_widget = browse_tab.sort_widget
 
         browse_tab_labels = [
             sort_widget.sort_by_label,

@@ -16,7 +16,6 @@ class BrowseTabOptionsPanel(QWidget):
         self.browse_tab = browse_tab
         self.main_widget = browse_tab.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
-        self.sort_widget = BrowseTabSortWidget(self)
         self._setup_layout()
 
     def _setup_layout(self):

@@ -19,9 +19,7 @@ class FullScreenViewer:
         self.beat_frame = sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
         self.json_loader = self.main_widget.json_manager.loader_saver
-        self.thumbnail_generator = (
-            self.sequence_widget.add_to_dictionary_manager.thumbnail_generator
-        )
+
         self.full_screen_overlay = None
 
     def view_full_screen(self):
@@ -45,6 +43,9 @@ class FullScreenViewer:
                 QApplication.restoreOverrideCursor()
 
     def create_thumbnail(self):
+        self.thumbnail_generator = (
+            self.sequence_widget.add_to_dictionary_manager.thumbnail_generator
+        )
         current_sequence = self.json_loader.load_current_sequence_json()
         temp_path = get_images_and_data_path("temp")
         image_path = self.thumbnail_generator.generate_and_save_thumbnail(

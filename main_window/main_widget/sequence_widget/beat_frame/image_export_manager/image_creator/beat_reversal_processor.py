@@ -4,7 +4,7 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import
 )
 
 
-class ReversalProcessor:
+class BeatReversalProcessor:
     """Class to process reversals and update pictographs."""
 
     @staticmethod
@@ -22,21 +22,11 @@ class ReversalProcessor:
             reversal_info = ReversalDetector.detect_reversal(
                 filtered_sequence_so_far, beat_dict
             )
-
             pictograph = beat_view.beat
-
             pictograph.blue_reversal = False
             pictograph.red_reversal = False
-
             pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
-
-            print(
-                f"Reversal detected - Beat {i}: "
-                f"Blue: {pictograph.blue_reversal}, "
-                f"Red: {pictograph.red_reversal}"
-            )
-
             pictograph.reversal_symbol_manager.update_reversal_symbols()
 
             beat_view.update()

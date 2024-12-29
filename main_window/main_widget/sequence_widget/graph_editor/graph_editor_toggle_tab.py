@@ -4,7 +4,11 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QFont
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.graph_editor.graph_editor import (
+        GraphEditor,
+    )
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
@@ -13,9 +17,10 @@ class GraphEditorToggleTab(QWidget):
 
     toggled = pyqtSignal()
 
-    def __init__(self, sequence_widget: "SequenceWidget") -> None:
-        super().__init__(sequence_widget)
-        self.sequence_widget = sequence_widget
+    def __init__(self, graph_editor: "GraphEditor") -> None:
+        super().__init__(graph_editor.sequence_widget)
+        self.graph_editor = graph_editor
+        self.sequence_widget = graph_editor.sequence_widget
         self._setup_layout()
         self._setup_components()
         self.move(0, self.sequence_widget.height() - self.height())
@@ -35,7 +40,7 @@ class GraphEditorToggleTab(QWidget):
         self.setLayout(self.layout)
 
     def mousePressEvent(self, event) -> None:
-        toggler = self.sequence_widget.toggler
+        toggler = self.graph_editor.toggler
         if toggler:
             toggler.toggle()
 

@@ -19,7 +19,7 @@ class BeatAdjustmentPanel(QFrame):
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
         self.GE_pictograph = graph_editor.pictograph_container.GE_pictograph
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.setMinimumHeight(0)
         self._initialize_ui()
 

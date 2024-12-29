@@ -24,8 +24,8 @@ class BrowseTabGoBackButton(QPushButton):
 
     def resizeEvent(self, event):
         """Repositions the button to the top left corner of the widget."""
-        self.setFixedHeight(self.browse_tab.main_widget.height() // 40)
-        self.setFixedWidth(self.browse_tab.main_widget.width() // 40)
+        self.setFixedHeight(self.browse_tab.main_widget.height() // 30)
+        self.setFixedWidth(self.browse_tab.main_widget.width() // 30)
         font = self.font()
         font.setPointSize(self.browse_tab.main_widget.width() // 100)
         self.setFont(font)
