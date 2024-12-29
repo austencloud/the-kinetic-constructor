@@ -10,7 +10,6 @@ from .lesson_1.lesson_1_widget import Lesson1Widget
 from .lesson_2.lesson_2_widget import Lesson2Widget
 from .lesson_3.lesson_3_widget import Lesson3Widget
 from .lesson_selector import LessonSelector
-from .codex.codex import Codex
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget

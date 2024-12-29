@@ -1,6 +1,4 @@
-from turtle import left
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication, QWidget
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -19,28 +17,22 @@ class MainWidgetTabs:
             and self.mw.right_stack.currentIndex() == index
         ):
             return
-        right_new_index = None
-        if index == self.mw.learn_tab_index:
-            left_new_index = 1
-            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-        elif index == self.mw.write_tab_index:
-            left_new_index = 2
-            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-        elif index == self.mw.browse_tab_index:
-            left_new_index = 3
-            right_new_index = 2
-            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 2 / 3))
-            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 3))
-        elif index == self.mw.generate_tab_index:
-            left_new_index = 0
-            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-        elif index == self.mw.construct_tab_index:
-            left_new_index = 0
-            self.mw.left_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
-            self.mw.right_stack.setMaximumWidth(int(self.mw.width() * 1 / 2))
+
+        left_new_index = {
+            self.mw.learn_tab_index: 1,
+            self.mw.write_tab_index: 2,
+            self.mw.browse_tab_index: 3,
+            self.mw.generate_tab_index: 0,
+            self.mw.construct_tab_index: 0,
+        }.get(index, None)
+
+        right_new_index = 2 if index == self.mw.browse_tab_index else index
+
+        width_ratio = (
+            (2 / 3, 1 / 3) if index == self.mw.browse_tab_index else (1 / 2, 1 / 2)
+        )
+        self.mw.left_stack.setMaximumWidth(int(self.mw.width() * width_ratio[0]))
+        self.mw.right_stack.setMaximumWidth(int(self.mw.width() * width_ratio[1]))
 
         if (
             index in [self.mw.generate_tab_index, self.mw.construct_tab_index]
@@ -51,13 +43,11 @@ class MainWidgetTabs:
                 stack=self.mw.right_stack, new_index=new_index
             )
         else:
-            if not right_new_index:
-                right_new_index = index
             self.mw.stack_fade_manager.fade_both_stacks_in_parallel(
-                right_stack=self.mw.right_stack,
-                right_new_index=right_new_index,
-                left_stack=self.mw.left_stack,
-                left_new_index=left_new_index,
+                self.mw.right_stack,
+                right_new_index,
+                self.mw.left_stack,
+                left_new_index,
             )
 
     def update_tab_based_on_settings(self) -> None:

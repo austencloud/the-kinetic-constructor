@@ -3,9 +3,6 @@ from data.positions_map import positions_map
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
-    ReversalDetector,
-)
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import pyqtSignal, Qt
-from PyQt6.QtGui import QFont, QResizeEvent
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 from data.constants import BLUE, RED

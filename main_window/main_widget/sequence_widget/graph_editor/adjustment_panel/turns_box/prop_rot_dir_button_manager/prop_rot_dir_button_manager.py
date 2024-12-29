@@ -6,7 +6,6 @@ from data.constants import (
     COUNTER_CLOCKWISE,
     ICON_DIR,
 )
-from PyQt6.QtCore import QSize
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )

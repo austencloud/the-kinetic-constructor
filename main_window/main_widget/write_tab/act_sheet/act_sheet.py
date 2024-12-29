@@ -9,7 +9,6 @@ from .sequence_collector import SequenceCollector
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-    from ..write_tab import WriteTab
 
 
 class ActSheet(QWidget):

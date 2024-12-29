@@ -7,7 +7,6 @@ from PyQt6.QtGui import (
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 
 class BeatNumberManager:

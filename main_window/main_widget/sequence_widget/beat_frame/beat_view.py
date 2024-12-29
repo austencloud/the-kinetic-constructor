@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from .beat import Beat
-from .beat_grabber import BeatGrabber
-from .beat_number_manager import BeatNumberManager
 from .start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:

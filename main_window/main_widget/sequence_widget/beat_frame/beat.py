@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import QGraphicsTextItem
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.beat_grabber import BeatGrabber
 from .beat_number_manager import BeatNumberManager
