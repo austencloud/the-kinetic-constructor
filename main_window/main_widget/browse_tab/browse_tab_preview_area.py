@@ -30,7 +30,7 @@ class BrowseTabPreviewArea(QWidget):
         self.current_thumbnail_box: ThumbnailBox = None
         self._setup_components()
         self._setup_layout()
-        self.hide()
+        # self.hide()
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
@@ -77,7 +77,7 @@ class BrowseTabPreviewArea(QWidget):
             self.variation_number_label.hide()
 
         elif len(self.thumbnails) == 0:
-            self.image_label.show_placeholder()
+            # self.image_label.show_placeholder()
             self.variation_number_label.clear()
             self.word_label.clear()
 
@@ -88,7 +88,7 @@ class BrowseTabPreviewArea(QWidget):
 
     def update_preview(self, index):
         if index is None:
-            self.image_label.show_placeholder()
+            # self.image_label.show_placeholder()
             self.variation_number_label.clear()
             return
 

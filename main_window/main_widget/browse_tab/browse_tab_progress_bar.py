@@ -13,12 +13,15 @@ class BrowseTabProgressBar(RainbowProgressBar):
         self.hide()
 
     def resizeEvent(self, event):
+        self.resize_progress_bar()
+        super().resizeEvent(event)
+
+    def resize_progress_bar(self):
+        """ We need this so we """
         self.setFixedWidth(self.browse_tab.width() // 3)
         self.setFixedHeight(self.browse_tab.height() // 6)
-
         font = self.percentage_label.font()
         font.setFamily("Monotype Corsiva")
         font.setPointSize(self.browse_tab.main_widget.width() // 80)
         self.percentage_label.setFont(font)
         self.loading_label.setFont(font)
-        super().resizeEvent(event)

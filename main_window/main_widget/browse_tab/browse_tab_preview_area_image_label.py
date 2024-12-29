@@ -11,6 +11,8 @@ if TYPE_CHECKING:
 
 
 class BrowseTabPreviewAreaImageLabel(QLabel):
+    placeholder_text = "Select a sequence to display it here."
+
     def __init__(self, preview_area: "BrowseTabPreviewArea"):
         super().__init__()
         self.preview_area = preview_area
@@ -22,6 +24,7 @@ class BrowseTabPreviewAreaImageLabel(QLabel):
         self.installEventFilter(self)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setScaledContents(False)
+        self.setText(self.placeholder_text)
 
     def update_thumbnail(self):
         self.thumbnails = self.preview_area.thumbnails
@@ -47,10 +50,10 @@ class BrowseTabPreviewAreaImageLabel(QLabel):
         self.setPixmap(scaled_pixmap)
 
     def show_placeholder(self):
-        self.setText("Select a sequence to display it here.")
-        self.style_placeholder()
+        self.setText(self.placeholder_text)
+        self.resize_placeholder()
 
-    def style_placeholder(self):
+    def resize_placeholder(self):
         placeholder_text_font_size = self.preview_area.width() // 50
         global_settings = (
             self.preview_area.browse_tab.main_widget.main_window.settings_manager.global_settings
@@ -88,5 +91,4 @@ class BrowseTabPreviewAreaImageLabel(QLabel):
         if self.pixmap().width():
             self.update_thumbnail()
         else:
-            # resize the placeholder text
-            self.style_placeholder()
+            self.resize_placeholder()

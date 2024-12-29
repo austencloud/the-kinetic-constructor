@@ -166,7 +166,7 @@ class MainWidgetFontColorUpdater:
         sort_widget.style_buttons()
         sort_widget.style_labels()
         browse_tab.nav_sidebar.set_styles()
-        browse_tab.preview_area.image_label.style_placeholder()
+        browse_tab.preview_area.image_label.resize_placeholder()
 
         for thumbnail_box in browse_tab.scroll_widget.thumbnail_boxes.values():
             self._apply_font_color(thumbnail_box.word_label)

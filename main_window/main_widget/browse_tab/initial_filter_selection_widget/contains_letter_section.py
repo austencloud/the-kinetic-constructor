@@ -169,7 +169,7 @@ class ContainsLettersSection(FilterSectionBase):
 
             self.browse_tab.progress_bar.setVisible(False)
             self.browse_tab.ui_updater.update_and_display_ui(
-                total_sequences, display_letters
+                total_sequences
             )
 
             QApplication.restoreOverrideCursor()

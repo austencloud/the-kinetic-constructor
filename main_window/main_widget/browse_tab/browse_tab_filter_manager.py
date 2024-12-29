@@ -38,7 +38,7 @@ class BrowseTabFilterManager:
 
         self.browse_tab.currently_displayed_sequences = favorites
         self.browse_tab.ui_updater.update_and_display_ui(
-            len(favorites), "favorite sequences"
+            len(favorites)
         )
 
     def show_all_sequences(self):
@@ -59,7 +59,7 @@ class BrowseTabFilterManager:
 
         self.browse_tab.currently_displayed_sequences = sequences
         self.browse_tab.ui_updater.update_and_display_ui(
-            len(sequences), "all sequences"
+            len(sequences)
         )
 
     def show_most_recent_sequences(self, date: datetime):
@@ -81,7 +81,7 @@ class BrowseTabFilterManager:
 
         self.browse_tab.currently_displayed_sequences = most_recent
         self.browse_tab.ui_updater.update_and_display_ui(
-            len(most_recent), "most recent sequences"
+            len(most_recent)
         )
 
     def show_browser_with_filters_from_settings(self):
@@ -116,6 +116,7 @@ class BrowseTabFilterManager:
             self.browse_tab.thumbnail_box_sorter.num_columns,
             Qt.AlignmentFlag.AlignCenter,
         )
-        # self.browse_tab.progress_bar.resizeEvent()
         self.browse_tab.progress_bar.setVisible(True)
+        self.browse_tab.progress_bar.resize_progress_bar()
+        
         QApplication.processEvents()

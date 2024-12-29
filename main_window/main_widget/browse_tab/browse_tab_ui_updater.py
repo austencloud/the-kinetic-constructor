@@ -11,10 +11,10 @@ class BrowseTabUIUpdater:
     def __init__(self, browse_tab: "BrowseTab"):
         self.browse_tab = browse_tab
 
-    def update_and_display_ui(self, total_sequences: int, filter_description: str):
+    def update_and_display_ui(self, total_sequences: int):
         """Update the UI to display the sequences based on filter criteria."""
         if total_sequences == 0:
-            total_sequences = 1  # Prevent division by zero
+            total_sequences = 1  
 
         self.browse_tab.sequence_count_label.setText(
             f"Number of words to be displayed: {total_sequences}"
@@ -36,7 +36,6 @@ class BrowseTabUIUpdater:
                 )
                 num_words += 1
 
-                # Update progress bar and number of words label
                 percentage = int((num_words / total_sequences) * 100)
                 self.browse_tab.progress_bar.set_value(percentage)
                 self.browse_tab.sequence_count_label.setText(

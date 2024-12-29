@@ -141,7 +141,7 @@ class StartingLetterSection(FilterSectionBase):
 
         total_sequences = len(matching_sequences) or 1  # Prevent division by zero
         self.browse_tab.currently_displayed_sequences = matching_sequences
-        self.browse_tab.ui_updater.update_and_display_ui(total_sequences, letter)
+        self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
     def _word_starts_with_letter(self, word: str, letter: str) -> bool:
         """Check if the word starts with the given letter."""

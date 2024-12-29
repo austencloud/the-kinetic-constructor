@@ -37,7 +37,6 @@ class TempBeatFrame(BaseBeatFrame):
         self.main_widget = browse_tab.main_widget
         self.json_manager = self.main_widget.json_manager
         self.browse_tab = browse_tab
-        # self.top_builder_widget = self.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.initialized = True
@@ -130,12 +129,6 @@ class TempBeatFrame(BaseBeatFrame):
         self.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
-        grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
-            current_sequence_json[2]
-        )
-        self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
-            grid_mode
-        )
 
         start_pos_beat = self.construct_tab.start_pos_picker.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
@@ -152,9 +145,6 @@ class TempBeatFrame(BaseBeatFrame):
 
         if self.construct_tab.start_pos_picker.isVisible():
             self.construct_tab.transition_to_option_picker()
-
-        # scroll_area = self.construct_tab.option_picker.scroll_area
-        # scroll_area.hide_all_pictographs()
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self)

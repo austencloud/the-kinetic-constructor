@@ -239,7 +239,7 @@ class GridModeSection(FilterSectionBase):
             for word, thumbnails in sequences
         ]
 
-        self.browse_tab.ui_updater.update_and_display_ui(total_sequences, grid_mode)
+        self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
     def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""

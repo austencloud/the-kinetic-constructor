@@ -44,7 +44,8 @@ class BrowseTabLayoutManager:
     def switch_to_main_content(self):
         """Switch to the main content page in the stacked layout."""
         self.browse_tab.go_back_button.show()
-        self.browse_tab.preview_area.show()
+        self.browse_tab.preview_area.image_label.show()
+        self.browse_tab.sequence_count_label.show()
         self.stacked_layout.setCurrentIndex(1)
 
     def switch_to_initial_filter_selection(self):
@@ -53,8 +54,10 @@ class BrowseTabLayoutManager:
         preview_area = self.browse_tab.preview_area
         preview_area.word_label.setText("")
         self.browse_tab.initial_selection_widget.show()
-        self.browse_tab.preview_area.hide()
+
+        self.browse_tab.preview_area.clear_preview()
         self.browse_tab.sequence_count_label.hide()
+
         self.browse_tab.dictionary_settings.set_current_section("filter_choice")
         self.browse_tab.dictionary_settings.set_current_filter(None)
         self.browse_tab.initial_selection_widget.show_section("filter_choice")

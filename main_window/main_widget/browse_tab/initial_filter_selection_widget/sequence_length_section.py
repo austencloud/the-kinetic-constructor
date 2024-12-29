@@ -124,7 +124,7 @@ class SequenceLengthSection(FilterSectionBase):
         total_sequences = len(matching_sequences) or 1  # Prevent division by zero
         self.browse_tab.currently_displayed_sequences = matching_sequences
 
-        self.browse_tab.ui_updater.update_and_display_ui(total_sequences, length)
+        self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
     def resize_sequence_length_section(self):
         self.resize_buttons()
