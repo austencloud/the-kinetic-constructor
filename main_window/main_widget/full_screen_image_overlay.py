@@ -12,20 +12,22 @@ class FullScreenImageOverlay(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
 
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self._setup_image_label()
+        self._setup_layout()
+        self._set_geometry()
 
-        layout = QVBoxLayout(self)
+    def _setup_layout(self):
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.image_label)
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
+
+    def _setup_image_label(self):
         self.image_label = QLabel(self)
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setContentsMargins(0, 0, 0, 0)
         self.image_label.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        layout.addWidget(self.image_label)
-        layout.setSpacing(0)
-        layout.setContentsMargins(0, 0, 0, 0)
-        self.setContentsMargins(0, 0, 0, 0)
-
-        self._set_geometry()
 
     def _set_geometry(self):
         geometry = QRect()
@@ -59,8 +61,4 @@ class FullScreenImageOverlay(QWidget):
     def mousePressEvent(self, event):
         """Close the overlay when the image is clicked."""
         self.close()
-
-    def close(self):
-        """Close the overlay."""
-        super().close()
-        self.main_widget.browse_tab.preview_area.button_panel.full_screen_overlay = None
+        super().mousePressEvent(event)

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon, QPixmap, QResizeEvent
-from .full_screen_image_overlay import FullScreenImageOverlay
+from ..full_screen_image_overlay import FullScreenImageOverlay
 from .temp_beat_frame.temp_beat_frame import TempBeatFrame
 from utilities.path_helpers import get_images_and_data_path
 

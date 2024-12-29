@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication, QMessageBox
 
-from main_window.main_widget.browse_tab.full_screen_image_overlay import (
+from main_window.main_widget.full_screen_image_overlay import (
     FullScreenImageOverlay,
 )
 from utilities.path_helpers import get_images_and_data_path
@@ -18,6 +18,10 @@ class FullScreenViewer:
         self.main_widget = sequence_widget.main_widget
         self.beat_frame = sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
+        self.json_loader = self.main_widget.json_manager.loader_saver
+        self.thumbnail_generator = (
+            self.sequence_widget.add_to_dictionary_manager.thumbnail_generator
+        )
         self.full_screen_overlay = None
 
     def view_full_screen(self):
@@ -41,9 +45,9 @@ class FullScreenViewer:
                 QApplication.restoreOverrideCursor()
 
     def create_thumbnail(self):
-        # Use the image export manager to create a thumbnail
-        return self.sequence_widget.add_to_dictionary_manager.thumbnail_generator.generate_and_save_thumbnail(
-            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json(),
-            0,
-            get_images_and_data_path("temp"),
+        current_sequence = self.json_loader.load_current_sequence_json()
+        temp_path = get_images_and_data_path("temp")
+        image_path = self.thumbnail_generator.generate_and_save_thumbnail(
+            current_sequence, 0, temp_path
         )
+        return image_path

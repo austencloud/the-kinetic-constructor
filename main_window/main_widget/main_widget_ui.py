@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
-from main_window.main_widget.browse_tab.full_screen_image_overlay import (
+from main_window.main_widget.full_screen_image_overlay import (
     FullScreenImageOverlay,
 )
 from main_window.main_widget.learn_tab.codex.codex import Codex
