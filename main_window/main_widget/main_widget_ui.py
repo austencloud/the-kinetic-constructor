@@ -70,7 +70,6 @@ class MainWidgetUI:
         self.mw.right_stack.addWidget(construct_tab.start_pos_picker)  # 0
         self.mw.right_stack.addWidget(construct_tab.advanced_start_pos_picker)  # 1
         self.mw.right_stack.addWidget(construct_tab.option_picker)  # 2
-
         self.mw.right_stack.addWidget(self.mw.generate_tab)  # 3
         self.mw.right_stack.addWidget(self.mw.learn_tab)  # 4
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
