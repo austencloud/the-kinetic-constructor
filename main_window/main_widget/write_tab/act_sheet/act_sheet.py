@@ -8,6 +8,7 @@ from .act_saver import ActSaver
 from .sequence_collector import SequenceCollector
 
 if TYPE_CHECKING:
+    from main_window.main_widget.write_tab.write_tab import WriteTab
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -15,11 +16,11 @@ class ActSheet(QWidget):
     DEFAULT_ROWS = 24
     DEFAULT_COLUMNS = 8
 
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self, write_tab: "WriteTab") -> None:
+        super().__init__(write_tab)
+        self.write_tab = write_tab
         self.settings_manager = (
-            self.main_widget.main_window.settings_manager.write_tab_settings
+            self.write_tab.main_widget.main_window.settings_manager.write_tab_settings
         )
         self.act_header = ActHeader(self)
         self.act_container = ActContainer(self)
@@ -32,16 +33,6 @@ class ActSheet(QWidget):
         self._setup_layout()
         self.act_container.connect_scroll_sync()
 
-    def populate_from_act_data(self, act_data: dict):
-        """Populate ActSheet from saved JSON data."""
-
-        self.act_header.set_title(act_data.get("title", "Untitled Act"))
-        self.main_widget.manager.set_grid_mode(act_data.get("grid_mode", "diamond"))
-
-        for sequence in act_data["sequences"]:
-            self.act_container.beat_scroll.act_beat_frame.populator.populate_beats(
-                sequence
-            )
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)

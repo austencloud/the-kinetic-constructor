@@ -18,9 +18,7 @@ class ActPopulator:
         """Populate each row in the act based on row index and beat data."""
         for i, data in enumerate(beat_data):
             beat_view: "ActBeatView" = self.beat_frame.beats[row_index * 8 + i]
-            beat_view.beat.updater.update_pictograph(
-                data["pictograph_dict"]
-            )
+            beat_view.beat.updater.update_pictograph(data["pictograph_dict"])
             beat_view.beat.pictograph_dict = data
             if beat_view in self.beat_frame.beat_step_map:
                 self.beat_frame.beat_step_map[beat_view].label.setText(
@@ -35,7 +33,7 @@ class ActPopulator:
 
         act_data = {
             "title": self.beat_frame.act_sheet.act_header.get_title(),
-            "prop_type": self.beat_frame.main_widget.prop_type.name,
+            "prop_type": self.beat_frame.write_tab.prop_type.name,
             "sequences": [],
         }
 
@@ -107,7 +105,7 @@ class ActPopulator:
     def save_initial_act_structure(self):
         """Create and save an initial act structure with empty beats."""
         act_data = self.create_initial_act_structure()
-        self.beat_frame.main_widget.json_manager.save_act(act_data)
+        self.beat_frame.write_tab.json_manager.save_act(act_data)
 
     def save_populated_act(self):
         """Save the populated act structure."""

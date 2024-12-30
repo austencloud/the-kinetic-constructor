@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QStackedLayout
+
+from main_window.main_widget.learn_tab.codex.codex import Codex
 from .lesson_1.lesson_1_widget import Lesson1Widget
 from .lesson_2.lesson_2_widget import Lesson2Widget
 from .lesson_3.lesson_3_widget import Lesson3Widget
@@ -28,7 +30,8 @@ class LearnTab(QWidget):
         self.lesson_1_widget = Lesson1Widget(self)
         self.lesson_2_widget = Lesson2Widget(self)
         self.lesson_3_widget = Lesson3Widget(self)
-
+        self.codex = Codex(self)
+        
     def _setup_layout(self) -> None:
         """Orchestrates creation of the main UI components and layout."""
         self._setup_stacked_layout()

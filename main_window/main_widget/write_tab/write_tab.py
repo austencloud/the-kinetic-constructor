@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
+
+from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from .act_browser.act_browser import ActBrowser
 
 if TYPE_CHECKING:
@@ -11,6 +13,7 @@ class WriteTab(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.act_browser = ActBrowser(self)
+        self.act_sheet = ActSheet(self)
         self.setAcceptDrops(False)
         layout = QHBoxLayout(self)
         layout.addWidget(self.act_browser, 4)

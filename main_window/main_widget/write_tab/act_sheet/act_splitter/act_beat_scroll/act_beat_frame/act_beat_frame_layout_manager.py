@@ -14,7 +14,9 @@ class ActBeatFrameLayoutManager:
     def __init__(self, beat_frame: "ActBeatFrame"):
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_overlay
-        self.settings_manager = beat_frame.main_widget.main_window.settings_manager
+        self.settings_manager = (
+            beat_frame.write_tab.main_widget.main_window.settings_manager
+        )
         self.setup_layout()
 
     def setup_layout(self) -> None:

@@ -12,7 +12,9 @@ class ActHeader(QWidget):
     def __init__(self, act_sheet: "ActSheet"):
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
-        self.settings_manager = self.act_sheet.main_widget.main_window.settings_manager
+        self.settings_manager = (
+            self.act_sheet.write_tab.main_widget.main_window.settings_manager
+        )
 
         # Initial header setup
         self._configure_header_style()

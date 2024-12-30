@@ -11,7 +11,7 @@ class ActContainer(QFrame):
     def __init__(self, act_sheet: "ActSheet") -> None:
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
-        self.main_widget = act_sheet.main_widget
+        self.main_widget = act_sheet.write_tab
 
         # Initialize scroll areas
         self.cue_scroll = CueScroll(self.act_sheet)

@@ -11,15 +11,16 @@ from .codex_data_manager import CodexDataManager
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
+    from main_window.main_widget.learn_tab.learn_tab import LearnTab
 
 
 class Codex(QWidget):
     """Displays pictographs with a control panel to modify them."""
 
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
-        self.learn_tab = main_widget.learn_tab
+    def __init__(self, learn_tab: "LearnTab") -> None:
+        super().__init__(learn_tab)
+        self.main_widget = learn_tab.main_widget
+        self.learn_tab = learn_tab
 
         # Components
         self.toggle_button = CodexToggleButton(self)

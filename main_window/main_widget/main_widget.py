@@ -65,8 +65,6 @@ class MainWidget(QWidget):
 
     # Left Widgets
     sequence_widget: "SequenceWidget"
-    codex: "Codex"
-    act_sheet: "ActSheet"
 
     # Right Widgets
     construct_tab: "ConstructTab"

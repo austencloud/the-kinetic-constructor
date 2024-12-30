@@ -53,29 +53,24 @@ class MainWidgetUI:
         self.mw.learn_tab = LearnTab(self.mw)
         splash.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
-        splash.updater.update_progress("Codex")
-        self.mw.act_sheet = ActSheet(self.mw)
         splash.updater.update_progress("Finalizing")
-        self.mw.codex = Codex(self.mw)
-        splash.updater.update_progress("ActSheet")
 
-        # self.mw.full_screen_overlay = FullScreenImageOverlay(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
 
+        filter_selector = self.mw.browse_tab.sequence_picker.filter_selector
+        construct_tab = self.mw.construct_tab
+        
         self.mw.left_stack.addWidget(self.mw.sequence_widget)  # 0
-        self.mw.left_stack.addWidget(self.mw.codex)  # 1
-        self.mw.left_stack.addWidget(self.mw.act_sheet)  # 2
-        self.mw.left_stack.addWidget(
-            self.mw.browse_tab.sequence_picker.filter_selector
-        )  # 3
+        self.mw.left_stack.addWidget(self.mw.learn_tab.codex)  # 1
+        self.mw.left_stack.addWidget(self.mw.write_tab.act_sheet)  # 2
+        self.mw.left_stack.addWidget(filter_selector)  # 3
         self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker)  # 4
 
-        construct_tab = self.mw.construct_tab
         self.mw.right_stack.addWidget(construct_tab.start_pos_picker)  # 0
         self.mw.right_stack.addWidget(construct_tab.advanced_start_pos_picker)  # 1
         self.mw.right_stack.addWidget(construct_tab.option_picker)  # 2
-        
+
         self.mw.right_stack.addWidget(self.mw.generate_tab)  # 3
         self.mw.right_stack.addWidget(self.mw.learn_tab)  # 4
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5

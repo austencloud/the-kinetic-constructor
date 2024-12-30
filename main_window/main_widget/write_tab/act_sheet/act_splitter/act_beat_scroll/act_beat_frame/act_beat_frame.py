@@ -19,10 +19,10 @@ class ActBeatFrame(BaseBeatFrame):
     layout: "QGridLayout"
 
     def __init__(self, beat_scroll_area: "ActBeatScroll"):
-        super().__init__(beat_scroll_area.act_sheet.main_widget)
+        super().__init__(beat_scroll_area.act_sheet.write_tab.main_widget)
         self.beat_scroll_area = beat_scroll_area
         self.act_sheet = beat_scroll_area.act_sheet
-        self.main_widget = self.act_sheet.main_widget
+        self.write_tab = self.act_sheet.write_tab
         self.beats: list[ActBeatView] = []
         self.step_labels: list[ActStepLabel] = []
         self.beat_step_map: dict[ActBeatView, ActStepLabel] = {}

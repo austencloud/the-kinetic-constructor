@@ -16,8 +16,8 @@ if TYPE_CHECKING:
 
 class ActBeat(BasePictograph):
     def __init__(self, beat_frame: "ActBeatFrame", duration: Union[int, float] = 1):
-        super().__init__(beat_frame.main_widget)
-        self.main_widget = beat_frame.main_widget
+        super().__init__(beat_frame.write_tab.main_widget)
+        self.main_widget = beat_frame.write_tab
         self.reversal_symbol_manager = BeatReversalManager(self)
         self.view: "ActBeatView" = None
         self.beat_number_item: QGraphicsTextItem = None

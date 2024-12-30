@@ -5,7 +5,6 @@ from main_window.menu_bar_widget.base_selector import BaseSelector
 from .user_profile_selector import UserProfileSelector
 from .background_selector.background_selector import BackgroundSelector
 from .prop_type_selector import PropTypeSelector
-from .grid_mode_selector import GridModeSelector
 from .visibility_selector import VisibilitySelector
 
 if TYPE_CHECKING:

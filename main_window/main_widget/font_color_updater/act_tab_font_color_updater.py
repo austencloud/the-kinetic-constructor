@@ -13,11 +13,10 @@ class WriteTabFontColorUpdater(BaseFontColorUpdater):
 
     def update(self):
         act_tab = self.main_widget.write_tab
-        act_sheet = self.main_widget.act_sheet
+        act_sheet = self.main_widget.write_tab.act_sheet
         self._apply_font_color(act_sheet.act_header)
         self._apply_font_color(act_sheet.act_container)
 
-        # Example:
         for thumbnail_box in act_tab.act_browser.thumbnail_boxes:
             self._apply_font_color(thumbnail_box.word_label)
 

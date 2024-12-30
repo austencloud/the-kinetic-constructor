@@ -21,7 +21,6 @@ class LearnTabFontColorUpdater(BaseFontColorUpdater):
         )
         learn_tab.lesson_selector.mode_toggle_widget.update_mode_label_styles()
 
-        # For example, these might be your lesson widgets:
         lesson_widgets: list[BaseLessonWidget] = [
             learn_tab.lesson_1_widget,
             learn_tab.lesson_2_widget,
@@ -32,7 +31,6 @@ class LearnTabFontColorUpdater(BaseFontColorUpdater):
             self._apply_font_color(lesson_widget.progress_label)
             self._apply_font_color(lesson_widget.result_label)
 
-        # Codex?
         self._apply_font_color(
-            self.main_widget.codex.control_widget.ori_selector.start_ori_label
+            self.main_widget.learn_tab.codex.control_widget.ori_selector.start_ori_label
         )
