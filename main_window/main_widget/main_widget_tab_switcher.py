@@ -31,6 +31,11 @@ class MainWidgetTabSwitcher:
             if index == self.mw.main_browse_tab_index
             else index
         )
+        right_new_index = (
+            self.mw.right_generate_tab_index
+            if index == self.mw.main_generate_tab_index
+            else right_new_index
+        )
 
         width_ratio = (
             (2 / 3, 1 / 3) if index == self.mw.main_browse_tab_index else (1 / 2, 1 / 2)
@@ -38,9 +43,12 @@ class MainWidgetTabSwitcher:
 
         if (
             index in [self.mw.main_generate_tab_index, self.mw.main_construct_tab_index]
-            and self.mw.left_stack.currentIndex() == 0
+            and self.mw.left_stack.currentIndex() == self.mw.left_sequence_widget_index
         ):
-            new_index = 1 if index == self.mw.main_generate_tab_index else 0
+            construct_tab_index = self.get_construct_tab_index()
+            new_index = (
+                3 if index == self.mw.main_generate_tab_index else construct_tab_index
+            )
             self.mw.fade_manager.fade_to_tab(
                 stack=self.mw.right_stack, new_index=new_index
             )
@@ -52,6 +60,15 @@ class MainWidgetTabSwitcher:
                 left_new_index=left_new_index,
                 width_ratio=width_ratio,
             )
+
+    def get_construct_tab_index(self):
+        """Return the index of the construct tab."""
+        beat_frame = self.mw.sequence_widget.beat_frame
+        # if the beat frame is empty, choose index 0
+        for beat in beat_frame.beats:
+            if beat.is_filled:
+                return self.mw.right_option_picker_index
+        return self.mw.right_start_pos_picker_index
 
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""

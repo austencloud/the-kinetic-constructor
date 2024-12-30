@@ -120,11 +120,13 @@ class MainWidget(QWidget):
     left_sequence_picker_index: int = 4
 
     # Right Indices
-    right_construct_tab_index: int = 0
-    right_generate_tab_index: int = 1
-    right_learn_tab_index: int = 2
-    right_write_tab_index: int = 3
-    right_sequence_viewer_index: int = 4
+    right_start_pos_picker_index: int = 0
+    right_advanced_start_pos_picker_index: int = 1
+    right_option_picker_index: int = 2
+    right_generate_tab_index: int = 3
+    right_learn_tab_index: int = 4
+    right_write_tab_index: int = 5
+    right_sequence_viewer_index: int = 6
 
     # Current state
     current_tab: str

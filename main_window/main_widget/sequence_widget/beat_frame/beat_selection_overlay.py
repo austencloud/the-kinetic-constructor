@@ -60,7 +60,7 @@ class BeatSelectionOverlay(QWidget):
                 )
         if toggle_graph_editor:
             if not self.beat_frame.main_widget.sequence_widget.graph_editor.isVisible():
-                self.beat_frame.sequence_widget.toggler.toggle()
+                self.beat_frame.sequence_widget.graph_editor.animator.toggle()
         beat_view.setCursor(Qt.CursorShape.ArrowCursor)
 
     def deselect_beat(self):
@@ -68,9 +68,9 @@ class BeatSelectionOverlay(QWidget):
             self.selected_beat.is_selected = False
             self.selected_beat.setCursor(Qt.CursorShape.PointingHandCursor)
             self.selected_beat.update()
-            
+
         self.selected_beat = None
-        
+
         self.hide()
 
     def update_overlay_position(self):

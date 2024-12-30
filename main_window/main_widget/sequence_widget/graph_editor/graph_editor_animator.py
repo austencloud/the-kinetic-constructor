@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.graph_editor.graph_editor import GraphEditor
+    from main_window.main_widget.sequence_widget.graph_editor.graph_editor import (
+        GraphEditor,
+    )
 
 
 class GraphEditorAnimator(QObject):
@@ -12,7 +14,7 @@ class GraphEditorAnimator(QObject):
         self.sequence_widget = graph_editor.sequence_widget
         self.graph_editor = graph_editor
         self.toggle_tab = graph_editor.toggle_tab
-        self.graph_editor_placeholder = self.graph_editor.graph_editor_placeholder
+        self.graph_editor_placeholder = self.graph_editor.placeholder
         self.button_panel_bottom_placeholder = (
             self.sequence_widget.button_panel.bottom_placeholder
         )

@@ -55,8 +55,8 @@ class GraphEditor(QFrame):
         self.layout_manager = GraphEditorLayoutManager(self)
         self.state = GraphEditorStateManager(self)
         self.toggle_tab = GraphEditorToggleTab(self)
-        self.graph_editor_placeholder = GraphEditorPlaceholder(self)
-        self.toggler = GraphEditorAnimator(self)
+        self.placeholder = GraphEditorPlaceholder(self)
+        self.animator = GraphEditorAnimator(self)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -67,7 +67,7 @@ class GraphEditor(QFrame):
         self.setFixedSize(width, graph_editor_height)
 
         if self.isVisible():
-            self.graph_editor_placeholder.resize_graph_editor_placeholder()
+            self.placeholder.resize_graph_editor_placeholder()
 
         self.adjustment_panel.update_adjustment_panel()
         self.raise_()

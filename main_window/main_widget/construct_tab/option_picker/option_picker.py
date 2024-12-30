@@ -2,9 +2,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.option_picker_fade_manager import (
-    OptionPickerFadeManager,
-)
+
 from .option_picker_pictograph_view import OptionPickerPictographView
 from .option_picker_reversal_filter import OptionPickerReversalFilter
 from .option_getter import OptionGetter
@@ -33,11 +31,9 @@ class OptionPicker(QWidget):
         self.option_getter = OptionGetter(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_filter = OptionPickerReversalFilter(self)
-        self.fade_manager = OptionPickerFadeManager(self)
 
         self.initialize_option_pool()
         self.setup_layout()
-        # self.hide()
 
     def initialize_option_pool(self):
         self.option_pool: list[BasePictograph] = []

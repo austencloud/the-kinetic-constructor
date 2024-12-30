@@ -71,11 +71,13 @@ class MainWidgetUI:
         )  # 3
         self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker)  # 4
 
-        self.mw.right_stack.addWidget(self.mw.construct_tab)  # 0
-        self.mw.right_stack.addWidget(self.mw.generate_tab)  # 1
-        self.mw.right_stack.addWidget(self.mw.learn_tab)  # 2
-        self.mw.right_stack.addWidget(self.mw.write_tab)  # 3
-        self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 4
+        self.mw.right_stack.addWidget(self.mw.construct_tab.start_pos_picker)  # 0
+        self.mw.right_stack.addWidget(self.mw.construct_tab.advanced_start_pos_picker) # 1
+        self.mw.right_stack.addWidget(self.mw.construct_tab.option_picker)  # 2
+        self.mw.right_stack.addWidget(self.mw.generate_tab)  # 3
+        self.mw.right_stack.addWidget(self.mw.learn_tab)  # 4
+        self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
+        self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 6
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)

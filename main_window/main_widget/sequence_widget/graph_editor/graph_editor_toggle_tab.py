@@ -39,7 +39,7 @@ class GraphEditorToggleTab(QWidget):
         self.setLayout(self.layout)
 
     def mousePressEvent(self, event) -> None:
-        toggler = self.graph_editor.toggler
+        toggler = self.graph_editor.animator
         if toggler:
             toggler.toggle()
 

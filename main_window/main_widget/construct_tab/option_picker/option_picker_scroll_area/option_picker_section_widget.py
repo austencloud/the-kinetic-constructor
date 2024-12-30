@@ -61,7 +61,7 @@ class OptionPickerSectionWidget(QGroupBox):
             pictograph.view.setParent(None)
             pictograph.view.hide()
         self.pictographs = {}
-        
+
     def add_pictograph(self, pictograph: BasePictograph) -> None:
         COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
         self.pictographs[
@@ -78,14 +78,13 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""
-        width = self.scroll_area.construct_tab.width()
+        width = self.scroll_area.construct_tab.option_picker.width()
 
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
             self.setFixedWidth(width)
-            
+
         elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
             COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
-            sections = self.scroll_area.section_manager.sections
 
             calculated_width = int(
                 (width / COLUMN_COUNT) - ((self.scroll_area.spacing))

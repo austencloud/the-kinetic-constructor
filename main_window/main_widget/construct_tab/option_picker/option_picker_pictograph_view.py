@@ -145,14 +145,15 @@ class OptionPickerPictographView(BorderedPictographView):
         spacing = self.option_picker.scroll_area.spacing
 
         calculated_width = int(
-            (self.pictograph.main_widget.construct_tab.width() / 8) - spacing
+            (self.pictograph.main_widget.construct_tab.option_picker.width() / 8)
+            - spacing
         )
 
         view_width = (
             calculated_width
             if calculated_width
-            < self.pictograph.main_widget.construct_tab.height() // 8
-            else self.pictograph.main_widget.construct_tab.height() // 8
+            < self.pictograph.main_widget.construct_tab.option_picker.height() // 8
+            else self.pictograph.main_widget.construct_tab.option_picker.height() // 8
         )
 
         outer_border_width = max(1, int(view_width * 0.015))
