@@ -87,8 +87,3 @@ class ThumbnailImageLabel(QLabel):
             )
         return super().eventFilter(obj, event)
 
-    def resizeEvent(self, a0):
-        self.set_pixmap_to_fit(
-            QPixmap(self.thumbnails[self.thumbnail_box.current_index])
-        )
-        return super().resizeEvent(a0)

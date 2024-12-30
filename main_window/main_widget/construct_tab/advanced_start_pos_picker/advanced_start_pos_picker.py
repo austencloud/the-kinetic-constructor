@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class AdvancedStartPosPicker(BaseStartPosPicker):
-    COLUMN_COUNT = 4  # Adjust as needed
+    COLUMN_COUNT = 4 
 
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)
@@ -83,7 +83,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
             widget_to_remove.setParent(None)
 
         # Add pictographs to the grid layout
-        for grid_mode, variation_list in self.all_variations.items():
+        for _, variation_list in self.all_variations.items():
             for i, variation in enumerate(variation_list):
                 row = i // self.COLUMN_COUNT
                 col = i % self.COLUMN_COUNT
@@ -91,10 +91,6 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 self._resize_variation(variation)
 
     def generate_variations(self):
-        """
-        Example code that loads variations for both box and diamond,
-        storing them in self.all_variations to place them on the grid.
-        """
         self.all_variations: dict[str, list[BasePictograph]] = {BOX: [], DIAMOND: []}
 
         for grid_mode in [BOX, DIAMOND]:
@@ -111,21 +107,19 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 variation.view.update_borders()
 
     def _resize_variation(self, variation: BasePictograph) -> None:
-        view_width = self.construct_tab.width() // 5
+        view_width = self.construct_tab.advanced_start_pos_picker.width() // 6
         variation.view.setFixedSize(view_width, view_width)
         variation.view.view_scale = view_width / variation.width()
         variation.view.resetTransform()
         variation.view.scale(variation.view.view_scale, variation.view.view_scale)
-        variation.view.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     def on_variation_selected(self, variation: BasePictograph) -> None:
-        self.start_position_adder.add_start_pos_to_sequence(variation)
-
+        self.start_position_adder.add_start_pos_to_sequence(variation, True)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.grid_layout.setHorizontalSpacing(20)
         self.grid_layout.setVerticalSpacing(20)
-        for grid_mode, variations in self.all_variations.items():
+        for _, variations in self.all_variations.items():
             for variation in variations:
                 self._resize_variation(variation)

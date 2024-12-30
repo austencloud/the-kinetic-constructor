@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.construct_tab.option_picker.construct_tab_fade_manager import ConstructTabFadeManager
 from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker import (
     StartPosPicker,
 )
@@ -38,14 +39,15 @@ class ConstructTab(QFrame):
         self.start_pos_picker = StartPosPicker(self)
         self.advanced_start_pos_picker = AdvancedStartPosPicker(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
+        self.fade_manager = ConstructTabFadeManager(self)
 
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
-        self.setContentsMargins(0, 0, 0, 0)
-        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        self.setStyleSheet("background: transparent;")
+        # self.layout: QHBoxLayout = QHBoxLayout(self)
+        # self.layout.setContentsMargins(0, 0, 0, 0)
+        # self.layout.setSpacing(0)
+        # self.setLayout(self.layout)
+        # self.setContentsMargins(0, 0, 0, 0)
+        # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        # self.setStyleSheet("background: transparent;")
 
     def transition_to_option_picker(self):
         """Transition to the option picker for sequence building."""

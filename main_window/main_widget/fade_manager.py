@@ -16,19 +16,21 @@ if TYPE_CHECKING:
 class FadeManager(QObject):
     """Manages fade-out/fade-in animations for your single stacked widget."""
 
+    old_widget: Optional[QWidget] = None
+    new_widget: Optional[QWidget] = None
     duration = 300
+    _old_opacity: Optional[QGraphicsOpacityEffect] = None
+    _new_opacity: Optional[QGraphicsOpacityEffect] = None
+    _is_animating = False
 
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self._old_opacity: Optional[QGraphicsOpacityEffect] = None
-        self._new_opacity: Optional[QGraphicsOpacityEffect] = None
-        self._is_animating = False
 
     def fade_to_tab(self, stack: QStackedLayout, new_index: int):
         if self._is_animating:
             return
-        
+
         self.stack = stack
         old_index = self.stack.currentIndex()
         if old_index == new_index:
@@ -83,8 +85,10 @@ class FadeManager(QObject):
         self._is_animating = False
         self._old_opacity = None
         self._new_opacity = None
-        self.old_widget.setGraphicsEffect(None)
-        self.new_widget.setGraphicsEffect(None)
+        if self.new_widget:
+            self.new_widget.setGraphicsEffect(None)
+        if self.old_widget:
+            self.old_widget.setGraphicsEffect(None)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
         effect = widget.graphicsEffect()
