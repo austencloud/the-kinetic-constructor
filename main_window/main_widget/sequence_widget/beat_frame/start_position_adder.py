@@ -1,14 +1,10 @@
 from typing import TYPE_CHECKING
 from copy import deepcopy
 
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeat,
-)
+from .start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
-    )
+    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 

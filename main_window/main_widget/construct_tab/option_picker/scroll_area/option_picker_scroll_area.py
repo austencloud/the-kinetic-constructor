@@ -30,9 +30,9 @@ class OptionPickerScrollArea(QScrollArea):
         self.json_manager = self.main_widget.json_manager
         self.pictograph_cache: dict[str, BasePictograph] = {}
         self.disabled = False
-        
+
         self.configure_ui()
-        
+
         self.section_manager = OptionPickerSectionManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
 
@@ -65,19 +65,19 @@ class OptionPickerScrollArea(QScrollArea):
             if i >= len(self.option_picker.option_pool):
                 break
             pictograph = self.option_picker.option_pool[i]
-            pictograph.updater.update_pictograph(pictograph_dict)
             sequence_so_far = (
                 self.json_manager.loader_saver.load_current_sequence_json()
             )
             reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, pictograph.pictograph_dict
+                sequence_so_far, pictograph_dict
             )
             pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
+            pictograph.updater.update_pictograph(pictograph_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
             pictograph.view.update_borders()
-            pictograph.elemental_glyph.update_elemental_glyph()
+
             pictograph.view.show()
 
     def set_disabled(self, disabled: bool) -> None:
