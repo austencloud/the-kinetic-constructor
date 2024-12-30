@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+from main_window.main_widget.fade_manager import FadeManager
 from main_window.main_widget.full_screen_image_overlay import FullScreenImageOverlay
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
@@ -15,7 +16,6 @@ from main_window.main_widget.main_background_widget.main_background_widget impor
     MainBackgroundWidget,
 )
 from main_window.main_widget.main_widget_tab_switcher import MainWidgetTabSwitcher
-from main_window.main_widget.main_widget_fade_manager import MainWidgetFadeManager
 from main_window.main_widget.font_color_updater.font_color_updater import (
     FontColorUpdater,
 )
@@ -92,7 +92,7 @@ class MainWidget(QWidget):
     sequence_properties_manager: "SequencePropertiesManager"
     thumbnail_finder: "ThumbnailFinder"
     grid_mode_checker: "GridModeChecker"
-    fade_manager: MainWidgetFadeManager
+    fade_manager: FadeManager
     font_color_updater: "FontColorUpdater"
 
     # Layouts and Widgets

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
+from main_window.main_widget.fade_manager import FadeManager
 from main_window.main_widget.learn_tab.codex.codex import Codex
 from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from .construct_tab.construct_tab import ConstructTab
@@ -9,7 +10,6 @@ from .write_tab.write_tab import WriteTab
 from .browse_tab.browse_tab import BrowseTab
 from .learn_tab.learn_tab import LearnTab
 from .main_background_widget.main_background_widget import MainBackgroundWidget
-from .main_widget_fade_manager import MainWidgetFadeManager
 from .font_color_updater.font_color_updater import (
     FontColorUpdater,
 )
@@ -33,7 +33,7 @@ class MainWidgetUI:
         self.mw.left_stack = QStackedWidget()
         self.mw.right_stack = QStackedWidget()
 
-        self.mw.fade_manager = MainWidgetFadeManager(self.mw)
+        self.mw.fade_manager = FadeManager(self.mw)
         self.mw.font_color_updater = FontColorUpdater(self.mw)
 
         splash = self.splash_screen
@@ -71,9 +71,11 @@ class MainWidgetUI:
         )  # 3
         self.mw.left_stack.addWidget(self.mw.browse_tab.sequence_picker)  # 4
 
-        self.mw.right_stack.addWidget(self.mw.construct_tab.start_pos_picker)  # 0
-        self.mw.right_stack.addWidget(self.mw.construct_tab.advanced_start_pos_picker) # 1
-        self.mw.right_stack.addWidget(self.mw.construct_tab.option_picker)  # 2
+        construct_tab = self.mw.construct_tab
+        self.mw.right_stack.addWidget(construct_tab.start_pos_picker)  # 0
+        self.mw.right_stack.addWidget(construct_tab.advanced_start_pos_picker)  # 1
+        self.mw.right_stack.addWidget(construct_tab.option_picker)  # 2
+        
         self.mw.right_stack.addWidget(self.mw.generate_tab)  # 3
         self.mw.right_stack.addWidget(self.mw.learn_tab)  # 4
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
