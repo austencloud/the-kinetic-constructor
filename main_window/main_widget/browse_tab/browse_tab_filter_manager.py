@@ -102,12 +102,14 @@ class BrowseTabFilterManager:
 
     def prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.browse_tab.sequence_picker.currently_displaying_label.setText("")
+        self.browse_tab.sequence_picker.control_panel.currently_displaying_label.setText(
+            ""
+        )
         QApplication.processEvents()
-        self.browse_tab.sequence_picker.currently_displaying_label.show_message(
+        self.browse_tab.sequence_picker.control_panel.currently_displaying_label.show_message(
             description
         )
-        self.browse_tab.sequence_picker.count_label.setText("")
+        self.browse_tab.sequence_picker.control_panel.count_label.setText("")
         self.browse_tab.sequence_picker.scroll_widget.clear_layout()
         self.browse_tab.sequence_picker.scroll_widget.grid_layout.addWidget(
             self.browse_tab.sequence_picker.progress_bar,

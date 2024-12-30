@@ -128,18 +128,18 @@ class SequencePickerSortWidget(QWidget):
             self.settings_manager.global_settings.get_background_type()
         )
         font_size = self.browse_tab.width() // 50
-        self.sequence_picker.count_label.setStyleSheet(
-            f"font-size: {font_size}px; color: {font_color};"
-        )
+        # self.sequence_picker.control_panel.count_label.setStyleSheet(
+        #     f"font-size: {font_size}px; color: {font_color};"
+        # )
 
     def _style_currently_displaying_label(self):
         font_color = self.main_widget.font_color_updater.get_font_color(
             self.settings_manager.global_settings.get_background_type()
         )
         font_size = self.browse_tab.width() // 50
-        self.sequence_picker.currently_displaying_label.setStyleSheet(
-            f"font-size: {font_size}px; color: {font_color};"
-        )
+        # self.sequence_picker.control_panel.currently_displaying_label.setStyleSheet(
+        #     f"font-size: {font_size}px; color: {font_color};"
+        # )
 
     def _style_button(self, button: QPushButton, selected: bool = False):
         button_font = button.font()

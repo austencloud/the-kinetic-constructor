@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
+
+from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import SequencePickerFilterSelector
 from .sequence_picker.sequence_picker import SequencePicker
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_getter import BrowseTabGetter

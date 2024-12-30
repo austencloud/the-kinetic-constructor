@@ -65,7 +65,7 @@ class BrowseTabThumbnailBoxSorter:
         )
         current_section = None
 
-        self.browse_tab.sequence_picker.sort_widget.highlight_appropriate_button(
+        self.browse_tab.sequence_picker.control_panel.sort_widget.highlight_appropriate_button(
             sort_method
         )
 
@@ -106,7 +106,7 @@ class BrowseTabThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.browse_tab.sequence_picker.count_label.setText(
+        self.browse_tab.sequence_picker.control_panel.count_label.setText(
             f"Number of words: {len(self.browse_tab.currently_displayed_sequences)}"
         )
         QApplication.restoreOverrideCursor()

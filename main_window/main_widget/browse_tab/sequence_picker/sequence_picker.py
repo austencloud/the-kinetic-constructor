@@ -1,13 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-
-from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_control_panel import (
-    SequencePickerControlPanel,
-)
-from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+from .sequence_picker_control_panel import SequencePickerControlPanel
+from .sequence_picker_filter_selector.sequence_picker_filter_selector import (
     SequencePickerFilterSelector,
 )
-
+from .sequence_picker_progress_bar import SequencePickerProgressBar
 from .sequence_picker_nav_sidebar import SequencePickerNavSidebar
 from .sequence_picker_scroll_widget import SequencePickerScrollWidget
 
@@ -23,6 +20,7 @@ class SequencePicker(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
+        self.progress_bar = SequencePickerProgressBar(self)
         self.control_panel = SequencePickerControlPanel(self)
         self.scroll_widget = SequencePickerScrollWidget(self)
         self.nav_sidebar = SequencePickerNavSidebar(self)

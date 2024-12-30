@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from .sequence_picker import SequencePicker
 
 
-class SequencePickerPirogressBar(RainbowProgressBar):
+class SequencePickerProgressBar(RainbowProgressBar):
     def __init__(self, sequence_picker: "SequencePicker") -> None:
         super().__init__(sequence_picker)
         self.sequence_picker = sequence_picker

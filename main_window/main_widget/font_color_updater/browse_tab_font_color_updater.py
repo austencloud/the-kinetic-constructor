@@ -11,22 +11,22 @@ class BrowseTabFontColorUpdater(BaseFontColorUpdater):
         self.main_widget = main_widget
 
     def update(self):
+        self._update_filter_selector()
         self._update_sequence_picker()
         self._update_sequence_viewer()
 
     def _update_sequence_picker(self):
         self.sequence_picker = self.main_widget.browse_tab.sequence_picker
-        self._update_filter_selector()
 
         sequence_picker_labels = [
-            self.sequence_picker.sort_widget.sort_by_label,
+            self.sequence_picker.control_panel.sort_widget.sort_by_label,
             self.sequence_picker.progress_bar.loading_label,
             self.sequence_picker.progress_bar.percentage_label,
         ]
         self._apply_font_colors(sequence_picker_labels)
 
-        self.sequence_picker.sort_widget.style_buttons()
-        self.sequence_picker.sort_widget.style_labels()
+        self.sequence_picker.control_panel.sort_widget.style_buttons()
+        self.sequence_picker.control_panel.sort_widget.style_labels()
         self.sequence_picker.nav_sidebar.set_styles()
 
         for (

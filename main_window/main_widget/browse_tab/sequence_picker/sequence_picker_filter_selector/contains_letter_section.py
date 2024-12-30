@@ -143,7 +143,7 @@ class ContainsLettersSection(FilterSectionBase):
 
         total_sequences = len(matching_sequences) or 1
         self.browse_tab.currently_displayed_sequences = matching_sequences
-        self.browse_tab.sequence_picker.count_label.setText(
+        self.browse_tab.sequence_picker.control_panel.count_label.setText(
             f"Number of words to be displayed: {len(matching_sequences)}"
         )
 
@@ -160,7 +160,7 @@ class ContainsLettersSection(FilterSectionBase):
                 )
                 percentage = int(((index + 1) / total_sequences) * 100)
                 self.browse_tab.sequence_picker.progress_bar.set_value(percentage)
-                self.browse_tab.sequence_picker.count_label.setText(
+                self.browse_tab.sequence_picker.control_panel.count_label.setText(
                     f"Number of words: {index + 1}"
                 )
                 QApplication.processEvents()
