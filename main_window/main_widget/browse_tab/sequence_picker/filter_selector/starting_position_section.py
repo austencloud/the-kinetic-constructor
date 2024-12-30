@@ -61,7 +61,7 @@ class StartingPositionSection(FilterSectionBase):
 
         layout.addLayout(grid_layout)
         layout.addStretch(1)
-        self.resize_starting_position_section()
+        # self.resize_starting_position_section()
 
     def create_position_vbox(self, position: str) -> QVBoxLayout:
         """Create a vertical box layout containing all components for a position."""
@@ -295,7 +295,7 @@ class StartingPositionSection(FilterSectionBase):
             Qt.TransformationMode.SmoothTransformation,
         )
 
-    def resize_starting_position_section(self):
+    def resizeEvent(self, event):
         """Handle resizing of the starting position section."""
         self.scale_images()
         self.resize_buttons()

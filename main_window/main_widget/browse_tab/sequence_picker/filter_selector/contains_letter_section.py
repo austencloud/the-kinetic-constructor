@@ -75,7 +75,6 @@ class ContainsLettersSection(FilterSectionBase):
         layout.addLayout(apply_button_layout)
 
         layout.addStretch(1)
-        self.resize_contains_letters_section()
 
     def create_letter_buttons(self, layout: QVBoxLayout):
         for section in self.SECTIONS:
@@ -131,8 +130,6 @@ class ContainsLettersSection(FilterSectionBase):
         self.browse_tab.filter_manager.apply_filter(
             {"contains_letters": list(self.selected_letters)}
         )
-
-
 
     def display_only_thumbnails_containing_letters(self, letters: list[str]):
         """Display only the thumbnails that contain the specified letters."""
@@ -205,12 +202,6 @@ class ContainsLettersSection(FilterSectionBase):
 
         return True
 
-    def resize_contains_letters_section(self):
-        self.resize_widget_font(self.header_label)
-        self.resize_widget_font(self.sequence_tally_label)
-        self.resize_buttons()
-        self.resize_apply_button()
-
     def resize_widget_font(self, widget: QWidget):
         font = widget.font()
         font.setPointSize(self.main_widget.width() // self.FONT_SIZE_FACTOR)
@@ -230,3 +221,9 @@ class ContainsLettersSection(FilterSectionBase):
         width = self.main_widget.width() // self.APPLY_BUTTON_WIDTH_FACTOR
         self.apply_button.setFixedWidth(width)
         self.resize_widget_font(self.apply_button)
+
+    def resizeEvent(self, event):
+        self.resize_widget_font(self.header_label)
+        self.resize_widget_font(self.sequence_tally_label)
+        self.resize_buttons()
+        self.resize_apply_button()

@@ -33,7 +33,7 @@ class ThumbnailBox(QWidget):
         self.load_favorite_status()
         self.word_label.update_favorite_icon(self.favorite_status)
         # self.hide()
-        
+
     def _setup_components(self):
         self.word_label = WordLabel(self)
         self.image_label = ThumbnailImageLabel(self)
@@ -98,7 +98,7 @@ class ThumbnailBox(QWidget):
 
         width = parent_width // 3
         self.setFixedWidth(width)
-        self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
+        # self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails

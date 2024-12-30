@@ -50,7 +50,7 @@ class StartingLetterSection(FilterSectionBase):
         layout.addWidget(self.sequence_tally_label)
 
         layout.addStretch(1)
-        self.resize_starting_letter_section()
+        # self.resize_starting_letter_section()
 
     def create_letter_buttons(self, layout: QVBoxLayout):
         for section in self.SECTIONS:
@@ -134,7 +134,7 @@ class StartingLetterSection(FilterSectionBase):
             return word.startswith(letter) and (len(word) == 1 or word[1] != "-")
         return word.startswith(letter)
 
-    def resize_starting_letter_section(self):
+    def resizeEvent(self, event):
         self.resize_buttons()
         self.resize_widget_font(self.header_label, 100)
         self.resize_widget_font(self.sequence_tally_label, 100)
