@@ -95,15 +95,8 @@ class BrowseTabFilterManager:
         self.current_filter = current_filter
 
         self.browse_tab.fade_manager.fade_and_update_browse_tab(
-            # self.main_widget.left_stack,
-            # self.main_widget.left_sequence_picker_index,
-            # lambda: self.sort_and_display_thumbnail_boxes_by_current_filter(
-            #     current_filter
-            # ),
         )
 
-        # self.sort_and_display_thumbnail_boxes_by_current_filter(current_filter)
-        self.browse_tab.sequence_viewer.update_preview(None)
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
