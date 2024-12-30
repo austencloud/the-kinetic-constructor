@@ -57,13 +57,6 @@ class SequencePickerFilterStack(QStackedWidget):
             self.sequence_picker.main_widget.fade_manager.fade_to_tab(
                 self.sequence_picker.filter_stack, index
             )
-            section = self.section_map.get(section_name)
-            if section_name != "filter_choice" and isinstance(
-                section, FilterSectionBase
-            ):
-                resize_method = getattr(section, f"resize_{section_name}_section", None)
-                if callable(resize_method):
-                    resize_method()
             self.browse_tab.settings.set_current_section(section_name)
             self.current_filter_section = section_name
         else:

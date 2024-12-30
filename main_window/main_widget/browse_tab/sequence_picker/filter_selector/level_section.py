@@ -60,7 +60,7 @@ class LevelSection(FilterSectionBase):
 
         layout.addLayout(grid_layout)
         layout.addStretch(1)
-        self.resize_level_section()
+        # self.resizeEvent()
 
     def create_level_vbox(self, level: int) -> QVBoxLayout:
         """Create a vertical box layout containing all components for a level."""
@@ -215,19 +215,6 @@ class LevelSection(FilterSectionBase):
                 return length
         return 0
 
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:
-        """Handle hover events to add or remove borders on images."""
-        if isinstance(source, QLabel):
-            level = source.property("level")
-            if level is not None:
-                if event.type() == QEvent.Type.Enter:
-                    self.apply_hover_effect(level, source)
-                    return True
-                elif event.type() == QEvent.Type.Leave:
-                    self.remove_hover_effect(level, source)
-                    return True
-        return super().eventFilter(source, event)
-
     def apply_hover_effect(self, level: int, label: QLabel):
         """Add a border to the image when hovered."""
         original_pixmap = self.original_pixmaps.get(level)
@@ -284,7 +271,7 @@ class LevelSection(FilterSectionBase):
             Qt.TransformationMode.SmoothTransformation,
         )
 
-    def resize_level_section(self):
+    def resizeEvent(self, event):
         """Handle resizing of the level section."""
         self.scale_images()
         self.resize_buttons()
@@ -320,3 +307,16 @@ class LevelSection(FilterSectionBase):
             font.setPointSize(font_size_button)
             button.setFont(font)
             button.setFixedSize(button_width, button_height)
+
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+        """Handle hover events to add or remove borders on images."""
+        if isinstance(source, QLabel):
+            level = source.property("level")
+            if level is not None:
+                if event.type() == QEvent.Type.Enter:
+                    self.apply_hover_effect(level, source)
+                    return True
+                elif event.type() == QEvent.Type.Leave:
+                    self.remove_hover_effect(level, source)
+                    return True
+        return super().eventFilter(source, event)

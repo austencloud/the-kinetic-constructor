@@ -67,7 +67,6 @@ class SequenceLengthSection(FilterSectionBase):
         layout.addStretch(1)
         layout.addLayout(self.grid_layout)
         layout.addStretch(1)
-        self.resize_sequence_length_section()
 
     def create_length_button(self, length: int) -> QPushButton:
         """Create and configure a QPushButton for a given sequence length."""
@@ -120,7 +119,7 @@ class SequenceLengthSection(FilterSectionBase):
 
         self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
-    def resize_sequence_length_section(self):
+    def resizeEvent(self, event):
         self.resize_buttons()
         self.resize_widget_font(self.header_label, 100)
         self.resize_sequence_count_labels()

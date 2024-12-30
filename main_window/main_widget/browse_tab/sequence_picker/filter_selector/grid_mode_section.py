@@ -60,7 +60,6 @@ class GridModeSection(FilterSectionBase):
 
         layout.addLayout(grid_layout)
         layout.addStretch(1)
-        self.resize_grid_mode_section()
 
     def create_grid_mode_vbox(self, grid_mode: str) -> QVBoxLayout:
         """Create a vertical box layout containing all components for a grid mode."""
@@ -316,7 +315,7 @@ class GridModeSection(FilterSectionBase):
             Qt.TransformationMode.SmoothTransformation,
         )
 
-    def resize_grid_mode_section(self):
+    def resizeEvent(self, event):
         """Handle resizing of the grid mode section."""
         self.scale_images()
         self.resize_buttons()

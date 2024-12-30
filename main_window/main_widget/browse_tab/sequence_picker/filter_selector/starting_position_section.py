@@ -226,18 +226,6 @@ class StartingPositionSection(FilterSectionBase):
                 return length
         return 0
 
-    def eventFilter(self, source: QObject, event: QEvent) -> bool:
-        """Handle hover events to add or remove borders on images."""
-        if isinstance(source, QLabel):
-            position = source.property("position")
-            if position is not None:
-                if event.type() == QEvent.Type.Enter:
-                    self.apply_hover_effect(position, source)
-                    return True
-                elif event.type() == QEvent.Type.Leave:
-                    self.remove_hover_effect(position, source)
-                    return True
-        return super().eventFilter(source, event)
 
     def apply_hover_effect(self, position: str, label: QLabel):
         """Add a border to the image when hovered."""
@@ -331,3 +319,16 @@ class StartingPositionSection(FilterSectionBase):
             font.setPointSize(font_size_button)
             button.setFont(font)
             button.setFixedSize(button_width, button_height)
+
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+        """Handle hover events to add or remove borders on images."""
+        if isinstance(source, QLabel):
+            position = source.property("position")
+            if position is not None:
+                if event.type() == QEvent.Type.Enter:
+                    self.apply_hover_effect(position, source)
+                    return True
+                elif event.type() == QEvent.Type.Leave:
+                    self.remove_hover_effect(position, source)
+                    return True
+        return super().eventFilter(source, event)
