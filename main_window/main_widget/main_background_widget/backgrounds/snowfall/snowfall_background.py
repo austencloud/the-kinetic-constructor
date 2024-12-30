@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING, Union
-
 from PyQt6.QtGui import QColor, QPainter, QLinearGradient
 from PyQt6.QtWidgets import QWidget
-
 from main_window.main_widget.main_background_widget.backgrounds.base_background import BaseBackground
-
 if TYPE_CHECKING:
 
     from main_window.main_widget.browse_tab.browse_tab import (
@@ -13,10 +10,9 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.learn_tab import LearnTab
     from main_window.main_widget.write_tab.write_tab import WriteTab
 
-
 from .snowflake_manager import SnowflakeManager
 from .santa_manager import SantaManager
-from .shooting_star_manager import ShootingStarManager  # Import the new manager
+from .shooting_star_manager import ShootingStarManager
 
 
 class SnowfallBackground(BaseBackground):
@@ -36,7 +32,6 @@ class SnowfallBackground(BaseBackground):
         self.santa_manager.animate_santa()
         self.shooting_star_manager.animate_shooting_star()
         self.shooting_star_manager.manage_shooting_star(self.widget)
-        # self.update_required.emit()
 
     def paint_background(self, widget: QWidget, painter: QPainter):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
