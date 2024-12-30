@@ -48,7 +48,7 @@ class ThumbnailImageLabel(QLabel):
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
-        self.adjustSize()
+        # self.adjustSize()
         QApplication.processEvents()
 
     def mousePressEvent(self, event: "QMouseEvent"):
@@ -75,12 +75,6 @@ class ThumbnailImageLabel(QLabel):
         else:
             self.setStyleSheet("border: 3px solid black;")
 
-    def set_pixmap(self, image_path):
-        self.setPixmap(QPixmap(image_path))
-        self.update()
-        QApplication.processEvents()
-        self.update_thumbnail()
-
     def eventFilter(self, obj, event: QEvent):
         if obj == self and event.type() == QEvent.Type.Enter:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -92,3 +86,9 @@ class ThumbnailImageLabel(QLabel):
                 else "border: 3px solid blue;"
             )
         return super().eventFilter(obj, event)
+
+    def resizeEvent(self, a0):
+        self.set_pixmap_to_fit(
+            QPixmap(self.thumbnails[self.thumbnail_box.current_index])
+        )
+        return super().resizeEvent(a0)

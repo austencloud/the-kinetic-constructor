@@ -3,21 +3,12 @@ from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from Enums.Enums import LetterType
 from data.constants import OPP, SAME
 from PyQt6.QtCore import Qt
-
-
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_header import (
-    OptionPickerSectionHeader,
-)
-from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_pictograph_frame import (
-    OptionPickerSectionPictographFrame,
-)
-
+from .option_picker_section_header import OptionPickerSectionHeader
+from .option_picker_section_pictograph_frame import OptionPickerSectionPictographFrame
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
+    from ..option_picker_scroll_area import OptionPickerScrollArea
 
 
 class OptionPickerSectionWidget(QGroupBox):
@@ -70,7 +61,6 @@ class OptionPickerSectionWidget(QGroupBox):
             )
         ] = pictograph
 
-        # Suppose we keep a count of how many pictographs we've added:
         count = len(self.pictographs)
         row, col = divmod(count - 1, COLUMN_COUNT)
         self.pictograph_frame.layout.addWidget(pictograph.view, row, col)

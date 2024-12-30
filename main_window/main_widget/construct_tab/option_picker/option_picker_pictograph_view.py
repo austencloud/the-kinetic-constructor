@@ -106,7 +106,7 @@ class OptionPickerPictographView(BorderedPictographView):
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
-            self.pictograph.main_widget.construct_tab.option_picker.construct_tab.option_click_handler.on_option_clicked(
+            self.pictograph.main_widget.construct_tab.option_picker.construct_tab.click_handler.on_option_clicked(
                 self.pictograph
             )
         QApplication.restoreOverrideCursor()

@@ -20,6 +20,7 @@ class ActThumbnailBox(QWidget):
         self.thumbnails = thumbnails
         self.main_widget = browser.act_tab.main_widget
         self.current_index = 0
+        self.margin = 10
 
         self.word_label = WordLabel(self)
         self.image_label = ActThumbnailImageLabel(self)

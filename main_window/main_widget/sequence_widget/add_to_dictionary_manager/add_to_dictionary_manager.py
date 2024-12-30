@@ -49,12 +49,6 @@ class AddToDictionaryManager:
                 f"New variation added to '{base_word}' as version {variation_number}."
             )
 
-        thumbnail_box = self.sequence_widget.main_widget.browse_tab.browser.scroll_widget.thumbnail_boxes.get(
-            base_word
-        )
-        if thumbnail_box:
-            thumbnail_box.resize_thumbnail_box()
-
     def get_next_variation_number(self, base_word):
         """Gets the next available version number for a word in the root directory."""
         base_path = os.path.join(self.dictionary_dir, base_word)
@@ -92,7 +86,7 @@ class AddToDictionaryManager:
         return thumbnails
 
     def find_thumbnail_box(self, base_word):
-        return self.sequence_widget.main_widget.browse_tab.browser.scroll_widget.thumbnail_boxes.get(
+        return self.sequence_widget.main_widget.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes.get(
             base_word
         )
 

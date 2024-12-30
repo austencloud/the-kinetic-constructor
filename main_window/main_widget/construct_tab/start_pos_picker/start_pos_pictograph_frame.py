@@ -14,7 +14,7 @@ class StartPosPickerPictographFrame(QWidget):
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
         self.clickable_option_handler = (
-            self.start_pos_picker.construct_tab.option_click_handler
+            self.start_pos_picker.construct_tab.option_picker.click_handler
         )
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictographs_layout = QHBoxLayout()

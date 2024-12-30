@@ -12,11 +12,6 @@ class MainWidgetTabSwitcher:
         self.mw = main_widget
 
     def on_tab_changed(self, index: int) -> None:
-        if (
-            index == self.mw.main_learn_tab_index
-            and self.mw.right_stack.currentIndex() == index
-        ):
-            return
 
         left_new_index = {
             self.mw.main_learn_tab_index: 1,
@@ -41,16 +36,26 @@ class MainWidgetTabSwitcher:
             (2 / 3, 1 / 3) if index == self.mw.main_browse_tab_index else (1 / 2, 1 / 2)
         )
 
+        right_construct_tab_index = self.get_construct_tab_index()
         if (
             index in [self.mw.main_generate_tab_index, self.mw.main_construct_tab_index]
             and self.mw.left_stack.currentIndex() == self.mw.left_sequence_widget_index
         ):
-            construct_tab_index = self.get_construct_tab_index()
             new_index = (
-                3 if index == self.mw.main_generate_tab_index else construct_tab_index
+                3
+                if index == self.mw.main_generate_tab_index
+                else right_construct_tab_index
             )
             self.mw.fade_manager.fade_to_tab(
                 stack=self.mw.right_stack, new_index=new_index
+            )
+        elif index in [self.mw.main_construct_tab_index]:
+            self.mw.fade_manager.fade_both_stacks_in_parallel(
+                right_stack=self.mw.right_stack,
+                right_new_index=right_construct_tab_index,
+                left_stack=self.mw.left_stack,
+                left_new_index=left_new_index,
+                width_ratio=width_ratio,
             )
         else:
             self.mw.fade_manager.fade_both_stacks_in_parallel(
@@ -64,7 +69,6 @@ class MainWidgetTabSwitcher:
     def get_construct_tab_index(self):
         """Return the index of the construct tab."""
         beat_frame = self.mw.sequence_widget.beat_frame
-        # if the beat frame is empty, choose index 0
         for beat in beat_frame.beats:
             if beat.is_filled:
                 return self.mw.right_option_picker_index
