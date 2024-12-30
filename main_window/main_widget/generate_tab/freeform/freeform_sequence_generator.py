@@ -55,8 +55,8 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
             QApplication.processEvents()
 
         construct_tab = self.sequence_widget.main_widget.construct_tab
-        # construct_tab.transition_to_option_picker()
         construct_tab.option_picker.update_option_picker(self.sequence)
+        
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(
@@ -64,26 +64,25 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
         level: int,
         turn_blue: float,
         turn_red: float,
-        is_continuous_rot_dir,
-        blue_rot_dir,
-        red_rot_dir,
+        is_continuous_rot_dir: bool,
+        blue_rot_dir: str,
+        red_rot_dir: str,
     ):
 
-        options = self.main_widget.construct_tab.option_picker.option_getter._load_all_next_options(
+        option_dicts = self.main_widget.construct_tab.option_picker.option_getter._load_all_next_option_dicts(
             self.sequence
         )
-        options = [deepcopy(option) for option in options]
+        option_dicts = [deepcopy(option) for option in option_dicts]
 
-        # Filter options by selected letter types
-        options = self._filter_options_by_letter_type(options)
+        option_dicts = self._filter_options_by_letter_type(option_dicts)
 
         if is_continuous_rot_dir:
-            options = self._filter_options_by_rotation(
-                options, blue_rot_dir, red_rot_dir
+            option_dicts = self._filter_options_by_rotation(
+                option_dicts, blue_rot_dir, red_rot_dir
             )
 
         last_beat = self.sequence[-1]
-        next_beat = random.choice(options)
+        next_beat = random.choice(option_dicts)
 
         if level == 2 or level == 3:
             next_beat = self._set_turns(next_beat, turn_blue, turn_red)
@@ -91,10 +90,7 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
         self._update_start_oris(next_beat, last_beat)
         self._update_end_oris(next_beat)
         self._update_dash_static_prop_rot_dirs(
-            next_beat,
-            is_continuous_rot_dir,
-            blue_rot_dir,
-            red_rot_dir,
+            next_beat, is_continuous_rot_dir, blue_rot_dir, red_rot_dir
         )
         next_beat = self._update_beat_number_depending_on_sequence_length(
             next_beat, self.sequence

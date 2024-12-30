@@ -6,6 +6,7 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
 
 class BeatFrameUpdater:
@@ -63,7 +64,7 @@ class BeatFrameUpdater:
         self.json_manager = self.beat_frame.json_manager
         json_updater = self.json_manager.updater
         self.json_manager.loader_saver.clear_current_sequence_file()
-
+        beat: "Beat" = None
         if len(modified_sequence_json) > 1:
             start_pos_dict = modified_sequence_json[1]
             start_pos = self.beat_frame.start_pos_view.start_pos
@@ -89,8 +90,8 @@ class BeatFrameUpdater:
                 )
             else:
                 break
-
-        # update the beat adjustment panel in the graph editor
+        if not beat:
+            beat = start_pos
         self.beat_frame.main_widget.sequence_widget.graph_editor.adjustment_panel.update_turns_panel(
             beat.blue_motion, beat.red_motion
         )

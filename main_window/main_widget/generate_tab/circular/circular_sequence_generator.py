@@ -101,7 +101,7 @@ class CircularSequenceGenerator(BaseSequenceGenerator):
         blue_rot_dir,
         red_rot_dir,
     ) -> dict:
-        options = self.main_widget.construct_tab.option_picker.option_getter._load_all_next_options(
+        options = self.main_widget.construct_tab.option_picker.option_getter._load_all_next_option_dicts(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

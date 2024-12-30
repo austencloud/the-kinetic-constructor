@@ -12,9 +12,6 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.generate_tab.freeform.custom_checkbox_widget import CustomCheckBoxWidget
-
-
-
 from .base_classes.customize_your_sequence_label import CustomizeSequenceLabel
 from .generate_sequence_button import GenerateSequenceButton
 from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
@@ -51,23 +48,20 @@ class GenerateTab(QWidget):
         self.circular_button.clicked.connect(self.circular_generator_frame.show)
 
     def _setup_layout(self):
-        # Set up stacked layout
         self.stacked_layout = QStackedLayout()
         self.stacked_layout.addWidget(self.freeform_generator_frame)
         self.stacked_layout.addWidget(self.circular_generator_frame)
 
-        # Set up main layout
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.setLayout(self.layout)
         alignment = Qt.AlignmentFlag.AlignCenter
 
-        # Add widgets to layout
-        self.layout.addWidget(self.customize_sequence_label, alignment=alignment)
+        self.layout.addWidget(self.customize_sequence_label, alignment)
         self.layout.addItem(self.spacer_1)
         self.layout.addLayout(self.button_layout)
         self.layout.addLayout(self.stacked_layout)
         self.layout.addItem(self.spacer_2)
-        self.layout.addWidget(self.generate_sequence_button, alignment=alignment)
+        self.layout.addWidget(self.generate_sequence_button, alignment)
         self.layout.addLayout(self.checkbox_layout)
         self.layout.addItem(self.spacer_3)
 

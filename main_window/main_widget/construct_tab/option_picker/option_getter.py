@@ -18,7 +18,7 @@ class OptionGetter:
         self, sequence: list, selected_filter: Optional[str] = None
     ) -> list[dict]:
         """Return next possible pictographs for the current sequence, applying filters."""
-        all_options = self._load_all_next_options(sequence)
+        all_options = self._load_all_next_option_dicts(sequence)
         filtered = (
             self._apply_filter(sequence, all_options, selected_filter)
             if selected_filter is not None
@@ -67,7 +67,7 @@ class OptionGetter:
             return "one_reversal"
         return "two_reversals"
 
-    def _load_all_next_options(self, sequence: list) -> list[dict]:
+    def _load_all_next_option_dicts(self, sequence: list) -> list[dict]:
         """Return all possible next pictographs whose start_pos matches the sequence end."""
         next_opts = []
         last_pictograph = (
