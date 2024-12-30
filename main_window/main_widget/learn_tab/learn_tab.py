@@ -58,7 +58,6 @@ class LearnTab(QWidget):
         right_layout.setContentsMargins(0, 0, 0, 0)
 
         top_bar_layout = QHBoxLayout()
-        # top_bar_layout.addWidget(self.main_widget.codex.toggle_button)
         top_bar_layout.addStretch()
         right_layout.addLayout(top_bar_layout)
 
@@ -70,7 +69,6 @@ class LearnTab(QWidget):
         """Sets up the main QSplitter, holding the Codex panel and right-side widget."""
         self.main_layout = QHBoxLayout()
         self.main_layout.setContentsMargins(0, 0, 0, 0)
-        # self.main_layout.addWidget(self.main_widget.codex, 1)
         self.main_layout.addWidget(self.right_side, 1)
 
     def _setup_main_layout(self) -> None:

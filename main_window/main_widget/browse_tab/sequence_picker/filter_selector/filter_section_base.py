@@ -35,7 +35,7 @@ class FilterSectionBase(QWidget):
             self.filter_selector.sequence_picker
         )
         self.go_back_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.go_back_button.connect_button(
+        self.go_back_button.clicked.connect(
             self.filter_selector.show_filter_choice_widget
         )
         top_bar_layout.addWidget(

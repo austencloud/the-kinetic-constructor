@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
+
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_go_back_button import LessonWidgetGoBackButton
 from ..base_answers_widget import BaseAnswersWidget
 from .lesson_layout_manager import LessonLayoutManager
 from .quiz_timer_manager import QuizTimerManager
@@ -133,10 +135,8 @@ class BaseLessonWidget(QWidget):
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""
-        self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(self.learn_widget.lesson_selector.show)
-        self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.back_layout.addWidget(self.back_button)
+        self.go_back_button = LessonWidgetGoBackButton(self)
+        self.back_layout.addWidget(self.go_back_button)
         self.back_layout.addStretch(1)
         self.main_layout.addLayout(self.back_layout, 0)
 
