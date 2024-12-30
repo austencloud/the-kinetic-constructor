@@ -6,16 +6,16 @@ from PyQt6.QtCore import Qt
 
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_section_header import (
+from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_header import (
     OptionPickerSectionHeader,
 )
-from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_section_pictograph_frame import (
+from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_pictograph_frame import (
     OptionPickerSectionPictographFrame,
 )
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+    from main_window.main_widget.construct_tab.option_picker.scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
 

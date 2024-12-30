@@ -3,10 +3,10 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+    from main_window.main_widget.construct_tab.option_picker.scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
-    from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_section_widget import (
+    from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
 

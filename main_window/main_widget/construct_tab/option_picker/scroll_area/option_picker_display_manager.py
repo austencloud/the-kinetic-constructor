@@ -4,7 +4,7 @@ from Enums.Enums import LetterType, Letter
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from Enums.Enums import LetterType
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-from .option_picker_section_widget import OptionPickerSectionWidget
+from .section_manager.option_picker_section_widget import OptionPickerSectionWidget
 
 if TYPE_CHECKING:
     from .option_picker_scroll_area import OptionPickerScrollArea

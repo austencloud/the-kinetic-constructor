@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import QHBoxLayout
 
 if TYPE_CHECKING:
 
-    from .option_picker_scroll_area import OptionPickerScrollArea
+    from ..option_picker_scroll_area import OptionPickerScrollArea
 
 
 class OptionPickerSectionManager:

@@ -9,12 +9,12 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
-from .option_picker_section_manager import OptionPickerSectionManager
+from .section_manager.option_picker_section_manager import OptionPickerSectionManager
 from .option_picker_display_manager import OptionPickerDisplayManager
 
 
 if TYPE_CHECKING:
-    from .option_picker_section_widget import OptionPickerSectionWidget
+    from .section_manager.option_picker_section_widget import OptionPickerSectionWidget
 
     from ..option_picker import OptionPicker
 

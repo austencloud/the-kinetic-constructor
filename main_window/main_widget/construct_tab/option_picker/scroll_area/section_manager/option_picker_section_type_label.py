@@ -7,10 +7,10 @@ from PyQt6.QtCore import pyqtSignal
 
 
 if TYPE_CHECKING:
-    from ...option_picker_section_widget import OptionPickerSectionWidget
+    from .option_picker_section_widget import OptionPickerSectionWidget
 
 
-class SectionTypeLabel(QLabel):
+class OptionPickerSectionTypeLabel(QLabel):
     clicked = pyqtSignal()
 
     TYPE_MAP = {

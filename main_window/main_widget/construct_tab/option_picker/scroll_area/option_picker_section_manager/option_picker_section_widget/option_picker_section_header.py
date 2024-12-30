@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
-from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.section_type_label import (
-    SectionTypeLabel,
-)
+from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_widget import OptionPickerSectionWidget
+
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_section_widget import (
-        OptionPickerSectionWidget,
-    )
+    from main_window.main_widget.construct_tab.option_picker.scroll_area.section_type_label import SectionTypeLabel
 
 
 class OptionPickerSectionHeader(QWidget):

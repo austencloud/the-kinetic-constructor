@@ -2,12 +2,11 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
+from .scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 from .option_picker_pictograph_view import OptionPickerPictographView
 from .option_picker_reversal_filter import OptionPickerReversalFilter
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
-from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
