@@ -28,6 +28,7 @@ class SequencePicker(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
+
         # Widgets
         self.filter_stack = SequencePickerFilterStack(self)
         self.control_panel = SequencePickerControlPanel(self)

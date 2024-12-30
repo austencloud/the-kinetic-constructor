@@ -81,7 +81,9 @@ class SequencePickerThumbnailBoxSorter:
 
             column_index = 0
             for word, thumbnails in self.browse_tab.sequence_picker.sections[section]:
-                self.add_thumbnail_box(row_index, column_index, word, thumbnails)
+                self.add_thumbnail_box(
+                    row_index, column_index, word, thumbnails, hidden=False
+                )
                 column_index = (column_index + 1) % self.num_columns
                 if column_index == 0:
                     row_index += 1
@@ -116,7 +118,6 @@ class SequencePickerThumbnailBoxSorter:
     ):
         if word not in self.scroll_widget.thumbnail_boxes:
             thumbnail_box = ThumbnailBox(self.browse_tab, word, thumbnails)
-            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
             self.scroll_widget.thumbnail_boxes[word] = thumbnail_box
         else:
             thumbnail_box = self.scroll_widget.thumbnail_boxes[word]

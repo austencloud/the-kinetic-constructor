@@ -11,7 +11,7 @@ class ActContainer(QFrame):
     def __init__(self, act_sheet: "ActSheet") -> None:
         super().__init__(act_sheet)
         self.act_sheet = act_sheet
-        self.main_widget = act_sheet.write_tab
+        self.write_tab = act_sheet.write_tab
 
         # Initialize scroll areas
         self.cue_scroll = CueScroll(self.act_sheet)
@@ -35,11 +35,11 @@ class ActContainer(QFrame):
         return cue_text, timestamp_text
 
     def save_scrollbar_state(self):
-        settings = self.main_widget.settings_manager.settings
+        settings = self.write_tab.main_widget.settings_manager.settings
         settings.setValue("act_sheet/scrollbar_state", self.sender().value())
 
     def restore_scrollbar_state(self):
-        settings = self.main_widget.settings_manager.settings
+        settings = self.write_tab.main_widget.settings_manager.settings
         beat_scrollbar_state = settings.value("act_sheet/scrollbar_state")
         if beat_scrollbar_state:
             self.beat_scroll.verticalScrollBar().setValue(int(beat_scrollbar_state))

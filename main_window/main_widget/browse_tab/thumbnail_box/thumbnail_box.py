@@ -32,7 +32,8 @@ class ThumbnailBox(QWidget):
         self.layout.setSpacing(0)
         self.load_favorite_status()
         self.word_label.update_favorite_icon(self.favorite_status)
-
+        # self.hide()
+        
     def _setup_components(self):
         self.word_label = WordLabel(self)
         self.image_label = ThumbnailImageLabel(self)
@@ -92,12 +93,12 @@ class ThumbnailBox(QWidget):
             self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().width()
         )
         parent_width = (
-            self.browse_tab.sequence_picker.scroll_widget.scroll_content.width()
-            - scrollbar_width
+            self.browse_tab.sequence_picker.scroll_widget.width() - scrollbar_width
         )
 
         width = parent_width // 3
         self.setFixedWidth(width)
+        self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
@@ -105,7 +106,7 @@ class ThumbnailBox(QWidget):
         if self == self.browse_tab.sequence_viewer.current_thumbnail_box:
             self.browse_tab.sequence_viewer.update_thumbnails(self.thumbnails)
         self.image_label.thumbnails = thumbnails
-        self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
+        # self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
         if len(self.thumbnails) == 1:
             self.variation_number_label.hide()
         else:

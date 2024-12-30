@@ -27,7 +27,7 @@ class ThumbnailImageLabel(QLabel):
     def update_thumbnail(self, index):
         if self.thumbnails and 0 <= index < len(self.thumbnails):
             pixmap = QPixmap(self.thumbnails[index])
-            self.set_pixmap_to_fit(pixmap)
+            # self.set_pixmap_to_fit(pixmap)
         else:
             self.setText("No image available")
 
@@ -48,8 +48,6 @@ class ThumbnailImageLabel(QLabel):
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
-        # self.adjustSize()
-        # QApplication.processEvents()
 
     def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:

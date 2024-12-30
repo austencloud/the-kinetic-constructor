@@ -93,14 +93,17 @@ class BrowseTabFilterManager:
     def apply_filter(self, current_filter):
         self.browse_tab.settings.set_current_section("sequence_picker")
         self.current_filter = current_filter
-        self.main_widget.fade_manager.fade_to_tab(
-            self.main_widget.left_stack,
-            self.main_widget.left_sequence_picker_index,
+
+        self.browse_tab.fade_manager.fade_and_update_browse_tab(
+            # self.main_widget.left_stack,
+            # self.main_widget.left_sequence_picker_index,
+            # lambda: self.sort_and_display_thumbnail_boxes_by_current_filter(
+            #     current_filter
+            # ),
         )
 
-        self.sort_and_display_thumbnail_boxes_by_current_filter(current_filter)
+        # self.sort_and_display_thumbnail_boxes_by_current_filter(current_filter)
         self.browse_tab.sequence_viewer.update_preview(None)
-        QApplication.processEvents()
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
@@ -139,7 +142,7 @@ class BrowseTabFilterManager:
         self.browse_tab.sequence_picker.control_panel.currently_displaying_label.setText(
             ""
         )
-        QApplication.processEvents()
+        # QApplication.processEvents()
         self.browse_tab.sequence_picker.control_panel.currently_displaying_label.show_message(
             description
         )
@@ -156,4 +159,4 @@ class BrowseTabFilterManager:
         self.browse_tab.sequence_picker.progress_bar.setVisible(True)
         self.browse_tab.sequence_picker.progress_bar.resize_progress_bar()
 
-        QApplication.processEvents()
+        # QApplication.processEvents()

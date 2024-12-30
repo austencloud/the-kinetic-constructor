@@ -42,7 +42,6 @@ class BrowseTabUIUpdater:
                 percentage = int((num_words / total_sequences) * 100)
                 self.progress_bar.set_value(percentage)
                 self.control_panel.count_label.setText(f"Number of words: {num_words}")
-                QApplication.processEvents()
 
             self.progress_bar.setVisible(False)
             self._apply_sorting_and_styling()

@@ -38,6 +38,9 @@ class ContainsLettersSection(FilterSectionBase):
     BUTTON_SIZE_FACTOR = 20
     APPLY_BUTTON_WIDTH_FACTOR = 6
 
+    SELECTED_STYLE = "background-color: blue; color: white; border: 2px solid black; border-radius: 5px;"
+    UNSELECTED_STYLE = "background-color: lightgray; color: black; border: 1px solid darkgray; border-radius: 5px;"
+
     def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select letters to be contained:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
@@ -66,6 +69,7 @@ class ContainsLettersSection(FilterSectionBase):
         apply_button_layout = QHBoxLayout()
         apply_button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.apply_button = QPushButton("Apply")
+        self.apply_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.apply_button.clicked.connect(self.apply_filter)
         apply_button_layout.addWidget(self.apply_button)
         layout.addLayout(apply_button_layout)
@@ -84,12 +88,23 @@ class ContainsLettersSection(FilterSectionBase):
                     button.setCheckable(True)
                     button.setProperty("letter", letter)
                     button.clicked.connect(self.update_letter_selection)
+                    self.update_button_style(button)  # Initialize style
                     self.buttons[letter] = button
                     button_row_layout.addWidget(button)
                 layout.addLayout(button_row_layout)
 
+    def update_button_style(self, button: QPushButton):
+        """Update the button style based on its state."""
+        if button.isChecked():
+            button.setStyleSheet(self.SELECTED_STYLE)
+        else:
+            button.setStyleSheet(self.UNSELECTED_STYLE)
+
     def update_letter_selection(self):
         """Update the selected letters and the sequence tally."""
+        for button in self.buttons.values():
+            self.update_button_style(button)
+
         self.selected_letters = {
             button.property("letter")
             for button in self.buttons.values()
@@ -116,6 +131,8 @@ class ContainsLettersSection(FilterSectionBase):
         self.browse_tab.filter_manager.apply_filter(
             {"contains_letters": list(self.selected_letters)}
         )
+
+
 
     def display_only_thumbnails_containing_letters(self, letters: list[str]):
         """Display only the thumbnails that contain the specified letters."""

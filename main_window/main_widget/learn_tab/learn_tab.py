@@ -25,7 +25,7 @@ class LearnTab(QWidget):
         self.lesson_2_widget = Lesson2Widget(self)
         self.lesson_3_widget = Lesson3Widget(self)
         self.codex = Codex(self)
-
+        
     def _setup_layout(self) -> None:
         self.stack = QStackedLayout()
         self.stack.addWidget(self.lesson_selector)

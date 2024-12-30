@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedLayout
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedLayout, QApplication
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
@@ -31,7 +31,7 @@ class FadeManager(QObject):
         super().__init__(main_widget)
         self.main_widget = main_widget
 
-    def fade_to_tab(self, stack: QStackedLayout, new_index: int):
+    def fade_to_tab(self, stack: QStackedLayout, new_index: int, callback: callable = None):
         if self._is_animating:
             return
 
@@ -60,12 +60,14 @@ class FadeManager(QObject):
         self.fade_out.setEndValue(0.0)
         self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
-        self.fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index))
+        self.fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index, callback))
         self.fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()
-    def _switch_and_fade_in(self, new_index: int):
+    def _switch_and_fade_in(self, new_index: int, callback: callable = None):
         self.stack.setCurrentIndex(new_index)
+        if callback:
+            callback()
 
         if self._old_opacity:
             self._old_opacity.setOpacity(1.0)
