@@ -34,7 +34,6 @@ class ConstructTab(QFrame):
             letter: {} for letter in Letter
         }
 
-        self.click_handler = OptionPickerClickHandler(self)
         self.option_picker = OptionPicker(self)
         self.start_pos_picker = StartPosPicker(self)
         self.advanced_start_pos_picker = AdvancedStartPosPicker(self)

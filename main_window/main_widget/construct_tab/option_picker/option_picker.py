@@ -1,19 +1,28 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from PyQt6.QtCore import pyqtSignal, Qt
+# option_picker.py
+
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
+from PyQt6.QtCore import pyqtSignal, Qt, pyqtSlot, QParallelAnimationGroup, QObject
+from typing import TYPE_CHECKING
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.construct_tab.option_picker.option_fade_manager import (
+    OptionFadeManager,
+)
 from main_window.main_widget.construct_tab.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
+)
+from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_widget import (
+    OptionPickerSectionWidget,
 )
 from .scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 from .option_picker_pictograph_view import OptionPickerPictographView
 from .reversal_filter.option_picker_reversal_filter import OptionPickerReversalFilter
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..construct_tab import ConstructTab
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class OptionPicker(QWidget):
@@ -34,9 +43,14 @@ class OptionPicker(QWidget):
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_filter = OptionPickerReversalFilter(self)
         self.click_handler = OptionPickerClickHandler(self)
+        self.fade_manager = OptionFadeManager(self)
 
         self.initialize_option_pool()
         self.setup_layout()
+
+    def get_sections(self) -> list["OptionPickerSectionWidget"]:
+        """Retrieve all OptionPickerSectionWidget instances."""
+        return list(self.scroll_area.section_manager.sections.values())
 
     def initialize_option_pool(self):
         self.option_pool: list[BasePictograph] = []
@@ -62,6 +76,7 @@ class OptionPicker(QWidget):
         self.layout.addWidget(self.scroll_area, 14)
 
     def update_option_picker(self, sequence=None):
+        """Initiate fade-out and update pictographs upon option selection."""
         if self.disabled:
             return
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -70,8 +85,14 @@ class OptionPicker(QWidget):
             next_options = self.option_getter.get_next_options(
                 sequence, selected_filter
             )
-            self.scroll_area.clear_pictographs()
-            self.scroll_area.add_and_display_relevant_pictographs(next_options)
+
+            sections = self.get_sections()
+            if not sections:
+                self.scroll_area.display_manager.clear_all_section_layouts()
+                self.scroll_area.add_and_display_relevant_pictographs(next_options)
+                return
+
+            self.fade_manager.fade_option_picker()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

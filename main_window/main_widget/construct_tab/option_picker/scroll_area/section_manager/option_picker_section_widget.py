@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
+from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QGraphicsOpacityEffect
 from Enums.Enums import LetterType
 from data.constants import OPP, SAME
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .option_picker_section_header import OptionPickerSectionHeader
 from .option_picker_section_pictograph_frame import OptionPickerSectionPictographFrame
@@ -29,6 +29,9 @@ class OptionPickerSectionWidget(QGroupBox):
         self._setup_header()
         self._setup_layout()
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.opacity_effect = QGraphicsOpacityEffect()
+        self.pictograph_frame.setGraphicsEffect(self.opacity_effect)
+        self.opacity_effect.setOpacity(1.0)  # Fully visible initially
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -37,6 +40,8 @@ class OptionPickerSectionWidget(QGroupBox):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.header)
         self.layout.addWidget(self.pictograph_frame)
+
+
 
     def _setup_header(self) -> None:
         self.header = OptionPickerSectionHeader(self)

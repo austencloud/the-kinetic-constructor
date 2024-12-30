@@ -32,7 +32,7 @@ class FadeManager(QObject):
         old_index = self.stack.currentIndex()
         if old_index == new_index:
             return
-        
+
         self._is_animating = True
 
         self.old_widget = self.stack.widget(old_index)
@@ -77,6 +77,10 @@ class FadeManager(QObject):
     @pyqtSlot()
     def _on_fade_in_finished(self):
         self._is_animating = False
+        self._old_opacity = None
+        self._new_opacity = None
+        self.old_widget.setGraphicsEffect(None)
+        self.new_widget.setGraphicsEffect(None)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
         effect = widget.graphicsEffect()
