@@ -2,10 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import Qt
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
-
+    from .generate_tab import GenerateTab
 
 class GenerateSequenceButton(QPushButton):
     def __init__(self, sequence_generator_widget: "GenerateTab"):
