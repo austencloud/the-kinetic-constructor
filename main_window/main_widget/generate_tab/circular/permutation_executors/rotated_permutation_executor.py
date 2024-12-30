@@ -212,12 +212,12 @@ class RotatedPermutationExecuter(PermutationExecutor):
             )
 
         new_entry["blue_attributes"]["end_ori"] = (
-            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_ori(
                 new_entry, "blue"
             )
         )
         new_entry["red_attributes"]["end_ori"] = (
-            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_sequence_generator.json_manager.ori_calculator.calculate_end_ori(
                 new_entry, "red"
             )
         )

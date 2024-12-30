@@ -19,31 +19,33 @@ class OptionGetter:
     ) -> list[dict]:
         """Return next possible pictographs for the current sequence, applying filters."""
         all_options = self._load_all_next_option_dicts(sequence)
-        filtered = (
+        filtered_options = (
             self._apply_filter(sequence, all_options, selected_filter)
             if selected_filter is not None
             else all_options
         )
 
-        # Update start orientations
-        for opt in filtered:
-            opt["blue_attributes"]["start_ori"] = sequence[-1]["blue_attributes"][
+        self.update_orientations(sequence, filtered_options)
+
+        return filtered_options
+
+    def update_orientations(self, sequence, filtered_options):
+        for option in filtered_options:
+            option["blue_attributes"]["start_ori"] = sequence[-1]["blue_attributes"][
                 "end_ori"
             ]
-            opt["red_attributes"]["start_ori"] = sequence[-1]["red_attributes"][
+            option["red_attributes"]["start_ori"] = sequence[-1]["red_attributes"][
                 "end_ori"
             ]
 
-        # Update end orientations
-        for opt in filtered:
-            opt["blue_attributes"]["end_ori"] = (
-                self.json_manager.ori_calculator.calculate_end_orientation(opt, "blue")
+        ori_calculator = self.json_manager.ori_calculator
+        for option in filtered_options:
+            option["blue_attributes"]["end_ori"] = ori_calculator.calculate_end_ori(
+                option, "blue"
             )
-            opt["red_attributes"]["end_ori"] = (
-                self.json_manager.ori_calculator.calculate_end_orientation(opt, "red")
+            option["red_attributes"]["end_ori"] = ori_calculator.calculate_end_ori(
+                option, "red"
             )
-
-        return filtered
 
     def _apply_filter(
         self, sequence: list, options: list, selected_filter: str
@@ -81,7 +83,6 @@ class OptionGetter:
                     if pict_dict[START_POS] == start_pos:
                         next_opts.append(pict_dict)
 
-        # Update start orientations and validate
         for opt in next_opts:
             for color in ("blue", "red"):
                 opt[f"{color}_attributes"]["start_ori"] = last_pictograph[

@@ -7,6 +7,8 @@ if TYPE_CHECKING:
 
 
 class OptionPickerSectionPictographFrame(QFrame):
+    opacity_effect: QGraphicsOpacityEffect
+    
     def __init__(self, section: "OptionPickerSectionWidget") -> None:
         super().__init__()
         self.section = section
@@ -16,6 +18,6 @@ class OptionPickerSectionPictographFrame(QFrame):
         self.layout.setSpacing(self.section.scroll_area.spacing)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         
-        self.opacity_effect = QGraphicsOpacityEffect()
-        self.setGraphicsEffect(self.opacity_effect)
-        self.opacity_effect.setOpacity(1.0)
+        # self.opacity_effect = QGraphicsOpacityEffect()
+        # self.setGraphicsEffect(self.opacity_effect)
+        # self.opacity_effect.setOpacity(1.0)

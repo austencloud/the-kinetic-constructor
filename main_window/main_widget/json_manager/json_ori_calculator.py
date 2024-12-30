@@ -24,7 +24,7 @@ class JsonOriCalculator:
         self.main_widget = json_manager.main_widget
         self.handpath_calculator = HandpathCalculator()
 
-    def calculate_end_orientation(self, pictograph_dict, color: str):
+    def calculate_end_ori(self, pictograph_dict, color: str):
         motion_type = pictograph_dict[f"{color}_attributes"]["motion_type"]
         if (pictograph_dict[f"{color}_attributes"]["turns"]) != "fl":
             turns = float(pictograph_dict[f"{color}_attributes"]["turns"])

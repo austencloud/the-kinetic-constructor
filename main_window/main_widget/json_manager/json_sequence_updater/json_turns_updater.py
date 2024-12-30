@@ -10,7 +10,6 @@ if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
 
-
 class JsonTurnsUpdater:
     def __init__(self, json_updater: "JsonSequenceUpdater"):
         self.json_updater = json_updater
@@ -22,7 +21,7 @@ class JsonTurnsUpdater:
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["turns"] = turns
-        end_ori = self.json_manager.ori_calculator.calculate_end_orientation(
+        end_ori = self.json_manager.ori_calculator.calculate_end_ori(
             sequence[index], color
         )
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori

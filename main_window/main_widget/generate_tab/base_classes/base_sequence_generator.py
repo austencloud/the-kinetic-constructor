@@ -106,10 +106,10 @@ class BaseSequenceGenerator:
 
     def _update_end_oris(self, next_pictograph_dict):
         next_pictograph_dict["blue_attributes"][END_ORI] = (
-            self.ori_calculator.calculate_end_orientation(next_pictograph_dict, BLUE)
+            self.ori_calculator.calculate_end_ori(next_pictograph_dict, BLUE)
         )
         next_pictograph_dict["red_attributes"][END_ORI] = (
-            self.ori_calculator.calculate_end_orientation(next_pictograph_dict, RED)
+            self.ori_calculator.calculate_end_ori(next_pictograph_dict, RED)
         )
 
     def _update_dash_static_prop_rot_dirs(

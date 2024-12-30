@@ -82,7 +82,7 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
             "blue_attributes"
         ]["end_ori"]
         correct_answer["blue_attributes"]["end_ori"] = (
-            self.main_widget.json_manager.ori_calculator.calculate_end_orientation(
+            self.main_widget.json_manager.ori_calculator.calculate_end_ori(
                 correct_answer, "blue"
             )
         )
@@ -91,7 +91,7 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
             "red_attributes"
         ]["end_ori"]
         correct_answer["red_attributes"]["end_ori"] = (
-            self.main_widget.json_manager.ori_calculator.calculate_end_orientation(
+            self.main_widget.json_manager.ori_calculator.calculate_end_ori(
                 correct_answer, "red"
             )
         )
