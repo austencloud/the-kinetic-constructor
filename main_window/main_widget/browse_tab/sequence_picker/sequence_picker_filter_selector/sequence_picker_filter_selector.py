@@ -89,13 +89,7 @@ class SequencePickerFilterSelector(QWidget):
         self.show_section("filter_choice")
 
     def apply_filter(self, filter_key: str, filter_value):
-        """Apply a filter to the browser.
-
-        Args:
-            filter_key (str): The filter key (e.g., 'level', 'author').
-            filter_value: The value for the filter key.
-        """
-        self.browse_tab.browse_tab_settings.set_current_section("browser")
+        self.browse_tab.browse_tab_settings.set_current_section("sequence_picker")
         self.browse_tab.filter_manager.apply_current_filter({filter_key: filter_value})
 
     # Event Handlers

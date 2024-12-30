@@ -8,20 +8,26 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .sequence_picker import SequencePicker
 
+
 class SequencePickerNavSidebar(QWidget):
+    buttons: list[QPushButton] = []
+    year_labels: dict[str, QLabel] = {}
+    spacer_lines: list[QLabel] = []
+    length_spacer_line: QLabel = None
+    letter_spacer_line: QLabel = None
+    selected_button: QPushButton = None
+
     def __init__(self, sequence_picker: "SequencePicker"):
         super().__init__(sequence_picker)
         self.sequence_picker = sequence_picker
+        self.length_label = QLabel("Length")
+        self.letter_label = QLabel("Letter")
+
         self._setup_scroll_area()
-        self.buttons: list[QPushButton] = []
-        self.year_labels: dict[str, QPushButton] = {}
-        self.spacer_lines: list[QLabel] = []
-        self.length_label: QLabel = None
-        self.length_spacer_line: QLabel = None
-        self.letter_label: QLabel = None
-        self.letter_spacer_line: QLabel = None
-        self.selected_button: QPushButton = None
-        self.settings_manager = self.sequence_picker.main_widget.main_window.settings_manager
+
+        self.settings_manager = (
+            self.sequence_picker.main_widget.main_window.settings_manager
+        )
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.scroll_area)
@@ -149,6 +155,7 @@ class SequencePickerNavSidebar(QWidget):
                 self.buttons.append(button)
 
         self.set_styles()
+        self.resize_sidebar()
 
     def clear_sidebar(self):
         for button in self.buttons:
@@ -164,7 +171,6 @@ class SequencePickerNavSidebar(QWidget):
             spacer_line.hide()
             spacer_line.deleteLater()
 
-        # Clear the length label and its spacer if they exist
         if self.length_label:
             self.layout.removeWidget(self.length_label)
             self.length_label.hide()
@@ -176,7 +182,6 @@ class SequencePickerNavSidebar(QWidget):
             self.length_spacer_line.deleteLater()
             self.length_spacer_line = None
 
-        # Clear the letter label and its spacer if they exist
         if self.letter_label:
             self.layout.removeWidget(self.letter_label)
             self.letter_label.hide()
@@ -199,7 +204,6 @@ class SequencePickerNavSidebar(QWidget):
         return day
 
     def style_button(self, button: QPushButton, selected: bool = False):
-        font_size = self.sequence_picker.height() // 40
         font_color = self.sequence_picker.main_widget.font_color_updater.get_font_color(
             self.settings_manager.global_settings.get_background_type()
         )
@@ -212,7 +216,6 @@ class SequencePickerNavSidebar(QWidget):
                     background-color: {button_background_color};
                     color: {font_color};
                     border-radius: 5px;
-                    font-size: {font_size}px;
                     padding: 5px;
                     font-weight: bold;
                 }}
@@ -224,7 +227,6 @@ class SequencePickerNavSidebar(QWidget):
                 QPushButton {{
                     background: transparent;
                     border: none;
-                    font-size: {font_size}px;
                     color: {font_color};
                     padding: 5px;
                     text-align: center;
@@ -237,7 +239,6 @@ class SequencePickerNavSidebar(QWidget):
             )
 
     def style_header_label(self, label: QLabel):
-        font_size = self.sequence_picker.height() // 40
         font_color = self.sequence_picker.main_widget.font_color_updater.get_font_color(
             self.settings_manager.global_settings.get_background_type()
         )
@@ -245,7 +246,6 @@ class SequencePickerNavSidebar(QWidget):
         label.setStyleSheet(
             f"""
             QLabel {{
-                font-size: {font_size}px;
                 color: {font_color};
                 padding: 5px;
                 font-weight: bold;
@@ -279,13 +279,38 @@ class SequencePickerNavSidebar(QWidget):
             self.style_button(button, selected=selected)
         for year_label in self.year_labels.values():
             self.style_header_label(year_label)
-        for spacer_line in self.spacer_lines:
-            spacer_line.setFixedHeight(1)
         if self.length_label:
             self.style_header_label(self.length_label)
-        if self.length_spacer_line:
-            self.length_spacer_line.setFixedHeight(1)
         if self.letter_label:
             self.style_header_label(self.letter_label)
+
+    def resizeEvent(self, event):
+        self.resize_sidebar()
+        super().resizeEvent(event)
+
+    def resize_sidebar(self):
+        for spacer_line in self.spacer_lines:
+            spacer_line.setFixedHeight(1)
         if self.letter_spacer_line:
             self.letter_spacer_line.setFixedHeight(1)
+        if self.length_spacer_line:
+            self.length_spacer_line.setFixedHeight(1)
+        if self.length_label:
+            self.resize_label(self.length_label)
+        if self.letter_label:
+            self.resize_label(self.letter_label)
+        if self.year_labels:
+            for year_label in self.year_labels.values():
+                self.resize_label(year_label)
+
+        for button in self.buttons:
+            font_size = self.sequence_picker.height() // 40
+            button_font = button.font()
+            button_font.setPointSize(font_size)
+            button.setFont(button_font)
+
+    def resize_label(self, label: QLabel):
+        font_size = self.sequence_picker.height() // 40
+        label_font = label.font()
+        label_font.setPointSize(font_size)
+        label.setFont(label_font)

@@ -54,7 +54,7 @@ class BrowseTab(QWidget):
     def show_initial_section(self):
         current_section = self.browse_tab_settings.get_current_section()
         selector = self.sequence_picker.filter_selector
-        if current_section == "browser":
+        if current_section == "sequence_picker":
             self.filter_manager.show_browser_with_filters_from_settings()
         else:
             selector.show_section(current_section)

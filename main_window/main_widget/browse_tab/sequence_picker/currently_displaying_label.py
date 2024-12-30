@@ -17,7 +17,7 @@ class CurrentlyDisplayingLabel(QLabel):
 
     def resizeEvent(self, event):
         font = self.font()
-        font_size = self.sequence_picker.main_widget.width() // 65
+        font_size = self.sequence_picker.main_widget.width() // 100
         font.setPointSize(font_size)
         self.setFont(font)
         super().resizeEvent(event)
