@@ -8,25 +8,32 @@ from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import Thumb
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker import (
+        SequencePicker,
+    )
 
 
-class BrowseTabThumbnailBoxSorter:
-    def __init__(self, browse_tab: "BrowseTab") -> None:
-        self.browse_tab = browse_tab
-        self.metadata_extractor = browse_tab.main_widget.metadata_extractor
-        self.main_widget = browse_tab.main_widget
+class SequencePickerThumbnailBoxSorter:
+    def __init__(self, sequence_picker: "SequencePicker"):
+        self.sequence_picker = sequence_picker
+        self.browse_tab = sequence_picker.browse_tab
+        self.metadata_extractor = self.browse_tab.main_widget.metadata_extractor
+        self.main_widget = self.browse_tab.main_widget
+        self.scroll_widget = self.sequence_picker.scroll_widget
+        self.section_manager = self.browse_tab.section_manager
+
         self.num_columns = 3
 
     def reload_currently_displayed_filtered_sequences(self):
         current_filter = self.browse_tab.browse_tab_settings.get_current_filter()
-        self.browse_tab.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
+        self.sequence_picker.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )
 
     def sort_and_display_currently_filtered_sequences_by_method(
         self, sort_method: str
     ) -> None:
-        self.browse_tab.sequence_picker.scroll_widget.clear_layout()
+        self.scroll_widget.clear_layout()
         self.browse_tab.sections = {}
         if sort_method == "sequence_length":
             self.browse_tab.currently_displayed_sequences.sort(
@@ -34,8 +41,7 @@ class BrowseTabThumbnailBoxSorter:
             )
         elif sort_method == "date_added":
             self.browse_tab.currently_displayed_sequences.sort(
-                key=lambda x: self.browse_tab.section_manager.get_date_added(x[1])
-                or datetime.min,
+                key=lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
                 reverse=True,
             )
         else:
@@ -47,7 +53,7 @@ class BrowseTabThumbnailBoxSorter:
             thumbnails,
             seq_length,
         ) in self.browse_tab.currently_displayed_sequences:
-            section = self.browse_tab.section_manager.get_section_from_word(
+            section = self.section_manager.get_section_from_word(
                 word, sort_method, seq_length, thumbnails
             )
 
@@ -56,16 +62,14 @@ class BrowseTabThumbnailBoxSorter:
 
             self.browse_tab.sections[section].append((word, thumbnails))
 
-        sorted_sections = self.browse_tab.section_manager.get_sorted_sections(
+        sorted_sections = self.section_manager.get_sorted_sections(
             sort_method, self.browse_tab.sections.keys()
         )
 
-        self.browse_tab.sequence_picker.nav_sidebar.update_sidebar(
-            sorted_sections, sort_method
-        )
+        self.sequence_picker.nav_sidebar.update_sidebar(sorted_sections, sort_method)
         current_section = None
 
-        self.browse_tab.sequence_picker.control_panel.sort_widget.highlight_appropriate_button(
+        self.sequence_picker.control_panel.sort_widget.highlight_appropriate_button(
             sort_method
         )
 
@@ -79,25 +83,21 @@ class BrowseTabThumbnailBoxSorter:
 
                 if year != current_section:
                     row_index += 1
-                    self.browse_tab.section_manager.add_header(
-                        row_index, self.num_columns, year
-                    )
+                    self.section_manager.add_header(row_index, self.num_columns, year)
                     row_index += 1
                     current_section = year
 
                 row_index += 1
-                self.browse_tab.section_manager.add_header(
+                self.section_manager.add_header(
                     row_index, self.num_columns, formatted_day
                 )
                 row_index += 1
             else:
                 row_index += 1
-                self.browse_tab.section_manager.add_header(
-                    row_index, self.num_columns, section
-                )
+                self.section_manager.add_header(row_index, self.num_columns, section)
                 row_index += 1
 
-            column_index = 0  # Reset column index at the start of each section
+            column_index = 0
 
             for word, thumbnails in self.browse_tab.sections[section]:
                 self.add_thumbnail_box(row_index, column_index, word, thumbnails)
@@ -106,7 +106,7 @@ class BrowseTabThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.browse_tab.sequence_picker.control_panel.count_label.setText(
+        self.sequence_picker.control_panel.count_label.setText(
             f"Number of words: {len(self.browse_tab.currently_displayed_sequences)}"
         )
         QApplication.restoreOverrideCursor()
@@ -114,7 +114,7 @@ class BrowseTabThumbnailBoxSorter:
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
     ) -> None:
-        filter_selector = self.browse_tab.sequence_picker.filter_selector
+        filter_selector = self.sequence_picker.filter_selector
 
         starting_position_section = filter_selector.starting_position_section
         contains_letter_section = filter_selector.contains_letter_section
@@ -149,23 +149,17 @@ class BrowseTabThumbnailBoxSorter:
     def add_thumbnail_box(
         self, row_index, column_index, word, thumbnails, hidden: bool = False
     ):
-        if word not in self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes:
+        if word not in self.scroll_widget.thumbnail_boxes:
             thumbnail_box = ThumbnailBox(self.browse_tab, word, thumbnails)
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-            self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes[word] = (
-                thumbnail_box
-            )
+            self.scroll_widget.thumbnail_boxes[word] = thumbnail_box
         else:
-            thumbnail_box = (
-                self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes[word]
-            )
+            thumbnail_box = self.scroll_widget.thumbnail_boxes[word]
 
         if hidden:
             thumbnail_box.hide()
 
-        self.browse_tab.sequence_picker.scroll_widget.grid_layout.addWidget(
-            thumbnail_box, row_index, column_index
-        )
+        self.scroll_widget.grid_layout.addWidget(thumbnail_box, row_index, column_index)
 
         if not hidden:
             thumbnail_box.show()
@@ -194,8 +188,7 @@ class BrowseTabThumbnailBoxSorter:
             base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
         elif sort_order == "date_added":
             base_words.sort(
-                key=lambda x: self.browse_tab.section_manager.get_date_added(x[1])
-                or datetime.min,
+                key=lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
                 reverse=True,
             )
         else:

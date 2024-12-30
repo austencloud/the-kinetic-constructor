@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
+
 from ..sequence_picker_go_back_button import SequencePickerGoBackButton
 
 if TYPE_CHECKING:
-    from .sequence_picker_filter_selector import SequencePickerFilterSelector
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import SequencePickerFilterSelector
 
 
 class FilterSectionBase(QWidget):

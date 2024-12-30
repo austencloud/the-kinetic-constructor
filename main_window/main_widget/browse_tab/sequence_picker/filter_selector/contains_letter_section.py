@@ -12,7 +12,7 @@ from PyQt6.QtCore import Qt, QTimer
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_filter_selector.sequence_picker_filter_selector import (
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
         SequencePickerFilterSelector,
     )
 

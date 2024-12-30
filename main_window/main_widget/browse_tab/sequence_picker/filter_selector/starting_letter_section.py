@@ -49,7 +49,7 @@ class StartingLetterSection(FilterSectionBase):
         self.sequence_tally = self._get_starting_letter_sequence_counts()
         self.sequence_tally_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.sequence_tally_label)
-        
+
         layout.addStretch(1)
         self.resize_starting_letter_section()
 
