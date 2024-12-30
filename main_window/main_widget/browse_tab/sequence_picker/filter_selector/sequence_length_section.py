@@ -94,9 +94,7 @@ class SequenceLengthSection(FilterSectionBase):
     def _get_sequence_length_counts(self) -> dict[int, int]:
         """Tally up how many sequences are available for each length."""
         length_counts = {}
-        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
-            "sequence_length"
-        )
+        base_words = self.get_sorted_base_words("sequence_length")
 
         for _, _, seq_length in base_words:
             length_counts[seq_length] = length_counts.get(seq_length, 0) + 1
@@ -112,9 +110,7 @@ class SequenceLengthSection(FilterSectionBase):
             f"sequences of length {length}"
         )
 
-        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
-            "sequence_length"
-        )
+        base_words = self.get_sorted_base_words("sequence_length")
         matching_sequences = [
             (word, thumbnails, seq_length)
             for word, thumbnails, seq_length in base_words

@@ -105,7 +105,7 @@ class ContainsLettersSection(FilterSectionBase):
         if not self.selected_letters:
             return 0
 
-        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
+        base_words = self.get_sorted_base_words(
             "sequence_length"
         )
         return sum(
@@ -126,10 +126,7 @@ class ContainsLettersSection(FilterSectionBase):
             f"sequences containing\n{display_letters}"
         )
 
-        sort_method = (
-            self.main_widget.main_window.settings_manager.browse_tab_settings.get_sort_method()
-        )
-        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
+        base_words = self.get_sorted_base_words(
             "sequence_length"
         )
 
@@ -146,35 +143,11 @@ class ContainsLettersSection(FilterSectionBase):
         self.browse_tab.sequence_picker.control_panel.count_label.setText(
             f"Number of words to be displayed: {len(matching_sequences)}"
         )
+        self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
-        def update_ui():
-            for index, (word, thumbnails, _) in enumerate(matching_sequences):
-                row_index = (
-                    index // self.sequence_picker.thumbnail_box_sorter.num_columns
-                )
-                column_index = (
-                    index % self.sequence_picker.thumbnail_box_sorter.num_columns
-                )
-                self.sequence_picker.thumbnail_box_sorter.add_thumbnail_box(
-                    row_index=row_index,
-                    column_index=column_index,
-                    word=word,
-                    thumbnails=thumbnails,
-                    hidden=True,
-                )
-                percentage = int(((index + 1) / total_sequences) * 100)
-                self.browse_tab.sequence_picker.progress_bar.set_value(percentage)
-                self.browse_tab.sequence_picker.control_panel.count_label.setText(
-                    f"Number of words: {index + 1}"
-                )
-                QApplication.processEvents()
+        QApplication.restoreOverrideCursor()
 
-            # self.browse_tab.sequence_picker.progress_bar.setVisible(False)
-            self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
-
-            QApplication.restoreOverrideCursor()
-
-        QTimer.singleShot(0, update_ui)
+        # QTimer.singleShot(0, update_ui)
         self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
             {"contains_letters": letters}
         )

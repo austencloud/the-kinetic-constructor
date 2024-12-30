@@ -97,11 +97,46 @@ class BrowseTabFilterManager:
             self.main_widget.left_sequence_picker_index,
         )
 
-        self.browse_tab.sequence_picker.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
+        self.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )
         self.browse_tab.sequence_viewer.update_preview(None)
         QApplication.processEvents()
+
+
+    def sort_and_display_thumbnail_boxes_by_current_filter(
+        self, initial_selection: dict
+    ) -> None:
+        
+        filter_selector = self.browse_tab.sequence_picker.filter_selector
+        starting_position_section = filter_selector.starting_position_section
+        contains_letter_section = filter_selector.contains_letter_section
+        starting_letter_section = filter_selector.starting_letter_section
+        level_section = filter_selector.level_section
+        length_section = filter_selector.length_section
+        author_section = filter_selector.author_section
+        grid_mode_section = filter_selector.grid_mode_section
+        display_functions = {
+            "starting_letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
+            "sequence_length": length_section.display_only_thumbnails_with_sequence_length,
+            "level": level_section.display_only_thumbnails_with_level,
+            "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
+            "starting_position": starting_position_section.display_only_thumbnails_with_starting_position,
+            "author": author_section.display_only_thumbnails_by_author,
+            "favorites": self.browse_tab.filter_manager.show_favorites,
+            "most_recent": self.browse_tab.filter_manager.show_most_recent_sequences,
+            "grid_mode": grid_mode_section.display_only_thumbnails_with_grid_mode,
+            "show_all": self.browse_tab.filter_manager.show_all_sequences,
+        }
+        if initial_selection:
+            for key, value in initial_selection.items():
+                if key in display_functions:
+                    if key in ["favorites", "show_all"]:
+                        display_functions[key]()
+                    else:
+                        display_functions[key](value)
+                        
+        self.browse_tab.initialized = True
 
     def prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

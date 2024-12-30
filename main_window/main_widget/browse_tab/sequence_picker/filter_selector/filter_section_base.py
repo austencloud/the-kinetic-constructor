@@ -1,6 +1,10 @@
+from datetime import datetime
+import os
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
+
+from utilities.path_helpers import get_images_and_data_path
 
 from ..sequence_picker_go_back_button import SequencePickerGoBackButton
 
@@ -49,3 +53,41 @@ class FilterSectionBase(QWidget):
 
         self.go_back_button.hide()
         self.header_label.hide()
+
+    def get_sorted_base_words(self, sort_order) -> list[tuple[str, list[str], None]]:
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (
+                d,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, d)
+                ),
+                None,
+            )
+            for d in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, d)) and "__pycache__" not in d
+        ]
+
+        for i, (word, thumbnails, _) in enumerate(base_words):
+            sequence_length = self.get_sequence_length_from_thumbnails(thumbnails)
+
+            base_words[i] = (word, thumbnails, sequence_length)
+
+        if sort_order == "sequence_length":
+            base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
+        elif sort_order == "date_added":
+            base_words.sort(
+                key=lambda x: self.filter_selector.sequence_picker.section_manager.get_date_added(x[1]) or datetime.min,
+                reverse=True,
+            )
+        else:
+            base_words.sort(key=lambda x: x[0])
+        return base_words
+
+    def get_sequence_length_from_thumbnails(self, thumbnails):
+        """Extract the sequence length from the first available thumbnail metadata."""
+        for thumbnail in thumbnails:
+            length = self.metadata_extractor.get_sequence_length(thumbnail)
+            if length:
+                return length
+        return None

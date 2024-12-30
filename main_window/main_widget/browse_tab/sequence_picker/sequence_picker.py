@@ -33,8 +33,8 @@ class SequencePicker(QWidget):
 
         content_layout = QHBoxLayout()
         content_layout.setContentsMargins(0, 0, 0, 0)
-        content_layout.addWidget(self.nav_sidebar, 1)
-        content_layout.addWidget(self.scroll_widget, 9)
+        content_layout.addWidget(self.nav_sidebar)
+        content_layout.addWidget(self.scroll_widget)
 
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)

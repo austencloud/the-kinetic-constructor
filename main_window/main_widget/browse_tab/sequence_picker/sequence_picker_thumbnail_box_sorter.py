@@ -8,12 +8,12 @@ from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import Thumb
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker import (
-        SequencePicker,
-    )
+    from main_window.main_widget.browse_tab.sequence_picker.sequence_picker import SequencePicker
 
 
 class SequencePickerThumbnailBoxSorter:
+    num_columns: int = 3
+
     def __init__(self, sequence_picker: "SequencePicker"):
         self.sequence_picker = sequence_picker
         self.browse_tab = sequence_picker.browse_tab
@@ -21,89 +21,49 @@ class SequencePickerThumbnailBoxSorter:
         self.main_widget = self.browse_tab.main_widget
         self.scroll_widget = self.sequence_picker.scroll_widget
 
-        self.num_columns = 3
-
-    def reload_currently_displayed_filtered_sequences(self):
-        current_filter = self.browse_tab.browse_tab_settings.get_current_filter()
-        self.sequence_picker.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
-            current_filter
-        )
-
-    def sort_and_display_currently_filtered_sequences_by_method(
-        self, sort_method: str
-    ) -> None:
+    def sort_and_display_currently_filtered_sequences_by_method(self, sort_method: str) -> None:
         self.section_manager = self.sequence_picker.section_manager
         self.scroll_widget.clear_layout()
         self.browse_tab.sections = {}
-        if sort_method == "sequence_length":
-            self.browse_tab.currently_displayed_sequences.sort(
-                key=lambda x: x[2] if x[2] is not None else float("inf")
-            )
-        elif sort_method == "date_added":
-            self.browse_tab.currently_displayed_sequences.sort(
-                key=lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
-                reverse=True,
-            )
-        else:
-            self.browse_tab.currently_displayed_sequences.sort(key=lambda x: x[0])
 
-        row_index = 0
-        for (
-            word,
-            thumbnails,
-            seq_length,
-        ) in self.browse_tab.currently_displayed_sequences:
-            section = self.section_manager.get_section_from_word(
-                word, sort_method, seq_length, thumbnails
-            )
+        sort_key = self.get_sort_key(sort_method)
+        self.sort_sequences(sort_key, sort_method)
+        self.group_sequences_by_section(sort_method)
+        sorted_sections = self.section_manager.get_sorted_sections(sort_method, self.browse_tab.sections.keys())
+        self.update_ui(sorted_sections, sort_method)
 
-            if section not in self.browse_tab.sections:
-                self.browse_tab.sections[section] = []
+    def get_sort_key(self, sort_method: str):
+        return {
+            "sequence_length": lambda x: x[2] if x[2] is not None else float("inf"),
+            "date_added": lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
+        }.get(sort_method, lambda x: x[0])
 
-            self.browse_tab.sections[section].append((word, thumbnails))
+    def sort_sequences(self, sort_key, sort_method: str):
+        self.browse_tab.currently_displayed_sequences.sort(key=sort_key, reverse=(sort_method == "date_added"))
 
-        sorted_sections = self.section_manager.get_sorted_sections(
-            sort_method, self.browse_tab.sections.keys()
-        )
+    def group_sequences_by_section(self, sort_method: str):
+        for word, thumbnails, seq_length in self.browse_tab.currently_displayed_sequences:
+            section = self.section_manager.get_section_from_word(word, sort_method, seq_length, thumbnails)
+            self.browse_tab.sections.setdefault(section, []).append((word, thumbnails))
 
+    def update_ui(self, sorted_sections, sort_method: str):
         self.sequence_picker.nav_sidebar.update_sidebar(sorted_sections, sort_method)
+        self.sequence_picker.control_panel.sort_widget.highlight_appropriate_button(sort_method)
+
         current_section = None
-
-        self.sequence_picker.control_panel.sort_widget.highlight_appropriate_button(
-            sort_method
-        )
-
+        row_index = 0
         for section in sorted_sections:
-            if sort_method == "date_added":
-                if section == "Unknown":
-                    continue
+            if sort_method == "date_added" and section == "Unknown":
+                continue
 
-                day, month, year = section.split("-")
-                formatted_day = f"{int(day)}-{int(month)}"
-
-                if year != current_section:
-                    row_index += 1
-                    self.section_manager.add_header(row_index, self.num_columns, year)
-                    row_index += 1
-                    current_section = year
-
-                row_index += 1
-                self.section_manager.add_header(
-                    row_index, self.num_columns, formatted_day
-                )
-                row_index += 1
-            else:
-                row_index += 1
-                self.section_manager.add_header(row_index, self.num_columns, section)
-                row_index += 1
+            row_index = self.add_section_headers(row_index, section, sort_method, current_section)
+            current_section = section if sort_method == "date_added" else current_section
 
             column_index = 0
-
             for word, thumbnails in self.browse_tab.sections[section]:
                 self.add_thumbnail_box(row_index, column_index, word, thumbnails)
-                column_index += 1
-                if column_index == self.num_columns:
-                    column_index = 0
+                column_index = (column_index + 1) % self.num_columns
+                if column_index == 0:
                     row_index += 1
 
         self.sequence_picker.control_panel.count_label.setText(
@@ -111,44 +71,27 @@ class SequencePickerThumbnailBoxSorter:
         )
         QApplication.restoreOverrideCursor()
 
-    def sort_and_display_thumbnail_boxes_by_current_filter(
-        self, initial_selection: dict
-    ) -> None:
-        filter_selector = self.sequence_picker.filter_selector
+    def add_section_headers(self, row_index, section, sort_method, current_section):
+        if sort_method == "date_added":
+            day, month, year = section.split("-")
+            formatted_day = f"{int(day)}-{int(month)}"
 
-        starting_position_section = filter_selector.starting_position_section
-        contains_letter_section = filter_selector.contains_letter_section
-        starting_letter_section = filter_selector.starting_letter_section
-        level_section = filter_selector.level_section
-        length_section = filter_selector.length_section
-        author_section = filter_selector.author_section
-        grid_mode_section = filter_selector.grid_mode_section
-        display_functions = {
-            "starting_letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
-            "sequence_length": length_section.display_only_thumbnails_with_sequence_length,
-            "level": level_section.display_only_thumbnails_with_level,
-            "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
-            "starting_position": starting_position_section.display_only_thumbnails_with_starting_position,
-            "author": author_section.display_only_thumbnails_by_author,
-            "favorites": self.browse_tab.filter_manager.show_favorites,
-            "most_recent": self.browse_tab.filter_manager.show_most_recent_sequences,
-            "grid_mode": grid_mode_section.display_only_thumbnails_with_grid_mode,
-            "show_all": self.browse_tab.filter_manager.show_all_sequences,
-        }
-        if initial_selection:
-            for key, value in initial_selection.items():
-                if key in display_functions:
-                    if key in ["favorites", "show_all"]:
-                        display_functions[key]()
-                    else:
-                        display_functions[key](value)
-        self.browse_tab.initialized = True
+            if year != current_section:
+                row_index += 1
+                self.section_manager.add_header(row_index, self.num_columns, year)
+                row_index += 1
+                current_section = year
 
-    ### HELPER FUNCTIONS ###
+            row_index += 1
+            self.section_manager.add_header(row_index, self.num_columns, formatted_day)
+            row_index += 1
+        else:
+            row_index += 1
+            self.section_manager.add_header(row_index, self.num_columns, section)
+            row_index += 1
+        return row_index
 
-    def add_thumbnail_box(
-        self, row_index, column_index, word, thumbnails, hidden: bool = False
-    ):
+    def add_thumbnail_box(self, row_index, column_index, word, thumbnails, hidden: bool = False):
         if word not in self.scroll_widget.thumbnail_boxes:
             thumbnail_box = ThumbnailBox(self.browse_tab, word, thumbnails)
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
@@ -164,41 +107,3 @@ class SequencePickerThumbnailBoxSorter:
         if not hidden:
             thumbnail_box.show()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-
-    def get_sorted_base_words(self, sort_order) -> list[tuple[str, list[str], None]]:
-        dictionary_dir = get_images_and_data_path("dictionary")
-        base_words = [
-            (
-                d,
-                self.main_widget.thumbnail_finder.find_thumbnails(
-                    os.path.join(dictionary_dir, d)
-                ),
-                None,
-            )
-            for d in os.listdir(dictionary_dir)
-            if os.path.isdir(os.path.join(dictionary_dir, d)) and "__pycache__" not in d
-        ]
-
-        for i, (word, thumbnails, _) in enumerate(base_words):
-            sequence_length = self.get_sequence_length_from_thumbnails(thumbnails)
-
-            base_words[i] = (word, thumbnails, sequence_length)
-
-        if sort_order == "sequence_length":
-            base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
-        elif sort_order == "date_added":
-            base_words.sort(
-                key=lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
-                reverse=True,
-            )
-        else:
-            base_words.sort(key=lambda x: x[0])
-        return base_words
-
-    def get_sequence_length_from_thumbnails(self, thumbnails):
-        """Extract the sequence length from the first available thumbnail metadata."""
-        for thumbnail in thumbnails:
-            length = self.metadata_extractor.get_sequence_length(thumbnail)
-            if length:
-                return length
-        return None

@@ -82,7 +82,7 @@ class StartingLetterSection(FilterSectionBase):
     def _get_starting_letter_sequence_counts(self) -> dict[str, int]:
         """Tally up how many sequences start with each letter."""
         letter_counts = {letter: 0 for letter in self.buttons.keys()}
-        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
+        base_words = self.get_sorted_base_words(
             "sequence_length"
         )
 
@@ -115,7 +115,7 @@ class StartingLetterSection(FilterSectionBase):
         QApplication.processEvents()
         self.browse_tab.filter_manager.prepare_ui_for_filtering(description)
 
-        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
+        base_words = self.get_sorted_base_words(
             "sequence_length"
         )
         if letter == "show_all":

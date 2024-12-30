@@ -285,8 +285,8 @@ class SequencePickerNavSidebar(QWidget):
             self.style_header_label(self.letter_label)
 
     def resizeEvent(self, event):
-        self.resize_sidebar()
         super().resizeEvent(event)
+        self.resize_sidebar()
 
     def resize_sidebar(self):
         for spacer_line in self.spacer_lines:
@@ -308,6 +308,15 @@ class SequencePickerNavSidebar(QWidget):
             button_font = button.font()
             button_font.setPointSize(font_size)
             button.setFont(button_font)
+
+        # get the width of the longest button
+        max_width = 0
+        for button in self.buttons:
+            max_width = max(
+                max_width, button.fontMetrics().boundingRect("12-33").width()
+            )
+        extra_padding = self.sequence_picker.width() // 25
+        self.setFixedWidth(max_width + extra_padding)
 
     def resize_label(self, label: QLabel):
         font_size = self.sequence_picker.height() // 40
