@@ -2,9 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from .sequence_picker.sequence_picker_sort_widget import (
-    SequencePickerSortWidget,
-)
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab

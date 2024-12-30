@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
-from main_window.main_widget.full_screen_image_overlay import (
-    FullScreenImageOverlay,
-)
 from main_window.main_widget.learn_tab.codex.codex import Codex
 from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from .construct_tab.construct_tab import ConstructTab
@@ -19,7 +16,6 @@ from .font_color_updater.font_color_updater import (
 from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
-from PyQt6.QtGui import QPixmap
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget

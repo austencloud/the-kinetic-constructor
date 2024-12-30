@@ -1,6 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget
-from matplotlib.pylab import f
 from .base_font_color_updater import BaseFontColorUpdater
 
 if TYPE_CHECKING:

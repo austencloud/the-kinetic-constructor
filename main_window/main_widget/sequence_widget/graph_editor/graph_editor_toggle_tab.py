@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.graph_editor.graph_editor import (
         GraphEditor,
     )
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class GraphEditorToggleTab(QWidget):

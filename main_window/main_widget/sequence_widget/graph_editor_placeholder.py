@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QSizePolicy, QFrame
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.graph_editor.graph_editor import GraphEditor
-    from .sequence_widget import SequenceWidget
 
 
 class GraphEditorPlaceholder(QFrame):

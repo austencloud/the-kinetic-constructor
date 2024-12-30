@@ -1,11 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from .graph_editor_placeholder import GraphEditorPlaceholder
 from .sequence_color_swap_manager import SequenceColorSwapManager
 from .sequence_mirror_manager import SequenceMirrorManager
 from .sequence_rotation_manager import SequenceRotationManager
-from .graph_editor.graph_editor_toggle_tab import GraphEditorToggleTab
-from .graph_editor.graph_editor_animator import GraphEditorAnimator
 from .sequence_clearer import SequenceClearer
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
