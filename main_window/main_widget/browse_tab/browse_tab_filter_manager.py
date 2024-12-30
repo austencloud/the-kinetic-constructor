@@ -73,7 +73,10 @@ class BrowseTabFilterManager:
                 ),
             )
             for word, thumbnails in self.browse_tab.get.base_words(dictionary_dir)
-            if self.browse_tab.section_manager.get_date_added(thumbnails) >= date
+            if self.browse_tab.sequence_picker.section_manager.get_date_added(
+                thumbnails
+            )
+            >= date
         ]
 
         self.browse_tab.currently_displayed_sequences = most_recent

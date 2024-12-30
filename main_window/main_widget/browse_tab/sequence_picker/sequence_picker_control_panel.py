@@ -38,6 +38,6 @@ class SequencePickerControlPanel(QWidget):
         self.main_layout.addWidget(self.currently_displaying_label)
         self.main_layout.addWidget(self.count_label)
         self.main_layout.addWidget(self.sort_widget)
-        self.main_layout.addWidget(self.sequence_picker.progress_bar)
+        # self.main_layout.addWidget(self.sequence_picker.progress_bar)
 
         self.setLayout(self.main_layout)

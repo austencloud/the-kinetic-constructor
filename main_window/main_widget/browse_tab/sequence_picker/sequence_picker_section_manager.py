@@ -2,22 +2,22 @@ import json
 from datetime import datetime
 from typing import TYPE_CHECKING
 from Enums.letters import LetterType
-from .browse_tab_section_header import BrowseTabSectionHeader
+from ..browse_tab_section_header import BrowseTabSectionHeader
 from PIL import Image
 
 if TYPE_CHECKING:
-    from .browse_tab import BrowseTab
+    from .sequence_picker import SequencePicker
 
 
-class BrowseTabSectionManager:
-    def __init__(self, browse_tab: "BrowseTab"):
-        self.browse_tab = browse_tab
+class SequencePickerSectionManager:
+    def __init__(self, sequence_picker: "SequencePicker"):
+        self.sequence_picker = sequence_picker
 
     def add_header(self, row_index, num_columns, section):
         header_title = f"{section}"
         header = BrowseTabSectionHeader(header_title)
-        self.browse_tab.sequence_picker.scroll_widget.section_headers[section] = header
-        self.browse_tab.sequence_picker.scroll_widget.grid_layout.addWidget(
+        self.sequence_picker.scroll_widget.section_headers[section] = header
+        self.sequence_picker.scroll_widget.grid_layout.addWidget(
             header, row_index, 0, 1, num_columns
         )
 

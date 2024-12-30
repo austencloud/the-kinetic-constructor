@@ -169,7 +169,7 @@ class ContainsLettersSection(FilterSectionBase):
                 )
                 QApplication.processEvents()
 
-            self.browse_tab.sequence_picker.progress_bar.setVisible(False)
+            # self.browse_tab.sequence_picker.progress_bar.setVisible(False)
             self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 
             QApplication.restoreOverrideCursor()

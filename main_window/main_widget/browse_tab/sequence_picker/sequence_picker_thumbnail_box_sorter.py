@@ -20,7 +20,6 @@ class SequencePickerThumbnailBoxSorter:
         self.metadata_extractor = self.browse_tab.main_widget.metadata_extractor
         self.main_widget = self.browse_tab.main_widget
         self.scroll_widget = self.sequence_picker.scroll_widget
-        self.section_manager = self.browse_tab.section_manager
 
         self.num_columns = 3
 
@@ -33,6 +32,7 @@ class SequencePickerThumbnailBoxSorter:
     def sort_and_display_currently_filtered_sequences_by_method(
         self, sort_method: str
     ) -> None:
+        self.section_manager = self.sequence_picker.section_manager
         self.scroll_widget.clear_layout()
         self.browse_tab.sections = {}
         if sort_method == "sequence_length":

@@ -7,7 +7,9 @@ from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence
 from .sequence_picker.sequence_picker import SequencePicker
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_getter import BrowseTabGetter
-from .browse_tab_section_manager import BrowseTabSectionManager
+from .sequence_picker.sequence_picker_section_manager import (
+    SequencePickerSectionManager,
+)
 from .sequence_picker.sequence_picker_thumbnail_box_sorter import (
     SequencePickerThumbnailBoxSorter,
 )
@@ -46,12 +48,12 @@ class BrowseTab(QWidget):
         self.edit_sequence_handler = BrowseTabEditSequenceHandler(self)
         self.filter_manager = BrowseTabFilterManager(self)
         self.get = BrowseTabGetter(self)
-        self.section_manager = BrowseTabSectionManager(self)
-        self.ui_updater = BrowseTabUIUpdater(self)
 
         # Components
         self.sequence_picker = SequencePicker(self)
         self.sequence_viewer = SequenceViewer(self)
+
+        self.ui_updater = BrowseTabUIUpdater(self)
 
     def show_initial_section(self):
         current_section = self.browse_tab_settings.get_current_section()

@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 
-from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_thumbnail_box_sorter import (
-    SequencePickerThumbnailBoxSorter,
-)
+from .sequence_picker_section_manager import SequencePickerSectionManager
+from .sequence_picker_thumbnail_box_sorter import SequencePickerThumbnailBoxSorter
 from .sequence_picker_control_panel import SequencePickerControlPanel
 from .filter_selector.sequence_picker_filter_selector import (
     SequencePickerFilterSelector,
@@ -24,12 +23,13 @@ class SequencePicker(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        self.progress_bar = SequencePickerProgressBar(self)
         self.control_panel = SequencePickerControlPanel(self)
+        self.progress_bar = SequencePickerProgressBar(self)
         self.scroll_widget = SequencePickerScrollWidget(self)
         self.nav_sidebar = SequencePickerNavSidebar(self)
         self.thumbnail_box_sorter = SequencePickerThumbnailBoxSorter(self)
         self.filter_selector = SequencePickerFilterSelector(self)
+        self.section_manager = SequencePickerSectionManager(self)
 
         content_layout = QHBoxLayout()
         content_layout.setContentsMargins(0, 0, 0, 0)
