@@ -20,6 +20,7 @@ class BrowseTab(QWidget):
         self.main_widget = main_widget
         self.settings = self.main_widget.main_window.settings_manager.browse_settings
 
+        self.filter_manager = BrowseTabFilterManager(self)
         # Components
         self.sequence_picker = SequencePicker(self)
         self.sequence_viewer = SequenceViewer(self)
@@ -28,6 +29,5 @@ class BrowseTab(QWidget):
         self.deletion_handler = BrowseTabDeletionHandler(self)
         self.selection_handler = BrowseTabSelectionHandler(self)
         self.edit_sequence_handler = BrowseTabEditSequenceHandler(self)
-        self.filter_manager = BrowseTabFilterManager(self)
         self.get = BrowseTabGetter(self)
         self.ui_updater = BrowseTabUIUpdater(self)

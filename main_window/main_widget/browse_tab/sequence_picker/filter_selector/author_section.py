@@ -16,8 +16,8 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
     )
 
 
@@ -25,7 +25,7 @@ class AuthorSection(FilterSectionBase):
     IMAGE_DIR = get_images_and_data_path("images/author_images")
     MAX_COLUMNS = 3
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select by Author:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -98,7 +98,7 @@ class AuthorSection(FilterSectionBase):
 
     def handle_author_click(self, author: str):
         """Handle clicks on author buttons."""
-        self.filter_selector.on_author_button_clicked(author)
+        self.browse_tab.filter_manager.apply_filter({"author": author})
 
     def _get_all_sequences_with_authors(self) -> list[Tuple[str, list[str], str]]:
         """Retrieve and cache all sequences along with their authors."""

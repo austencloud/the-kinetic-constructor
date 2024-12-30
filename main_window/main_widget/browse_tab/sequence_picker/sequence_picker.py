@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from .sequence_picker_section_manager import SequencePickerSectionManager
 from .sequence_picker_thumbnail_box_sorter import SequencePickerThumbnailBoxSorter
 from .sequence_picker_control_panel import SequencePickerControlPanel
-from .filter_selector.sequence_picker_filter_selector import (
-    SequencePickerFilterSelector,
+from .filter_selector.sequence_picker_filter_stack import (
+    SequencePickerFilterStack,
 )
 from .sequence_picker_progress_bar import SequencePickerProgressBar
 from .sequence_picker_nav_sidebar import SequencePickerNavSidebar
@@ -23,17 +23,23 @@ class SequencePicker(QWidget):
         self.sections: dict[str, list[tuple[str, list[str]]]] = {}
         self.currently_displayed_sequences = []
         self.selected_sequence_dict = None
-        self._setup_ui()
 
-    def _setup_ui(self):
+        self._setup_components()
+        self._setup_layout()
+
+    def _setup_components(self):
+        # Widgets
+        self.filter_stack = SequencePickerFilterStack(self)
         self.control_panel = SequencePickerControlPanel(self)
         self.progress_bar = SequencePickerProgressBar(self)
         self.scroll_widget = SequencePickerScrollWidget(self)
         self.nav_sidebar = SequencePickerNavSidebar(self)
+
+        # Managers
         self.thumbnail_box_sorter = SequencePickerThumbnailBoxSorter(self)
-        self.filter_selector = SequencePickerFilterSelector(self)
         self.section_manager = SequencePickerSectionManager(self)
 
+    def _setup_layout(self):
         content_layout = QHBoxLayout()
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.addWidget(self.nav_sidebar)

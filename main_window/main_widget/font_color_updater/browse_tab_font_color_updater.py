@@ -58,7 +58,7 @@ class BrowseTabFontColorUpdater(BaseFontColorUpdater):
             self._apply_font_color(thumbnail_box.variation_number_label)
 
     def _update_filter_selector(self):
-        filter_selector = self.sequence_picker.filter_selector
+        filter_selector = self.sequence_picker.filter_stack
         header_labels = [
             filter_selector.starting_letter_section.header_label,
             filter_selector.contains_letter_section.header_label,
@@ -70,7 +70,7 @@ class BrowseTabFontColorUpdater(BaseFontColorUpdater):
         ]
 
         description_labels = (
-            [filter_selector.filter_choice_widget.description_label]
+            [filter_selector.filter_choice_widget.header_label]
             + list(filter_selector.filter_choice_widget.description_labels.values())
             + list(filter_selector.level_section.description_labels.values())
             + list(

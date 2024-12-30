@@ -10,10 +10,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QEvent, QObject
 from PyQt6.QtGui import QFontMetrics
 from .filter_section_base import FilterSectionBase
-from functools import partial
 
 if TYPE_CHECKING:
-    from .sequence_picker_filter_selector import SequencePickerFilterSelector
+    from .sequence_picker_filter_stack import SequencePickerFilterStack
 
 
 class StartingLetterSection(FilterSectionBase):
@@ -31,7 +30,7 @@ class StartingLetterSection(FilterSectionBase):
         [["α", "β", "Γ"]],
     ]
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select by starting letter:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -72,9 +71,8 @@ class StartingLetterSection(FilterSectionBase):
         button.installEventFilter(self)
         # Use partial to pass the letter to the slot
         button.clicked.connect(
-            partial(
-                self.filter_selector.on_starting_letter_button_clicked,
-                letter,
+            lambda: self.browse_tab.filter_manager.apply_filter(
+                {"starting_letter": letter}
             )
         )
         return button

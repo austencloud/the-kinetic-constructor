@@ -9,13 +9,13 @@ from utilities.path_helpers import get_images_and_data_path
 from ..sequence_picker_go_back_button import SequencePickerGoBackButton
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import SequencePickerFilterSelector
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
+    )
 
 
 class FilterSectionBase(QWidget):
-    def __init__(
-        self, filter_selector: "SequencePickerFilterSelector", label_text: str
-    ):
+    def __init__(self, filter_selector: "SequencePickerFilterStack", label_text: str):
         super().__init__(filter_selector)
         self.filter_selector = filter_selector
         self.buttons: dict[str, QPushButton] = {}
@@ -77,7 +77,10 @@ class FilterSectionBase(QWidget):
             base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
         elif sort_order == "date_added":
             base_words.sort(
-                key=lambda x: self.filter_selector.sequence_picker.section_manager.get_date_added(x[1]) or datetime.min,
+                key=lambda x: self.filter_selector.sequence_picker.section_manager.get_date_added(
+                    x[1]
+                )
+                or datetime.min,
                 reverse=True,
             )
         else:

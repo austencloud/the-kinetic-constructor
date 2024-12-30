@@ -16,8 +16,8 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
     )
 
 
@@ -30,7 +30,7 @@ class LevelSection(FilterSectionBase):
     AVAILABLE_LEVELS = [1, 2, 3]
     IMAGE_DIR = get_images_and_data_path("images/level_images")
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select by Difficulty Level:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[int, QPushButton] = {}
@@ -130,7 +130,7 @@ class LevelSection(FilterSectionBase):
 
     def handle_level_click(self, level: int):
         """Handle clicks on level buttons."""
-        self.filter_selector.on_level_button_clicked(level)
+        self.browse_tab.filter_manager.apply_filter({"level": level})
 
     def handle_image_click(self, level: int, event):
         """Handle clicks on level images."""

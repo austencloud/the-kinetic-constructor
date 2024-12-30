@@ -16,8 +16,8 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
     )
 
 
@@ -30,7 +30,7 @@ class StartingPositionSection(FilterSectionBase):
     AVAILABLE_POSITIONS = ["Alpha", "Beta", "Gamma"]
     IMAGE_DIR = get_images_and_data_path("images/position_images")
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select by Starting Position:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -137,7 +137,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def handle_position_click(self, position: str):
         """Handle clicks on position buttons."""
-        self.filter_selector.on_position_button_clicked(position)
+        self.browse_tab.filter_manager.apply_filter({"starting_position": position})
 
     def handle_image_click(self, position: str, event):
         """Handle clicks on position images."""

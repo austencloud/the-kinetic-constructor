@@ -15,6 +15,7 @@ class SequencePickerScrollWidget(QWidget):
         self.sequence_picker = sequence_picker
         self.thumbnail_boxes: dict[str, ThumbnailBox] = {}
         self.section_headers: dict[int, "BrowseTabSectionHeader"] = {}
+
         self.setStyleSheet("background: transparent;")
         self._setup_scroll_area()
         self._setup_layout()

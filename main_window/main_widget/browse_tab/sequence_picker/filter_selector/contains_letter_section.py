@@ -12,8 +12,8 @@ from PyQt6.QtCore import Qt
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
     )
 
 
@@ -38,7 +38,7 @@ class ContainsLettersSection(FilterSectionBase):
     BUTTON_SIZE_FACTOR = 20
     APPLY_BUTTON_WIDTH_FACTOR = 6
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select letters to be contained:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.selected_letters: set[str] = set()
@@ -113,7 +113,9 @@ class ContainsLettersSection(FilterSectionBase):
 
     def apply_filter(self):
         """Apply the filter based on the selected letters."""
-        self.filter_selector.apply_contains_letter_filter(list(self.selected_letters))
+        self.browse_tab.filter_manager.apply_filter(
+            {"contains_letters": list(self.selected_letters)}
+        )
 
     def display_only_thumbnails_containing_letters(self, letters: list[str]):
         """Display only the thumbnails that contain the specified letters."""

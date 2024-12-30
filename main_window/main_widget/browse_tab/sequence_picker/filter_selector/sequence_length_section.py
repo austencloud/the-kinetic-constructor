@@ -1,19 +1,18 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QLabel, QGridLayout, QWidget
 from PyQt6.QtCore import Qt
-from functools import partial
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
     )
 
 
 class SequenceLengthSection(FilterSectionBase):
     AVAILABLE_LENGTHS = [4, 6, 8, 10, 12, 16, 20, 24, 28, 32]
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select by Sequence Length:")
         self.buttons: dict[int, QPushButton] = {}
         self.sequence_tally_labels: dict[int, QLabel] = {}
@@ -76,10 +75,7 @@ class SequenceLengthSection(FilterSectionBase):
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.buttons[length] = button
         button.clicked.connect(
-            partial(
-                self.filter_selector.on_length_button_clicked,
-                length,
-            )
+            lambda: self.browse_tab.filter_manager.apply_filter({"length": length})
         )
         return button
 

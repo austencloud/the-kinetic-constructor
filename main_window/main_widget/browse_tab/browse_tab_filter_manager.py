@@ -88,9 +88,10 @@ class BrowseTabFilterManager:
             self.browse_tab.main_widget.main_window.settings_manager.browse_settings.get_current_filter()
         )
 
-        self.apply_current_filter(current_filter)
+        self.apply_filter(current_filter)
 
-    def apply_current_filter(self, current_filter):
+    def apply_filter(self, current_filter):
+        self.browse_tab.settings.set_current_section("sequence_picker")
         self.current_filter = current_filter
         self.main_widget.fade_manager.fade_to_tab(
             self.main_widget.left_stack,
@@ -105,7 +106,7 @@ class BrowseTabFilterManager:
         self, initial_selection: dict
     ) -> None:
 
-        filter_selector = self.browse_tab.sequence_picker.filter_selector
+        filter_selector = self.browse_tab.sequence_picker.filter_stack
         starting_position_section = filter_selector.starting_position_section
         contains_letter_section = filter_selector.contains_letter_section
         starting_letter_section = filter_selector.starting_letter_section

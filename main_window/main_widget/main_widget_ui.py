@@ -58,9 +58,9 @@ class MainWidgetUI:
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
 
-        filter_selector = self.mw.browse_tab.sequence_picker.filter_selector
+        filter_selector = self.mw.browse_tab.sequence_picker.filter_stack
         construct_tab = self.mw.construct_tab
-        
+
         self.mw.left_stack.addWidget(self.mw.sequence_widget)  # 0
         self.mw.left_stack.addWidget(self.mw.learn_tab.codex)  # 1
         self.mw.left_stack.addWidget(self.mw.write_tab.act_sheet)  # 2

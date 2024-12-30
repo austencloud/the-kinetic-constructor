@@ -20,8 +20,8 @@ from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-        SequencePickerFilterSelector,
+    from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_stack import (
+        SequencePickerFilterStack,
     )
 
 
@@ -29,7 +29,7 @@ class GridModeSection(FilterSectionBase):
     GRID_MODES = ["Box", "Diamond"]
     IMAGE_DIR = get_images_and_data_path("images/grid")
 
-    def __init__(self, initial_selection_widget: "SequencePickerFilterSelector"):
+    def __init__(self, initial_selection_widget: "SequencePickerFilterStack"):
         super().__init__(initial_selection_widget, "Select by Grid Mode:")
         self.main_widget = initial_selection_widget.browse_tab.main_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -160,7 +160,7 @@ class GridModeSection(FilterSectionBase):
 
     def handle_grid_mode_click(self, grid_mode: str):
         """Handle clicks on grid mode buttons."""
-        self.filter_selector.on_grid_mode_button_clicked(grid_mode)
+        self.browse_tab.filter_manager.apply_filter({"grid_mode": grid_mode})
 
     def handle_image_click(self, grid_mode: str, event):
         """Handle clicks on grid mode images."""
