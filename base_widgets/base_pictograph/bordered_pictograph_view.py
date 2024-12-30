@@ -18,6 +18,7 @@ class BorderedPictographView(PictographView):
         self.secondary_color = None
         self.original_primary_color = None
         self.original_secondary_color = None
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         self.update_borders()
 
@@ -115,18 +116,13 @@ class BorderedPictographView(PictographView):
         painter.drawRect(inner_rect)
 
     def resizeEvent(self, event):
-        """Handle resizing and maintain aspect ratio."""
         super().resizeEvent(event)
         self.setSceneRect(self.scene().itemsBoundingRect())
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
         self.update_border_widths()
 
     def enterEvent(self, event: QEvent) -> None:
-        """Handle mouse entering the widget area."""
-        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.set_gold_border()
 
     def leaveEvent(self, event: QEvent) -> None:
-        """Handle mouse leaving the widget area."""
-        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.reset_border()

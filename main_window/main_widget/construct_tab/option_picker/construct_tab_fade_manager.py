@@ -5,7 +5,7 @@ from PyQt6.QtCore import (
     pyqtSlot,
     QParallelAnimationGroup,
 )
-from PyQt6.QtWidgets import QFrame, QGridLayout, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QGraphicsOpacityEffect
 
 from typing import TYPE_CHECKING
 import logging
@@ -16,7 +16,6 @@ if TYPE_CHECKING:
     from .scroll_area.section_manager.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
-    from .option_picker import OptionPicker
 
 logger = logging.getLogger(__name__)
 

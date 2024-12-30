@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from Enums.Enums import LetterType
 from data.constants import OPP, SAME
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
+from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .option_picker_section_header import OptionPickerSectionHeader
 from .option_picker_section_pictograph_frame import OptionPickerSectionPictographFrame

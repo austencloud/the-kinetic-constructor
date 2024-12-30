@@ -1,9 +1,7 @@
-from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 from PyQt6.QtCore import Qt
 
-from Enums.letters import LetterType
-from data.constants import BLUE, RED
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
@@ -14,7 +12,7 @@ from .option_picker_display_manager import OptionPickerDisplayManager
 
 
 if TYPE_CHECKING:
-    from .section_manager.option_picker_section_widget import OptionPickerSectionWidget
+    pass
 
     from ..option_picker import OptionPicker
 

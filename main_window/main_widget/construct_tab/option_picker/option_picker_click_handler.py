@@ -2,7 +2,7 @@
 
 from PyQt6.QtWidgets import QApplication
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, pyqtSlot
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker
@@ -18,6 +18,8 @@ class OptionPickerClickHandler:
 
     def on_option_clicked(self, clicked_option: "BasePictograph") -> None:
         """Handle the logic when an option is clicked."""
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+
         beat_frame = (
             self.option_picker.construct_tab.main_widget.sequence_widget.beat_frame
         )
@@ -58,3 +60,4 @@ class OptionPickerClickHandler:
             new_beat.view.is_filled = True
             self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
             self.option_picker.choose_your_next_pictograph_label.set_default_text()
+        QApplication.restoreOverrideCursor()

@@ -1,13 +1,10 @@
 # option_picker.py
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
-from PyQt6.QtCore import pyqtSignal, Qt, pyqtSlot, QParallelAnimationGroup, QObject
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtCore import pyqtSignal, Qt
 from typing import TYPE_CHECKING
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.construct_tab_fade_manager import (
-    ConstructTabFadeManager,
-)
 from main_window.main_widget.construct_tab.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
 )
