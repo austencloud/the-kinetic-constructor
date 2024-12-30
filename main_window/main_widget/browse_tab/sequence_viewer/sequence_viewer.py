@@ -2,14 +2,14 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from .browse_tab_preview_area_image_label import BrowseTabPreviewAreaImageLabel
-from .browse_tab_button_panel import BrowseTabButtonPanel
-from .thumbnail_box.browse_tab_preview_area_word_label import (
-    BrowseTabPreviewAreaWordLabel,
+from .sequence_viewer_image_label import SequenceViewerImageLabel
+from .sequence_viewer_action_button_panel import SequenceViewerActionButtonPanel
+from .sequence_viewer_word_label import (
+    SequenceViewerWordLabel,
 )
-from .thumbnail_box.preview_area_nav_btns import PreviewAreaNavButtonsWidget
-from .thumbnail_box.thumbnail_box import ThumbnailBox
-from .thumbnail_box.variation_number_label import VariationNumberLabel
+from .sequence_viewer_nav_buttons_widget import SequenceViewerNavButtonsWidget
+from ..thumbnail_box.thumbnail_box import ThumbnailBox
+from ..thumbnail_box.variation_number_label import VariationNumberLabel
 
 
 if TYPE_CHECKING:
@@ -30,7 +30,6 @@ class SequenceViewer(QWidget):
         self.current_thumbnail_box: ThumbnailBox = None
         self._setup_components()
         self._setup_layout()
-        # self.hide()
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
@@ -40,7 +39,7 @@ class SequenceViewer(QWidget):
         layout.addWidget(self.variation_number_label)
         layout.addWidget(self.image_label)
         layout.addWidget(self.nav_buttons_widget)
-        layout.addWidget(self.button_panel)
+        layout.addWidget(self.action_button_panel)
         layout.addStretch(1)
         self.setLayout(layout)
 
@@ -51,10 +50,10 @@ class SequenceViewer(QWidget):
 
     def _setup_components(self):
         self.variation_number_label = VariationNumberLabel(self)
-        self.image_label = BrowseTabPreviewAreaImageLabel(self)
-        self.nav_buttons_widget = PreviewAreaNavButtonsWidget(self)
-        self.word_label = BrowseTabPreviewAreaWordLabel(self)
-        self.button_panel = BrowseTabButtonPanel(self)
+        self.image_label = SequenceViewerImageLabel(self)
+        self.nav_buttons_widget = SequenceViewerNavButtonsWidget(self)
+        self.word_label = SequenceViewerWordLabel(self)
+        self.action_button_panel = SequenceViewerActionButtonPanel(self)
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
@@ -77,14 +76,13 @@ class SequenceViewer(QWidget):
             self.variation_number_label.hide()
 
         elif len(self.thumbnails) == 0:
-            # self.image_label.show_placeholder()
             self.variation_number_label.clear()
             self.word_label.clear()
 
     def _show_components(self):
         self.word_label.show()
         self.variation_number_label.show()
-        self.button_panel.show_buttons()
+        self.action_button_panel.show_buttons()
 
     def update_preview(self, index):
         if index is None:

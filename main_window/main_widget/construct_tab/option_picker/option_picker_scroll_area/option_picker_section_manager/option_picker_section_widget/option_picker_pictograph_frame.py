@@ -3,8 +3,9 @@ from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area.option_picker_section_manager.option_picker_section_widget.option_picker_section_widget import OptionPickerSectionWidget
+    from main_window.main_widget.construct_tab.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
 
 
 class OptionPickerPictographFrame(QFrame):

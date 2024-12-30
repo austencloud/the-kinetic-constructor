@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import (
         ThumbnailBox,
     )
-    from main_window.main_widget.browse_tab.sequence_viewer import (
+    from main_window.main_widget.browse_tab.sequence_viewer.sequence_viewer import (
         SequenceViewer,
     )
 

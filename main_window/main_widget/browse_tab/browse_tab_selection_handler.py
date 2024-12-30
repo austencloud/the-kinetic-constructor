@@ -33,19 +33,19 @@ class BrowseTabSelectionHandler:
         thumbnail_index,
     ) -> None:
         self.dictionary_widget.selected_sequence_dict = metadata
-        self.preview_area = self.dictionary_widget.sequence_viewer
-        self.preview_area.thumbnails = thumbnail_collection
-        self.preview_area.image_label.setPixmap(
+        self.sequence_viewer = self.dictionary_widget.sequence_viewer
+        self.sequence_viewer.thumbnails = thumbnail_collection
+        self.sequence_viewer.image_label.setPixmap(
             thumbnail_pixmap.scaled(
-                self.preview_area.image_label.size() * 0.9,
+                self.sequence_viewer.image_label.size() * 0.9,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )
         )
         self.update_selection(image_label)
-        self.preview_area.select_thumbnail(
+        self.sequence_viewer.select_thumbnail(
             image_label.thumbnail_box,
             thumbnail_index,
             image_label.thumbnail_box.word,
         )
-        self.preview_area.variation_number_label.update_index(thumbnail_index)
+        self.sequence_viewer.variation_number_label.update_index(thumbnail_index)

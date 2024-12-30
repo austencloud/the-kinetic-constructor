@@ -4,15 +4,15 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.sequence_viewer import (
+    from main_window.main_widget.browse_tab.sequence_viewer.sequence_viewer import (
         SequenceViewer,
     )
 
 
-class BrowseTabPreviewAreaWordLabel(QLabel):
-    def __init__(self, preview_area: "SequenceViewer"):
-        super().__init__(preview_area)
-        self.preview_area = preview_area
+class SequenceViewerWordLabel(QLabel):
+    def __init__(self, sequence_viewer: "SequenceViewer"):
+        super().__init__(sequence_viewer)
+        self.sequence_viewer = sequence_viewer
         self.word = ""
         self.setText(self.word)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -23,7 +23,7 @@ class BrowseTabPreviewAreaWordLabel(QLabel):
         self.setText(word)
 
     def resizeEvent(self, event):
-        font_size = self.preview_area.width() // 20
+        font_size = self.sequence_viewer.width() // 20
         self.setFont(QFont("Georgia", font_size, QFont.Weight.DemiBold))
         while self.fontMetrics().horizontalAdvance(self.word) > self.width():
             font_size -= 1

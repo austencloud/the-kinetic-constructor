@@ -10,7 +10,7 @@ from .browse_tab_thumbnail_box_sorter import BrowseTabThumbnailBoxSorter
 from .browse_tab_ui_updater import BrowseTabUIUpdater
 from .deletion_handler.browse_tab_deletion_handler import BrowseTabDeletionHandler
 from .browse_tab_selection_handler import BrowseTabSelectionHandler
-from .sequence_viewer import SequenceViewer
+from .sequence_viewer.sequence_viewer import SequenceViewer
 from .browse_tab_edit_sequence_handler import BrowseTabEditSequenceHandler
 
 if TYPE_CHECKING:

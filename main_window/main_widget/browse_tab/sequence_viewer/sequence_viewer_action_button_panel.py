@@ -2,25 +2,24 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon, QPixmap, QResizeEvent
-from ..full_screen_image_overlay import FullScreenImageOverlay
-from .temp_beat_frame.temp_beat_frame import TempBeatFrame
+from ...full_screen_image_overlay import FullScreenImageOverlay
+from ..temp_beat_frame.temp_beat_frame import TempBeatFrame
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from .sequence_viewer import SequenceViewer
 
 
-class BrowseTabButtonPanel(QWidget):
+class SequenceViewerActionButtonPanel(QWidget):
     delete_variation_button: QPushButton
     edit_sequence_button: QPushButton
     save_image_button: QPushButton
 
-    def __init__(self, preview_area: "SequenceViewer"):
-        super().__init__(preview_area)
-        self.preview_area = preview_area
-        self.browse_tab = preview_area.browse_tab
+    def __init__(self, sequence_viewer: "SequenceViewer"):
+        super().__init__(sequence_viewer)
+        self.sequence_viewer = sequence_viewer
+        self.browse_tab = sequence_viewer.browse_tab
         self.temp_beat_frame = TempBeatFrame(self.browse_tab)
-        self.full_screen_overlay = None
         self._setup_buttons()
 
     def _setup_buttons(self):
@@ -43,10 +42,10 @@ class BrowseTabButtonPanel(QWidget):
                 "tooltip": "Delete Variation",
                 "action": lambda: (
                     self.browse_tab.deletion_handler.delete_variation(
-                        self.preview_area.current_thumbnail_box,
-                        ((self.preview_area.current_thumbnail_box.current_index)),
+                        self.sequence_viewer.current_thumbnail_box,
+                        ((self.sequence_viewer.current_thumbnail_box.current_index)),
                     )
-                    if self.preview_area.current_thumbnail_box
+                    if self.sequence_viewer.current_thumbnail_box
                     else None
                 ),
             },
@@ -79,12 +78,10 @@ class BrowseTabButtonPanel(QWidget):
 
     def view_full_screen(self):
         """Display the current image in full screen mode."""
-        current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
-        mw = self.preview_area.main_widget
+        current_thumbnail = self.sequence_viewer.get_thumbnail_at_current_index()
+        mw = self.sequence_viewer.main_widget
         if current_thumbnail:
             pixmap = QPixmap(current_thumbnail)
-            # if mw.full_screen_overlay:
-            #     mw.full_screen_overlay.close()
             mw.full_screen_overlay = FullScreenImageOverlay(mw)
             mw.full_screen_overlay.show(pixmap)
         else:
@@ -93,11 +90,11 @@ class BrowseTabButtonPanel(QWidget):
     def edit_sequence(self):
         if not hasattr(self, "sequence_populator"):
             self.sequence_populator = self.browse_tab.edit_sequence_handler
-        if self.preview_area.sequence_json:
-            self.preview_area.main_widget.navigation_widget.on_button_clicked(0)
+        if self.sequence_viewer.sequence_json:
+            self.sequence_viewer.main_widget.navigation_widget.on_button_clicked(0)
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             self.sequence_populator.load_sequence_from_json(
-                self.preview_area.sequence_json
+                self.sequence_viewer.sequence_json
             )
             QApplication.restoreOverrideCursor()
         else:
@@ -106,14 +103,14 @@ class BrowseTabButtonPanel(QWidget):
             )
 
     def save_image(self):
-        current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
+        current_thumbnail = self.sequence_viewer.get_thumbnail_at_current_index()
         if not current_thumbnail:
             QMessageBox.warning(
                 self, "No Selection", "Please select a thumbnail first."
             )
             return
 
-        metadata = self.preview_area.sequence_json
+        metadata = self.sequence_viewer.sequence_json
         if not metadata:
             QMessageBox.warning(
                 self, "No Metadata", "No metadata found for the selected sequence."
@@ -134,15 +131,8 @@ class BrowseTabButtonPanel(QWidget):
         self.delete_variation_button.show()
         self.edit_sequence_button.show()
 
-    def resizeEvent(self, a0: QResizeEvent | None) -> None:
-        if self.full_screen_overlay:
-            try:
-                if self.full_screen_overlay.isVisible():
-                    self.full_screen_overlay.resizeEvent(a0)
-            except RuntimeError:
-                self.full_screen_overlay = None
-
-        btn_size = int(self.browse_tab.width() // 24)
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        btn_size = int(self.sequence_viewer.main_widget.width() // 30)
         icon_size = int(btn_size * 0.8)
         for button_name in [
             "edit_sequence",
@@ -154,3 +144,4 @@ class BrowseTabButtonPanel(QWidget):
             button.setMinimumSize(QSize(btn_size, btn_size))
             button.setMaximumSize(QSize(btn_size, btn_size))
             button.setIconSize(QSize(icon_size, icon_size))
+        super().resizeEvent(event)

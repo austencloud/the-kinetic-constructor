@@ -45,28 +45,28 @@ class CustomPrintDialog(QDialog):
 
     def _setup_preview_layout(self) -> QVBoxLayout:
         preview_column_layout = QVBoxLayout()
-        self.preview_area = QGraphicsView(self)
-        self.preview_area.setHorizontalScrollBarPolicy(
+        self.sequence_viewer = QGraphicsView(self)
+        self.sequence_viewer.setHorizontalScrollBarPolicy(
             Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
-        self.preview_area.setVerticalScrollBarPolicy(
+        self.sequence_viewer.setVerticalScrollBarPolicy(
             Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
         self.scene = QGraphicsScene(self)
-        self.preview_area.setScene(self.scene)
+        self.sequence_viewer.setScene(self.scene)
 
         # make sure the scene's view matches the aspect ratio of the pixmap
         # scale the pixmap to fit the view's limitations
         self.preview_pixmap_item = self.scene.addPixmap(self.pixmap)
-        self.preview_area.fitInView(
+        self.sequence_viewer.fitInView(
             self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
         )
-        self.preview_area.setRenderHint(QPainter.RenderHint.Antialiasing)
-        self.preview_area.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-        self.preview_area.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+        self.sequence_viewer.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.sequence_viewer.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        self.sequence_viewer.setRenderHint(QPainter.RenderHint.TextAntialiasing)
 
         self.update_preview()
-        preview_column_layout.addWidget(self.preview_area)
+        preview_column_layout.addWidget(self.sequence_viewer)
         return preview_column_layout
 
     def _setup_controls_layout(self) -> QVBoxLayout:
@@ -95,7 +95,7 @@ class CustomPrintDialog(QDialog):
         for item in self.scene.items():
             print(item)
         if not self.preview_pixmap_item.pixmap().isNull():
-            self.preview_area.fitInView(
+            self.sequence_viewer.fitInView(
                 self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
             )
         else:
@@ -127,11 +127,11 @@ class CustomPrintDialog(QDialog):
     def resize_custom_print_dialog(self, width: int, height: int) -> None:
         self.setFixedSize(width, height)
         scene_aspect_ratio = (
-            self.preview_area.sceneRect().width()
-            / self.preview_area.sceneRect().height()
+            self.sequence_viewer.sceneRect().width()
+            / self.sequence_viewer.sceneRect().height()
         )
-        self.preview_area.setFixedWidth(int(self.width() // 2))
-        self.preview_area.setFixedHeight(int(self.width() // 2 / scene_aspect_ratio))
-        self.preview_area.fitInView(
+        self.sequence_viewer.setFixedWidth(int(self.width() // 2))
+        self.sequence_viewer.setFixedHeight(int(self.width() // 2 / scene_aspect_ratio))
+        self.sequence_viewer.fitInView(
             self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
         )

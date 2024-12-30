@@ -17,9 +17,7 @@ class SequencePickerGoBackButton(QPushButton):
         self.browse_tab: "BrowseTab" = self.sequence_picker.browse_tab
         self.main_widget = self.sequence_picker.main_widget
         self.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-        self.connect_button(
-            lambda: self.switch_to_initial_filter_selection()
-        )
+        self.connect_button(lambda: self.switch_to_initial_filter_selection())
 
     def connect_button(self, callback):
         """Connects the button's clicked signal to the provided callback."""
@@ -36,8 +34,8 @@ class SequencePickerGoBackButton(QPushButton):
 
     def switch_to_initial_filter_selection(self):
         """Switch to the initial selection page in the stacked layout."""
-        preview_area = self.browse_tab.sequence_viewer
-        preview_area.word_label.setText("")
+        sequence_viewer = self.browse_tab.sequence_viewer
+        sequence_viewer.word_label.setText("")
         self.main_widget.fade_manager.fade_to_tab(
             self.main_widget.left_stack,
             self.main_widget.left_filter_selector_index,

@@ -98,5 +98,4 @@ class OptionPickerSectionWidget(QGroupBox):
             width = int(view_width * 8) // 3
             self.setFixedWidth(width)
 
-        self.header.type_label.resize_section_type_label()
         super().resizeEvent(event)
