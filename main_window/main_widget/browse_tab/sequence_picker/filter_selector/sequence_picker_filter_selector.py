@@ -79,7 +79,7 @@ class SequencePickerFilterSelector(QWidget):
                 resize_method = getattr(section, f"resize_{section_name}_section", None)
                 if callable(resize_method):
                     resize_method()
-            self.browse_tab.browse_tab_settings.set_current_section(section_name)
+            self.browse_tab.settings.set_current_section(section_name)
             self.current_filter_section = section_name
         else:
             print(f"Section '{section_name}' not found.")
@@ -89,7 +89,7 @@ class SequencePickerFilterSelector(QWidget):
         self.show_section("filter_choice")
 
     def apply_filter(self, filter_key: str, filter_value):
-        self.browse_tab.browse_tab_settings.set_current_section("sequence_picker")
+        self.browse_tab.settings.set_current_section("sequence_picker")
         self.browse_tab.filter_manager.apply_current_filter({filter_key: filter_value})
 
     # Event Handlers

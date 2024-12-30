@@ -154,9 +154,7 @@ class AuthorSection(FilterSectionBase):
 
     def display_only_thumbnails_by_author(self, author: str):
         """Display only the thumbnails that match the selected author."""
-        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
-            {"author": author}
-        )
+        self.filter_selector.browse_tab.settings.set_current_filter({"author": author})
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
             f"sequences by {author}"
         )
@@ -164,7 +162,7 @@ class AuthorSection(FilterSectionBase):
         sequences = self.get_sequences_by_author(author)
         total_sequences = len(sequences)
 
-        self.browse_tab.currently_displayed_sequences = [
+        self.browse_tab.sequence_picker.currently_displayed_sequences = [
             (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
             for word, thumbnails in sequences
         ]

@@ -8,15 +8,14 @@ from .codex.codex import Codex
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
+
+
 class LearnTab(QWidget):
     """Widget for the learning module, managing lesson selection and individual lessons."""
+
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.background_manager = None
-        self.global_settings = (
-            self.main_widget.main_window.settings_manager.global_settings
-        )
         self._setup_components()
         self._setup_layout()
 
@@ -28,10 +27,10 @@ class LearnTab(QWidget):
         self.codex = Codex(self)
 
     def _setup_layout(self) -> None:
-        self.stack_layout = QStackedLayout()
-        self.stack_layout.addWidget(self.lesson_selector)
-        self.stack_layout.addWidget(self.lesson_1_widget)
-        self.stack_layout.addWidget(self.lesson_2_widget)
-        self.stack_layout.addWidget(self.lesson_3_widget)
-        self.stack_layout.setCurrentWidget(self.lesson_selector)
-        self.setLayout(self.stack_layout)
+        self.stack = QStackedLayout()
+        self.stack.addWidget(self.lesson_selector)
+        self.stack.addWidget(self.lesson_1_widget)
+        self.stack.addWidget(self.lesson_2_widget)
+        self.stack.addWidget(self.lesson_3_widget)
+        self.stack.setCurrentWidget(self.lesson_selector)
+        self.setLayout(self.stack)

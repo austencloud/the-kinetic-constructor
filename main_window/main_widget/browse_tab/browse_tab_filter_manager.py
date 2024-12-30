@@ -37,7 +37,7 @@ class BrowseTabFilterManager:
             )
         ]
 
-        self.browse_tab.currently_displayed_sequences = favorites
+        self.browse_tab.sequence_picker.currently_displayed_sequences = favorites
         self.browse_tab.ui_updater.update_and_display_ui(len(favorites))
 
     def show_all_sequences(self):
@@ -56,7 +56,7 @@ class BrowseTabFilterManager:
             for word, thumbnails in self.browse_tab.get.base_words(dictionary_dir)
         ]
 
-        self.browse_tab.currently_displayed_sequences = sequences
+        self.browse_tab.sequence_picker.currently_displayed_sequences = sequences
         self.browse_tab.ui_updater.update_and_display_ui(len(sequences))
 
     def show_most_recent_sequences(self, date: datetime):
@@ -79,13 +79,13 @@ class BrowseTabFilterManager:
             >= date
         ]
 
-        self.browse_tab.currently_displayed_sequences = most_recent
+        self.browse_tab.sequence_picker.currently_displayed_sequences = most_recent
         self.browse_tab.ui_updater.update_and_display_ui(len(most_recent))
 
     def show_browser_with_filters_from_settings(self):
         """Show browser with filters from settings."""
         current_filter = (
-            self.browse_tab.main_widget.main_window.settings_manager.browse_tab_settings.get_current_filter()
+            self.browse_tab.main_widget.main_window.settings_manager.browse_settings.get_current_filter()
         )
 
         self.apply_current_filter(current_filter)
@@ -97,17 +97,14 @@ class BrowseTabFilterManager:
             self.main_widget.left_sequence_picker_index,
         )
 
-        self.sort_and_display_thumbnail_boxes_by_current_filter(
-            current_filter
-        )
+        self.sort_and_display_thumbnail_boxes_by_current_filter(current_filter)
         self.browse_tab.sequence_viewer.update_preview(None)
         QApplication.processEvents()
-
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
     ) -> None:
-        
+
         filter_selector = self.browse_tab.sequence_picker.filter_selector
         starting_position_section = filter_selector.starting_position_section
         contains_letter_section = filter_selector.contains_letter_section
@@ -135,8 +132,6 @@ class BrowseTabFilterManager:
                         display_functions[key]()
                     else:
                         display_functions[key](value)
-                        
-        self.browse_tab.initialized = True
 
     def prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

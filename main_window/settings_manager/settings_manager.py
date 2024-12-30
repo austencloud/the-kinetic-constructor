@@ -30,9 +30,9 @@ class SettingsManager(QObject):
         self.visibility = VisibilitySettings(self)
         self.sequence_layout = SequenceLayoutSettings(self)
         self.sequence_share_settings = SequenceShareSettings(self)
-        
+
         # Tabs
         self.construct_tab_settings = ConstructTabSettings(self)
         self.generate_tab_settings = GenerateTabSettings(self)
-        self.browse_tab_settings = BrowseTabSettings(self)
+        self.browse_settings = BrowseTabSettings(self)
         self.write_tab_settings = WriteTabSettings(self)

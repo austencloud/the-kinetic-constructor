@@ -201,7 +201,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         """Display only the thumbnails that match the selected starting position."""
-        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.settings.set_current_filter(
             {"starting_position": position.lower()}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
@@ -211,7 +211,7 @@ class StartingPositionSection(FilterSectionBase):
         sequences = self.get_sequences_that_are_a_specific_position(position)
         total_sequences = len(sequences)
 
-        self.browse_tab.currently_displayed_sequences = [
+        self.browse_tab.sequence_picker.currently_displayed_sequences = [
             (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
             for word, thumbnails in sequences
         ]

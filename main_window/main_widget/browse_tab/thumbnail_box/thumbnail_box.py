@@ -64,7 +64,7 @@ class ThumbnailBox(QWidget):
         QApplication.processEvents()
         self.save_favorite_status()
 
-        current_filter = self.browse_tab.browse_tab_settings.get_current_filter()
+        current_filter = self.browse_tab.settings.get_current_filter()
         if current_filter and current_filter.get("favorites"):
             if not self.favorite_status:
                 self.hide()
@@ -110,4 +110,3 @@ class ThumbnailBox(QWidget):
             self.variation_number_label.hide()
         else:
             self.variation_number_label.update_index(self.current_index + 1)
-

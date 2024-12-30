@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class BrowseTabSelectionHandler:
     def __init__(self, dictionary_widget: "BrowseTab") -> None:
-        self.dictionary_widget = dictionary_widget
+        self.browse_tab = dictionary_widget
         self.currently_selected_thumbnail: ThumbnailImageLabel = None
 
     def update_selection(self, thumbnail_image_label: "ThumbnailImageLabel") -> None:
@@ -32,8 +32,8 @@ class BrowseTabSelectionHandler:
         thumbnail_collection,
         thumbnail_index,
     ) -> None:
-        self.dictionary_widget.selected_sequence_dict = metadata
-        self.sequence_viewer = self.dictionary_widget.sequence_viewer
+        self.browse_tab.sequence_picker.selected_sequence_dict = metadata
+        self.sequence_viewer = self.browse_tab.sequence_viewer
         self.sequence_viewer.thumbnails = thumbnail_collection
         self.sequence_viewer.image_label.setPixmap(
             thumbnail_pixmap.scaled(

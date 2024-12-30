@@ -27,6 +27,6 @@ class SequencePickerGoBackButton(BaseGoBackButton):
         )
 
         self.browse_tab.sequence_viewer.clear()
-        self.browse_tab.browse_tab_settings.set_current_section("filter_choice")
-        self.browse_tab.browse_tab_settings.set_current_filter(None)
+        self.browse_tab.settings.set_current_section("filter_choice")
+        self.browse_tab.settings.set_current_filter(None)
         self.sequence_picker.filter_selector.show_section("filter_choice")

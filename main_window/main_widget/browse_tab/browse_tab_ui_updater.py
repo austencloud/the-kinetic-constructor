@@ -30,7 +30,7 @@ class BrowseTabUIUpdater:
         def update_ui():
             num_words = 0
             for index, (word, thumbnails, _) in enumerate(
-                self.browse_tab.currently_displayed_sequences
+                self.browse_tab.sequence_picker.currently_displayed_sequences
             ):
                 row_index = index // self.thumbnail_box_sorter.num_columns
                 column_index = index % self.thumbnail_box_sorter.num_columns
@@ -53,7 +53,7 @@ class BrowseTabUIUpdater:
     def _apply_sorting_and_styling(self):
         """Apply sorting to thumbnails and style elements based on current settings."""
         self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-            self.settings_manager.browse_tab_settings.get_sort_method()
+            self.settings_manager.browse_settings.get_sort_method()
         )
 
         font_color = self.font_color_updater.get_font_color(

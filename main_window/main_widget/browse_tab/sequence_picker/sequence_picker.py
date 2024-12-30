@@ -20,6 +20,9 @@ class SequencePicker(QWidget):
         super().__init__(browse_tab)
         self.browse_tab = browse_tab
         self.main_widget = browse_tab.main_widget
+        self.sections: dict[str, list[tuple[str, list[str]]]] = {}
+        self.currently_displayed_sequences = []
+        self.selected_sequence_dict = None
         self._setup_ui()
 
     def _setup_ui(self):

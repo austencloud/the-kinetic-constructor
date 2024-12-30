@@ -103,7 +103,7 @@ class SequenceLengthSection(FilterSectionBase):
 
     def display_only_thumbnails_with_sequence_length(self, length: int):
         """Display sequences of a specific length."""
-        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.settings.set_current_filter(
             {"sequence_length": length}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
@@ -118,7 +118,9 @@ class SequenceLengthSection(FilterSectionBase):
         ]
 
         total_sequences = len(matching_sequences) or 1  # Prevent division by zero
-        self.browse_tab.currently_displayed_sequences = matching_sequences
+        self.browse_tab.sequence_picker.currently_displayed_sequences = (
+            matching_sequences
+        )
 
         self.browse_tab.ui_updater.update_and_display_ui(total_sequences)
 

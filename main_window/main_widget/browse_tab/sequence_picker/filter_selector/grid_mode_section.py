@@ -222,7 +222,7 @@ class GridModeSection(FilterSectionBase):
 
     def display_only_thumbnails_with_grid_mode(self, grid_mode: str):
         """Display only the thumbnails that match the selected grid mode."""
-        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.settings.set_current_filter(
             {"grid_mode": grid_mode.lower()}
         )
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
@@ -232,7 +232,7 @@ class GridModeSection(FilterSectionBase):
         sequences = self.get_sequences_by_grid_mode(grid_mode)
         total_sequences = len(sequences)
 
-        self.browse_tab.currently_displayed_sequences = [
+        self.browse_tab.sequence_picker.currently_displayed_sequences = [
             (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
             for word, thumbnails in sequences
         ]

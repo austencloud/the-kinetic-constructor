@@ -105,9 +105,7 @@ class ContainsLettersSection(FilterSectionBase):
         if not self.selected_letters:
             return 0
 
-        base_words = self.get_sorted_base_words(
-            "sequence_length"
-        )
+        base_words = self.get_sorted_base_words("sequence_length")
         return sum(
             any(letter in word for letter in self.selected_letters)
             for word, _, _ in base_words
@@ -126,9 +124,7 @@ class ContainsLettersSection(FilterSectionBase):
             f"sequences containing\n{display_letters}"
         )
 
-        base_words = self.get_sorted_base_words(
-            "sequence_length"
-        )
+        base_words = self.get_sorted_base_words("sequence_length")
 
         matching_sequences = [
             (word, thumbnails, seq_length)
@@ -139,7 +135,9 @@ class ContainsLettersSection(FilterSectionBase):
         ]
 
         total_sequences = len(matching_sequences) or 1
-        self.browse_tab.currently_displayed_sequences = matching_sequences
+        self.browse_tab.sequence_picker.currently_displayed_sequences = (
+            matching_sequences
+        )
         self.browse_tab.sequence_picker.control_panel.count_label.setText(
             f"Number of words to be displayed: {len(matching_sequences)}"
         )
@@ -148,7 +146,7 @@ class ContainsLettersSection(FilterSectionBase):
         QApplication.restoreOverrideCursor()
 
         # QTimer.singleShot(0, update_ui)
-        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
+        self.filter_selector.browse_tab.settings.set_current_filter(
             {"contains_letters": letters}
         )
 

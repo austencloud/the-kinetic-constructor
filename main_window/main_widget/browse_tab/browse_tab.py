@@ -18,38 +18,16 @@ class BrowseTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.indicator_label = main_widget.sequence_widget.indicator_label
-        self.selected_sequence_dict = None
-        self.currently_displayed_sequences = []
+        self.settings = self.main_widget.main_window.settings_manager.browse_settings
 
-        self.global_settings = (
-            self.main_widget.main_window.settings_manager.global_settings
-        )
-        self.browse_tab_settings = (
-            self.main_widget.main_window.settings_manager.browse_tab_settings
-        )
-        self._setup_ui()
-        self.initialized = False
-        self.sections: dict[str, list[tuple[str, list[str]]]] = {}
+        # Components
+        self.sequence_picker = SequencePicker(self)
+        self.sequence_viewer = SequenceViewer(self)
 
-    def _setup_ui(self) -> None:
         # Managers
         self.deletion_handler = BrowseTabDeletionHandler(self)
         self.selection_handler = BrowseTabSelectionHandler(self)
         self.edit_sequence_handler = BrowseTabEditSequenceHandler(self)
         self.filter_manager = BrowseTabFilterManager(self)
         self.get = BrowseTabGetter(self)
-
-        # Components
-        self.sequence_picker = SequencePicker(self)
-        self.sequence_viewer = SequenceViewer(self)
-
         self.ui_updater = BrowseTabUIUpdater(self)
-
-    def show_initial_section(self):
-        current_section = self.browse_tab_settings.get_current_section()
-        selector = self.sequence_picker.filter_selector
-        if current_section == "sequence_picker":
-            self.filter_manager.show_browser_with_filters_from_settings()
-        else:
-            selector.show_section(current_section)

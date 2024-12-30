@@ -192,9 +192,7 @@ class LevelSection(FilterSectionBase):
 
     def display_only_thumbnails_with_level(self, level: int):
         """Display only the thumbnails that match the selected level."""
-        self.filter_selector.browse_tab.browse_tab_settings.set_current_filter(
-            {"level": level}
-        )
+        self.filter_selector.browse_tab.settings.set_current_filter({"level": level})
         self.browse_tab.filter_manager.prepare_ui_for_filtering(
             f"level {level} sequences"
         )
@@ -202,7 +200,7 @@ class LevelSection(FilterSectionBase):
         sequences = self.get_sequences_that_are_a_specific_level(level)
         total_sequences = len(sequences)
 
-        self.browse_tab.currently_displayed_sequences = [
+        self.browse_tab.sequence_picker.currently_displayed_sequences = [
             (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
             for word, thumbnails in sequences
         ]
