@@ -2,15 +2,12 @@ from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.generator_tab import (
-        GeneratorTab,
-    )
+    from .generate_tab import GenerateTab
 
 
 class CustomizeSequenceLabel(QLabel):
-    def __init__(self, generator_widget: "GeneratorTab") -> None:
+    def __init__(self, generator_widget: "GenerateTab") -> None:
         super().__init__(generator_widget)
         self.generator_widget = generator_widget
         self.setText("Customize your sequence:")

@@ -11,8 +11,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.generate_tab.freeform.custom_checkbox_widget import CustomCheckBoxWidget
-from .base_classes.customize_your_sequence_label import CustomizeSequenceLabel
+from main_window.main_widget.generate_tab.freeform.custom_checkbox_widget import (
+    CustomCheckBoxWidget,
+)
+from .customize_your_sequence_label import CustomizeSequenceLabel
 from .generate_sequence_button import GenerateSequenceButton
 from .circular.circular_sequence_generator_frame import CircularSequenceGeneratorFrame
 from .freeform.freeform_sequence_generator_frame import FreeformSequenceGeneratorFrame
@@ -31,7 +33,6 @@ class GenerateTab(QWidget):
 
         self._setup_spacers()
         self._setup_buttons()
-        self._setup_checkbox()
         self._setup_components()
         self._connect_signals()
         self._setup_layout()
@@ -39,6 +40,8 @@ class GenerateTab(QWidget):
         self.freeform_generator_frame.show()
 
     def _setup_components(self):
+        self.overwrite_checkbox = CustomCheckBoxWidget("Overwrite sequence")
+
         self.customize_sequence_label = CustomizeSequenceLabel(self)
         self.freeform_generator_frame = FreeformSequenceGeneratorFrame(self)
         self.circular_generator_frame = CircularSequenceGeneratorFrame(self)
@@ -52,18 +55,28 @@ class GenerateTab(QWidget):
         self.stacked_layout.addWidget(self.freeform_generator_frame)
         self.stacked_layout.addWidget(self.circular_generator_frame)
 
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.setLayout(self.layout)
-        alignment = Qt.AlignmentFlag.AlignCenter
+        top_hbox = QHBoxLayout()
+        top_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        top_hbox.addWidget(self.customize_sequence_label)
 
-        self.layout.addWidget(self.customize_sequence_label, alignment)
+        generate_button_hbox = QHBoxLayout()
+        generate_button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        generate_button_hbox.addWidget(self.generate_sequence_button)
+
+        self.checkbox_layout = QHBoxLayout()
+        self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.checkbox_layout.addWidget(self.overwrite_checkbox)
+
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addLayout(top_hbox)
         self.layout.addItem(self.spacer_1)
         self.layout.addLayout(self.button_layout)
         self.layout.addLayout(self.stacked_layout)
         self.layout.addItem(self.spacer_2)
-        self.layout.addWidget(self.generate_sequence_button, alignment)
+        self.layout.addLayout(generate_button_hbox)
         self.layout.addLayout(self.checkbox_layout)
         self.layout.addItem(self.spacer_3)
+        self.setLayout(self.layout)
 
     def _setup_spacers(self):
         self.spacers: list[QSpacerItem] = []
@@ -76,11 +89,6 @@ class GenerateTab(QWidget):
             self.spacers.append(spacer)
         self.spacer_1, self.spacer_2, self.spacer_3 = self.spacers
 
-    def _setup_checkbox(self):
-        self.overwrite_checkbox = CustomCheckBoxWidget("Overwrite sequence")
-        self.checkbox_layout = QHBoxLayout()
-        self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.checkbox_layout.addWidget(self.overwrite_checkbox)
 
     def _setup_buttons(self):
         """Set up Freeform and Circular buttons and add them to the layout."""
@@ -102,7 +110,8 @@ class GenerateTab(QWidget):
 
     def dummy_function(self):
         """Placeholder function to ensure there's always a connected slot."""
-
+        pass
+    
     def update_button_styles(self):
         """Apply active and inactive styles across all main buttons."""
         font_size = self.main_widget.width() // 75
