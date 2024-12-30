@@ -8,7 +8,6 @@ from main_window.main_widget.browse_tab.sequence_picker.sequence_picker_go_back_
 from .currently_displaying_label import (
     CurrentlyDisplayingLabel,
 )
-from .sequence_picker_progress_bar import SequencePickerProgressBar
 from .sequence_picker_count_label import SequencePickerCountLabel
 from .sequence_picker_sort_widget import SequencePickerSortWidget
 

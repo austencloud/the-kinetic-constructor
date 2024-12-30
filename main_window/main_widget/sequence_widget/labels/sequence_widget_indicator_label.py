@@ -1,14 +1,8 @@
-from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QLabel, QGraphicsOpacityEffect
-from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, pyqtSlot
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from main_window.main_widget.base_indicator_label import BaseIndicatorLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
-        BaseLessonWidget,
-    )
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 

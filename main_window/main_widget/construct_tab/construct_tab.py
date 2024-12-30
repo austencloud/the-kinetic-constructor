@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QFrame
+from PyQt6.QtCore import pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -14,7 +14,6 @@ from .advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPo
 
 from .add_to_sequence_manager import AddToSequenceManager
 from .option_picker.option_picker import OptionPicker
-from .option_picker.option_picker_click_handler import OptionPickerClickHandler
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget

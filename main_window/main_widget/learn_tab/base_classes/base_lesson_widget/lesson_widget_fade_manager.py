@@ -1,10 +1,9 @@
 # pictograph_fade_manager.py
-from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QApplication
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
 from PyQt6.QtCore import (
     QPropertyAnimation,
     QEasingCurve,
     QObject,
-    pyqtSignal,
     QParallelAnimationGroup,
     pyqtSlot,
 )
@@ -17,7 +16,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
         BaseLessonWidget,
     )
-    from main_window.main_widget.learn_tab.learn_tab import LearnTab
 
 
 class LessonWidgetFadeManager(QObject):

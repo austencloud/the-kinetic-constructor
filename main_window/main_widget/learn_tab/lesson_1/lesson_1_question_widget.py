@@ -4,9 +4,8 @@ from PyQt6.QtWidgets import (
     QLabel,
     QSpacerItem,
     QSizePolicy,
-    QGraphicsOpacityEffect,
 )
-from PyQt6.QtCore import Qt, QPropertyAnimation
+from PyQt6.QtCore import Qt
 from main_window.main_widget.learn_tab.base_classes.base_question_widget import (
     BaseQuestionWidget,
 )

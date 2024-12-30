@@ -1,13 +1,10 @@
-import os
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
 from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import ThumbnailBox
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
     from main_window.main_widget.browse_tab.sequence_picker.sequence_picker import SequencePicker
 
 

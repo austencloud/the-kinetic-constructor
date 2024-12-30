@@ -1,15 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QGraphicsRectItem
-from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtGui import QBrush, QColor, QKeyEvent
+from PyQt6.QtWidgets import QGraphicsRectItem
+from PyQt6.QtGui import QBrush, QColor
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
-from base_widgets.base_pictograph.pictograph_context_menu_handler import (
-    PictographContextMenuHandler,
-)
-from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
-    PictographViewKeyEventHandler,
-)
 
 
 if TYPE_CHECKING:

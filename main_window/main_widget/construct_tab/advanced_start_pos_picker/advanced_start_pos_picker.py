@@ -1,5 +1,5 @@
 from copy import deepcopy
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout
 from typing import TYPE_CHECKING
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph

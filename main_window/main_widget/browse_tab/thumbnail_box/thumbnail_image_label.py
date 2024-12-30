@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent
-from PyQt6.QtWidgets import QLabel, QApplication
+from PyQt6.QtWidgets import QLabel
 from typing import TYPE_CHECKING
 
 

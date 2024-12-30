@@ -110,7 +110,6 @@ class GenerateTab(QWidget):
 
     def dummy_function(self):
         """Placeholder function to ensure there's always a connected slot."""
-        pass
     
     def update_button_styles(self):
         """Apply active and inactive styles across all main buttons."""

@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING
 
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
-from ..start_pos_picker.start_pos_picker_pictograph_view import (
-    StartPosPickerPictographView,
-)
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph

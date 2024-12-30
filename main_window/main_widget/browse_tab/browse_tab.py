@@ -1,18 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
-from main_window.main_widget.browse_tab.sequence_picker.filter_selector.sequence_picker_filter_selector import (
-    SequencePickerFilterSelector,
-)
 from .sequence_picker.sequence_picker import SequencePicker
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_getter import BrowseTabGetter
-from .sequence_picker.sequence_picker_section_manager import (
-    SequencePickerSectionManager,
-)
-from .sequence_picker.sequence_picker_thumbnail_box_sorter import (
-    SequencePickerThumbnailBoxSorter,
-)
 from .browse_tab_ui_updater import BrowseTabUIUpdater
 from .deletion_handler.browse_tab_deletion_handler import BrowseTabDeletionHandler
 from .browse_tab_selection_handler import BrowseTabSelectionHandler

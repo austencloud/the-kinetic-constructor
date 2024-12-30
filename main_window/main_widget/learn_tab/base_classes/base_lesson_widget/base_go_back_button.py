@@ -5,9 +5,6 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
-        BaseLessonWidget,
-    )
 
 
 class BaseGoBackButton(QPushButton):
