@@ -99,7 +99,7 @@ class BeatDeletionManager:
         self.selection_overlay.deselect_beat()
         self.json_manager.loader_saver.clear_current_sequence_file()
         self.construct_tab.last_beat = None
-        self.construct_tab.reset_to_start_pos_picker()
+        # self.construct_tab.reset_to_start_pos_picker()
         self.construct_tab.option_picker.update_option_picker()
         graph_editor = self.beat_frame.main_widget.sequence_widget.graph_editor
         graph_editor.adjustment_panel.update_adjustment_panel()

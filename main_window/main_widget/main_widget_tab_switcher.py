@@ -31,6 +31,11 @@ class MainWidgetTabSwitcher:
             if index == self.mw.main_generate_tab_index
             else right_new_index
         )
+        right_new_index = (
+            self.mw.right_learn_tab_index
+            if index == self.mw.main_learn_tab_index
+            else right_new_index
+        ) 
 
         width_ratio = (
             (2 / 3, 1 / 3) if index == self.mw.main_browse_tab_index else (1 / 2, 1 / 2)
