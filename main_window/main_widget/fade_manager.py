@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from main_widget.main_widget import MainWidget
 
 
-class MainWidgetFadeManager(QObject):
+class FadeManager(QObject):
     """Manages fade-out/fade-in animations for your single stacked widget."""
 
     duration = 300
@@ -26,24 +26,13 @@ class MainWidgetFadeManager(QObject):
         self._is_animating = False
 
     def fade_to_tab(self, stack: QStackedLayout, new_index: int):
-        """
-        new_index corresponds to the pages in mw.content_stack:
-          0 -> Build
-          1 -> Generate
-          2 -> Browse
-          3 -> Learn
-          4 -> Write
-        """
         if self._is_animating:
             return
         self.stack = stack
         old_index = self.stack.currentIndex()
         if old_index == new_index:
             return
-
-        self._fade_stack(old_index, new_index)
-
-    def _fade_stack(self, old_index: int, new_index: int):
+        
         self._is_animating = True
 
         self.old_widget = self.stack.widget(old_index)
