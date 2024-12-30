@@ -11,7 +11,6 @@ class CodexPictographView(PictographView):
     def __init__(self, pictograph: "BasePictograph", codex: "Codex") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
-        self.pictograph.view = self
         self.codex = codex
         self.setStyleSheet("border: 1px solid black;")
 

@@ -36,7 +36,7 @@ class SequenceClearer:
 
     def _reset_construct_tab(self, should_reset_to_start_pos_picker: bool) -> None:
         if should_reset_to_start_pos_picker:
-            self.construct_tab.reset_to_start_pos_picker()
+            self.construct_tab.transition_to_start_pos_picker()
         self.construct_tab.last_beat = self.sequence_widget.beat_frame.start_pos
         self.graph_editor = self.sequence_widget.graph_editor
 

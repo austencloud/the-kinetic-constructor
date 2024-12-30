@@ -13,7 +13,7 @@ class StartPosPickerPictographFrame(QWidget):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
-        self.clickable_option_handler = (
+        self.option_click_handler = (
             self.start_pos_picker.construct_tab.option_picker.click_handler
         )
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -30,9 +30,9 @@ class StartPosPickerPictographFrame(QWidget):
             )
 
     def _add_start_pos_to_layout(self, start_pos: BasePictograph) -> None:
-        start_pos.view.mousePressEvent = (
-            self.clickable_option_handler.get_click_handler(start_pos)
-        )
+        # start_pos.view.mousePressEvent = self.option_click_handler.handle_click(
+        #     start_pos
+        # )
         self.pictographs_layout.addWidget(start_pos.view)
         self.start_pos_picker.start_options[start_pos.letter] = start_pos
         key = f"{start_pos.letter}_{start_pos.start_pos}_{start_pos.end_pos}"

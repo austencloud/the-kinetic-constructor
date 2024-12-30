@@ -14,6 +14,8 @@ class PictographView(QGraphicsView):
     def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
+        self.pictograph.view = self
+        
         self.dict_copier = PictographDictCopier(pictograph)
 
         self.setFrameStyle(QFrame.Shape.NoFrame)

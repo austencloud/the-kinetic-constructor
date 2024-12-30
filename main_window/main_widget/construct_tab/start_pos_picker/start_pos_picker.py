@@ -105,9 +105,7 @@ class StartPosPicker(BaseStartPosPicker):
                     pictograph.start_pos = start_pos
                     pictograph.end_pos = end_pos
                     self.pictograph_frame._add_start_pos_to_layout(pictograph)
-                    pictograph.view.mousePressEvent = lambda event: self.start_position_adder.add_start_pos_to_sequence(
-                        pictograph
-                    )
+
 
                     pictograph.start_to_end_pos_glyph.hide()
                     break

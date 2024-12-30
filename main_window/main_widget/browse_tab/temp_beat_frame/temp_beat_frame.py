@@ -161,7 +161,7 @@ class TempBeatFrame(BaseBeatFrame):
         self._reset_beat_frame()
 
         if should_reset_to_start_pos_picker:
-            self.construct_tab.reset_to_start_pos_picker()
+            self.construct_tab.transition_to_start_pos_picker()
         self.construct_tab.last_beat = self.start_pos
         self.json_manager.loader_saver.clear_current_sequence_file()
 

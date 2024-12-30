@@ -52,7 +52,7 @@ class OptionPicker(QWidget):
         self.option_pool: list[BasePictograph] = []
         for _ in range(self.MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
-            option.view = OptionPickerPictographView(option, self)
+            option.view = OptionPickerPictographView(self, option)
             self.option_pool.append(option)
 
     def setup_layout(self) -> None:

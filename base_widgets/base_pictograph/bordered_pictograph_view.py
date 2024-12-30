@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 class BorderedPictographView(PictographView):
     def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__(pictograph)
-
         self.primary_color = None
         self.secondary_color = None
         self.original_primary_color = None

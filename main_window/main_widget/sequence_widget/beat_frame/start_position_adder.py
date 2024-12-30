@@ -20,6 +20,7 @@ class StartPositionAdder:
         self.json_manager = self.main_widget.json_manager
 
     def add_start_pos_to_sequence(self, clicked_start_option: "BasePictograph") -> None:
+
         start_pos_beat = StartPositionBeat(self.beat_frame)
 
         start_pos_view = self.beat_frame.start_pos_view

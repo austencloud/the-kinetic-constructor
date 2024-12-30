@@ -42,7 +42,7 @@ class BaseStartPosPicker(QWidget):
 
         # Build the pictograph
         pictograph = BasePictograph(self.main_widget)
-        pictograph.view = StartPosPickerPictographView(pictograph)
+        pictograph.view = StartPosPickerPictographView(self, pictograph)
         pictograph.updater.update_pictograph(local_dict)
         pictograph.view.update_borders()
 

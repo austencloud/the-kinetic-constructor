@@ -3,7 +3,9 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.construct_tab_fade_manager import ConstructTabFadeManager
+from main_window.main_widget.construct_tab.option_picker.construct_tab_fade_manager import (
+    ConstructTabFadeManager,
+)
 from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker import (
     StartPosPicker,
 )
@@ -35,28 +37,17 @@ class ConstructTab(QFrame):
             letter: {} for letter in Letter
         }
 
+        self.add_to_sequence_manager = AddToSequenceManager(self)
         self.option_picker = OptionPicker(self)
         self.start_pos_picker = StartPosPicker(self)
         self.advanced_start_pos_picker = AdvancedStartPosPicker(self)
-        self.add_to_sequence_manager = AddToSequenceManager(self)
         self.fade_manager = ConstructTabFadeManager(self)
-
-        # self.layout: QHBoxLayout = QHBoxLayout(self)
-        # self.layout.setContentsMargins(0, 0, 0, 0)
-        # self.layout.setSpacing(0)
-        # self.setLayout(self.layout)
-        # self.setContentsMargins(0, 0, 0, 0)
-        # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        # self.setStyleSheet("background: transparent;")
 
     def transition_to_option_picker(self):
         """Transition to the option picker for sequence building."""
         self.main_widget.fade_manager.fade_to_tab(
             self.main_widget.right_stack, self.main_widget.right_option_picker_index
         )
-
-        # self.option_picker.scroll_area.section_manager.display_sections()
-        # self.option_picker.update_option_picker()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""
@@ -65,7 +56,7 @@ class ConstructTab(QFrame):
         )
         self.advanced_start_pos_picker.display_variations()
 
-    def reset_to_start_pos_picker(self) -> None:
+    def transition_to_start_pos_picker(self) -> None:
         """Reset the view back to the start position picker."""
         self.main_widget.fade_manager.fade_to_tab(
             self.main_widget.right_stack, self.start_pos_picker_index

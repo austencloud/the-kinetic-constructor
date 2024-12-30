@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
-
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
+    Beat,
+)
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -17,18 +19,12 @@ class AddToSequenceManager:
         self.construct_tab = construct_tab
 
     def create_new_beat(self, clicked_option: "BasePictograph") -> "Beat":
-        from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
-            Beat,
-        )
-
-        beat_frame = self.construct_tab.main_widget.sequence_widget.beat_frame
         sequence = (
             self.construct_tab.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
 
         last_beat_dict = None
         if len(sequence) > 1:
-            # Get the last beat dict (excluding the start position)
             last_beat_dict = sequence[-1]
             if last_beat_dict.get("is_placeholder", False):
                 last_beat_dict = sequence[-2]
