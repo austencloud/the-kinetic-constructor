@@ -30,7 +30,6 @@ class OptionFadeManager(QObject):
         self.option_getter = self.option_picker.option_getter
         self.scroll_area = self.option_picker.scroll_area
 
-        self.is_animating = False
         self.fade_out_group = None
         self.fade_in_group = None
 
@@ -83,3 +82,9 @@ class OptionFadeManager(QObject):
             self.fade_in_group.addAnimation(animation)
 
         self.fade_in_group.start()
+        self.fade_in_group.finished.connect(self._on_fade_in_finished)
+        
+    @pyqtSlot()
+    def _on_fade_in_finished(self):
+        for section in self.option_picker.get_sections():
+            section.setGraphicsEffect(None)
