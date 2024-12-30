@@ -22,7 +22,7 @@ class StartPosPickerPictographFrame(QWidget):
         self.variation_buttons: dict[str, QPushButton] = {}
         self.start_positions: dict[str, BasePictograph] = {}
 
-    def resize_start_pos_picker_pictograph_frame(self) -> None:
+    def resizeEvent(self, event) -> None:
         # self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
         for button in self.variation_buttons.values():
             button.setMaximumWidth(

@@ -5,8 +5,8 @@ from PyQt6.QtCore import pyqtSignal, Qt, pyqtSlot, QParallelAnimationGroup, QObj
 from typing import TYPE_CHECKING
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.option_fade_manager import (
-    OptionFadeManager,
+from main_window.main_widget.construct_tab.option_picker.construct_tab_fade_manager import (
+    ConstructTabFadeManager,
 )
 from main_window.main_widget.construct_tab.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
@@ -43,7 +43,6 @@ class OptionPicker(QWidget):
         self.scroll_area = OptionPickerScrollArea(self)
         self.reversal_filter = OptionPickerReversalFilter(self)
         self.click_handler = OptionPickerClickHandler(self)
-        self.fade_manager = OptionFadeManager(self)
 
         self.initialize_option_pool()
         self.setup_layout()
@@ -91,7 +90,7 @@ class OptionPicker(QWidget):
                 self.scroll_area.display_manager.clear_all_section_layouts()
                 self.scroll_area.add_and_display_relevant_pictographs(next_options)
                 return
-            self.fade_manager.fade_and_update_option_picker()
+            self.construct_tab.fade_manager.fade_and_update_option_picker()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

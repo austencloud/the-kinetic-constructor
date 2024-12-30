@@ -88,13 +88,6 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
         self.pictograph_views.clear()
         self.pictographs.clear()
 
-    def resize_answers_widget(self):
-        """Resize the pictograph views based on window size."""
-        for view in self.pictograph_views:
-            size = int(self.main_widget.height() // 5.5)
-            view.setFixedSize(size, size)
-        spacing = self.main_widget.width() // 100
-        self.layout.setSpacing(spacing)
 
     def disable_answers(self, answer):
         """Disable a specific pictograph answer."""
@@ -102,3 +95,11 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
         wrong_answer = self.pictographs[pictograph_key]
         wrong_answer.view.setEnabled(False)
         wrong_answer.view.set_overlay_color("red")
+
+    def resize_answers_widget(self):
+        """Resize the pictograph views based on window size."""
+        for view in self.pictograph_views:
+            size = int(self.main_widget.height() // 5.5)
+            view.setFixedSize(size, size)
+        spacing = self.main_widget.width() // 100
+        self.layout.setSpacing(spacing)

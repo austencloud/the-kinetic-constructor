@@ -91,10 +91,8 @@ class FadeManager(QObject):
             self.old_widget.setGraphicsEffect(None)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
-        effect = widget.graphicsEffect()
-        if not effect or not isinstance(effect, QGraphicsOpacityEffect):
-            effect = QGraphicsOpacityEffect(widget)
-            widget.setGraphicsEffect(effect)
+        effect = QGraphicsOpacityEffect(widget)
+        widget.setGraphicsEffect(effect)
         return effect
 
     def fade_both_stacks_in_parallel(

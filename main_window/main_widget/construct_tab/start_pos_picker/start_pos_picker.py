@@ -33,7 +33,6 @@ class StartPosPicker(BaseStartPosPicker):
 
         self.display_variations()
 
-
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
@@ -167,16 +166,3 @@ class StartPosPicker(BaseStartPosPicker):
                 return mapping[key]
         return None
 
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        spacing = 10
-        for start_option in self.start_options.values():
-            view_width = int((self.width() // 5) - spacing)
-            start_option.view.setFixedSize(view_width, view_width)
-            start_option.view.view_scale = view_width / start_option.width()
-            start_option.view.resetTransform()
-            start_option.view.scale(
-                start_option.view.view_scale, start_option.view.view_scale
-            )
-        self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
-        self.variations_button.resize_variations_button()

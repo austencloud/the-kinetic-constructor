@@ -10,7 +10,9 @@ from PyQt6.QtWidgets import QFrame, QGridLayout, QGraphicsOpacityEffect
 from typing import TYPE_CHECKING
 import logging
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.construct_tab.construct_tab import ConstructTab
     from .scroll_area.section_manager.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
@@ -19,12 +21,13 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class OptionFadeManager(QObject):
+class ConstructTabFadeManager(QObject):
     """Manages fade-out and sequential fade-in animations for multiple widgets."""
 
-    def __init__(self, option_picker: "OptionPicker"):
-        super().__init__(option_picker)
-        self.option_picker = option_picker
+    def __init__(self, construct_tab: "ConstructTab") -> None:
+        super().__init__(construct_tab)
+        self.construct_tab = construct_tab
+        self.option_picker = construct_tab.option_picker
         self.json_manager = self.option_picker.json_manager
         self.reversal_filter = self.option_picker.reversal_filter
         self.option_getter = self.option_picker.option_getter
@@ -96,4 +99,3 @@ class OptionFadeManager(QObject):
     def _on_fade_in_finished(self):
         for section in self.option_picker.get_sections():
             section.pictograph_frame.setGraphicsEffect(None)
-            # section.pictograph_frame.opacity_effect = None

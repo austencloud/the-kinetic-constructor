@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class AdvancedStartPosPicker(BaseStartPosPicker):
-    COLUMN_COUNT = 4 
+    COLUMN_COUNT = 4
 
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)
@@ -47,16 +47,10 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
     def create_pictograph_from_dict(
         self, pictograph_dict: dict, target_grid_mode: str
     ) -> BasePictograph:
-        """
-        Creates and returns a pictograph for the given dictionary & grid_mode
-        without a context manager. We call our base method directly,
-        then apply advanced-specific logic if needed.
-        """
         pictograph_key = self.generate_pictograph_key(pictograph_dict, target_grid_mode)
         if pictograph_key in self.pictograph_cache:
             return self.pictograph_cache[pictograph_key]
 
-        # Just call the base class's create_pictograph_from_dict
         local_dict = deepcopy(pictograph_dict)
         local_dict["grid_mode"] = target_grid_mode
 

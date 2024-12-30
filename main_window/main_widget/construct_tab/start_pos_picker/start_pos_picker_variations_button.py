@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker import (
+    from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker import (
         StartPosPicker,
     )
 
@@ -31,13 +31,13 @@ class StartPosVariationsButton(QPushButton):
         """
         )
 
-    def resize_variations_button(self):
-        width = self.start_pos_picker.construct_tab.width() // 5
-        height = self.start_pos_picker.construct_tab.height() // 10
+    def resizeEvent(self, event):
+        width = self.start_pos_picker.width() // 5
+        height = self.start_pos_picker.height() // 10
         self.setFixedSize(width, height)
         font_size = int(width // 10)
         self.setFont(QFont("Calibri", font_size, italic=True))
-
+        super().resizeEvent(event)
     def enterEvent(self, event: QEnterEvent) -> None:
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.set_label_style(outline=True)

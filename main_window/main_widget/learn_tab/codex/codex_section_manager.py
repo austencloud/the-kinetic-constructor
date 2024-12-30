@@ -15,7 +15,8 @@ if TYPE_CHECKING:
 class CodexSectionManager:
     """Manages the loading and organization of pictograph sections in the Codex."""
 
-    VERT_SPACING = 20
+    VERT_SPACING = 7
+    HOR_SPACING = 7
     ROWS = [
         ["A", "B", "C", "D", "E", "F"],
         ["G", "H", "I", "J", "K", "L"],
@@ -50,7 +51,7 @@ class CodexSectionManager:
             return
 
         vertical_layout = QVBoxLayout()
-        vertical_layout.setSpacing(0)
+        vertical_layout.setSpacing(self.VERT_SPACING)
         vertical_layout.setContentsMargins(0, 0, 0, 0)
 
         for _, row_letters in enumerate(self.ROWS):
@@ -73,7 +74,7 @@ class CodexSectionManager:
 
     def _create_row_layout(self, row_letters: list[str]) -> QHBoxLayout:
         layout = QHBoxLayout()
-        layout.setSpacing(0)
+        layout.setSpacing(self.HOR_SPACING)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
