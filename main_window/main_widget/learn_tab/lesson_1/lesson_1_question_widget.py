@@ -62,7 +62,8 @@ class Lesson1QuestionWidget(BaseQuestionWidget):
             self.pictograph.view.deleteLater()
             self.pictograph = None
 
-    def _resize_question_widget(self) -> None:
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         self._resize_question_label()
         self._resize_pictograph()
         self._resize_spacer()
@@ -72,29 +73,3 @@ class Lesson1QuestionWidget(BaseQuestionWidget):
             self.pictograph.view.setFixedSize(
                 self.main_widget.height() // 3, self.main_widget.height() // 3
             )
-
-    def fade_out_pictograph(self):
-        """Animate the fade-out effect on the pictograph view."""
-        if self.pictograph and self.pictograph.view:
-            opacity_effect = QGraphicsOpacityEffect()
-            self.pictograph.view.setGraphicsEffect(opacity_effect)
-
-            self.fade_out_animation = QPropertyAnimation(opacity_effect, b"opacity")
-            self.fade_out_animation.setDuration(500)
-            self.fade_out_animation.setStartValue(1)  # Start fully visible
-            self.fade_out_animation.setEndValue(0)  # End invisible
-
-            self.fade_out_animation.start()
-
-    def fade_in_pictograph(self):
-        """Animate the fade-in effect on the pictograph view."""
-        if self.pictograph and self.pictograph.view:
-            opacity_effect = QGraphicsOpacityEffect()
-            self.pictograph.view.setGraphicsEffect(opacity_effect)
-
-            self.fade_in_animation = QPropertyAnimation(opacity_effect, b"opacity")
-            self.fade_in_animation.setDuration(500)
-            self.fade_in_animation.setStartValue(0)  # Start invisible
-            self.fade_in_animation.setEndValue(1)  # End fully visible
-
-            self.fade_in_animation.start()

@@ -145,9 +145,15 @@ class LessonSelector(QWidget):
         ]
         if 1 <= lesson_number <= len(lesson_widgets):
             lesson_widget = lesson_widgets[lesson_number - 1]
-            self.learn_widget.stack_layout.setCurrentWidget(lesson_widget)
+            lesson_widget_index = self.learn_widget.stack_layout.indexOf(lesson_widget)
+            self.main_widget.fade_manager.fade_to_tab(
+                self.learn_widget.stack_layout, lesson_widget_index
+            )
             lesson_widget.prepare_quiz_ui()
 
     def show(self) -> None:
         """Show the LessonSelector widget."""
-        self.learn_widget.stack_layout.setCurrentWidget(self)
+        # self.learn_widget.stack_layout.setCurrentWidget(self)
+        self.learn_widget.main_widget.fade_manager.fade_to_tab(
+            self.learn_widget.stack_layout, 0
+        )

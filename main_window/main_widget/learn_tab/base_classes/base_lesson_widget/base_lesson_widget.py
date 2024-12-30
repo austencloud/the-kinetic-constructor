@@ -2,7 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_go_back_button import LessonWidgetGoBackButton
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_go_back_button import (
+    LessonWidgetGoBackButton,
+)
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_fade_manager import LessonWidgetFadeManager
 from ..base_answers_widget import BaseAnswersWidget
 from .lesson_layout_manager import LessonLayoutManager
 from .quiz_timer_manager import QuizTimerManager
@@ -18,17 +21,18 @@ if TYPE_CHECKING:
 class BaseLessonWidget(QWidget):
     """Base class for all lesson widgets, managing shared logic for questions and answers."""
 
-    def __init__(self, learn_widget: "LearnTab"):
-        super().__init__(learn_widget)
-        self.learn_widget = learn_widget
-        self.main_widget = learn_widget.main_widget
+    def __init__(self, learn_tab: "LearnTab"):
+        super().__init__(learn_tab)
+        self.learn_tab = learn_tab
+        self.main_widget = learn_tab.main_widget
 
-        # Layout manager, timer manager, and result manager
+        # Managers and widgets
         self.layout_manager = LessonLayoutManager(self)
         self.timer_manager = QuizTimerManager(self)
         self.results_widget = ResultsWidget(self)
         self.indicator_label = LessonWidgetIndicatorLabel(self)
-
+        self.fade_manager = LessonWidgetFadeManager(self)
+        
         # Main layout
         self.main_layout: QVBoxLayout = QVBoxLayout()
         self.central_layout: QVBoxLayout = QVBoxLayout()
@@ -129,9 +133,7 @@ class BaseLessonWidget(QWidget):
 
     def start_new_question(self):
         """Start a new question for the lesson."""
-        self.clear_current_question()
-        self.question_generator.generate_question()
-        self.layout_manager.resize_widgets()
+        self.fade_manager.fade_and_update_lesson()
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""

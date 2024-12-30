@@ -33,7 +33,7 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
         self.pictographs: dict[str, BasePictograph] = {}
         # Define grid parameters
         self.columns = 2  # Number of columns in the grid
-        self.spacing = 20  # Spacing between widgets
+        self.spacing = 30  # Spacing between widgets
 
         self.layout.setSpacing(self.spacing)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -96,8 +96,9 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
         wrong_answer.view.setEnabled(False)
         wrong_answer.view.set_overlay_color("red")
 
-    def resize_answers_widget(self):
+    def resizeEvent(self,event):
         """Resize the pictograph views based on window size."""
+        super().resizeEvent(event)
         for view in self.pictograph_views:
             size = int(self.main_widget.height() // 5.5)
             view.setFixedSize(size, size)

@@ -1,11 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
-    QFrame,
-    QStackedLayout,
-)
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QStackedLayout
 from .lesson_1.lesson_1_widget import Lesson1Widget
 from .lesson_2.lesson_2_widget import Lesson2Widget
 from .lesson_3.lesson_3_widget import Lesson3Widget

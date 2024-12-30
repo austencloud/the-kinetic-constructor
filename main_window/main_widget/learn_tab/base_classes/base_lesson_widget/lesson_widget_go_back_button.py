@@ -19,5 +19,5 @@ class LessonWidgetGoBackButton(BaseGoBackButton):
         self.lesson_widget = lesson_widget
         self.main_widget = self.lesson_widget.main_widget
         self.clicked.connect(
-            lambda: self.lesson_widget.learn_widget.lesson_selector.show()
+            lambda: self.lesson_widget.learn_tab.lesson_selector.show()
         )

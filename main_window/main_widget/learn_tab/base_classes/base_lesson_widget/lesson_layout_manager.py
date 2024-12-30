@@ -24,22 +24,10 @@ class LessonLayoutManager:
 
     def resize_widgets(self):
         """Resize UI elements dynamically."""
-        self.lesson_widget.question_widget._resize_question_widget()
-        self.lesson_widget.answers_widget.resize_answers_widget()
-        self._resize_indicator_label()
         self._resize_progress_label()
         self._resize_result_label()
         self._resize_start_over_button()
         self.lesson_widget.results_widget.resize_results_widget()
-
-    def _resize_indicator_label(self):
-        self.lesson_widget.indicator_label.setFixedHeight(
-            self.lesson_widget.main_widget.height() // 20
-        )
-        font = self.lesson_widget.indicator_label.font()
-        font.setPointSize(self.lesson_widget.main_widget.width() // 75)
-        self.lesson_widget.indicator_label.setFont(font)
-
 
     def _resize_progress_label(self):
         font_size = self.lesson_widget.main_widget.width() // 75

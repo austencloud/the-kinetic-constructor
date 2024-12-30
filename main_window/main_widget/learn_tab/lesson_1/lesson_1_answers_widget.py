@@ -45,7 +45,7 @@ class Lesson1AnswersWidget(BaseAnswersWidget):
         palette.setColor(self.buttons[answer].foregroundRole(), Qt.GlobalColor.gray)
         self.buttons[answer].setPalette(palette)
 
-    def resize_answers_widget(self) -> None:
+    def resizeEvent(self, event) -> None:
         for button in self.buttons.values():
             button.setFixedSize(
                 self.main_widget.width() // 16, self.main_widget.width() // 16

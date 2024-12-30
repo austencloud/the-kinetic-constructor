@@ -89,6 +89,9 @@ class FadeManager(QObject):
             self.new_widget.setGraphicsEffect(None)
         if self.old_widget:
             self.old_widget.setGraphicsEffect(None)
+        for i in range(self.stack.count()):
+            widget = self.stack.widget(i)
+            widget.setGraphicsEffect(None)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
         effect = QGraphicsOpacityEffect(widget)

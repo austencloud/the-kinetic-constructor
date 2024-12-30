@@ -11,6 +11,8 @@ if TYPE_CHECKING:
 
 
 class BaseQuestionWidget(QWidget):
+    letter_label: QLabel = None
+    pictograph: BasePictograph = None
     def __init__(self, lesson_widget: "BaseLessonWidget"):
         super().__init__(lesson_widget)
         self.lesson_widget = lesson_widget
@@ -34,15 +36,7 @@ class BaseQuestionWidget(QWidget):
             "This function should be implemented by the subclass."
         )
 
-    def fade_out_pictograph(self) -> None:
-        raise NotImplementedError(
-            "This function should be implemented by the subclass."
-        )
 
-    def fade_in_pictograph(self) -> None:
-        raise NotImplementedError(
-            "This function should be implemented by the subclass."
-        )
 
     def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""

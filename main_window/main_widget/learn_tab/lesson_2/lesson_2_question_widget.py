@@ -45,8 +45,9 @@ class Lesson2QuestionWidget(BaseQuestionWidget):
         """Clear the question display."""
         self.letter_label.clear()
 
-    def _resize_question_widget(self) -> None:
+    def resizeEvent(self, event) -> None:
         """Resize the question labels based on window size."""
+        super().resizeEvent(event)
         self._resize_question_label()
         self._resize_letter_label()
         self._resize_spacer()

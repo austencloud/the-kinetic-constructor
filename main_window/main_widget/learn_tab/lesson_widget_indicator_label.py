@@ -50,3 +50,12 @@ class LessonWidgetIndicatorLabel(QLabel):
 
     def clear(self) -> None:
         self.setText(" ")
+
+    def resizeEvent(self, event) -> None:
+        self.setFixedHeight(
+        self.lesson_widget.main_widget.height() // 20
+        )
+        font = self.font()
+        font.setPointSize(self.lesson_widget.main_widget.width() // 75)
+        self.setFont(font)
+        super().resizeEvent(event)

@@ -39,7 +39,7 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
 
         # Define grid parameters
         self.columns = 2  # Number of columns in the grid
-        self.spacing = 20  # Spacing between widgets
+        self.spacing = 30  # Spacing between widgets
 
         self.layout.setSpacing(self.spacing)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -62,8 +62,6 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
             pictograph.updater.update_pictograph(pictograph_dict)
             pictograph.view.update_borders()
             self.pictographs[key] = pictograph
-            # Configure view properties
-            view.setCursor(Qt.CursorShape.PointingHandCursor)
             pictograph.quiz_mode = True
             pictograph.tka_glyph.setVisible(False)
 
@@ -103,8 +101,9 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
         self.pictographs.clear()
         logger.info("Cleared all pictographs from the grid layout.")
 
-    def resize_answers_widget(self):
+    def resizeEvent(self,event):
         """Resize the pictograph views based on window size."""
+        super().resizeEvent(event)
         for view in self.pictograph_views:
             size = int(self.main_widget.height() // 5.5)
             view.setFixedSize(size, size)
