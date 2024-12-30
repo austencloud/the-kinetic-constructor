@@ -26,9 +26,6 @@ class PictographView(QGraphicsView):
         self.viewport().setContentsMargins(0, 0, 0, 0)
         self.setViewportMargins(0, 0, 0, 0)
 
-        self.grabGesture(Qt.GestureType.TapGesture)
-        self.grabGesture(Qt.GestureType.TapAndHoldGesture)
-
     ### EVENTS ###
 
     def resizeEvent(self, event):
