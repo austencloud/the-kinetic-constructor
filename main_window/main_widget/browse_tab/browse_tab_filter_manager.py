@@ -94,7 +94,7 @@ class BrowseTabFilterManager:
             self.main_widget.left_sequence_picker_index,
         )
 
-        self.browse_tab.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
+        self.browse_tab.sequence_picker.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
         )
         self.browse_tab.sequence_viewer.update_preview(None)
@@ -116,7 +116,7 @@ class BrowseTabFilterManager:
             0,
             0,
             1,
-            self.browse_tab.thumbnail_box_sorter.num_columns,
+            self.browse_tab.sequence_picker.thumbnail_box_sorter.num_columns,
             Qt.AlignmentFlag.AlignCenter,
         )
         self.browse_tab.sequence_picker.progress_bar.setVisible(True)

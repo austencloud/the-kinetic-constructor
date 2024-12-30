@@ -105,7 +105,7 @@ class ContainsLettersSection(FilterSectionBase):
         if not self.selected_letters:
             return 0
 
-        base_words = self.browse_tab.thumbnail_box_sorter.get_sorted_base_words(
+        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
             "sequence_length"
         )
         return sum(
@@ -129,7 +129,7 @@ class ContainsLettersSection(FilterSectionBase):
         sort_method = (
             self.main_widget.main_window.settings_manager.browse_tab_settings.get_sort_method()
         )
-        base_words = self.browse_tab.thumbnail_box_sorter.get_sorted_base_words(
+        base_words = self.sequence_picker.thumbnail_box_sorter.get_sorted_base_words(
             "sequence_length"
         )
 
@@ -149,9 +149,13 @@ class ContainsLettersSection(FilterSectionBase):
 
         def update_ui():
             for index, (word, thumbnails, _) in enumerate(matching_sequences):
-                row_index = index // self.browse_tab.thumbnail_box_sorter.num_columns
-                column_index = index % self.browse_tab.thumbnail_box_sorter.num_columns
-                self.browse_tab.thumbnail_box_sorter.add_thumbnail_box(
+                row_index = (
+                    index // self.sequence_picker.thumbnail_box_sorter.num_columns
+                )
+                column_index = (
+                    index % self.sequence_picker.thumbnail_box_sorter.num_columns
+                )
+                self.sequence_picker.thumbnail_box_sorter.add_thumbnail_box(
                     row_index=row_index,
                     column_index=column_index,
                     word=word,

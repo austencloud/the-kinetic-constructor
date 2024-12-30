@@ -15,6 +15,7 @@ class FilterSectionBase(QWidget):
         super().__init__(filter_selector)
         self.filter_selector = filter_selector
         self.buttons: dict[str, QPushButton] = {}
+        self.sequence_picker = filter_selector.sequence_picker
         self.browse_tab = filter_selector.browse_tab
         self.main_widget = filter_selector.browse_tab.main_widget
         self.metadata_extractor = self.main_widget.metadata_extractor

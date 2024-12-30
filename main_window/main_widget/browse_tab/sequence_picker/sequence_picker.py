@@ -28,8 +28,8 @@ class SequencePicker(QWidget):
         self.control_panel = SequencePickerControlPanel(self)
         self.scroll_widget = SequencePickerScrollWidget(self)
         self.nav_sidebar = SequencePickerNavSidebar(self)
-        self.filter_selector = SequencePickerFilterSelector(self)
         self.thumbnail_box_sorter = SequencePickerThumbnailBoxSorter(self)
+        self.filter_selector = SequencePickerFilterSelector(self)
 
         content_layout = QHBoxLayout()
         content_layout.setContentsMargins(0, 0, 0, 0)
