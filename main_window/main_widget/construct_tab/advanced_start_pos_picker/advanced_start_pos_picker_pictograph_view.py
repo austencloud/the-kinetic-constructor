@@ -1,12 +1,30 @@
-from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker_pictograph_view import (
+from typing import TYPE_CHECKING
+
+from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
+from ..start_pos_picker.start_pos_picker_pictograph_view import (
     StartPosPickerPictographView,
 )
 
+if TYPE_CHECKING:
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from .advanced_start_pos_picker import AdvancedStartPosPicker
 
-class AdvancedStartPosPickerPictographView(StartPosPickerPictographView):
-    def __init__(self, pictograph):
+
+class AdvancedStartPosPickerPictographView(BorderedPictographView):
+    def __init__(
+        self,
+        advanced_start_pos_picker: "AdvancedStartPosPicker",
+        pictograph: "BasePictograph",
+    ):
         super().__init__(pictograph)
         self.pictograph = pictograph
+        self.construct_tab = advanced_start_pos_picker.construct_tab
+        self.picker = advanced_start_pos_picker
 
     def resizeEvent(self, event):
-        """Override to prevent automatic resizing."""
+        view_width = self.construct_tab.main_widget.right_stack.width() // 7
+        self.setFixedSize(view_width, view_width)
+        self.view_scale = view_width / self.picker.width()
+        self.resetTransform()
+        self.scale(self.view_scale, self.view_scale)
+        super().resizeEvent(event)

@@ -18,6 +18,7 @@ class BorderedPictographView(PictographView):
         self.secondary_color = None
         self.original_primary_color = None
         self.original_secondary_color = None
+        
         self.update_borders()
 
     ### BORDER METHODS ###

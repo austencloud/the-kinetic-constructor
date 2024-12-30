@@ -34,7 +34,8 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.grid_layout = QGridLayout()
-
+        self.grid_layout.setHorizontalSpacing(20)
+        self.grid_layout.setVerticalSpacing(20)
         self.start_label_layout = QHBoxLayout()
         self.start_label_layout.addWidget(self.choose_your_start_pos_label)
 
@@ -55,7 +56,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         local_dict["grid_mode"] = target_grid_mode
 
         pictograph = BasePictograph(self.main_widget)
-        pictograph.view = AdvancedStartPosPickerPictographView(pictograph)
+        pictograph.view = AdvancedStartPosPickerPictographView(self, pictograph)
         pictograph.updater.update_pictograph(local_dict)
         pictograph.view.update_borders()
 
@@ -82,7 +83,6 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 row = i // self.COLUMN_COUNT
                 col = i % self.COLUMN_COUNT
                 self.grid_layout.addWidget(variation.view, row, col)
-                self._resize_variation(variation)
 
     def generate_variations(self):
         self.all_variations: dict[str, list[BasePictograph]] = {BOX: [], DIAMOND: []}
@@ -100,20 +100,5 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 )
                 variation.view.update_borders()
 
-    def _resize_variation(self, variation: BasePictograph) -> None:
-        view_width = self.construct_tab.advanced_start_pos_picker.width() // 6
-        variation.view.setFixedSize(view_width, view_width)
-        variation.view.view_scale = view_width / variation.width()
-        variation.view.resetTransform()
-        variation.view.scale(variation.view.view_scale, variation.view.view_scale)
-
     def on_variation_selected(self, variation: BasePictograph) -> None:
-        self.start_position_adder.add_start_pos_to_sequence(variation, True)
-
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        self.grid_layout.setHorizontalSpacing(20)
-        self.grid_layout.setVerticalSpacing(20)
-        for _, variations in self.all_variations.items():
-            for variation in variations:
-                self._resize_variation(variation)
+        self.start_position_adder.add_start_pos_to_sequence(variation)
