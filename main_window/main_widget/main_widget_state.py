@@ -17,4 +17,4 @@ class MainWidgetState:
             self.main_widget.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
                 current_sequence
             )
-            self.main_widget.construct_tab.option_picker.update_option_picker()
+            # self.main_widget.construct_tab.option_picker.update_option_picker()

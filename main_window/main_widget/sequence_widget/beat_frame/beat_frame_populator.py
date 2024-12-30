@@ -38,7 +38,7 @@ class BeatFramePopulator:
         self._populate_beats()
         self._finalize_sequence()
 
-        self.construct_tab.option_picker.update_option_picker()
+        # self.construct_tab.option_picker.update_option_picker()
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )

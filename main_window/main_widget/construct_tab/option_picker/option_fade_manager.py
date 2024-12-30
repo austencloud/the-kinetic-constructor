@@ -44,7 +44,7 @@ class OptionFadeManager(QObject):
     def fade_out(
         self, section: "OptionPickerSectionWidget", duration: int = 200
     ) -> QPropertyAnimation:
-        animation = QPropertyAnimation(section.opacity_effect, b"opacity")
+        animation = QPropertyAnimation(section.pictograph_frame.opacity_effect, b"opacity")
         animation.setDuration(duration)
         animation.setStartValue(1.0)
         animation.setEndValue(0.0)
@@ -55,7 +55,7 @@ class OptionFadeManager(QObject):
     def fade_in(
         self, section: "OptionPickerSectionWidget", duration: int = 200
     ) -> QPropertyAnimation:
-        animation = QPropertyAnimation(section.opacity_effect, b"opacity")
+        animation = QPropertyAnimation(section.pictograph_frame.opacity_effect, b"opacity")
         animation.setDuration(duration)
         animation.setStartValue(0.0)
         animation.setEndValue(1.0)
@@ -68,8 +68,9 @@ class OptionFadeManager(QObject):
         """Called after all fade-out animations finish. Update pictographs and start fade-in."""
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         selected_filter = self.reversal_filter.reversal_combobox.currentData()
-        next_options = self.option_getter.get_next_options(sequence, selected_filter)
-
+        next_options = self.option_getter.get_next_options(
+            sequence, selected_filter
+        )
         self.scroll_area.display_manager.clear_all_section_layouts()
         self.scroll_area.add_and_display_relevant_pictographs(next_options)
         sections = self.option_picker.get_sections()

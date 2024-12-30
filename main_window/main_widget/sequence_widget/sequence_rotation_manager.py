@@ -6,6 +6,8 @@ from data.locations import cw_loc_order
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 
+from main_window.main_widget.grid_mode_checker import GridModeChecker
+
 if TYPE_CHECKING:
     from .sequence_widget import SequenceWidget
 
@@ -88,6 +90,7 @@ class SequenceRotationManager:
             if "end_loc" in bl and "end_loc" in rl:
                 _dict["end_pos"] = positions_map[(bl["end_loc"], rl["end_loc"])]
 
+        _dict["grid_mode"] = GridModeChecker().get_grid_mode(_dict)
         return _dict
 
     def _rotate_location(self, location):

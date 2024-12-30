@@ -28,6 +28,7 @@ class FadeManager(QObject):
     def fade_to_tab(self, stack: QStackedLayout, new_index: int):
         if self._is_animating:
             return
+        
         self.stack = stack
         old_index = self.stack.currentIndex()
         if old_index == new_index:
@@ -40,6 +41,10 @@ class FadeManager(QObject):
         if not self.old_widget or not self.new_widget:
             return
 
+        for i in range(self.stack.count()):
+            widget = self.stack.widget(i)
+            widget.setGraphicsEffect(None)
+
         self._old_opacity = self._ensure_opacity_effect(self.old_widget)
         self._new_opacity = self._ensure_opacity_effect(self.new_widget)
 
@@ -50,7 +55,6 @@ class FadeManager(QObject):
         self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
 
         self.fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index))
-
         self.fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
 
     @pyqtSlot()

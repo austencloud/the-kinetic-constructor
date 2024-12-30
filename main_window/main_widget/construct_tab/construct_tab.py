@@ -53,8 +53,8 @@ class ConstructTab(QFrame):
             self.main_widget.right_stack, self.main_widget.right_option_picker_index
         )
 
-        self.option_picker.scroll_area.section_manager.display_sections()
-        self.option_picker.update_option_picker()
+        # self.option_picker.scroll_area.section_manager.display_sections()
+        # self.option_picker.update_option_picker()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         """Transition to the advanced start position picker."""

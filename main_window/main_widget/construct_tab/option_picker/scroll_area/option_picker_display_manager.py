@@ -26,10 +26,8 @@ class OptionPickerDisplayManager:
 
     def add_pictograph_to_layout(self, pictograph: BasePictograph, index: int) -> None:
         row, col = divmod(index, self.scroll_area.option_picker.COLUMN_COUNT)
-        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
-            pictograph.letter
-        )
-        section = self.scroll_area.section_manager.get_section(letter_type)
+        letter_type = LetterType.get_letter_type(pictograph.letter)
+        section = self.scroll_area.section_manager.sections[letter_type]
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
             # pictograph.view.resize_pictograph_view()
@@ -52,10 +50,8 @@ class OptionPickerDisplayManager:
 
         for key, cached_pictograph in self.scroll_area.pictograph_cache.items():
             if self.is_pictograph_relevant(cached_pictograph, last_beat):
-                pictograph_letter_type = (
-                    self.scroll_area.section_manager.get_pictograph_letter_type(
-                        cached_pictograph.letter
-                    )
+                pictograph_letter_type = LetterType.get_letter_type(
+                    cached_pictograph.letter
                 )
                 if pictograph_letter_type == letter_type:
                     relevant_pictographs[key] = cached_pictograph
@@ -89,13 +85,9 @@ class OptionPickerDisplayManager:
 
     def add_pictograph_to_section_layout(self, pictograph: BasePictograph):
         """Add a pictograph to its corresponding section layout."""
-        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
-            pictograph.letter
-        )
-        section: OptionPickerSectionWidget = (
-            self.scroll_area.section_manager.get_section(letter_type)
-        )
-
+        letter_type = LetterType.get_letter_type(pictograph.letter)
+        section: OptionPickerSectionWidget = self.scroll_area.section_manager.sections[
+            letter_type
+        ]
         if section:
-            # section.clear_pictographs()
             section.add_pictograph(pictograph)
