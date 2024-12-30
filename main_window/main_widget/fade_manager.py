@@ -9,6 +9,8 @@ from PyQt6.QtCore import (
     QParallelAnimationGroup,
 )
 
+from main_window.main_widget.base_indicator_label import BaseIndicatorLabel
+
 if TYPE_CHECKING:
     from main_widget.main_widget import MainWidget
 
@@ -18,6 +20,8 @@ class FadeManager(QObject):
 
     old_widget: Optional[QWidget] = None
     new_widget: Optional[QWidget] = None
+    new_right_widget: Optional[QWidget] = None
+    new_left_widget: Optional[QWidget] = None
     duration = 300
     _old_opacity: Optional[QGraphicsOpacityEffect] = None
     _new_opacity: Optional[QGraphicsOpacityEffect] = None
@@ -45,7 +49,7 @@ class FadeManager(QObject):
 
         for i in range(self.stack.count()):
             widget = self.stack.widget(i)
-            widget.setGraphicsEffect(None)
+            self.clear_graphics_effects(widget)
 
         self._old_opacity = self._ensure_opacity_effect(self.old_widget)
         self._new_opacity = self._ensure_opacity_effect(self.new_widget)
@@ -79,19 +83,6 @@ class FadeManager(QObject):
         self.fade_in.finished.connect(self._on_fade_in_finished)
 
         self.fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
-
-    @pyqtSlot()
-    def _on_fade_in_finished(self):
-        self._is_animating = False
-        self._old_opacity = None
-        self._new_opacity = None
-        if self.new_widget:
-            self.new_widget.setGraphicsEffect(None)
-        if self.old_widget:
-            self.old_widget.setGraphicsEffect(None)
-        for i in range(self.stack.count()):
-            widget = self.stack.widget(i)
-            widget.setGraphicsEffect(None)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
         effect = QGraphicsOpacityEffect(widget)
@@ -209,3 +200,33 @@ class FadeManager(QObject):
             layout.invalidate()
             layout.activate()
         widget.resize(widget.size().width(), widget.size().height())
+
+    @pyqtSlot()
+    def _on_fade_in_finished(self):
+        self._is_animating = False
+        self._old_opacity = None
+        self._new_opacity = None
+        if self.new_widget:
+            self.new_widget.setGraphicsEffect(None)
+        if self.old_widget:
+            self.old_widget.setGraphicsEffect(None)
+        if self.new_left_widget:
+            self.new_left_widget.setGraphicsEffect(None)
+        if self.new_right_widget:
+            self.new_right_widget.setGraphicsEffect(None)
+        for i in range(self.stack.count()):
+            widget = self.stack.widget(i)
+            self.clear_graphics_effects(widget)
+
+    def clear_graphics_effects(self, widget: QWidget) -> None:
+        """Recursively clears GraphicsEffect from the given widget and its children."""
+        if widget.graphicsEffect():
+            widget.setGraphicsEffect(None)
+        for child in widget.findChildren(QWidget):
+            if child.__class__.__base__ == BaseIndicatorLabel:
+                continue
+            if child.graphicsEffect():
+                child.setGraphicsEffect(None)
+            # for child in widget.findChildren(QWidget):
+            #     if child.graphicsEffect():
+            #         child.setGraphicsEffect(None)

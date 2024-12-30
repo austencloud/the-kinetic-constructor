@@ -10,6 +10,8 @@ from PyQt6.QtCore import (
 )
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.base_indicator_label import BaseIndicatorLabel
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
@@ -92,4 +94,19 @@ class LessonWidgetFadeManager(QObject):
     @pyqtSlot()
     def _on_fade_in_finished(self):
         for widget in self.get_widgets():
+            self.clear_graphics_effects(widget)
+
+    def clear_graphics_effects(self, widget: QWidget) -> None:
+        """Recursively clears GraphicsEffect from the given widget and its children."""
+        if widget.graphicsEffect():
             widget.setGraphicsEffect(None)
+        for child in widget.findChildren(QWidget):
+            if child.__class__.__base__ == BaseIndicatorLabel:
+                continue
+            if child.graphicsEffect():
+                child.setGraphicsEffect(None)
+            # for child in widget.findChildren(QWidget):
+            #     if child.__class__.__base__ == BaseIndicatorLabel:
+            #         continue
+            #     if child.graphicsEffect():
+            #         child.setGraphicsEffect(None)

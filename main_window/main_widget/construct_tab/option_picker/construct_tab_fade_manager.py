@@ -5,7 +5,7 @@ from PyQt6.QtCore import (
     pyqtSlot,
     QParallelAnimationGroup,
 )
-from PyQt6.QtWidgets import QGraphicsOpacityEffect
+from PyQt6.QtWidgets import QGraphicsOpacityEffect, QWidget
 
 from typing import TYPE_CHECKING
 import logging
@@ -97,4 +97,12 @@ class ConstructTabFadeManager(QObject):
     @pyqtSlot()
     def _on_fade_in_finished(self):
         for section in self.option_picker.get_sections():
-            section.pictograph_frame.setGraphicsEffect(None)
+            self.clear_graphics_effects(section.pictograph_frame)
+
+    def clear_graphics_effects(self, widget: QWidget) -> None:
+        """Recursively clears GraphicsEffect from the given widget and its children."""
+        if widget.graphicsEffect():
+            widget.setGraphicsEffect(None)
+        for child in widget.findChildren(QWidget):
+            if child.graphicsEffect():
+                child.setGraphicsEffect(None)
