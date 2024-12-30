@@ -33,7 +33,7 @@ class OptionFadeManager(QObject):
         self.fade_out_group = None
         self.fade_in_group = None
 
-    def fade_option_picker(self):
+    def fade_and_update_option_picker(self):
         self.fade_out_group = QParallelAnimationGroup(self)
 
         for section in self.option_picker.get_sections():
@@ -81,6 +81,7 @@ class OptionFadeManager(QObject):
         next_options = self.option_getter.get_next_options(sequence, selected_filter)
         self.scroll_area.display_manager.clear_all_section_layouts()
         self.scroll_area.add_and_display_relevant_pictographs(next_options)
+
         sections = self.option_picker.get_sections()
         self.fade_in_group = QParallelAnimationGroup(self)
 

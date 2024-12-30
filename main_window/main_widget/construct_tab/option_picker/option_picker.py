@@ -91,15 +91,7 @@ class OptionPicker(QWidget):
                 self.scroll_area.display_manager.clear_all_section_layouts()
                 self.scroll_area.add_and_display_relevant_pictographs(next_options)
                 return
-            # self._update_without_fading()
-            self.fade_manager.fade_option_picker()
-
-    def _update_without_fading(self):
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        selected_filter = self.reversal_filter.reversal_combobox.currentData()
-        next_options = self.option_getter.get_next_options(sequence, selected_filter)
-        self.scroll_area.display_manager.clear_all_section_layouts()
-        self.scroll_area.add_and_display_relevant_pictographs(next_options)
+            self.fade_manager.fade_and_update_option_picker()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
