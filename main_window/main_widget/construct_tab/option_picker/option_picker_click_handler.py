@@ -48,7 +48,6 @@ class OptionPickerClickHandler:
         beat_frame.beat_adder.add_beat_to_sequence(new_beat)
 
         if new_beat.view:
-            self.option_picker.choose_your_next_pictograph_label.set_text_to_loading()
             selection_manager = beat_frame.selection_overlay
             selection_manager.select_beat(new_beat.view)
             QApplication.processEvents()

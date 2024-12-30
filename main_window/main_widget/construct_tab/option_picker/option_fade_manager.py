@@ -1,5 +1,3 @@
-# fade_manager.py
-
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
@@ -7,7 +5,7 @@ from PyQt6.QtCore import (
     pyqtSlot,
     QParallelAnimationGroup,
 )
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 import logging
 
 if TYPE_CHECKING:
@@ -83,7 +81,7 @@ class OptionFadeManager(QObject):
 
         self.fade_in_group.start()
         self.fade_in_group.finished.connect(self._on_fade_in_finished)
-        
+
     @pyqtSlot()
     def _on_fade_in_finished(self):
         for section in self.option_picker.get_sections():

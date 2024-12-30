@@ -21,9 +21,6 @@ class ChooseYourNextPictographLabel(QLabel):
     def set_default_text(self) -> None:
         self.setText("Choose your next pictograph:")
 
-    def set_text_to_loading(self) -> None:
-        self.setText("Loading...")
-
     def resizeEvent(self, event) -> None:
         height = self.main_widget.height()
         font_size = int(0.03 * height)
