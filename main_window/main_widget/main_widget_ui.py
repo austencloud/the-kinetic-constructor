@@ -2,8 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.fade_manager import FadeManager
-from main_window.main_widget.learn_tab.codex.codex import Codex
-from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .write_tab.write_tab import WriteTab

@@ -1,9 +1,6 @@
 import json
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtCore import Qt
 from Enums.PropTypes import PropType
-from data.constants import IN
 from letter_determiner.letter_determiner import LetterDeterminer
 from utilities.path_helpers import get_images_and_data_path
 

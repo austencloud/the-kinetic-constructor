@@ -5,19 +5,15 @@ from PyQt6.QtCore import (
     pyqtSlot,
     QParallelAnimationGroup,
 )
-from PyQt6.QtWidgets import QGraphicsOpacityEffect, QWidget, QApplication
+from PyQt6.QtWidgets import QGraphicsOpacityEffect, QApplication
 
 from typing import TYPE_CHECKING
 import logging
 
-from main_window.main_widget.browse_tab.sequence_picker.filter_selector.filter_section_base import (
-    FilterSectionBase,
-)
 
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-    from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 
 
 logger = logging.getLogger(__name__)

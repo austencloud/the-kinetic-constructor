@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget
-from PyQt6.QtCore import Qt
-from .filter_section_base import FilterSectionBase
+from PyQt6.QtWidgets import QWidget, QStackedWidget
 from .author_section import AuthorSection
 from .contains_letter_section import ContainsLettersSection
 from .initial_filter_choice_widget import InitialFilterChoiceWidget

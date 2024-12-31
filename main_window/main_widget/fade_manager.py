@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedLayout, QApplication
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedLayout
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
@@ -229,6 +229,3 @@ class FadeManager(QObject):
                 continue
             if child.graphicsEffect():
                 child.setGraphicsEffect(None)
-            # for child in widget.findChildren(QWidget):
-            #     if child.graphicsEffect():
-            #         child.setGraphicsEffect(None)

@@ -55,7 +55,6 @@ class ThumbnailImageLabel(QLabel):
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
-        pass
 
     def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:

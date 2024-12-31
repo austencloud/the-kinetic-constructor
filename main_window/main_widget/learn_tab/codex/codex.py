@@ -10,7 +10,6 @@ from .codex_animation_manager import CodexAnimationManager
 from .codex_data_manager import CodexDataManager
 
 if TYPE_CHECKING:
-    from main_window.main_widget.main_widget import MainWidget
     from main_window.main_widget.learn_tab.learn_tab import LearnTab
 
 

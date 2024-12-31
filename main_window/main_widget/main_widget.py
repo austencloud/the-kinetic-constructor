@@ -8,9 +8,7 @@ from main_window.main_widget.fade_manager import FadeManager
 from main_window.main_widget.full_screen_image_overlay import FullScreenImageOverlay
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
-from main_window.main_widget.learn_tab.codex.codex import Codex
 from main_window.main_widget.learn_tab.learn_tab import LearnTab
-from main_window.main_widget.write_tab.act_sheet.act_sheet import ActSheet
 from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.main_background_widget.main_background_widget import (
     MainBackgroundWidget,
