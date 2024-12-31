@@ -34,6 +34,7 @@ class OptionPicker(QWidget):
         self.construct_tab = construct_tab
         self.main_widget = construct_tab.main_widget
         self.json_manager = self.main_widget.json_manager
+        self.fade_manager = self.main_widget.fade_manager
         self.disabled = False
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.option_getter = OptionGetter(self)
@@ -72,7 +73,6 @@ class OptionPicker(QWidget):
         self.layout.addWidget(self.scroll_area, 14)
 
     def update_option_picker(self, sequence=None):
-        """Initiate fade-out and update pictographs upon option selection."""
         if self.disabled:
             return
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -82,12 +82,15 @@ class OptionPicker(QWidget):
                 sequence, selected_filter
             )
 
-            sections = self.get_sections()
-            if not sections:
-                self.scroll_area.display_manager.clear_all_section_layouts()
-                self.scroll_area.add_and_display_relevant_pictographs(next_options)
-                return
-            self.construct_tab.fade_manager.fade_and_update_option_picker()
+            widgets_to_fade = [self.scroll_area]
+            self.fade_manager.fade_and_update(
+                widgets_to_fade,
+                update_callback=lambda: self._update_pictographs(next_options),
+            )
+
+    def _update_pictographs(self, next_options):
+        self.scroll_area.display_manager.clear_all_section_layouts()
+        self.scroll_area.add_and_display_relevant_pictographs(next_options)
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

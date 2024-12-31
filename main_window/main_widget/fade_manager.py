@@ -1,200 +1,254 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedLayout
+from PyQt6.QtWidgets import (
+    QWidget,
+    QGraphicsOpacityEffect,
+    QStackedWidget,
+)
 from PyQt6.QtCore import (
     QObject,
     QPropertyAnimation,
-    QAbstractAnimation,
     QEasingCurve,
-    pyqtSlot,
     QParallelAnimationGroup,
+    pyqtSlot,
 )
 
 from main_window.main_widget.base_indicator_label import BaseIndicatorLabel
 
 if TYPE_CHECKING:
-    from main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class FadeManager(QObject):
-    """Manages fade-out/fade-in animations for your single stacked widget."""
+    """
+    A centralized manager for handling fade-out/fade-in animations across the application.
+    """
 
-    old_widget: Optional[QWidget] = None
-    new_widget: Optional[QWidget] = None
-    new_right_widget: Optional[QWidget] = None
-    new_left_widget: Optional[QWidget] = None
-    duration = 300
-    _old_opacity: Optional[QGraphicsOpacityEffect] = None
-    _new_opacity: Optional[QGraphicsOpacityEffect] = None
-    _is_animating = False
+    left_old_widget: Optional[QWidget] = None
+    left_new_widget: Optional[QWidget] = None
+    right_old_widget: Optional[QWidget] = None
+    right_new_widget: Optional[QWidget] = None
+    widgets_to_fade_out: Optional[list[QWidget]] = []
+    widgets_to_fade_in: Optional[list[QWidget]] = []
+    default_duration = 250
 
     def __init__(self, main_widget: "MainWidget"):
-        super().__init__(main_widget)
+        super().__init__()
         self.main_widget = main_widget
+        self._is_animating = False
 
-    def fade_to_tab(self, stack: QStackedLayout, new_index: int, callback: callable = None):
-        if self._is_animating:
-            return
+    def fade_widgets(
+        self,
+        fade_in: bool,
+        callback: Optional[callable] = None,
+    ):
+        """
+        Fades a list of widgets either in or out.
+        """
+        if fade_in:
+            widgets_to_fade = self.widgets_to_fade_in
+        elif not fade_in:
+            widgets_to_fade = self.widgets_to_fade_out
+            if not self.widgets_to_fade_out:
+                if callback:
+                    callback()
+                return
 
+        animation_group = QParallelAnimationGroup(self)
+        self.clear_graphics_effects()
+        for widget in widgets_to_fade:
+            effect = self._ensure_opacity_effect(widget)
+            animation = QPropertyAnimation(effect, b"opacity", self)
+            animation.setDuration(self.default_duration)
+            animation.setStartValue(0.0 if fade_in else 1.0)
+            animation.setEndValue(1.0 if fade_in else 0.0)
+            animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
+            animation_group.addAnimation(animation)
+
+        if callback:
+            animation_group.finished.connect(callback)
+        animation_group.start()
+
+    def fade_stack(
+        self,
+        stack: QStackedWidget,
+        new_index: int,
+        callback: Optional[callable] = None,
+    ):
+        """
+        Fades out the current widget in a stack, switches to a new index, and fades in the new widget.
+        """
         self.stack = stack
-        old_index = self.stack.currentIndex()
-        if old_index == new_index:
+        if self._is_animating or stack.currentIndex() == new_index:
             return
 
         self._is_animating = True
+        current_widget = stack.currentWidget()
+        next_widget = stack.widget(new_index)
 
-        self.old_widget = self.stack.widget(old_index)
-        self.new_widget = self.stack.widget(new_index)
-        if not self.old_widget or not self.new_widget:
+        if not current_widget or not next_widget:
             return
 
-        for i in range(self.stack.count()):
-            widget = self.stack.widget(i)
-            self.clear_graphics_effects(widget)
+        self.widgets_to_fade_out = [current_widget]
+        self.widgets_to_fade_in = [next_widget]
 
-        self._old_opacity = self._ensure_opacity_effect(self.old_widget)
-        self._new_opacity = self._ensure_opacity_effect(self.new_widget)
+        self.fade_widgets(
+            fade_in=False,
+            callback=lambda: self._on_stack_fade_out(stack, new_index, callback),
+        )
 
-        self.fade_out = QPropertyAnimation(self._old_opacity, b"opacity", self)
-        self.fade_out.setDuration(self.duration)
-        self.fade_out.setStartValue(1.0)
-        self.fade_out.setEndValue(0.0)
-        self.fade_out.setEasingCurve(QEasingCurve.Type.InOutQuad)
+    def _on_stack_fade_out(
+        self,
+        stack: QStackedWidget,
+        new_index: int,
+        callback: Optional[callable],
+    ) -> None:
+        stack.setCurrentIndex(new_index)
+        self.clear_graphics_effects()
+        self.fade_widgets(True, lambda: self._on_stack_fade_in(callback))
 
-        self.fade_out.finished.connect(lambda: self._switch_and_fade_in(new_index, callback))
-        self.fade_out.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
-
-    @pyqtSlot()
-    def _switch_and_fade_in(self, new_index: int, callback: callable = None):
-        self.stack.setCurrentIndex(new_index)
+    def _on_stack_fade_in(self, callback: Optional[callable]):
+        self._is_animating = False
         if callback:
             callback()
 
-        if self._old_opacity:
-            self._old_opacity.setOpacity(1.0)
+    def fade_and_update(
+        self, widgets_to_fade: list[QWidget], update_callback: callable
+    ) -> None:
+        self.widgets_to_fade_out = widgets_to_fade
+        self.fade_widgets(
+            False,
+            callback=lambda: self._on_update_fade_out(update_callback),
+        )
 
-        self.new_widget = self.stack.currentWidget()
-        if self.new_widget and self._new_opacity:
-            self._new_opacity.setOpacity(0.0)
-
-        # Fade in
-        self.fade_in = QPropertyAnimation(self._new_opacity, b"opacity", self)
-        self.fade_in.setDuration(self.duration)
-        self.fade_in.setStartValue(0.0)
-        self.fade_in.setEndValue(1.0)
-        self.fade_in.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        self.fade_in.finished.connect(self._on_fade_in_finished)
-
-        self.fade_in.start(QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
+    def _on_update_fade_out(self, update_callback: callable):
+        update_callback()
+        self.fade_widgets(fade_in=True)
 
     def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
-        effect = QGraphicsOpacityEffect(widget)
-        widget.setGraphicsEffect(effect)
+        effect = widget.graphicsEffect()
+        if not effect or not isinstance(effect, QGraphicsOpacityEffect):
+            effect = QGraphicsOpacityEffect(widget)
+            widget.setGraphicsEffect(effect)
         return effect
 
     def fade_both_stacks_in_parallel(
         self,
-        right_stack: QStackedLayout,
+        right_stack: QStackedWidget,
         right_new_index: int,
-        left_stack: QStackedLayout,
-        left_new_index: int,
-        width_ratio: tuple[float, float] = (0.5, 0.5),
-    ):
-        """
-        Fades out both stacks in parallel, then in the 'finished' callback,
-        we switch indexes, do any resizing, and fade them in.
-        """
-        old_right_idx = right_stack.currentIndex()
-        old_left_idx = left_stack.currentIndex()
-        if old_right_idx == right_new_index and old_left_idx == left_new_index:
-            return
-
-        self.old_right_widget = right_stack.widget(old_right_idx)
-        self.old_left_widget = left_stack.widget(old_left_idx)
-        self.new_right_widget = right_stack.widget(right_new_index)
-        self.new_left_widget = left_stack.widget(left_new_index)
-
-        if not self.old_right_widget or not self.old_left_widget:
-            return
-
-        self.fade_out_group = QParallelAnimationGroup(self)  # Keep a reference
-        self.old_right_effect = self._ensure_opacity_effect(self.old_right_widget)
-        self.old_left_effect = self._ensure_opacity_effect(self.old_left_widget)
-
-        self.anim_out_right = QPropertyAnimation(
-            self.old_right_effect, b"opacity", self
-        )
-        self.anim_out_right.setDuration(self.duration)
-        self.anim_out_right.setStartValue(1.0)
-        self.anim_out_right.setEndValue(0.0)
-        self.anim_out_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-        self.anim_out_left = QPropertyAnimation(self.old_left_effect, b"opacity", self)
-        self.anim_out_left.setDuration(self.duration)
-        self.anim_out_left.setStartValue(1.0)
-        self.anim_out_left.setEndValue(0.0)
-        self.anim_out_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-        self.fade_out_group.addAnimation(self.anim_out_right)
-        self.fade_out_group.addAnimation(self.anim_out_left)
-
-        self.fade_out_group.finished.connect(
-            lambda: self._switch_resize_and_fade_in_both(
-                right_stack, right_new_index, left_stack, left_new_index, width_ratio
-            )
-        )
-
-        self.fade_out_group.start()
-        self._is_animating = True
-
-    def _switch_resize_and_fade_in_both(
-        self,
-        right_stack: QStackedLayout,
-        right_new_index: int,
-        left_stack: QStackedLayout,
+        left_stack: QStackedWidget,
         left_new_index: int,
         width_ratio: tuple[float, float],
     ):
-        right_stack.setCurrentIndex(right_new_index)
-        left_stack.setCurrentIndex(left_new_index)
+        if self._is_animating:
+            return
 
-        self.old_right_effect.setOpacity(1.0)
-        self.old_left_effect.setOpacity(1.0)
+        self._is_animating = True
+        self.clear_graphics_effects()
 
-        self.new_right_widget.hide()
-        self.new_left_widget.hide()
-        nr_effect = self._ensure_opacity_effect(self.new_right_widget)
-        nl_effect = self._ensure_opacity_effect(self.new_left_widget)
-        nr_effect.setOpacity(0.0)
-        nl_effect.setOpacity(0.0)
+        self.right_old_widget = right_stack.currentWidget()
+        self.left_old_widget = left_stack.currentWidget()
 
-        total_width = self.main_widget.width()
-        left_width = int(total_width * width_ratio[0])
-        right_width = int(total_width * width_ratio[1])
-        self.main_widget.left_stack.setMaximumWidth(left_width)
-        self.main_widget.right_stack.setMaximumWidth(right_width)
+        self.right_new_widget = right_stack.widget(right_new_index)
+        self.left_new_widget = left_stack.widget(left_new_index)
 
-        self._update_layout(self.main_widget)
+        if not (
+            self.right_old_widget
+            and self.left_old_widget
+            and self.right_new_widget
+            and self.left_new_widget
+        ):
+            self._is_animating = False
+            return
 
-        self.new_right_widget.show()
-        self.new_left_widget.show()
+        self.clear_graphics_effects()
 
-        self.fade_in_group = QParallelAnimationGroup(self)
-        anim_in_right = QPropertyAnimation(nr_effect, b"opacity", self)
-        anim_in_right.setDuration(self.duration)
-        anim_in_right.setStartValue(0.0)
-        anim_in_right.setEndValue(1.0)
-        anim_in_right.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        # Fade out current widgets
+        animations = []
+        animations.append(
+            self.create_fade_animation(self.right_old_widget, fade_in=False)
+        )
+        animations.append(
+            self.create_fade_animation(self.left_old_widget, fade_in=False)
+        )
 
-        anim_in_left = QPropertyAnimation(nl_effect, b"opacity", self)
-        anim_in_left.setDuration(self.duration)
-        anim_in_left.setStartValue(0.0)
-        anim_in_left.setEndValue(1.0)
-        anim_in_left.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        # Adjust layout width after fade-out
+        def switch_and_resize():
+            right_stack.setCurrentIndex(right_new_index)
+            left_stack.setCurrentIndex(left_new_index)
 
-        self.fade_in_group.addAnimation(anim_in_right)
-        self.fade_in_group.addAnimation(anim_in_left)
-        self.fade_in_group.finished.connect(self._on_fade_in_finished)
-        self.fade_in_group.start()
+            total_width = self.main_widget.width()
+            left_width = int(total_width * width_ratio[0])
+            right_width = int(total_width * width_ratio[1])
+
+            left_stack.setMinimumWidth(left_width)
+            # right_stack.setMaximumWidth(right_width)
+            # self._update_layout(self.main_widget)
+
+        # Fade in new widgets
+        def fade_in_new_widgets():
+            animations = [
+                self.create_fade_animation(self.right_new_widget, fade_in=True),
+                self.create_fade_animation(self.left_new_widget, fade_in=True),
+            ]
+            fade_in_group = QParallelAnimationGroup(self)
+            for anim in animations:
+                fade_in_group.addAnimation(anim)
+            fade_in_group.finished.connect(self._on_fade_in_finished)
+            fade_in_group.start()
+
+        fade_out_group = QParallelAnimationGroup(self)
+        for anim in animations:
+            fade_out_group.addAnimation(anim)
+        fade_out_group.finished.connect(
+            lambda: (switch_and_resize(), fade_in_new_widgets())
+        )
+        fade_out_group.start()
+
+    def create_fade_animation(
+        self, widget: QWidget, fade_in: bool
+    ) -> QPropertyAnimation:
+        effect = self._ensure_opacity_effect(widget)
+        animation = QPropertyAnimation(effect, b"opacity", self)
+        animation.setDuration(self.default_duration)
+        animation.setStartValue(0.0 if fade_in else 1.0)
+        animation.setEndValue(1.0 if fade_in else 0.0)
+        animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        return animation
+
+    def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
+        effect = widget.graphicsEffect()
+        if not effect or not isinstance(effect, QGraphicsOpacityEffect):
+            effect = QGraphicsOpacityEffect(widget)
+            widget.setGraphicsEffect(effect)
+        return effect
+
+    def _on_fade_in_finished(self):
+        self._is_animating = False
+        self._old_opacity = None
+        self._new_opacity = None
+
+        for i in range(self.stack.count()):
+            self.clear_graphics_effects()
+
+    def clear_graphics_effects(self) -> None:
+        """Recursively clears GraphicsEffect from the given widget and its children."""
+        widgets = (
+            [
+                self.right_old_widget,
+                self.left_old_widget,
+                self.right_new_widget,
+                self.left_new_widget,
+            ]
+            + self.widgets_to_fade_out
+            + self.widgets_to_fade_in
+        )
+
+        for widget in widgets:
+            if widget:
+                widget.setGraphicsEffect(None)
+                for child in widget.findChildren(QWidget):
+                    if not isinstance(child, BaseIndicatorLabel):
+                        child.setGraphicsEffect(None)
 
     def _update_layout(self, widget: QWidget):
         layout = widget.layout()
@@ -202,30 +256,3 @@ class FadeManager(QObject):
             layout.invalidate()
             layout.activate()
         widget.resize(widget.size().width(), widget.size().height())
-
-    @pyqtSlot()
-    def _on_fade_in_finished(self):
-        self._is_animating = False
-        self._old_opacity = None
-        self._new_opacity = None
-        if self.new_widget:
-            self.new_widget.setGraphicsEffect(None)
-        if self.old_widget:
-            self.old_widget.setGraphicsEffect(None)
-        if self.new_left_widget:
-            self.new_left_widget.setGraphicsEffect(None)
-        if self.new_right_widget:
-            self.new_right_widget.setGraphicsEffect(None)
-        for i in range(self.stack.count()):
-            widget = self.stack.widget(i)
-            self.clear_graphics_effects(widget)
-
-    def clear_graphics_effects(self, widget: QWidget) -> None:
-        """Recursively clears GraphicsEffect from the given widget and its children."""
-        if widget.graphicsEffect():
-            widget.setGraphicsEffect(None)
-        for child in widget.findChildren(QWidget):
-            if child.__class__.__base__ == BaseIndicatorLabel:
-                continue
-            if child.graphicsEffect():
-                child.setGraphicsEffect(None)

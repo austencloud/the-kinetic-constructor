@@ -52,7 +52,7 @@ class SequencePickerFilterStack(QStackedWidget):
     def show_section(self, section_name: str):
         index = self.section_indexes.get(section_name)
         if index is not None:
-            self.sequence_picker.main_widget.fade_manager.fade_to_tab(
+            self.sequence_picker.main_widget.fade_manager.fade_stack(
                 self.sequence_picker.filter_stack, index
             )
             self.browse_tab.settings.set_current_section(section_name)

@@ -31,7 +31,7 @@ class BaseLessonWidget(QWidget):
         self.timer_manager = QuizTimerManager(self)
         self.results_widget = ResultsWidget(self)
         self.indicator_label = LessonWidgetIndicatorLabel(self)
-        self.fade_manager = LessonWidgetFadeManager(self)
+        self.fade_manager = self.main_widget.fade_manager
         
         # Main layout
         self.main_layout: QVBoxLayout = QVBoxLayout()
@@ -132,8 +132,18 @@ class BaseLessonWidget(QWidget):
             self.incorrect_guesses += 1
 
     def start_new_question(self):
-        """Start a new question for the lesson."""
-        self.fade_manager.fade_and_update_lesson()
+        widgets_to_fade = [
+            self.question_widget,
+            self.answers_widget,
+        ]
+        self.fade_manager.fade_and_update(
+            widgets_to_fade,
+            update_callback=self._generate_new_question,
+        )
+
+    def _generate_new_question(self):
+        self.clear_current_question()
+        self.question_generator.generate_question()
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""

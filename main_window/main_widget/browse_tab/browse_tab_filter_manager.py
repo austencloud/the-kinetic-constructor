@@ -14,6 +14,7 @@ class BrowseTabFilterManager:
     def __init__(self, browse_tab: "BrowseTab"):
         self.browse_tab = browse_tab
         self.main_widget = self.browse_tab.main_widget
+        self.fade_manager = self.main_widget.fade_manager
 
     def show_favorites(self):
         """Show only favorite sequences."""
@@ -94,7 +95,26 @@ class BrowseTabFilterManager:
         self.browse_tab.settings.set_current_section("sequence_picker")
         self.current_filter = current_filter
 
-        self.browse_tab.fade_manager.fade_and_update_browse_tab()
+        widgets_to_fade = [
+            self.browse_tab.sequence_picker.filter_stack,
+            self.browse_tab.sequence_picker,
+        ]
+        self.fade_manager.fade_and_update(
+            widgets_to_fade,
+            update_callback=self._apply_filter_logic,
+        )
+
+    def _apply_filter_logic(self):
+        self.browse_tab.filter_manager.sort_and_display_thumbnail_boxes_by_current_filter(
+            self.browse_tab.filter_manager.current_filter
+        )
+        QApplication.processEvents()
+        self.browse_tab.main_widget.left_stack.setCurrentIndex(
+            self.browse_tab.main_widget.left_sequence_picker_index
+        )
+        self.browse_tab.main_widget.left_stack.setGraphicsEffect(None)
+        self.browse_tab.sequence_picker.setGraphicsEffect(None)
+        self.main_widget.fade_manager.clear_graphics_effects()
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
