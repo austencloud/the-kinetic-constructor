@@ -22,7 +22,7 @@ class BeatNumberManager:
             
         self.beat_number_text = beat_number_text
         self.beat_number_item = QGraphicsTextItem(str(self.beat_number_text))
-        self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+        self.beat_number_item.setFont(QFont("Georgia", 70, QFont.Weight.DemiBold))
         self.beat_number_item.setPos(
             QPointF(
                 self.beat_number_item.boundingRect().height() // 3,

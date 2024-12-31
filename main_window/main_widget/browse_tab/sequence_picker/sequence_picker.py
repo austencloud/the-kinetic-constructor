@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 
 from .sequence_picker_section_manager import SequencePickerSectionManager
-from .sequence_picker_thumbnail_box_sorter import SequencePickerThumbnailBoxSorter
+from .sequence_picker_sorter import SequencePickerSorter
 from .sequence_picker_control_panel import SequencePickerControlPanel
 from .filter_selector.sequence_picker_filter_stack import (
     SequencePickerFilterStack,
@@ -37,7 +37,7 @@ class SequencePicker(QWidget):
         self.nav_sidebar = SequencePickerNavSidebar(self)
 
         # Managers
-        self.thumbnail_box_sorter = SequencePickerThumbnailBoxSorter(self)
+        self.sorter = SequencePickerSorter(self)
         self.section_manager = SequencePickerSectionManager(self)
 
     def _setup_layout(self):

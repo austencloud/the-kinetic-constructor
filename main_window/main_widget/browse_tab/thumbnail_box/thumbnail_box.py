@@ -89,14 +89,19 @@ class ThumbnailBox(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        self.resize_thumbnail_box()
+
+    def resize_thumbnail_box(self):
         scrollbar_width = (
             self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().width()
         )
-        parent_width = (
-            self.browse_tab.sequence_picker.scroll_widget.width() - scrollbar_width
+        scroll_widget_width = (
+            self.browse_tab.sequence_picker.main_widget.left_stack.width()
+            - scrollbar_width
+            - self.browse_tab.sequence_picker.nav_sidebar.width()
         )
 
-        width = parent_width // 3
+        width = scroll_widget_width // 3
         self.setFixedWidth(width)
         # self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
 

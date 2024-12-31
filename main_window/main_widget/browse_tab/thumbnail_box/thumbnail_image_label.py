@@ -17,17 +17,22 @@ class ThumbnailImageLabel(QLabel):
 
         self.setStyleSheet("border: 3px solid black;")
         self.installEventFilter(self)
-
+        self.target_width = 0
         self.thumbnails = thumbnail_box.thumbnails
         self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
         self.is_selected = False
-
+        self.index = None
+        self.pixmap: QPixmap = None
         self.setScaledContents(False)
 
     def update_thumbnail(self, index):
         if self.thumbnails and 0 <= index < len(self.thumbnails):
-            pixmap = QPixmap(self.thumbnails[index])
-            self.set_pixmap_to_fit(pixmap)
+            if index != self.index:
+                self.index = index
+                self.pixmap = QPixmap(self.thumbnails[index])
+                self.set_pixmap_to_fit(self.pixmap)
+            else:
+                self.set_pixmap_to_fit(self.pixmap)
         else:
             self.setText("No image available")
 
@@ -43,11 +48,14 @@ class ThumbnailImageLabel(QLabel):
             target_width = self.thumbnail_box.width() - int(
                 self.thumbnail_box.margin * 2
             )
-
+        if target_width == self.target_width:
+            return
+        self.target_width = target_width
         scaled_pixmap = pixmap.scaledToWidth(
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
+        pass
 
     def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:
@@ -84,4 +92,3 @@ class ThumbnailImageLabel(QLabel):
                 else "border: 3px solid blue;"
             )
         return super().eventFilter(obj, event)
-

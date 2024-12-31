@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequencePickerThumbnailBoxSorter:
+class SequencePickerSorter:
     num_columns: int = 3
 
     def __init__(self, sequence_picker: "SequencePicker"):
@@ -129,4 +129,17 @@ class SequencePickerThumbnailBoxSorter:
 
         if not hidden:
             thumbnail_box.show()
+            thumbnail_box.resize_thumbnail_box()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
+
+    def reload_currently_displayed_filtered_sequences(self):
+        sort_method = (
+            self.sequence_picker.control_panel.sort_widget.settings_manager.browse_settings.get_sort_method()
+        )
+        self.sort_and_display_currently_filtered_sequences_by_method(sort_method)
+        self.update_ui(
+            self.section_manager.get_sorted_sections(
+                sort_method, self.browse_tab.sequence_picker.sections.keys()
+            ),
+            sort_method,
+        )

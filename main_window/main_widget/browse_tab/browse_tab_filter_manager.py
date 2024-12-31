@@ -94,9 +94,7 @@ class BrowseTabFilterManager:
         self.browse_tab.settings.set_current_section("sequence_picker")
         self.current_filter = current_filter
 
-        self.browse_tab.fade_manager.fade_and_update_browse_tab(
-        )
-
+        self.browse_tab.fade_manager.fade_and_update_browse_tab()
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
@@ -146,7 +144,7 @@ class BrowseTabFilterManager:
             0,
             0,
             1,
-            self.browse_tab.sequence_picker.thumbnail_box_sorter.num_columns,
+            self.browse_tab.sequence_picker.sorter.num_columns,
             Qt.AlignmentFlag.AlignCenter,
         )
         self.browse_tab.sequence_picker.progress_bar.setVisible(True)

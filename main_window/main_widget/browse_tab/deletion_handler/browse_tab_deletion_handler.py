@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 class BrowseTabDeletionHandler:
     def __init__(self, browse_tab: "BrowseTab"):
         self.browse_tab = browse_tab
+        self.sequence_picker = browse_tab.sequence_picker
         self.variation_number_fixer = VariationNumberFixer()
 
     def is_folder_empty(self, folder_path):
@@ -39,7 +40,7 @@ class BrowseTabDeletionHandler:
             else:
                 self.delete_empty_folders(get_images_and_data_path("dictionary"))
                 thumbnail_box.current_index = 0
-                self.sequence_picker.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
+                # self.sequence_picker.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
                 thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
                 self.browse_tab.sequence_viewer.update_thumbnails(
                     thumbnail_box.thumbnails
@@ -70,7 +71,8 @@ class BrowseTabDeletionHandler:
         shutil.rmtree(base_path)
         self.delete_empty_folders(get_images_and_data_path("dictionary"))
         self.variation_number_fixer.ensure_sequential_versions()
-        self.sequence_picker.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
+
+        self.sequence_picker.sorter.reload_currently_displayed_filtered_sequences()
 
     def delete_empty_folders(self, root_folder):
         for root, dirs, files in os.walk(root_folder, topdown=False):

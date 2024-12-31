@@ -72,10 +72,10 @@ class BrowseTabFadeManager(QObject):
         self.browse_tab.filter_manager.sort_and_display_thumbnail_boxes_by_current_filter(
             self.browse_tab.filter_manager.current_filter
         )
+        QApplication.processEvents()
         self.browse_tab.main_widget.left_stack.setCurrentIndex(
             self.browse_tab.main_widget.left_sequence_picker_index
         )
-        QApplication.processEvents()
         self.fade_in_group = QParallelAnimationGroup(self)
 
         animation = self.fade_in_sequence_picker()

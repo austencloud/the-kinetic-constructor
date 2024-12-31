@@ -12,7 +12,7 @@ class BrowseTabUIUpdater:
         self.browse_tab = browse_tab
         self.sequence_picker = browse_tab.sequence_picker
         self.control_panel = self.sequence_picker.control_panel
-        self.thumbnail_box_sorter = self.sequence_picker.thumbnail_box_sorter
+        self.thumbnail_box_sorter = self.sequence_picker.sorter
         self.progress_bar = self.sequence_picker.progress_bar
         self.scroll_widget = self.sequence_picker.scroll_widget
         self.settings_manager = browse_tab.main_widget.main_window.settings_manager
@@ -42,6 +42,7 @@ class BrowseTabUIUpdater:
                 percentage = int((num_words / total_sequences) * 100)
                 self.progress_bar.set_value(percentage)
                 self.control_panel.count_label.setText(f"Number of words: {num_words}")
+                # QApplication.processEvents()
 
             self.progress_bar.setVisible(False)
             self._apply_sorting_and_styling()
