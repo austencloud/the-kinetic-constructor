@@ -15,7 +15,6 @@ class GraphEditorPictographContainer(QWidget):
         self.graph_editor = graph_editor
 
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.setMinimumHeight(0)
         self.setup_pictograph()
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -31,10 +30,10 @@ class GraphEditorPictographContainer(QWidget):
         self.GE_pictograph_view.set_scene(pictograph)
         self.GE_pictograph = pictograph
 
-    def resizeEvent(self, event):
-        size = self.graph_editor.height()
-        self.setFixedWidth(size)
-        self.setFixedHeight(size)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
+    # def resizeEvent(self, event):
+    #     size = self.graph_editor.height()
+    #     self.setFixedWidth(size)
+    #     self.setFixedHeight(size)
+    #     self.layout.setContentsMargins(0, 0, 0, 0)
+    #     self.layout.setSpacing(0)
+    #     self.setLayout(self.layout)

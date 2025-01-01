@@ -134,7 +134,7 @@ class GenerateTab(QWidget):
 
         # Update button sizes
         for button in self.buttons.values():
-            button.setMinimumHeight(self.main_widget.height() // 16)
+            button.setFixedHeight(self.main_widget.height() // 16)
             button.setFixedWidth(self.main_widget.width() // 10)
 
         self.update_button_styles()

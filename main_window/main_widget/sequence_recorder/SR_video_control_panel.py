@@ -10,10 +10,10 @@ from PyQt6.QtWidgets import (
 )
 
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_recorder.SR_main_control_frame import SR_MainControlFrame
-
+    from main_window.main_widget.sequence_recorder.SR_main_control_frame import (
+        SR_MainControlFrame,
+    )
 
 
 class SR_VideoControlPanel(QFrame):
@@ -58,10 +58,8 @@ class SR_VideoControlPanel(QFrame):
     def resize_video_control_frame(self) -> None:
         width = self.capture_frame.video_display_frame.width()
         height = width // 4
-        self.setMinimumWidth(width)
-        self.setMaximumWidth(width)
-        self.setMinimumHeight(height)
-        self.setMaximumHeight(height)
+        self.setFixedWidth(width)
+        self.setFixedHeight(height)
 
     @staticmethod
     def detect_available_cameras() -> dict[int, str]:

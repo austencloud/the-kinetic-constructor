@@ -58,7 +58,7 @@ class GraphEditorToggleTab(QWidget):
         sequence_widget_height = self.sequence_widget.height()
 
         if self.graph_editor.isVisible():
-            desired_height = self.graph_editor.get_graph_editor_height()
+            desired_height = self.graph_editor.height()
             self.graph_editor.resize(self.width(), desired_height)
             self.graph_editor.move(0, sequence_widget_height - desired_height)
 

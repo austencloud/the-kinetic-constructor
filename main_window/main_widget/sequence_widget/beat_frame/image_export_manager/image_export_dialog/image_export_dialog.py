@@ -150,7 +150,6 @@ class ImageExportDialog(QDialog):
         super().showEvent(event)
 
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
-        # set the font size for all the checkbox labels and all the comboboxes and buttons int he control panel
         self._resize_widgets()
         self.update_preview()
         self._resize_buttons()
@@ -183,7 +182,7 @@ class ImageExportDialog(QDialog):
         button_height = int(self.height() * 0.08)
         font_size = int(self.height() * 0.03)
         for button in [self.ok_button, self.cancel_button, self.share_button]:
-            button.setMinimumHeight(button_height)
+            button.setFixedHeight(button_height)
             button.setSizePolicy(
                 QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
             )

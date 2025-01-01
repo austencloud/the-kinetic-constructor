@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, QSize
 from PyQt6.QtGui import QPixmap, QImage
 import cv2
 import numpy as np
@@ -183,10 +183,7 @@ class SR_BeatFrame(QFrame):
     def resize_beat_frame(self) -> None:
         beat_view_size = int(self.width() / (self.COLUMN_COUNT))
         for view in self.beat_views:
-            view.setMinimumWidth(beat_view_size)
-            view.setMaximumWidth(beat_view_size)
-            view.setMinimumHeight(beat_view_size)
-            view.setMaximumHeight(beat_view_size)
+            view.setFixedSize(QSize(beat_view_size))
             view.resetTransform()
             if view.scene():
                 view.fitInView(

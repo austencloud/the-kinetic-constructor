@@ -66,8 +66,8 @@ class NavigationWidget(QWidget):
             )
         else:
             button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
-        button.setMinimumWidth(self.mw.width() // 10)
-        button.setMinimumHeight(self.mw.height() // 22)
+        button.setFixedWidth(self.mw.width() // 10)
+        button.setFixedHeight(self.mw.height() // 22)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

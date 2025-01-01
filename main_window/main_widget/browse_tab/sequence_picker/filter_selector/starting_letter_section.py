@@ -138,7 +138,7 @@ class StartingLetterSection(FilterSectionBase):
         self.resize_buttons()
         self.resize_widget_font(self.header_label, 100)
         self.resize_widget_font(self.sequence_tally_label, 100)
-        self.sequence_tally_label.setMinimumHeight(self.calculate_label_height())
+        self.sequence_tally_label.setFixedHeight(self.calculate_label_height())
 
     def resize_widget_font(self, widget: QWidget, factor: int):
         font = widget.font()

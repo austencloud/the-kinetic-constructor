@@ -20,7 +20,6 @@ class BeatAdjustmentPanel(QFrame):
         self.graph_editor = graph_editor
         self.GE_pictograph = graph_editor.pictograph_container.GE_pictograph
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.setMinimumHeight(0)
         self._initialize_ui()
 
     def _initialize_ui(self):
@@ -59,9 +58,9 @@ class BeatAdjustmentPanel(QFrame):
     def _create_box_set(self, blue_box, red_box):
         """Creates a container with a horizontal layout for a pair of boxes."""
         box_set = QWidget(self)
-        layout = QHBoxLayout(box_set) 
-        layout.setContentsMargins(0, 0, 0, 0)  
-        layout.setSpacing(0) 
+        layout = QHBoxLayout(box_set)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.addWidget(blue_box)
         layout.addWidget(red_box)
         return box_set

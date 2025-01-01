@@ -116,7 +116,4 @@ class SR_BeatControlPanel(QFrame):
     def resize_beat_control_frame(self) -> None:
         width = self.beat_frame.width()
         height = width // 4
-        self.setMinimumWidth(width)
-        self.setMaximumWidth(width)
-        # self.setMinimumHeight(height)
-        # self.setMaximumHeight(height)
+        self.setFixedWidth(width)

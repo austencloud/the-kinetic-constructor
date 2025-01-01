@@ -39,7 +39,6 @@ class GraphEditor(QFrame):
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.setMinimumHeight(0)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
         self._setup_components()

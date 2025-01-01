@@ -25,11 +25,8 @@ class SequenceViewerImageLabel(QLabel):
 
     def update_thumbnail(self):
         self.thumbnails = self.sequence_viewer.thumbnails
-        if self.thumbnails:
-            pixmap = QPixmap(self.thumbnails[self.sequence_viewer.current_index])
-            self.set_pixmap_to_fit(pixmap)
-        else:
-            self.setText("No image available")
+        pixmap = QPixmap(self.thumbnails[self.sequence_viewer.current_index])
+        self.set_pixmap_to_fit(pixmap)
 
     def set_pixmap_to_fit(self, pixmap: QPixmap):
         current_index = self.sequence_viewer.current_index
@@ -51,6 +48,8 @@ class SequenceViewerImageLabel(QLabel):
         self.resize_placeholder()
 
     def resize_placeholder(self):
+        min_height = int(max(self.sequence_viewer.height() / 5, 50))
+        self.setMinimumHeight(min_height)
         placeholder_text_font_size = self.sequence_viewer.width() // 50
         global_settings = (
             self.sequence_viewer.browse_tab.main_widget.main_window.settings_manager.global_settings
@@ -77,12 +76,9 @@ class SequenceViewerImageLabel(QLabel):
             Qt.TransformationMode.SmoothTransformation,
         )
         self.setPixmap(scaled_pixmap)
-        self.setMinimumHeight(new_height)
+        self.setFixedHeight(new_height)
 
     def resizeEvent(self, event):
-        min_height = int(max(self.sequence_viewer.height() / 5, 50))
-        self.setMinimumHeight(min_height)
-
         if self.pixmap().width():
             self.update_thumbnail()
         else:
