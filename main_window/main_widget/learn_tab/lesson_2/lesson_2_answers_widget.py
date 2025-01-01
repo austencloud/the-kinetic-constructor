@@ -80,10 +80,6 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
 
             self.pictograph_views.append(view)
 
-        logger.info(
-            f"Displayed {num_pictographs} pictographs in {rows} rows and {self.columns} columns."
-        )
-
     def disable_answers(self, answer):
         """Disable a specific pictograph answer."""
         pictograph_key = self.key_generator.generate_pictograph_key(answer)
@@ -99,9 +95,8 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
             logger.debug("Removed and deleted a pictograph view from the grid.")
         self.pictograph_views.clear()
         self.pictographs.clear()
-        logger.info("Cleared all pictographs from the grid layout.")
 
-    def resizeEvent(self,event):
+    def resizeEvent(self, event):
         """Resize the pictograph views based on window size."""
         super().resizeEvent(event)
         for view in self.pictograph_views:

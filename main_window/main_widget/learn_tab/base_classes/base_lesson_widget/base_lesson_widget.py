@@ -135,6 +135,7 @@ class BaseLessonWidget(QWidget):
             self.question_widget,
             self.answers_widget,
         ]
+        
         self.fade_manager.widget_fader.fade_and_update(
             widgets_to_fade,
             callback=self._generate_new_question,

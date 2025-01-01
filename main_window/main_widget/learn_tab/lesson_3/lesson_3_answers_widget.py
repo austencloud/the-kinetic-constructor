@@ -76,9 +76,6 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
 
             self.pictograph_views.append(view)
 
-        logger.info(
-            f"Displayed {num_pictographs} pictographs in {rows} rows and {self.columns} columns."
-        )
 
     def clear(self):
         """Clear all the displayed pictographs."""

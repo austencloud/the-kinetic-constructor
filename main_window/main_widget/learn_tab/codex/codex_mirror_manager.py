@@ -18,7 +18,6 @@ class CodexMirrorManager:
         self.vertical_mirror_positions = mirrored_positions["vertical"]
 
     def mirror_all(self):
-        logger.info("Mirror action triggered.")
         try:
             for letter_str, view in self.codex.section_manager.views.items():
                 scene = view.pictograph

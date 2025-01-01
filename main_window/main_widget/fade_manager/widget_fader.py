@@ -45,13 +45,14 @@ class WidgetFader:
         return effect
 
     def fade_and_update(
-        self, widget: list[QWidget], callback: callable, duration: int = 300
+        self, widget: list[QWidget], callback: callable = None, duration: int = 300
     ) -> None:
         """Fades out widgets, invokes an update callback, and fades them back in."""
 
         def on_fade_out_finished():
             self.manager.graphics_effect_remover.clear_graphics_effects(widget)
-            callback()
+            if callback:
+                callback()
             self.fade_widgets(widget, True, duration)
 
         self.fade_widgets(widget, False, duration, on_fade_out_finished)

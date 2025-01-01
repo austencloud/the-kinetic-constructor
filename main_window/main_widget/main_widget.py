@@ -3,22 +3,22 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-from main_window.main_widget.fade_manager.fade_manager import FadeManager
-from main_window.main_widget.full_screen_image_overlay import FullScreenImageOverlay
-from main_window.main_widget.construct_tab.construct_tab import ConstructTab
-from main_window.main_widget.generate_tab.generate_tab import GenerateTab
-from main_window.main_widget.learn_tab.learn_tab import LearnTab
-from main_window.main_widget.sequence_widget.beat_frame.resize_event_filter import (
-    ResizeEventFilter,
+from .browse_tab.browse_tab import BrowseTab
+from .fade_manager.fade_manager import FadeManager
+from .full_screen_image_overlay import FullScreenImageOverlay
+from .construct_tab.construct_tab import ConstructTab
+from .generate_tab.generate_tab import GenerateTab
+from .learn_tab.learn_tab import LearnTab
+from .sequence_widget.beat_frame.resize_event_filter import (
+    ResizeEventFilter
 )
-from main_window.main_widget.write_tab.write_tab import WriteTab
-from main_window.main_widget.main_background_widget.main_background_widget import (
-    MainBackgroundWidget,
+from .write_tab.write_tab import WriteTab
+from .main_background_widget.main_background_widget import (
+    MainBackgroundWidget
 )
-from main_window.main_widget.main_widget_tab_switcher import MainWidgetTabSwitcher
-from main_window.main_widget.font_color_updater.font_color_updater import (
-    FontColorUpdater,
+from .main_widget_tab_switcher import MainWidgetTabSwitcher
+from .font_color_updater.font_color_updater import (
+    FontColorUpdater
 )
 
 
@@ -40,7 +40,7 @@ if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
         SvgManager,
     )
-    from main_window.main_widget.main_background_widget.backgrounds.base_background import (
+    from .main_background_widget.backgrounds.base_background import (
         BaseBackground,
     )
     from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
