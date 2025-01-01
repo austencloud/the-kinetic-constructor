@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from main_window.main_widget.browse_tab.browse_tab import BrowseTab
-from main_window.main_widget.fade_manager import FadeManager
+from main_window.main_widget.fade_manager.fade_manager import FadeManager
 from main_window.main_widget.full_screen_image_overlay import FullScreenImageOverlay
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab

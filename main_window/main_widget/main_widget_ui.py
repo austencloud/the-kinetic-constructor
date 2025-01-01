@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
-from main_window.main_widget.fade_manager import FadeManager
+from main_window.main_widget.fade_manager.fade_manager import FadeManager
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .write_tab.write_tab import WriteTab

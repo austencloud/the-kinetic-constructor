@@ -1,0 +1,53 @@
+from typing import TYPE_CHECKING, Optional, List
+from PyQt6.QtWidgets import QWidget, QStackedWidget
+from PyQt6.QtCore import QObject
+from .widget_fader import WidgetFader
+
+if TYPE_CHECKING:
+    from main_window.main_widget.fade_manager.fade_manager import FadeManager
+    from main_window.main_widget.main_widget import MainWidget
+
+
+class StackFader:
+
+    def __init__(self, manager: "FadeManager"):
+        self.manager = manager
+
+    def fade_stack(
+        self,
+        stack: QStackedWidget,
+        new_index: int,
+        duration: int = 300,
+        callback: Optional[callable] = None,
+    ):
+        """
+        Fades out the current widget in the stack, switches to the new widget, and fades it in.
+        """
+        current_widget = stack.currentWidget()
+        next_widget = stack.widget(new_index)
+
+        if not current_widget or not next_widget or stack.currentIndex() == new_index:
+            return
+
+        self.manager.widget_fader.fade_widgets(
+            [current_widget],
+            fade_in=False,
+            duration=duration,
+            callback=lambda: self._switch_and_fade_in(
+                stack, new_index, next_widget, duration, callback
+            ),
+        )
+
+    def _switch_and_fade_in(
+        self,
+        stack: QStackedWidget,
+        new_index: int,
+        next_widget: QWidget,
+        duration: int,
+        callback: Optional[callable],
+    ):
+        stack.setCurrentIndex(new_index)
+        self.manager.widget_fader.fade_widgets(
+            [next_widget], fade_in=True, duration=duration, callback=callback
+        )
+        self.manager.clear_graphics_effects([next_widget])

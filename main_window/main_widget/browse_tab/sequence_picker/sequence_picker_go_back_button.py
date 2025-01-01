@@ -21,9 +21,8 @@ class SequencePickerGoBackButton(BaseGoBackButton):
         """Switch to the initial selection page in the stacked layout."""
         sequence_viewer = self.browse_tab.sequence_viewer
         sequence_viewer.word_label.setText("")
-        self.main_widget.fade_manager.fade_stack(
-            self.main_widget.left_stack,
-            self.main_widget.left_filter_selector_index
+        self.main_widget.fade_manager.stack_fader.fade_stack(
+            self.main_widget.left_stack, self.main_widget.left_filter_selector_index
         )
 
         self.browse_tab.sequence_viewer.clear()

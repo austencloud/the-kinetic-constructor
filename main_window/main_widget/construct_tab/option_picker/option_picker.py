@@ -82,10 +82,9 @@ class OptionPicker(QWidget):
                 sequence, selected_filter
             )
 
-            widgets_to_fade = [self.scroll_area]
+            views = [option.view for option in self.option_pool]
             self.fade_manager.fade_and_update(
-                widgets_to_fade,
-                update_callback=lambda: self._update_pictographs(next_options),
+                views, lambda: self._update_pictographs(next_options)
             )
 
     def _update_pictographs(self, next_options):
