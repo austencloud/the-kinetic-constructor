@@ -31,7 +31,7 @@ class BaseLessonWidget(QWidget):
         self.results_widget = ResultsWidget(self)
         self.indicator_label = LessonWidgetIndicatorLabel(self)
         self.fade_manager = self.main_widget.fade_manager
-        
+
         # Main layout
         self.main_layout: QVBoxLayout = QVBoxLayout()
         self.central_layout: QVBoxLayout = QVBoxLayout()
@@ -135,9 +135,9 @@ class BaseLessonWidget(QWidget):
             self.question_widget,
             self.answers_widget,
         ]
-        self.fade_manager.fade_and_update(
+        self.fade_manager.widget_fader.fade_and_update(
             widgets_to_fade,
-            update_callback=self._generate_new_question,
+            callback=self._generate_new_question,
         )
 
     def _generate_new_question(self):

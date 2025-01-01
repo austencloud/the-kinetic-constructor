@@ -1,11 +1,8 @@
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QWidget, QStackedWidget
-from PyQt6.QtCore import QObject
-from .widget_fader import WidgetFader
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class ParallelStackFader:

@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QStackedWidget
-from PyQt6.QtCore import QObject
+from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
 from PyQt6.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class WidgetFader:
@@ -24,7 +22,7 @@ class WidgetFader:
                 callback()
             return
 
-        self.manager.clear_graphics_effects(widgets)
+        self.manager.graphics_effect_remover.clear_graphics_effects(widgets)
 
         animation_group = QParallelAnimationGroup(self.manager)
         for widget in widgets:
@@ -45,3 +43,15 @@ class WidgetFader:
             effect = QGraphicsOpacityEffect(widget)
             widget.setGraphicsEffect(effect)
         return effect
+
+    def fade_and_update(
+        self, widget: list[QWidget], callback: callable, duration: int = 300
+    ) -> None:
+        """Fades out widgets, invokes an update callback, and fades them back in."""
+
+        def on_fade_out_finished():
+            self.manager.graphics_effect_remover.clear_graphics_effects(widget)
+            callback()
+            self.fade_widgets(widget, True, duration)
+
+        self.fade_widgets(widget, False, duration, on_fade_out_finished)

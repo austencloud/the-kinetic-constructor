@@ -99,9 +99,9 @@ class BrowseTabFilterManager:
             self.browse_tab.sequence_picker.filter_stack,
             self.browse_tab.sequence_picker,
         ]
-        self.fade_manager.fade_and_update(
+        self.fade_manager.widget_fader.fade_and_update(
             widgets_to_fade,
-            update_callback=self._apply_filter_logic,
+            callback=self._apply_filter_logic,
         )
 
     def _apply_filter_logic(self):
@@ -114,7 +114,7 @@ class BrowseTabFilterManager:
         )
         self.browse_tab.main_widget.left_stack.setGraphicsEffect(None)
         self.browse_tab.sequence_picker.setGraphicsEffect(None)
-        self.main_widget.fade_manager.clear_graphics_effects()
+        self.main_widget.fade_manager.graphics_effect_remover.clear_graphics_effects()
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict

@@ -83,7 +83,7 @@ class OptionPicker(QWidget):
             )
 
             views = [option.view for option in self.option_pool]
-            self.fade_manager.fade_and_update(
+            self.fade_manager.widget_fader.fade_and_update(
                 views, lambda: self._update_pictographs(next_options)
             )
 
