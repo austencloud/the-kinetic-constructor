@@ -90,7 +90,9 @@ class SequenceRotationManager:
             if "end_loc" in bl and "end_loc" in rl:
                 _dict["end_pos"] = positions_map[(bl["end_loc"], rl["end_loc"])]
 
-        _dict["grid_mode"] = GridModeChecker().get_grid_mode(_dict)
+        _dict["grid_mode"] = (
+            self.sequence_widget.main_widget.grid_mode_checker.get_grid_mode(_dict)
+        )
         return _dict
 
     def _rotate_location(self, location):

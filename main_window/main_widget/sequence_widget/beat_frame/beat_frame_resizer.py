@@ -39,7 +39,7 @@ class BeatFrameResizer:
         width = int(available_width * 0.8)
         available_height = (
             self.sequence_widget.height()
-            - self.sequence_widget.graph_editor.height() * 0.8
+            - self.sequence_widget.graph_editor.get_graph_editor_height() * 0.8
         )
 
         return width, available_height
