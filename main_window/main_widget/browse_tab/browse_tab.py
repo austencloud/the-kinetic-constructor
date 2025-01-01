@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
-from main_window.main_widget.browse_tab.browse_tab_fade_manager import BrowseTabFadeManager
 
 
 from .sequence_picker.sequence_picker import SequencePicker
@@ -34,4 +33,3 @@ class BrowseTab(QWidget):
         self.edit_sequence_handler = BrowseTabEditSequenceHandler(self)
         self.get = BrowseTabGetter(self)
         self.ui_updater = BrowseTabUIUpdater(self)
-        self.fade_manager = BrowseTabFadeManager(self)

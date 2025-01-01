@@ -5,7 +5,6 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_go_back_button import (
     LessonWidgetGoBackButton,
 )
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_fade_manager import LessonWidgetFadeManager
 from ..base_answers_widget import BaseAnswersWidget
 from .lesson_layout_manager import LessonLayoutManager
 from .quiz_timer_manager import QuizTimerManager

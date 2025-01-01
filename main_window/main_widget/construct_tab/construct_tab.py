@@ -3,9 +3,7 @@ from PyQt6.QtCore import pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.construct_tab_fade_manager import (
-    ConstructTabFadeManager,
-)
+
 from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker import (
     StartPosPicker,
 )
@@ -40,7 +38,6 @@ class ConstructTab(QFrame):
         self.option_picker = OptionPicker(self)
         self.start_pos_picker = StartPosPicker(self)
         self.advanced_start_pos_picker = AdvancedStartPosPicker(self)
-        self.fade_manager = ConstructTabFadeManager(self)
 
     def transition_to_option_picker(self):
         """Transition to the option picker for sequence building."""
