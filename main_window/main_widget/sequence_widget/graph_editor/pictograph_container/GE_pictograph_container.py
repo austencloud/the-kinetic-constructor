@@ -30,10 +30,10 @@ class GraphEditorPictographContainer(QWidget):
         self.GE_pictograph_view.set_scene(pictograph)
         self.GE_pictograph = pictograph
 
-    # def resizeEvent(self, event):
-    #     size = self.graph_editor.height()
-    #     self.setFixedWidth(size)
-    #     self.setFixedHeight(size)
-    #     self.layout.setContentsMargins(0, 0, 0, 0)
-    #     self.layout.setSpacing(0)
-    #     self.setLayout(self.layout)
+    def resizeEvent(self, event):
+        size = self.graph_editor.height()
+        self.setFixedWidth(size)
+        self.setFixedHeight(size)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
