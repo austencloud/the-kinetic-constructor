@@ -9,6 +9,9 @@ from main_window.main_widget.full_screen_image_overlay import FullScreenImageOve
 from main_window.main_widget.construct_tab.construct_tab import ConstructTab
 from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.learn_tab.learn_tab import LearnTab
+from main_window.main_widget.sequence_widget.beat_frame.resize_event_filter import (
+    ResizeEventFilter,
+)
 from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.main_background_widget.main_background_widget import (
     MainBackgroundWidget,
@@ -152,6 +155,20 @@ class MainWidget(QWidget):
 
         QTimer.singleShot(0, self.state_handler.load_state)
         QTimer.singleShot(0, self.ui_handler.load_current_tab)
+
+        self._install_filter()
+
+    def _install_filter(self):
+        event_filter = ResizeEventFilter()
+        self.installEventFilter(event_filter)
+
+        def install_resize_filter(widget: "QWidget"):
+            widget.installEventFilter(event_filter)
+            for child in widget.children():
+                if isinstance(child, QWidget):
+                    install_resize_filter(child)
+
+        install_resize_filter(self)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

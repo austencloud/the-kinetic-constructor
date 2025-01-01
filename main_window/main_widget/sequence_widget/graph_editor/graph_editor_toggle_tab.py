@@ -55,17 +55,12 @@ class GraphEditorToggleTab(QWidget):
         self.setStyleSheet("background-color: white")
 
     def reposition_toggle_tab(self):
-
         sequence_widget_height = self.sequence_widget.height()
         graph_editor_height = (
             self.sequence_widget.height()
             - self.sequence_widget.graph_editor.get_graph_editor_height()
         )
         if self.graph_editor.isVisible():
-            desired_height = self.graph_editor.height()
-            self.graph_editor.resize(self.width(), desired_height)
-            self.graph_editor.move(0, sequence_widget_height - desired_height)
-
             self.move(0, graph_editor_height - self.height())
         else:
             self.move(0, sequence_widget_height - self.height())

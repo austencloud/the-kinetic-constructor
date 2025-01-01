@@ -14,18 +14,14 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
-from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view_mouse_event_handler import (
-    GE_PictographViewMouseEventHandler,
-)
+from .GE_pictograph_view_mouse_event_handler import GE_PictographViewMouseEventHandler
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+    from .pictograph_container.GE_pictograph_container import (
         GraphEditorPictographContainer,
     )
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
-        Beat,
-    )
+    from ..beat_frame.beat_view import Beat
 
     from .GE_pictograph_view import GE_BlankPictograph
 
@@ -103,6 +99,7 @@ class GE_PictographView(PictographView):
         )
         painter.drawRect(overlay_rect)
         painter.end()
+
     def get_current_pictograph(self) -> BasePictograph:
         return self.scene()
 
@@ -116,7 +113,7 @@ class GE_PictographView(PictographView):
         self.repaint()
 
     def resizeEvent(self, event) -> None:
-        # self.setFixedSize(self.graph_editor.height(), self.graph_editor.height())
+        self.setFixedSize(self.graph_editor.height(), self.graph_editor.height())
 
         scene_size = self.scene().sceneRect().size()
         view_size = self.viewport().size()
