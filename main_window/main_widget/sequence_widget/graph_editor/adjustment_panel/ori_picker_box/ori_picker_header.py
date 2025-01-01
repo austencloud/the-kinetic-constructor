@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from .ori_picker_box import OriPickerBox
 
 
-class GE_OriPickerHeader(BaseAdjustmentBoxHeaderWidget):
+class OriPickerHeader(BaseAdjustmentBoxHeaderWidget):
     def __init__(self, ori_picker_box: "OriPickerBox") -> None:
         super().__init__(ori_picker_box)
         self._add_widgets()

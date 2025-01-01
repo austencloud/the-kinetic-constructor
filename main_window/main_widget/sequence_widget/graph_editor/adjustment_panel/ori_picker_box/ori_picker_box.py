@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from .ori_picker_widget.ori_picker_widget import OriPickerWidget
-from .ori_picker_header import GE_OriPickerHeader
+from .ori_picker_header import OriPickerHeader
 
 if TYPE_CHECKING:
     from ..beat_adjustment_panel import BeatAdjustmentPanel
@@ -32,7 +32,7 @@ class OriPickerBox(QFrame):
         self._setup_layout()
 
     def _setup_widgets(self) -> None:
-        self.header = GE_OriPickerHeader(self)
+        self.header = OriPickerHeader(self)
         self.ori_picker_widget = OriPickerWidget(self)
 
     def _setup_layout(self) -> None:
@@ -43,7 +43,7 @@ class OriPickerBox(QFrame):
         self.setLayout(layout)
 
     def resizeEvent(self, event):
-        border_width = self.graph_editor.sequence_widget.width() // 100
+        border_width = self.graph_editor.sequence_widget.width() // 200
         self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
             f"#{self.__class__.__name__} {{ "

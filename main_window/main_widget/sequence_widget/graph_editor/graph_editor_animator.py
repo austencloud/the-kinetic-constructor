@@ -96,4 +96,3 @@ class GraphEditorAnimator(QObject):
         self.graph_editor_animation.start()
         self.graph_editor_placeholder_animation.start()
         self.toggle_tab_animation.start()
-        # self.sequence_widget.button_panel.resize_button_panel()

@@ -47,6 +47,7 @@ class GraphEditor(QFrame):
         self._setup_components()
         self.layout_manager.setup_layout()
         self.hide()
+        # self.toggle_tab.reposition_toggle_tab()
 
     def _setup_components(self) -> None:
         self.selection_manager = ArrowSelectionManager(self)
@@ -59,8 +60,6 @@ class GraphEditor(QFrame):
         self.animator = GraphEditorAnimator(self)
 
     def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-
         graph_editor_height = self.get_graph_editor_height()
         width = self.sequence_widget.width()
 
@@ -71,6 +70,7 @@ class GraphEditor(QFrame):
 
         self.adjustment_panel.update_adjustment_panel()
         self.raise_()
+        super().resizeEvent(event)
 
     def get_graph_editor_height(self):
         return int(self.sequence_widget.height() // 3.5)

@@ -51,7 +51,3 @@ class SequenceWidget(QWidget):
         # Layout
         self.layout_manager = SequenceWidgetLayoutManager(self)
 
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.graph_editor.resizeEvent(event)
-        self.graph_editor.toggle_tab.reposition_toggle_tab()
