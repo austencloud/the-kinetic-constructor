@@ -14,9 +14,7 @@ from main_window.main_widget.sequence_widget.graph_editor.graph_editor_animator 
 from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_tab import (
     GraphEditorToggleTab,
 )
-from main_window.main_widget.sequence_widget.graph_editor_placeholder import (
-    GraphEditorPlaceholder,
-)
+
 from .arrow_selection_manager import ArrowSelectionManager
 from .graph_editor_layout_manager import GraphEditorLayoutManager
 from .graph_editor_state_manager import GraphEditorStateManager
@@ -47,7 +45,6 @@ class GraphEditor(QFrame):
         self._setup_components()
         self.layout_manager.setup_layout()
         self.hide()
-        # self.toggle_tab.reposition_toggle_tab()
 
     def _setup_components(self) -> None:
         self.selection_manager = ArrowSelectionManager(self)
@@ -56,19 +53,13 @@ class GraphEditor(QFrame):
         self.layout_manager = GraphEditorLayoutManager(self)
         self.state = GraphEditorStateManager(self)
         self.toggle_tab = GraphEditorToggleTab(self)
-        self.placeholder = GraphEditorPlaceholder(self)
+        self.placeholder = QFrame(self)
         self.animator = GraphEditorAnimator(self)
 
     def resizeEvent(self, event) -> None:
         graph_editor_height = self.get_graph_editor_height()
         width = self.sequence_widget.width()
-
         self.setFixedSize(width, graph_editor_height)
-
-        if self.isVisible():
-            self.placeholder.resize_graph_editor_placeholder()
-
-        self.adjustment_panel.update_adjustment_panel()
         self.raise_()
         super().resizeEvent(event)
 

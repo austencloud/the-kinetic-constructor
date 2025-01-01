@@ -10,9 +10,12 @@ if TYPE_CHECKING:
 class GraphEditorStateManager:
     def __init__(self, graph_editor: "GraphEditor") -> None:
         self.graph_editor = graph_editor
-        self.is_graph_editor_visible = self.graph_editor.settings_manager.settings.value(
-            "graph_editor_visible", True, type=bool
+        self.is_graph_editor_visible = (
+            self.graph_editor.settings_manager.settings.value(
+                "graph_editor_visible", True, type=bool
+            )
         )
+
     def update_graph_editor_visibility(self):
         """Set the initial state of the GraphEditor based on saved settings."""
         if self.is_graph_editor_visible:

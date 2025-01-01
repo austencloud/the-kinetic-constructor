@@ -53,7 +53,6 @@ class GraphEditorToggleTab(QWidget):
         family = "Georgia"
         self.label.setFont(QFont(family, font_size))
         self.setStyleSheet("background-color: white")
-        self.reposition_toggle_tab()
 
     def reposition_toggle_tab(self):
         sequence_widget_height = self.sequence_widget.height()

@@ -2,18 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtGui import QKeyEvent
 
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeat,
-)
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
-    StartPositionBeatView,
-)
-from main_window.main_widget.sequence_widget.beat_frame.start_position_adder import (
-    StartPositionAdder,
-)
-from main_window.main_widget.sequence_widget.sequence_widget_pictograph_factory import (
-    BeatFactory,
-)
+from .start_pos_beat import StartPositionBeat
+from .start_pos_beat_view import StartPositionBeatView
+from .start_position_adder import StartPositionAdder
+from ..sequence_widget_pictograph_factory import BeatFactory
 from .beat_adder import BeatAdder
 from .beat_duration_manager import BeatDurationManager
 from .beat_frame_key_event_handler import BeatFrameKeyEventHandler

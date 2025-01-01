@@ -1,9 +1,11 @@
+from tracemalloc import start
 from typing import TYPE_CHECKING, Literal
 from data.constants import BOX, DIAMOND
 from data.positions import box_positions, diamond_positions
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
+
 
 class GridModeChecker:
     """Checks what grid a given pictograph is in by looking at its start and end positions"""
@@ -14,10 +16,9 @@ class GridModeChecker:
     def get_grid_mode(
         self, pictograph_dict: dict
     ) -> None | Literal["box"] | Literal["diamond"] | Literal["skewed"]:
-
-        start_pos = pictograph_dict.get("sequence_start_position", pictograph_dict.get("start_pos"))
+        start_pos = pictograph_dict.get("start_pos") or pictograph_dict.get("end_pos") # Handles the start position
         end_pos = pictograph_dict.get("end_pos")
-
+        
         if start_pos in box_positions and end_pos in box_positions:
             return BOX
         if start_pos in diamond_positions and end_pos in diamond_positions:
