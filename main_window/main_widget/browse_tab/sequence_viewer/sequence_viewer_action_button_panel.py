@@ -90,7 +90,9 @@ class SequenceViewerActionButtonPanel(QWidget):
     def edit_sequence(self):
         sequence_json = self.sequence_viewer.sequence_json
         if sequence_json:
-            self.sequence_viewer.main_widget.navigation_widget.on_button_clicked(0)
+            self.sequence_viewer.main_widget.menu_bar.navigation_widget.on_button_clicked(
+                self.sequence_viewer.main_widget.main_construct_tab_index
+            )
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             populator = self.browse_tab.main_widget.sequence_widget.beat_frame.populator
             if sequence_json:
