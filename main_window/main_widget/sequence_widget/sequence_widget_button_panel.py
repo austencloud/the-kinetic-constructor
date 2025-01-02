@@ -173,9 +173,7 @@ class SequenceWidgetButtonPanel(QFrame):
             self.layout.addWidget(self.buttons[name])
 
         self.layout.addWidget(self.bottom_placeholder)
-        self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignRight
-        )
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         # Initial spacing setup
         self.spacer3 = QSpacerItem(

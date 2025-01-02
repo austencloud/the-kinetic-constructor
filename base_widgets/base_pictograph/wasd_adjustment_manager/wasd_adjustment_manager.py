@@ -30,6 +30,6 @@ class WASD_AdjustmentManager:
             return
         letter = self.pictograph.letter
         self.entry_remover.remove_special_placement_entry(letter, selected_arrow)
-        self.pictograph.arrow_placement_manager.update_arrow_placements()   
+        self.pictograph.arrow_placement_manager.update_arrow_placements()
         self.pictograph.updater.update_pictograph()
         self.pictograph.view.repaint()

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
+
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
@@ -94,7 +95,9 @@ class GridData:
         if point and point.coordinates:
             return point.coordinates
         else:
-            logger.warning(f"Shift point '{point_name}' not found or has no coordinates.")
+            logger.warning(
+                f"Shift point '{point_name}' not found or has no coordinates."
+            )
             return None
 
     def get_static_coord(self, point_name: str) -> Optional[QPointF]:
@@ -105,10 +108,14 @@ class GridData:
         if point and point.coordinates:
             return point.coordinates
         else:
-            logger.warning(f"Static point '{point_name}' not found or has no coordinates.")
+            logger.warning(
+                f"Static point '{point_name}' not found or has no coordinates."
+            )
             return None
 
-    def get_point(self, layer: dict[str, GridPoint], pos: QPointF) -> Optional[GridPoint]:
+    def get_point(
+        self, layer: dict[str, GridPoint], pos: QPointF
+    ) -> Optional[GridPoint]:
         """
         Returns the closest point to the given position within the specified layer.
         """
@@ -123,6 +130,7 @@ class GridData:
         if not closest_point:
             logger.warning("No closest point found.")
         return closest_point
+
 
 class GridItem(QGraphicsSvgItem):
     def __init__(self, path: str) -> None:
@@ -144,22 +152,27 @@ class GridItem(QGraphicsSvgItem):
         event.ignore()
 
 
-
-
 logger = logging.getLogger(__name__)
 
 GRID_DIR = "images/grid/"
 
+
 class Grid:
-    def __init__(self, pictograph: "BasePictograph", grid_data: GridData, grid_mode: str):
+    def __init__(
+        self, pictograph: "BasePictograph", grid_data: GridData, grid_mode: str
+    ):
         self.pictograph = pictograph
         self.grid_data = grid_data
         self.grid_mode = grid_mode  # Store the current grid mode
         self.items: dict[str, GridItem] = {}
-        self.center = self.grid_data.center_points.get(grid_mode, QPointF(0, 0))  # Retrieve the center point
+        self.center = self.grid_data.center_points.get(
+            grid_mode, QPointF(0, 0)
+        )  # Retrieve the center point
 
         if self.center == QPointF(0, 0):
-            logger.warning(f"Center point for grid mode '{grid_mode}' not found. Using default (0,0).")
+            logger.warning(
+                f"Center point for grid mode '{grid_mode}' not found. Using default (0,0)."
+            )
 
         self._create_grid_items()
 
@@ -176,7 +189,9 @@ class Grid:
         for mode, path in paths.items():
             grid_item = GridItem(path)
             self.pictograph.addItem(grid_item)
-            grid_item.setVisible(mode == self.grid_mode)  # Show only the current grid mode
+            grid_item.setVisible(
+                mode == self.grid_mode
+            )  # Show only the current grid mode
             self.items[mode] = grid_item
 
         # Load non-radial points specific to the grid mode
@@ -253,7 +268,7 @@ class Grid:
         """
         for item in self.items.values():
             item.setVisible(False)
-            
+
     def update_grid_mode(self):
         grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
             self.pictograph.pictograph_dict

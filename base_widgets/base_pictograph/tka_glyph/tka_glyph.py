@@ -25,7 +25,7 @@ class TKA_Glyph(QGraphicsItemGroup):
         self.turns_column_handler = TurnsColumnHandler(self)
         self.addToGroup(self.turns_column_handler)
 
-    def update_tka_glyph(self, visibility = True) -> None:
+    def update_tka_glyph(self, visibility=True) -> None:
         self.letter = self.pictograph.letter
         self.letter_handler.set_letter()
         if not self.letter:
@@ -34,12 +34,14 @@ class TKA_Glyph(QGraphicsItemGroup):
         direction, top_turn, bottom_turn = parse_turns_tuple_string(turns_tuple)
         self.dot_handler.update_dots(direction)
         self.dash_handler.update_dash()
-        
+
         self.turns_column_handler.update_turns(top_turn, bottom_turn)
         visibility_manager = (
             self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
         )
-        self.setVisible(visibility_manager.should_glyph_be_visible("TKA") if visibility else False)
+        self.setVisible(
+            visibility_manager.should_glyph_be_visible("TKA") if visibility else False
+        )
 
     def convert_to_ints(self, top_turn) -> int:
         top_turn = int(top_turn) if top_turn == int(top_turn) else top_turn

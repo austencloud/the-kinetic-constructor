@@ -7,6 +7,7 @@ from PyQt6.QtGui import QCursor, QClipboard, QAction, QContextMenuEvent
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
+
 class PictographDictCopier:
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph

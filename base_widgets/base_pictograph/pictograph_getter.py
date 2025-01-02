@@ -24,7 +24,6 @@ class PictographGetter:
         self.red_motion = self.pictograph.red_motion
         self.blue_arrow = self.pictograph.blue_arrow
         self.red_arrow = self.pictograph.red_arrow
-        self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
         self.lead_state_determiner = LeadStateDeterminer(
             self.red_motion, self.blue_motion
         )
@@ -91,7 +90,8 @@ class PictographGetter:
         return opposite_locations.get(loc)
 
     def turns_tuple(self) -> tuple[int, int, int]:
-        return self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
+        generator = self.pictograph.main_widget.turns_tuple_generator
+        return generator.generate_turns_tuple(self.pictograph)
 
     def pictograph_dict(self) -> dict:
         return {
@@ -119,4 +119,3 @@ class PictographGetter:
                 "end_ori": self.red_motion.end_ori,
             },
         }
-

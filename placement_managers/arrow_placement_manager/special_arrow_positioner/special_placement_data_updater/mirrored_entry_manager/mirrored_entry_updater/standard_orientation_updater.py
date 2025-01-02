@@ -1,4 +1,3 @@
-
 from Enums.letters import LetterConditions, Letter
 
 from data.constants import *

@@ -57,7 +57,6 @@ class BasePictograph(QGraphicsScene):
 
     # int
     arrow_turns: int
-
     # managers
     attr_manager: PictographAttrManager
     arrow_placement_manager: ArrowPlacementManager

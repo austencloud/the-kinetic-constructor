@@ -30,8 +30,10 @@ class PictographUpdater:
 
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
-                self.pictograph.grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
-                    self.pictograph.pictograph_dict
+                self.pictograph.grid_mode = (
+                    self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
+                        self.pictograph.pictograph_dict
+                    )
                 )
                 self.pictograph.grid.update_grid_mode()
 
@@ -46,7 +48,7 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self.pictograph.elemental_glyph.update_elemental_glyph()
-        
+
         self._position_objects()
         self.pictograph.reversal_symbol_manager.update_reversal_symbols()
 
