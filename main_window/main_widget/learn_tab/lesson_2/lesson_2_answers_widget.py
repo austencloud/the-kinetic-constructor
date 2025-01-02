@@ -9,7 +9,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.learn_tab.base_classes.base_answers_widget import (
     BaseAnswersWidget,
 )
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.pictograph_view import (
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import (
     LessonPictographView,
 )
 

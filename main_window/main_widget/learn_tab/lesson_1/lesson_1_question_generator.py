@@ -38,7 +38,7 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
         self.lesson_1_widget.answers_widget.display_answers(
             letters,
             correct_answer.value,
-            self.lesson_1_widget.check_answer,
+            self.lesson_1_widget.answer_checker.check_answer,
         )
 
     def generate_correct_answer(self) -> Letter:

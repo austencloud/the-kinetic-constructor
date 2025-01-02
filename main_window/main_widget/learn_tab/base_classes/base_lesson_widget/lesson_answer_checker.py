@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from .base_lesson_widget import BaseLessonWidget
 
 
-class AnswerChecker:
+class LessonAnswerChecker:
     """Class to check answers and update the UI accordingly."""
 
     def __init__(self, lesson_widget: "BaseLessonWidget"):
@@ -18,10 +18,7 @@ class AnswerChecker:
 
             if self.lesson.mode == "fixed_question":
                 self.lesson.update_progress_label()
-                if (
-                    self.lesson.current_question
-                    <= self.lesson.total_questions
-                ):
+                if self.lesson.current_question <= self.lesson.total_questions:
                     self.lesson.question_generator.start_new_question()
                 else:
                     self.lesson.results_widget.show_results(

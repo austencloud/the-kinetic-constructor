@@ -31,7 +31,7 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
         self.lesson_widget.answers_widget.display_answers(
             pictographs,
             correct_pictograph,
-            self.lesson_widget.check_answer,
+            self.lesson_widget.answer_checker.check_answer,
         )
 
     def generate_correct_answer(self) -> tuple[Letter, dict]:
