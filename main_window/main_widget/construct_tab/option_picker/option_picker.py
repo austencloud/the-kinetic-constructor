@@ -75,19 +75,20 @@ class OptionPicker(QWidget):
     def update_option_picker(self, sequence=None):
         if self.disabled:
             return
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+
+        if sequence is None:
+            sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if len(sequence) > 1:
-            selected_filter = self.reversal_filter.reversal_combobox.currentData()
-            next_options = self.option_getter.get_next_options(
-                sequence, selected_filter
-            )
 
             views = [option.view for option in self.option_pool]
             self.fade_manager.widget_fader.fade_and_update(
-                views, lambda: self._update_pictographs(next_options)
+                views, self._update_pictographs
             )
 
-    def _update_pictographs(self, next_options):
+    def _update_pictographs(self):
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        selected_filter = self.reversal_filter.reversal_combobox.currentData()
+        next_options = self.option_getter.get_next_options(sequence, selected_filter)
         self.scroll_area.display_manager.clear_all_section_layouts()
         self.scroll_area.add_and_display_relevant_pictographs(next_options)
 

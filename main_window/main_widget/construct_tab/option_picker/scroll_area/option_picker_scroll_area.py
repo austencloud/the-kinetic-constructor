@@ -78,7 +78,7 @@ class OptionPickerScrollArea(QScrollArea):
             self.display_manager.add_pictograph_to_section_layout(pictograph)
             pictograph.view.update_borders()
 
-            pictograph.view.show()
+            # pictograph.view.show()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

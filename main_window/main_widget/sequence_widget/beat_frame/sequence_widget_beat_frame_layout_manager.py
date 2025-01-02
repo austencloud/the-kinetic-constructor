@@ -50,6 +50,15 @@ class SequenceWidgetBeatFrameLayoutManager:
                 rows += 1
         return rows
 
+    def configure_beat_frame_for_filled_beats(self) -> None:
+        if self.settings_manager.global_settings.get_grow_sequence():
+            filled_beats = [
+                beat for beat in self.beat_frame.beats if beat.is_filled
+            ]
+            self.beat_frame.layout_manager.configure_beat_frame(
+                len(filled_beats)
+            )
+
     def configure_beat_frame(self, num_beats, override_grow_sequence=False):
         if not override_grow_sequence:
             grow_sequence = self.settings_manager.global_settings.get_grow_sequence()

@@ -25,6 +25,7 @@ class StartPositionDeleter:
                     widgets.remove(item)
 
             self.deleter.fade_and_reset_widgets(widgets, show_indicator)
+            
         elif not beats_filled and start_pos_filled:
             adjustment_panel_items = (
                 self.deleter.widget_collector.get_adjustment_panel_items()
