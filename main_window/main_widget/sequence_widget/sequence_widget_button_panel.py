@@ -90,7 +90,7 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "clear_sequence": {
                 "icon": "clear.svg",
-                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.delete_all_beats(
+                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.start_position_deleter.delete_all_beats(
                     show_indicator=True
                 ),
                 "tooltip": "Clear Sequence",

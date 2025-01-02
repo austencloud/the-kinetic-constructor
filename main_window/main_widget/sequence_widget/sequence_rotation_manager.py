@@ -6,7 +6,6 @@ from data.locations import cw_loc_order
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 
-from main_window.main_widget.grid_mode_checker import GridModeChecker
 
 if TYPE_CHECKING:
     from .sequence_widget import SequenceWidget

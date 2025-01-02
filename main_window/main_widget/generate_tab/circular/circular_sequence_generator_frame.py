@@ -20,7 +20,9 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         self.layout.addStretch(1)
 
         self.apply_settings()
-
+        self.beat_deleter = (
+            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter
+        )
     def apply_settings(self):
         """Apply settings to the modular widgets."""
         super().apply_settings()
@@ -60,7 +62,7 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def on_create_sequence(self, overwrite_sequence: bool):
         """Trigger sequence creation for Circular."""
         if overwrite_sequence:
-            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter.delete_start_pos()
+            self.beat_deleter.reset_widgets(False)
 
         self.builder.build_sequence(
             self.generate_tab_settings.get_sequence_generator_setting(

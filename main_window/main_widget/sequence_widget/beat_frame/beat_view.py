@@ -22,7 +22,7 @@ class BeatView(PictographView):
         self.beat_frame = beat_frame
         self.setStyleSheet("border: none; border: 1px solid black;")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        
+
         self._setup_blank_beat()
 
     def _setup_blank_beat(self):
@@ -33,6 +33,7 @@ class BeatView(PictographView):
         self.blank_beat.number_manager.add_beat_number()
 
     def set_beat(self, beat: "Beat", number: int) -> None:
+        # super().__init__(beat)
         self.beat = beat
         self.beat.view = self
         self.is_filled = True

@@ -20,10 +20,13 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         self.builder = FreeFormSequenceGenerator(self)
         self.letter_type_picker.apply_settings()
+        self.beat_deleter = (
+            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter
+        )
 
     def on_create_sequence(self, overwrite_sequence: bool):
         if overwrite_sequence:
-            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter.delete_start_pos()
+            self.beat_deleter.reset_widgets(False)
 
         self.builder.build_sequence(
             int(

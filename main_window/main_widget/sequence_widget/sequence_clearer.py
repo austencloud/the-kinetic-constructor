@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_widget.beat_frame import beat
 
 
 if TYPE_CHECKING:
