@@ -144,7 +144,12 @@ class LessonSelector(QWidget):
             lesson_widget = lesson_widgets[lesson_number - 1]
             lesson_widget_index = self.learn_widget.stack.indexOf(lesson_widget)
             self.main_widget.fade_manager.stack_fader.fade_stack(
-                self.learn_widget.stack, lesson_widget_index
+                self.learn_widget.stack,
+                lesson_widget_index,
+                300,
+                self.reset_layout_and_start_question(lesson_widget),
             )
-            lesson_widget.prepare_quiz_ui()
-            lesson_widget.question_generator.start_new_question()
+
+    def reset_layout_and_start_question(self, lesson_widget: "BaseLessonWidget"):
+        lesson_widget.prepare_quiz_ui()
+        lesson_widget.question_generator.start_new_question()

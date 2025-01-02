@@ -36,7 +36,7 @@ class BaseQuestionGenerator:
         ]
         self.lesson_widget.fade_manager.widget_fader.fade_and_update(
             widgets_to_fade,
-            callback=self.lesson_widget.question_generator.generate_question,
+            callback=self.generate_question,
         )
 
     def generate_question(self):

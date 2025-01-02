@@ -2,13 +2,15 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFrame
 
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_start_over_button import LessonStartOverButton
+
 if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
         BaseLessonWidget,
     )
 
 
-class ResultsWidget(QWidget):
+class LessonResultsWidget(QWidget):
     """Widget containing the result label and the 'Start Over' button."""
 
     def __init__(self, lesson_widget: "BaseLessonWidget"):
@@ -45,9 +47,7 @@ class ResultsWidget(QWidget):
         result_section_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Start Over button
-        self.start_over_button = QPushButton("Start Over", self)
-        self.start_over_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.start_over_button.clicked.connect(self.lesson_widget.prepare_quiz_ui)
+        self.start_over_button = LessonStartOverButton(self)
 
         # Layout setup
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -85,7 +85,7 @@ class ResultsWidget(QWidget):
         self.result_label.setText(text)
         self.adjustSize()
 
-    def resizeEvent(self,event):
+    def resizeEvent(self, event):
         """Resize the result label and start-over button to fit the content."""
         self._resize_result_label()
         self._resize_start_over_button()

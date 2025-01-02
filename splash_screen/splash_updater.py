@@ -32,4 +32,4 @@ class SplashUpdater:
         self.splash_screen.progress_bar.set_value(self.current_progress)
         message = self.widget_messages.get(widget_name, "Loading components...")
         self.splash_screen.currently_loading_label.setText(message)
-        QApplication.processEvents()
+        # QApplication.processEvents()

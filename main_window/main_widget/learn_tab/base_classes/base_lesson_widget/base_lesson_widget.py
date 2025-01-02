@@ -13,11 +13,10 @@ from .lesson_progress_label import LessonProgressLabel
 from .lesson_results_label import LessonResultLabel
 from .lesson_indicator_label import LessonIndicatorLabel
 from ..base_answers_widget import BaseAnswersWidget
-from .lesson_layout_manager import LessonLayoutManager
 from .lesson_quiz_timer_manager import QuizTimerManager
 from ..base_question_generator import BaseQuestionGenerator
 from ..base_question_widget import BaseQuestionWidget
-from .lesson_results_widget import ResultsWidget
+from .lesson_results_widget import LessonResultsWidget
 
 if TYPE_CHECKING:
     from ...learn_tab import LearnTab
@@ -40,28 +39,28 @@ class BaseLessonWidget(QWidget):
         self.main_widget = learn_tab.main_widget
         self.fade_manager = self.main_widget.fade_manager
 
-        self.layout_manager = LessonLayoutManager(self)
         self.timer_manager = QuizTimerManager(self)
-        self.results_widget = ResultsWidget(self)
+        self.results_widget = LessonResultsWidget(self)
         self.indicator_label = LessonIndicatorLabel(self)
         self.go_back_button = LessonGoBackButton(self)
+        self.progress_label = LessonProgressLabel(self)
+        self.result_label = LessonResultLabel(self)
+        self.answer_checker = LessonAnswerChecker(self)
 
+        self._setup_layout()
+
+    def _setup_layout(self):
         self.central_layout = QVBoxLayout()
-        
+
         self.back_layout = QHBoxLayout()
         self.back_layout.addWidget(self.go_back_button)
         self.back_layout.addStretch(1)
-        
+
         self.main_layout = QVBoxLayout()
         self.main_layout.addLayout(self.back_layout, 0)
         self.main_layout.addLayout(self.central_layout)
-        
-        self.setLayout(self.main_layout)
 
-        self.progress_label = LessonProgressLabel(self)
-        self.result_label = LessonResultLabel(self)
-        self.start_over_button = LessonStartOverButton(self)
-        self.answer_checker = LessonAnswerChecker(self)
+        self.setLayout(self.main_layout)
 
     def update_progress_label(self):
         self.progress_label.setText(f"{self.current_question}/{self.total_questions}")
@@ -71,7 +70,20 @@ class BaseLessonWidget(QWidget):
         self.incorrect_guesses = 0
         self.update_progress_label()
         self.clear_layout(self.central_layout)
-        self.layout_manager.setup_central_layout()
+        self._refresh_layout()
+
+    def _refresh_layout(self):
+        """Setup common UI layout."""
+        layout = self.central_layout
+        widgets = [
+            self.progress_label,
+            self.question_widget,
+            self.answers_widget,
+            self.indicator_label,
+        ]
+        for widget in widgets:
+            layout.addWidget(widget)
+            layout.addStretch(1)
 
     def clear_layout(self, layout: QVBoxLayout):
         if layout is not None:

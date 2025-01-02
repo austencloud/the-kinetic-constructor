@@ -22,28 +22,50 @@ class SequenceClearer:
         if not self.construct_tab:
             self.construct_tab = self.sequence_widget.main_widget.construct_tab
         beats = beat_frame.beats
-        self.main_widget.fade_manager.widget_fader.fade_and_update(
-            beats
-            + [
-                beat_frame.start_pos_view,
-                beat_frame.selection_overlay,
-                self.sequence_widget.current_word_label,
-                self.sequence_widget.difficulty_label,
-            ],
-            lambda: self.reset_widgets(
-                show_indicator, should_reset_to_start_pos_picker
-            ),
-            300,
-        )
+        widgets = [
+            self.sequence_widget.current_word_label,
+            self.sequence_widget.difficulty_label,
+            beat_frame.start_pos_view,
+            beat_frame.selection_overlay,
+        ] + beats
+        beats_filled = any(beat.is_filled for beat in beats)
+        start_pos_filled = beat_frame.start_pos_view.is_filled
+        
+        if not beats_filled and not start_pos_filled:
+            self.main_widget.fade_manager.widget_fader.fade_and_update(
+                widgets,
+                callback=lambda: self.reset_widgets(
+                    show_indicator, should_reset_to_start_pos_picker
+                ),
+                duration=300,
+            )
+        elif self.main_widget.right_stack.currentWidget() == self.main_widget.generate_tab:
+            self.main_widget.fade_manager.widget_fader.fade_and_update(
+                widgets,
+                callback=lambda: self.reset_widgets(
+                    show_indicator, should_reset_to_start_pos_picker
+                ),
+                duration=300,
+            )
+        else:
+            self.main_widget.fade_manager.widget_and_stack_fader.fade_widgets_and_stack(
+                widgets,
+                self.main_widget.right_stack,
+                self.main_widget.right_start_pos_picker_index,
+                300,
+                lambda: self.reset_widgets(
+                    show_indicator, should_reset_to_start_pos_picker
+                ),
+            )
 
     def reset_widgets(self, show_indicator, should_reset_to_start_pos_picker):
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
-        self._reset_construct_tab(should_reset_to_start_pos_picker)
-        self.construct_tab.last_beat = self.sequence_widget.beat_frame.start_pos
+        # self._reset_construct_tab(should_reset_to_start_pos_picker)
         self._show_clear_indicator(show_indicator)
-        self.sequence_widget.graph_editor.state.reset_graph_editor()
         self._configure_beat_frame()
+        self.sequence_widget.graph_editor.state.reset_graph_editor()
+        self.construct_tab.last_beat = self.sequence_widget.beat_frame.start_pos
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
     def _reset_construct_tab(self, should_reset_to_start_pos_picker: bool) -> None:

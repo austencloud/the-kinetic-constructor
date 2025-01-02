@@ -5,23 +5,25 @@ from PyQt6.QtCore import Qt
 
 
 
+
 if TYPE_CHECKING:
+    from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_results_widget import LessonResultsWidget
     from .base_lesson_widget import BaseLessonWidget
 
 
 class LessonStartOverButton(QPushButton):
     """Custom Start Over button with resize functionality."""
 
-    def __init__(self, lesson_widget: "BaseLessonWidget"):
+    def __init__(self, results_widget: "LessonResultsWidget"):
         super().__init__("Start Over")
-        self.lesson_widget = lesson_widget
-        self.clicked.connect(self.lesson_widget.prepare_quiz_ui)
+        self.results_widget = results_widget
+        self.clicked.connect(self.results_widget.lesson_widget.prepare_quiz_ui)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
     def resizeEvent(self, event):
-        font_size = self.lesson_widget.main_widget.width() // 60
+        font_size = self.results_widget.main_widget.width() // 60
         self.setStyleSheet(f"font-size: {font_size}px;")
         self.setFixedSize(
-            self.lesson_widget.main_widget.width() // 8,
-            self.lesson_widget.main_widget.height() // 12,
+            self.results_widget.main_widget.width() // 8,
+            self.results_widget.main_widget.height() // 12,
         )
