@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from .sequence_picker import SequencePicker
+    from ..sequence_picker import SequencePicker
 
 
 class SequencePickerNavSidebar(QWidget):
@@ -158,46 +158,29 @@ class SequencePickerNavSidebar(QWidget):
         self.resize_sidebar()
 
     def clear_sidebar(self):
-        for button in self.buttons:
-            self.layout.removeWidget(button)
-            button.hide()
-            button.deleteLater()
-        for year_label in self.year_labels.values():
-            self.layout.removeWidget(year_label)
-            year_label.hide()
-            year_label.deleteLater()
-        for spacer_line in self.spacer_lines:
-            self.layout.removeWidget(spacer_line)
-            spacer_line.hide()
-            spacer_line.deleteLater()
-
+        widgets = self.buttons + list(self.year_labels.values()) + self.spacer_lines
         if self.length_label:
-            self.layout.removeWidget(self.length_label)
-            self.length_label.hide()
-            self.length_label.deleteLater()
-            self.length_label = None
+            widgets.append(self.length_label)
         if self.length_spacer_line:
-            self.layout.removeWidget(self.length_spacer_line)
-            self.length_spacer_line.hide()
-            self.length_spacer_line.deleteLater()
-            self.length_spacer_line = None
-
+            widgets.append(self.length_spacer_line)
         if self.letter_label:
-            self.layout.removeWidget(self.letter_label)
-            self.letter_label.hide()
-            self.letter_label.deleteLater()
-            self.letter_label = None
+            widgets.append(self.letter_label)
         if self.letter_spacer_line:
-            self.layout.removeWidget(self.letter_spacer_line)
-            self.letter_spacer_line.hide()
-            self.letter_spacer_line.deleteLater()
-            self.letter_spacer_line = None
+            widgets.append(self.letter_spacer_line)
+
+        for widget in widgets:
+            self.layout.removeWidget(widget)
+            widget.hide()
+            widget.deleteLater()
 
         self.buttons.clear()
         self.year_labels.clear()
         self.spacer_lines.clear()
+        self.length_label = None
+        self.length_spacer_line = None
+        self.letter_label = None
+        self.letter_spacer_line = None
         self.selected_button = None
-        QApplication.processEvents()
 
     def get_formatted_day(self, date: str) -> str:
         day = date.split("-")[0].lstrip("0") + "-" + date.split("-")[1].lstrip("0")
@@ -309,7 +292,6 @@ class SequencePickerNavSidebar(QWidget):
             button_font.setPointSize(font_size)
             button.setFont(button_font)
 
-        # get the width of the longest button
         max_width = 0
         for button in self.buttons:
             max_width = max(

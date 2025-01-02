@@ -88,14 +88,20 @@ class SequenceViewerActionButtonPanel(QWidget):
             QMessageBox.warning(self, "No Image", "Please select an image first.")
 
     def edit_sequence(self):
-        if not hasattr(self, "sequence_populator"):
-            self.sequence_populator = self.browse_tab.edit_sequence_handler
-        if self.sequence_viewer.sequence_json:
+        sequence_json = self.sequence_viewer.sequence_json
+        if sequence_json:
             self.sequence_viewer.main_widget.navigation_widget.on_button_clicked(0)
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-            self.sequence_populator.load_sequence_from_json(
-                self.sequence_viewer.sequence_json
-            )
+            populator = self.browse_tab.main_widget.sequence_widget.beat_frame.populator
+            if sequence_json:
+                populator.populate_beat_frame_from_json(sequence_json["sequence"])
+            else:
+                QMessageBox.warning(
+                    self.browse_tab.main_widget,
+                    "Error",
+                    "No sequence metadata found in the thumbnail.",
+                )
+
             QApplication.restoreOverrideCursor()
         else:
             QMessageBox.warning(
@@ -103,6 +109,7 @@ class SequenceViewerActionButtonPanel(QWidget):
             )
 
     def save_image(self):
+        sequence_json = self.sequence_viewer.sequence_json
         current_thumbnail = self.sequence_viewer.get_thumbnail_at_current_index()
         if not current_thumbnail:
             QMessageBox.warning(
@@ -110,16 +117,15 @@ class SequenceViewerActionButtonPanel(QWidget):
             )
             return
 
-        metadata = self.sequence_viewer.sequence_json
-        if not metadata:
+        if not sequence_json:
             QMessageBox.warning(
                 self, "No Metadata", "No metadata found for the selected sequence."
             )
             return
 
-        self.temp_beat_frame.populate_beat_frame_from_json(metadata["sequence"])
+        self.temp_beat_frame.populate_beat_frame_from_json(sequence_json["sequence"])
         self.export_manager = self.temp_beat_frame.export_manager
-        self.export_manager.dialog_executor.exec_dialog(metadata["sequence"])
+        self.export_manager.dialog_executor.exec_dialog(sequence_json["sequence"])
 
     def hide_buttons(self):
         self.save_image_button.hide()

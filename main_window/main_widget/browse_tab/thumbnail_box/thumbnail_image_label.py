@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QApplication
 from typing import TYPE_CHECKING
 
 
@@ -55,6 +55,7 @@ class ThumbnailImageLabel(QLabel):
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
+        QApplication.processEvents()
 
     def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:

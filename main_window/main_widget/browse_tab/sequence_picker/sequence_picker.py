@@ -8,7 +8,7 @@ from .filter_selector.sequence_picker_filter_stack import (
     SequencePickerFilterStack,
 )
 from .sequence_picker_progress_bar import SequencePickerProgressBar
-from .sequence_picker_nav_sidebar import SequencePickerNavSidebar
+from .nav_sidebar.sequence_picker_nav_sidebar import SequencePickerNavSidebar
 from .sequence_picker_scroll_widget import SequencePickerScrollWidget
 
 if TYPE_CHECKING:
