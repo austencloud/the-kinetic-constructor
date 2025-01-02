@@ -93,5 +93,5 @@ class MainWidgetTabSwitcher:
         current_tab_name = self.mw.current_tab
         if current_tab_name in tab_indices:
             idx = tab_indices[current_tab_name]
-            self.mw.navigation_widget.on_button_clicked(idx)
+            self.mw.menu_bar.navigation_widget.on_button_clicked(idx)
             self.on_tab_changed(idx)

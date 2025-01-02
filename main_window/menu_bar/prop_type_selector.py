@@ -7,7 +7,7 @@ from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
-    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
+    from main_window.menu_bar.menu_bar import MenuBarWidget
 
 
 class ClickableLabel(QLabel):
@@ -24,10 +24,10 @@ class ClickableLabel(QLabel):
 
 
 class PropTypeSelector(QWidget):
-    def __init__(self, menu_bar_widget: "MenuBarWidget"):
+    def __init__(self, menu_bar: "MenuBarWidget"):
         super().__init__()
-        self.menu_bar_widget = menu_bar_widget
-        self.main_widget = menu_bar_widget.main_widget
+        self.menu_bar = menu_bar
+        self.main_widget = menu_bar.main_widget
         self.settings_manager = self.main_widget.settings_manager
         self.prop_type_changer = self.settings_manager.global_settings.prop_type_changer
 
@@ -43,7 +43,7 @@ class PropTypeSelector(QWidget):
         self.setLayout(layout)
 
     def style_widget(self):
-        font_size = self.menu_bar_widget.selectors_widget.selector_font_size
+        font_size = self.menu_bar.selectors_widget.selector_font_size
         font = QFont("Georgia", font_size)
         self.label.setFont(font)
 

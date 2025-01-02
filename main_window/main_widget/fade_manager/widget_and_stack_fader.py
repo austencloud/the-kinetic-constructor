@@ -1,3 +1,4 @@
+from calendar import c
 from typing import TYPE_CHECKING, Optional, List
 from PyQt6.QtWidgets import QWidget, QStackedWidget, QApplication
 from PyQt6.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve
@@ -23,32 +24,22 @@ class WidgetAndStackFader:
         """Fades out widgets and stack in parallel, switches the stack, and fades both in."""
         current_widget = stack.currentWidget()
         next_widget = stack.widget(new_index)
-
         if not current_widget or not next_widget or stack.currentIndex() == new_index:
             return
-
-        # Clear any lingering graphics effects
         self.manager.graphics_effect_remover.clear_graphics_effects(
             [current_widget, next_widget] + widgets
         )
-
-        # Prepare animations for widgets and stack
         animation_group = QParallelAnimationGroup(self.manager)
-
-        # Fade out current widget
-        if current_widget:
-            self._add_fade_animation(
-                animation_group, current_widget, fade_in=False, duration=duration
-            )
-
-        # Fade out widgets
-        for widget in widgets:
+        # if current_widget:
+        #     self._add_fade_animation(
+        #         animation_group, current_widget, fade_in=False, duration=duration
+        #     )
+        for widget in widgets + [current_widget if current_widget else None]:
             self._add_fade_animation(
                 animation_group, widget, fade_in=False, duration=duration
             )
 
         def on_fade_out_finished():
-            # Reset widgets and switch stack index
             if callback:
                 callback()
 
@@ -57,7 +48,6 @@ class WidgetAndStackFader:
             )
             stack.setCurrentIndex(new_index)
 
-            # Fade in new widget and widgets
             fade_in_group = QParallelAnimationGroup(self.manager)
             if next_widget:
                 self._add_fade_animation(
@@ -70,10 +60,7 @@ class WidgetAndStackFader:
 
             fade_in_group.start()
 
-        # Connect animation group finished signal
         animation_group.finished.connect(on_fade_out_finished)
-
-        # Start animations
         animation_group.start()
 
     def _add_fade_animation(

@@ -6,15 +6,16 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 
 if TYPE_CHECKING:
+    from main_window.menu_bar.menu_bar import MenuBarWidget
     from main_window.main_widget.main_widget import MainWidget
 
 
 class NavigationWidget(QWidget):
     tab_changed = pyqtSignal(int)
 
-    def __init__(self, main_widget: "MainWidget"):
-        super().__init__(main_widget)
-        self.mw = main_widget
+    def __init__(self, menu_bar: "MenuBarWidget"):
+        super().__init__(menu_bar)
+        self.mw = menu_bar.main_widget
 
         self.container_frame = QFrame(self)
         self.container_layout = QVBoxLayout(self.container_frame)

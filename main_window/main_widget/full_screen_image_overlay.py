@@ -46,7 +46,7 @@ class FullScreenImageOverlay(QWidget):
     def show(self, pixmap: QPixmap):
         """Scale the pixmap to fit within the window while maintaining aspect ratio."""
         window_size = self.main_widget.main_window.size()
-        menu_bar_height = self.main_widget.menu_bar_widget.height()
+        menu_bar_height = self.main_widget.menu_bar.height()
         window_size.setHeight(window_size.height() - menu_bar_height)
 
         scaled_pixmap = pixmap.scaled(

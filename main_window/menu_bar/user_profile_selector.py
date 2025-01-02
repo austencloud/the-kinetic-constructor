@@ -6,7 +6,7 @@ from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
-    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
+    from main_window.menu_bar.menu_bar import MenuBarWidget
 
 
 class ClickableLabel(QLabel):
@@ -23,10 +23,10 @@ class ClickableLabel(QLabel):
 
 
 class UserProfileSelector(QWidget):
-    def __init__(self, menu_bar_widget: "MenuBarWidget"):
+    def __init__(self, menu_bar: "MenuBarWidget"):
         super().__init__()
-        self.menu_bar_widget = menu_bar_widget
-        self.main_widget = menu_bar_widget.main_widget
+        self.menu_bar = menu_bar
+        self.main_widget = menu_bar.main_widget
         self.user_manager = self.main_widget.settings_manager.users.user_manager
         self.dialog = None
         current_user = self.user_manager.get_current_user()
@@ -41,7 +41,7 @@ class UserProfileSelector(QWidget):
         self.setLayout(layout)
 
     def style_widget(self):
-        font_size = self.menu_bar_widget.selectors_widget.selector_font_size
+        font_size = self.menu_bar.selectors_widget.selector_font_size
         font = QFont("Georgia", font_size)
         self.label.setFont(font)
 
@@ -97,7 +97,7 @@ class UserProfileSelector(QWidget):
         layout.setContentsMargins(5, 5, 5, 5)
 
         font = QFont()
-        font.setPointSize(self.menu_bar_widget.selectors_widget.selector_font_size)
+        font.setPointSize(self.menu_bar.selectors_widget.selector_font_size)
 
         for option in self.options:
             button = QPushButton(option)

@@ -1,29 +1,29 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QFrame
 from PyQt6.QtCore import Qt
-from main_window.menu_bar_widget.base_selector import BaseSelector
+from main_window.menu_bar.base_selector import BaseSelector
 from .user_profile_selector import UserProfileSelector
 from .background_selector.background_selector import BackgroundSelector
 from .prop_type_selector import PropTypeSelector
 from .visibility_selector import VisibilitySelector
 
 if TYPE_CHECKING:
-    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
+    from main_window.menu_bar.menu_bar import MenuBarWidget
     from main_window.main_widget.main_widget import MainWidget
 
 
 class SelectorsWidget(QWidget):
     """Holds the user profile, prop, background, and visibility selectors."""
 
-    def __init__(self, menu_bar_widget: "MenuBarWidget") -> None:
-        super().__init__(menu_bar_widget)
-        self.main_widget = menu_bar_widget.main_widget
+    def __init__(self, menu_bar: "MenuBarWidget") -> None:
+        super().__init__(menu_bar)
+        self.main_widget = menu_bar.main_widget
 
         # Instantiate selectors
-        self.user_profile_selector = UserProfileSelector(menu_bar_widget)
-        self.prop_type_selector = PropTypeSelector(menu_bar_widget)
-        self.background_selector = BackgroundSelector(menu_bar_widget)
-        self.visibility_selector = VisibilitySelector(menu_bar_widget)
+        self.user_profile_selector = UserProfileSelector(menu_bar)
+        self.prop_type_selector = PropTypeSelector(menu_bar)
+        self.background_selector = BackgroundSelector(menu_bar)
+        self.visibility_selector = VisibilitySelector(menu_bar)
 
         # Create labels
         self.user_profile_label = QLabel("User:")

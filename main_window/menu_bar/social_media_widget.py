@@ -2,16 +2,17 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QPushButton
 from PyQt6.QtGui import QIcon, QDesktopServices
 from PyQt6.QtCore import Qt, QSize, QUrl
+
 if TYPE_CHECKING:
-    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
+    from main_window.menu_bar.menu_bar import MenuBarWidget
 
 
 class SocialMediaWidget(QWidget):
     """Handles all social media link buttons."""
 
-    def __init__(self, menu_bar_widget: "MenuBarWidget"):
-        super().__init__(menu_bar_widget)
-        self.main_widget = menu_bar_widget.main_widget
+    def __init__(self, menu_bar: "MenuBarWidget"):
+        super().__init__(menu_bar)
+        self.main_widget = menu_bar.main_widget
 
         # Core layout
         self._grid_layout = QGridLayout()

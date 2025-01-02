@@ -4,7 +4,7 @@ from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
-    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
+    from main_window.menu_bar.menu_bar import MenuBarWidget
 
 
 class ClickableLabel(QLabel):
@@ -21,10 +21,10 @@ class ClickableLabel(QLabel):
 
 
 class BaseSelector(QWidget):
-    def __init__(self, menu_bar_widget: "MenuBarWidget", widget: QWidget):
+    def __init__(self, menu_bar: "MenuBarWidget", widget: QWidget):
         super().__init__()
-        self.menu_bar_widget = menu_bar_widget
-        self.main_widget = menu_bar_widget.main_widget
+        self.menu_bar = menu_bar
+        self.main_widget = menu_bar.main_widget
         self.widget = widget
 
         # Set up layout
@@ -34,7 +34,7 @@ class BaseSelector(QWidget):
         self.setLayout(layout)
 
     def style_widget(self):
-        font_size = self.menu_bar_widget.selectors_widget.selector_font_size
+        font_size = self.menu_bar.selectors_widget.selector_font_size
         font = QFont("Georgia", font_size)
         self.widget.setFont(font)
 
@@ -77,10 +77,10 @@ class BaseSelector(QWidget):
 
 
 class LabelSelector(BaseSelector):
-    def __init__(self, menu_bar_widget: "MenuBarWidget", label_text: str):
+    def __init__(self, menu_bar: "MenuBarWidget", label_text: str):
         self.label = ClickableLabel(label_text)
         self.label.clicked.connect(self.on_label_clicked)
-        super().__init__(menu_bar_widget, self.label)
+        super().__init__(menu_bar, self.label)
 
     def on_label_clicked(self):
         """To be implemented by subclasses."""
@@ -90,10 +90,10 @@ class LabelSelector(BaseSelector):
 
 
 class ButtonSelector(BaseSelector):
-    def __init__(self, menu_bar_widget: "MenuBarWidget", button_text: str):
+    def __init__(self, menu_bar: "MenuBarWidget", button_text: str):
         self.button = QPushButton(button_text)
         self.button.clicked.connect(self.on_button_clicked)
-        super().__init__(menu_bar_widget, self.button)
+        super().__init__(menu_bar, self.button)
 
     def on_button_clicked(self):
         """To be implemented by subclasses."""

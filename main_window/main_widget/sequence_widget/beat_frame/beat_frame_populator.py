@@ -30,7 +30,7 @@ class BeatFramePopulator:
         if not self.current_sequence_json:
             return
 
-        self.beat_frame.deletion_manager.delete_all_beats()
+        # self.beat_frame.deletion_manager.delete_start_pos()
         self._set_start_position()
         self._update_sequence_layout()
         self._update_sequence_word()

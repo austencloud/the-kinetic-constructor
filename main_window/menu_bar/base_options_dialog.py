@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QDialog, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt
 from typing import Callable, TYPE_CHECKING
 
-from main_window.menu_bar_widget.base_selector import BaseSelector
+from main_window.menu_bar.base_selector import BaseSelector
 
 if TYPE_CHECKING:
     from PyQt6.QtWidgets import QWidget
@@ -55,7 +55,7 @@ class BaseOptionsDialog(QDialog):
         self.exec()
 
     def resize_dialog(self):
-        font_size = self.selector.menu_bar_widget.height() // 3
+        font_size = self.selector.menu_bar.height() // 3
         font = self.font()
         font.setPointSize(font_size)
         for button in self.findChildren(QPushButton):

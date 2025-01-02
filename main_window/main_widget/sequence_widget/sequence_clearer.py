@@ -15,9 +15,7 @@ class SequenceClearer:
         self.settings_manager = sequence_widget.main_widget.settings_manager
         self.main_widget = sequence_widget.main_widget
 
-    def clear_sequence(
-        self, show_indicator=True, should_reset_to_start_pos_picker=True
-    ) -> None:
+    def clear_sequence(self, show_indicator=True) -> None:
         beat_frame = self.sequence_widget.beat_frame
         if not self.construct_tab:
             self.construct_tab = self.sequence_widget.main_widget.construct_tab
@@ -30,21 +28,20 @@ class SequenceClearer:
         ] + beats
         beats_filled = any(beat.is_filled for beat in beats)
         start_pos_filled = beat_frame.start_pos_view.is_filled
-        
+
         if not beats_filled and not start_pos_filled:
             self.main_widget.fade_manager.widget_fader.fade_and_update(
                 widgets,
-                callback=lambda: self.reset_widgets(
-                    show_indicator, should_reset_to_start_pos_picker
-                ),
+                callback=lambda: self.reset_widgets(show_indicator),
                 duration=300,
             )
-        elif self.main_widget.right_stack.currentWidget() == self.main_widget.generate_tab:
+        elif (
+            self.main_widget.right_stack.currentWidget()
+            == self.main_widget.generate_tab
+        ):
             self.main_widget.fade_manager.widget_fader.fade_and_update(
                 widgets,
-                callback=lambda: self.reset_widgets(
-                    show_indicator, should_reset_to_start_pos_picker
-                ),
+                callback=lambda: self.reset_widgets(show_indicator),
                 duration=300,
             )
         else:
@@ -53,22 +50,19 @@ class SequenceClearer:
                 self.main_widget.right_stack,
                 self.main_widget.right_start_pos_picker_index,
                 300,
-                lambda: self.reset_widgets(
-                    show_indicator, should_reset_to_start_pos_picker
-                ),
+                lambda: self.reset_widgets(show_indicator),
             )
 
-    def reset_widgets(self, show_indicator, should_reset_to_start_pos_picker):
+    def reset_widgets(self, show_indicator):
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
-        # self._reset_construct_tab(should_reset_to_start_pos_picker)
         self._show_clear_indicator(show_indicator)
         self._configure_beat_frame()
         self.sequence_widget.graph_editor.state.reset_graph_editor()
         self.construct_tab.last_beat = self.sequence_widget.beat_frame.start_pos
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
-    def _reset_construct_tab(self, should_reset_to_start_pos_picker: bool) -> None:
+    def _reset_construct_tab(self) -> None:
         current_widget = self.main_widget.right_stack.currentWidget()
         if not current_widget == self.main_widget.generate_tab:
             self.construct_tab.transition_to_start_pos_picker()

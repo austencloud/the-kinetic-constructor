@@ -2,9 +2,10 @@ import random
 from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import Qt
+from PyQt6.QtOpenGL import QOpenGLTexture
 
 from utilities.path_helpers import get_images_and_data_path
-
+from OpenGL.GL import *
 
 class SantaManager:
     _cached_santa_image = None
@@ -15,7 +16,7 @@ class SantaManager:
             santa_image_path = get_images_and_data_path("images/backgrounds/santa.png")
             SantaManager._cached_santa_image = QPixmap(santa_image_path)
 
-        self.santa_image = SantaManager._cached_santa_image
+        self.santa_image:QPixmap = SantaManager._cached_santa_image
 
         # Set initial parameters for Santa
         self.santa = {
@@ -96,3 +97,40 @@ class SantaManager:
 
         # Reset opacity
         painter.setOpacity(1.0)
+
+
+    def draw_santa_opengl(self, widget):
+        if not self.santa["active"]:
+            return
+
+        x = 2 * self.santa["x"] - 1
+        y = 2 * (1 - self.santa["y"]) - 1
+        width = 0.2  # Adjust as needed
+        height = 0.2
+
+        glEnable(GL_TEXTURE_2D)
+        glBindTexture(GL_TEXTURE_2D, self.get_santa_texture_id())
+        glColor4f(1.0, 1.0, 1.0, self.santa["opacity"])
+
+        glBegin(GL_QUADS)
+        if self.santa["direction"] == 1:  # Normal
+            glTexCoord2f(0, 0); glVertex2f(x, y)
+            glTexCoord2f(1, 0); glVertex2f(x + width, y)
+            glTexCoord2f(1, 1); glVertex2f(x + width, y - height)
+            glTexCoord2f(0, 1); glVertex2f(x, y - height)
+        else:  # Mirrored
+            glTexCoord2f(1, 0); glVertex2f(x, y)
+            glTexCoord2f(0, 0); glVertex2f(x + width, y)
+            glTexCoord2f(0, 1); glVertex2f(x + width, y - height)
+            glTexCoord2f(1, 1); glVertex2f(x, y - height)
+        glEnd()
+
+        glDisable(GL_TEXTURE_2D)
+
+    
+    def get_santa_texture_id(self):
+        if not hasattr(self, "_santa_texture_id"):
+            image = self.santa_image.toImage()
+            texture = QOpenGLTexture(image)
+            self._santa_texture_id = texture.textureId()
+        return self._santa_texture_id

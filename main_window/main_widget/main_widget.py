@@ -9,17 +9,11 @@ from .full_screen_image_overlay import FullScreenImageOverlay
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .learn_tab.learn_tab import LearnTab
-from .sequence_widget.beat_frame.resize_event_filter import (
-    ResizeEventFilter
-)
+from .sequence_widget.beat_frame.resize_event_filter import ResizeEventFilter
 from .write_tab.write_tab import WriteTab
-from .main_background_widget.main_background_widget import (
-    MainBackgroundWidget
-)
+from .main_background_widget.main_background_widget import MainBackgroundWidget
 from .main_widget_tab_switcher import MainWidgetTabSwitcher
-from .font_color_updater.font_color_updater import (
-    FontColorUpdater
-)
+from .font_color_updater.font_color_updater import FontColorUpdater
 
 
 from .main_widget_manager import MainWidgetManager
@@ -29,8 +23,8 @@ from .main_widget_state import MainWidgetState
 
 if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
-    from .navigation_widget import NavigationWidget
-    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
+    from ..menu_bar.navigation_widget import NavigationWidget
+    from main_window.menu_bar.menu_bar import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
 
@@ -97,8 +91,7 @@ class MainWidget(QWidget):
     # Layouts and Widgets
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
-    menu_bar_widget: "MenuBarWidget"
-    navigation_widget: "NavigationWidget"
+    menu_bar: "MenuBarWidget"
     background_widget: "MainBackgroundWidget"
     left_stack: QStackedWidget
     right_stack: QStackedWidget

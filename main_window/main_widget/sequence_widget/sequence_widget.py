@@ -30,7 +30,7 @@ class SequenceWidget(QWidget):
         # Managers
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
-        self.sequence_clearer = SequenceClearer(self)
+        self.clearer = SequenceClearer(self)
 
         # Modification Managers
         self.mirror_manager = SequenceMirrorManager(self)

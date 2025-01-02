@@ -90,7 +90,7 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "clear_sequence": {
                 "icon": "clear.svg",
-                "callback": lambda: self.sequence_widget.sequence_clearer.clear_sequence(
+                "callback": lambda: self.sequence_widget.clearer.clear_sequence(
                     show_indicator=True
                 ),
                 "tooltip": "Clear Sequence",

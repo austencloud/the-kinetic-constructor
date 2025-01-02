@@ -11,8 +11,8 @@ from .main_background_widget.main_background_widget import MainBackgroundWidget
 from .font_color_updater.font_color_updater import (
     FontColorUpdater,
 )
-from ..menu_bar_widget.menu_bar_widget import MenuBarWidget
-from .navigation_widget import NavigationWidget
+from ..menu_bar.menu_bar import MenuBarWidget
+from ..menu_bar.navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
@@ -36,9 +36,8 @@ class MainWidgetUI:
 
         splash = self.splash_screen
         splash.updater.update_progress("MenuBarWidget")
-        self.mw.menu_bar_widget = MenuBarWidget(self.mw)
-        splash.updater.update_progress("NavigationWidget")
-        self.mw.navigation_widget = NavigationWidget(self.mw)
+        self.mw.menu_bar = MenuBarWidget(self.mw)
+
         splash.updater.update_progress("SequenceWidget")
         self.mw.sequence_widget = SequenceWidget(self.mw)
         splash.updater.update_progress("ConstructTab")
@@ -80,8 +79,9 @@ class MainWidgetUI:
         self.mw.setLayout(self.mw.main_layout)
 
         top_layout = QHBoxLayout()
-        top_layout.addWidget(self.mw.menu_bar_widget)
-        top_layout.addWidget(self.mw.navigation_widget)
+        top_layout.addWidget(self.mw.menu_bar.social_media_widget, 1)
+        top_layout.addWidget(self.mw.menu_bar.navigation_widget, 16)
+        top_layout.addWidget(self.mw.menu_bar.settings_button, 1)
 
         content_layout = QHBoxLayout()
         content_layout.addWidget(self.mw.left_stack, 1)
