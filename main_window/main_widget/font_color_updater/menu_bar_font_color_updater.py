@@ -13,5 +13,5 @@ class MenuBarFontColorUpdater(BaseFontColorUpdater):
 
     def update(self):
         menu_bar = self.main_widget.menu_bar_widget
-        for label, _ in menu_bar.selectors_widget.sections:
-            self._apply_font_color(label)
+        # for label, _ in menu_bar.selectors_widget.sections:
+        #     self._apply_font_color(label)

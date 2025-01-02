@@ -80,8 +80,8 @@ class MainWidgetUI:
         self.mw.setLayout(self.mw.main_layout)
 
         top_layout = QHBoxLayout()
-        top_layout.addWidget(self.mw.menu_bar_widget, 1)
-        top_layout.addWidget(self.mw.navigation_widget, 1)
+        top_layout.addWidget(self.mw.menu_bar_widget)
+        top_layout.addWidget(self.mw.navigation_widget)
 
         content_layout = QHBoxLayout()
         content_layout.addWidget(self.mw.left_stack, 1)
