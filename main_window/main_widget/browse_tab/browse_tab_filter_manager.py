@@ -108,13 +108,13 @@ class BrowseTabFilterManager:
         self.browse_tab.filter_manager.sort_and_display_thumbnail_boxes_by_current_filter(
             self.browse_tab.filter_manager.current_filter
         )
-        QApplication.processEvents()
+        # QApplication.processEvents()
         self.browse_tab.main_widget.left_stack.setCurrentIndex(
             self.browse_tab.main_widget.left_sequence_picker_index
         )
-        self.browse_tab.main_widget.left_stack.setGraphicsEffect(None)
-        self.browse_tab.sequence_picker.setGraphicsEffect(None)
-        self.main_widget.fade_manager.graphics_effect_remover.clear_graphics_effects()
+        # self.browse_tab.main_widget.left_stack.setGraphicsEffect(None)
+        # self.browse_tab.sequence_picker.setGraphicsEffect(None)
+        # self.main_widget.fade_manager.graphics_effect_remover.clear_graphics_effects()
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict

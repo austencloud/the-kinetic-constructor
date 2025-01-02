@@ -106,7 +106,6 @@ class StartingLetterSection(FilterSectionBase):
             else "all sequences"
         )
         self.browse_tab.sequence_picker.nav_sidebar.clear_sidebar()
-        QApplication.processEvents()
         self.browse_tab.filter_manager.prepare_ui_for_filtering(description)
 
         base_words = self.get_sorted_base_words("sequence_length")

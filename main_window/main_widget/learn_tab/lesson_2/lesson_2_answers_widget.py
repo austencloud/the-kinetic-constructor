@@ -23,23 +23,20 @@ logger = logging.getLogger(__name__)
 
 class Lesson2AnswersWidget(BaseAnswersWidget):
     """Widget responsible for displaying the pictograph answers in a grid layout."""
+    columns = 2  
+    spacing = 30 
 
     def __init__(self, lesson_2_widget: "Lesson2Widget"):
         super().__init__(lesson_2_widget)
         self.lesson_2_widget = lesson_2_widget
         self.key_generator = self.main_widget.pictograph_key_generator
 
-        # Initialize Grid Layout
         self.layout: QGridLayout = QGridLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
 
         self.pictograph_views: List[LessonPictographView] = []
         self.pictographs: dict[str, BasePictograph] = {}
-
-        # Define grid parameters
-        self.columns = 2  # Number of columns in the grid
-        self.spacing = 30  # Spacing between widgets
 
         self.layout.setSpacing(self.spacing)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -65,15 +62,11 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
             pictograph.quiz_mode = True
             pictograph.tka_glyph.setVisible(False)
 
-            # Connect click event
-            # Use lambda with default arguments to capture current pictograph_dict and correct_pictograph
             view.mousePressEvent = (
                 lambda event, opt=pictograph_dict: check_answer_callback(
                     opt, correct_pictograph
                 )
             )
-
-            # Add to the grid layout
             row = index // self.columns
             col = index % self.columns
             self.layout.addWidget(view, row, col)
