@@ -77,10 +77,11 @@ class SequenceWidgetBeatFrameLayoutManager:
         for row in range(rows):
             for col in range(1, columns + 1):
                 if index < num_beats:
-                    beat_view = beats[index]
-                    self.beat_frame.layout.addWidget(beat_view, row, col)
-                    beat_view.beat.number_manager.add_beat_number(index + 1)
-                    beat_view.show()
+                    if index < len(beats):
+                        beat_view = beats[index]
+                        self.beat_frame.layout.addWidget(beat_view, row, col)
+                        beat_view.beat.number_manager.add_beat_number(index + 1)
+                        beat_view.show()
                     index += 1
                 else:
                     if index < len(beats):

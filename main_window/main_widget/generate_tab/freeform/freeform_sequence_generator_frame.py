@@ -12,8 +12,10 @@ if TYPE_CHECKING:
 
 
 class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
-    def __init__(self, sequence_generator_tab: "GenerateTab") -> None:
-        super().__init__(sequence_generator_tab, "freeform")
+    
+    
+    def __init__(self, generate_tab: "GenerateTab") -> None:
+        super().__init__(generate_tab, "freeform")
 
         self.letter_type_picker = LetterTypePickerWidget(self)
         self.layout.addWidget(self.letter_type_picker)

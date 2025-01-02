@@ -3,16 +3,24 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 
+
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster
 from ..widgets.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
+    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget import LetterTypePickerWidget
+    from main_window.main_widget.generate_tab.widgets.permutation_type_toggle import PermutationTypeToggle
+    from main_window.main_widget.generate_tab.widgets.rotation_type_toggle import RotationTypeToggle
     from ..generate_tab import GenerateTab
 
 
 class BaseSequenceGeneratorFrame(QFrame):
+    letter_type_picker: "LetterTypePickerWidget" = None
+    rotation_type_toggle: "RotationTypeToggle" = None
+    permutation_type_toggle: "PermutationTypeToggle" = None
+    
     def __init__(self, generate_tab: "GenerateTab", builder_type: str) -> None:
         super().__init__(generate_tab)
         self.generate_tab = generate_tab

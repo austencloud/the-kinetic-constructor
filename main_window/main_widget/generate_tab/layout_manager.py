@@ -37,17 +37,17 @@ class GenerateTabLayoutManager:
         self.tab.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.tab.checkbox_layout.addWidget(self.tab.overwrite_checkbox)
 
-        self.tab.layout = QVBoxLayout(self.tab)
-        self.tab.layout.addLayout(top_hbox)
-        self.tab.layout.addWidget(self.tab.spacer_1)
-        self.tab.layout.addLayout(self.tab.button_layout)
-        self.tab.layout.addLayout(self.tab.stacked_layout)
-        self.tab.layout.addWidget(self.tab.spacer_2)
-        self.tab.layout.addLayout(generate_button_hbox)
-        self.tab.layout.addLayout(self.tab.checkbox_layout)
-        self.tab.layout.addWidget(self.tab.spacer_3)
+        layout = self.tab.layout = QVBoxLayout(self.tab)
+        layout.addLayout(top_hbox)
+        layout.addWidget(self.tab.spacer_1)
+        layout.addLayout(self.tab.button_layout)
+        layout.addLayout(self.tab.stacked_layout)
+        layout.addWidget(self.tab.spacer_2)
+        layout.addLayout(generate_button_hbox)
+        layout.addLayout(self.tab.checkbox_layout)
+        layout.addWidget(self.tab.spacer_3)
+
         self.tab.setLayout(self.tab.layout)
-        
 
     def _setup_spacers(self):
         spacers: list[GenerateTabSpacer] = []
