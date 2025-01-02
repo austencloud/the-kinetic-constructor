@@ -5,7 +5,7 @@ class SequenceLevelEvaluator:
         self.RADIAL_ORIENTATIONS = {"in", "out"}
 
     def get_sequence_difficulty_level(self, sequence: list[dict]) -> int:
-        if len(sequence) < 2:
+        if len(sequence) < 3:
             return ""
         has_non_radial_orientation = False
         has_turns = False

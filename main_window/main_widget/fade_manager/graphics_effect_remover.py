@@ -30,8 +30,8 @@ class GraphicsEffectRemover:
         """Remove graphics effects recursively and reset widget visibility."""
         if widget.graphicsEffect():
             widget.setGraphicsEffect(None)
-
-        for child in widget.findChildren(QWidget):
-            if child.graphicsEffect():
-                if child.__class__.__base__ != BaseIndicatorLabel:
-                    child.setGraphicsEffect(None)
+        if hasattr(widget, "children"):
+            for child in widget.findChildren(QWidget):
+                if child.graphicsEffect():
+                    if child.__class__.__base__ != BaseIndicatorLabel:
+                        child.setGraphicsEffect(None)

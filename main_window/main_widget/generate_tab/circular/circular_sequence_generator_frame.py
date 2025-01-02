@@ -60,7 +60,7 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def on_create_sequence(self, overwrite_sequence: bool):
         """Trigger sequence creation for Circular."""
         if overwrite_sequence:
-            self.generate_tab.main_widget.sequence_widget.beat_frame.deletion_manager.delete_start_pos()
+            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_remover.delete_start_pos()
 
         self.builder.build_sequence(
             self.generate_tab_settings.get_sequence_generator_setting(

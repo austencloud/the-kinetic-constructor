@@ -1,5 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
+
+from main_window.main_widget.sequence_widget.beat_frame.beat_remover import BeatRemover
+
+
 from .sequence_color_swap_manager import SequenceColorSwapManager
 from .sequence_mirror_manager import SequenceMirrorManager
 from .sequence_rotation_manager import SequenceRotationManager
@@ -30,7 +34,6 @@ class SequenceWidget(QWidget):
         # Managers
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
-        self.clearer = SequenceClearer(self)
 
         # Modification Managers
         self.mirror_manager = SequenceMirrorManager(self)
@@ -50,6 +53,8 @@ class SequenceWidget(QWidget):
 
         # Layout
         self.layout_manager = SequenceWidgetLayoutManager(self)
+
+        self.beat_remover = BeatRemover(self)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

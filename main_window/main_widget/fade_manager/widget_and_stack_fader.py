@@ -30,14 +30,12 @@ class WidgetAndStackFader:
             [current_widget, next_widget] + widgets
         )
         animation_group = QParallelAnimationGroup(self.manager)
-        # if current_widget:
-        #     self._add_fade_animation(
-        #         animation_group, current_widget, fade_in=False, duration=duration
-        #     )
+
         for widget in widgets + [current_widget if current_widget else None]:
-            self._add_fade_animation(
-                animation_group, widget, fade_in=False, duration=duration
-            )
+            if widget:
+                self._add_fade_animation(
+                    animation_group, widget, fade_in=False, duration=duration
+                )
 
         def on_fade_out_finished():
             if callback:
@@ -54,9 +52,10 @@ class WidgetAndStackFader:
                     fade_in_group, next_widget, fade_in=True, duration=duration
                 )
             for widget in widgets:
-                self._add_fade_animation(
-                    fade_in_group, widget, fade_in=True, duration=duration
-                )
+                if widget:
+                    self._add_fade_animation(
+                        fade_in_group, widget, fade_in=True, duration=duration
+                    )
 
             fade_in_group.start()
 

@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.sequence_widget.beat_frame import beat
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import (
@@ -20,12 +22,21 @@ class SequenceClearer:
         if not self.construct_tab:
             self.construct_tab = self.sequence_widget.main_widget.construct_tab
         beats = beat_frame.beats
-        widgets = [
-            self.sequence_widget.current_word_label,
-            self.sequence_widget.difficulty_label,
-            beat_frame.start_pos_view,
-            beat_frame.selection_overlay,
-        ] + beats
+        pictograph_items = self._get_GE_pictograph_items()
+        adjustment_panel_items = self._get_adjustment_panel_items()
+        widgets = (
+            [
+                self.sequence_widget.current_word_label,
+                self.sequence_widget.difficulty_label,
+                beat_frame.start_pos_view,
+                beat_frame.selection_overlay,
+            ]
+            + beats
+            + pictograph_items
+            + adjustment_panel_items
+        )
+        widgets = [widget for widget in widgets if widget]
+
         beats_filled = any(beat.is_filled for beat in beats)
         start_pos_filled = beat_frame.start_pos_view.is_filled
 
@@ -52,6 +63,56 @@ class SequenceClearer:
                 300,
                 lambda: self.reset_widgets(show_indicator),
             )
+
+    def _get_GE_pictograph_items(self):
+        beat_frame = self.sequence_widget.beat_frame
+        GE_pictograph = (
+            beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+        )
+        arrows: dict = GE_pictograph.arrows
+        props: dict = GE_pictograph.props
+        tka_glyph = GE_pictograph.tka_glyph
+        tka_glyph_parts = [
+            tka_glyph.letter_handler.letter_item,
+            tka_glyph.dash_handler.dash_item,
+            tka_glyph.dot_handler.same_dot_item,
+            tka_glyph.dot_handler.opp_dot_item,
+        ]
+        start_to_end_pos_glyph = GE_pictograph.start_to_end_pos_glyph
+        start_to_end_pos_glyph_parts = [
+            start_to_end_pos_glyph.start_glyph,
+            start_to_end_pos_glyph.end_glyph,
+            start_to_end_pos_glyph.arrow_glyph,
+        ]
+        GE_glyphs = (
+            [
+                GE_pictograph.vtg_glyph,
+                GE_pictograph.elemental_glyph,
+                GE_pictograph.number_manager.beat_number_item,
+                GE_pictograph.start_text_item,
+            ]
+            + tka_glyph_parts
+            + start_to_end_pos_glyph_parts
+        )
+
+        props_list = [prop for prop in props.values()]
+        arrows_list = [arrow for arrow in arrows.values()]
+        pictograph_items = props_list + arrows_list + GE_glyphs
+        return pictograph_items
+
+    def _get_adjustment_panel_items(self):
+        adjustment_panel = self.sequence_widget.graph_editor.adjustment_panel
+        adjustment_panel_items = [
+            adjustment_panel.blue_turns_box.turns_widget,
+            adjustment_panel.red_turns_box.turns_widget,
+            adjustment_panel.blue_turns_box.header,
+            adjustment_panel.red_turns_box.header,
+            adjustment_panel.blue_ori_picker.header,
+            adjustment_panel.red_ori_picker.header,
+            adjustment_panel.blue_ori_picker.ori_picker_widget,
+            adjustment_panel.red_ori_picker.ori_picker_widget,
+        ]
+        return adjustment_panel_items
 
     def reset_widgets(self, show_indicator):
         self.json_manager.loader_saver.clear_current_sequence_file()

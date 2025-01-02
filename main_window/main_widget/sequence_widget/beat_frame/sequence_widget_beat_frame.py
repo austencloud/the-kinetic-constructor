@@ -15,7 +15,6 @@ from .beat_frame_updater import BeatFrameUpdater
 from .sequence_widget_beat_frame_layout_manager import (
     SequenceWidgetBeatFrameLayoutManager,
 )
-from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
 from .beat_view import BeatView
@@ -50,7 +49,6 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.beat_factory = BeatFactory(self)
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = SequenceWidgetBeatFrameLayoutManager(self)
-        self.deletion_manager = BeatDeletionManager(self)
         self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
         self.populator = BeatFramePopulator(self)
         self.beat_adder = BeatAdder(self)

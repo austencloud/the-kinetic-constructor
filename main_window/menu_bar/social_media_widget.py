@@ -136,4 +136,4 @@ class SocialMediaWidget(QWidget):
 
     def _open_youtube_link(self):
         """Opens YouTube channel."""
-        QDesktopServices.openUrl(QUrl("https://youtube.com/thekineticalphabet"))
+        QDesktopServices.openUrl(QUrl("https://www.youtube.com/channel/UCbLHNRSASZS_gwkmRATH1-A"))

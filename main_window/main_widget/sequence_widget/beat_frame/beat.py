@@ -10,6 +10,14 @@ if TYPE_CHECKING:
 
 
 class Beat(BasePictograph):
+    view: "BeatView" = None
+    is_placeholder = False
+    parent_beat = None
+    beat_number = 0
+    blue_reversal = False
+    red_reversal = False
+    start_text_item = None
+
     def __init__(
         self, beat_frame: "SequenceWidgetBeatFrame", duration: Union[int, float] = 1
     ):
@@ -18,11 +26,4 @@ class Beat(BasePictograph):
         self.reversal_symbol_manager = BeatReversalManager(self)
         self.number_manager = BeatNumberManager(self)
         self.grabber = BeatGrabber(self)
-
-        self.view: "BeatView" = None
         self.duration = duration
-        self.is_placeholder = False
-        self.parent_beat = None
-        self.beat_number = 0
-        self.blue_reversal = False
-        self.red_reversal = False
