@@ -1,6 +1,7 @@
 import random
 from PyQt6.QtGui import QPainter, QColor, QLinearGradient, QBrush
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget
 
 
 class ShootingStarManager:
@@ -75,7 +76,7 @@ class ShootingStarManager:
             if len(star["tail"]) > star["tail_length"]:
                 star["tail"].pop(0)
 
-    def draw_shooting_star(self, painter: QPainter, widget):
+    def draw_shooting_star(self, painter: QPainter, widget: "QWidget"):
         """Draw the shooting star and its smooth tail."""
         if not self.shooting_star:
             return

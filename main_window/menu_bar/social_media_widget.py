@@ -128,7 +128,7 @@ class SocialMediaWidget(QWidget):
 
     def _open_facebook_link(self):
         """Opens Facebook page."""
-        QDesktopServices.openUrl(QUrl("https://www.facebook.com/austencloud"))
+        QDesktopServices.openUrl(QUrl("https://www.facebook.com/thekineticalphabet"))
 
     def _open_instagram_link(self):
         """Opens Instagram profile."""
@@ -136,4 +136,4 @@ class SocialMediaWidget(QWidget):
 
     def _open_youtube_link(self):
         """Opens YouTube channel."""
-        QDesktopServices.openUrl(QUrl("https://youtube.com/austencloud"))
+        QDesktopServices.openUrl(QUrl("https://youtube.com/thekineticalphabet"))
