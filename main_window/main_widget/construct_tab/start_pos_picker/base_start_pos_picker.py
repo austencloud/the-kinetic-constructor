@@ -66,7 +66,7 @@ class BaseStartPosPicker(QWidget):
         end_pos = pictograph_dict.get("end_pos", "no_end")
         return f"{letter}_{start_pos}_{end_pos}_{grid_mode}"
 
-    def get_box_variations(self, advanced: bool = False) -> list[BasePictograph]:
+    def get_box_pictographs(self, advanced: bool = False) -> list[BasePictograph]:
         """
         Load pictographs for box mode. No context manager usage. We just
         call create_pictograph_from_dict(...) with 'BOX'.
@@ -102,7 +102,7 @@ class BaseStartPosPicker(QWidget):
 
         return self.box_pictographs
 
-    def get_diamond_variations(self, advanced: bool = False) -> list[BasePictograph]:
+    def get_diamond_pictographs(self, advanced: bool = False) -> list[BasePictograph]:
         """
         Load pictographs for diamond mode. No context manager usage.
         """

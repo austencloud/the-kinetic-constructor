@@ -19,7 +19,7 @@ class AdvancedStartPosPickerPictographView(BorderedPictographView):
         self.picker = advanced_start_pos_picker
 
     def resizeEvent(self, event):
-        view_width = self.construct_tab.main_widget.right_stack.width() // 7
+        view_width = self.construct_tab.main_widget.right_stack.width() // 6
         self.setFixedSize(view_width, view_width)
         self.view_scale = view_width / self.picker.width()
         self.resetTransform()

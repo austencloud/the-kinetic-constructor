@@ -29,7 +29,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.start_position_adder = (
             self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
         )
-        self.generate_variations()
+        self.generate_pictographs()
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -84,16 +84,19 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
                 col = i % self.COLUMN_COUNT
                 self.grid_layout.addWidget(variation.view, row, col)
 
-    def generate_variations(self):
+    def generate_pictographs(self):
         self.all_variations: dict[str, list[BasePictograph]] = {BOX: [], DIAMOND: []}
 
         for grid_mode in [BOX, DIAMOND]:
             if grid_mode == BOX:
-                variations = self.get_box_variations(advanced=True)
+                pictographs = self.get_box_pictographs(advanced=True)
             else:
-                variations = self.get_diamond_variations(advanced=True)
+                pictographs = self.get_diamond_pictographs(advanced=True)
 
-            for variation in variations:
+            # Sort variations by alpha, beta, gamma with ascending numbers
+            pictographs.sort(key=lambda p: (p.start_pos[:-1], int(p.start_pos[-1])))
+
+            for variation in pictographs:
                 self.all_variations[grid_mode].append(variation)
                 variation.view.mousePressEvent = (
                     lambda event, v=variation: self.on_variation_selected(v)

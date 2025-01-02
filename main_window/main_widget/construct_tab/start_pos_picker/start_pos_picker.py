@@ -73,11 +73,11 @@ class StartPosPicker(BaseStartPosPicker):
             else ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
         )
         if grid_mode == BOX:
-            self.get_box_variations()
+            self.get_box_pictographs()
             for position_key in start_pos_keys:
                 self._add_start_position_option_to_start_pos_frame(position_key, BOX)
         elif grid_mode == DIAMOND:
-            self.get_diamond_variations()
+            self.get_diamond_pictographs()
             for position_key in start_pos_keys:
                 self._add_start_position_option_to_start_pos_frame(
                     position_key, DIAMOND
@@ -105,7 +105,6 @@ class StartPosPicker(BaseStartPosPicker):
                     pictograph.start_pos = start_pos
                     pictograph.end_pos = end_pos
                     self.pictograph_frame._add_start_pos_to_layout(pictograph)
-
 
                     pictograph.start_to_end_pos_glyph.hide()
                     break
@@ -163,4 +162,3 @@ class StartPosPicker(BaseStartPosPicker):
             if start_pos_key.startswith(key):
                 return mapping[key]
         return None
-
