@@ -9,7 +9,6 @@ from .visibility_selector import VisibilitySelector
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBarWidget
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class SelectorsWidget(QWidget):

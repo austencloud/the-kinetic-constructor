@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFrame
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QFrame
 
 from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_start_over_button import LessonStartOverButton
 

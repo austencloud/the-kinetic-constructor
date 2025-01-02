@@ -1,4 +1,3 @@
-from tracemalloc import start
 from typing import TYPE_CHECKING, Literal
 from data.constants import BOX, DIAMOND
 from data.positions import box_positions, diamond_positions

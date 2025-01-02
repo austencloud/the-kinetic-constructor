@@ -7,7 +7,6 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBarWidget
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class NavigationWidget(QWidget):

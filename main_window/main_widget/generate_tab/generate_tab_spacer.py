@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QSpacerItem, QSizePolicy, QWidget
+from PyQt6.QtWidgets import QSizePolicy, QWidget
 from PyQt6.QtCore import QSize
 from typing import TYPE_CHECKING
 

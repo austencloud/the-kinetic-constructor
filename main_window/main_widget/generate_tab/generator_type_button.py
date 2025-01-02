@@ -1,11 +1,9 @@
 from PyQt6.QtWidgets import (
     QPushButton,
-    QHBoxLayout,
 )
 from PyQt6.QtCore import Qt, QEvent
 from typing import TYPE_CHECKING
 
-from .generate_sequence_button import GenerateSequenceButton
 
 
 if TYPE_CHECKING:

@@ -8,7 +8,6 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_results_widget import LessonResultsWidget
-    from .base_lesson_widget import BaseLessonWidget
 
 
 class LessonStartOverButton(QPushButton):

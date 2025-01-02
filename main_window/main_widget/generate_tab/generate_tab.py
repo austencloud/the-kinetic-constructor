@@ -4,11 +4,10 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QStackedLayout,
-    QSpacerItem,
 )
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.generate_tab.generate_tab_spacer import GenerateTabSpacer
+from .generate_tab_spacer import GenerateTabSpacer
 from .button_manager import GenerateTabButtonManager
 from .freeform.overwrite_checkbox_widget import OverwriteCheckboxWidget
 from .layout_manager import GenerateTabLayoutManager

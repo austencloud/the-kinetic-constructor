@@ -1,6 +1,5 @@
-from calendar import c
 from typing import TYPE_CHECKING, Optional, List
-from PyQt6.QtWidgets import QWidget, QStackedWidget, QApplication
+from PyQt6.QtWidgets import QWidget, QStackedWidget
 from PyQt6.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve
 
 if TYPE_CHECKING:

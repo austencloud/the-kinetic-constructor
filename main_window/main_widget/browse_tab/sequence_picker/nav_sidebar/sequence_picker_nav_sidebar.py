@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QWidget, QScrollArea, QLabel
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, QPoint
-from PyQt6.QtWidgets import QApplication
 from typing import TYPE_CHECKING
 
 

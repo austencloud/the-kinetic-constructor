@@ -1,12 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 
 from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_answer_checker import (
     LessonAnswerChecker,
-)
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_start_over_button import (
-    LessonStartOverButton,
 )
 from .lesson_go_back_button import LessonGoBackButton
 from .lesson_progress_label import LessonProgressLabel

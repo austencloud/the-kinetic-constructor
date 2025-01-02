@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon, QCursor
 from PyQt6.QtCore import QSize, Qt
 
 from main_window.main_widget.settings_dialog import SettingsDialog
-from .social_media_widget import SocialMediaWidget
-from .selectors_widget import SelectorsWidget
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBarWidget
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class SettingsButton(QPushButton):

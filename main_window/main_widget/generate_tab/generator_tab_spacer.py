@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import pyqtSignal
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
+    pass
 
 
 class GeneratorTabSpacer(QSpacerItem):

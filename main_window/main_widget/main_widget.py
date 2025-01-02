@@ -23,7 +23,6 @@ from .main_widget_state import MainWidgetState
 
 if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
-    from ..menu_bar.navigation_widget import NavigationWidget
     from main_window.menu_bar.menu_bar import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow

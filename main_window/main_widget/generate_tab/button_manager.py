@@ -1,8 +1,7 @@
 from PyQt6.QtWidgets import (
-    QPushButton,
     QHBoxLayout,
 )
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.generate_tab.generator_type_button import GeneratorTypeButton

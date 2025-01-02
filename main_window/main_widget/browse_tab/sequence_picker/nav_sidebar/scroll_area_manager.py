@@ -1,12 +1,10 @@
-from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QWidget, QScrollArea, QLabel
-from PyQt6.QtGui import QCursor
-from PyQt6.QtCore import Qt, QPoint
-from typing import TYPE_CHECKING, List, Dict
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QScrollArea
+from PyQt6.QtCore import Qt
+from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.sequence_picker.nav_sidebar.sequence_picker_nav_sidebar import SequencePickerNavSidebar
-    from ..sequence_picker import SequencePicker
 
 
 class NavSidebarScrollManager:

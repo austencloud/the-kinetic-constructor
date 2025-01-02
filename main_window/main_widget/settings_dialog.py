@@ -7,9 +7,7 @@ from PyQt6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QWidget,
-    QLabel,
     QCheckBox,
-    QComboBox,
     QPushButton,
 )
 from PyQt6.QtCore import Qt

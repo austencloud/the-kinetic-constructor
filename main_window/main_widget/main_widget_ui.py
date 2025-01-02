@@ -12,7 +12,6 @@ from .font_color_updater.font_color_updater import (
     FontColorUpdater,
 )
 from ..menu_bar.menu_bar import MenuBarWidget
-from ..menu_bar.navigation_widget import NavigationWidget
 from .sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:

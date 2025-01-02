@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QLabel,
     QWidget,
-    QApplication,
 )
 from PyQt6.QtCore import Qt, QEvent, QObject
 from PyQt6.QtGui import QFontMetrics
