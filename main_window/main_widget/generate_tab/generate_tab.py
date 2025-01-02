@@ -89,7 +89,6 @@ class GenerateTab(QWidget):
             self.spacers.append(spacer)
         self.spacer_1, self.spacer_2, self.spacer_3 = self.spacers
 
-
     def _setup_buttons(self):
         """Set up Freeform and Circular buttons and add them to the layout."""
         self.button_layout = QHBoxLayout()
@@ -110,9 +109,8 @@ class GenerateTab(QWidget):
 
     def dummy_function(self):
         """Placeholder function to ensure there's always a connected slot."""
-    
+
     def update_button_styles(self):
-        """Apply active and inactive styles across all main buttons."""
         font_size = self.main_widget.width() // 75
         active_style = "background-color: lightblue; font-weight: bold;"
         inactive_style = "background-color: none; font-weight: normal;"
@@ -127,8 +125,6 @@ class GenerateTab(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.freeform_generator_frame._resize_sequence_generator_frame()
-        self.circular_generator_frame._resize_sequence_generator_frame()
         self.customize_sequence_label.resize_customize_sequence_label()
         self.generate_sequence_button.resize_generate_sequence_button()
 

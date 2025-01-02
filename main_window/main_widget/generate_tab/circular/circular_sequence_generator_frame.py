@@ -84,12 +84,11 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        # self.sequence_generator.sequence_builder.construct_tab.option_picker.update_option_picker()
 
-    def _resize_sequence_generator_frame(self):
-        super()._resize_sequence_generator_frame()
+    def resizeEvent(self, event):
         self.permutation_type_toggle.resize_permutation_type_toggle()
         self.rotation_type_toggle.resize_rotation_type_toggle()
+        super().resizeEvent(event)
 
     def show(self):
         """Display Circular frame by setting it in the stacked layout."""
@@ -99,7 +98,7 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         if self.generate_tab.overwrite_connected:
             try:
-                self.generate_tab.overwrite_checkbox.stateChanged.disconnect()
+                self.generate_tab.overwrite_checkbox.checkbox.stateChanged.disconnect()
             except TypeError:
                 pass
             self.generate_tab.overwrite_connected = False

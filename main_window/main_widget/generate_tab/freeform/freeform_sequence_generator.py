@@ -51,12 +51,11 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
             self.sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
             )
-            self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
-        construct_tab = self.sequence_widget.main_widget.construct_tab
+        construct_tab = self.main_widget.construct_tab
         construct_tab.option_picker.update_option_picker(self.sequence)
-        
+
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(

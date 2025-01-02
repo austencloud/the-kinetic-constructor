@@ -45,16 +45,13 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        self.generate_tab.main_widget.construct_tab.option_picker.update_option_picker()
 
     def get_selected_letter_types(self) -> list[LetterType]:
         return self.letter_type_picker.get_selected_letter_types()
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
-        font_size = self.height() // 30
         self.layout.setSpacing(self.height() // 50)
-        # Adjust if needed
+        super().resizeEvent(event)
 
     def show(self):
         """Display Freeform frame by setting it in the stacked layout."""

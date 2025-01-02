@@ -68,15 +68,6 @@ class BaseSequenceGeneratorFrame(QFrame):
         self.continuous_rotation_toggle.set_state(continuous_rotation)
         self.continuous_rotation_toggle.update_mode_label_styles()
 
-    def _resize_sequence_generator_frame(self):
-        """Resize the auto builder frame based on the parent widget size."""
-        self._resize_widgets()
-
-    def _resize_widgets(self):
-        self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
-        self.level_selector.resize_level_selector()
-        self.length_adjuster.resize_length_adjuster()
-        self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
 
     def _update_sequence_length(self, length: int):
         self.generate_tab_settings.set_sequence_generator_setting(
@@ -97,3 +88,10 @@ class BaseSequenceGeneratorFrame(QFrame):
         self.generate_tab_settings.set_sequence_generator_setting(
             "continuous_rotation", state, self.builder_type
         )
+
+    def resizeEvent(self, event):
+        """Resize the auto builder frame based on the parent widget size."""
+        self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
+        self.level_selector.resize_level_selector()
+        self.length_adjuster.resize_length_adjuster()
+        self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
