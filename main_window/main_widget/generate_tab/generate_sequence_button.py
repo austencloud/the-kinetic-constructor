@@ -14,7 +14,8 @@ class GenerateSequenceButton(QPushButton):
         self.setStyleSheet("font-size: 16px; padding: 8px;")
         self.setText("Generate Sequence")
 
-    def resize_generate_sequence_button(self):
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         """Resize the button based on the main widget's width."""
         width = self.main_widget.width()
         font_size = width // 75

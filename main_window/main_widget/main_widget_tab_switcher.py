@@ -64,6 +64,15 @@ class MainWidgetTabSwitcher:
                 left_new_index,
                 width_ratio,
             )
+        elif index in [self.mw.main_generate_tab_index]:
+            self.mw.fade_manager.parallel_stack_fader.fade_both_stacks(
+                self.mw.right_stack,
+                self.mw.right_generate_tab_index,
+                self.mw.left_stack,
+                left_new_index,
+                width_ratio,
+            )
+
         else:
             self.mw.fade_manager.parallel_stack_fader.fade_both_stacks(
                 right_stack=self.mw.right_stack,

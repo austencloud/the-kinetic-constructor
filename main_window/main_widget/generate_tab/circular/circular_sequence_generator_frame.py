@@ -96,7 +96,7 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         """Display Circular frame by setting it in the stacked layout."""
         self.generate_tab.stacked_layout.setCurrentWidget(self)
         self.generate_tab.current_sequence_generator = "circular"
-        self.generate_tab.update_button_styles()
+        self.generate_tab.button_manager.update_button_styles()
 
         if self.generate_tab.overwrite_connected:
             try:

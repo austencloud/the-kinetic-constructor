@@ -134,7 +134,7 @@ class LetterTypePickerWidget(QWidget):
         f = self.filter_label.font()
         f.setPointSize(font_size)
         self.filter_label.setFont(f)
-        global_settings = self.generator_frame.generate_tab.global_settings
+        global_settings = self.generator_frame.generate_tab.main_widget.main_window.settings_manager.global_settings
         color = self.generator_frame.generate_tab.main_widget.font_color_updater.get_font_color(
             global_settings.get_background_type()
         )

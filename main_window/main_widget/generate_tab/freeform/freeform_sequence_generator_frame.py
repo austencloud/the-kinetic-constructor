@@ -60,7 +60,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         """Display Freeform frame by setting it in the stacked layout."""
         self.generate_tab.stacked_layout.setCurrentWidget(self)
         self.generate_tab.current_sequence_generator = "freeform"
-        self.generate_tab.update_button_styles()
+        self.generate_tab.button_manager.update_button_styles()
 
         if self.generate_tab.overwrite_connected:
             try:

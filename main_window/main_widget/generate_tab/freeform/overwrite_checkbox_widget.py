@@ -1,15 +1,19 @@
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QCheckBox, QLabel
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QMouseEvent
+from PyQt6.QtGui import QMouseEvent, QFont
+if TYPE_CHECKING:
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
-class CustomCheckBoxWidget(QWidget):
+class OverwriteCheckboxWidget(QWidget):
     clicked = pyqtSignal(bool)  # Emitted when the checkbox toggles
 
-    def __init__(self, text: str = "", parent=None):
-        super().__init__(parent)
-
+    def __init__(self, generate_tab: "GenerateTab"):
+        super().__init__(generate_tab)
+        self.generate_tab = generate_tab
         self.checkbox = QCheckBox("", self)
+        text = "Overwrite sequence"
         self.label = QLabel(text, self)
         self.label.setAlignment(
             Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft
@@ -57,7 +61,9 @@ class CustomCheckBoxWidget(QWidget):
             self.checkbox.toggle()  # Toggle state
         super().mousePressEvent(event)
 
-    # def resizeEvent(self, event):
-    #     super().resizeEvent(event)
-    #     font_size = self.height() // 30
-    #     self.label.setFont(QFont("Arial", font_size))
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        font = self.font()
+        font.setPointSize(self.generate_tab.main_widget.height() // 65)
+        self.label.setFont(font)
+        # self.label.setFont(QFont("Arial", self.height() // 50, 0))

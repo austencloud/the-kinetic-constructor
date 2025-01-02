@@ -26,7 +26,8 @@ class CustomizeSequenceLabel(QLabel):
             f"}}"
         )
 
-    def resize_customize_sequence_label(self) -> None:
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
         width = self.generator_widget.main_widget.width() // 4
         height = self.generator_widget.main_widget.height() // 20
 
