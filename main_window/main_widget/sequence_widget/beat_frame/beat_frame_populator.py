@@ -98,7 +98,6 @@ class BeatFramePopulator:
         self.construct_tab.transition_to_option_picker()
 
         scroll_area = self.construct_tab.option_picker.scroll_area
-        # scroll_area.hide_all_pictographs()
 
         filters = self.main_widget.settings_manager.construct_tab_settings.get_filters()
 

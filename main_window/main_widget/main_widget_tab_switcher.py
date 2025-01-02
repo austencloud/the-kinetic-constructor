@@ -84,7 +84,7 @@ class MainWidgetTabSwitcher:
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""
         tab_indices = {
-            "build": self.mw.main_construct_tab_index,
+            "construct": self.mw.main_construct_tab_index,
             "generate": self.mw.main_generate_tab_index,
             "browse": self.mw.main_browse_tab_index,
             "learn": self.mw.main_learn_tab_index,

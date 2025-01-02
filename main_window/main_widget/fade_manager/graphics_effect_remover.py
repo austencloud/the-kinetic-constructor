@@ -18,6 +18,8 @@ class GraphicsEffectRemover:
             self.manager.parallel_stack_fader.left_old_widget,
             self.manager.parallel_stack_fader.right_new_widget,
             self.manager.parallel_stack_fader.left_new_widget,
+            self.manager.main_widget.right_stack.currentWidget(),
+            self.manager.main_widget.left_stack.currentWidget(),
         ]
         widgets = default_widgets + widgets
         for widget in widgets:

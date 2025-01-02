@@ -29,7 +29,8 @@ class StackFader:
         if not current_widget or not next_widget or stack.currentIndex() == new_index:
             return
 
-        def switch_and_fade_in():
+        def on_fade_out_finished():
+            self.manager.graphics_effect_remover.clear_graphics_effects([current_widget, next_widget])
             stack.setCurrentIndex(new_index)
             self.manager.widget_fader.fade_widgets(
                 [next_widget], fade_in=True, duration=duration, callback=callback
@@ -39,5 +40,5 @@ class StackFader:
             [current_widget],
             fade_in=False,
             duration=duration,
-            callback=switch_and_fade_in,
+            callback=on_fade_out_finished,
         )
