@@ -27,7 +27,7 @@ class LessonLayoutManager:
         self._resize_progress_label()
         self._resize_result_label()
         self._resize_start_over_button()
-        self.lesson_widget.results_widget.resize_results_widget()
+        # self.lesson_widget.results_widget.resize_results_widget()
 
     def _resize_progress_label(self):
         font_size = self.lesson_widget.main_widget.width() // 75

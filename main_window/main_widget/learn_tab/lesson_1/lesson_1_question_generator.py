@@ -20,6 +20,8 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
 
     def generate_question(self):
         """Generate a question for Lesson 1."""
+        self.lesson_1_widget.question_widget.clear()
+        self.lesson_1_widget.answers_widget.clear()
         correct_answer = self.generate_correct_answer()
         self.previous_correct_letter = correct_answer
 
@@ -34,7 +36,9 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
         random.shuffle(letters)
 
         self.lesson_1_widget.answers_widget.display_answers(
-            letters, correct_answer.value, self.lesson_1_widget.check_answer
+            letters,
+            correct_answer.value,
+            self.lesson_1_widget.check_answer,
         )
 
     def generate_correct_answer(self) -> Letter:

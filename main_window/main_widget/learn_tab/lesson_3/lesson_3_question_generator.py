@@ -19,6 +19,8 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
 
     def generate_question(self):
         """Generate a question for Lesson 3."""
+        self.lesson_3_widget.question_widget.clear()
+        self.lesson_3_widget.answers_widget.clear()
         initial_pictograph = self.generate_initial_pictograph()
         self.previous_pictograph = initial_pictograph
 
@@ -34,7 +36,9 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
         random.shuffle(pictographs)
 
         self.lesson_3_widget.answers_widget.display_answers(
-            pictographs, correct_pictograph, self.lesson_3_widget.check_answer
+            pictographs,
+            correct_pictograph,
+            self.lesson_3_widget.answer_checker.check_answer,
         )
 
     def generate_initial_pictograph(self) -> dict:
@@ -73,11 +77,11 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
         ]
 
         correct_answer = random.choice(valid_pictographs)
-        self._update_orientations_to_be_accurate(initial_pictograph, correct_answer)
+        self._update_orientations(initial_pictograph, correct_answer)
 
         return correct_answer
 
-    def _update_orientations_to_be_accurate(self, initial_pictograph, correct_answer):
+    def _update_orientations(self, initial_pictograph, correct_answer):
         correct_answer["blue_attributes"]["start_ori"] = initial_pictograph[
             "blue_attributes"
         ]["end_ori"]

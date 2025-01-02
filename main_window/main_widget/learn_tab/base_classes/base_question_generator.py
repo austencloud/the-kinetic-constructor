@@ -14,6 +14,7 @@ class BaseQuestionGenerator:
 
     def __init__(self, lesson_widget: "BaseLessonWidget"):
         self.main_widget = lesson_widget.main_widget
+        self.lesson_widget = lesson_widget
 
     def filter_pictograph_dicts_by_grid_mode(self) -> dict[Letter, list[dict]]:
         """Filter pictograph dicts by grid mode."""
@@ -27,6 +28,16 @@ class BaseQuestionGenerator:
                 ):
                     valid_dicts[letter].append(pictograph_dict)
         return valid_dicts
+
+    def start_new_question(self):
+        widgets_to_fade = [
+            self.lesson_widget.question_widget,
+            self.lesson_widget.answers_widget,
+        ]
+        self.lesson_widget.fade_manager.widget_fader.fade_and_update(
+            widgets_to_fade,
+            callback=self.lesson_widget.question_generator.generate_question,
+        )
 
     def generate_question(self):
         raise NotImplementedError(self.not_implemented_message)

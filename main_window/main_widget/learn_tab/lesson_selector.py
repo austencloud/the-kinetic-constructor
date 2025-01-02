@@ -147,4 +147,4 @@ class LessonSelector(QWidget):
                 self.learn_widget.stack, lesson_widget_index
             )
             lesson_widget.prepare_quiz_ui()
-            lesson_widget.start_new_question()
+            lesson_widget.question_generator.start_new_question()

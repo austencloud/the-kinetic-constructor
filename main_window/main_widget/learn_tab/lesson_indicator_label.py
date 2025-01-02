@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     )
 
 
-class LessonWidgetIndicatorLabel(BaseIndicatorLabel):
+class LessonIndicatorLabel(BaseIndicatorLabel):
     def __init__(self, lesson_widget: "BaseLessonWidget") -> None:
         super().__init__(lesson_widget)
         self.lesson_widget = lesson_widget

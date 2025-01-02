@@ -2,15 +2,15 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_widget_go_back_button import (
-    LessonWidgetGoBackButton,
-)
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.go_back_button import LessonGoBackButton
+from main_window.main_widget.learn_tab.lesson_indicator_label import LessonIndicatorLabel
+
+
 from ..base_answers_widget import BaseAnswersWidget
 from .lesson_layout_manager import LessonLayoutManager
 from .quiz_timer_manager import QuizTimerManager
 from ..base_question_generator import BaseQuestionGenerator
 from ..base_question_widget import BaseQuestionWidget
-from ...lesson_widget_indicator_label import LessonWidgetIndicatorLabel
 from .results_widget import ResultsWidget
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ class BaseLessonWidget(QWidget):
         self.layout_manager = LessonLayoutManager(self)
         self.timer_manager = QuizTimerManager(self)
         self.results_widget = ResultsWidget(self)
-        self.indicator_label = LessonWidgetIndicatorLabel(self)
+        self.indicator_label = LessonIndicatorLabel(self)
 
         # Main layout
         self.main_layout: QVBoxLayout = QVBoxLayout()
@@ -146,7 +146,7 @@ class BaseLessonWidget(QWidget):
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""
-        self.go_back_button = LessonWidgetGoBackButton(self)
+        self.go_back_button = LessonGoBackButton(self)
         self.back_layout.addWidget(self.go_back_button)
         self.back_layout.addStretch(1)
         self.main_layout.addLayout(self.back_layout, 0)

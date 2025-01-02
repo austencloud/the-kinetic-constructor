@@ -21,13 +21,17 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
 
     def generate_question(self):
         """Generate a question and update the question and answer widgets."""
+        self.lesson_2_widget.question_widget.clear()
+        self.lesson_2_widget.answers_widget.clear()
         correct_letter, correct_pictograph = self.generate_correct_answer()
 
         self.lesson_2_widget.question_widget._update_letter_label(correct_letter.value)
 
         pictographs = self._get_shuffled_pictographs(correct_pictograph)
         self.lesson_2_widget.answers_widget.display_answers(
-            pictographs, correct_pictograph, self.lesson_2_widget.check_answer
+            pictographs,
+            correct_pictograph,
+            self.lesson_2_widget.answer_checker.check_answer,
         )
 
     def generate_correct_answer(self) -> tuple[Letter, dict]:

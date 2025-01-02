@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_go_back_button import (
+from base_widgets.base_go_back_button import (
     BaseGoBackButton,
 )
 

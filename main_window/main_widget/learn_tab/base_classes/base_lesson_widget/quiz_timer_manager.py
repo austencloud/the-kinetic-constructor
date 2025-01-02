@@ -40,7 +40,9 @@ class QuizTimerManager:
             )
         else:
             self.timer.stop()
-            self.base_widget.show_results()
+            self.base_widget.results_widget.show_results(
+                self.base_widget.incorrect_guesses
+            )()
 
     def stop_timer(self):
         """Stop the quiz timer."""

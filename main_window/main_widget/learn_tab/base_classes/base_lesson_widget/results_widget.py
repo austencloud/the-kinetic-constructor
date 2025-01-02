@@ -85,7 +85,7 @@ class ResultsWidget(QWidget):
         self.result_label.setText(text)
         self.adjustSize()
 
-    def resize_results_widget(self):
+    def resizeEvent(self,event):
         """Resize the result label and start-over button to fit the content."""
         self._resize_result_label()
         self._resize_start_over_button()
@@ -108,7 +108,6 @@ class ResultsWidget(QWidget):
 
     def show_results(self, incorrect_guesses):
         """Display the results after the quiz or countdown ends."""
-        self.lesson_widget.clear_layout(self.lesson_widget.central_layout)
         self.lesson_widget.central_layout.addWidget(self)
 
         self.set_result_text(
