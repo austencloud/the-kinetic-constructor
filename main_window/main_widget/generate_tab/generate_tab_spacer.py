@@ -16,7 +16,7 @@ class GenerateTabSpacer(QWidget):
     def update_size(self):
         """Update the spacer height based on the parent tab's size."""
         height = self.tab.main_widget.height() // 20
-        self.setFixedSize(QSize(0, height))
+        self.setFixedSize(QSize(self.width(), height))
 
     def resizeEvent(self, event):
         """Resize the spacer whenever the parent is resized."""

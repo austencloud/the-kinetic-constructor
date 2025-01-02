@@ -121,28 +121,19 @@ class LetterTypePickerWidget(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self._update_font_sizes()
-        self._update_widget_sizes()
-        self._update_filter_label_style()
-
-    def _update_font_sizes(self):
         font_size = self.generator_frame.tab.main_widget.height() // 50
         self.filter_label.setFont(QFont("Arial", font_size))
-        for w in self.letter_type_widgets:
-            f = w.label.font()
-            f.setPointSize(font_size)
-            w.label.setFont(f)
-        f = self.filter_label.font()
-        f.setPointSize(font_size)
-        self.filter_label.setFont(f)
-
-    def _update_widget_sizes(self):
+        self.layout().setSpacing(self.generator_frame.height() // 50)
         width = self.generator_frame.width() // 16
         for w in self.letter_type_widgets:
             w.setFixedSize(width, width)
-        self.layout().setSpacing(self.generator_frame.height() // 50)
+            f = w.label.font()
+            f.setPointSize(font_size)
+            w.label.setFont(f)
 
-    def _update_filter_label_style(self):
+        f = self.filter_label.font()
+        f.setPointSize(font_size)
+        self.filter_label.setFont(f)
         global_settings = (
             self.generator_frame.tab.main_widget.main_window.settings_manager.global_settings
         )
