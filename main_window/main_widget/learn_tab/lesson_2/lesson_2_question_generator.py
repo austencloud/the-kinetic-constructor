@@ -14,24 +14,24 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
     """Generates questions for Lesson 2 (letter to pictograph matching)."""
 
     def __init__(self, lesson_2_widget: "Lesson2Widget") -> None:
-        self.lesson_2_widget = lesson_2_widget
+        self.lesson_widget = lesson_2_widget
         self.main_widget = lesson_2_widget.main_widget
         self.previous_pictographs = set()
         self.previous_letter = None  # Track the previously used letter
 
     def generate_question(self):
         """Generate a question and update the question and answer widgets."""
-        self.lesson_2_widget.question_widget.clear()
-        self.lesson_2_widget.answers_widget.clear()
+        self.lesson_widget.question_widget.clear()
+        self.lesson_widget.answers_widget.clear()
         correct_letter, correct_pictograph = self.generate_correct_answer()
 
-        self.lesson_2_widget.question_widget._update_letter_label(correct_letter.value)
+        self.lesson_widget.question_widget._update_letter_label(correct_letter.value)
 
         pictographs = self._get_shuffled_pictographs(correct_pictograph)
-        self.lesson_2_widget.answers_widget.display_answers(
+        self.lesson_widget.answers_widget.display_answers(
             pictographs,
             correct_pictograph,
-            self.lesson_2_widget.answer_checker.check_answer,
+            self.lesson_widget.check_answer,
         )
 
     def generate_correct_answer(self) -> tuple[Letter, dict]:

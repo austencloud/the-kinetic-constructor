@@ -24,22 +24,22 @@ class LessonLayoutManager:
 
     def resize_widgets(self):
         """Resize UI elements dynamically."""
-        self._resize_progress_label()
-        self._resize_result_label()
+        # self._resize_progress_label()
+        # self._resize_result_label()
         self._resize_start_over_button()
         # self.lesson_widget.results_widget.resize_results_widget()
 
-    def _resize_progress_label(self):
-        font_size = self.lesson_widget.main_widget.width() // 75
-        font = self.lesson_widget.progress_label.font()
-        font.setPointSize(font_size)
-        self.lesson_widget.progress_label.setFont(font)
+    # def _resize_progress_label(self):
+    #     font_size = self.lesson_widget.main_widget.width() // 75
+    #     font = self.lesson_widget.progress_label.font()
+    #     font.setPointSize(font_size)
+    #     self.lesson_widget.progress_label.setFont(font)
 
-    def _resize_result_label(self):
-        font_size = self.lesson_widget.main_widget.width() // 60
-        font = self.lesson_widget.result_label.font()
-        font.setPointSize(font_size)
-        self.lesson_widget.result_label.setFont(font)
+    # def _resize_result_label(self):
+    #     font_size = self.lesson_widget.main_widget.width() // 60
+    #     font = self.lesson_widget.result_label.font()
+    #     font.setPointSize(font_size)
+    #     self.lesson_widget.result_label.setFont(font)
 
     def _resize_start_over_button(self):
         font_size = self.lesson_widget.main_widget.width() // 60

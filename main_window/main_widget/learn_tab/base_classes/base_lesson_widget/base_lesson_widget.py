@@ -2,8 +2,18 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.go_back_button import LessonGoBackButton
-from main_window.main_widget.learn_tab.lesson_indicator_label import LessonIndicatorLabel
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.go_back_button import (
+    LessonGoBackButton,
+)
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.progress_label import (
+    LessonProgressLabel,
+)
+from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.results_label import (
+    LessonResultLabel,
+)
+from main_window.main_widget.learn_tab.lesson_indicator_label import (
+    LessonIndicatorLabel,
+)
 
 
 from ..base_answers_widget import BaseAnswersWidget
@@ -47,8 +57,8 @@ class BaseLessonWidget(QWidget):
         self.main_layout.addLayout(self.central_layout)
 
         # Progress and result labels
-        self.progress_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
-        self.result_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
+        self.progress_label = LessonProgressLabel(self)
+        self.result_label = LessonResultLabel(self)
 
         # Start Over button
         self.start_over_button = QPushButton("Start Over")
@@ -62,39 +72,7 @@ class BaseLessonWidget(QWidget):
         self.mode = "fixed_question"
         self.incorrect_guesses = 0
 
-    def _setup_layout(self):
-        """Setup common UI layout."""
         self.layout_manager.setup_layout()
-
-    def show_results(self):
-        """Display the results after the quiz or countdown ends."""
-        self.results_widget.show_results(self.incorrect_guesses)
-
-    def set_mode(self, mode: str) -> None:
-        """Set the quiz mode (Fixed Questions or Countdown)."""
-        self.mode = mode
-        if self.mode == "fixed_question":
-            self.start_fixed_question_mode()
-        elif self.mode == "countdown":
-            self.start_countdown_mode()
-
-    def start_fixed_question_mode(self):
-        """Start the Fixed Question Mode by setting up the UI."""
-        self.current_question = 1
-        self.update_progress_label()
-
-        self.timer_manager.stop_timer()
-        self.prepare_quiz_ui()
-
-    def start_countdown_mode(self):
-        """Start the Countdown Mode by setting up the UI."""
-        self.clear_layout(self.central_layout)
-        self.prepare_quiz_ui()
-        self.timer_manager.start_timer(120)  # 2 minutes countdown
-
-    def start_quiz_timer(self):
-        """Start the quiz timer."""
-        self.timer_manager.start_timer(120)
 
     def update_progress_label(self):
         """Update progress display for Fixed Question Mode."""

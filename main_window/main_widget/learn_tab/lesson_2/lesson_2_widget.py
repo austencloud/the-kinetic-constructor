@@ -16,4 +16,4 @@ class Lesson2Widget(BaseLessonWidget):
         self.question_generator = Lesson2QuestionGenerator(self)
 
         # Set up the layout
-        self._setup_layout()
+        # self._setup_layout()

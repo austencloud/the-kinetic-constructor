@@ -14,18 +14,18 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
 
     def __init__(self, lesson_3_widget: "Lesson3Widget"):
         super().__init__(lesson_3_widget)
-        self.lesson_3_widget = lesson_3_widget
+        self.lesson_widget = lesson_3_widget
         self.previous_pictograph = None
 
     def generate_question(self):
         """Generate a question for Lesson 3."""
-        self.lesson_3_widget.question_widget.clear()
-        self.lesson_3_widget.answers_widget.clear()
+        self.lesson_widget.question_widget.clear()
+        self.lesson_widget.answers_widget.clear()
         initial_pictograph = self.generate_initial_pictograph()
         self.previous_pictograph = initial_pictograph
 
         # Show the initial pictograph in the question widget
-        self.lesson_3_widget.question_widget.load_pictograph(initial_pictograph)
+        self.lesson_widget.question_widget.load_pictograph(initial_pictograph)
 
         # Generate answers (one correct and three wrong)
         correct_pictograph = self.generate_correct_answer(initial_pictograph)
@@ -35,10 +35,10 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
         pictographs: list["BasePictograph"] = [correct_pictograph] + wrong_pictographs
         random.shuffle(pictographs)
 
-        self.lesson_3_widget.answers_widget.display_answers(
+        self.lesson_widget.answers_widget.display_answers(
             pictographs,
             correct_pictograph,
-            self.lesson_3_widget.answer_checker.check_answer,
+            self.lesson_widget.check_answer,
         )
 
     def generate_initial_pictograph(self) -> dict:
