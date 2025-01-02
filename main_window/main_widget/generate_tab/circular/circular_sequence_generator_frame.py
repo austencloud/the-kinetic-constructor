@@ -21,7 +21,7 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         self.apply_settings()
         self.beat_deleter = (
-            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter
+            self.tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter
         )
 
     def apply_settings(self):
@@ -29,10 +29,10 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         super().apply_settings()
 
         rotation_type = self.generate_tab_settings.get_sequence_generator_setting(
-            "rotation_type", self.builder_type
+            "rotation_type", self.generator_type
         )
         permutation_type = self.generate_tab_settings.get_sequence_generator_setting(
-            "permutation_type", self.builder_type
+            "permutation_type", self.generator_type
         )
 
         self.rotation_type_toggle.set_state(rotation_type == "quartered")
@@ -41,13 +41,13 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def _update_rotation_type(self, rotation_type: str):
         """Update the rotation type based on the toggle."""
         self.generate_tab_settings.set_sequence_generator_setting(
-            "rotation_type", rotation_type, self.builder_type
+            "rotation_type", rotation_type, self.generator_type
         )
 
     def _update_permutation_type(self, permutation_type: str):
         """Update the permutation type based on the toggle."""
         self.generate_tab_settings.set_sequence_generator_setting(
-            "permutation_type", permutation_type, self.builder_type
+            "permutation_type", permutation_type, self.generator_type
         )
         if permutation_type == "mirrored":
             self.rotation_type_toggle.hide()
@@ -55,8 +55,6 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         else:
             self.rotation_type_toggle.show()
             self.length_adjuster.limit_length(True)
-
-
 
     def on_create_sequence(self, overwrite_sequence: bool):
         if overwrite_sequence:
@@ -68,14 +66,13 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
             ("sequence_level", int),
             ("rotation_type", str),
             ("permutation_type", str),
-            ("continuous_rotation", lambda x: x)
+            ("continuous_rotation", lambda x: x),
         ]
-        
 
         settings = [
             setting_type(
                 self.generate_tab_settings.get_sequence_generator_setting(
-                    key, self.builder_type
+                    key, self.generator_type
                 )
             )
             for key, setting_type in settings_keys

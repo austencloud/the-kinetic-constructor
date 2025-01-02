@@ -27,7 +27,7 @@ class GenerateTab(QWidget):
     spacer_2: "GenerateTabSpacer"
     spacer_3: "GenerateTabSpacer"
     button_layout: QHBoxLayout
-    stacked_layout: QStackedLayout
+    stacked_widget: QStackedLayout
     freeform_button: QPushButton
     circular_button: QPushButton
     generate_sequence_button: GenerateSequenceButton
@@ -37,7 +37,7 @@ class GenerateTab(QWidget):
     checkbox_layout: QHBoxLayout
     layout: QVBoxLayout
     overwrite_connected = False
-    current_sequence_generator = "freeform"
+    generator_type = "freeform"
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
@@ -54,4 +54,3 @@ class GenerateTab(QWidget):
         # Managers
         self.button_manager = GenerateTabButtonManager(self)
         self.layout_manager = GenerateTabLayoutManager(self)
-

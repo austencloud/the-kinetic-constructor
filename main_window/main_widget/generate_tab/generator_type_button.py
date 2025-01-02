@@ -14,7 +14,7 @@ class GeneratorTypeButton(QPushButton):
     def __init__(self, text: str, frame: "BaseSequenceGeneratorFrame", key: str):
         super().__init__(text)
         self.frame = frame
-        self.tab = frame.generate_tab
+        self.tab = frame.tab
         self.key = key
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.clicked.connect(self.show_frame)
@@ -34,15 +34,10 @@ class GeneratorTypeButton(QPushButton):
         super().resizeEvent(event)
 
     def show_frame(self):
+        self.tab.generator_type = self.frame.generator_type
+        self.tab.button_manager.update_button_styles()
         fade_manager = self.tab.main_widget.fade_manager
-        widgets = [
-            self.frame.level_selector,
-            self.frame.length_adjuster,
-            self.frame.turn_intensity_adjuster,
-            self.frame.continuous_rotation_toggle,
-            self.frame.letter_type_picker,
-            self.frame.permutation_type_toggle,
-            self.frame.rotation_type_toggle,
-        ]
-        widgets = [widget for widget in widgets if widget]
-        fade_manager.widget_fader.fade_and_update(widgets, self.frame.show, 300)
+        index = self.tab.stacked_widget.indexOf(self.frame)
+        fade_manager.widget_fader.fade_and_update(
+            [self.tab.stacked_widget], self.frame.show
+        )

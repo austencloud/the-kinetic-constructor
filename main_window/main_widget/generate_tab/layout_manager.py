@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
-    QStackedLayout,
+    QStackedLayout, QWidget, QStackedWidget
 )
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -21,10 +21,10 @@ class GenerateTabLayoutManager:
         self.tab.freeform_generator_frame.show()
 
     def _setup_layout(self):
-        self.tab.stacked_layout = QStackedLayout()
-        self.tab.stacked_layout.addWidget(self.tab.freeform_generator_frame)
-        self.tab.stacked_layout.addWidget(self.tab.circular_generator_frame)
-
+        self.tab.stacked_widget = QStackedWidget()
+        self.tab.stacked_widget.addWidget(self.tab.freeform_generator_frame)
+        self.tab.stacked_widget.addWidget(self.tab.circular_generator_frame)
+        
         top_hbox = QHBoxLayout()
         top_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         top_hbox.addWidget(self.tab.customize_sequence_label)
@@ -41,7 +41,7 @@ class GenerateTabLayoutManager:
         layout.addLayout(top_hbox)
         layout.addWidget(self.tab.spacer_1)
         layout.addLayout(self.tab.button_layout)
-        layout.addLayout(self.tab.stacked_layout)
+        layout.addWidget(self.tab.stacked_widget)
         layout.addWidget(self.tab.spacer_2)
         layout.addLayout(generate_button_hbox)
         layout.addLayout(self.tab.checkbox_layout)

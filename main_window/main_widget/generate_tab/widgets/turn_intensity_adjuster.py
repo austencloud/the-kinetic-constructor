@@ -86,7 +86,7 @@ class TurnIntensityAdjuster(QWidget):
             self.sequence_generator_frame._update_max_turn_intensity(self.intensity)
 
     def resize_max_turn_intensity_adjuster(self):
-        font_size = self.sequence_generator_frame.generate_tab.main_widget.width() // 75
+        font_size = self.sequence_generator_frame.tab.main_widget.width() // 75
         font = self.intensity_label.font()
         font.setPointSize(font_size)
 
@@ -94,6 +94,6 @@ class TurnIntensityAdjuster(QWidget):
         self.plus_button.setFont(font)
         self.intensity_label.setFont(font)
         self.intensity_value_label.setFont(font)
-        btn_size = self.sequence_generator_frame.generate_tab.main_widget.width() // 40
+        btn_size = self.sequence_generator_frame.tab.main_widget.width() // 40
         self.minus_button.setFixedSize(btn_size, btn_size)
         self.plus_button.setFixedSize(btn_size, btn_size)

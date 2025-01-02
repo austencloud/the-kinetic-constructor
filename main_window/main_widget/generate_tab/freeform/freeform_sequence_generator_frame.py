@@ -12,8 +12,7 @@ if TYPE_CHECKING:
 
 
 class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
-    
-    
+
     def __init__(self, generate_tab: "GenerateTab") -> None:
         super().__init__(generate_tab, "freeform")
 
@@ -23,7 +22,7 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         self.builder = FreeFormSequenceGenerator(self)
         self.letter_type_picker.apply_settings()
         self.beat_deleter = (
-            self.generate_tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter
+            self.tab.main_widget.sequence_widget.beat_frame.sequence_widget.beat_deleter
         )
 
     def on_create_sequence(self, overwrite_sequence: bool):
@@ -39,7 +38,9 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
 
         settings = [
             setting_type(
-                self.generate_tab_settings.get_sequence_generator_setting(key, self.builder_type)
+                self.generate_tab_settings.get_sequence_generator_setting(
+                    key, self.generator_type
+                )
             )
             for key, setting_type in settings_keys
         ]
@@ -52,5 +53,3 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def resizeEvent(self, event):
         self.layout.setSpacing(self.height() // 50)
         super().resizeEvent(event)
-
-

@@ -10,7 +10,7 @@ class ContinuousRotationToggle(QWidget):
     def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         super().__init__()
         self.sequence_generator_frame = sequence_generator_frame
-        self.main_widget = self.sequence_generator_frame.generate_tab.main_widget
+        self.main_widget = self.sequence_generator_frame.tab.main_widget
         self.layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(self.layout)
         self._create_rotation_toggle()

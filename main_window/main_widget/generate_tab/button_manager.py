@@ -46,16 +46,10 @@ class GenerateTabButtonManager:
         }
         self.tab.generate_sequence_button = GenerateSequenceButton(self.tab)
         self.tab.generate_sequence_button.clicked.connect(self.tab.dummy_function)
+        self.update_button_styles()
 
     def update_button_styles(self):
-        current_widget = self.tab.stacked_layout.currentWidget()
+        current_widget = self.tab.generator_type
         for key, button in self.nav_buttons.items():
-            button.update_style(
-                isinstance(
-                    current_widget,
-                    {
-                        "freeform": FreeformSequenceGeneratorFrame,
-                        "circular": CircularSequenceGeneratorFrame,
-                    }[key],
-                )
-            )
+            active = key == current_widget
+            button.update_style(active)

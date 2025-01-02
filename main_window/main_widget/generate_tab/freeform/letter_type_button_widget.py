@@ -99,8 +99,7 @@ class LetterTypeButtonWidget(QWidget):
         self.overlay.setFixedSize(self.size())
         font = self.label.font()
         font.setPointSize(
-            self.letter_type_picker.generator_frame.generate_tab.main_widget.height()
-            // 10
+            self.letter_type_picker.generator_frame.tab.main_widget.height() // 10
         )
         font.setBold(True)
         self.label.setFont(font)
