@@ -89,9 +89,56 @@ class BaseSequenceGeneratorFrame(QFrame):
             "continuous_rotation", state, self.builder_type
         )
 
+    def on_create_sequence(self, overwrite_sequence: bool):
+        """Trigger sequence creation for the specific builder."""
+        raise NotImplementedError
+
     def resizeEvent(self, event):
         """Resize the auto builder frame based on the parent widget size."""
         self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
         self.level_selector.resize_level_selector()
         self.length_adjuster.resize_length_adjuster()
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
+
+    def show(self):
+        """Display Freeform frame by setting it in the stacked layout."""
+        self.generate_tab.stacked_layout.setCurrentWidget(self)
+        self.generate_tab.current_sequence_generator = self.builder_type
+        self.generate_tab.button_manager.update_button_styles()
+
+        if self.generate_tab.overwrite_connected:
+            try:
+                self.generate_tab.overwrite_checkbox.checkbox.stateChanged.disconnect()
+            except TypeError:
+                pass
+            self.generate_tab.overwrite_connected = False
+
+        overwrite_value = self.generate_tab_settings.get_sequence_generator_setting(
+            "overwrite_sequence",
+            self.generate_tab.current_sequence_generator,
+        )
+
+        if isinstance(overwrite_value, bool):
+            overwrite_bool = overwrite_value
+        elif isinstance(overwrite_value, str):
+            overwrite_bool = overwrite_value.lower() == "true"
+        else:
+            overwrite_bool = False
+
+        self.generate_tab.overwrite_checkbox.setChecked(overwrite_bool)
+
+        self.generate_tab.overwrite_checkbox.checkbox.stateChanged.connect(
+            lambda state: self.generate_tab_settings.set_sequence_generator_setting(
+                "overwrite_sequence",
+                state == 2,
+                self.generate_tab.current_sequence_generator,
+            )
+        )
+        self.overwrite_connected = True
+
+        self.generate_tab.generate_sequence_button.clicked.disconnect()
+        self.generate_tab.generate_sequence_button.clicked.connect(
+            lambda: self.on_create_sequence(
+                self.generate_tab.overwrite_checkbox.isChecked()
+            )
+        )

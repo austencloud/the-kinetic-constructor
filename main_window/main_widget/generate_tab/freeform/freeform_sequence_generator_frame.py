@@ -28,26 +28,21 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         if overwrite_sequence:
             self.beat_deleter.reset_widgets(False)
 
-        self.builder.build_sequence(
-            int(
-                self.generate_tab_settings.get_sequence_generator_setting(
-                    "sequence_length", self.builder_type
-                )
-            ),
-            float(
-                self.generate_tab_settings.get_sequence_generator_setting(
-                    "max_turn_intensity", self.builder_type
-                )
-            ),
-            int(
-                self.generate_tab_settings.get_sequence_generator_setting(
-                    "sequence_level", self.builder_type
-                )
-            ),
-            self.generate_tab_settings.get_sequence_generator_setting(
-                "continuous_rotation", self.builder_type
-            ),
-        )
+        settings_keys = [
+            ("sequence_length", int),
+            ("max_turn_intensity", float),
+            ("sequence_level", int),
+            ("continuous_rotation", lambda x: x),
+        ]
+
+        settings = [
+            setting_type(
+                self.generate_tab_settings.get_sequence_generator_setting(key, self.builder_type)
+            )
+            for key, setting_type in settings_keys
+        ]
+
+        self.builder.build_sequence(*settings)
 
     def get_selected_letter_types(self) -> list[LetterType]:
         return self.letter_type_picker.get_selected_letter_types()
@@ -56,45 +51,4 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         self.layout.setSpacing(self.height() // 50)
         super().resizeEvent(event)
 
-    def show(self):
-        """Display Freeform frame by setting it in the stacked layout."""
-        self.generate_tab.stacked_layout.setCurrentWidget(self)
-        self.generate_tab.current_sequence_generator = "freeform"
-        self.generate_tab.button_manager.update_button_styles()
 
-        if self.generate_tab.overwrite_connected:
-            try:
-                self.generate_tab.overwrite_checkbox.checkbox.stateChanged.disconnect()
-            except TypeError:
-                pass
-            self.generate_tab.overwrite_connected = False
-
-        overwrite_value = self.generate_tab_settings.get_sequence_generator_setting(
-            "overwrite_sequence",
-            self.generate_tab.current_sequence_generator,
-        )
-
-        if isinstance(overwrite_value, bool):
-            overwrite_bool = overwrite_value
-        elif isinstance(overwrite_value, str):
-            overwrite_bool = overwrite_value.lower() == "true"
-        else:
-            overwrite_bool = False
-
-        self.generate_tab.overwrite_checkbox.setChecked(overwrite_bool)
-
-        self.generate_tab.overwrite_checkbox.checkbox.stateChanged.connect(
-            lambda state: self.generate_tab_settings.set_sequence_generator_setting(
-                "overwrite_sequence",
-                state == 2,
-                self.generate_tab.current_sequence_generator,
-            )
-        )
-        self.overwrite_connected = True
-
-        self.generate_tab.generate_sequence_button.clicked.disconnect()
-        self.generate_tab.generate_sequence_button.clicked.connect(
-            lambda: self.on_create_sequence(
-                self.generate_tab.overwrite_checkbox.isChecked()
-            )
-        )

@@ -18,6 +18,7 @@ class GenerateTabLayoutManager:
         self.tab = tab
         self._setup_spacers()
         self._setup_layout()
+        self.tab.freeform_generator_frame.show()
 
     def _setup_layout(self):
         self.tab.stacked_layout = QStackedLayout()
@@ -46,6 +47,7 @@ class GenerateTabLayoutManager:
         self.tab.layout.addLayout(self.tab.checkbox_layout)
         self.tab.layout.addWidget(self.tab.spacer_3)
         self.tab.setLayout(self.tab.layout)
+        
 
     def _setup_spacers(self):
         spacers: list[GenerateTabSpacer] = []

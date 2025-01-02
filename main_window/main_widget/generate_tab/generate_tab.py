@@ -36,12 +36,12 @@ class GenerateTab(QWidget):
     customize_sequence_label: CustomizeSequenceLabel
     checkbox_layout: QHBoxLayout
     layout: QVBoxLayout
+    overwrite_connected = False
+    current_sequence_generator = "freeform"
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.overwrite_connected = False
-        self.current_sequence_generator = "freeform"
 
         # Frames
         self.freeform_generator_frame = FreeformSequenceGeneratorFrame(self)
@@ -55,4 +55,3 @@ class GenerateTab(QWidget):
         self.button_manager = GenerateTabButtonManager(self)
         self.layout_manager = GenerateTabLayoutManager(self)
 
-        self.freeform_generator_frame.show()
