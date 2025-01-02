@@ -16,6 +16,6 @@ class BeatFrameKeyEventHandler(QWidget):
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:
         if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:
-            self.beat_frame.sequence_widget.beat_remover.delete_selected_beat()
+            self.beat_frame.sequence_widget.beat_deleter.delete_selected_beat()
         else:
             super().keyPressEvent(event)

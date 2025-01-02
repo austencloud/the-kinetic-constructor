@@ -85,12 +85,12 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "delete_beat": {
                 "icon": "delete.svg",
-                "callback": lambda: self.beat_frame.sequence_widget.beat_remover.delete_selected_beat(),
+                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.delete_selected_beat(),
                 "tooltip": "Delete Beat",
             },
             "clear_sequence": {
                 "icon": "clear.svg",
-                "callback": lambda: self.beat_frame.sequence_widget.beat_remover.clear_sequence(
+                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.delete_all_beats(
                     show_indicator=True
                 ),
                 "tooltip": "Clear Sequence",

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     )
 
 
-class BeatRemover:
+class BeatDeleter:
     message = "You can't delete a beat if you haven't selected one."
 
     def __init__(self, sequence_widget: "SequenceWidget"):
@@ -29,11 +29,11 @@ class BeatRemover:
             return
 
         if isinstance(selected_beat, StartPositionBeatView):
-            self.clear_sequence(show_indicator=True)
+            self.delete_all_beats(show_indicator=True)
         else:
             self._delete_regular_beat(selected_beat)
 
-    def clear_sequence(self, show_indicator=True) -> None:
+    def delete_all_beats(self, show_indicator=True) -> None:
         beats = self.beat_frame.beats
         widgets = self._collect_widgets()
         beats_filled = any(beat.is_filled for beat in beats)
@@ -63,7 +63,6 @@ class BeatRemover:
         )
 
     def _delete_regular_beat(self, selected_beat: BeatView) -> None:
-        widgets = self._collect_widgets()
         beats = self.beat_frame.beats
         if selected_beat == beats[0]:
             self._delete_first_beat(selected_beat)
@@ -82,7 +81,6 @@ class BeatRemover:
         self._delete_beat_and_following(selected_beat)
 
     def _delete_non_first_beat(self, selected_beat: BeatView) -> None:
-        # self._fade_and_reset_widgets([selected_beat], show_indicator=False)
         self._delete_beat_and_following(selected_beat)
         last_filled_beat = self.beat_frame.get.last_filled_beat()
         self.selection_overlay.select_beat(last_filled_beat, toggle_graph_editor=False)

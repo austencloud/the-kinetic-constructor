@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
-from main_window.main_widget.sequence_widget.beat_frame.beat_remover import BeatRemover
+from main_window.main_widget.sequence_widget.beat_frame.beat_deleter import BeatDeleter
 
 
 from .sequence_color_swap_manager import SequenceColorSwapManager
@@ -53,8 +53,7 @@ class SequenceWidget(QWidget):
 
         # Layout
         self.layout_manager = SequenceWidgetLayoutManager(self)
-
-        self.beat_remover = BeatRemover(self)
+        self.beat_deleter = BeatDeleter(self)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
