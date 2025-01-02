@@ -20,17 +20,21 @@ if TYPE_CHECKING:
 class BaseLessonWidget(QWidget):
     """Base class for all lesson widgets, managing shared logic for questions and answers."""
 
+    question_generator: BaseQuestionGenerator = None
+    question_widget: BaseQuestionWidget = None
+    answers_widget: BaseAnswersWidget = None
+
     def __init__(self, learn_tab: "LearnTab"):
         super().__init__(learn_tab)
         self.learn_tab = learn_tab
         self.main_widget = learn_tab.main_widget
+        self.fade_manager = self.main_widget.fade_manager
 
         # Managers and widgets
         self.layout_manager = LessonLayoutManager(self)
         self.timer_manager = QuizTimerManager(self)
         self.results_widget = ResultsWidget(self)
         self.indicator_label = LessonWidgetIndicatorLabel(self)
-        self.fade_manager = self.main_widget.fade_manager
 
         # Main layout
         self.main_layout: QVBoxLayout = QVBoxLayout()
@@ -41,10 +45,6 @@ class BaseLessonWidget(QWidget):
         # Add back button and central area to the main layout
         self.add_back_button()
         self.main_layout.addLayout(self.central_layout)
-
-        self.question_generator: BaseQuestionGenerator = None
-        self.question_widget: BaseQuestionWidget = None
-        self.answers_widget: BaseAnswersWidget = None
 
         # Progress and result labels
         self.progress_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
@@ -107,7 +107,6 @@ class BaseLessonWidget(QWidget):
         self.update_progress_label()
         self.clear_layout(self.central_layout)
         self.layout_manager.setup_layout()
-        self.start_new_question()
 
     def check_answer(self, selected_answer, correct_answer):
         """Check the answer and show feedback."""
@@ -135,7 +134,7 @@ class BaseLessonWidget(QWidget):
             self.question_widget,
             self.answers_widget,
         ]
-        
+
         self.fade_manager.widget_fader.fade_and_update(
             widgets_to_fade,
             callback=self._generate_new_question,

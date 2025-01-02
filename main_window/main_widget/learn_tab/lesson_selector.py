@@ -90,9 +90,6 @@ class LessonSelector(QWidget):
         self.layout.addLayout(lesson_layout)
         self.layout.addStretch(1)
 
-    # --------------------------------------
-    # Resizing Methods
-    # --------------------------------------
     def resizeEvent(self, event) -> None:
         """Resize title, buttons, and descriptions based on window size."""
         self._resize_title_label()
@@ -150,10 +147,4 @@ class LessonSelector(QWidget):
                 self.learn_widget.stack, lesson_widget_index
             )
             lesson_widget.prepare_quiz_ui()
-
-    def show(self) -> None:
-        """Show the LessonSelector widget."""
-        # self.learn_widget.stack_layout.setCurrentWidget(self)
-        self.learn_widget.main_widget.fade_manager.stack_fader.fade_stack(
-            self.learn_widget.stack, 0
-        )
+            lesson_widget.start_new_question()

@@ -97,7 +97,7 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
         """Resize the pictograph views based on window size."""
         super().resizeEvent(event)
         for view in self.pictograph_views:
-            size = int(self.main_widget.height() // 5.5)
+            size = int(self.main_widget.height() // 5)
             view.setFixedSize(size, size)
         spacing = self.main_widget.width() // 100
         self.layout.setSpacing(spacing)

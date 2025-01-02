@@ -22,6 +22,9 @@ class StackFader:
         """
         current_widget = stack.currentWidget()
         next_widget = stack.widget(new_index)
+        self.manager.graphics_effect_remover.clear_graphics_effects(
+            [current_widget, next_widget]
+        )
 
         if not current_widget or not next_widget or stack.currentIndex() == new_index:
             return
