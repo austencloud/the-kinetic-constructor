@@ -29,25 +29,15 @@ class StackFader:
         if not current_widget or not next_widget or stack.currentIndex() == new_index:
             return
 
+        def switch_and_fade_in():
+            stack.setCurrentIndex(new_index)
+            self.manager.widget_fader.fade_widgets(
+                [next_widget], fade_in=True, duration=duration, callback=callback
+            )
+
         self.manager.widget_fader.fade_widgets(
             [current_widget],
             fade_in=False,
             duration=duration,
-            callback=lambda: self._switch_and_fade_in(
-                stack, new_index, next_widget, duration, callback
-            ),
+            callback=switch_and_fade_in,
         )
-
-    def _switch_and_fade_in(
-        self,
-        stack: QStackedWidget,
-        new_index: int,
-        next_widget: QWidget,
-        duration: int,
-        callback: Optional[callable],
-    ):
-        stack.setCurrentIndex(new_index)
-        self.manager.widget_fader.fade_widgets(
-            [next_widget], fade_in=True, duration=duration, callback=callback
-        )
-        self.manager.graphics_effect_remover.clear_graphics_effects([next_widget])
