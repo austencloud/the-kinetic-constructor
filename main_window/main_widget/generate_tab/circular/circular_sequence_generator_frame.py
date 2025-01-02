@@ -25,7 +25,6 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         )
 
     def apply_settings(self):
-        """Apply settings to the modular widgets."""
         super().apply_settings()
 
         rotation_type = self.generate_tab_settings.get_sequence_generator_setting(
@@ -39,13 +38,11 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         self.permutation_type_toggle.set_state(permutation_type == "rotated")
 
     def _update_rotation_type(self, rotation_type: str):
-        """Update the rotation type based on the toggle."""
         self.generate_tab_settings.set_sequence_generator_setting(
             "rotation_type", rotation_type, self.generator_type
         )
 
     def _update_permutation_type(self, permutation_type: str):
-        """Update the permutation type based on the toggle."""
         self.generate_tab_settings.set_sequence_generator_setting(
             "permutation_type", permutation_type, self.generator_type
         )
@@ -79,8 +76,3 @@ class CircularSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
         ]
 
         self.builder.build_sequence(*settings)
-
-    def resizeEvent(self, event):
-        self.permutation_type_toggle.resize_permutation_type_toggle()
-        self.rotation_type_toggle.resize_rotation_type_toggle()
-        super().resizeEvent(event)

@@ -50,6 +50,3 @@ class FreeformSequenceGeneratorFrame(BaseSequenceGeneratorFrame):
     def get_selected_letter_types(self) -> list[LetterType]:
         return self.letter_type_picker.get_selected_letter_types()
 
-    def resizeEvent(self, event):
-        self.layout.setSpacing(self.height() // 50)
-        super().resizeEvent(event)

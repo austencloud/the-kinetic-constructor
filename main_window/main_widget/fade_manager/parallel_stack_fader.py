@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QStackedWidget
+from PyQt6.QtWidgets import QWidget, QStackedWidget, QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
@@ -46,8 +46,8 @@ class ParallelStackFader:
 
             total_width = self.manager.main_widget.width()
             left_width = int(total_width * width_ratio[0])
-            left_stack.setMinimumWidth(left_width)
-            right_stack.setMinimumWidth(total_width - left_width)
+            left_stack.setFixedWidth(left_width)
+            right_stack.setFixedWidth(total_width - left_width)
 
         def fade_in_new_widgets():
             self.manager.widget_fader.fade_widgets(

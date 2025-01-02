@@ -70,7 +70,7 @@ class LevelSelector(QWidget):
         """Set the initial level when loading settings."""
         self._on_level_change(level)
 
-    def resize_level_selector(self):
+    def resizeEvent(self, event):
         """Resize the level label font dynamically based on the parent height."""
         self.level_label.setFont(
             QFont("Arial", self.sequence_generator_frame.height() // 30, 0)

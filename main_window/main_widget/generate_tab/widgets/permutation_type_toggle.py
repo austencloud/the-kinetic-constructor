@@ -57,7 +57,7 @@ class PermutationTypeToggle(QWidget):
         self.permutation_type_toggle.setChecked(state)
         self.update_mode_label_styles()
 
-    def resize_permutation_type_toggle(self):
+    def resizeEvent(self, event):
         font_size = self.circular_builder_frame.tab.main_widget.width() // 75
         self.mirrored_label.setStyleSheet(f"font-size: {font_size}px;")
         self.rotated_label.setStyleSheet(f"font-size: {font_size}px;")

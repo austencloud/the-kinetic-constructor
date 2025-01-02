@@ -105,12 +105,7 @@ class BaseSequenceGeneratorFrame(QFrame):
         """Trigger sequence creation for the specific builder."""
         raise NotImplementedError
 
-    def resizeEvent(self, event):
-        """Resize the auto builder frame based on the parent widget size."""
-        self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
-        self.level_selector.resize_level_selector()
-        self.length_adjuster.resize_length_adjuster()
-        self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
+
 
     def show(self):
         """Display Freeform frame by setting it in the stacked layout."""

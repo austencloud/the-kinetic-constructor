@@ -60,7 +60,7 @@ class RotationTypeToggle(QWidget):
         self.rotation_type_toggle.setChecked(state)
         self.update_mode_label_styles()
 
-    def resize_rotation_type_toggle(self):
+    def resizeEvent(self, event):
         font_size = self.circular_builder_frame.tab.main_widget.width() // 75
         font = self.halved_label.font()
         font.setPointSize(font_size)

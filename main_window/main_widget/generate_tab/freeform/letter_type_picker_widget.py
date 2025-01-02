@@ -121,26 +121,34 @@ class LetterTypePickerWidget(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        self._update_font_sizes()
+        self._update_widget_sizes()
+        self._update_filter_label_style()
+
+    def _update_font_sizes(self):
         font_size = self.generator_frame.tab.main_widget.height() // 50
         self.filter_label.setFont(QFont("Arial", font_size))
-        self.layout().setSpacing(self.generator_frame.height() // 50)
-        width = self.generator_frame.width() // 16
         for w in self.letter_type_widgets:
-            w.setFixedSize(width, width)
             f = w.label.font()
             f.setPointSize(font_size)
             w.label.setFont(f)
-
         f = self.filter_label.font()
         f.setPointSize(font_size)
         self.filter_label.setFont(f)
+
+    def _update_widget_sizes(self):
+        width = self.generator_frame.width() // 16
+        for w in self.letter_type_widgets:
+            w.setFixedSize(width, width)
+        self.layout().setSpacing(self.generator_frame.height() // 50)
+
+    def _update_filter_label_style(self):
         global_settings = (
             self.generator_frame.tab.main_widget.main_window.settings_manager.global_settings
         )
         color = self.generator_frame.tab.main_widget.font_color_updater.get_font_color(
             global_settings.get_background_type()
         )
-        # Just apply the color to the label text, not the checkbox
         existing_style = self.filter_label.styleSheet()
         new_style = f"{existing_style} color: {color};"
         self.filter_label.setStyleSheet(new_style)

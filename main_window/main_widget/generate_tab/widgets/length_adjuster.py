@@ -73,7 +73,7 @@ class LengthAdjuster(QWidget):
         self.length = length
         self.length_value_label.setText(str(self.length))
 
-    def resize_length_adjuster(self):
+    def resizeEvent(self, event):
         font_size = self.sequence_generator_frame.tab.main_widget.width() // 75
         font = self.length_label.font()
         font.setPointSize(font_size)

@@ -53,7 +53,7 @@ class ContinuousRotationToggle(QWidget):
         self.toggle.setChecked(state)
         self.update_mode_label_styles()
 
-    def resize_continuous_rotation_toggle(self):
+    def resizeEvent(self, event):
         font_size = self.main_widget.width() // 75
         font = self.random_label.font()
         font.setPointSize(font_size)
