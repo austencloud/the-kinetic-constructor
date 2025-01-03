@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from .beat_deleter import BeatDeleter
 
 
-class OtherBeatDeleter:
+class NonFirstBeatDeleter:
     def __init__(self, deleter: "BeatDeleter"):
         self.deleter = deleter
 

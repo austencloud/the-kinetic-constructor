@@ -30,7 +30,7 @@ class BeatView(PictographView):
         self.beat = self.blank_beat
         self.setScene(self.blank_beat)
         self.blank_beat.grid.hide()
-        self.blank_beat.number_manager.add_beat_number()
+        self.blank_beat.number_item.update_beat_number()
 
     def set_beat(self, beat: "Beat", number: int) -> None:
         # super().__init__(beat)
@@ -39,7 +39,7 @@ class BeatView(PictographView):
         self.is_filled = True
         self.beat.beat_number = number
         self.setScene(self.beat)
-        self.beat.number_manager.add_beat_number(number)
+        self.beat.number_item.update_beat_number(number)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:

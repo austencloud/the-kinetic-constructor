@@ -27,37 +27,30 @@ class WidgetCollector:
         return [widget for widget in widgets if widget]
 
     def _get_GE_pictograph_items(self):
-        beat_frame = self.deleter.beat_frame
-        GE_pictograph = (
-            beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
-        )
-        arrows = GE_pictograph.arrows.values()
-        props = GE_pictograph.props.values()
-        tka_glyph_parts = [
-            GE_pictograph.tka_glyph.letter_handler.letter_item,
-            GE_pictograph.tka_glyph.dash_handler.dash_item,
-            GE_pictograph.tka_glyph.dot_handler.same_dot_item,
-            GE_pictograph.tka_glyph.dot_handler.opp_dot_item,
-        ]
-        start_to_end_parts = [
-            GE_pictograph.start_to_end_pos_glyph.start_glyph,
-            GE_pictograph.start_to_end_pos_glyph.end_glyph,
-            GE_pictograph.start_to_end_pos_glyph.arrow_glyph,
-        ]
+        GE_pictograph = self.deleter.beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
         return (
-            list(arrows)
-            + list(props)
-            + tka_glyph_parts
-            + start_to_end_parts
-            + [GE_pictograph.number_manager.beat_number_item]
+            list(GE_pictograph.arrows.values())
+            + list(GE_pictograph.props.values())
+            + [
+                GE_pictograph.tka_glyph.letter_handler.letter_item,
+                GE_pictograph.tka_glyph.dash_handler.dash_item,
+                GE_pictograph.tka_glyph.dot_handler.same_dot_item,
+                GE_pictograph.tka_glyph.dot_handler.opp_dot_item,
+                GE_pictograph.start_to_end_pos_glyph.start_glyph,
+                GE_pictograph.start_to_end_pos_glyph.end_glyph,
+                GE_pictograph.start_to_end_pos_glyph.arrow_glyph,
+                GE_pictograph.number_item,
+                GE_pictograph.blue_reversal_symbol,
+                GE_pictograph.red_reversal_symbol,
+            ]
         )
 
     def get_adjustment_panel_items(self):
         panel = self.deleter.sequence_widget.graph_editor.adjustment_panel
         return [
-            panel.blue_turns_box.turns_widget.turns_display_frame,
+            panel.blue_turns_box.turns_widget.turns_display_frame.turns_label,
             panel.blue_turns_box.turns_widget.motion_type_label,
-            panel.red_turns_box.turns_widget.turns_display_frame,
+            panel.red_turns_box.turns_widget.turns_display_frame.turns_label,
             panel.red_turns_box.turns_widget.motion_type_label,
             panel.blue_turns_box.prop_rot_dir_button_manager.ccw_button,
             panel.blue_turns_box.prop_rot_dir_button_manager.cw_button,

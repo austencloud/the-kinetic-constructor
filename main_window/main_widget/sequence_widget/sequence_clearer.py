@@ -86,7 +86,7 @@ class SequenceClearer:
             [
                 GE_pictograph.vtg_glyph,
                 GE_pictograph.elemental_glyph,
-                GE_pictograph.number_manager.beat_number_item,
+                GE_pictograph.number_item,
                 GE_pictograph.start_text_item,
             ]
             + tka_glyph_parts

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from .first_beat_deleter import FirstBeatDeleter
-from .other_beat_deleter import OtherBeatDeleter
+from .non_first_beat_deleter import NonFirstBeatDeleter
 from .start_pos_deleter import StartPositionDeleter
 from .widget_collector import WidgetCollector
 from ..beat_view import BeatView
@@ -25,7 +25,7 @@ class BeatDeleter:
         self.widget_collector = WidgetCollector(self)
         self.start_position_deleter = StartPositionDeleter(self)
         self.first_beat_deleter = FirstBeatDeleter(self)
-        self.other_beat_deleter = OtherBeatDeleter(self)
+        self.other_beat_deleter = NonFirstBeatDeleter(self)
 
     def delete_selected_beat(self) -> None:
         selected_beat = self.selection_overlay.get_selected_beat()

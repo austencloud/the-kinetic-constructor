@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
-from PyQt6.QtWidgets import QGridLayout
+from PyQt6.QtWidgets import QGridLayout, QApplication
 from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
@@ -52,12 +52,8 @@ class SequenceWidgetBeatFrameLayoutManager:
 
     def configure_beat_frame_for_filled_beats(self) -> None:
         if self.settings_manager.global_settings.get_grow_sequence():
-            filled_beats = [
-                beat for beat in self.beat_frame.beats if beat.is_filled
-            ]
-            self.beat_frame.layout_manager.configure_beat_frame(
-                len(filled_beats)
-            )
+            filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
+            self.beat_frame.layout_manager.configure_beat_frame(len(filled_beats))
 
     def configure_beat_frame(self, num_beats, override_grow_sequence=False):
         if not override_grow_sequence:
@@ -89,14 +85,13 @@ class SequenceWidgetBeatFrameLayoutManager:
                     if index < len(beats):
                         beat_view = beats[index]
                         self.beat_frame.layout.addWidget(beat_view, row, col)
-                        beat_view.beat.number_manager.add_beat_number(index + 1)
+                        beat_view.beat.number_item.update_beat_number(index + 1)
                         beat_view.show()
                     index += 1
                 else:
                     if index < len(beats):
                         beats[index].hide()
                         index += 1
-
         self.beat_frame.adjustSize()
         selected_beat = self.selection_manager.selected_beat
         if selected_beat:

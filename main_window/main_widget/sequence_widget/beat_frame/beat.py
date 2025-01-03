@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.beat_grabber import BeatGrabber
-from .beat_number_manager import BeatNumberManager
+from .beat_number_item import BeatNumberItem
 from .beat_reversal_manager import BeatReversalManager
 
 if TYPE_CHECKING:
@@ -24,6 +24,6 @@ class Beat(BasePictograph):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
         self.reversal_symbol_manager = BeatReversalManager(self)
-        self.number_manager = BeatNumberManager(self)
+        self.number_item = BeatNumberItem(self)
         self.grabber = BeatGrabber(self)
         self.duration = duration

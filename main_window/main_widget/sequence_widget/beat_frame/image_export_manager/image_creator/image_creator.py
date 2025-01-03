@@ -131,9 +131,7 @@ class ImageCreator:
 
         # Set beat numbers visibility
         for beat_view in filled_beats:
-            beat_view.beat.number_manager.beat_number_item.setVisible(
-                options["add_beat_numbers"]
-            )
+            beat_view.beat.number_item.setVisible(options["add_beat_numbers"])
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:
         """Create a new QImage with the given dimensions."""
