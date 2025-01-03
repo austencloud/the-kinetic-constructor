@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class GE_PictographViewMouseEventHandler:
     def __init__(self, pictograph_view: "GE_PictographView") -> None:
         self.pictograph_view = pictograph_view
-        self.pictograph = pictograph_view.GE_pictograph
+        self.pictograph = pictograph_view.pictograph
         self.selection_manager = self.pictograph_view.graph_editor.selection_manager
 
     def handle_mouse_press(self, event: QMouseEvent) -> None:

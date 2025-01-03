@@ -6,6 +6,7 @@ from data.constants import (
     COUNTER_CLOCKWISE,
     ICON_DIR,
 )
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
@@ -58,28 +59,36 @@ class PropRotDirButtonManager:
         """Set the prop rotation direction and update the motion and letter."""
         if self.turns_box.prop_rot_dir_btn_state[prop_rot_dir]:
             return
-        pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
-        for motion in pictograph.motions.values():
-            if motion.color == self.turns_box.color:
-                motion.prop_rot_dir = prop_rot_dir
-                new_letter = (
-                    self.graph_editor.main_widget.letter_determiner.determine_letter(
+        selected_beat = (
+            self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat()
+        )
+        both_beats: list[Beat] = [
+            selected_beat.beat,
+            self.graph_editor.pictograph_container.GE_pictograph_view.pictograph,
+        ]
+
+        for pictograph in both_beats:
+            for motion in pictograph.motions.values():
+                if motion.color == self.turns_box.color:
+                    motion.prop_rot_dir = prop_rot_dir
+                    new_letter = self.graph_editor.main_widget.letter_determiner.determine_letter(
                         motion, swap_prop_rot_dir=True
                     )
-                )
-                self._update_pictograph_and_json(motion, new_letter)
+                    self._update_pictograph_and_json(motion, new_letter)
 
-        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
+            pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
 
-        sequence_so_far = self.json_manager.loader_saver.load_current_sequence_json()[
-            : pictograph_index + 2
-        ]
-        reversal_info = ReversalDetector.detect_reversal(
-            sequence_so_far, pictograph.pictograph_dict
-        )
-        pictograph.blue_reversal = reversal_info["blue_reversal"]
-        pictograph.red_reversal = reversal_info["red_reversal"]
-        pictograph.reversal_symbol_manager.update_reversal_symbols()
+            sequence_so_far = (
+                self.json_manager.loader_saver.load_current_sequence_json()[
+                    : pictograph_index + 2
+                ]
+            )
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, pictograph.pictograph_dict
+            )
+            pictograph.blue_reversal = reversal_info["blue_reversal"]
+            pictograph.red_reversal = reversal_info["red_reversal"]
+            pictograph.reversal_symbol_manager.update_reversal_symbols()
 
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
         self.option_picker = (
@@ -87,8 +96,10 @@ class PropRotDirButtonManager:
         )
         self.option_picker.update_option_picker()
         self.graph_editor.pictograph_container.update_GE_pictograph(pictograph)
-        
-    def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter = None) -> None:
+
+    def _update_pictograph_and_json(
+        self, motion: "Motion", new_letter: Letter = None
+    ) -> None:
         """Update the pictograph and JSON with the new letter and motion attributes."""
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         beat = motion.pictograph

@@ -100,8 +100,8 @@ class SequenceWidgetBeatFrameLayoutManager:
         self.beat_frame.adjustSize()
         selected_beat = self.selection_manager.selected_beat
         if selected_beat:
-            self.selection_manager.deselect_beat()
-            self.selection_manager.select_beat(selected_beat, toggle_graph_editor=False)
+            # self.selection_manager.deselect_beat()
+            # self.selection_manager.select_beat(selected_beat, toggle_graph_editor=False)
             self.selection_manager.update_overlay_position()
 
     def adjust_layout_to_sequence_length(self):

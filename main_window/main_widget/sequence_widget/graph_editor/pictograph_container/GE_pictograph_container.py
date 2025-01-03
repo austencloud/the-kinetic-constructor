@@ -29,18 +29,20 @@ class GraphEditorPictographContainer(QWidget):
         self.GE_pictograph_view = GE_PictographView(self, self.GE_pictograph)
 
     def update_GE_pictograph(self, reference_beat: "Beat") -> None:
-        GE_view = self.GE_pictograph_view
+        view = self.GE_pictograph_view
+        
         if reference_beat.view.is_start_pos:
-            GE_view.is_start_pos = True
+            view.is_start_pos = True
         else:
-            GE_view.is_start_pos = False
-        GE_view.GE_pictograph.is_blank = False
-        GE_view.reference_beat = reference_beat
-        GE_view.GE_pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
+            view.is_start_pos = False
+            
+        view.pictograph.is_blank = False
+        view.reference_beat = reference_beat
+        view.pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
         if reference_beat.number_manager.beat_number_text != "0":
             beat_number_text = reference_beat.number_manager.beat_number_text
-            GE_view.GE_pictograph.number_manager.add_beat_number(beat_number_text)
-        
+            view.pictograph.number_manager.add_beat_number(beat_number_text)
+
     def resizeEvent(self, event):
         size = self.graph_editor.height()
         self.setFixedWidth(size)

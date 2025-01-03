@@ -37,7 +37,7 @@ class GE_PictographView(PictographView):
     ) -> None:
         super().__init__(pictograph)
         self.graph_editor = container.graph_editor
-        self.GE_pictograph = pictograph
+        self.pictograph = pictograph
         self.main_widget = self.graph_editor.main_widget
         self.setScene(pictograph)
         self.setFrameShape(PictographView.Shape.Box)
@@ -52,9 +52,9 @@ class GE_PictographView(PictographView):
         self.scene().update()  # Ensure the view reflects the updated selection
 
     def set_to_blank_grid(self) -> None:
-        self.GE_pictograph = GE_Pictograph(self)
-        self.setScene(self.GE_pictograph)
-        self.GE_pictograph.view = self
+        self.pictograph = GE_Pictograph(self)
+        self.setScene(self.pictograph)
+        self.pictograph.view = self
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self.key_event_handler.handle_key_press(event):
@@ -130,7 +130,5 @@ class GE_PictographView(PictographView):
 
 class GE_Pictograph(Beat):
     def __init__(self, pictograph_container: "GraphEditorPictographContainer") -> None:
-        super().__init__(
-            pictograph_container.graph_editor.sequence_widget.beat_frame
-        )
+        super().__init__(pictograph_container.graph_editor.sequence_widget.beat_frame)
         self.is_blank = True

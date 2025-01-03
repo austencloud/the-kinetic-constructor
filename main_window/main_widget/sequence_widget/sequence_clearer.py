@@ -65,7 +65,7 @@ class SequenceClearer:
     def _get_GE_pictograph_items(self):
         beat_frame = self.sequence_widget.beat_frame
         GE_pictograph = (
-            beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.GE_pictograph
+            beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
         )
         arrows: dict = GE_pictograph.arrows
         props: dict = GE_pictograph.props

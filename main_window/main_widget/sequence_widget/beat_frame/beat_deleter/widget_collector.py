@@ -29,7 +29,7 @@ class WidgetCollector:
     def _get_GE_pictograph_items(self):
         beat_frame = self.deleter.beat_frame
         GE_pictograph = (
-            beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.GE_pictograph
+            beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
         )
         arrows = GE_pictograph.arrows.values()
         props = GE_pictograph.props.values()
