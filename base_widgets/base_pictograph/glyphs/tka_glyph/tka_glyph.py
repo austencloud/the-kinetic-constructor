@@ -18,6 +18,10 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         self.letter = None
         self.init_handlers()
 
+
+    def boundingRect(self):
+        return self.childrenBoundingRect()
+
     def init_handlers(self) -> None:
         from .handlers.tka_letter_handler import TKALetterHandler
         from .handlers.dash_handler import DashHandler

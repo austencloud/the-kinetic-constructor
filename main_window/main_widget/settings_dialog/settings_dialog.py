@@ -19,7 +19,7 @@ class SettingsDialog(QDialog):
         self.main_widget = main_widget
         self.setWindowTitle("Settings")
         # self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.FramelessWindowHint)
-        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)  # Delete dialog on close
+        # self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)  # Delete dialog on close
         self._setup_ui()
         self._apply_styles()
 

@@ -36,7 +36,7 @@ class WidgetCollector:
         items.extend(GE_pictograph.props.values())
 
         glyph_items = [
-            GE_pictograph.tka_glyph.letter_handler.letter_item,
+            GE_pictograph.tka_glyph.letter_item,
             GE_pictograph.tka_glyph.dash_handler.dash_item,
             GE_pictograph.tka_glyph.dot_handler.same_dot_item,
             GE_pictograph.tka_glyph.dot_handler.opp_dot_item,

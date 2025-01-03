@@ -13,7 +13,7 @@ class VisibilityTab(QWidget):
         super().__init__()
         self.main_widget = settings_dialog.main_widget
         self.settings = self.main_widget.settings_manager.visibility
-
+        self.dialog = settings_dialog
         self.checkbox_widget = VisibilityCheckboxWidget(self)
         self.pictograph_view = VisibilityTabPictographView(self)
 

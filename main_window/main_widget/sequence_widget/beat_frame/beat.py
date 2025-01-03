@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Union
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
 from main_window.main_widget.sequence_widget.beat_frame.beat_grabber import BeatGrabber
 from main_window.main_widget.sequence_widget.beat_frame.beat_start_text_manager import (
     BeatStartTextItem,
 )
 from .beat_number_item import BeatNumberItem
-from .....base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtCore import QPointF

@@ -36,11 +36,17 @@ class VisibilityTabPictographView(PictographView):
 
     def add_hover_effect(self):
         def apply_hover_effects(item: "Glyph"):
+            print(f"Applying hover effects to {item.name}")
             item.setCursor(Qt.CursorShape.PointingHandCursor)
             item.hoverEnterEvent = self._create_hover_enter_event(item)
             item.hoverLeaveEvent = self._create_hover_leave_event(item)
+            item.setAcceptHoverEvents(True)  # Ensure hover events are accepted
+
             for child in item.childItems():
-                apply_hover_effects(child)
+                child.setCursor(Qt.CursorShape.PointingHandCursor)
+                child.setAcceptHoverEvents(True)
+                child.hoverEnterEvent = self._create_hover_enter_event(item)
+                child.hoverLeaveEvent = self._create_hover_leave_event(item)
 
         for glyph in self._get_all_glyphs():
             apply_hover_effects(glyph)
@@ -104,6 +110,9 @@ class VisibilityTabPictographView(PictographView):
             glyph.mousePressEvent = self._create_mouse_press_event(glyph)
 
     def _create_mouse_press_event(self, glyph: "Glyph"):
+        for child in glyph.childItems():
+            child.setAcceptHoverEvents(True)
+
         def mousePressEvent(event):
             self._toggle_glyph_visibility(glyph)
             if self.settings.glyph_visibility_manager.should_glyph_be_visible(
@@ -124,8 +133,9 @@ class VisibilityTabPictographView(PictographView):
 
     def resizeEvent(self, event: QEvent):
         tab_width = (
-            self.visibility_tab.width() - self.visibility_tab.checkbox_widget.width()
+            self.visibility_tab.dialog.width()
+            - self.visibility_tab.checkbox_widget.width()
         )
-        size = int(tab_width * 0.8)
+        size = int(tab_width * 0.7)
         self.setFixedSize(size, size)
         super().resizeEvent(event)
