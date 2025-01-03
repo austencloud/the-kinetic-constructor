@@ -10,7 +10,6 @@ from .full_screen_image_overlay import FullScreenImageOverlay
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .learn_tab.learn_tab import LearnTab
-from .sequence_widget.beat_frame.resize_event_filter import ResizeEventFilter
 from .write_tab.write_tab import WriteTab
 from .main_background_widget.main_background_widget import MainBackgroundWidget
 from .main_widget_tab_switcher import MainWidgetTabSwitcher

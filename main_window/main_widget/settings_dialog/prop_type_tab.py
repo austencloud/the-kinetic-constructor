@@ -2,17 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QPushButton,
     QLabel,
-    QSpacerItem,
-    QSizePolicy,
     QGridLayout,
 )
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from PyQt6.QtCore import QSize
 
-from Enums.PropTypes import PropType
 from main_window.main_widget.settings_dialog.styles.card_frame import CardFrame
 from main_window.main_widget.settings_dialog.prop_button import PropButton
 

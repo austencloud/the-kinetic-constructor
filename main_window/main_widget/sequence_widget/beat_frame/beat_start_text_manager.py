@@ -1,17 +1,10 @@
 from typing import TYPE_CHECKING
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.beat_grabber import BeatGrabber
-from .beat_number_item import BeatNumberItem
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtCore import QPointF
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
-    )
-    from .beat_view import BeatView
 
 
 class BeatStartTextItem(QGraphicsTextItem):

@@ -1,6 +1,5 @@
 # pictograph_data_manager.py
 
-from copy import deepcopy
 from typing import TYPE_CHECKING, Optional
 from Enums.letters import Letter
 

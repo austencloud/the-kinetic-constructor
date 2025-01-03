@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QWidget,
     QPushButton,
 )
 from PyQt6.QtGui import QIcon, QColor
@@ -10,7 +9,6 @@ from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.prop_type_tab import PropTypeTab
-    from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 
 
 class PropButton(QPushButton):

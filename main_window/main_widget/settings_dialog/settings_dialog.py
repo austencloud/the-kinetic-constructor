@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QTabWidget, QSizePolicy
-from PyQt6.QtGui import QFont, QCursor, QMouseEvent
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QTabWidget
+from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt
 from .settings_dialog_action_buttons import SettingsDialogActionButtons
 from .styles.settings_dialog_styler import SettingsDialogStyler

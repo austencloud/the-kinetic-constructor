@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QPalette, QColor, QFont, QCursor
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtWidgets import QTabWidget, QPushButton
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog

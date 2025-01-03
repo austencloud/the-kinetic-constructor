@@ -6,9 +6,6 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_start_text_manager 
     BeatStartTextItem,
 )
 from .beat_number_item import BeatNumberItem
-from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QGraphicsTextItem
-from PyQt6.QtCore import QPointF
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (

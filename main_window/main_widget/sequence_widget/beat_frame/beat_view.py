@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from .beat import Beat
-from .start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame

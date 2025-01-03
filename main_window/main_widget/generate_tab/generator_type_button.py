@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.generate_tab.base_classes.base_sequence_generator_frame import (
         BaseSequenceGeneratorFrame,
     )
-    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class GeneratorTypeButton(QPushButton):

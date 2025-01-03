@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import (
-    GE_Pictograph,
-)
 
 if TYPE_CHECKING:
     from main_window.settings_manager.visibility_settings.visibility_settings import (
