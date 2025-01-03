@@ -46,4 +46,4 @@ class VisibilitySettings:
 
     def set_grid_visibility(self, element: str, visible: bool) -> None:
         self.settings.setValue(f"visibility/grid_visibility/{element}", visible)
-        self.grid_visibility_manager.apply_visibility_to_all_pictographs()
+        self.grid_visibility_manager.apply_grid_visibility()

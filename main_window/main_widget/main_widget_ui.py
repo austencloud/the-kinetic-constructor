@@ -33,7 +33,6 @@ class MainWidgetUI:
 
         self.mw.fade_manager = FadeManager(self.mw)
         self.mw.font_color_updater = FontColorUpdater(self.mw)
-        self.mw.settings_dialog = SettingsDialog(self.mw)
         splash = self.splash_screen
         splash.updater.update_progress("MenuBarWidget")
         self.mw.menu_bar = MenuBarWidget(self.mw)
@@ -52,6 +51,7 @@ class MainWidgetUI:
         self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Finalizing")
 
+        self.mw.settings_dialog = SettingsDialog(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
 

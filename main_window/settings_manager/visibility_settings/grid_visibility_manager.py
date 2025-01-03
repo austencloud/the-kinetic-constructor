@@ -22,7 +22,7 @@ class GridVisibilityManager:
 
     def save_non_radial_visibility(self, visible: bool):
         self.visibility_settings.set_grid_visibility("non_radial_points", visible)
-        self.apply_visibility_to_all_pictographs()
+        self.apply_grid_visibility()
 
     def set_non_radial_visibility(self, visible: bool):
         self.non_radial_visible = visible
@@ -30,9 +30,9 @@ class GridVisibilityManager:
 
     def toggle_visibility(self):
         self.non_radial_visible = not self.non_radial_visible
-        self.save_non_radial_visibility(self.non_radial_visible)
+        # self.save_non_radial_visibility(self.non_radial_visible)
 
-    def apply_visibility_to_all_pictographs(self):
+    def apply_grid_visibility(self):
         def toggle_visibility(obj: "BasePictograph"):
             obj.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
 

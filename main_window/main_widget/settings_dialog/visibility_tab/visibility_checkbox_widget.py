@@ -21,40 +21,50 @@ class VisibilityCheckboxWidget(QWidget):
         super().__init__()
         self.visibility_tab = visibility_tab
         self.glyph_checkboxes: dict[str, QCheckBox] = {}
+        self.grid_checkboxes: dict[str, QCheckBox] = {}
         self._setup_ui()
 
     def _setup_ui(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(2)
-        glyph_visibility_manager = (
-            self.visibility_tab.main_widget.settings_manager.visibility.glyph_visibility_manager
-        )
         self.glyph_names = [
             "TKA",
             "VTG",
             "Elemental",
             "Positions",
             "Reversals",
+        ]
+        self.grid_names = [
             "Non-radial points",
         ]
-
-        for glyph_name in self.glyph_names:
-            checkbox = QCheckBox(glyph_name)
-            checkbox.setChecked(
-                glyph_visibility_manager.should_glyph_be_visible(glyph_name)
+        self._create_checkboxes()
+        for checkbox in self.glyph_checkboxes.values():
+            name = checkbox.text()
+            checkbox.stateChanged.connect(
+                lambda state, g=name: self._toggle_glyph_visibility(g, state)
             )
-            if glyph_name == "Non-radial points":
-                checkbox.stateChanged.connect(
-                    lambda state: self._toggle_grid_visibility(state)
-                )
-            else:
-                checkbox.stateChanged.connect(
-                    lambda state, g=glyph_name: self._toggle_glyph_visibility(g, state)
-                )
+        for checkbox in self.grid_checkboxes.values():
+            name = checkbox.text()
+            checkbox.stateChanged.connect(
+                lambda state, g=name: self._toggle_grid_visibility(state)
+            )
+        self.layout.addStretch(2)
+
+        self.update_checkboxes()
+
+    def _create_checkboxes(self):
+        glyph_visibility_manager = (
+            self.visibility_tab.main_widget.settings_manager.visibility.glyph_visibility_manager
+        )
+        for name in self.glyph_names + self.grid_names:
+            checkbox = QCheckBox(name)
+            checkbox.setChecked(glyph_visibility_manager.should_glyph_be_visible(name))
             self.layout.addWidget(checkbox)
             self.layout.addStretch(1)
-            self.glyph_checkboxes[glyph_name] = checkbox
-        self.layout.addStretch(2)
+            if name in self.grid_names:
+                self.grid_checkboxes[name] = checkbox
+            else:
+                self.glyph_checkboxes[name] = checkbox
 
     def _toggle_grid_visibility(self, state: int):
         is_checked = state == Qt.CheckState.Checked.value
@@ -68,11 +78,11 @@ class VisibilityCheckboxWidget(QWidget):
 
     def update_checkboxes(self):
         """Synchronize checkboxes with the current visibility settings."""
-        glyph_visibility_manager = (
-            self.visibility_tab.main_widget.settings_manager.visibility.glyph_visibility_manager
-        )
-        for glyph, checkbox in self.glyph_checkboxes.items():
-            checkbox.setChecked(glyph_visibility_manager.should_glyph_be_visible(glyph))
+        settings = self.visibility_tab.main_widget.settings_manager.visibility
+        for name, checkbox in self.glyph_checkboxes.items():
+            checkbox.setChecked(settings.get_glyph_visibility(name))
+        for name, checkbox in self.grid_checkboxes.items():
+            checkbox.setChecked(settings.get_grid_visibility(name))
 
     def resizeEvent(self, event: QEvent):
         width = self.visibility_tab.width()
@@ -81,4 +91,6 @@ class VisibilityCheckboxWidget(QWidget):
         font.setPointSize(font_size)
         for glyph in self.glyph_names:
             self.glyph_checkboxes[glyph].setFont(font)
+        for grid in self.grid_names:
+            self.grid_checkboxes[grid].setFont(font)
         super().resizeEvent(event)

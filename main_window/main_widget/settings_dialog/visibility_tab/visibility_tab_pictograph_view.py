@@ -160,7 +160,8 @@ class VisibilityTabPictographView(PictographView):
             )
         else:
             self.settings.set_glyph_visibility(glyph.name, not current_visibility)
-        self.visibility_tab.checkbox_widget.update_checkboxes()
+            
+        # self.visibility_tab.checkbox_widget.update_checkboxes()
 
     def resizeEvent(self, event: QEvent):
         tab_width = (
