@@ -88,7 +88,7 @@ class PropRotDirButtonManager:
             )
             pictograph.blue_reversal = reversal_info["blue_reversal"]
             pictograph.red_reversal = reversal_info["red_reversal"]
-            pictograph.reversal_symbol_manager.update_reversal_symbols()
+            pictograph.reversal_glyph.update_reversal_symbols()
 
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
         self.option_picker = (

@@ -38,15 +38,17 @@ class BeatFrameUpdater:
                 beat_view.beat.updater.update_pictograph(entry)
                 beat = beat_view.beat
                 pictograph_index = self.bf.get.index_of_beat(beat_view)
-                sequence_so_far = self.bf.json_manager.loader_saver.load_current_sequence_json()[
-                    : pictograph_index + 2
-                ]
+                sequence_so_far = (
+                    self.bf.json_manager.loader_saver.load_current_sequence_json()[
+                        : pictograph_index + 2
+                    ]
+                )
                 reversal_info = ReversalDetector.detect_reversal(
                     sequence_so_far, beat.pictograph_dict
                 )
                 beat.blue_reversal = reversal_info["blue_reversal"]
                 beat.red_reversal = reversal_info["red_reversal"]
-                beat.reversal_symbol_manager.update_reversal_symbols()
+                beat.reversal_glyph.update_reversal_symbols()
                 # QApplication.processEvents()
             else:
                 print(
@@ -86,9 +88,7 @@ class BeatFrameUpdater:
                 )
                 beat.grid.hide()
                 beat.grid.__init__(beat, beat.grid.grid_data, grid_mode)
-                json_updater.update_current_sequence_file_with_beat(
-                    self.bf.beats[i]
-                )
+                json_updater.update_current_sequence_file_with_beat(self.bf.beats[i])
             else:
                 break
         if not beat:
@@ -101,9 +101,7 @@ class BeatFrameUpdater:
         for beat_view in self.bf.beats:
             beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
-        self.bf.start_pos_view.setScene(
-            self.bf.start_pos_view.blank_beat
-        )
+        self.bf.start_pos_view.setScene(self.bf.start_pos_view.blank_beat)
         self.bf.start_pos_view.is_filled = False
         self.bf.selection_overlay.deselect_beat()
         self.bf.sequence_widget.current_word_label.update_current_word_label_from_beats()

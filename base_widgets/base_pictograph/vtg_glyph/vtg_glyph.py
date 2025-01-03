@@ -86,8 +86,8 @@ class VTG_Glyph(QGraphicsSvgItem, BaseGlyph):
             QUARTER_OPP: f"{SVG_BASE_PATH}/QO.svg",
         }
 
-        vtg_mode = self.determine_vtg_mode()
-        svg_path = SVG_PATHS.get(vtg_mode, "")
+        self.pictograph.vtg_mode = self.determine_vtg_mode()
+        svg_path = SVG_PATHS.get(self.pictograph.vtg_mode, "")
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)

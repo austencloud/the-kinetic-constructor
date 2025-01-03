@@ -49,6 +49,8 @@ class VisibilityTab(QWidget):
             blue_motion_type=example_data["blue_motion_type"],
             red_motion_type=example_data["red_motion_type"],
         )
+        pictograph.red_reversal = True
+        pictograph.blue_reversal = True
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 

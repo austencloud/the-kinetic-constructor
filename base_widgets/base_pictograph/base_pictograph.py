@@ -17,7 +17,7 @@ from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker_pic
 )
 
 from main_window.main_widget.sequence_widget.beat_frame.beat_reversal_manager import (
-    BeatReversalManager,
+    BeatReversalGlyph,
 )
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -43,7 +43,9 @@ from .pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import GE_PictographView
+    from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import (
+        GE_PictographView,
+    )
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -62,7 +64,7 @@ class BasePictograph(QGraphicsScene):
     attr_manager: PictographAttrManager
     arrow_placement_manager: ArrowPlacementManager
     prop_placement_manager: PropPlacementManager
-    reversal_symbol_manager: BeatReversalManager
+    reversal_glyph: BeatReversalGlyph
     wasd_manager: WASD_AdjustmentManager
 
     # bool
@@ -125,7 +127,7 @@ class BasePictograph(QGraphicsScene):
         LessonPictographView,
         StartPosPickerPictographView,
         CodexPictographView,
-        "GE_PictographView"
+        "GE_PictographView",
     ]
 
     def __init__(self, main_widget: "MainWidget") -> None:
@@ -140,4 +142,4 @@ class BasePictograph(QGraphicsScene):
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
-        self.reversal_symbol_manager = BeatReversalManager(self)
+        self.reversal_glyph = BeatReversalGlyph(self)

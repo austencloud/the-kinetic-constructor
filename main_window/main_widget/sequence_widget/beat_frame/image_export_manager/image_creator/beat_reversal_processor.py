@@ -27,7 +27,7 @@ class BeatReversalProcessor:
             pictograph.red_reversal = False
             pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
-            pictograph.reversal_symbol_manager.update_reversal_symbols()
+            pictograph.reversal_glyph.update_reversal_symbols()
 
             beat_view.update()
             beat_view.repaint()

@@ -30,7 +30,7 @@ class OptionPickerDisplayManager:
         section = self.scroll_area.layout_manager.sections[letter_type]
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-            pictograph.reversal_symbol_manager.update_reversal_symbols()
+            pictograph.reversal_glyph.update_reversal_symbols()
 
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType

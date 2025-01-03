@@ -50,7 +50,7 @@ class PictographUpdater:
         self.pictograph.elemental_glyph.update_elemental_glyph()
 
         self._position_objects()
-        self.pictograph.reversal_symbol_manager.update_reversal_symbols()
+        self.pictograph.reversal_glyph.update_reversal_symbols()
 
     def get_end_pos(self) -> str:
         return self.pictograph.end_pos[:-1]

@@ -5,7 +5,7 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_start_text_manager 
     BeatStartTextItem,
 )
 from .beat_number_item import BeatNumberItem
-from .beat_reversal_manager import BeatReversalManager
+from .beat_reversal_manager import BeatReversalGlyph
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtCore import QPointF
@@ -30,7 +30,7 @@ class Beat(BasePictograph):
     ):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
-        self.reversal_symbol_manager = BeatReversalManager(self)
+        self.reversal_glyph = BeatReversalGlyph(self)
         self.number_item = BeatNumberItem(self)
         self.grabber = BeatGrabber(self)
         self.duration = duration
