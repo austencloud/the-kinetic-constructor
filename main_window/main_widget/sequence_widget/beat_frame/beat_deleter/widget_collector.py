@@ -49,8 +49,10 @@ class WidgetCollector:
     def get_adjustment_panel_items(self):
         panel = self.deleter.sequence_widget.graph_editor.adjustment_panel
         return [
-            panel.blue_turns_box.turns_widget,
-            panel.red_turns_box.turns_widget,
+            panel.blue_turns_box.turns_widget.turns_display_frame,
+            panel.blue_turns_box.turns_widget.motion_type_label,
+            panel.red_turns_box.turns_widget.turns_display_frame,
+            panel.red_turns_box.turns_widget.motion_type_label,
             panel.blue_turns_box.prop_rot_dir_button_manager.ccw_button,
             panel.blue_turns_box.prop_rot_dir_button_manager.cw_button,
             panel.red_turns_box.prop_rot_dir_button_manager.ccw_button,

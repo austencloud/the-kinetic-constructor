@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
+
 from ..GE_pictograph_view import GE_PictographView, GE_Pictograph
 
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from ..graph_editor import GraphEditor
 
@@ -26,16 +28,19 @@ class GraphEditorPictographContainer(QWidget):
         self.GE_pictograph = GE_Pictograph(self)
         self.GE_pictograph_view = GE_PictographView(self, self.GE_pictograph)
 
-    def update_GE_pictograph(self, pictograph: "BasePictograph") -> None:
+    def update_GE_pictograph(self, reference_beat: "Beat") -> None:
         GE_view = self.GE_pictograph_view
-        if pictograph.view.is_start_pos:
+        if reference_beat.view.is_start_pos:
             GE_view.is_start_pos = True
         else:
             GE_view.is_start_pos = False
         GE_view.GE_pictograph.is_blank = False
-        GE_view.reference_beat = pictograph
-        GE_view.GE_pictograph.updater.update_pictograph(pictograph.pictograph_dict)
-
+        GE_view.reference_beat = reference_beat
+        GE_view.GE_pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
+        if reference_beat.number_manager.beat_number_text != "0":
+            beat_number_text = reference_beat.number_manager.beat_number_text
+            GE_view.GE_pictograph.number_manager.add_beat_number(beat_number_text)
+        
     def resizeEvent(self, event):
         size = self.graph_editor.height()
         self.setFixedWidth(size)
