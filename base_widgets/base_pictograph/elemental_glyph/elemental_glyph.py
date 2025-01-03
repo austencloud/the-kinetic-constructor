@@ -41,6 +41,7 @@ class ElementalGlyph(QGraphicsSvgItem):
 
     def set_elemental_glyph(self) -> None:
         if not self.pictograph.letter_type in [LetterType.Type1]:
+            self.pictograph.removeItem(self)
             return
         vtg_mode = self.pictograph.vtg_mode
         svg_path: str = SVG_PATHS.get(vtg_mode, "")

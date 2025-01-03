@@ -61,6 +61,7 @@ class VTG_Glyph(QGraphicsSvgItem):
 
     def set_vtg_mode(self) -> None:
         if not self.pictograph.letter_type in [LetterType.Type1]:
+            self.pictograph.removeItem(self)
             return
         vtg_mode = self.determine_vtg_mode()
         self.pictograph.vtg_mode = vtg_mode
