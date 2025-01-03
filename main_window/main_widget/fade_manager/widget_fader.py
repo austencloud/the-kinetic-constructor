@@ -1,6 +1,11 @@
 from typing import TYPE_CHECKING, Optional, Union
 from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
-from PyQt6.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve
+from PyQt6.QtCore import (
+    QParallelAnimationGroup,
+    QPropertyAnimation,
+    QEasingCurve,
+    QTimer,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
@@ -55,16 +60,19 @@ class WidgetFader:
 
             if callback:
                 if isinstance(callback, tuple):
-                    # Execute the first callback
+                    # Execute first callback
                     callback[0]()
-                    # Fade widgets back in and execute the second callback after fade-in
+                    # Fade widgets in and defer the second callback
                     self.fade_widgets(
-                        widget, True, duration, lambda: callback[1]()
+                        widget,
+                        True,
+                        duration,
+                        lambda: QTimer.singleShot(0, callback[1]),
                     )
                 else:
-                    # Execute single callback before fading back in
+                    # Execute single callback before fade-in
                     callback()
                     self.fade_widgets(widget, True, duration)
 
-        # Start fading out the widgets and connect the fade-out animation to the callback
+        # Start fading out widgets and connect fade-out to callback
         self.fade_widgets(widget, False, duration, on_fade_out_finished)

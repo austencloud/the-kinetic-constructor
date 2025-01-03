@@ -86,7 +86,8 @@ class PropRotDirButtonManager:
             self.turns_box.graph_editor.sequence_widget.main_widget.construct_tab.option_picker
         )
         self.option_picker.update_option_picker()
-
+        self.graph_editor.pictograph_container.update_GE_pictograph(pictograph)
+        
     def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
         """Update the pictograph and JSON with the new letter and motion attributes."""
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()

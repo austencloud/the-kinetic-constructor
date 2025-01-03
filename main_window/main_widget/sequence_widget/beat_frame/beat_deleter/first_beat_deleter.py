@@ -17,14 +17,18 @@ class FirstBeatDeleter:
         widgets.extend(views)
         widgets.remove(self.deleter.beat_frame.start_pos_view)
 
+        def fade_out_callback():
+            self._delete_beat_and_following(selected_beat)
+
+        def fade_in_callback():
+            # Safely select the beat after fade-in completes
+            self.deleter.beat_frame.selection_overlay.select_beat(
+                self.deleter.beat_frame.start_pos_view, toggle_graph_editor=False
+            )
+
         self.deleter.main_widget.fade_manager.widget_fader.fade_and_update(
             widgets,
-            callback=lambda: (
-                self._delete_beat_and_following(selected_beat),
-                self.deleter.selection_overlay.select_beat(
-                    self.deleter.beat_frame.start_pos_view, toggle_graph_editor=False
-                ),
-            ),
+            callback=(fade_out_callback, fade_in_callback),
             duration=300,
         )
 

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
-from ..GE_pictograph_view import GE_PictographView, GE_BlankPictograph
+from ..GE_pictograph_view import GE_PictographView, GE_Pictograph
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -23,12 +23,18 @@ class GraphEditorPictographContainer(QWidget):
         self.layout.setSpacing(0)
 
     def setup_pictograph(self):
-        self.GE_pictograph = GE_BlankPictograph(self)
+        self.GE_pictograph = GE_Pictograph(self)
         self.GE_pictograph_view = GE_PictographView(self, self.GE_pictograph)
 
     def update_GE_pictograph(self, pictograph: "BasePictograph") -> None:
-        self.GE_pictograph_view.set_scene(pictograph)
-        self.GE_pictograph = pictograph
+        GE_view = self.GE_pictograph_view
+        if pictograph.view.is_start_pos:
+            GE_view.is_start_pos = True
+        else:
+            GE_view.is_start_pos = False
+        GE_view.GE_pictograph.is_blank = False
+        GE_view.reference_beat = pictograph
+        GE_view.GE_pictograph.updater.update_pictograph(pictograph.pictograph_dict)
 
     def resizeEvent(self, event):
         size = self.graph_editor.height()

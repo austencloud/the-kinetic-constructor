@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from typing import TYPE_CHECKING, Optional
 
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
@@ -22,46 +22,44 @@ class BeatSelectionOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
 
-    def select_beat(self, beat_view: BeatView, toggle_graph_editor=True):
+    def select_beat(
+        self, beat_view: BeatView, toggle_graph_editor=True, defer_show=True
+    ):
         if self.selected_beat == beat_view:
             return
-        else:
-            if self.selected_beat:
-                self.deselect_beat()
-            self.selected_beat = beat_view
-            blue_motion = self.selected_beat.beat.blue_motion
-            red_motion = self.selected_beat.beat.red_motion
-            self.selected_beat.is_selected = True
-            graph_editor = (
-                self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
-            )
 
-            self.update()
-            self.update_overlay_position()
+        if self.selected_beat:
+            self.deselect_beat()
+
+        self.selected_beat = beat_view
+        self.selected_beat.is_selected = True
+
+        self.update_overlay_position()
+
+        self.show()
+
+        self._update_graph_editor(toggle_graph_editor)
+
+        beat_view.setCursor(Qt.CursorShape.ArrowCursor)
+
+    def _safe_show(self):
+        """Safely show the widget without interrupting animations."""
+        if not self.isVisible():
             self.show()
 
-            graph_editor.pictograph_container.update_GE_pictograph(
-                self.selected_beat.beat
-            )
-            graph_editor.adjustment_panel.update_turns_panel(blue_motion, red_motion)
-            graph_editor.adjustment_panel.update_adjustment_panel()
-            if isinstance(beat_view, StartPositionBeatView):
-                start_pos_pictograph = beat_view.beat
-                blue_start_pos_ori_picker = (
-                    graph_editor.adjustment_panel.blue_ori_picker
-                )
-                red_start_pos_ori_picker = graph_editor.adjustment_panel.red_ori_picker
+    def _update_graph_editor(self, toggle_graph_editor):
+        """Update graph editor components."""
+        graph_editor = (
+            self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
+        )
+        graph_editor.pictograph_container.update_GE_pictograph(self.selected_beat.beat)
+        graph_editor.adjustment_panel.update_turns_panel(
+            self.selected_beat.beat.blue_motion, self.selected_beat.beat.red_motion
+        )
+        graph_editor.adjustment_panel.update_adjustment_panel()
 
-                blue_start_pos_ori_picker.ori_picker_widget.ori_setter.set_initial_orientation(
-                    start_pos_pictograph, "blue"
-                )
-                red_start_pos_ori_picker.ori_picker_widget.ori_setter.set_initial_orientation(
-                    start_pos_pictograph, "red"
-                )
-        if toggle_graph_editor:
-            if not self.beat_frame.main_widget.sequence_widget.graph_editor.isVisible():
-                self.beat_frame.sequence_widget.graph_editor.animator.toggle()
-        beat_view.setCursor(Qt.CursorShape.ArrowCursor)
+        if toggle_graph_editor and not graph_editor.isVisible():
+            graph_editor.animator.toggle()
 
     def deselect_beat(self):
         if self.selected_beat:
@@ -77,7 +75,7 @@ class BeatSelectionOverlay(QWidget):
         if self.selected_beat:
             self.setGeometry(self.selected_beat.geometry())
             self.raise_()
-            self.update()
+            # self.update()
 
     def get_selected_beat(self) -> Optional[BeatView]:
         return self.selected_beat

@@ -70,7 +70,7 @@ class GridVisibilityManager:
 
         graph_editor = main_widget.sequence_widget.graph_editor
         GE_blank_pictograph = (
-            graph_editor.pictograph_container.GE_pictograph_view.blank_pictograph
+            graph_editor.pictograph_container.GE_pictograph_view.GE_pictograph
         )
         if hasattr(GE_blank_pictograph, "grid"):
             GE_blank_pictograph.grid.toggle_non_radial_points_visibility(

@@ -18,7 +18,7 @@ class TurnsBoxHeader(BaseAdjustmentBoxHeaderWidget):
     def update_turns_box_header(self) -> None:
         """Update the header to display correct buttons based on motion type."""
         pictograph = (
-            self.turns_box.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+            self.turns_box.graph_editor.pictograph_container.GE_pictograph_view.GE_pictograph
         )
         motion = pictograph.get.motion_by_color(self.turns_box.color)
         prop_rot_dir_button_mngr = self.turns_box.prop_rot_dir_button_manager

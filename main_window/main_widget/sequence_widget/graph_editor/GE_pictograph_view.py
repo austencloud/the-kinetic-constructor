@@ -23,21 +23,23 @@ if TYPE_CHECKING:
     )
     from ..beat_frame.beat_view import Beat
 
-    from .GE_pictograph_view import GE_BlankPictograph
+    from .GE_pictograph_view import GE_Pictograph
 
 
 class GE_PictographView(PictographView):
+    reference_beat: "Beat" = None
+    is_start_pos = False
+    
     def __init__(
         self,
         container: "GraphEditorPictographContainer",
-        blank_pictograph: "GE_BlankPictograph",
+        pictograph: "GE_Pictograph",
     ) -> None:
-        super().__init__(blank_pictograph)
+        super().__init__(pictograph)
         self.graph_editor = container.graph_editor
-        self.is_start_pos = False
-        self.blank_pictograph = blank_pictograph
+        self.GE_pictograph = pictograph
         self.main_widget = self.graph_editor.main_widget
-        self.setScene(blank_pictograph)
+        self.setScene(pictograph)
         self.setFrameShape(PictographView.Shape.Box)
         self.mouse_event_handler = GE_PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
@@ -50,8 +52,9 @@ class GE_PictographView(PictographView):
         self.scene().update()  # Ensure the view reflects the updated selection
 
     def set_to_blank_grid(self) -> None:
-        self.blank_pictograph = GE_BlankPictograph(self)
-        self.setScene(self.blank_pictograph)
+        self.GE_pictograph = GE_Pictograph(self)
+        self.setScene(self.GE_pictograph)
+        self.GE_pictograph.view = self
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self.key_event_handler.handle_key_press(event):
@@ -104,8 +107,8 @@ class GE_PictographView(PictographView):
         return self.scene()
 
     def set_scene(self, beat: "Beat") -> None:
-        self.setScene(beat)
-        self.pictograph = beat
+        # self.setScene(beat)
+        self.reference_beat = beat
         if beat.view.is_start_pos:
             self.is_start_pos = True
         else:
@@ -125,7 +128,7 @@ class GE_PictographView(PictographView):
         self.scale(scale_factor, scale_factor)
 
 
-class GE_BlankPictograph(BasePictograph):
+class GE_Pictograph(BasePictograph):
     def __init__(self, pictograph_container: "GraphEditorPictographContainer") -> None:
         super().__init__(pictograph_container.graph_editor.main_widget)
         self.is_blank = True
