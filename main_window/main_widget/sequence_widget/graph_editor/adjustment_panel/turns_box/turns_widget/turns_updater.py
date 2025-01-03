@@ -175,7 +175,7 @@ class TurnsUpdater:
             index, motion.color, motion.prefloat_prop_rot_dir
         )
 
-    def _adjust_turns_for_pictograph(
+    def adjust_turns_for_pictograph(
         self, pictograph: "BasePictograph", new_turns: Union[int, float, str]
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""

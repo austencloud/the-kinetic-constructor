@@ -21,9 +21,6 @@ class TurnsAdjustmentManager(QObject):
         self.json_manager = self.main_widget.json_manager
         self.json_validation_engine = self.json_manager.ori_validation_engine
         self.color = self.turns_widget.turns_box.color
-        self.GE_pictograph = (
-            self.graph_editor.pictograph_container.GE_pictograph_view.GE_pictograph
-        )
 
         self.turns_adjusted.connect(
             self.beat_frame.updater.update_beats_from_current_sequence_json
@@ -31,11 +28,14 @@ class TurnsAdjustmentManager(QObject):
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.reference_beat = (
-            self.graph_editor.pictograph_container.GE_pictograph_view.reference_beat
-        )
+        GE_view = self.graph_editor.pictograph_container.GE_pictograph_view
+        self.GE_pictograph = GE_view.GE_pictograph
+        self.reference_beat = GE_view.reference_beat
+
         current_turns = self.get_current_turns_value()
+        GE_motion = self.GE_pictograph.motions[self.color]
         matching_motion = self.reference_beat.motions[self.color]
+
         if current_turns == "fl" and adjustment > 0:
             new_turns = 0
         elif current_turns == "fl" and adjustment < 0:
@@ -47,22 +47,20 @@ class TurnsAdjustmentManager(QObject):
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
 
-        motion = self.reference_beat.motions[self.color]
-        self.turns_widget.turns_updater._adjust_turns_for_pictograph(
-            self.reference_beat, new_turns
-        )
+        for pictograph in [self.reference_beat, self.GE_pictograph]:
+            self.turns_widget.turns_updater.adjust_turns_for_pictograph(
+                pictograph, new_turns
+            )
+
         self.turns_widget.update_turns_display(matching_motion, new_turns)
-        need_to_determine_new_letter: bool = self.determine_if_new_letter_is_necessary(
-            motion, new_turns
-        )
-        if need_to_determine_new_letter:
-            new_letter = self.main_widget.letter_determiner.determine_letter(motion)
-        else:
-            new_letter = None
-        motion.turns = new_turns
-        self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
-            motion, new_letter
-        )
+
+        for motion in [matching_motion, GE_motion]:
+            motion.turns = new_turns
+            new_letter = self.get_new_letter(new_turns, motion)
+            self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
+                motion, new_letter
+            )
+
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
@@ -72,7 +70,17 @@ class TurnsAdjustmentManager(QObject):
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
 
-    def determine_if_new_letter_is_necessary(self, motion: Motion, new_turns) -> bool:
+    def get_new_letter(self, new_turns, motion):
+        need_to_determine_new_letter: bool = self.determine_if_new_letter_is_needed(
+            motion, new_turns
+        )
+        if need_to_determine_new_letter:
+            new_letter = self.main_widget.letter_determiner.determine_letter(motion)
+        else:
+            new_letter = None
+        return new_letter
+
+    def determine_if_new_letter_is_needed(self, motion: Motion, new_turns) -> bool:
         if new_turns == "fl":
             return True
         if motion.turns == "fl" and new_turns >= 0:
@@ -90,20 +98,35 @@ class TurnsAdjustmentManager(QObject):
 
     def direct_set_turns(self, new_turns: Turns) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-
+        GE_view = self.graph_editor.pictograph_container.GE_pictograph_view
+        self.GE_pictograph = GE_view.GE_pictograph
+        self.reference_beat = GE_view.reference_beat
         self._update_motion_properties(new_turns)
+
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
         self.reference_beat.motions[self.color].turns = new_turns
-        self.reference_beat.view.repaint()
+        # self.reference_beat.view.repaint()
         self.turns_widget.update_turns_display(
             self.reference_beat.motions[self.color], new_turns
         )
-        self.turns_widget.turns_updater._adjust_turns_for_pictograph(
-            self.reference_beat, new_turns
-        )
+
+        for pictograph in [self.reference_beat, self.GE_pictograph]:
+            self.turns_widget.turns_updater.adjust_turns_for_pictograph(
+                pictograph, new_turns
+            )
+
+        matching_motion = self.reference_beat.motions[self.color]
+        GE_motion = self.GE_pictograph.motions[self.color]
+
+        for motion in [matching_motion, GE_motion]:
+            motion.turns = new_turns
+            self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
+                motion
+            )
+
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.construct_tab.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
@@ -138,6 +161,8 @@ class TurnsAdjustmentManager(QObject):
         self.turns_widget.update_turns_display(turns)
 
     def _update_motion_properties(self, new_turns) -> None:
-        for motion in self.reference_beat.motions.values():
-            if motion.color == self.turns_widget.turns_box.color:
-                self.turns_widget.turns_updater.set_motion_turns(motion, new_turns)
+        for motion in [
+            self.reference_beat.motions[self.color],
+            self.GE_pictograph.motions[self.color],
+        ]:
+            self.turns_widget.turns_updater.set_motion_turns(motion, new_turns)
