@@ -47,10 +47,7 @@ class BeatDeleter:
     def _post_deletion_updates(self) -> None:
         self.json_manager.updater.clear_and_repopulate_json_from_beat_view()
         self.beat_frame.layout_manager.configure_beat_frame_for_filled_beats()
-        # if self.settings_manager.global_settings.get_grow_sequence():
-        #     self.beat_frame.layout_manager.adjust_layout_to_sequence_length()
         self.beat_frame.sequence_widget.current_word_label.update_current_word_label_from_beats()
-        # self.beat_frame.main_widget.sequence_widget.main_widget.construct_tab.option_picker.update_option_picker()
         self.beat_frame.sequence_widget.difficulty_label.update_difficulty_label()
 
     def _delete_beat_and_following(self, beat: BeatView) -> None:
