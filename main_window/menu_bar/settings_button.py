@@ -19,7 +19,7 @@ class SettingsButton(QPushButton):
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
     def show_settings_dialog(self):
-        dialog = SettingsDialog(self.main_widget)
+        dialog = self.main_widget.settings_dialog
         dialog.exec()
 
     def resizeEvent(self, event):

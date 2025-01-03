@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.fade_manager.fade_manager import FadeManager
+from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
 from .write_tab.write_tab import WriteTab
@@ -32,7 +33,7 @@ class MainWidgetUI:
 
         self.mw.fade_manager = FadeManager(self.mw)
         self.mw.font_color_updater = FontColorUpdater(self.mw)
-
+        self.mw.settings_dialog = SettingsDialog(self.mw)
         splash = self.splash_screen
         splash.updater.update_progress("MenuBarWidget")
         self.mw.menu_bar = MenuBarWidget(self.mw)

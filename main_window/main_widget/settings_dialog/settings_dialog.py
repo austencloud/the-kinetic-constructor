@@ -7,12 +7,19 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QSpacerItem,
     QSizePolicy,
+    QWidget,
 )
 from PyQt6.QtGui import QFont
+
+from main_window.main_widget.settings_dialog.action_buttons import (
+    SettingsDialogActionButtons,
+)
+from main_window.main_widget.settings_dialog.settings_dialog_styler import SettingsDialogStyler
 from .user_profile_tab import UserProfileTab
 from .prop_type_tab import PropTypeTab
 from .background_tab import BackgroundTab
 from .visibility_tab import VisibilityTab
+
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
@@ -21,49 +28,41 @@ class SettingsDialog(QDialog):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.setWindowTitle("Settings")
-
-        # Dynamically size the dialog to half the main widget size
-        main_widget_size = main_widget.size()
-        self.setFixedSize(main_widget_size.width() // 2, main_widget_size.height() // 2)
-
         self._setup_ui()
+        self._apply_styles()
 
     def _setup_ui(self):
-        # Main layout
+        self.action_btns = SettingsDialogActionButtons(self)
+        self.tab_widget = QTabWidget(self)
+
+        self.user_profile_tab = UserProfileTab(self)
+        self.prop_type_tab = PropTypeTab(self)
+        self.background_tab = BackgroundTab(self)
+        self.visibility_tab = VisibilityTab(self)
+
+        self.tab_widget.addTab(self.user_profile_tab, "User Profile")
+        self.tab_widget.addTab(self.prop_type_tab, "Prop Type")
+        self.tab_widget.addTab(self.background_tab, "Background")
+        self.tab_widget.addTab(self.visibility_tab, "Visibility")
+
         main_layout = QVBoxLayout(self)
+        main_layout.addWidget(self.tab_widget)
+        main_layout.addWidget(self.action_btns)
         self.setLayout(main_layout)
 
-        # Tab widget for categorized settings
-        self.tab_widget = QTabWidget(self)
-        main_layout.addWidget(self.tab_widget)
+    def _apply_styles(self):
+        SettingsDialogStyler.style_tab_widget(self.tab_widget)
 
-        # Add tabs
-        self.tab_widget.addTab(UserProfileTab(self.main_widget), "User Profile")
-        self.tab_widget.addTab(PropTypeTab(self.main_widget), "Prop Type")
-        self.tab_widget.addTab(BackgroundTab(self.main_widget), "Background")
-        self.tab_widget.addTab(VisibilityTab(self.main_widget), "Visibility")
+        # Style action buttons
+        for button in [self.action_btns.save_button, self.action_btns.close_button]:
+            SettingsDialogStyler.style_button(button)
 
-        # Add a Save and Close button at the bottom
-        button_layout = QHBoxLayout()
-        button_layout.addSpacerItem(
-            QSpacerItem(
-                40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
-            )
-        )
-
-        save_button = QPushButton("Save")
-        save_button.setFont(self._get_default_font())
-        save_button.clicked.connect(self.accept)
-        button_layout.addWidget(save_button)
-
-        close_button = QPushButton("Close")
-        close_button.setFont(self._get_default_font())
-        close_button.clicked.connect(self.reject)
-        button_layout.addWidget(close_button)
-
-        main_layout.addLayout(button_layout)
-
-    def _get_default_font(self):
+    def get_default_font(self):
         font = QFont()
-        font.setPointSize(12)
+        font_size = self.main_widget.width() // 100
+        font.setPointSize(font_size)
         return font
+
+    def resizeEvent(self, event):
+        main_widget_size = self.main_widget.size()
+        self.setFixedSize(main_widget_size.width() // 2, main_widget_size.height() // 2)

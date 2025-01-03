@@ -9,13 +9,15 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
+
 if TYPE_CHECKING:
+    from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
     from main_window.main_widget.main_widget import MainWidget
 
 class VisibilityTab(QWidget):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, settings_dialog: "SettingsDialog"):
         super().__init__()
-        self.main_widget = main_widget
+        self.main_widget = settings_dialog.main_widget
         self._setup_ui()
 
     def _setup_ui(self):

@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
+from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 from .browse_tab.browse_tab import BrowseTab
 from .fade_manager.fade_manager import FadeManager
 from .full_screen_image_overlay import FullScreenImageOverlay
@@ -56,7 +57,7 @@ class MainWidget(QWidget):
     main_window: "MainWindow"
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
-
+    settings_dialog     : "SettingsDialog"
     # Left Widgets
     sequence_widget: "SequenceWidget"
 
