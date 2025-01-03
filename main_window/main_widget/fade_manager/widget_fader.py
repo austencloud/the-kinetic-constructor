@@ -47,18 +47,24 @@ class WidgetFader:
     def fade_and_update(
         self,
         widget: list[QWidget],
-        callback: Union[callable, tuple[callable]] = None,
-        duration: int = 300,
+        callback: Union[callable, tuple[callable, callable]] = None,
+        duration: int = 250,
     ) -> None:
         def on_fade_out_finished():
             self.manager.graphics_effect_remover.clear_graphics_effects(widget)
+
             if callback:
                 if isinstance(callback, tuple):
+                    # Execute the first callback
                     callback[0]()
-                    self.fade_widgets(widget, True, duration, callback[1]())
-
+                    # Fade widgets back in and execute the second callback after fade-in
+                    self.fade_widgets(
+                        widget, True, duration, lambda: callback[1]()
+                    )
                 else:
+                    # Execute single callback before fading back in
                     callback()
                     self.fade_widgets(widget, True, duration)
 
+        # Start fading out the widgets and connect the fade-out animation to the callback
         self.fade_widgets(widget, False, duration, on_fade_out_finished)

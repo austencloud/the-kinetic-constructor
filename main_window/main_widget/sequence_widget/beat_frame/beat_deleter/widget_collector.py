@@ -9,7 +9,7 @@ class WidgetCollector:
     def __init__(self, deleter: "BeatDeleter"):
         self.deleter = deleter
 
-    def collect_widgets(self):
+    def collect_shared_widgets(self):
         beats = self.deleter.beat_frame.beats
         pictograph_items = self._get_GE_pictograph_items()
         adjustment_panel_items = self.get_adjustment_panel_items()
@@ -47,14 +47,16 @@ class WidgetCollector:
         return list(arrows) + list(props) + tka_glyph_parts + start_to_end_parts
 
     def get_adjustment_panel_items(self):
-        adjustment_panel = self.deleter.sequence_widget.graph_editor.adjustment_panel
+        panel = self.deleter.sequence_widget.graph_editor.adjustment_panel
         return [
-            adjustment_panel.blue_turns_box.turns_widget,
-            adjustment_panel.red_turns_box.turns_widget,
-            adjustment_panel.blue_turns_box.header,
-            adjustment_panel.red_turns_box.header,
-            adjustment_panel.blue_ori_picker.header,
-            adjustment_panel.red_ori_picker.header,
-            adjustment_panel.blue_ori_picker.ori_picker_widget,
-            adjustment_panel.red_ori_picker.ori_picker_widget,
+            panel.blue_turns_box.turns_widget,
+            panel.red_turns_box.turns_widget,
+            panel.blue_turns_box.prop_rot_dir_button_manager.ccw_button,
+            panel.blue_turns_box.prop_rot_dir_button_manager.cw_button,
+            panel.red_turns_box.prop_rot_dir_button_manager.ccw_button,
+            panel.red_turns_box.prop_rot_dir_button_manager.cw_button,
+            panel.blue_ori_picker.header,
+            panel.red_ori_picker.header,
+            panel.blue_ori_picker.ori_picker_widget,
+            panel.red_ori_picker.ori_picker_widget,
         ]

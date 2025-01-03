@@ -43,6 +43,7 @@ from .pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import GE_PictographView
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -124,6 +125,7 @@ class BasePictograph(QGraphicsScene):
         LessonPictographView,
         StartPosPickerPictographView,
         CodexPictographView,
+        "GE_PictographView"
     ]
 
     def __init__(self, main_widget: "MainWidget") -> None:

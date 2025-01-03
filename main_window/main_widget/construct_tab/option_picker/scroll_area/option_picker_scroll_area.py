@@ -7,7 +7,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
-from .section_manager.option_picker_section_manager import OptionPickerSectionManager
+from .section_manager.option_picker_layout_manager import OptionPickerLayoutManager
 from .option_picker_display_manager import OptionPickerDisplayManager
 
 
@@ -33,7 +33,7 @@ class OptionPickerScrollArea(QScrollArea):
 
         self.configure_ui()
 
-        self.section_manager = OptionPickerSectionManager(self)
+        self.layout_manager = OptionPickerLayoutManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
 
     def configure_ui(self):
@@ -59,7 +59,7 @@ class OptionPickerScrollArea(QScrollArea):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
     def add_and_display_relevant_pictographs(self, next_options: list[dict]):
-        for section in self.section_manager.sections.values():
+        for section in self.layout_manager.sections.values():
             section.clear_pictographs()
         for i, pictograph_dict in enumerate(next_options):
             if i >= len(self.option_picker.option_pool):
@@ -75,14 +75,11 @@ class OptionPickerScrollArea(QScrollArea):
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
             pictograph.updater.update_pictograph(pictograph_dict)
-            # QApplication.processEvents()
             self.display_manager.add_pictograph_to_section_layout(pictograph)
-            # QApplication.processEvents()
             pictograph.view.update_borders()
-            # QApplication.processEvents()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
-        for section in self.section_manager.sections.values():
+        for section in self.layout_manager.sections.values():
             for pictograph in section.pictographs.values():
                 pictograph.view.set_enabled(not disabled)

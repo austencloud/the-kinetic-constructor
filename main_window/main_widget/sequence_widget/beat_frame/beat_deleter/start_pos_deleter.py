@@ -12,7 +12,7 @@ class StartPositionDeleter:
 
     def delete_all_beats(self, show_indicator=True) -> None:
         beats = self.beat_frame.beats
-        widgets = self.deleter.widget_collector.collect_widgets()
+        widgets = self.deleter.widget_collector.collect_shared_widgets()
         beats_filled = any(beat.is_filled for beat in beats)
         start_pos_filled = self.beat_frame.start_pos_view.is_filled
 
@@ -25,7 +25,7 @@ class StartPositionDeleter:
                     widgets.remove(item)
 
             self.deleter.fade_and_reset_widgets(widgets, show_indicator)
-            
+
         elif not beats_filled and start_pos_filled:
             adjustment_panel_items = (
                 self.deleter.widget_collector.get_adjustment_panel_items()

@@ -10,12 +10,12 @@ from base_widgets.base_pictograph.pictograph_context_menu_handler import (
 from base_widgets.base_pictograph.pictograph_view import (
     PictographView,
 )
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
 from .GE_pictograph_view_mouse_event_handler import GE_PictographViewMouseEventHandler
 
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
     from .pictograph_container.GE_pictograph_container import (

@@ -12,11 +12,11 @@ class FirstBeatDeleter:
 
     def delete_first_beat(self, selected_beat: BeatView):
         self.option_picker = self.deleter.main_widget.construct_tab.option_picker
-        widgets = self.deleter.widget_collector.collect_widgets()
+        widgets = self.deleter.widget_collector.collect_shared_widgets()
         views = [option.view for option in self.option_picker.option_pool]
         widgets.extend(views)
         widgets.remove(self.deleter.beat_frame.start_pos_view)
-        
+
         self.deleter.main_widget.fade_manager.widget_fader.fade_and_update(
             widgets,
             callback=lambda: (

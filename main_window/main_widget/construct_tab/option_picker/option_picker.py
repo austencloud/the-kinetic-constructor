@@ -47,7 +47,7 @@ class OptionPicker(QWidget):
 
     def get_sections(self) -> list["OptionPickerSectionWidget"]:
         """Retrieve all OptionPickerSectionWidget instances."""
-        return list(self.scroll_area.section_manager.sections.values())
+        return list(self.scroll_area.layout_manager.sections.values())
 
     def initialize_option_pool(self):
         self.option_pool: list[BasePictograph] = []
@@ -82,14 +82,14 @@ class OptionPicker(QWidget):
 
             views = [option.view for option in self.option_pool]
             self.fade_manager.widget_fader.fade_and_update(
-                views, self._update_pictographs
+                views, self._update_pictographs, 200
             )
 
     def _update_pictographs(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         selected_filter = self.reversal_filter.reversal_combobox.currentData()
         next_options = self.option_getter.get_next_options(sequence, selected_filter)
-        for section in self.scroll_area.section_manager.sections.values():
+        for section in self.scroll_area.layout_manager.sections.values():
             section.pictographs = {}
         self.scroll_area.add_and_display_relevant_pictographs(next_options)
 

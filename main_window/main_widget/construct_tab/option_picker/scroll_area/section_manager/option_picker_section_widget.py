@@ -47,10 +47,6 @@ class OptionPickerSectionWidget(QGroupBox):
         self.pictograph_frame.setVisible(is_visible)
 
     def clear_pictographs(self) -> None:
-        # for pictograph_key in list(self.pictographs.keys()):
-        #     pictograph = self.pictographs.pop(pictograph_key)
-        #     pictograph.view.setParent(None)
-        #     pictograph.view.hide()
         self.pictographs = {}
 
     def add_pictograph(self, pictograph: BasePictograph) -> None:
@@ -64,7 +60,6 @@ class OptionPickerSectionWidget(QGroupBox):
         count = len(self.pictographs)
         row, col = divmod(count - 1, COLUMN_COUNT)
         self.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-        # pictograph.view.show()
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""

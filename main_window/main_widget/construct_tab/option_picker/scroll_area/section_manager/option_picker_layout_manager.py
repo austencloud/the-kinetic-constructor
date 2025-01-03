@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from ..option_picker_scroll_area import OptionPickerScrollArea
 
 
-class OptionPickerSectionManager:
+class OptionPickerLayoutManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the OptionPickerSectionWidget class."""
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
@@ -46,9 +46,9 @@ class OptionPickerSectionManager:
                         group_layout.addStretch()
                         group_layout.addWidget(group_widget)
                         group_layout.addStretch()
-                        self.scroll_area.layout.addLayout(group_layout)
+                        self.scroll_area.layout.addLayout(group_layout, 3)
                     group_widget.add_section_widget(section)
+                elif letter_type == LetterType.Type1:
+                    self.scroll_area.layout.addWidget(section, 4)
                 else:
-                    self.scroll_area.layout.addWidget(section)
-
-
+                    self.scroll_area.layout.addWidget(section, 3)

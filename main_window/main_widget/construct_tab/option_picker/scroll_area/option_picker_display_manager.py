@@ -27,11 +27,10 @@ class OptionPickerDisplayManager:
     def add_pictograph_to_layout(self, pictograph: BasePictograph, index: int) -> None:
         row, col = divmod(index, self.scroll_area.option_picker.COLUMN_COUNT)
         letter_type = LetterType.get_letter_type(pictograph.letter)
-        section = self.scroll_area.section_manager.sections[letter_type]
+        section = self.scroll_area.layout_manager.sections[letter_type]
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
             pictograph.reversal_symbol_manager.update_reversal_symbols()
-
 
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
@@ -72,7 +71,7 @@ class OptionPickerDisplayManager:
     def add_pictograph_to_section_layout(self, pictograph: BasePictograph):
         """Add a pictograph to its corresponding section layout."""
         letter_type = LetterType.get_letter_type(pictograph.letter)
-        section: OptionPickerSectionWidget = self.scroll_area.section_manager.sections[
+        section: OptionPickerSectionWidget = self.scroll_area.layout_manager.sections[
             letter_type
         ]
         if section:
