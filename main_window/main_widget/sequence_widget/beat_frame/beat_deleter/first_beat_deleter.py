@@ -31,8 +31,7 @@ class FirstBeatDeleter:
                     box.turns_widget.turns_text,
                 ]
             )
-        for ori_picker in ori_pickers:
-            widgets.remove(ori_picker.header)
+
         self.deleter.main_widget.fade_manager.widget_fader.fade_and_update(
             widgets,
             callback=lambda: self._delete_beat_and_following(selected_beat),

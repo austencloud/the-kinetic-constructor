@@ -71,6 +71,6 @@ class WidgetCollector:
                 ]
             )
         for ori_picker in ori_pickers:
-            items.extend([ori_picker.header, ori_picker.ori_picker_widget])
+            items.extend([ori_picker.ori_picker_widget])
 
         return items
