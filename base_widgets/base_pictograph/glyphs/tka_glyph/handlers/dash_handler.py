@@ -11,28 +11,20 @@ if TYPE_CHECKING:
 class DashHandler:
     def __init__(self, glyph: "TKA_Glyph") -> None:
         self.glyph = glyph
-        self.dash_item = None
+        self.dash_item = QGraphicsSvgItem()
+        self.glyph.addToGroup(self.dash_item)
 
     def add_dash(self) -> None:
-        if not self.dash_item:
-            dash_path = get_images_and_data_path("images/dash.svg")
-            self.dash_item = self.create_dash(dash_path)
-            self.glyph.addToGroup(self.dash_item)
-
-    def create_dash(self, dash_path: str) -> QGraphicsSvgItem:
+        dash_path = get_images_and_data_path("images/dash.svg")
         renderer = QSvgRenderer(dash_path)
         if renderer.isValid():
-            item = QGraphicsSvgItem()
-            item.setSharedRenderer(renderer)
-            return item
-        return None
+            self.dash_item.setSharedRenderer(renderer)
+        self.dash_item.setVisible(True)
 
     def position_dash(self) -> None:
         padding = 5
         if self.dash_item:
-            letter_scene_rect = (
-                self.glyph.letter_item.sceneBoundingRect()
-            )
+            letter_scene_rect = self.glyph.letter_item.sceneBoundingRect()
             dash_x = letter_scene_rect.right() + padding
             dash_y = (
                 letter_scene_rect.center().y()
@@ -42,12 +34,7 @@ class DashHandler:
 
     def update_dash(self) -> None:
         if "-" in self.glyph.pictograph.letter.value:
-            if self.dash_item:
-                self.position_dash()
-            if not self.dash_item:
-                self.add_dash()
-                self.position_dash()
+            self.add_dash()
+            self.position_dash()
         else:
-            if self.dash_item:
-                self.glyph.removeFromGroup(self.dash_item)
-                self.dash_item = None
+            self.dash_item.setVisible(False)

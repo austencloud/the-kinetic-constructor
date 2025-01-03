@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.glyphs.tka_glyph.tka_glyph import TKA_Glyph
 
 
-class TurnsColumnHandler(QGraphicsItemGroup):
+class TurnsColumn(QGraphicsItemGroup):
     def __init__(self, glyph: "TKA_Glyph") -> None:
         super().__init__()
         self.glyph = glyph
@@ -19,8 +19,13 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.svg_path_prefix = get_images_and_data_path("images/numbers/")
         self.blank_svg_path = get_images_and_data_path("images/blank.svg")
         self.number_svg_cache = {}
+        self.top_number_item = QGraphicsSvgItem()
+        self.bottom_number_item = QGraphicsSvgItem()
+        self.glyph.addToGroup(self)
 
-    def load_number_svg(self, number: Union[int, float, str]) -> QGraphicsSvgItem:
+    def load_number_svg(
+        self, number: Union[int, float, str], is_top: bool
+    ) -> QGraphicsSvgItem:
         if number == "fl":  # Handle the float case
             svg_path = get_images_and_data_path("images/numbers/float.svg")
         else:
@@ -39,21 +44,23 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         else:
             renderer = self.number_svg_cache[svg_path]
 
-        number_item = QGraphicsSvgItem()
+        if is_top:
+            number_item = self.top_number_item
+        elif not is_top:
+            number_item = self.bottom_number_item
+
         number_item.setSharedRenderer(renderer)
         return number_item
 
     def set_number(self, number: Union[int, float, str], is_top: bool) -> None:
-        new_item = self.load_number_svg(number)
+        new_item = self.load_number_svg(number, is_top)
         old_item = self.top_number_item if is_top else self.bottom_number_item
 
         if old_item:
             self.removeFromGroup(old_item)
-            old_item.hide()
 
         if new_item:
             self.addToGroup(new_item)
-            new_item.show()
             if is_top:
                 self.top_number_item = new_item
             else:
@@ -62,7 +69,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
     def position_turns(self) -> None:
         reference_rect = (
             self.glyph.dash_handler.dash_item.sceneBoundingRect()
-            if self.glyph.dash_handler.dash_item
+            if self.glyph.dash_handler.dash_item.isVisible()
             else self.glyph.letter_item.sceneBoundingRect()
         )
         letter_scene_rect = self.glyph.letter_item.sceneBoundingRect()
@@ -87,9 +94,12 @@ class TurnsColumnHandler(QGraphicsItemGroup):
             adjusted_low_pos_y = low_pos_y if self.top_number_item else high_pos_y + 20
             self.bottom_number_item.setPos(base_pos_x, adjusted_low_pos_y)
 
-    def update_turns(
+    def update_turns_column(
         self, top_turn: Union[int, float, str], bottom_turn: Union[int, float, str]
     ) -> None:
-        self.set_number(top_turn, is_top=True)
-        self.set_number(bottom_turn, is_top=False)
+        self.top_number_item.setVisible(bool(top_turn))
+        self.bottom_number_item.setVisible(bool(bottom_turn))
+        for turn, is_top in [(top_turn, True), (bottom_turn, False)]:
+            self.set_number(turn, is_top)
+
         self.position_turns()

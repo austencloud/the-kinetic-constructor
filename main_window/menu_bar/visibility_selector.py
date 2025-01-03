@@ -48,7 +48,7 @@ class VisibilitySelector(ButtonSelector):
             f"{glyph}": self.glyph_visibility_manager.should_glyph_be_visible(glyph)
             for glyph in glyph_types
         }
-        options["Non-Radial Points"] = self.grid_visibility_manager.non_radial_visible
+        options["non_radial_points"] = self.grid_visibility_manager.non_radial_visible
 
         font = QFont()
         self.selector_font_size = self.main_widget.height() // 50
@@ -72,7 +72,7 @@ class VisibilitySelector(ButtonSelector):
 
     def option_toggled(self, option: str, state):
         is_checked = state == Qt.CheckState.Checked.value
-        if option == "Non-Radial Points":
+        if option == "non_radial_points":
             self.grid_visibility_manager.set_non_radial_visibility(is_checked)
         else:
             self.settings_manager.visibility.set_glyph_visibility(option, is_checked)

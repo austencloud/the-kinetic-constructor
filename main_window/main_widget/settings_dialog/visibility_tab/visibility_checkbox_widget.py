@@ -29,23 +29,43 @@ class VisibilityCheckboxWidget(QWidget):
         glyph_visibility_manager = (
             self.visibility_tab.main_widget.settings_manager.visibility.glyph_visibility_manager
         )
-        self.glyph_types = ["TKA", "VTG", "Elemental", "Positions", "Reversals"]
+        self.glyph_names = [
+            "TKA",
+            "VTG",
+            "Elemental",
+            "Positions",
+            "Reversals",
+            "Non-radial points",
+        ]
 
-        for glyph in self.glyph_types:
-            checkbox = QCheckBox(glyph)
-            checkbox.setChecked(glyph_visibility_manager.should_glyph_be_visible(glyph))
-            checkbox.stateChanged.connect(
-                lambda state, g=glyph: self._toggle_glyph_visibility(g, state)
+        for glyph_name in self.glyph_names:
+            checkbox = QCheckBox(glyph_name)
+            checkbox.setChecked(
+                glyph_visibility_manager.should_glyph_be_visible(glyph_name)
             )
+            if glyph_name == "Non-radial points":
+                checkbox.stateChanged.connect(
+                    lambda state: self._toggle_glyph_visibility(
+                        "non_radial_points", state
+                    )
+                )
+            else:
+                checkbox.stateChanged.connect(
+                    lambda state, g=glyph_name: self._toggle_glyph_visibility(g, state)
+                )
             self.layout.addWidget(checkbox)
             self.layout.addStretch(1)
-            self.glyph_checkboxes[glyph] = checkbox
-        self.layout.addStretch(1)
+            self.glyph_checkboxes[glyph_name] = checkbox
+        self.layout.addStretch(2)
 
-
-    def _toggle_glyph_visibility(self, glyph: str, state: int):
+    def _toggle_glyph_visibility(self, glyph_name: str, state: int):
         is_checked = state == Qt.CheckState.Checked.value
-        self.visibility_tab.settings.set_glyph_visibility(glyph, is_checked)
+        if glyph_name == "non_radial_points":
+            self.visibility_tab.settings.set_grid_visibility(
+                "non_radial_points", is_checked
+            )
+        else:
+            self.visibility_tab.settings.set_glyph_visibility(glyph_name, is_checked)
 
     def update_checkboxes(self):
         """Synchronize checkboxes with the current visibility settings."""
@@ -60,6 +80,6 @@ class VisibilityCheckboxWidget(QWidget):
         font_size = width // 40
         font = QFont()
         font.setPointSize(font_size)
-        for glyph in self.glyph_types:
+        for glyph in self.glyph_names:
             self.glyph_checkboxes[glyph].setFont(font)
         super().resizeEvent(event)

@@ -22,7 +22,7 @@ class VisibilityTabPictographView(PictographView):
 
         self.pictograph = self._initialize_example_pictograph()
         super().__init__(self.pictograph)
-        for glyph in self._get_all_glyphs():
+        for glyph in self._get_all_items():
             glyph.setOpacity(
                 1
                 if self.settings.glyph_visibility_manager.should_glyph_be_visible(
@@ -30,7 +30,7 @@ class VisibilityTabPictographView(PictographView):
                 )
                 else 0.1
             )
-        self.set_clickable_glyphs()
+        self.set_clickable_items()
         self.setMouseTracking(True)
         self.add_hover_effect()
 
@@ -48,7 +48,7 @@ class VisibilityTabPictographView(PictographView):
                 child.hoverEnterEvent = self._create_hover_enter_event(item)
                 child.hoverLeaveEvent = self._create_hover_leave_event(item)
 
-        for glyph in self._get_all_glyphs():
+        for glyph in self._get_all_items():
             apply_hover_effects(glyph)
 
     def _create_hover_enter_event(self, glyph: "Glyph"):
@@ -91,12 +91,13 @@ class VisibilityTabPictographView(PictographView):
         pictograph.elemental_glyph.setVisible(True)
         pictograph.start_to_end_pos_glyph.setVisible(True)
         pictograph.reversal_glyph.setVisible(True)
+        pictograph.grid.toggle_non_radial_points_visibility(True)
 
         return pictograph
 
-    def _get_all_glyphs(self) -> list[Glyph]:
-        """Return a list of all glyphs in the pictograph."""
-        return [
+    def _get_all_items(self) -> list[Glyph]:
+        """Return a list of all clickable items in the pictograph."""
+        all_glyphs = [
             self.pictograph.tka_glyph,
             self.pictograph.vtg_glyph,
             self.pictograph.elemental_glyph,
@@ -104,14 +105,39 @@ class VisibilityTabPictographView(PictographView):
             self.pictograph.reversal_glyph,
         ]
 
-    def set_clickable_glyphs(self):
+        # Extend with non-radial grid points
+        non_radial_items = self.pictograph.grid.items.get(
+            f"{self.pictograph.grid.grid_mode}_nonradial", []
+        )
+        if isinstance(non_radial_items, list):
+            all_glyphs.extend(non_radial_items)
+        else:
+            all_glyphs.append(non_radial_items)
+
+        return all_glyphs
+
+    def set_clickable_items(self):
         """Enable glyphs to be clickable and toggle visibility."""
-        for glyph in self._get_all_glyphs():
+        for glyph in self._get_all_items():
             glyph.mousePressEvent = self._create_mouse_press_event(glyph)
 
     def _create_mouse_press_event(self, glyph: "Glyph"):
         for child in glyph.childItems():
             child.setAcceptHoverEvents(True)
+        if glyph.name == "non_radial_points":
+
+            def mousePressEvent(event):
+                self.settings.set_grid_visibility(
+                    "non_radial_points",
+                    not self.settings.grid_visibility_manager.non_radial_visible,
+                )
+                glyph.setOpacity(
+                    1
+                    if self.settings.grid_visibility_manager.non_radial_visible
+                    else 0.1
+                )
+
+            return mousePressEvent
 
         def mousePressEvent(event):
             self._toggle_glyph_visibility(glyph)
@@ -128,7 +154,12 @@ class VisibilityTabPictographView(PictographView):
         """Toggle glyph visibility and synchronize with checkboxes."""
         manager = self.settings.glyph_visibility_manager
         current_visibility = manager.should_glyph_be_visible(glyph.name)
-        self.settings.set_glyph_visibility(glyph.name, not current_visibility)
+        if glyph.name == "non_radial_points":
+            self.settings.set_grid_visibility(
+                "non_radial_points", not current_visibility
+            )
+        else:
+            self.settings.set_glyph_visibility(glyph.name, not current_visibility)
         self.visibility_tab.checkbox_widget.update_checkboxes()
 
     def resizeEvent(self, event: QEvent):

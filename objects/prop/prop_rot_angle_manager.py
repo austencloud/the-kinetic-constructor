@@ -16,7 +16,6 @@ from data.constants import (
     WEST,
     EAST,
 )
-from objects import grid
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop

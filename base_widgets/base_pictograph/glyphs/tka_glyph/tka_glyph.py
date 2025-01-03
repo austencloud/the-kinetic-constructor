@@ -18,7 +18,6 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         self.letter = None
         self.init_handlers()
 
-
     def boundingRect(self):
         return self.childrenBoundingRect()
 
@@ -26,13 +25,12 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         from .handlers.tka_letter_handler import TKALetterHandler
         from .handlers.dash_handler import DashHandler
         from .handlers.dot_handler import DotHandler
-        from .handlers.turns_column_handler import TurnsColumnHandler
+        from .handlers.turns_column import TurnsColumn
 
         self.letter_handler = TKALetterHandler(self)
         self.dash_handler = DashHandler(self)
         self.dot_handler = DotHandler(self)
-        self.turns_column_handler = TurnsColumnHandler(self)
-        self.addToGroup(self.turns_column_handler)
+        self.turns_column = TurnsColumn(self)
 
     def update_tka_glyph(self, visibility=True) -> None:
         self.letter = self.pictograph.letter
@@ -46,7 +44,7 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         self.dot_handler.update_dots(direction)
         self.dash_handler.update_dash()
 
-        self.turns_column_handler.update_turns(top_turn, bottom_turn)
+        self.turns_column.update_turns_column(top_turn, bottom_turn)
         visibility_manager = (
             self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
         )
