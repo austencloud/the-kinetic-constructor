@@ -16,9 +16,15 @@ class FirstBeatDeleter:
         views = [option.view for option in self.option_picker.option_pool]
         widgets.extend(views)
         widgets.remove(self.deleter.beat_frame.start_pos_view)
+        
         self.deleter.main_widget.fade_manager.widget_fader.fade_and_update(
             widgets,
-            callback=lambda: self._delete_beat_and_following(selected_beat),
+            callback=lambda: (
+                self._delete_beat_and_following(selected_beat),
+                self.deleter.selection_overlay.select_beat(
+                    self.deleter.beat_frame.start_pos_view, toggle_graph_editor=False
+                ),
+            ),
             duration=300,
         )
 
@@ -26,15 +32,12 @@ class FirstBeatDeleter:
         self.deleter.sequence_widget.main_widget.construct_tab.last_beat = (
             self.deleter.beat_frame.start_pos_view.beat
         )
-        self.deleter.selection_overlay.deselect_beat()
+        self.deleter.beat_frame.selection_overlay.deselect_beat()
         beats = self.deleter.beat_frame.beats
         start_index = beats.index(start_beat)
         for beat in beats[start_index:]:
             self.deleter._delete_beat(beat)
         self.deleter._post_deletion_updates()
-        self.deleter.selection_overlay.select_beat(
-            self.deleter.beat_frame.start_pos_view, toggle_graph_editor=False
-        )
 
         self.option_picker = self.deleter.main_widget.construct_tab.option_picker
         self.option_picker._update_pictographs()

@@ -12,7 +12,7 @@ from main_window.main_widget.construct_tab.option_picker.scroll_area.section_man
     OptionPickerSectionWidget,
 )
 from .scroll_area.option_picker_scroll_area import OptionPickerScrollArea
-from .option_picker_pictograph_view import OptionPickerPictographView
+from .option_view import OptionView
 from .reversal_filter.option_picker_reversal_filter import OptionPickerReversalFilter
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
@@ -53,7 +53,7 @@ class OptionPicker(QWidget):
         self.option_pool: list[BasePictograph] = []
         for _ in range(self.MAX_PICTOGRAPHS):
             option = BasePictograph(self.main_widget)
-            option.view = OptionPickerPictographView(self, option)
+            option.view = OptionView(self, option)
             self.option_pool.append(option)
 
     def setup_layout(self) -> None:
@@ -89,7 +89,8 @@ class OptionPicker(QWidget):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         selected_filter = self.reversal_filter.reversal_combobox.currentData()
         next_options = self.option_getter.get_next_options(sequence, selected_filter)
-        self.scroll_area.display_manager.clear_all_section_layouts()
+        for section in self.scroll_area.section_manager.sections.values():
+            section.pictographs = {}
         self.scroll_area.add_and_display_relevant_pictographs(next_options)
 
     def set_disabled(self, disabled: bool) -> None:

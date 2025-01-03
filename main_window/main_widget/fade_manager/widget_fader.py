@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Union
 from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect
 from PyQt6.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve
 
@@ -45,12 +45,20 @@ class WidgetFader:
         return effect
 
     def fade_and_update(
-        self, widget: list[QWidget], callback: callable = None, duration: int = 300
+        self,
+        widget: list[QWidget],
+        callback: Union[callable, tuple[callable]] = None,
+        duration: int = 300,
     ) -> None:
         def on_fade_out_finished():
             self.manager.graphics_effect_remover.clear_graphics_effects(widget)
             if callback:
-                callback()
-            self.fade_widgets(widget, True, duration)
+                if isinstance(callback, tuple):
+                    callback[0]()
+                    self.fade_widgets(widget, True, duration, callback[1]())
+
+                else:
+                    callback()
+                    self.fade_widgets(widget, True, duration)
 
         self.fade_widgets(widget, False, duration, on_fade_out_finished)

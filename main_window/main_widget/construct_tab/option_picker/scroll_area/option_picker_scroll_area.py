@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QApplication
 from PyQt6.QtCore import Qt
 
 
@@ -75,10 +75,11 @@ class OptionPickerScrollArea(QScrollArea):
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
             pictograph.updater.update_pictograph(pictograph_dict)
+            # QApplication.processEvents()
             self.display_manager.add_pictograph_to_section_layout(pictograph)
+            # QApplication.processEvents()
             pictograph.view.update_borders()
-
-            # pictograph.view.show()
+            # QApplication.processEvents()
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

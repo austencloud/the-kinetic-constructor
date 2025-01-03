@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class OptionPickerPictographView(BorderedPictographView):
+class OptionView(BorderedPictographView):
     def __init__(
         self, option_picker: "OptionPicker", pictograph: "BasePictograph"
     ) -> None:

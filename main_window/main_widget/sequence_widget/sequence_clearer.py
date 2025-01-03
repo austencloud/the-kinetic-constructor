@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 
-
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import (
         SequenceWidget,

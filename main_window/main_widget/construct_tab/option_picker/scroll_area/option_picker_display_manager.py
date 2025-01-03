@@ -30,17 +30,8 @@ class OptionPickerDisplayManager:
         section = self.scroll_area.section_manager.sections[letter_type]
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-            # pictograph.view.resize_pictograph_view()
-            pictograph.view.show()
-            # hide or show the reversal symbols depending on the context
             pictograph.reversal_symbol_manager.update_reversal_symbols()
 
-    def remove_pictograph(self, pictograph_key: str) -> None:
-        pictograph_to_remove: BasePictograph = self.scroll_area.pictograph_cache.pop(
-            pictograph_key, None
-        )
-        if pictograph_to_remove:
-            self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
 
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
@@ -77,11 +68,6 @@ class OptionPickerDisplayManager:
 
         if last_beat.end_pos == cached_pictograph.start_pos:
             return True
-
-    def clear_all_section_layouts(self):
-        """Clears all widgets from all section layouts."""
-        for section in self.scroll_area.section_manager.sections.values():
-            section.clear_pictographs()
 
     def add_pictograph_to_section_layout(self, pictograph: BasePictograph):
         """Add a pictograph to its corresponding section layout."""
