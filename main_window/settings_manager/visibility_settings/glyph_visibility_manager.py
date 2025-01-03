@@ -56,7 +56,7 @@ class GlyphVisibilityManager:
             if option:
                 self.apply_current_visibility_settings(option)
         self.apply_current_visibility_settings(
-            self.main_window.main_widget.settings_dialog.visibility_tab.pictograph
+            self.main_window.main_widget.settings_dialog.visibility_tab.pictograph_view.pictograph
         )
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:

@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QTabWidget, QSizePolicy
 from PyQt6.QtGui import QFont, QCursor, QMouseEvent
 from PyQt6.QtCore import Qt
-from .action_buttons import SettingsDialogActionButtons
-from .settings_dialog_styler import SettingsDialogStyler
+from .settings_dialog_action_buttons import SettingsDialogActionButtons
+from .styles.settings_dialog_styler import SettingsDialogStyler
 from .user_profile_tab import UserProfileTab
 from .prop_type_tab import PropTypeTab
 from .background_tab import BackgroundTab
-from .visibility_tab import VisibilityTab
+from .visibility_tab.visibility_tab import VisibilityTab
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget

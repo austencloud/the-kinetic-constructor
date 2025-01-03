@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.settings_dialog.settings_dialog_styler import (
+from main_window.main_widget.settings_dialog.styles.settings_dialog_styler import (
     SettingsDialogStyler,
 )
 

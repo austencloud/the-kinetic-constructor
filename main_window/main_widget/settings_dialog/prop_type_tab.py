@@ -13,7 +13,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QSize
 
 from Enums.PropTypes import PropType
-from main_window.main_widget.settings_dialog.card_frame import CardFrame
+from main_window.main_widget.settings_dialog.styles.card_frame import CardFrame
 from main_window.main_widget.settings_dialog.prop_button import PropButton
 
 if TYPE_CHECKING:

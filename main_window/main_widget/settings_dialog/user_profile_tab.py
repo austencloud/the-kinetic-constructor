@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.settings_dialog.card_frame import CardFrame
+from main_window.main_widget.settings_dialog.styles.card_frame import CardFrame
 
 
 if TYPE_CHECKING:
