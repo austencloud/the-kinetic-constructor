@@ -47,19 +47,7 @@ class TurnsAdjustmentManager(QObject):
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
 
-        for pictograph in [self.reference_beat, self.GE_pictograph]:
-            self.turns_widget.turns_updater.adjust_turns_for_pictograph(
-                pictograph, new_turns
-            )
-
         self.turns_widget.update_turns_display(matching_motion, new_turns)
-
-        for motion in [matching_motion, GE_motion]:
-            motion.turns = new_turns
-            new_letter = self.get_new_letter(new_turns, motion)
-            self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
-                motion, new_letter
-            )
 
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
@@ -67,7 +55,21 @@ class TurnsAdjustmentManager(QObject):
         )
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.construct_tab.option_picker.update_option_picker()
-        self.turns_adjusted.emit(new_turns)
+
+        for pictograph in [self.reference_beat, self.GE_pictograph]:
+            self.turns_widget.turns_updater.adjust_turns_for_pictograph(
+                pictograph, new_turns
+            )
+        for motion in [matching_motion, GE_motion]:
+            motion.turns = new_turns
+            new_letter = self.get_new_letter(new_turns, motion)
+            self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
+                motion, new_letter
+            )
+            motion.prefloat_motion_type
+
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        self.beat_frame.updater.update_beats_from(sequence)
         QApplication.restoreOverrideCursor()
 
     def get_new_letter(self, new_turns, motion):

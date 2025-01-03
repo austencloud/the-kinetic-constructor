@@ -44,7 +44,13 @@ class WidgetCollector:
             GE_pictograph.start_to_end_pos_glyph.end_glyph,
             GE_pictograph.start_to_end_pos_glyph.arrow_glyph,
         ]
-        return list(arrows) + list(props) + tka_glyph_parts + start_to_end_parts
+        return (
+            list(arrows)
+            + list(props)
+            + tka_glyph_parts
+            + start_to_end_parts
+            + [GE_pictograph.number_manager.beat_number_item]
+        )
 
     def get_adjustment_panel_items(self):
         panel = self.deleter.sequence_widget.graph_editor.adjustment_panel

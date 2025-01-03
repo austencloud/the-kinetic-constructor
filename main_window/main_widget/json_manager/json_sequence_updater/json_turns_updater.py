@@ -36,6 +36,7 @@ class JsonTurnsUpdater:
                         "prop_rot_dir"
                     ] = prop_rot_dir
             if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:
+                
                 del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         elif sequence[index][f"{color}_attributes"]["turns"] == "fl":
             pictograph = beat_frame.beats[index - 2].beat

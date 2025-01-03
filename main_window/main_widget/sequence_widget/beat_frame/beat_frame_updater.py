@@ -14,6 +14,7 @@ class BeatFrameUpdater:
         self.bf = beat_frame
 
     def update_beats_from_current_sequence_json(self) -> None:
+
         current_sequence_json = (
             self.bf.json_manager.loader_saver.load_current_sequence_json()
         )

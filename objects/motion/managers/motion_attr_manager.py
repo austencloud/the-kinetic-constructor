@@ -25,10 +25,19 @@ class MotionAttrManager:
                 if self.motion.motion_type != FLOAT:
                     self.motion.prefloat_motion_type = self.motion.motion_type
             if "prefloat_motion_type" in motion_dict:
-                self.motion.prefloat_motion_type = motion_dict["prefloat_motion_type"]
+                if motion_dict["prefloat_motion_type"] == FLOAT:
+                    print("Warning: prefloat_motion_type cannot be 'float'")
+                else:
+                    self.motion.prefloat_motion_type = motion_dict[
+                        "prefloat_motion_type"
+                    ]
             if "prefloat_prop_rot_dir" in motion_dict:
-                self.motion.prefloat_prop_rot_dir = motion_dict["prefloat_prop_rot_dir"]
-
+                if motion_dict["prefloat_prop_rot_dir"] == NO_ROT:
+                    print("Warning: prefloat_prop_rot_dir cannot be 'no_rot'")
+                else:
+                    self.motion.prefloat_prop_rot_dir = motion_dict[
+                        "prefloat_prop_rot_dir"
+                    ]
 
     def update_prop_ori(self) -> None:
         if hasattr(self.motion, PROP) and self.motion.prop:
