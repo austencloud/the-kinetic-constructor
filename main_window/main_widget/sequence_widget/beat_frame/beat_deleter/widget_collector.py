@@ -49,6 +49,8 @@ class WidgetCollector:
             GE_pictograph.blue_reversal_symbol,
             GE_pictograph.red_reversal_symbol,
             GE_pictograph.start_text_item,
+            GE_pictograph.tka_glyph.turns_column_handler.top_number_item,
+            GE_pictograph.tka_glyph.turns_column_handler.bottom_number_item,
         ]
 
         items.extend(glyph_items)
