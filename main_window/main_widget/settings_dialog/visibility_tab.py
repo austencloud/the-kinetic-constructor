@@ -2,17 +2,16 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QPushButton,
     QLabel,
     QSpacerItem,
-    QSizePolicy, QCheckBox
+    QSizePolicy,
+    QCheckBox
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
-    from main_window.main_widget.main_widget import MainWidget
 
 class VisibilityTab(QWidget):
     def __init__(self, settings_dialog: "SettingsDialog"):

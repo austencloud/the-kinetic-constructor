@@ -10,10 +10,11 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.settings_dialog.card_frame import CardFrame
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class UserProfileTab(QWidget):
@@ -23,11 +24,16 @@ class UserProfileTab(QWidget):
         self._setup_ui()
 
     def _setup_ui(self):
-        layout = QVBoxLayout(self)
+        card = CardFrame(self)
+        layout = QVBoxLayout(card)
 
         title = QLabel("User Profile Settings")
         title.setFont(self._get_title_font())
         layout.addWidget(title)
+
+        outer_layout = QVBoxLayout(self)
+        outer_layout.addWidget(card)
+        self.setLayout(outer_layout)
 
         user_manager = self.main_widget.settings_manager.users.user_manager
         users = user_manager.get_all_users()
