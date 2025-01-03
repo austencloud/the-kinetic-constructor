@@ -45,9 +45,7 @@ class VisibilityCheckboxWidget(QWidget):
             )
             if glyph_name == "Non-radial points":
                 checkbox.stateChanged.connect(
-                    lambda state: self._toggle_glyph_visibility(
-                        "non_radial_points", state
-                    )
+                    lambda state: self._toggle_grid_visibility(state)
                 )
             else:
                 checkbox.stateChanged.connect(
@@ -58,14 +56,15 @@ class VisibilityCheckboxWidget(QWidget):
             self.glyph_checkboxes[glyph_name] = checkbox
         self.layout.addStretch(2)
 
-    def _toggle_glyph_visibility(self, glyph_name: str, state: int):
+    def _toggle_grid_visibility(self, state: int):
         is_checked = state == Qt.CheckState.Checked.value
-        if glyph_name == "non_radial_points":
-            self.visibility_tab.settings.set_grid_visibility(
-                "non_radial_points", is_checked
-            )
-        else:
-            self.visibility_tab.settings.set_glyph_visibility(glyph_name, is_checked)
+        self.visibility_tab.settings.set_grid_visibility(
+            "non_radial_points", is_checked
+        )
+
+    def _toggle_glyph_visibility(self, name: str, state: int):
+        is_checked = state == Qt.CheckState.Checked.value
+        self.visibility_tab.settings.set_glyph_visibility(name, is_checked)
 
     def update_checkboxes(self):
         """Synchronize checkboxes with the current visibility settings."""

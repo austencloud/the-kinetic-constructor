@@ -26,7 +26,7 @@ class BeatView(PictographView):
         self._setup_blank_beat()
 
     def _setup_blank_beat(self):
-        self.blank_beat = StartPositionBeat(self.beat_frame)
+        self.blank_beat = Beat(self.beat_frame)
         self.beat = self.blank_beat
         self.setScene(self.blank_beat)
         self.blank_beat.grid.hide()

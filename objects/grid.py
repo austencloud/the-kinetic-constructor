@@ -1,8 +1,9 @@
 import logging
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
+from PyQt6.QtWidgets import QApplication
 
 logger = logging.getLogger(__name__)
 
@@ -14,81 +15,6 @@ GRID_DIR = "images/grid/"
 
 from typing import Optional
 from PyQt6.QtCore import QPointF
-
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-
-
-import xml.etree.ElementTree as ET
-from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsItemGroup
-from PyQt6.QtGui import QColor, QBrush, QPen
-from PyQt6.QtCore import QPointF
-
-
-class NonRadialGridSvgItem(QGraphicsItemGroup):
-    def __init__(self, path: str, name: str) -> None:
-        super().__init__()
-        self.name = name
-        self.child_items: list[QGraphicsEllipseItem] = []
-        self._parse_svg_and_create_items(path)
-
-    def _parse_svg_and_create_items(self, path: str):
-        """
-        Parse the SVG file and extract points under the 'non_radial_points' group.
-        """
-        tree = ET.parse(path)
-        root = tree.getroot()
-        namespace = {"svg": "http://www.w3.org/2000/svg"}
-
-        # Find the group with ID 'non_radial_points'
-        non_radial_group = root.find(".//*[@id='non_radial_points']", namespace)
-        if not non_radial_group:
-            print(f"Group 'non_radial_points' not found in {path}")
-            return
-
-        # Iterate through all 'circle' elements within the group
-        for circle in non_radial_group.findall("circle", namespace):
-            cx = float(circle.attrib.get("cx", 0))
-            cy = float(circle.attrib.get("cy", 0))
-            r = float(circle.attrib.get("r", 0))
-            point_id = circle.attrib.get("id", "unknown_point")
-
-            # Create a QGraphicsEllipseItem for each circle
-            ellipse = QGraphicsEllipseItem(-r, -r, 2 * r, 2 * r)
-            ellipse.setBrush(QBrush(QColor("black")))
-            ellipse.setPen(QPen(QColor("black")))
-            ellipse.setPos(QPointF(cx, cy))
-            ellipse.setParentItem(self)  # Add to the group
-            ellipse.setToolTip(point_id)  # Optional: Add a tooltip
-            ellipse.setZValue(101)  # Ensure it's above other elements
-            ellipse.name = point_id  # Assign the name attribute for hover/click logic
-
-            # Add hover and click behavior
-            ellipse.setAcceptHoverEvents(True)
-            ellipse.hoverEnterEvent = self._create_hover_enter_event(ellipse)
-            ellipse.hoverLeaveEvent = self._create_hover_leave_event(ellipse)
-            ellipse.mousePressEvent = self._create_mouse_press_event(ellipse)
-
-            self.child_items.append(ellipse)
-
-    def _create_hover_enter_event(self, item: QGraphicsEllipseItem):
-        def hoverEnterEvent(event):
-            item.setBrush(QBrush(QColor("yellow")))  # Highlight on hover
-
-        return hoverEnterEvent
-
-    def _create_hover_leave_event(self, item: QGraphicsEllipseItem):
-        def hoverLeaveEvent(event):
-            item.setBrush(QBrush(QColor("black")))  # Revert on leave
-
-        return hoverLeaveEvent
-
-    def _create_mouse_press_event(self, item: QGraphicsEllipseItem):
-        def mousePressEvent(event):
-            print(f"Clicked on point: {item.name}")  # Debug output
-            # Toggle visibility or perform other logic
-            item.setBrush(QBrush(QColor("red")))
-
-        return mousePressEvent
 
 
 class GridPoint:
@@ -239,7 +165,7 @@ class Grid:
         self.pictograph = pictograph
         self.grid_data = grid_data
         self.grid_mode = grid_mode  # Store the current grid mode
-        self.items: dict[str, Union[GridItem, NonRadialGridSvgItem]] = {}
+        self.items: dict[str, GridItem] = {}
         self.center = self.grid_data.center_points.get(
             grid_mode, QPointF(0, 0)
         )  # Retrieve the center point
@@ -258,25 +184,32 @@ class Grid:
         paths = {
             "diamond": f"{GRID_DIR}diamond_grid.svg",
             "box": f"{GRID_DIR}box_grid.svg",
+            # Add more grid modes and their paths as needed
         }
 
         for mode, path in paths.items():
             grid_item = GridItem(path)
             self.pictograph.addItem(grid_item)
-            grid_item.setVisible(mode == self.grid_mode)
+            grid_item.setVisible(
+                mode == self.grid_mode
+            )
             self.items[mode] = grid_item
 
-        # Add non-radial points
-        non_radial_points_dict = {
+        # Load non-radial points specific to the grid mode
+        non_radial_paths = {
             "diamond": f"{GRID_DIR}diamond_nonradial_points.svg",
             "box": f"{GRID_DIR}box_nonradial_points.svg",
+            # Add more grid modes and their non-radial paths as needed
         }
+        non_radial_path = non_radial_paths.get(self.grid_mode)
+        if non_radial_path:
+            non_radial_item = QGraphicsSvgItem(non_radial_path)
+            # can we set a non_radial_item.name attribute here?
 
-        non_radial_points = non_radial_points_dict.get(self.grid_mode)
-        if non_radial_points:
-            non_radial_item = NonRadialGridSvgItem(
-                non_radial_points, "non_radial_points"
+            is_visible = (
+                self.pictograph.main_widget.settings_manager.visibility.grid_visibility_manager.non_radial_visible
             )
+            # non_radial_item.setVisible(is_visible)
             self.pictograph.addItem(non_radial_item)
             self.items[f"{self.grid_mode}_nonradial"] = non_radial_item
 
@@ -332,8 +265,6 @@ class Grid:
         non_radial_key = f"{self.grid_mode}_nonradial"
         if non_radial_key in self.items:
             self.items[non_radial_key].setVisible(visible)
-            for item in self.items[non_radial_key].child_items:
-                item.setVisible(visible)
         else:
             logger.warning(f"Non-radial layer '{non_radial_key}' not found.")
 

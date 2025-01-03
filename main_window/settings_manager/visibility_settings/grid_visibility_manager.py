@@ -1,4 +1,10 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget
+
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import (
+    GE_Pictograph,
+)
 
 if TYPE_CHECKING:
     from main_window.settings_manager.visibility_settings.visibility_settings import (
@@ -27,52 +33,72 @@ class GridVisibilityManager:
         self.save_non_radial_visibility(self.non_radial_visible)
 
     def apply_visibility_to_all_pictographs(self):
-        # Apply non-radial visibility to all pictographs in the application
+        def toggle_visibility(obj: "BasePictograph"):
+            obj.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
+
         main_widget = self.settings_manager.main_window.main_widget
-        for pictograph_list in main_widget.pictograph_cache.values():
-            for start_pos in pictograph_list.values():
-                if hasattr(start_pos, "grid"):
-                    start_pos.grid.toggle_non_radial_points_visibility(
-                        self.non_radial_visible
-                    )
 
-        for option in main_widget.construct_tab.option_picker.option_pool:
-            if hasattr(option, "grid"):
-                option.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
-
-        # Apply visibility to additional views
-        beat_frame = main_widget.sequence_widget.beat_frame
-        for beat_view in beat_frame.beats:
-            if hasattr(beat_view, "beat"):
-                if hasattr(beat_view, "beat") and hasattr(beat_view.beat, "grid"):
-                    beat_view.beat.grid.toggle_non_radial_points_visibility(
-                        self.non_radial_visible
-                    )
-
-        start_pos_view = beat_frame.start_pos_view
-        if start_pos_view.isVisible():
-            start_pos = start_pos_view.beat
-            if hasattr(start_pos, "grid"):
-                start_pos.grid.toggle_non_radial_points_visibility(
-                    self.non_radial_visible
+        # Collections to apply visibility
+        beat_views = main_widget.sequence_widget.beat_frame.beats
+        beats = []
+        # create a list of beat_view.beat for each beat_view
+        for view in beat_views:
+            beats.extend([view.beat])
+        collections = [
+            [main_widget.construct_tab.option_picker.option_pool],
+            [
+                (
+                    [main_widget.sequence_widget.beat_frame.start_pos_view.beat]
+                    if main_widget.sequence_widget.beat_frame.start_pos_view.isVisible()
+                    else []
                 )
+            ],
+            beats,
+            list(
+                main_widget.construct_tab.advanced_start_pos_picker.start_pos_cache.values()
+            ),
+            [
+                [
+                    main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+                ]
+            ],
+        ]
 
-        # Apply to advanced start pos picker and the GE blank pictograph
-        construct_tab = main_widget.construct_tab
-        for (
-            pictograph_list
-        ) in construct_tab.advanced_start_pos_picker.start_pos_cache.values():
-            for start_pos in pictograph_list:
-                if hasattr(start_pos, "grid"):
-                    start_pos.grid.toggle_non_radial_points_visibility(
-                        self.non_radial_visible
-                    )
+        # recursively remove all empty lists and dicts from the collections
+        def clean_collections(collections):
+            cleaned = []
+            for item in collections:
+                if isinstance(item, list):
+                    cleaned_item = clean_collections(item)
+                    if cleaned_item:
+                        cleaned.append(cleaned_item)
+                elif isinstance(item, dict):
+                    if item:
+                        cleaned.append(item)
+                else:
+                    cleaned.append(item)
+            return cleaned
 
-        graph_editor = main_widget.sequence_widget.graph_editor
-        GE_blank_pictograph = (
-            graph_editor.pictograph_container.GE_pictograph_view.pictograph
-        )
-        if hasattr(GE_blank_pictograph, "grid"):
-            GE_blank_pictograph.grid.toggle_non_radial_points_visibility(
-                self.non_radial_visible
-            )
+        collections = clean_collections(collections)
+
+        # get all the pictographs from the lists within the collection, put everything in one list
+        def extract_pictographs(collection):
+            pictographs = []
+            if isinstance(collection, list):
+                for item in collection:
+                    if isinstance(item, list):
+                        for pictograph in extract_pictographs(item):
+                            pictographs.append(pictograph)
+                    else:
+                        pictographs.extend(extract_pictographs(item))
+            elif isinstance(collection, dict):
+                for item in collection.values():
+                    pictographs.extend(extract_pictographs(item))
+            else:
+                pictographs.append(collection)
+            return pictographs
+
+        pictographs = extract_pictographs(collections)
+
+        for pictograph in pictographs:
+            toggle_visibility(pictograph)

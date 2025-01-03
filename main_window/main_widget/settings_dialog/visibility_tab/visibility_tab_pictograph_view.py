@@ -109,10 +109,10 @@ class VisibilityTabPictographView(PictographView):
         non_radial_items = self.pictograph.grid.items.get(
             f"{self.pictograph.grid.grid_mode}_nonradial", []
         )
-        if isinstance(non_radial_items, list):
-            all_glyphs.extend(non_radial_items)
-        else:
-            all_glyphs.append(non_radial_items)
+        # if isinstance(non_radial_items, list):
+        #     all_glyphs.extend(non_radial_items)
+        # else:
+        #     all_glyphs.append(non_radial_items)
 
         return all_glyphs
 
