@@ -27,3 +27,6 @@ class SettingsDialogActionButtons(QWidget):
 
         layout.addWidget(self.save_button)
         layout.addWidget(self.close_button)
+
+        self.save_button.clicked.connect(self.dialog.accept)
+        self.close_button.clicked.connect(self.dialog.reject)

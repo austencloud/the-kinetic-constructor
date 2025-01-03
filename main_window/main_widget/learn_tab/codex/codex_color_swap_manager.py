@@ -26,7 +26,7 @@ class CodexColorSwapManager:
         for pictograph in self.codex.data_manager.pictograph_data.values():
             self._swap_colors(pictograph)
         try:
-            for letter_str, view in self.codex.section_manager.views.items():
+            for letter_str, view in self.codex.section_manager.codex_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     # Implement actual color swap logic here

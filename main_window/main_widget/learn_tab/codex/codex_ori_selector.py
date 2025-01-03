@@ -49,7 +49,7 @@ class CodexOriSelector(QWidget):
     def update_orientations(self, orientation: str):
         """Updates the 'start_ori' attribute of all pictographs to the selected orientation."""
         try:
-            for letter_str, view in self.codex.section_manager.views.items():
+            for letter_str, view in self.codex.section_manager.codex_views.items():
                 scene = view.pictograph
                 if scene.pictograph_dict:
                     new_dict = scene.pictograph_dict.copy()

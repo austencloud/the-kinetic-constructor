@@ -13,26 +13,30 @@ if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 
 class BackgroundTab(QWidget):
-    def __init__(self, settings_dialog: "SettingsDialog"):
+    buttons: list[QPushButton] = []
+    
+    def __init__(self, dialog: "SettingsDialog"):
         super().__init__()
-        self.main_widget = settings_dialog.main_widget
+        self.dialog = dialog
+        self.main_widget = dialog.main_widget
         self._setup_ui()
+        
+        
     def _setup_ui(self):
         layout = QVBoxLayout(self)
 
-        title = QLabel("Background Settings")
-        title.setFont(self._get_title_font())
-        layout.addWidget(title)
+        self.title = QLabel("Background Settings")
+        layout.addWidget(self.title)
 
         # Available background options
         backgrounds = ["Starfield", "Aurora", "Snowfall", "Bubbles"]
 
         for background in backgrounds:
             button = QPushButton(background)
-            button.setFont(self._get_default_font())
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.setStyleSheet("margin: 5px;")
             button.clicked.connect(lambda _, b=background: self._set_background(b))
+            self.buttons.append(button)
             layout.addWidget(button)
 
         layout.addSpacerItem(
@@ -49,11 +53,15 @@ class BackgroundTab(QWidget):
 
     def _get_title_font(self):
         font = QFont()
-        font.setPointSize(16)
+        font.setPointSize(self.dialog.calculate_font_size())
         font.setBold(True)
         return font
 
-    def _get_default_font(self):
-        font = QFont()
-        font.setPointSize(12)
-        return font
+    def resizeEvent(self, event):
+        self.title.setFont(self._get_title_font())
+        font_size = self.dialog.calculate_font_size()
+        for button in self.buttons:
+            # button.font().setPointSize(font_size)
+            button_font = button.font()
+            button_font.setPointSize(font_size)
+            button.setFont(button_font)

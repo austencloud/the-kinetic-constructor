@@ -1,11 +1,15 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
+
 if TYPE_CHECKING:
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from .base_lesson_widget.base_lesson_widget import BaseLessonWidget
 
 
 class BaseAnswersWidget(QWidget):
+    pictographs: dict[str, "BasePictograph"]
+
     def __init__(self, lesson_widget: "BaseLessonWidget"):
         super().__init__(lesson_widget)
         self.main_widget = lesson_widget.main_widget

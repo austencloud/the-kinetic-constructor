@@ -65,10 +65,16 @@ class SettingsDialog(QDialog):
 
     def resizeEvent(self, event):
         size = self.main_widget.size()
+        font_size = self.calculate_font_size()
         self.setFixedSize(size.width() // 2, size.height() // 2)
-        font = QFont()
-        font.setPointSize(size.width() // 100)
-        self.tab_widget.tabBar().setFont(font)
+        self.tab_widget.tabBar().font().setPointSize(font_size)
         self.tab_widget.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         for button in [self.action_btns.save_button, self.action_btns.close_button]:
-            button.setFont(font)
+            button.font().setPointSize(font_size)
+
+    def calculate_font_size(self):
+        size = self.main_widget.size()
+        font = QFont()
+        font_size = size.width() // 100
+        font.setPointSize(font_size)
+        return font_size

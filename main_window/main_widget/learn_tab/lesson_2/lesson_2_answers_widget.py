@@ -23,8 +23,10 @@ logger = logging.getLogger(__name__)
 
 class Lesson2AnswersWidget(BaseAnswersWidget):
     """Widget responsible for displaying the pictograph answers in a grid layout."""
-    columns = 2  
-    spacing = 30 
+
+    columns = 2
+    spacing = 30
+    pictographs: dict[str, BasePictograph]
 
     def __init__(self, lesson_2_widget: "Lesson2Widget"):
         super().__init__(lesson_2_widget)
