@@ -37,8 +37,8 @@ class StartPositionBeatView(BeatView):
         self.view_scale = view_width / self.start_pos.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-        self.start_pos.add_start_text()
-        
+        self.start_pos.start_text_item.add_start_text()
+
     def _add_start_text(self):
         self.start_text_item = QGraphicsTextItem("Start")
         self.start_text_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))

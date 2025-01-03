@@ -22,6 +22,9 @@ class BeatNumberItem(QGraphicsTextItem):
         self.beat.addItem(self)
 
     def update_beat_number(self, beat_number_int: int = None) -> None:
+        if self.beat.start_text_item:
+            self.beat.start_text_item.setVisible(False)
+        self.setVisible(True)
         if self.beat_number_int != 0:
             self.beat_number_int = beat_number_int
             self.setPlainText(str(beat_number_int))

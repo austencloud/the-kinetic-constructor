@@ -19,10 +19,4 @@ class StartPositionBeat(Beat):
         self.main_widget = beat_frame.main_widget
         self.beat_frame = beat_frame
 
-    def add_start_text(self) -> None:
-        self.start_text_item = QGraphicsTextItem("Start")
-        self.start_text_item.setFont(QFont("Georgia", 60, QFont.Weight.DemiBold))
-        text_padding = self.height() // 28
-        self.start_text_item.setPos(QPointF(text_padding, text_padding))
-        if self.view and self.view.scene():
-            self.view.scene().addItem(self.start_text_item)
+

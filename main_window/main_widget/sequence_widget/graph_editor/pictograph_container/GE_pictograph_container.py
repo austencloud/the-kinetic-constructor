@@ -39,9 +39,11 @@ class GraphEditorPictographContainer(QWidget):
         view.pictograph.is_blank = False
         view.reference_beat = reference_beat
         view.pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
-        if reference_beat.number_item.beat_number_int != "0":
+        if reference_beat.number_item.beat_number_int != "":
             beat_number_text = reference_beat.number_item.beat_number_int
             view.pictograph.number_item.update_beat_number(beat_number_text)
+        else:
+            view.pictograph.start_text_item.add_start_text()
 
     def resizeEvent(self, event):
         size = self.graph_editor.height()

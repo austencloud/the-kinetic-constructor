@@ -1,12 +1,20 @@
 from typing import TYPE_CHECKING, Union
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.beat_grabber import BeatGrabber
+from main_window.main_widget.sequence_widget.beat_frame.beat_start_text_manager import (
+    BeatStartTextItem,
+)
 from .beat_number_item import BeatNumberItem
 from .beat_reversal_manager import BeatReversalManager
+from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QGraphicsTextItem
+from PyQt6.QtCore import QPointF
 
 if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
     from .beat_view import BeatView
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
 class Beat(BasePictograph):
@@ -16,7 +24,6 @@ class Beat(BasePictograph):
     beat_number = 0
     blue_reversal = False
     red_reversal = False
-    start_text_item = None
 
     def __init__(
         self, beat_frame: "SequenceWidgetBeatFrame", duration: Union[int, float] = 1
@@ -27,3 +34,4 @@ class Beat(BasePictograph):
         self.number_item = BeatNumberItem(self)
         self.grabber = BeatGrabber(self)
         self.duration = duration
+        self.start_text_item = BeatStartTextItem(self)
