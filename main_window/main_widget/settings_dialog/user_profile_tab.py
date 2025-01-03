@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 class UserProfileTab(QWidget):
     def __init__(self, settings_dialog: "SettingsDialog"):
         super().__init__()
+        self.settings_dialog = settings_dialog
         self.main_widget = settings_dialog.main_widget
         self._setup_ui()
 
@@ -27,9 +28,9 @@ class UserProfileTab(QWidget):
         card = CardFrame(self)
         layout = QVBoxLayout(card)
 
-        title = QLabel("User Profile Settings")
-        title.setFont(self._get_title_font())
-        layout.addWidget(title)
+        self.header = QLabel("User:")
+        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.header)
 
         outer_layout = QVBoxLayout(self)
         outer_layout.addWidget(card)
@@ -74,3 +75,10 @@ class UserProfileTab(QWidget):
         font_size = self.width() // 30
         font.setPointSize(font_size)
         return font
+
+    def resizeEvent(self, event):
+        font = QFont()
+        font_size = self.settings_dialog.width() // 30
+        font.setPointSize(font_size)
+        font.setBold(True)
+        self.header.setFont(font)

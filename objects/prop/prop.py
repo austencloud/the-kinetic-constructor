@@ -30,7 +30,7 @@ class Prop(GraphicalObject):
         The motion to which the prop belongs.
     """
 
-    loc: Location
+    loc: Location = None
     ori: Orientations = None
     axis: Axes
     prop_type: PropType

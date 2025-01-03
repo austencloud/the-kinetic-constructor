@@ -20,7 +20,7 @@ class SettingsButton(QPushButton):
 
     def show_settings_dialog(self):
         dialog = self.main_widget.settings_dialog
-        dialog.exec()
+        dialog.show()
 
     def resizeEvent(self, event):
         size = int(self.main_widget.width() // 24)

@@ -6,68 +6,82 @@ from PyQt6.QtWidgets import (
     QLabel,
     QSpacerItem,
     QSizePolicy,
+    QGridLayout,
 )
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
+from PyQt6.QtCore import QSize
 
 from Enums.PropTypes import PropType
+from main_window.main_widget.settings_dialog.card_frame import CardFrame
+from main_window.main_widget.settings_dialog.prop_button import PropButton
+
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 
+
 class PropTypeTab(QWidget):
+    buttons: list[PropButton] = []
+
     def __init__(self, settings_dialog: "SettingsDialog"):
         super().__init__()
+        self.settings_dialog = settings_dialog
         self.main_widget = settings_dialog.main_widget
         self._setup_ui()
 
-
     def _setup_ui(self):
-        layout = QVBoxLayout(self)
+        # Main layout
+        card = CardFrame(self)
+        main_layout = QVBoxLayout(card)
 
-        title = QLabel("Prop Type Settings")
-        title.setFont(self._get_title_font())
-        layout.addWidget(title)
+        # Title
+        self.header = QLabel("Prop Type:")
+        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        main_layout.addWidget(self.header)
 
-        prop_types = [
-            "Hand",
-            "Staff",
-            "Club",
-            "Fan",
-            "Triad",
-            "Minihoop",
-            "Buugeng",
-            "Sword",
-            "Ukulele",
-        ]
+        # Grid layout for prop buttons
+        grid_layout = QGridLayout()
+        main_layout.addLayout(grid_layout)
 
-        for prop in prop_types:
-            button = QPushButton(prop)
-            button.setFont(self._get_default_font())
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            button.setStyleSheet("margin: 5px;")
-            button.clicked.connect(
-                lambda _, p=prop: self._set_current_prop_type(PropType.get_prop_type(p))
-            )
-            layout.addWidget(button)
+        # Define props and corresponding SVG icons
+        props = {
+            "Hand": "images/props/hand.svg",
+            "Staff": "images/props/staff.svg",
+            "Club": "images/props/club.svg",
+            "Fan": "images/props/fan.svg",
+            "Triad": "images/props/triad.svg",
+            "Minihoop": "images/props/minihoop.svg",
+            "Buugeng": "images/props/buugeng.svg",
+            "Sword": "images/props/sword.svg",
+            "Ukulele": "images/props/ukulele.svg",
+        }
 
-        layout.addSpacerItem(
-            QSpacerItem(
-                20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
-            )
-        )
+        # Add buttons to grid
+        row, col = 0, 0
+        for prop, icon_path in props.items():
+            button = PropButton(prop, icon_path, self, self._set_current_prop_type)
+            self.buttons.append(button)
+            grid_layout.addWidget(button, row, col)
+
+            # Move to the next grid cell
+            col += 1
+            if col >= 3:  # 3 columns per row
+                col = 0
+                row += 1
+
+        outer_layout = QVBoxLayout(self)
+        outer_layout.addWidget(card)
+        self.setLayout(outer_layout)
 
     def _set_current_prop_type(self, prop_type: str):
         settings_manager = self.main_widget.settings_manager
         settings_manager.global_settings.set_prop_type(prop_type)
         self.main_widget.settings_manager.global_settings.prop_type_changer.apply_prop_type()
 
-    def _get_title_font(self):
-        font = QFont()
-        font.setPointSize(16)
-        font.setBold(True)
-        return font
 
-    def _get_default_font(self):
+    def resizeEvent(self, event):
         font = QFont()
-        font.setPointSize(12)
-        return font
+        font_size = self.settings_dialog.width() // 30
+        font.setPointSize(font_size)
+        font.setBold(True)
+        self.header.setFont(font)

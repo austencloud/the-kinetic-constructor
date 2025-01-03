@@ -5,6 +5,7 @@ from PyQt6.QtSvg import QSvgRenderer
 import os
 
 from Enums.letters import Letter
+from base_widgets.base_pictograph.tka_glyph.base_glyph import BaseGlyph
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -13,13 +14,13 @@ if TYPE_CHECKING:
 
 class StartToEndPosGlyph(QGraphicsItemGroup):
     def __init__(self, pictograph: "BasePictograph"):
+        QGraphicsItemGroup.__init__(self)
+        BaseGlyph.__init__(self, "Positions")
         super().__init__()
         self.pictograph = pictograph
         self.glyph_visibility_manager = (
             self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
         )
-
-        # Initialize SVG items
         self.start_glyph = QGraphicsSvgItem(self)
         self.arrow_glyph = QGraphicsSvgItem(self)
         self.end_glyph = QGraphicsSvgItem(self)

@@ -81,7 +81,8 @@ class PropTypeChanger:
         graph_editor_pictograph = (
             main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
         )
-        pictographs.add(graph_editor_pictograph)
+        if graph_editor_pictograph.red_arrow.loc:
+            pictographs.add(graph_editor_pictograph)
 
         lesson_1_pictograph = (
             main_widget.learn_tab.lesson_1_widget.question_widget.pictograph
@@ -105,7 +106,17 @@ class PropTypeChanger:
         )
         pictographs.add(lesson_3_question_pictograph)
         pictographs.update(lesson_3_answer_pictographs.values())
-        return list(pictographs)
+        pictograph_list: list["BasePictograph"] = list(pictographs)
+
+        pictograph_list = [pictograph for pictograph in pictograph_list if pictograph]
+
+        pictograph_list = [
+            pictograph
+            for pictograph in pictograph_list
+            if pictograph.red_prop.loc and pictograph.blue_prop.loc
+        ]
+
+        return pictograph_list
 
     def _update_start_pos_view(self, new_prop_type):
         start_pos_view = (

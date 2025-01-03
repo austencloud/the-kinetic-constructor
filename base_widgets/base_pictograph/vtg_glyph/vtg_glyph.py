@@ -5,6 +5,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Literal
 
 from Enums.Enums import LetterType
+from base_widgets.base_pictograph.tka_glyph.base_glyph import BaseGlyph
 from data.constants import (
     ALPHA1,
     BOX,
@@ -54,22 +55,42 @@ SVG_PATHS = {
 }
 
 
-class VTG_Glyph(QGraphicsSvgItem):
+class VTG_Glyph(QGraphicsSvgItem, BaseGlyph):
     def __init__(self, pictograph: "BasePictograph") -> None:
-        super().__init__()
+        super().__init__(name="VTG")
         self.pictograph = pictograph
 
     def set_vtg_mode(self) -> None:
+        from Enums.Enums import LetterType
+        from data.constants import (
+            SPLIT_SAME,
+            SPLIT_OPP,
+            TOG_SAME,
+            TOG_OPP,
+            QUARTER_SAME,
+            QUARTER_OPP,
+        )
+        from utilities.path_helpers import get_images_and_data_path
+
         if not self.pictograph.letter_type in [LetterType.Type1]:
             self.pictograph.removeItem(self)
             return
+
+        SVG_BASE_PATH = get_images_and_data_path("images/vtg_glyphs")
+        SVG_PATHS = {
+            SPLIT_SAME: f"{SVG_BASE_PATH}/SS.svg",
+            SPLIT_OPP: f"{SVG_BASE_PATH}/SO.svg",
+            TOG_SAME: f"{SVG_BASE_PATH}/TS.svg",
+            TOG_OPP: f"{SVG_BASE_PATH}/TO.svg",
+            QUARTER_SAME: f"{SVG_BASE_PATH}/QS.svg",
+            QUARTER_OPP: f"{SVG_BASE_PATH}/QO.svg",
+        }
+
         vtg_mode = self.determine_vtg_mode()
-        self.pictograph.vtg_mode = vtg_mode
-        svg_path: str = SVG_PATHS.get(vtg_mode, "")
-        self.renderer: QSvgRenderer = QSvgRenderer(svg_path)
+        svg_path = SVG_PATHS.get(vtg_mode, "")
+        self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
-            # if self isn't already in self.pictograph, then add it
             if not self.scene():
                 self.pictograph.addItem(self)
             self.position_vtg_glyph()
@@ -80,47 +101,87 @@ class VTG_Glyph(QGraphicsSvgItem):
 
     def determine_vtg_mode(self) -> Literal["SS", "SO", "TS", "TO", "QS", "QO"]:
         letter_str = self.pictograph.letter.value
-        mode = self.pictograph.vtg_mode
         start_pos = self.pictograph.start_pos
         grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
             self.pictograph.pictograph_dict
         )
-        if grid_mode == DIAMOND:
-            if letter_str in ["A", "B", "C"]:
-                mode = SPLIT_SAME
-            elif letter_str in ["D", "E", "F"]:
-                if start_pos in [BETA3, BETA7]:
-                    mode = SPLIT_OPP
-                elif start_pos in [BETA1, BETA5]:
-                    mode = TOG_OPP
-            elif letter_str in ["G", "H", "I"]:
-                mode = TOG_SAME
-            elif letter_str in ["J", "K", "L"]:
-                if start_pos in [ALPHA1, ALPHA5]:
-                    mode = SPLIT_OPP
-                elif start_pos in [ALPHA3, ALPHA7]:
-                    mode = TOG_OPP
-            elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
-                mode = QUARTER_OPP
-            elif letter_str in ["S", "T", "U", "V"]:
-                mode = QUARTER_SAME
-        elif grid_mode == BOX:
-            if letter_str in ["A", "B", "C"]:
-                mode = SPLIT_SAME
-            elif letter_str in ["D", "E", "F"]:
-                mode = QUARTER_OPP
-            elif letter_str in ["G", "H", "I"]:
-                mode = TOG_SAME
-            elif letter_str in ["J", "K", "L"]:
-                mode = QUARTER_OPP
-            elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
-                if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]:
-                    mode = SPLIT_OPP
-                elif start_pos in [GAMMA12, GAMMA16, GAMMA6, GAMMA2]:
-                    mode = TOG_OPP
-            elif letter_str in ["S", "T", "U", "V"]:
-                mode = QUARTER_SAME
-        return mode
+
+        mode_mapping = {
+            DIAMOND: {
+                "A": SPLIT_SAME,
+                "B": SPLIT_SAME,
+                "C": SPLIT_SAME,
+                "D": SPLIT_OPP if start_pos in [BETA3, BETA7] else TOG_OPP,
+                "E": SPLIT_OPP if start_pos in [BETA3, BETA7] else TOG_OPP,
+                "F": SPLIT_OPP if start_pos in [BETA3, BETA7] else TOG_OPP,
+                "G": TOG_SAME,
+                "H": TOG_SAME,
+                "I": TOG_SAME,
+                "J": SPLIT_OPP if start_pos in [ALPHA1, ALPHA5] else TOG_OPP,
+                "K": SPLIT_OPP if start_pos in [ALPHA1, ALPHA5] else TOG_OPP,
+                "L": SPLIT_OPP if start_pos in [ALPHA1, ALPHA5] else TOG_OPP,
+                "M": QUARTER_OPP,
+                "N": QUARTER_OPP,
+                "O": QUARTER_OPP,
+                "P": QUARTER_OPP,
+                "Q": QUARTER_OPP,
+                "R": QUARTER_OPP,
+                "S": QUARTER_SAME,
+                "T": QUARTER_SAME,
+                "U": QUARTER_SAME,
+                "V": QUARTER_SAME,
+            },
+            BOX: {
+                "A": SPLIT_SAME,
+                "B": SPLIT_SAME,
+                "C": SPLIT_SAME,
+                "D": QUARTER_OPP,
+                "E": QUARTER_OPP,
+                "F": QUARTER_OPP,
+                "G": TOG_SAME,
+                "H": TOG_SAME,
+                "I": TOG_SAME,
+                "J": QUARTER_OPP,
+                "K": QUARTER_OPP,
+                "L": QUARTER_OPP,
+                "M": (
+                    SPLIT_OPP
+                    if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]
+                    else TOG_OPP
+                ),
+                "N": (
+                    SPLIT_OPP
+                    if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]
+                    else TOG_OPP
+                ),
+                "O": (
+                    SPLIT_OPP
+                    if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]
+                    else TOG_OPP
+                ),
+                "P": (
+                    SPLIT_OPP
+                    if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]
+                    else TOG_OPP
+                ),
+                "Q": (
+                    SPLIT_OPP
+                    if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]
+                    else TOG_OPP
+                ),
+                "R": (
+                    SPLIT_OPP
+                    if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]
+                    else TOG_OPP
+                ),
+                "S": QUARTER_SAME,
+                "T": QUARTER_SAME,
+                "U": QUARTER_SAME,
+                "V": QUARTER_SAME,
+            },
+        }
+
+        return mode_mapping.get(grid_mode, {}).get(letter_str, self.pictograph.vtg_mode)
 
     def position_vtg_glyph(self) -> None:
         pictograph_width = self.pictograph.width()
