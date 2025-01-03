@@ -12,7 +12,7 @@ class VisibilitySettings:
             "VTG": False,
             "TKA": True,
             "Elemental": False,
-            "EndPosition": False,
+            "Positions": False,
             "Reversals": True,
         },
         "grid_visibility": {

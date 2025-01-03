@@ -173,7 +173,7 @@ class PictographInitializer:
 
     def init_start_to_end_pos_glyph(self) -> StartToEndPosGlyph:
         start_to_end_glyph = StartToEndPosGlyph(self.pictograph)
-        self.pictograph.addItem(start_to_end_glyph)
+
         return start_to_end_glyph
 
     def init_quadrant_boundaries(

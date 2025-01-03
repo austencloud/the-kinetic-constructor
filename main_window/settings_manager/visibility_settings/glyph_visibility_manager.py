@@ -31,7 +31,6 @@ class GlyphVisibilityManager:
 
     def apply_current_visibility_settings(self, pictograph: "BasePictograph"):
         for glyph_type in ["VTG", "TKA", "Elemental", "Positions", "Reversals"]:
-            visibility = self.visibility_settings.get_glyph_visibility(glyph_type)
             self.apply_visibility(glyph_type, pictograph)
 
         if pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:

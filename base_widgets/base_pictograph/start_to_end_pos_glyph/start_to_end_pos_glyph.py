@@ -60,9 +60,8 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
             self.scale_and_position_glyphs()
 
             # Adjust visibility based on settings
-            visible = self.glyph_visibility_manager.should_glyph_be_visible(
-                "EndPosition"
-            )
+            visible = self.glyph_visibility_manager.should_glyph_be_visible("Positions")
+            self.pictograph.addItem(self)
             self.setVisible(visible)
         else:
             print(

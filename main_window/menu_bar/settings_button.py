@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon, QCursor
 from PyQt6.QtCore import QSize, Qt
 
-from main_window.main_widget.settings_dialog import SettingsDialog
+from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBarWidget

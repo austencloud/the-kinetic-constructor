@@ -44,7 +44,8 @@ class GraphEditorPictographContainer(QWidget):
             view.pictograph.number_item.update_beat_number(beat_number_text)
         else:
             view.pictograph.start_text_item.add_start_text()
-
+        view.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
+        
     def resizeEvent(self, event):
         size = self.graph_editor.height()
         self.setFixedWidth(size)
