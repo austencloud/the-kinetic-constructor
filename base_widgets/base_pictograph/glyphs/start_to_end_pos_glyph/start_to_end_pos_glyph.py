@@ -5,7 +5,7 @@ from PyQt6.QtSvg import QSvgRenderer
 import os
 
 from Enums.letters import Letter
-from base_widgets.base_pictograph.tka_glyph.base_glyph import BaseGlyph
+from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Union
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
+    from base_widgets.base_pictograph.glyphs.tka_glyph.tka_glyph import TKA_Glyph
 
 
 class TurnsColumnHandler(QGraphicsItemGroup):
@@ -63,9 +63,9 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         reference_rect = (
             self.glyph.dash_handler.dash_item.sceneBoundingRect()
             if self.glyph.dash_handler.dash_item
-            else self.glyph.letter_handler.letter_item.sceneBoundingRect()
+            else self.glyph.letter_item.sceneBoundingRect()
         )
-        letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
+        letter_scene_rect = self.glyph.letter_item.sceneBoundingRect()
 
         base_pos_x = reference_rect.right() + 15
 

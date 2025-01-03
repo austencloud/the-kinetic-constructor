@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsTextItem, QGraphicsItemGroup
 from PyQt6.QtGui import QFont, QColor
 
-from base_widgets.base_pictograph.tka_glyph.base_glyph import BaseGlyph
+from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from data.constants import BLUE, HEX_BLUE, HEX_RED, RED
 
 if TYPE_CHECKING:
@@ -87,5 +87,3 @@ class BeatReversalGlyph(QGraphicsItemGroup, BaseGlyph):
         text_item.setFont(font)
         text_item.setDefaultTextColor(QColor(color))
         return text_item
-
-

@@ -48,7 +48,7 @@ if TYPE_CHECKING:
     from .thumbnail_finder import ThumbnailFinder
     from .grid_mode_checker import GridModeChecker
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from .pcitograph_dict_loader import PictographDictLoader
+    from .pictograph_dict_loader import PictographDictLoader
     from Enums.Enums import Letter
     from letter_determiner.letter_determiner import LetterDeterminer
 
@@ -87,7 +87,7 @@ class MainWidget(QWidget):
     grid_mode_checker: "GridModeChecker"
     fade_manager: FadeManager
     font_color_updater: "FontColorUpdater"
-
+    
     # Layouts and Widgets
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
@@ -148,20 +148,6 @@ class MainWidget(QWidget):
 
         QTimer.singleShot(0, self.state_handler.load_state)
         QTimer.singleShot(0, self.ui_handler.load_current_tab)
-
-        self._install_filter()
-
-    def _install_filter(self):
-        event_filter = ResizeEventFilter()
-        self.installEventFilter(event_filter)
-
-        def install_resize_filter(widget: "QWidget"):
-            widget.installEventFilter(event_filter)
-            for child in widget.children():
-                if isinstance(child, QWidget):
-                    install_resize_filter(child)
-
-        install_resize_filter(self)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

@@ -1,19 +1,17 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsItemGroup
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from base_widgets.base_pictograph.tka_glyph.base_glyph import BaseGlyph
+from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 
-from .handlers.tka_letter_handler import TKALetterHandler
-from .handlers.dash_handler import DashHandler
-from .handlers.dot_handler import DotHandler
-from .handlers.turns_column_handler import TurnsColumnHandler
-from .handlers.utils import parse_turns_tuple_string
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
+    letter_item: "QGraphicsSvgItem"
+
     def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__(name="TKA")  # Ensure MRO handles initialization
         self.pictograph = pictograph

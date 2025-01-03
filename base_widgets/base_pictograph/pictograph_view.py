@@ -1,8 +1,7 @@
-import json
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QFrame, QMenu, QToolTip, QApplication
+from PyQt6.QtWidgets import QGraphicsView, QFrame, QMenu
 from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QCursor, QClipboard, QAction, QContextMenuEvent
+from PyQt6.QtGui import QCursor, QAction
 
 from base_widgets.base_pictograph.pictograph_dict_copier import PictographDictCopier
 

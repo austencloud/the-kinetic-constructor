@@ -1,29 +1,19 @@
-from math import pi
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
 from typing import TYPE_CHECKING, Literal
 
-from Enums.Enums import LetterType
-from base_widgets.base_pictograph.tka_glyph.base_glyph import BaseGlyph
+from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from data.constants import (
     ALPHA1,
     BOX,
     DIAMOND,
-    ALPHA3,
     ALPHA5,
-    ALPHA7,
-    BETA1,
     BETA3,
-    BETA5,
     BETA7,
     GAMMA10,
-    GAMMA12,
     GAMMA14,
-    GAMMA16,
-    GAMMA2,
     GAMMA4,
-    GAMMA6,
     GAMMA8,
     QUARTER_OPP,
     QUARTER_SAME,
@@ -32,7 +22,6 @@ from data.constants import (
     TOG_OPP,
     TOG_SAME,
 )
-from main_window.main_widget import grid_mode_checker, pcitograph_dict_loader
 from utilities.path_helpers import get_images_and_data_path
 
 

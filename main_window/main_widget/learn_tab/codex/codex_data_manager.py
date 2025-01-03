@@ -6,6 +6,7 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.codex.codex import Codex
+from Enums.letters import Letter
 
 
 class CodexDataManager:
@@ -17,41 +18,6 @@ class CodexDataManager:
             self._initialize_pictograph_data()
         )
 
-    def _find_pictograph_dict(
-        self,
-        letter_str: str,
-        start_pos: str,
-        end_pos: str,
-        blue_motion_type: str,
-        red_motion_type: str,
-    ) -> Optional[dict]:
-        """
-        Search main_widget's preloaded pictograph_dicts for a given letter and conditions,
-        including blue and red motion types. Assumes start_ori is always "in".
-        """
-        target_letter = None
-        for l in Letter:
-            if l.value == letter_str:
-                target_letter = l
-                break
-        if not target_letter:
-            print(f"Warning: Letter '{letter_str}' not found in Letter Enum.")
-            return None
-
-        letter_dicts = self.main_widget.pictograph_dicts.get(target_letter, [])
-        for pdict in letter_dicts:
-            if (
-                pdict.get("start_pos") == start_pos
-                and pdict.get("end_pos") == end_pos
-                and pdict.get("blue_attributes", {}).get("motion_type")
-                == blue_motion_type
-                and pdict.get("red_attributes", {}).get("motion_type")
-                == red_motion_type
-            ):
-                return deepcopy(pdict)
-
-        return None
-
     def _initialize_pictograph_data(self) -> dict[str, Optional[dict]]:
         """Initializes the pictograph data for all letters."""
         letters = [letter.value for letter in Letter]
@@ -60,12 +26,16 @@ class CodexDataManager:
         for letter in letters:
             params = self._get_pictograph_params(letter)
             if params:
-                pictograph_dict = self._find_pictograph_dict(
-                    letter_str=letter,
-                    start_pos=params["start_pos"],
-                    end_pos=params["end_pos"],
-                    blue_motion_type=params["blue_motion_type"],
-                    red_motion_type=params["red_motion_type"],
+                pictograph_dict = (
+                    self.main_widget.pictograph_dict_loader.find_pictograph_dict(
+                        {
+                            "letter": letter,
+                            "start_pos": params["start_pos"],
+                            "end_pos": params["end_pos"],
+                            "blue_motion_type": params["blue_motion_type"],
+                            "red_motion_type": params["red_motion_type"],
+                        }
+                    )
                 )
                 pictograph_data[letter] = pictograph_dict
             else:

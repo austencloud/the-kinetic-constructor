@@ -45,7 +45,7 @@ class DotHandler:
 
     def update_dots(self, dir: VTG_Directions) -> None:
         padding = 10
-        letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
+        letter_scene_rect = self.glyph.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
 
         if self.same_dot_item:

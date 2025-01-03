@@ -16,9 +16,6 @@ from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker_pic
     StartPosPickerPictographView,
 )
 
-from main_window.main_widget.sequence_widget.beat_frame.beat_reversal_manager import (
-    BeatReversalGlyph,
-)
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -29,10 +26,11 @@ from placement_managers.arrow_placement_manager.arrow_placement_manager import (
 from placement_managers.prop_placement_manager.prop_placement_manager import (
     PropPlacementManager,
 )
-from .elemental_glyph.elemental_glyph import ElementalGlyph
-from .start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
-from .tka_glyph.tka_glyph import TKA_Glyph
-from .vtg_glyph.vtg_glyph import VTG_Glyph
+from .glyphs.reversals_glyph import BeatReversalGlyph
+from .glyphs.elemental_glyph.elemental_glyph import ElementalGlyph
+from .glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
+from .glyphs.tka_glyph.tka_glyph import TKA_Glyph
+from .glyphs.vtg_glyph.vtg_glyph import VTG_Glyph
 from .pictograph_attr_manager import PictographAttrManager
 from .pictograph_checker import PictographChecker
 from .pictograph_getter import PictographGetter

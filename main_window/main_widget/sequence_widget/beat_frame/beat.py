@@ -5,7 +5,7 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_start_text_manager 
     BeatStartTextItem,
 )
 from .beat_number_item import BeatNumberItem
-from .beat_reversal_manager import BeatReversalGlyph
+from .....base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtCore import QPointF

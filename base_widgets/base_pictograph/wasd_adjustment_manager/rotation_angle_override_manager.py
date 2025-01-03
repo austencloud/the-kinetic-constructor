@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from base_widgets.base_pictograph.wasd_adjustment_manager import wasd_adjustment_manager
 from data.constants import STATIC, DASH
 from base_widgets.base_pictograph.wasd_adjustment_manager.rotation_angle_override_key_generator import (
     RotationAngleOverrideKeyGenerator,

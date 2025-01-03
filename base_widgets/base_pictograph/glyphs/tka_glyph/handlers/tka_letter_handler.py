@@ -28,7 +28,7 @@ SVG_PATHS = {
 class TKALetterHandler:
     def __init__(self, glyph: "TKA_Glyph") -> None:
         self.glyph = glyph
-        self.letter_item = QGraphicsSvgItem(self.glyph)
+        self.glyph.letter_item = QGraphicsSvgItem(self.glyph)
         self.renderer = None
 
     def set_letter(self) -> None:
@@ -40,14 +40,14 @@ class TKALetterHandler:
         svg_path = svg_path.format(letter=self.glyph.pictograph.letter.value)
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
-            self.letter_item.setSharedRenderer(self.renderer)
+            self.glyph.letter_item.setSharedRenderer(self.renderer)
             self.position_letter()
 
     def position_letter(self) -> None:
-        x = int(self.letter_item.boundingRect().height() / 1.5)
+        x = int(self.glyph.letter_item.boundingRect().height() / 1.5)
         y = int(
             self.glyph.pictograph.height()
-            - (self.letter_item.boundingRect().height() * 1.7)
+            - (self.glyph.letter_item.boundingRect().height() * 1.7)
         )
-        self.letter_item.setPos(x, y)
+        self.glyph.letter_item.setPos(x, y)
 

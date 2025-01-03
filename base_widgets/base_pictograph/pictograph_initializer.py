@@ -1,10 +1,10 @@
 import json
-from typing import TYPE_CHECKING, Literal
-from PyQt6.QtCore import QPointF, QPoint, Qt
+from typing import TYPE_CHECKING
+from PyQt6.QtCore import QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
-from main_window.main_widget.sequence_widget.beat_frame.beat_reversal_manager import (
+from base_widgets.base_pictograph.glyphs.reversals_glyph import (
     BeatReversalGlyph,
 )
 from objects.arrow.arrow import Arrow
@@ -15,10 +15,10 @@ from objects.prop.prop_classes import *
 from data.constants import *
 from utilities.path_helpers import get_images_and_data_path
 from .prop_factory import PropFactory
-from .elemental_glyph.elemental_glyph import ElementalGlyph
-from .start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
-from .tka_glyph.tka_glyph import TKA_Glyph
-from .vtg_glyph.vtg_glyph import VTG_Glyph
+from .glyphs.elemental_glyph.elemental_glyph import ElementalGlyph
+from .glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
+from .glyphs.tka_glyph.tka_glyph import TKA_Glyph
+from .glyphs.vtg_glyph.vtg_glyph import VTG_Glyph
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph

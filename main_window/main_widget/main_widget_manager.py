@@ -5,7 +5,7 @@ from letter_determiner.letter_determiner import LetterDeterminer
 from utilities.path_helpers import get_images_and_data_path
 
 from .grid_mode_checker import GridModeChecker
-from .pcitograph_dict_loader import PictographDictLoader
+from .pictograph_dict_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )

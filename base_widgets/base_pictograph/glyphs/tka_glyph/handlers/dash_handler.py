@@ -31,7 +31,7 @@ class DashHandler:
         padding = 5
         if self.dash_item:
             letter_scene_rect = (
-                self.glyph.letter_handler.letter_item.sceneBoundingRect()
+                self.glyph.letter_item.sceneBoundingRect()
             )
             dash_x = letter_scene_rect.right() + padding
             dash_y = (

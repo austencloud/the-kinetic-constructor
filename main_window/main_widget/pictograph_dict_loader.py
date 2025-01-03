@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING
+from copy import deepcopy
+from typing import TYPE_CHECKING, Optional
 import pandas as pd
 from Enums.letters import Letter
 from data.constants import END_POS, IN, LETTER, START_POS
@@ -108,3 +109,29 @@ class PictographDictLoader:
             if letter.value == letter_value:
                 return letter
         raise ValueError(f"No matching Letters enum for value: {letter_value}")
+
+    def find_pictograph_dict(self, simplified_dict: dict) -> Optional[dict]:
+        """Find and return the appropriate pictograph dictionary."""
+        from Enums.letters import Letter
+
+        target_letter = next(
+            (l for l in Letter if l.value == simplified_dict["letter"]), None
+        )
+        if not target_letter:
+            print(
+                f"Warning: Letter '{simplified_dict['letter']}' not found in Letter Enum."
+            )
+            return None
+
+        letter_dicts = self.main_widget.pictograph_dicts.get(target_letter, [])
+        for pdict in letter_dicts:
+            if (
+                pdict.get("start_pos") == simplified_dict["start_pos"]
+                and pdict.get("end_pos") == simplified_dict["end_pos"]
+                and pdict.get("blue_attributes", {}).get("motion_type")
+                == simplified_dict["blue_motion_type"]
+                and pdict.get("red_attributes", {}).get("motion_type")
+                == simplified_dict["red_motion_type"]
+            ):
+                return deepcopy(pdict)
+        return None
