@@ -23,6 +23,7 @@ class ThumbnailImageLabel(QLabel):
         self.is_selected = False
         self.index = None
         self.pixmap: QPixmap = None
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setScaledContents(False)
 
     def update_thumbnail(self, index):

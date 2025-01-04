@@ -129,7 +129,6 @@ class SequencePickerSorter:
 
         if not hidden:
             thumbnail_box.show()
-            thumbnail_box.resize_thumbnail_box()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
 
     def reload_currently_displayed_filtered_sequences(self):

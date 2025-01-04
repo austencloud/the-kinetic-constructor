@@ -8,20 +8,30 @@ if TYPE_CHECKING:
 
 
 class ActLoader:
+    default_act = {"title": "Act", "prop_type": "Staff", "sequences": []}
+
     def __init__(self, act_sheet: "ActSheet") -> None:
         self.act_sheet = act_sheet
         self.load_act()
-        
+
     def load_act(self, filename="current_act.json") -> None:
         """Load an act from a JSON file in the acts directory."""
         file_path = get_user_editable_resource_path(filename)
         if not os.path.isfile(file_path):
             print(f"No saved act found at {file_path}")
+            self.populate_act_from_data(self.default_act)
             return None
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            act_data = json.load(f)
-            self.populate_act_from_data(act_data)
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                act_data = json.load(f)
+                self.populate_act_from_data(act_data)
+        except json.JSONDecodeError:
+            print(
+                f"Error decoding JSON from {file_path}, populating with default data."
+            )
+
+            self.populate_act_from_data(self.default_act)
 
     def populate_act_from_data(self, act_data):
         """Populate the act based on saved data, using sequence length to determine row spans."""

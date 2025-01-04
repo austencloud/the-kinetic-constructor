@@ -13,6 +13,7 @@ class ActBrowser(QScrollArea):
     def __init__(self, act_tab: "WriteTab") -> None:
         super().__init__(act_tab)
         self.act_tab = act_tab
+        self.main_widget = act_tab.main_widget
         self.thumbnail_boxes: list[ActThumbnailBox] = []
         self.metadata_extractor = self.act_tab.main_widget.metadata_extractor
 
@@ -66,7 +67,7 @@ class ActBrowser(QScrollArea):
                     row += 1
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)        
+        super().resizeEvent(event)
         scroll_bar_width = self.verticalScrollBar().width()
         browser_width = self.width() - scroll_bar_width
         self.scroll_content.setMinimumWidth(browser_width)
