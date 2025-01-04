@@ -24,7 +24,7 @@ class BeatFramePopulator:
         self.current_sequence_json = current_sequence_json  # Store the sequence JSON
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message("Loading sequence...")
-
+        self.json_manager.loader_saver.clear_current_sequence_file()
         self.construct_tab = self.main_widget.construct_tab
 
         if not self.current_sequence_json:

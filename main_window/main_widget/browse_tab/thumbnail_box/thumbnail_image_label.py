@@ -11,20 +11,21 @@ if TYPE_CHECKING:
 
 
 class ThumbnailImageLabel(QLabel):
+    target_width = 0
+    is_selected = False
+    index = None
+    pixmap: QPixmap = None
+
     def __init__(self, thumbnail_box: "ThumbnailBox"):
         super().__init__()
         self.thumbnail_box = thumbnail_box
 
-        self.setStyleSheet("border: 3px solid black;")
-        self.installEventFilter(self)
-        self.target_width = 0
         self.thumbnails = thumbnail_box.thumbnails
         self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
-        self.is_selected = False
-        self.index = None
-        self.pixmap: QPixmap = None
+
+        self.setStyleSheet("border: 3px solid black;")
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setScaledContents(False)
 
     def update_thumbnail(self, index):
         if self.thumbnails and 0 <= index < len(self.thumbnails):
@@ -82,14 +83,14 @@ class ThumbnailImageLabel(QLabel):
         else:
             self.setStyleSheet("border: 3px solid black;")
 
-    def eventFilter(self, obj, event: QEvent):
-        if obj == self and event.type() == QEvent.Type.Enter:
-            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            self.setStyleSheet("border: 3px solid gold;")
-        elif obj == self and event.type() == QEvent.Type.Leave:
-            self.setStyleSheet(
-                "border: 3px solid black;"
-                if not self.is_selected
-                else "border: 3px solid blue;"
-            )
-        return super().eventFilter(obj, event)
+    def enterEvent(self, event: QEvent):
+        self.setStyleSheet("border: 3px solid gold;")
+        super().enterEvent(event)
+
+    def leaveEvent(self, event: QEvent):
+        self.setStyleSheet(
+            "border: 3px solid black;"
+            if not self.is_selected
+            else "border: 3px solid blue;"
+        )
+        super().leaveEvent(event)
