@@ -73,9 +73,11 @@ class ThumbnailBox(QWidget):
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
+        self.image_label.thumbnails = thumbnails
+        
         if self == self.browse_tab.sequence_viewer.current_thumbnail_box:
             self.browse_tab.sequence_viewer.update_thumbnails(self.thumbnails)
-        self.image_label.thumbnails = thumbnails
+            
         if len(self.thumbnails) == 1:
             self.variation_number_label.hide()
         else:

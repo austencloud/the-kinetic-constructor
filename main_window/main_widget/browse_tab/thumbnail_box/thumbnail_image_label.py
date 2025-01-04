@@ -39,9 +39,20 @@ class ThumbnailImageLabel(QLabel):
             self.setText("No image available")
 
     def set_pixmap_to_fit(self, pixmap: QPixmap):
+        current_index = self.thumbnail_box.current_index
         sequence_length = self.metadata_extractor.get_sequence_length(
-            self.thumbnail_box.thumbnails[self.thumbnail_box.current_index]
+            self.thumbnail_box.thumbnails[current_index]
         )
+
+        target_width = self._get_target_width(sequence_length)
+
+        scaled_pixmap = pixmap.scaledToWidth(
+            target_width, Qt.TransformationMode.SmoothTransformation
+        )
+        
+        self.setPixmap(scaled_pixmap)
+
+    def _get_target_width(self, sequence_length):
         if sequence_length == 1:
             target_width = int(self.thumbnail_box.width() * 0.6) - int(
                 self.thumbnail_box.margin * 2
@@ -50,14 +61,8 @@ class ThumbnailImageLabel(QLabel):
             target_width = self.thumbnail_box.width() - int(
                 self.thumbnail_box.margin * 2
             )
-        if target_width == self.target_width:
-            return
-        self.target_width = target_width
-        scaled_pixmap = pixmap.scaledToWidth(
-            target_width, Qt.TransformationMode.SmoothTransformation
-        )
-        self.setPixmap(scaled_pixmap)
-        QApplication.processEvents()
+            
+        return target_width
 
     def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:

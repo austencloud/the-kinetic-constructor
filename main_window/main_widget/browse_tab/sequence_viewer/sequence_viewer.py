@@ -86,7 +86,6 @@ class SequenceViewer(QWidget):
 
     def update_preview(self, index):
         if index is None:
-            # self.image_label.show_placeholder()
             self.variation_number_label.clear()
             return
 

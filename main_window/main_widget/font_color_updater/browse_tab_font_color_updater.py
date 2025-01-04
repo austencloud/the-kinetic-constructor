@@ -99,4 +99,3 @@ class BrowseTabFontColorUpdater(BaseFontColorUpdater):
             sequence_viewer.variation_number_label,
         ]
         self._apply_font_colors(viewer_labels)
-        sequence_viewer.image_label.resize_placeholder()

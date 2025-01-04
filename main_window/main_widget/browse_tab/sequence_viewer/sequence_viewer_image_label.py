@@ -33,15 +33,21 @@ class SequenceViewerImageLabel(QLabel):
         sequence_length = self.metadata_extractor.get_sequence_length(
             self.thumbnails[current_index]
         )
-        if sequence_length == 1:
-            target_width = int(self.sequence_viewer.width() * 0.6)
-        else:
-            target_width = int(self.sequence_viewer.width() * 0.9)
+        
+        target_width = self._get_target_width(sequence_length)
 
         scaled_pixmap = pixmap.scaledToWidth(
             target_width, Qt.TransformationMode.SmoothTransformation
         )
+        
         self.setPixmap(scaled_pixmap)
+
+    def _get_target_width(self, sequence_length):
+        if sequence_length == 1:
+            target_width = int(self.sequence_viewer.width() * 0.6)
+        else:
+            target_width = int(self.sequence_viewer.width() * 0.9)
+        return target_width
 
     def show_placeholder(self):
         self.setText(self.placeholder_text)
