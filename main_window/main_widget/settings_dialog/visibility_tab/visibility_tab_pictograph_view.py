@@ -8,7 +8,7 @@ from base_widgets.base_pictograph.pictograph_view import PictographView
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import Qt, QEvent
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
-from objects.grid import NonRadialGridPoints
+from base_widgets.base_pictograph.grid.grid import NonRadialGridPointsGroup
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
@@ -16,7 +16,9 @@ if TYPE_CHECKING:
     )
     from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem", "BeatReversalGlyph"]
+Glyph = Union[
+    "BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem", "BeatReversalGlyph"
+]
 
 
 class VisibilityTabPictographView(PictographView):
@@ -108,7 +110,7 @@ class VisibilityTabPictographView(PictographView):
                         child, entering=False
                     )
             # Handle BeatReversalGlyph children
-        # Directly access reversal items and assign events
+            # Directly access reversal items and assign events
             if glyph.name == "Reversals" and hasattr(glyph, "reversal_items"):
                 for color, text_item in glyph.reversal_items.items():
                     print(f"Assigning hover and click events to reversal: {color}")
@@ -119,7 +121,7 @@ class VisibilityTabPictographView(PictographView):
                     text_item.hoverLeaveEvent = self._create_hover_event(
                         text_item, entering=False
                     )
-                    
+
         self.non_radial_points.mousePressEvent = self._create_non_radial_click_event()
         self.non_radial_points.hoverEnterEvent = self._create_hover_event(
             self.non_radial_points, entering=True
@@ -129,7 +131,7 @@ class VisibilityTabPictographView(PictographView):
         )
 
     def _create_hover_event(
-        self, item: Union["NonRadialGridPoints", Glyph], entering: bool
+        self, item: Union["NonRadialGridPointsGroup", Glyph], entering: bool
     ):
         """Create a hover event for entering or leaving."""
 

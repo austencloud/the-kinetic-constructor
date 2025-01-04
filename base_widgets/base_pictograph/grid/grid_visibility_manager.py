@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from .visibility_settings import VisibilitySettings
+    from ....main_window.settings_manager.visibility_settings.visibility_settings import VisibilitySettings
 
 
 class GridVisibilityManager:

@@ -1,14 +1,33 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from Enums.letters import Letter
 from PyQt6.QtCore import Qt
-
+from PyQt6.QtWidgets import QGraphicsTextItem
+from base_widgets.base_pictograph.glyphs.elemental_glyph.elemental_glyph import (
+    ElementalGlyph,
+)
+from base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
+from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
+    StartToEndPosGlyph,
+)
+from base_widgets.base_pictograph.glyphs.tka_glyph.tka_glyph import TKA_Glyph
+from base_widgets.base_pictograph.glyphs.vtg_glyph.vtg_glyph import VTG_Glyph
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from main_window.settings_manager.visibility_settings.visibility_settings import (
         VisibilitySettings,
     )
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
+Glyph = Union[
+    QGraphicsTextItem,
+    QGraphicsSvgItem,
+    BeatReversalGlyph,
+    ElementalGlyph,
+    StartToEndPosGlyph,
+    TKA_Glyph,
+    VTG_Glyph,
+]
 
 class GlyphVisibilityManager:
     def __init__(self, visibility_settings: "VisibilitySettings") -> None:
@@ -17,19 +36,21 @@ class GlyphVisibilityManager:
 
     def apply_visibility(self, glyph_type: str, pictograph: "BasePictograph"):
         visibility = self.visibility_settings.get_glyph_visibility(glyph_type)
-        if glyph_type == "VTG":
-            pictograph.vtg_glyph.setVisible(visibility)
-        elif glyph_type == "TKA":
-            pictograph.tka_glyph.setVisible(visibility)
-        elif glyph_type == "Elemental":
-            pictograph.elemental_glyph.setVisible(visibility)
-        elif glyph_type == "Positions":
-            pictograph.start_to_end_pos_glyph.setVisible(visibility)
-        elif glyph_type == "Reversals":
-            if pictograph.blue_reversal:
-                pictograph.blue_reversal_symbol.setVisible(visibility)
-            if pictograph.red_reversal:
-                pictograph.red_reversal_symbol.setVisible(visibility)
+        glyph_mapping: dict[str, list[Glyph]] = {
+            "VTG": [pictograph.vtg_glyph],
+            "TKA": [pictograph.tka_glyph],
+            "Elemental": [pictograph.elemental_glyph],
+            "Positions": [pictograph.start_to_end_pos_glyph],
+            "Reversals": [
+                pictograph.blue_reversal_symbol if pictograph.blue_reversal else None,
+                pictograph.red_reversal_symbol if pictograph.red_reversal else None,
+            ],
+        }
+
+        glyphs = glyph_mapping.get(glyph_type, [])
+        for glyph in glyphs:
+            if glyph:
+                glyph.setVisible(visibility)
 
     def apply_current_visibility_settings(self, pictograph: "BasePictograph"):
         for glyph_type in ["VTG", "TKA", "Elemental", "Positions", "Reversals"]:

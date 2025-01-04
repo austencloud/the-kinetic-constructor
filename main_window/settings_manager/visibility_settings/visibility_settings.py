@@ -1,6 +1,11 @@
 from typing import TYPE_CHECKING
-from .glyph_visibility_manager import GlyphVisibilityManager
-from .grid_visibility_manager import GridVisibilityManager
+
+from base_widgets.base_pictograph.glyphs.glyph_visibility_manager import (
+    GlyphVisibilityManager,
+)
+from base_widgets.base_pictograph.grid.grid_visibility_manager import (
+    GridVisibilityManager,
+)
 
 if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager

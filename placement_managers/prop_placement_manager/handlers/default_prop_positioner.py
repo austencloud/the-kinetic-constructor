@@ -6,7 +6,7 @@ from objects.prop.prop import Prop
 import logging
 
 if TYPE_CHECKING:
-    from objects.grid import GridPoint
+    from base_widgets.base_pictograph.grid.grid import GridPoint
     from ..prop_placement_manager import PropPlacementManager
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 

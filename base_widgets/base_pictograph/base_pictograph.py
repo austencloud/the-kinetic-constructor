@@ -17,7 +17,7 @@ from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker_pic
 )
 
 from objects.arrow.arrow import Arrow
-from objects.grid import Grid
+from base_widgets.base_pictograph.grid.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from placement_managers.arrow_placement_manager.arrow_placement_manager import (

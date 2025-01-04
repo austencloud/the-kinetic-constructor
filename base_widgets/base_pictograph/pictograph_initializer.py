@@ -8,7 +8,7 @@ from base_widgets.base_pictograph.glyphs.reversals_glyph import (
     BeatReversalGlyph,
 )
 from objects.arrow.arrow import Arrow
-from objects.grid import Grid, GridData
+from base_widgets.base_pictograph.grid.grid import Grid, GridData
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 import json
 from utilities.path_helpers import get_images_and_data_path
-from objects.grid import Grid, GridData
+from base_widgets.base_pictograph.grid.grid import Grid, GridData
 import logging
 
 logger = logging.getLogger(__name__)

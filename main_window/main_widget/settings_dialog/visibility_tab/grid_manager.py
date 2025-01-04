@@ -1,7 +1,10 @@
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from typing import TYPE_CHECKING, Union
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
-from objects.grid import NonRadialGridPoints, NonRadialPoint
+from base_widgets.base_pictograph.grid.grid import (
+    NonRadialGridPointsGroup,
+    NonRadialPoint,
+)
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -20,7 +23,7 @@ class GridManager:
         self.pictograph = pictograph
         self.non_radial_points = self._collect_non_radial_points()
 
-    def _collect_non_radial_points(self) -> NonRadialGridPoints:
+    def _collect_non_radial_points(self) -> NonRadialGridPointsGroup:
         """Retrieve the non-radial points group from the grid."""
         return self.pictograph.grid.items.get(
             f"{self.pictograph.grid.grid_mode}_nonradial"
@@ -35,13 +38,14 @@ class GridManager:
         for point in self.non_radial_points.child_points:
             print(f"Assigning events to point: {point.point_id}")
             point.setAcceptHoverEvents(True)  # Explicitly accept hover events
-            point.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)  # Accept mouse buttons
+            point.setAcceptedMouseButtons(
+                Qt.MouseButton.LeftButton
+            )  # Accept mouse buttons
             point.mousePressEvent = self._create_click_event(point)
             point.hoverEnterEvent = self._create_hover_event(point, entering=True)
             point.hoverLeaveEvent = self._create_hover_event(point, entering=False)
 
         print("Non-radial points interaction initialized.")
-
 
     def _create_hover_event(self, point: "NonRadialPoint", entering: bool):
         """Create a hover event for entering or leaving."""
