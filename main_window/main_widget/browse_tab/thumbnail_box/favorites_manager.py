@@ -7,12 +7,15 @@ from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box_nav_btns imp
 )
 
 from .word_label import WordLabel
-from .thumbnail_image_label import ThumbnailImageLabel
+from .thumbnail_image_label import ThumbnailImageWidget
 from .variation_number_label import VariationNumberLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import ThumbnailBox
+    from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import (
+        ThumbnailBox,
+    )
     from main_window.main_widget.browse_tab.browse_tab import BrowseTab
+
 
 class FavoritesManager:
     def __init__(self, thumbnail_box: "ThumbnailBox"):

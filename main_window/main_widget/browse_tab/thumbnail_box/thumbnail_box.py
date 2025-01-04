@@ -10,7 +10,7 @@ from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box_nav_btns imp
 )
 
 from .word_label import WordLabel
-from .thumbnail_image_label import ThumbnailImageLabel
+from .thumbnail_image_label import ThumbnailImageWidget
 from .variation_number_label import VariationNumberLabel
 
 if TYPE_CHECKING:
@@ -42,7 +42,7 @@ class ThumbnailBox(QWidget):
 
         # Widgets
         self.word_label = WordLabel(self)
-        self.image_label = ThumbnailImageLabel(self)
+        self.image_label = ThumbnailImageWidget(self)
         self.variation_number_label = VariationNumberLabel(self)
         self.nav_buttons_widget = ThumbnailBoxNavButtonsWidget(self)
 
@@ -74,10 +74,10 @@ class ThumbnailBox(QWidget):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
         self.image_label.thumbnails = thumbnails
-        
+
         if self == self.browse_tab.sequence_viewer.current_thumbnail_box:
             self.browse_tab.sequence_viewer.update_thumbnails(self.thumbnails)
-            
+
         if len(self.thumbnails) == 1:
             self.variation_number_label.hide()
         else:

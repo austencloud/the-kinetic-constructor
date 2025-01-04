@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_image_label import (
-        ThumbnailImageLabel,
+        ThumbnailImageWidget,
     )
     from main_window.main_widget.browse_tab.browse_tab import (
         BrowseTab,
@@ -15,18 +15,18 @@ if TYPE_CHECKING:
 class BrowseTabSelectionHandler:
     def __init__(self, dictionary_widget: "BrowseTab") -> None:
         self.browse_tab = dictionary_widget
-        self.currently_selected_thumbnail: ThumbnailImageLabel = None
+        self.currently_selected_thumbnail: ThumbnailImageWidget = None
 
-    def update_selection(self, thumbnail_image_label: "ThumbnailImageLabel") -> None:
+    def update_selection(self, thumbnail_image_label: "ThumbnailImageWidget") -> None:
         if self.currently_selected_thumbnail:
             self.currently_selected_thumbnail.set_selected(False)
-        self.currently_selected_thumbnail: ThumbnailImageLabel = thumbnail_image_label
+        self.currently_selected_thumbnail: ThumbnailImageWidget = thumbnail_image_label
         self.currently_selected_thumbnail.set_selected(True)
         self.currently_selected_thumbnail.is_selected = True
 
     def thumbnail_clicked(
         self,
-        image_label: "ThumbnailImageLabel",
+        image_label: "ThumbnailImageWidget",
         thumbnail_pixmap: "QPixmap",
         metadata,
         thumbnail_collection,

@@ -97,5 +97,6 @@ class BrowseTabFontColorUpdater(BaseFontColorUpdater):
         viewer_labels = [
             sequence_viewer.word_label,
             sequence_viewer.variation_number_label,
+            sequence_viewer.placeholder_label,
         ]
         self._apply_font_colors(viewer_labels)

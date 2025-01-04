@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QWidget, QStackedWidget
 from PyQt6.QtCore import QParallelAnimationGroup, QPropertyAnimation, QEasingCurve
 
@@ -14,7 +14,7 @@ class WidgetAndStackFader:
 
     def fade_widgets_and_stack(
         self,
-        widgets: List[QWidget],
+        widgets: list[QWidget],
         stack: QStackedWidget,
         new_index: int,
         duration: int = 300,

@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent
-from PyQt6.QtWidgets import QLabel, QApplication
+from PyQt6.QtWidgets import QLabel, QApplication, QVBoxLayout, QWidget
 from typing import TYPE_CHECKING
 
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     )
 
 
-class ThumbnailImageLabel(QLabel):
+class ThumbnailImageWidget(QWidget):
     target_width = 0
     is_selected = False
     index = None
@@ -23,9 +23,16 @@ class ThumbnailImageLabel(QLabel):
         self.thumbnails = thumbnail_box.thumbnails
         self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
 
+        self.label = QLabel(self)
+        self.label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.label)
+        layout.setContentsMargins(3, 3, 3, 3)
+        self.setLayout(layout)
+
         self.setStyleSheet("border: 3px solid black;")
-        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_thumbnail(self, index):
         if self.thumbnails and 0 <= index < len(self.thumbnails):
@@ -36,7 +43,7 @@ class ThumbnailImageLabel(QLabel):
             else:
                 self.set_pixmap_to_fit(self.pixmap)
         else:
-            self.setText("No image available")
+            self.label.setText("No image available")
 
     def set_pixmap_to_fit(self, pixmap: QPixmap):
         current_index = self.thumbnail_box.current_index
@@ -49,8 +56,9 @@ class ThumbnailImageLabel(QLabel):
         scaled_pixmap = pixmap.scaledToWidth(
             target_width, Qt.TransformationMode.SmoothTransformation
         )
-        
-        self.setPixmap(scaled_pixmap)
+
+        self.label.setPixmap(scaled_pixmap)
+        QApplication.processEvents()
 
     def _get_target_width(self, sequence_length):
         if sequence_length == 1:
@@ -61,7 +69,7 @@ class ThumbnailImageLabel(QLabel):
             target_width = self.thumbnail_box.width() - int(
                 self.thumbnail_box.margin * 2
             )
-            
+
         return target_width
 
     def mousePressEvent(self, event: "QMouseEvent"):

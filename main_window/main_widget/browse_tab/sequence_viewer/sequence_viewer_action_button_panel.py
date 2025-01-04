@@ -112,7 +112,9 @@ class SequenceViewerActionButtonPanel(QWidget):
 
     def save_image(self):
         sequence_json = self.sequence_viewer.sequence_json
-        current_thumbnail = self.sequence_viewer.get_thumbnail_at_current_index()
+        current_thumbnail = self.sequence_viewer.thumbnails[
+            self.sequence_viewer.current_index
+        ]
         if not current_thumbnail:
             QMessageBox.warning(
                 self, "No Selection", "Please select a thumbnail first."
