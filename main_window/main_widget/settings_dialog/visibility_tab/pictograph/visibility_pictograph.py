@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, Union
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
-    from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab_pictograph_view import (
-        VisibilityTabPictographView,
+    from main_window.main_widget.settings_dialog.visibility_tab.pictograph.visibility_pictograph_view import (
+        VisibilityPictographView,
     )
     from PyQt6.QtSvgWidgets import QGraphicsSvgItem
     from PyQt6.QtWidgets import QGraphicsItemGroup
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem"]
 
 
-class VisibilityTabPictograph(BasePictograph):
+class VisibilityPictograph(BasePictograph):
     """Special class for the visibility tab pictograph."""
 
     example_data = {
@@ -23,7 +23,7 @@ class VisibilityTabPictograph(BasePictograph):
         "blue_motion_type": "pro",
         "red_motion_type": "pro",
     }
-    view: "VisibilityTabPictographView" = None
+    view: "VisibilityPictographView" = None
     red_reversal = True
     blue_reversal = True
 
@@ -31,4 +31,3 @@ class VisibilityTabPictograph(BasePictograph):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.dict_loader = self.main_widget.pictograph_dict_loader
-

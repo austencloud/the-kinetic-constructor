@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
-from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab_pictograph import (
-    VisibilityTabPictograph,
+from main_window.main_widget.settings_dialog.visibility_tab.pictograph.visibility_pictograph import (
+    VisibilityPictograph,
 )
 
 from .visibility_checkbox_widget import VisibilityCheckboxWidget
-from .visibility_tab_pictograph_view import VisibilityTabPictographView
+from .pictograph.visibility_pictograph_view import VisibilityPictographView
 
 if TYPE_CHECKING:
     from ..settings_dialog import SettingsDialog
@@ -19,8 +19,8 @@ class VisibilityTab(QWidget):
         self.settings = self.main_widget.settings_manager.visibility
         self.dialog = settings_dialog
         self.checkbox_widget = VisibilityCheckboxWidget(self)
-        self.pictograph = VisibilityTabPictograph(self.main_widget)
-        self.pictograph_view = VisibilityTabPictographView(self, self.pictograph)
+        self.pictograph = VisibilityPictograph(self.main_widget)
+        self.pictograph_view = VisibilityPictographView(self, self.pictograph)
 
         layout: QHBoxLayout = QHBoxLayout(self)
         layout.addWidget(self.checkbox_widget)
