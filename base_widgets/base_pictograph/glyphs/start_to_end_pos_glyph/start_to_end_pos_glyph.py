@@ -19,7 +19,7 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
         super().__init__()
         self.pictograph = pictograph
         self.glyph_visibility_manager = (
-            self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
+            self.pictograph.main_widget.main_window.settings_manager.visibility.glyph
         )
         self.start_glyph = QGraphicsSvgItem(self)
         self.arrow_glyph = QGraphicsSvgItem(self)

@@ -14,12 +14,8 @@ class VisibilitySelector(ButtonSelector):
     def __init__(self, menu_bar: "MenuBarWidget"):
         super().__init__(menu_bar, "Visibility")
         self.settings_manager = self.main_widget.settings_manager
-        self.glyph_visibility_manager = (
-            self.settings_manager.visibility.glyph_visibility_manager
-        )
-        self.grid_visibility_manager = (
-            self.settings_manager.visibility.grid_visibility_manager
-        )
+        self.glyph_visibility_manager = self.settings_manager.visibility.glyph
+        self.grid_visibility_manager = self.settings_manager.visibility.grid
 
     def on_button_clicked(self):
         self.show_visibility_dialog()

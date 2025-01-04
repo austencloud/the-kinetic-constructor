@@ -150,20 +150,3 @@ class PropMouseEventHandler:
             self.p.motion.start_loc = new_arrow_location
             self.p.motion.end_loc = new_arrow_location
             self.p.motion.arrow.updater.update_arrow()
-
-    def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
-        (
-            closest_hand_point,
-            closest_hand_point_coord,
-        ) = self.p.pictograph.grid.get_closest_hand_point(event.scenePos())
-
-        self.loc = closest_hand_point
-        self.axis = self.p.attr_manager.get_axis_from_ori()
-        self.p.updater.update_prop()
-        self.p.setPos(closest_hand_point_coord)
-
-        if self.p.motion.arrow:
-            self.p.motion.arrow.updater.update_arrow()
-        self.p.previous_location = closest_hand_point
-        self.p.scene.updater.update_pictograph()
-

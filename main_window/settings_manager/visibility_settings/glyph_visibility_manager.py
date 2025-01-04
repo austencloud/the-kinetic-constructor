@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -62,3 +63,7 @@ class GlyphVisibilityManager:
     def should_glyph_be_visible(self, glyph_type: str) -> bool:
         """Check if a glyph type should be visible based on current settings."""
         return self.visibility_settings.get_glyph_visibility(glyph_type)
+
+    def toggle_glyph_visibility(self, name: str, state: int):
+        is_checked = state == Qt.CheckState.Checked.value
+        self.visibility_settings.set_glyph_visibility(name, is_checked)

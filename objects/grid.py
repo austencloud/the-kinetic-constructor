@@ -5,9 +5,13 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from PyQt6.QtWidgets import QApplication
 
+
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
+    from main_window.settings_manager.visibility_settings.grid_visibility_manager import (
+        GridVisibilityManager,
+    )
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 GRID_DIR = "images/grid/"
@@ -15,6 +19,74 @@ GRID_DIR = "images/grid/"
 
 from typing import Optional
 from PyQt6.QtCore import QPointF
+
+from PyQt6.QtWidgets import QGraphicsEllipseItem
+from PyQt6.QtGui import QBrush, QPen, QColor
+from PyQt6.QtCore import QPointF, Qt
+
+
+import xml.etree.ElementTree as ET
+from PyQt6.QtWidgets import QGraphicsItemGroup
+
+
+class NonRadialGridPoints(QGraphicsItemGroup):
+    def __init__(self, path, visibility_manager):
+        super().__init__()
+        self.visibility_manager = visibility_manager
+        self.child_points = []
+        self._parse_svg(path)
+
+    def _parse_svg(self, path):
+        tree = ET.parse(path)
+        root = tree.getroot()
+        namespace = {"": "http://www.w3.org/2000/svg"}
+
+        non_radial_group = root.find(".//*[@id='non_radial_points']", namespace)
+        if not non_radial_group:
+            print(f"Group 'non_radial_points' not found in {path}")
+            return
+
+        for circle in non_radial_group.findall("circle", namespace):
+            cx = float(circle.attrib.get("cx", 0))
+            cy = float(circle.attrib.get("cy", 0))
+            r = float(circle.attrib.get("r", 0))
+            point_id = circle.attrib.get("id", "unknown_point")
+            point = NonRadialPoint(cx, cy, r, point_id, self.visibility_manager)
+            point.setParentItem(self)
+            self.child_points.append(point)
+
+
+class NonRadialPoint(QGraphicsEllipseItem):
+    def __init__(self, x, y, r, point_id, visibility_manager: "GridVisibilityManager"):
+        super().__init__(-r, -r, 2 * r, 2 * r)
+        self.setBrush(QBrush(QColor("black")))
+        self.setPen(QPen(Qt.PenStyle.NoPen))
+        self.setPos(QPointF(x, y))
+        self.setAcceptHoverEvents(True)
+        self.setToolTip(point_id)
+        self.point_id = point_id
+        self.visibility_manager = visibility_manager
+        self.setZValue(101)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    def hoverEnterEvent(self, event):
+        if self._is_near(event.pos()):
+            self.setBrush(QBrush(QColor("yellow")))
+
+    def hoverLeaveEvent(self, event):
+        visible = self.visibility_manager.non_radial_visible
+        self.setBrush(QBrush(QColor("black" if visible else "gray")))
+
+    def mousePressEvent(self, event):
+        if self._is_near(event.pos()):
+            self.visibility_manager.toggle_non_radial_points_visibility()
+            visible = self.visibility_manager.non_radial_visible
+            self.setBrush(QBrush(QColor("black" if visible else "gray")))
+
+    def _is_near(self, pos):
+        """Check if the cursor is close enough to the center."""
+        distance = (pos - self.boundingRect().center()).manhattanLength()
+        return distance <= self.boundingRect().width() / 2
 
 
 class GridPoint:
@@ -164,11 +236,9 @@ class Grid:
     ):
         self.pictograph = pictograph
         self.grid_data = grid_data
-        self.grid_mode = grid_mode  # Store the current grid mode
+        self.grid_mode = grid_mode
         self.items: dict[str, GridItem] = {}
-        self.center = self.grid_data.center_points.get(
-            grid_mode, QPointF(0, 0)
-        )  # Retrieve the center point
+        self.center = self.grid_data.center_points.get(grid_mode, QPointF(0, 0))
 
         if self.center == QPointF(0, 0):
             logger.warning(
@@ -178,90 +248,31 @@ class Grid:
         self._create_grid_items()
 
     def _create_grid_items(self):
-        """
-        Create grid items for all grid modes.
-        """
         paths = {
             "diamond": f"{GRID_DIR}diamond_grid.svg",
             "box": f"{GRID_DIR}box_grid.svg",
-            # Add more grid modes and their paths as needed
         }
 
         for mode, path in paths.items():
             grid_item = GridItem(path)
             self.pictograph.addItem(grid_item)
-            grid_item.setVisible(
-                mode == self.grid_mode
-            )
+            grid_item.setVisible(mode == self.grid_mode)
             self.items[mode] = grid_item
 
-        # Load non-radial points specific to the grid mode
         non_radial_paths = {
             "diamond": f"{GRID_DIR}diamond_nonradial_points.svg",
             "box": f"{GRID_DIR}box_nonradial_points.svg",
-            # Add more grid modes and their non-radial paths as needed
         }
+
         non_radial_path = non_radial_paths.get(self.grid_mode)
         if non_radial_path:
-            non_radial_item = QGraphicsSvgItem(non_radial_path)
-            # can we set a non_radial_item.name attribute here?
-
-            is_visible = (
-                self.pictograph.main_widget.settings_manager.visibility.grid_visibility_manager.non_radial_visible
+            non_radial_points = NonRadialGridPoints(
+                non_radial_path, self.pictograph.main_widget.settings_manager.visibility
             )
-            # non_radial_item.setVisible(is_visible)
-            self.pictograph.addItem(non_radial_item)
-            self.items[f"{self.grid_mode}_nonradial"] = non_radial_item
-
-    def set_layer_visibility(self, layer_id: str, visibility: bool):
-        """
-        Sets visibility for a specific layer.
-        """
-        if layer_id in self.items:
-            self.items[layer_id].setVisible(visibility)
-        else:
-            logger.warning(f"Layer '{layer_id}' not found.")
-
-    def toggle_layer_visibility(self, layer_id: str):
-        """
-        Toggles visibility for a specific layer.
-        """
-        if layer_id in self.items:
-            current_visibility = self.items[layer_id].isVisible()
-            self.items[layer_id].setVisible(not current_visibility)
-        else:
-            logger.warning(f"Layer '{layer_id}' not found.")
-
-    def setPos(self, position: QPointF) -> None:
-        """
-        Sets the position for all grid items.
-        """
-        for item in self.items.values():
-            item.setPos(position)
-
-    def get_closest_hand_point(self, pos: QPointF, strict: bool) -> Optional[GridPoint]:
-        """
-        Retrieves the closest hand point to the given position.
-        """
-        layer = (
-            self.grid_data.all_hand_points_strict
-            if strict
-            else self.grid_data.all_hand_points_normal
-        )
-        closest_point = self.grid_data.get_point(layer, pos)
-        return closest_point
-
-    def get_closest_layer2_point(self, pos: QPointF) -> Optional[GridPoint]:
-        """
-        Retrieves the closest layer2 point to the given position.
-        """
-        closest_point = self.grid_data.get_point(self.grid_data.all_layer2_points, pos)
-        return closest_point
+            self.pictograph.addItem(non_radial_points)
+            self.items[f"{self.grid_mode}_nonradial"] = non_radial_points
 
     def toggle_non_radial_points_visibility(self, visible: bool):
-        """
-        Toggles visibility for non-radial points.
-        """
         non_radial_key = f"{self.grid_mode}_nonradial"
         if non_radial_key in self.items:
             self.items[non_radial_key].setVisible(visible)
@@ -269,9 +280,6 @@ class Grid:
             logger.warning(f"Non-radial layer '{non_radial_key}' not found.")
 
     def hide(self):
-        """
-        Hides all grid items.
-        """
         for item in self.items.values():
             item.setVisible(False)
 

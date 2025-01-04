@@ -19,24 +19,23 @@ class VisibilityTabPictographView(PictographView):
         self.visibility_tab = visibility_tab
         self.main_widget = visibility_tab.main_widget
         self.settings = self.main_widget.settings_manager.visibility
-
         self.pictograph = self._initialize_example_pictograph()
         super().__init__(self.pictograph)
-        for glyph in self._get_all_items():
+        self._collect_all_items()
+        for glyph in self.glyphs:
             glyph.setOpacity(
-                1
-                if self.settings.glyph_visibility_manager.should_glyph_be_visible(
-                    glyph.name
-                )
-                else 0.1
+                1 if self.settings.glyph.should_glyph_be_visible(glyph.name) else 0.1
             )
+        self.non_radial_item.setOpacity(
+            1 if self.settings.grid.non_radial_visible else 0.1
+        )
         self.set_clickable_items()
         self.setMouseTracking(True)
         self.add_hover_effect()
+        self.setStyleSheet("border: 2px solid black;")
 
     def add_hover_effect(self):
-        def apply_hover_effects(item: "Glyph"):
-            print(f"Applying hover effects to {item.name}")
+        def apply_glyph_hover_effects(item: "Glyph"):
             item.setCursor(Qt.CursorShape.PointingHandCursor)
             item.hoverEnterEvent = self._create_hover_enter_event(item)
             item.hoverLeaveEvent = self._create_hover_leave_event(item)
@@ -48,8 +47,15 @@ class VisibilityTabPictographView(PictographView):
                 child.hoverEnterEvent = self._create_hover_enter_event(item)
                 child.hoverLeaveEvent = self._create_hover_leave_event(item)
 
-        for glyph in self._get_all_items():
-            apply_hover_effects(glyph)
+        def apply_grid_hover_effects(item: "QGraphicsSvgItem"):
+            item.setCursor(Qt.CursorShape.PointingHandCursor)
+            item.hoverEnterEvent = self._create_nonradial_hover_enter_event(item)
+            item.hoverLeaveEvent = self._create_nonradial_hover_leave_event(item)
+            item.setAcceptHoverEvents(True)
+
+        for glyph in self.glyphs:
+            apply_glyph_hover_effects(glyph)
+        apply_grid_hover_effects(self.non_radial_item)
 
     def _create_hover_enter_event(self, glyph: "Glyph"):
         def hoverEnterEvent(event):
@@ -57,11 +63,25 @@ class VisibilityTabPictographView(PictographView):
 
         return hoverEnterEvent
 
+    def _create_nonradial_hover_enter_event(self, grid_item: "QGraphicsItemGroup"):
+        def hoverEnterEvent(event):
+            grid_item.setOpacity(0.5)
+
+        return hoverEnterEvent
+
+    def _create_nonradial_hover_leave_event(self, grid_item: "QGraphicsItemGroup"):
+        def hoverLeaveEvent(event):
+            visible = self.settings.get_grid_visibility("non_radial_points")
+            if visible:
+                grid_item.setOpacity(1)
+            else:
+                grid_item.setOpacity(0.1)
+
+        return hoverLeaveEvent
+
     def _create_hover_leave_event(self, glyph: "Glyph"):
         def hoverLeaveEvent(event):
-            visible = self.settings.glyph_visibility_manager.should_glyph_be_visible(
-                glyph.name
-            )
+            visible = self.settings.glyph.should_glyph_be_visible(glyph.name)
             if visible:
                 glyph.setOpacity(1)
             else:
@@ -86,18 +106,22 @@ class VisibilityTabPictographView(PictographView):
         pictograph.blue_reversal = True
         pictograph.updater.update_pictograph(pictograph_dict)
 
-        pictograph.tka_glyph.setVisible(True)
-        pictograph.vtg_glyph.setVisible(True)
-        pictograph.elemental_glyph.setVisible(True)
-        pictograph.start_to_end_pos_glyph.setVisible(True)
-        pictograph.reversal_glyph.setVisible(True)
+        glyphs: list[Glyph] = [
+            pictograph.tka_glyph,
+            pictograph.vtg_glyph,
+            pictograph.elemental_glyph,
+            pictograph.start_to_end_pos_glyph,
+            pictograph.reversal_glyph,
+        ]
+        for glyph in glyphs:
+            glyph.setVisible(True)
         pictograph.grid.toggle_non_radial_points_visibility(True)
 
         return pictograph
 
-    def _get_all_items(self) -> list[Glyph]:
+    def _collect_all_items(self):
         """Return a list of all clickable items in the pictograph."""
-        all_glyphs = [
+        self.glyphs: list[Glyph] = [
             self.pictograph.tka_glyph,
             self.pictograph.vtg_glyph,
             self.pictograph.elemental_glyph,
@@ -105,63 +129,56 @@ class VisibilityTabPictographView(PictographView):
             self.pictograph.reversal_glyph,
         ]
 
-        # Extend with non-radial grid points
-        non_radial_items = self.pictograph.grid.items.get(
+        self.non_radial_item: QGraphicsSvgItem = self.pictograph.grid.items.get(
             f"{self.pictograph.grid.grid_mode}_nonradial", []
         )
-        # if isinstance(non_radial_items, list):
-        #     all_glyphs.extend(non_radial_items)
-        # else:
-        #     all_glyphs.append(non_radial_items)
-
-        return all_glyphs
 
     def set_clickable_items(self):
         """Enable glyphs to be clickable and toggle visibility."""
-        for glyph in self._get_all_items():
-            glyph.mousePressEvent = self._create_mouse_press_event(glyph)
+        for glyph in self.glyphs:
+            glyph.mousePressEvent = self._create_glyph_mouse_press_event(glyph)
+        self.non_radial_item.mousePressEvent = self.create_nonradial_mouse_press_event()
 
-    def _create_mouse_press_event(self, glyph: "Glyph"):
+    def _create_glyph_mouse_press_event(self, glyph: "Glyph"):
         for child in glyph.childItems():
             child.setAcceptHoverEvents(True)
-        if glyph.name == "non_radial_points":
-
-            def mousePressEvent(event):
-                self.settings.set_grid_visibility(
-                    "non_radial_points",
-                    not self.settings.grid_visibility_manager.non_radial_visible,
-                )
-                glyph.setOpacity(
-                    1
-                    if self.settings.grid_visibility_manager.non_radial_visible
-                    else 0.1
-                )
-
-            return mousePressEvent
 
         def mousePressEvent(event):
             self._toggle_glyph_visibility(glyph)
-            if self.settings.glyph_visibility_manager.should_glyph_be_visible(
-                glyph.name
-            ):
+            if self.settings.glyph.should_glyph_be_visible(glyph.name):
                 glyph.setOpacity(1)
             else:
                 glyph.setOpacity(0.15)
 
         return mousePressEvent
 
+    def create_nonradial_mouse_press_event(self):
+        def mousePressEvent(event):
+            self._toggle_grid_visibility()
+
+            self.settings.set_grid_visibility(
+                "non_radial_points",
+                not self.settings.grid.non_radial_visible,
+            )
+            self.non_radial_item.setOpacity(
+                1 if self.settings.grid.non_radial_visible else 0.1
+            )
+
+        return mousePressEvent
+
     def _toggle_glyph_visibility(self, glyph: BaseGlyph):
         """Toggle glyph visibility and synchronize with checkboxes."""
-        manager = self.settings.glyph_visibility_manager
+        manager = self.settings.glyph
         current_visibility = manager.should_glyph_be_visible(glyph.name)
-        if glyph.name == "non_radial_points":
-            self.settings.set_grid_visibility(
-                "non_radial_points", not current_visibility
-            )
-        else:
-            self.settings.set_glyph_visibility(glyph.name, not current_visibility)
-            
-        # self.visibility_tab.checkbox_widget.update_checkboxes()
+        self.settings.set_glyph_visibility(glyph.name, not current_visibility)
+
+        self.visibility_tab.checkbox_widget.update_checkboxes()
+
+    def _toggle_grid_visibility(self):
+        """Toggle grid visibility and synchronize with checkboxes."""
+        current_visibility = self.settings.get_grid_visibility("non_radial_points")
+        self.settings.grid.save_non_radial_visibility(not current_visibility)
+        self.visibility_tab.checkbox_widget.update_checkboxes()
 
     def resizeEvent(self, event: QEvent):
         tab_width = (
