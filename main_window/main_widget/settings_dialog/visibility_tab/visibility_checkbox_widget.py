@@ -1,19 +1,11 @@
 from functools import partial
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 from PyQt6.QtGui import QFont
-from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtCore import QEvent
 from typing import TYPE_CHECKING
-from Enums.Enums import Glyph
-from Enums.letters import Letter
-from main_window.main_widget.settings_dialog.visibility_tab.pictograph.visibility_pictograph_view import (
-    VisibilityPictographView,
-)
-
 
 if TYPE_CHECKING:
-    from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
-        VisibilityTab,
-    )
+    from .visibility_tab import VisibilityTab
 
 
 class VisibilityCheckboxWidget(QWidget):

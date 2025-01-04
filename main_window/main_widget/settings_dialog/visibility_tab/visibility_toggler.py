@@ -7,9 +7,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
         VisibilityTab,
     )
-    from main_window.main_widget.settings_dialog.visibility_tab.pictograph.visibility_pictograph_view import (
-        VisibilityPictographView,
-    )
 
 
 class VisibilityToggler:

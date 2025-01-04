@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import QGraphicsItemGroup
 from PyQt6.QtCore import QEvent
 from typing import TYPE_CHECKING
 from base_widgets.base_pictograph.pictograph_view import PictographView
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from Enums.Enums import Glyph
 from .visibility_pictograph_interaction_manager import (
     VisibilityPictographInteractionManager,
@@ -27,7 +26,8 @@ class VisibilityPictographView(PictographView):
         self._update_opacity()
 
         self.interaction_manager = VisibilityPictographInteractionManager(self)
-
+        self.setStyleSheet("border: 2px solid black;")
+        
     def _initialize_data(self) -> "VisibilityPictograph":
         example_data = {
             "letter": "A",
