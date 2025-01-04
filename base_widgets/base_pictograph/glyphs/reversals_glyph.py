@@ -1,4 +1,3 @@
-from os import name
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsTextItem, QGraphicsItemGroup
 from PyQt6.QtGui import QFont, QColor
@@ -18,29 +17,23 @@ class BeatReversalGlyph(QGraphicsItemGroup, BaseGlyph):
         self.create_reversal_symbols()
 
     def create_reversal_symbols(self):
-        # Create reversal symbols for both hands
         red_R = self._create_reversal_text_item(HEX_RED)
         blue_R = self._create_reversal_text_item(HEX_BLUE)
 
-        # Add items to the group
         self.addToGroup(red_R)
         self.addToGroup(blue_R)
 
-        # Add the group to the pictograph
         self.pictograph.addItem(self)
 
         self.pictograph.blue_reversal_symbol = blue_R
         self.pictograph.red_reversal_symbol = red_R
 
-        # Store references to the reversal items
         self.reversal_items[RED] = red_R
         self.reversal_items[BLUE] = blue_R
 
-        # Initially hide the reversal symbols
         self.setVisible(False)
 
     def update_reversal_symbols(self):
-        # Update the visibility of the reversal symbols based on the pictograph's reversal flags
         blue_visible = self.pictograph.blue_reversal
         red_visible = self.pictograph.red_reversal
 
@@ -50,7 +43,6 @@ class BeatReversalGlyph(QGraphicsItemGroup, BaseGlyph):
         center_y = self.pictograph.height() / 2
 
         if blue_visible and red_visible:
-            # Both symbols are visible, position them stacked
             red_R = self.reversal_items[RED]
             blue_R = self.reversal_items[BLUE]
             total_height = (
@@ -61,22 +53,17 @@ class BeatReversalGlyph(QGraphicsItemGroup, BaseGlyph):
             red_R.setPos(0, red_R_y)
             blue_R.setPos(0, blue_R_y)
         elif blue_visible:
-            # Only blue symbol is visible, center it vertically
             blue_R = self.reversal_items[BLUE]
             blue_R_y = -blue_R.boundingRect().height() / 2
             blue_R.setPos(0, blue_R_y)
         elif red_visible:
-            # Only red symbol is visible, center it vertically
             red_R = self.reversal_items[RED]
             red_R_y = -red_R.boundingRect().height() / 2
             red_R.setPos(0, red_R_y)
-        # else: both are not visible, do nothing
 
-        # Update the visibility of the group
         self.setVisible(blue_visible or red_visible)
 
-        # Position the group
-        x_position = 40  # Adjust as needed
+        x_position = 40
         self.setPos(x_position, center_y)
 
         self.pictograph.update()

@@ -1,6 +1,9 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Union
 from Enums.Enums import LetterType, Letter
+from PyQt6.QtWidgets import QGraphicsItemGroup
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
+from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from base_widgets.base_pictograph.lead_state_determiner import (
     LeadStateDeterminer,
 )
@@ -11,6 +14,8 @@ from Enums.MotionAttributes import Location, MotionType
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
+
+Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem"]
 
 
 class PictographGetter:
@@ -119,3 +124,12 @@ class PictographGetter:
                 "end_ori": self.red_motion.end_ori,
             },
         }
+
+    def glyphs(self) -> list[Glyph]:
+        return [
+            self.pictograph.tka_glyph,
+            self.pictograph.vtg_glyph,
+            self.pictograph.elemental_glyph,
+            self.pictograph.start_to_end_pos_glyph,
+            self.pictograph.reversal_glyph,
+        ]

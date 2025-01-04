@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 from PyQt6.QtGui import QFont
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import QEvent
 from typing import TYPE_CHECKING
 
 
