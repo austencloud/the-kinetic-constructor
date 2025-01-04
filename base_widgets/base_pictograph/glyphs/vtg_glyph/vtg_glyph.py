@@ -77,16 +77,18 @@ class VTG_Glyph(QGraphicsSvgItem, BaseGlyph):
 
         self.pictograph.vtg_mode = self.determine_vtg_mode()
         svg_path = SVG_PATHS.get(self.pictograph.vtg_mode, "")
-        self.renderer = QSvgRenderer(svg_path)
+        self.renderer: QSvgRenderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
             if not self.scene():
                 self.pictograph.addItem(self)
             self.position_vtg_glyph()
-            visibility_manager = (
-                self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
+
+            self.setVisible(
+                self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility(
+                    "VTG"
+                )
             )
-            self.setVisible(visibility_manager.visibility_settings.get_glyph_visibility("VTG"))
 
     def determine_vtg_mode(self) -> Literal["SS", "SO", "TS", "TO", "QS", "QO"]:
         letter_str = self.pictograph.letter.value

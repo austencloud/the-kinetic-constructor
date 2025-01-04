@@ -79,7 +79,7 @@ class PropTypeChanger:
 
         # Collect the graph editor's pictograph
         graph_editor_pictograph = (
-            main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+            main_widget.sequence_widget.graph_editor.pictograph_container.GE_view.pictograph
         )
         if graph_editor_pictograph.red_arrow.loc:
             pictographs.add(graph_editor_pictograph)

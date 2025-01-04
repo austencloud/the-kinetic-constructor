@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import QEvent, Qt
 from typing import TYPE_CHECKING
+from Enums.Enums import Glyph
+from Enums.letters import Letter
 
 
 if TYPE_CHECKING:
@@ -45,13 +47,11 @@ class VisibilityCheckboxWidget(QWidget):
         self.layout.addStretch(2)
 
     def _create_checkboxes(self):
-        glyph_toggler = self.visibility_tab.settings.glyph_visibility_manager
-
         for name in self.glyph_names:
             checkbox = QCheckBox(name)
             self.glyph_checkboxes[name] = checkbox
             checkbox.stateChanged.connect(
-                lambda state, g=checkbox.text(): glyph_toggler.toggle_glyph_visibility(
+                lambda state, g=checkbox.text(): self.toggle_all_glyphs_of_type(
                     g, state
                 )
             )
@@ -65,12 +65,46 @@ class VisibilityCheckboxWidget(QWidget):
                 )
             )
 
+    def toggle_all_glyphs_of_type(self, name: str, state: int):
+        is_checked = state == Qt.CheckState.Checked.value
+        self.settings.set_glyph_visibility(name, is_checked)
+        pictographs = (
+            self.main_widget.pictograph_collector.collect_all_pictographs()
+        )
+        for pictograph in pictographs:
+            for glyph_type in ["VTG", "TKA", "Elemental", "Positions", "Reversals"]:
+                visibility = self.settings.get_glyph_visibility(glyph_type)
+                glyph_mapping: dict[str, list[Glyph]] = {
+                    "VTG": [pictograph.vtg_glyph],
+                    "TKA": [pictograph.tka_glyph],
+                    "Elemental": [pictograph.elemental_glyph],
+                    "Positions": [pictograph.start_to_end_pos_glyph],
+                    "Reversals": [
+                        (
+                            pictograph.blue_reversal_symbol
+                            if pictograph.blue_reversal
+                            else None
+                        ),
+                        (
+                            pictograph.red_reversal_symbol
+                            if pictograph.red_reversal
+                            else None
+                        ),
+                    ],
+                }
+
+                glyphs = glyph_mapping.get(glyph_type, [])
+                for glyph in glyphs:
+                    if glyph:
+                        glyph.setVisible(visibility)
+
+            if pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:
+                pictograph.start_to_end_pos_glyph.setVisible(False)
+
     def toggle_all_non_radial_points(self, state: int):
         is_checked = state == Qt.CheckState.Checked.value
         self.settings.set_non_radial_visibility(is_checked)
-        self.non_radial_visible = self.settings.get_non_radial_visibility(
-            
-        )
+        self.non_radial_visible = self.settings.get_non_radial_visibility()
 
         pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
         for pictograph in pictographs:
@@ -78,13 +112,13 @@ class VisibilityCheckboxWidget(QWidget):
 
     def update_checkboxes(self):
         """Synchronize checkboxes with the current visibility settings."""
-        visibility_settings = (
+        settings = (
             self.visibility_tab.main_widget.settings_manager.visibility
         )
         for name, checkbox in self.glyph_checkboxes.items():
-            checkbox.setChecked(visibility_settings.get_glyph_visibility(name))
+            checkbox.setChecked(settings.get_glyph_visibility(name))
         self.grid_checkboxes["Non-radial points"].setChecked(
-            visibility_settings.get_non_radial_visibility()
+            settings.get_non_radial_visibility()
         )
 
     def resizeEvent(self, event: QEvent):

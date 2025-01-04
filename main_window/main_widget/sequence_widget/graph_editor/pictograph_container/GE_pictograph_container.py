@@ -19,16 +19,16 @@ class GraphEditorPictographContainer(QWidget):
         self.setup_pictograph()
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.GE_pictograph_view)
+        self.layout.addWidget(self.GE_view)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
     def setup_pictograph(self):
         self.GE_pictograph = GE_Pictograph(self)
-        self.GE_pictograph_view = GE_PictographView(self, self.GE_pictograph)
+        self.GE_view = GE_PictographView(self, self.GE_pictograph)
 
     def update_GE_pictograph(self, reference_beat: "Beat") -> None:
-        view = self.GE_pictograph_view
+        view = self.GE_view
 
         if reference_beat.view.is_start_pos:
             view.is_start_pos = True
@@ -44,7 +44,7 @@ class GraphEditorPictographContainer(QWidget):
         else:
             view.pictograph.start_text_item.add_start_text()
         view.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
-        
+
     def resizeEvent(self, event):
         size = self.graph_editor.height()
         self.setFixedWidth(size)

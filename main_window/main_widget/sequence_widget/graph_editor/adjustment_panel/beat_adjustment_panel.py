@@ -67,7 +67,7 @@ class BeatAdjustmentPanel(QFrame):
 
     def update_adjustment_panel(self) -> None:
         """Update the panel view based on the current pictograph state."""
-        view = self.graph_editor.pictograph_container.GE_pictograph_view
+        view = self.graph_editor.pictograph_container.GE_view
         is_blank = view.get_current_pictograph().is_blank
         self._set_current_stack_widgets(
             ORI_WIDGET_INDEX if is_blank or view.is_start_pos else TURNS_WIDGET_INDEX

@@ -45,9 +45,9 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         self.dash_handler.update_dash()
 
         self.turns_column.update_turns_column(top_turn, bottom_turn)
-        visibility_manager = (
-            self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
-        )
+
         self.setVisible(
-            visibility_manager.visibility_settings.get_glyph_visibility("TKA") if visibility else False
+            self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility("TKA")
+            if visibility
+            else False
         )

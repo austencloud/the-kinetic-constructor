@@ -18,9 +18,7 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
         BaseGlyph.__init__(self, "Positions")
         super().__init__()
         self.pictograph = pictograph
-        self.glyph_visibility_manager = (
-            self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
-        )
+
         self.start_glyph = QGraphicsSvgItem(self)
         self.arrow_glyph = QGraphicsSvgItem(self)
         self.end_glyph = QGraphicsSvgItem(self)
@@ -62,7 +60,7 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
 
             # Adjust visibility based on settings
             visible = (
-                self.glyph_visibility_manager.visibility_settings.get_glyph_visibility(
+                self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility(
                     "Positions"
                 )
             )

@@ -28,7 +28,7 @@ class WidgetCollector:
 
     def _get_GE_pictograph_items(self):
         GE_pictograph = (
-            self.deleter.beat_frame.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+            self.deleter.beat_frame.sequence_widget.graph_editor.pictograph_container.GE_view.pictograph
         )
 
         items = []

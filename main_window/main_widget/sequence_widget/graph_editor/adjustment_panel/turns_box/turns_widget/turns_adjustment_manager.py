@@ -28,7 +28,7 @@ class TurnsAdjustmentManager(QObject):
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        GE_view = self.graph_editor.pictograph_container.GE_pictograph_view
+        GE_view = self.graph_editor.pictograph_container.GE_view
         self.GE_pictograph = GE_view.pictograph
         self.reference_beat = GE_view.reference_beat
 
@@ -92,7 +92,7 @@ class TurnsAdjustmentManager(QObject):
         """Repaint the pictograph and GE pictograph views to reflect the change."""
         self.reference_beat.view.repaint()
         GE_pictograph = (
-            self.turns_widget.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+            self.turns_widget.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_view.get_current_pictograph()
         )
         GE_pictograph.view.repaint()
         # GE_pictograph.updater.update_pictograph()
@@ -100,7 +100,7 @@ class TurnsAdjustmentManager(QObject):
 
     def direct_set_turns(self, new_turns: Turns) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        GE_view = self.graph_editor.pictograph_container.GE_pictograph_view
+        GE_view = self.graph_editor.pictograph_container.GE_view
         self.GE_pictograph = GE_view.pictograph
         self.reference_beat = GE_view.reference_beat
         self._update_motion_properties(new_turns)

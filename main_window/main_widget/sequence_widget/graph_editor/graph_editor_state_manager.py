@@ -36,5 +36,5 @@ class GraphEditorStateManager:
         )
 
     def reset_graph_editor(self) -> None:
-        self.graph_editor.pictograph_container.GE_pictograph_view.set_to_blank_grid()
+        self.graph_editor.pictograph_container.GE_view.set_to_blank_grid()
         self.graph_editor.adjustment_panel.update_adjustment_panel()

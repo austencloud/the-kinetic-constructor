@@ -64,7 +64,7 @@ class PropRotDirButtonManager:
         )
         both_beats: list[Beat] = [
             selected_beat.beat,
-            self.graph_editor.pictograph_container.GE_pictograph_view.pictograph,
+            self.graph_editor.pictograph_container.GE_view.pictograph,
         ]
 
         for pictograph in both_beats:

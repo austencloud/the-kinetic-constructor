@@ -46,6 +46,10 @@ class Grid:
                 non_radial_path, self.pictograph.main_widget.settings_manager.visibility
             )
             self.pictograph.addItem(non_radial_points)
+            is_visible = (
+                self.pictograph.main_widget.settings_manager.visibility.get_non_radial_visibility()
+            )
+            non_radial_points.setVisible(is_visible)
             self.items[f"{self.grid_mode}_nonradial"] = non_radial_points
 
     def toggle_non_radial_points(self, visible: bool):

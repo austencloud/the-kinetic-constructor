@@ -54,11 +54,9 @@ class ElementalGlyph(QGraphicsSvgItem, BaseGlyph):
             if not self.scene():
                 self.pictograph.addItem(self)
             self.position_elemental_glyph()
-            visibility_manager = (
-                self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
-            )
+
             self.setVisible(
-                visibility_manager.visibility_settings.get_glyph_visibility("Elemental")
+                self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility("Elemental")
             )
 
     def position_elemental_glyph(self) -> None:
@@ -80,9 +78,7 @@ class ElementalGlyph(QGraphicsSvgItem, BaseGlyph):
     def update_elemental_glyph(self) -> None:
         self.set_elemental_glyph()
         self.position_elemental_glyph()
-        visibility_manager = (
-            self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
-        )
+
         self.setVisible(
-            visibility_manager.visibility_settings.get_glyph_visibility("Elemental")
+            self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility("Elemental")
         )
