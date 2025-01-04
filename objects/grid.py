@@ -30,10 +30,12 @@ from PyQt6.QtWidgets import QGraphicsItemGroup
 
 
 class NonRadialGridPoints(QGraphicsItemGroup):
+    child_points: list[QGraphicsEllipseItem] = []
+    name = "non_radial_points"
+    
     def __init__(self, path, visibility_manager):
         super().__init__()
         self.visibility_manager = visibility_manager
-        self.child_points = []
         self._parse_svg(path)
 
     def _parse_svg(self, path):
@@ -67,7 +69,6 @@ class NonRadialPoint(QGraphicsEllipseItem):
         self.point_id = point_id
         self.visibility_manager = visibility_manager
         self.setZValue(101)
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
 
     def hoverEnterEvent(self, event):
         if self._is_near(event.pos()):

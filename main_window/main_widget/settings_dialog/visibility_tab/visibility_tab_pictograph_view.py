@@ -1,9 +1,14 @@
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
+    StartToEndPosGlyph,
+)
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtWidgets import QWidget
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
+from objects.grid import NonRadialGridPoints
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
@@ -15,79 +20,18 @@ Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem"]
 
 
 class VisibilityTabPictographView(PictographView):
+    """Manages interactions with pictograph view, including hover and click behavior."""
+
     def __init__(self, visibility_tab: "VisibilityTab"):
         self.visibility_tab = visibility_tab
+        self.settings = visibility_tab.settings
         self.main_widget = visibility_tab.main_widget
-        self.settings = self.main_widget.settings_manager.visibility
-        self.pictograph = self._initialize_example_pictograph()
-        super().__init__(self.pictograph)
-        self._collect_all_items()
-        for glyph in self.glyphs:
-            glyph.setOpacity(
-                1 if self.settings.glyph.should_glyph_be_visible(glyph.name) else 0.1
-            )
-        self.non_radial_item.setOpacity(
-            1 if self.settings.grid.non_radial_visible else 0.1
-        )
-        self.set_clickable_items()
-        self.setMouseTracking(True)
-        self.add_hover_effect()
-        self.setStyleSheet("border: 2px solid black;")
-
-    def add_hover_effect(self):
-        def apply_glyph_hover_effects(item: "Glyph"):
-            item.setCursor(Qt.CursorShape.PointingHandCursor)
-            item.hoverEnterEvent = self._create_hover_enter_event(item)
-            item.hoverLeaveEvent = self._create_hover_leave_event(item)
-            item.setAcceptHoverEvents(True)  # Ensure hover events are accepted
-
-            for child in item.childItems():
-                child.setCursor(Qt.CursorShape.PointingHandCursor)
-                child.setAcceptHoverEvents(True)
-                child.hoverEnterEvent = self._create_hover_enter_event(item)
-                child.hoverLeaveEvent = self._create_hover_leave_event(item)
-
-        def apply_grid_hover_effects(item: "QGraphicsSvgItem"):
-            item.setCursor(Qt.CursorShape.PointingHandCursor)
-            item.hoverEnterEvent = self._create_nonradial_hover_enter_event(item)
-            item.hoverLeaveEvent = self._create_nonradial_hover_leave_event(item)
-            item.setAcceptHoverEvents(True)
-
-        for glyph in self.glyphs:
-            apply_glyph_hover_effects(glyph)
-        apply_grid_hover_effects(self.non_radial_item)
-
-    def _create_hover_enter_event(self, glyph: "Glyph"):
-        def hoverEnterEvent(event):
-            glyph.setOpacity(0.5)
-
-        return hoverEnterEvent
-
-    def _create_nonradial_hover_enter_event(self, grid_item: "QGraphicsItemGroup"):
-        def hoverEnterEvent(event):
-            grid_item.setOpacity(0.5)
-
-        return hoverEnterEvent
-
-    def _create_nonradial_hover_leave_event(self, grid_item: "QGraphicsItemGroup"):
-        def hoverLeaveEvent(event):
-            visible = self.settings.get_grid_visibility("non_radial_points")
-            if visible:
-                grid_item.setOpacity(1)
-            else:
-                grid_item.setOpacity(0.1)
-
-        return hoverLeaveEvent
-
-    def _create_hover_leave_event(self, glyph: "Glyph"):
-        def hoverLeaveEvent(event):
-            visible = self.settings.glyph.should_glyph_be_visible(glyph.name)
-            if visible:
-                glyph.setOpacity(1)
-            else:
-                glyph.setOpacity(0.1)
-
-        return hoverLeaveEvent
+        super().__init__(self._initialize_example_pictograph())
+        self.glyphs = self._collect_glyphs()
+        self.non_radial_points = self._collect_non_radial_points()
+        self._apply_initial_visibility()
+        self._initialize_interactions()
+        self.setStyleSheet("border: 1px solid black;")
 
     def _initialize_example_pictograph(self) -> BasePictograph:
         """Create and initialize the example pictograph."""
@@ -119,9 +63,9 @@ class VisibilityTabPictographView(PictographView):
 
         return pictograph
 
-    def _collect_all_items(self):
-        """Return a list of all clickable items in the pictograph."""
-        self.glyphs: list[Glyph] = [
+    def _collect_glyphs(self) -> list[Glyph]:
+        """Collect all glyphs for interaction."""
+        return [
             self.pictograph.tka_glyph,
             self.pictograph.vtg_glyph,
             self.pictograph.elemental_glyph,
@@ -129,62 +73,108 @@ class VisibilityTabPictographView(PictographView):
             self.pictograph.reversal_glyph,
         ]
 
-        self.non_radial_item: QGraphicsSvgItem = self.pictograph.grid.items.get(
-            f"{self.pictograph.grid.grid_mode}_nonradial", []
+    def _collect_non_radial_points(self) -> QGraphicsItemGroup:
+        """Retrieve the non-radial points group from the grid."""
+        return self.pictograph.grid.items.get(
+            f"{self.pictograph.grid.grid_mode}_nonradial"
         )
 
-    def set_clickable_items(self):
-        """Enable glyphs to be clickable and toggle visibility."""
+    def _apply_initial_visibility(self):
+        """Set initial visibility for glyphs and non-radial points."""
         for glyph in self.glyphs:
-            glyph.mousePressEvent = self._create_glyph_mouse_press_event(glyph)
-        self.non_radial_item.mousePressEvent = self.create_nonradial_mouse_press_event()
+            glyph.setOpacity(
+                1 if self.settings.glyph.should_glyph_be_visible(glyph.name) else 0.1
+            )
+        self.non_radial_points.setOpacity(
+            1 if self.settings.grid.non_radial_visible else 0.1
+        )
 
-    def _create_glyph_mouse_press_event(self, glyph: "Glyph"):
-        for child in glyph.childItems():
-            child.setAcceptHoverEvents(True)
+    def _initialize_interactions(self):
+        """Attach hover and click events to glyphs and non-radial points."""
+        for glyph in self.glyphs:
+            glyph.mousePressEvent = self._create_click_event(glyph)
+            glyph.setAcceptHoverEvents(True)
+            glyph.hoverEnterEvent = self._create_hover_event(glyph, entering=True)
+            glyph.hoverLeaveEvent = self._create_hover_event(glyph, entering=False)
+            if glyph.__class__ == StartToEndPosGlyph:
+                for child in glyph.childItems():
+                    child.setCursor(Qt.CursorShape.PointingHandCursor)
+                    child.mousePressEvent = self._create_click_event(glyph)
+                    child.setAcceptHoverEvents(True)
+                    child.hoverEnterEvent = self._create_hover_event(
+                        child, entering=True
+                    )
+                    child.hoverLeaveEvent = self._create_hover_event(
+                        child, entering=False
+                    )
 
-        def mousePressEvent(event):
-            self._toggle_glyph_visibility(glyph)
-            if self.settings.glyph.should_glyph_be_visible(glyph.name):
-                glyph.setOpacity(1)
+        self.non_radial_points.mousePressEvent = self._create_non_radial_click_event()
+        self.non_radial_points.hoverEnterEvent = self._create_hover_event(
+            self.non_radial_points, entering=True
+        )
+        self.non_radial_points.hoverLeaveEvent = self._create_hover_event(
+            self.non_radial_points, entering=False
+        )
+
+    def _create_hover_event(
+        self, item: Union["NonRadialGridPoints", Glyph], entering: bool
+    ):
+        """Create a hover event for entering or leaving."""
+
+        def hoverEvent(event):
+            if item.name == "non_radial_points":
+                children = item.childItems()
+                for child in children:
+                    child.setCursor(Qt.CursorShape.PointingHandCursor)
+                item.setOpacity(
+                    0.5
+                    if entering
+                    else (1 if self.settings.get_grid_visibility(item.name) else 0.1)
+                )
             else:
-                glyph.setOpacity(0.15)
+                item.setCursor(Qt.CursorShape.PointingHandCursor)
+                item.setOpacity(
+                    0.5
+                    if entering
+                    else (
+                        1
+                        if self.settings.glyph.should_glyph_be_visible(item.name)
+                        else 0.1
+                    )
+                )
+                for child in item.childItems():
+                    child.setCursor(Qt.CursorShape.PointingHandCursor)
 
-        return mousePressEvent
+        return hoverEvent
 
-    def create_nonradial_mouse_press_event(self):
-        def mousePressEvent(event):
-            self._toggle_grid_visibility()
+    def _create_click_event(self, glyph: Glyph):
+        """Create a click event for toggling glyph visibility."""
 
-            self.settings.set_grid_visibility(
-                "non_radial_points",
-                not self.settings.grid.non_radial_visible,
-            )
-            self.non_radial_item.setOpacity(
-                1 if self.settings.grid.non_radial_visible else 0.1
-            )
+        def clickEvent(event):
+            current_visibility = self.settings.glyph.should_glyph_be_visible(glyph.name)
+            self.settings.set_glyph_visibility(glyph.name, not current_visibility)
+            glyph.setOpacity(1 if not current_visibility else 0.1)
+            self.visibility_tab.checkbox_widget.update_checkboxes()
 
-        return mousePressEvent
+        return clickEvent
 
-    def _toggle_glyph_visibility(self, glyph: BaseGlyph):
-        """Toggle glyph visibility and synchronize with checkboxes."""
-        manager = self.settings.glyph
-        current_visibility = manager.should_glyph_be_visible(glyph.name)
-        self.settings.set_glyph_visibility(glyph.name, not current_visibility)
+    def _create_non_radial_click_event(self):
+        """Create a click event for toggling non-radial points visibility."""
 
-        self.visibility_tab.checkbox_widget.update_checkboxes()
+        def clickEvent(event):
+            current_visibility = self.settings.grid.non_radial_visible
+            self.settings.grid.set_non_radial_visibility(not current_visibility)
+            self.non_radial_points.setOpacity(1 if not current_visibility else 0.1)
+            self.visibility_tab.checkbox_widget.update_checkboxes()
 
-    def _toggle_grid_visibility(self):
-        """Toggle grid visibility and synchronize with checkboxes."""
-        current_visibility = self.settings.get_grid_visibility("non_radial_points")
-        self.settings.grid.save_non_radial_visibility(not current_visibility)
-        self.visibility_tab.checkbox_widget.update_checkboxes()
+        return clickEvent
 
     def resizeEvent(self, event: QEvent):
-        tab_width = (
+        """Handle resizing of the pictograph view."""
+        available_width = (
             self.visibility_tab.dialog.width()
             - self.visibility_tab.checkbox_widget.width()
         )
-        size = int(tab_width * 0.7)
+        size = int(available_width * 0.7)
         self.setFixedSize(size, size)
         super().resizeEvent(event)
