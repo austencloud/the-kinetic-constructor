@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItemGroup
 from typing import TYPE_CHECKING, Union
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from base_widgets.base_pictograph.grid.grid import (
-    NonRadialGridPointsGroup,
+    NonRadialPointsGroup,
     NonRadialPoint,
 )
 from PyQt6.QtCore import Qt
@@ -23,7 +23,7 @@ class GridManager:
         self.pictograph = pictograph
         self.non_radial_points = self._collect_non_radial_points()
 
-    def _collect_non_radial_points(self) -> NonRadialGridPointsGroup:
+    def _collect_non_radial_points(self) -> NonRadialPointsGroup:
         """Retrieve the non-radial points group from the grid."""
         return self.pictograph.grid.items.get(
             f"{self.pictograph.grid.grid_mode}_nonradial"
@@ -57,7 +57,7 @@ class GridManager:
                 if entering
                 else (
                     1
-                    if self.pictograph.main_widget.settings_manager.visibility.grid.non_radial_visible
+                    if self.pictograph.main_widget.settings_manager.visibility.grid_visibility_manager.non_radial_visible
                     else 0.1
                 )
             )
@@ -69,9 +69,9 @@ class GridManager:
 
         def clickEvent(event):
             current_visibility = (
-                self.pictograph.main_widget.settings_manager.visibility.grid.non_radial_visible
+                self.pictograph.main_widget.settings_manager.visibility.grid_visibility_manager.non_radial_visible
             )
-            self.pictograph.main_widget.settings_manager.visibility.grid.set_non_radial_visibility(
+            self.pictograph.main_widget.settings_manager.visibility.grid_visibility_manager.set_non_radial_visibility(
                 not current_visibility
             )
             point.setOpacity(1 if not current_visibility else 0.1)

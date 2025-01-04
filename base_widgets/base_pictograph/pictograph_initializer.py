@@ -62,7 +62,7 @@ class PictographInitializer:
         self.init_reversal_symbols()
 
         self.set_nonradial_points_visibility(
-            self.pictograph.main_widget.main_window.settings_manager.visibility.get_grid_visibility(
+            self.pictograph.main_widget.main_window.settings_manager.visibility.get_non_radial_visibility(
                 "non_radial_points"
             )
         )

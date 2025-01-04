@@ -1,18 +1,18 @@
 from typing import TYPE_CHECKING
 import xml.etree.ElementTree as ET
 from PyQt6.QtWidgets import QGraphicsItemGroup
-from .non_radial_grid_point import NonRadialGridPoint
+from .non_radial_point import NonRadialGridPoint
 
 if TYPE_CHECKING:
-    from .grid_visibility_manager import GridVisibilityManager
+    from .non_radial_points_toggler import NonRadialPointsToggler
 
 
-class NonRadialGridPointsGroup(QGraphicsItemGroup):
+class NonRadialPointsGroup(QGraphicsItemGroup):
     """Manages a group of non-radial points."""
 
     name = "non_radial_points"
 
-    def __init__(self, path: str, visibility_manager: "GridVisibilityManager"):
+    def __init__(self, path: str, visibility_manager: "NonRadialPointsToggler"):
         super().__init__()
         self.setFlag(self.GraphicsItemFlag.ItemHasNoContents, True)
         self.setFiltersChildEvents(False)

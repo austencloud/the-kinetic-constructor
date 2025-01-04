@@ -42,14 +42,14 @@ class VisibilityCheckboxWidget(QWidget):
         self.layout.addStretch(2)
 
     def _create_checkboxes(self):
-        glyph_settings = self.visibility_tab.settings.glyph
-        grid_settings = self.visibility_tab.settings.grid
+        glyph_toggler = self.visibility_tab.settings.glyph_visibility_manager
+        grid_toggler = self.visibility_tab.main_widget.grid_toggler
 
         for name in self.glyph_names:
             checkbox = QCheckBox(name)
             self.glyph_checkboxes[name] = checkbox
             checkbox.stateChanged.connect(
-                lambda state, g=checkbox.text(): glyph_settings.toggle_glyph_visibility(
+                lambda state, g=checkbox.text(): glyph_toggler.toggle_glyph_visibility(
                     g, state
                 )
             )
@@ -58,7 +58,7 @@ class VisibilityCheckboxWidget(QWidget):
             checkbox = QCheckBox(name)
             self.grid_checkboxes[name] = checkbox
             checkbox.stateChanged.connect(
-                lambda state, g=checkbox.text(): grid_settings.toggle_grid_visibility(
+                lambda state, g=checkbox.text(): grid_toggler.toggle_non_radial_points(
                     state
                 )
             )
@@ -71,7 +71,7 @@ class VisibilityCheckboxWidget(QWidget):
         for name, checkbox in self.glyph_checkboxes.items():
             checkbox.setChecked(visibility_settings.get_glyph_visibility(name))
         self.grid_checkboxes["Non-radial points"].setChecked(
-            visibility_settings.get_grid_visibility("non_radial_points")
+            visibility_settings.get_non_radial_visibility("non_radial_points")
         )
 
     def resizeEvent(self, event: QEvent):

@@ -8,7 +8,7 @@ from base_widgets.base_pictograph.pictograph_view import PictographView
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import Qt, QEvent
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
-from base_widgets.base_pictograph.grid.grid import NonRadialGridPointsGroup
+from base_widgets.base_pictograph.grid.grid import NonRadialPointsGroup
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
@@ -85,11 +85,14 @@ class VisibilityTabPictographView(PictographView):
         """Set initial visibility for glyphs and non-radial points."""
         for glyph in self.glyphs:
             glyph.setOpacity(
-                1 if self.settings.glyph.should_glyph_be_visible(glyph.name) else 0.1
+                1
+                if self.settings.glyph_visibility_manager.should_glyph_be_visible(
+                    glyph.name
+                )
+                else 0.1
             )
-        self.non_radial_points.setOpacity(
-            1 if self.settings.grid.non_radial_visible else 0.1
-        )
+        nonradial_visible = self.settings.get_non_radial_visibility("non_radial_points")
+        self.non_radial_points.setOpacity(1 if nonradial_visible else 0.1)
 
     def _initialize_interactions(self):
         """Attach hover and click events to glyphs and non-radial points."""
@@ -131,7 +134,7 @@ class VisibilityTabPictographView(PictographView):
         )
 
     def _create_hover_event(
-        self, item: Union["NonRadialGridPointsGroup", Glyph], entering: bool
+        self, item: Union["NonRadialPointsGroup", Glyph], entering: bool
     ):
         """Create a hover event for entering or leaving."""
 
@@ -143,7 +146,9 @@ class VisibilityTabPictographView(PictographView):
                 item.setOpacity(
                     0.5
                     if entering
-                    else (1 if self.settings.get_grid_visibility(item.name) else 0.1)
+                    else (
+                        1 if self.settings.get_non_radial_visibility(item.name) else 0.1
+                    )
                 )
             else:
                 item.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -152,7 +157,9 @@ class VisibilityTabPictographView(PictographView):
                     if entering
                     else (
                         1
-                        if self.settings.glyph.should_glyph_be_visible(item.name)
+                        if self.settings.glyph_visibility_manager.should_glyph_be_visible(
+                            item.name
+                        )
                         else 0.1
                     )
                 )
@@ -165,7 +172,11 @@ class VisibilityTabPictographView(PictographView):
         """Create a click event for toggling glyph visibility."""
 
         def clickEvent(event):
-            current_visibility = self.settings.glyph.should_glyph_be_visible(glyph.name)
+            current_visibility = (
+                self.settings.glyph_visibility_manager.should_glyph_be_visible(
+                    glyph.name
+                )
+            )
             self.settings.set_glyph_visibility(glyph.name, not current_visibility)
             glyph.setOpacity(1 if not current_visibility else 0.1)
             self.visibility_tab.checkbox_widget.update_checkboxes()
@@ -176,8 +187,10 @@ class VisibilityTabPictographView(PictographView):
         """Create a click event for toggling non-radial points visibility."""
 
         def clickEvent(event):
-            current_visibility = self.settings.grid.non_radial_visible
-            self.settings.grid.set_non_radial_visibility(not current_visibility)
+            current_visibility = self.settings.get_non_radial_visibility(
+                "non_radial_points"
+            )
+            self.settings.set_non_radial_visibility(not current_visibility)
             self.non_radial_points.setOpacity(1 if not current_visibility else 0.1)
             self.visibility_tab.checkbox_widget.update_checkboxes()
 

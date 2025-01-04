@@ -29,7 +29,8 @@ Glyph = Union[
     VTG_Glyph,
 ]
 
-class GlyphVisibilityManager:
+
+class GlyphToggler:
     def __init__(self, visibility_settings: "VisibilitySettings") -> None:
         self.visibility_settings = visibility_settings
         self.main_window = visibility_settings.settings_manager.main_window

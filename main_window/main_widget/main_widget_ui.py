@@ -1,6 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
+from base_widgets.base_pictograph.grid.non_radial_points_toggler import (
+    NonRadialPointsToggler,
+)
 from main_window.main_widget.fade_manager.fade_manager import FadeManager
 from main_window.main_widget.pictograph_collector import PictographCollector
 from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
@@ -51,7 +54,7 @@ class MainWidgetUI:
         splash.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Finalizing")
-
+        self.mw.grid_toggler = NonRadialPointsToggler(self.mw)
         self.mw.pictograph_collector = PictographCollector(self.mw)
         self.mw.settings_dialog = SettingsDialog(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)

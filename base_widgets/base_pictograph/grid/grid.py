@@ -1,7 +1,12 @@
 from typing import TYPE_CHECKING
+
+from base_widgets.base_pictograph.grid.non_radial_points_toggler import (
+    NonRadialPointsToggler,
+)
 from .grid_data import GridData
 from .grid_item import GridItem
-from .non_radial_grid_points_group import NonRadialGridPointsGroup
+from .non_radial_points_group import NonRadialPointsGroup
+
 if TYPE_CHECKING:
     from ..base_pictograph import BasePictograph
 
@@ -12,6 +17,7 @@ class Grid:
     def __init__(
         self, pictograph: "BasePictograph", grid_data: GridData, grid_mode: str
     ):
+
         self.pictograph = pictograph
         self.grid_data = grid_data
         self.grid_mode = grid_mode
@@ -39,7 +45,7 @@ class Grid:
 
         non_radial_path = non_radial_paths.get(self.grid_mode)
         if non_radial_path:
-            non_radial_points = NonRadialGridPointsGroup(
+            non_radial_points = NonRadialPointsGroup(
                 non_radial_path, self.pictograph.main_widget.settings_manager.visibility
             )
             self.pictograph.addItem(non_radial_points)
