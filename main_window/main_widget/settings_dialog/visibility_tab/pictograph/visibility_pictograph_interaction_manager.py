@@ -66,12 +66,7 @@ class VisibilityPictographInteractionManager:
                 item.setOpacity(0.5)
                 item.setCursor(Qt.CursorShape.PointingHandCursor)
             else:
-                visible = (
-                    self.visibility_settings.get_glyph_visibility(item.name)
-                    if hasattr(item, "name")
-                    else self.visibility_settings.get_non_radial_visibility()
-                )
-                item.setOpacity(1 if visible else 0.1)
+                self.update_opacity(item)
 
         return hoverEvent
 
@@ -85,7 +80,7 @@ class VisibilityPictographInteractionManager:
             self.visibility_settings.set_glyph_visibility(
                 glyph.name, not current_visibility
             )
-            glyph.setOpacity(1 if not current_visibility else 0.1)
+            self.update_opacity(glyph)
             self.parent.visibility_tab.checkbox_widget.update_checkboxes()
 
         return clickEvent
@@ -96,7 +91,15 @@ class VisibilityPictographInteractionManager:
         def clickEvent(event):
             current_visibility = self.visibility_settings.get_non_radial_visibility()
             self.visibility_settings.set_non_radial_visibility(not current_visibility)
-            self.non_radial_points.setOpacity(1 if not current_visibility else 0.1)
+            self.update_opacity(self.non_radial_points)
             self.parent.visibility_tab.checkbox_widget.update_checkboxes()
 
         return clickEvent
+
+    def update_opacity(self, item: Union[Glyph, NonRadialPointsGroup]):
+        """Update the opacity of a glyph or non-radial point based on visibility settings."""
+        if isinstance(item, NonRadialPointsGroup):
+            visible = self.visibility_settings.get_non_radial_visibility()
+        else:
+            visible = self.visibility_settings.get_glyph_visibility(item.name)
+        item.setOpacity(1 if visible else 0.1)

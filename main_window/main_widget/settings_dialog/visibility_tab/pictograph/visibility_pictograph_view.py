@@ -9,22 +9,26 @@ from .visibility_pictograph_interaction_manager import (
 )
 
 if TYPE_CHECKING:
+    from .visibility_pictograph import VisibilityPictograph
     from ..visibility_tab import VisibilityTab
 
 
 class VisibilityPictographView(PictographView):
-    def __init__(self, visibility_tab: "VisibilityTab", pictograph: BasePictograph):
+
+    def __init__(
+        self, visibility_tab: "VisibilityTab", pictograph: "VisibilityPictograph"
+    ):
         self.visibility_tab = visibility_tab
         self.visibility_settings = visibility_tab.settings
         self.main_widget = visibility_tab.main_widget
         super().__init__(pictograph)
         self.pictograph = self._initialize_data()
         self.non_radial_points = self._collect_non_radial_points()
-        self._apply_initial_visibility()
+        self._update_opacity()
 
         self.interaction_manager = VisibilityPictographInteractionManager(self)
 
-    def _initialize_data(self) -> BasePictograph:
+    def _initialize_data(self) -> "VisibilityPictograph":
         example_data = {
             "letter": "A",
             "start_pos": "alpha1",
@@ -59,7 +63,7 @@ class VisibilityPictographView(PictographView):
             f"{self.pictograph.grid.grid_mode}_nonradial"
         )
 
-    def _apply_initial_visibility(self):
+    def _update_opacity(self):
         for glyph in self.glyphs:
             glyph.setOpacity(
                 1 if self.visibility_settings.get_glyph_visibility(glyph.name) else 0.1
