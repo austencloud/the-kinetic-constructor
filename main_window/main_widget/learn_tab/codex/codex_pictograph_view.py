@@ -19,3 +19,4 @@ class CodexPictographView(PictographView):
         self.setMinimumSize(size, size)
         self.setMaximumSize(size, size)
         self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        super().resizeEvent(event)

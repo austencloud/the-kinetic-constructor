@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from main_window.main_widget.fade_manager.fade_manager import FadeManager
+from main_window.main_widget.pictograph_collector import PictographCollector
 from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 from .construct_tab.construct_tab import ConstructTab
 from .generate_tab.generate_tab import GenerateTab
@@ -51,6 +52,7 @@ class MainWidgetUI:
         self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Finalizing")
 
+        self.mw.pictograph_collector = PictographCollector(self.mw)
         self.mw.settings_dialog = SettingsDialog(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()

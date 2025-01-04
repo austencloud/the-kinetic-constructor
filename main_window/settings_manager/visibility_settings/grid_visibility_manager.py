@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt
 
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
-    from main_window.settings_manager.visibility_settings.visibility_settings import (
-        VisibilitySettings,
-    )
+    from .visibility_settings import VisibilitySettings
 
 
 class GridVisibilityManager:
@@ -14,6 +11,7 @@ class GridVisibilityManager:
         self.settings = visibility_settings
         self.settings_manager = visibility_settings.settings_manager
         self.non_radial_visible = self.settings.get_grid_visibility("non_radial_points")
+        self.main_window = visibility_settings.settings_manager.main_window
 
     def save_non_radial_visibility(self, visible: bool):
         self.settings.set_grid_visibility("non_radial_points", visible)
@@ -26,79 +24,13 @@ class GridVisibilityManager:
     def apply_grid_visibility(self):
         self.non_radial_visible = self.settings.get_grid_visibility("non_radial_points")
 
-        def toggle_visibility(obj: "BasePictograph"):
-            obj.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
-
-        main_widget = self.settings_manager.main_window.main_widget
-
-        # Collections to apply visibility
-        beat_views = main_widget.sequence_widget.beat_frame.beats
-        beats = []
-        # create a list of beat_view.beat for each beat_view
-        for view in beat_views:
-            beats.extend([view.beat])
-        collections = [
-            [main_widget.construct_tab.option_picker.option_pool],
-            [
-                (
-                    [main_widget.sequence_widget.beat_frame.start_pos_view.beat]
-                    if main_widget.sequence_widget.beat_frame.start_pos_view.isVisible()
-                    else []
-                )
-            ],
-            beats,
-            list(
-                main_widget.construct_tab.advanced_start_pos_picker.start_pos_cache.values()
-            ),
-            [
-                [
-                    main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view.pictograph
-                ]
-            ],
-        ]
-
-        # recursively remove all empty lists and dicts from the collections
-        def clean_collections(collections):
-            cleaned = []
-            for item in collections:
-                if isinstance(item, list):
-                    cleaned_item = clean_collections(item)
-                    if cleaned_item:
-                        cleaned.append(cleaned_item)
-                elif isinstance(item, dict):
-                    if item:
-                        cleaned.append(item)
-                else:
-                    cleaned.append(item)
-            return cleaned
-
-        collections = clean_collections(collections)
-
-        # get all the pictographs from the lists within the collection, put everything in one list
-        def extract_pictographs(collection):
-            pictographs = []
-            if isinstance(collection, list):
-                for item in collection:
-                    if isinstance(item, list):
-                        for pictograph in extract_pictographs(item):
-                            pictographs.append(pictograph)
-                    else:
-                        pictographs.extend(extract_pictographs(item))
-            elif isinstance(collection, dict):
-                for item in collection.values():
-                    pictographs.extend(extract_pictographs(item))
-            else:
-                pictographs.append(collection)
-            return pictographs
-
-        pictographs = extract_pictographs(collections)
-
+        pictographs = (
+            self.main_window.main_widget.pictograph_collector.collect_all_pictographs()
+        )
         for pictograph in pictographs:
-            toggle_visibility(pictograph)
+            pictograph.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
 
     def toggle_grid_visibility(self, state: int):
         is_checked = state == Qt.CheckState.Checked.value
         self.set_non_radial_visibility(is_checked)
-        self.settings.set_grid_visibility(
-            "non_radial_points", is_checked
-        )
+        self.settings.set_grid_visibility("non_radial_points", is_checked)

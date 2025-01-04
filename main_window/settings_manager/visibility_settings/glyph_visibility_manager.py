@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from PyQt6.QtCore import Qt
 
+
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from main_window.settings_manager.visibility_settings.visibility_settings import (
@@ -38,27 +39,11 @@ class GlyphVisibilityManager:
             pictograph.start_to_end_pos_glyph.setVisible(False)
 
     def apply_glyph_visibility(self):
-        # Apply current settings to all visible pictographs
-        beat_views = self.main_window.main_widget.sequence_widget.beat_frame.beats
-        beats = [beat_view.beat for beat_view in beat_views]
-        for pictograph_key_with_scene in list(
-            self.main_window.main_widget.pictograph_cache.values()
-        ):
-            for scene in pictograph_key_with_scene.values():
-                if scene.view:
-                    if scene.view.isVisible():
-                        self.apply_current_visibility_settings(scene)
-        for beat in beats:
-            if beat:
-                self.apply_current_visibility_settings(beat)
-        for (
-            option
-        ) in self.main_window.main_widget.construct_tab.option_picker.option_pool:
-            if option:
-                self.apply_current_visibility_settings(option)
-        # self.apply_current_visibility_settings(
-        #     self.main_window.main_widget.settings_dialog.visibility_tab.pictograph_view.pictograph
-        # )
+        pictographs = (
+            self.main_window.main_widget.pictograph_collector.collect_all_pictographs()
+        )
+        for pictograph in pictographs:
+            self.apply_current_visibility_settings(pictograph)
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:
         """Check if a glyph type should be visible based on current settings."""

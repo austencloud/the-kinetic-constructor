@@ -25,14 +25,16 @@ class SettingsManager(QObject):
         self.settings = QSettings("settings.ini", QSettings.Format.IniFormat)
 
         self.global_settings = GlobalSettings(self)
-        self.image_export = ImageExportSettings(self)
-        self.users = UserProfileSettings(self)
-        self.visibility = VisibilitySettings(self)
-        self.sequence_layout = SequenceLayoutSettings(self)
-        self.sequence_share_settings = SequenceShareSettings(self)
+        
+        if self.main_window:
+            self.image_export = ImageExportSettings(self)
+            self.users = UserProfileSettings(self)
+            self.visibility = VisibilitySettings(self)
+            self.sequence_layout = SequenceLayoutSettings(self)
+            self.sequence_share_settings = SequenceShareSettings(self)
 
-        # Tabs
-        self.construct_tab_settings = ConstructTabSettings(self)
-        self.generate_tab_settings = GenerateTabSettings(self)
-        self.browse_settings = BrowseTabSettings(self)
-        self.write_tab_settings = WriteTabSettings(self)
+            # Tabs
+            self.construct_tab_settings = ConstructTabSettings(self)
+            self.generate_tab_settings = GenerateTabSettings(self)
+            self.browse_settings = BrowseTabSettings(self)
+            self.write_tab_settings = WriteTabSettings(self)

@@ -1,14 +1,13 @@
-
-
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
+from base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
+from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
+    StartToEndPosGlyph,
+)
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtWidgets import QWidget
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
-from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab_pictograph import VisibilityTabPictograph
 from objects.grid import NonRadialGridPoints
 
 if TYPE_CHECKING:
@@ -17,18 +16,19 @@ if TYPE_CHECKING:
     )
     from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem"]
+Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem", "BeatReversalGlyph"]
 
 
 class VisibilityTabPictographView(PictographView):
     """Manages interactions with pictograph view, including hover and click behavior."""
 
     def __init__(self, visibility_tab: "VisibilityTab", pictograph: BasePictograph):
-        super().__init__(pictograph)
+        self.pictograph = pictograph
         self.visibility_tab = visibility_tab
         self.settings = visibility_tab.settings
         self.main_widget = visibility_tab.main_widget
-        self.pictograph = pictograph
+        self.pictograph = self._initialize_example_pictograph()
+        super().__init__(pictograph)
         self.glyphs = self._collect_glyphs()
         self.non_radial_points = self._collect_non_radial_points()
         self._apply_initial_visibility()
@@ -43,26 +43,25 @@ class VisibilityTabPictographView(PictographView):
             "blue_motion_type": "pro",
             "red_motion_type": "pro",
         }
-        pictograph = VisibilityTabPictograph(self.main_widget)
         pictograph_dict = self.main_widget.pictograph_dict_loader.find_pictograph_dict(
             example_data
         )
-        pictograph.red_reversal = True
-        pictograph.blue_reversal = True
-        pictograph.updater.update_pictograph(pictograph_dict)
+        self.pictograph.red_reversal = True
+        self.pictograph.blue_reversal = True
+        self.pictograph.updater.update_pictograph(pictograph_dict)
 
         glyphs: list[Glyph] = [
-            pictograph.tka_glyph,
-            pictograph.vtg_glyph,
-            pictograph.elemental_glyph,
-            pictograph.start_to_end_pos_glyph,
-            pictograph.reversal_glyph,
+            self.pictograph.tka_glyph,
+            self.pictograph.vtg_glyph,
+            self.pictograph.elemental_glyph,
+            self.pictograph.start_to_end_pos_glyph,
+            self.pictograph.reversal_glyph,
         ]
         for glyph in glyphs:
             glyph.setVisible(True)
-        pictograph.grid.toggle_non_radial_points_visibility(True)
+        self.pictograph.grid.toggle_non_radial_points_visibility(True)
 
-        return pictograph
+        return self.pictograph
 
     def _collect_glyphs(self) -> list[Glyph]:
         """Collect all glyphs for interaction."""
@@ -102,9 +101,25 @@ class VisibilityTabPictographView(PictographView):
                     child.setCursor(Qt.CursorShape.PointingHandCursor)
                     child.mousePressEvent = self._create_click_event(glyph)
                     child.setAcceptHoverEvents(True)
-                    child.hoverEnterEvent = self._create_hover_event(child, entering=True)
-                    child.hoverLeaveEvent = self._create_hover_event(child, entering=False)
-                
+                    child.hoverEnterEvent = self._create_hover_event(
+                        child, entering=True
+                    )
+                    child.hoverLeaveEvent = self._create_hover_event(
+                        child, entering=False
+                    )
+            # Handle BeatReversalGlyph children
+        # Directly access reversal items and assign events
+            if glyph.name == "Reversals" and hasattr(glyph, "reversal_items"):
+                for color, text_item in glyph.reversal_items.items():
+                    print(f"Assigning hover and click events to reversal: {color}")
+                    text_item.mousePressEvent = self._create_click_event(text_item)
+                    text_item.hoverEnterEvent = self._create_hover_event(
+                        text_item, entering=True
+                    )
+                    text_item.hoverLeaveEvent = self._create_hover_event(
+                        text_item, entering=False
+                    )
+                    
         self.non_radial_points.mousePressEvent = self._create_non_radial_click_event()
         self.non_radial_points.hoverEnterEvent = self._create_hover_event(
             self.non_radial_points, entering=True

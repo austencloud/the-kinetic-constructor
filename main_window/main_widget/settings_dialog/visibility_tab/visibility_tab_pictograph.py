@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from objects.grid import NonRadialGridPoints
-from .glyph_manager import GlyphManager
-from .grid_manager import GridManager
-from .visibility_manager import VisibilityManager
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab_pictograph_view import (
