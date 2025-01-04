@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING
 
-from base_widgets.base_pictograph.grid.non_radial_points_toggler import (
-    NonRadialPointsToggler,
-)
 from .grid_data import GridData
 from .grid_item import GridItem
 from .non_radial_points_group import NonRadialPointsGroup
@@ -51,7 +48,7 @@ class Grid:
             self.pictograph.addItem(non_radial_points)
             self.items[f"{self.grid_mode}_nonradial"] = non_radial_points
 
-    def toggle_non_radial_points_visibility(self, visible: bool):
+    def toggle_non_radial_points(self, visible: bool):
         non_radial_key = f"{self.grid_mode}_nonradial"
         self.items[non_radial_key].setVisible(visible)
 

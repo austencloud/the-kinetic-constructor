@@ -3,16 +3,13 @@ from typing import TYPE_CHECKING
 from base_widgets.base_pictograph.glyphs.glyph_toggler import (
     GlyphToggler,
 )
-from base_widgets.base_pictograph.grid.non_radial_points_toggler import (
-    NonRadialPointsToggler,
-)
+
 
 if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
 
 
 class VisibilitySettings:
-
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager
         self.settings = self.settings_manager.settings

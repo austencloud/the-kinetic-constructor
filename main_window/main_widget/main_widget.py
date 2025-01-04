@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from base_widgets.base_pictograph.grid.non_radial_points_toggler import (
-    NonRadialPointsToggler,
-)
+
 from main_window.main_widget.pictograph_collector import PictographCollector
 from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 from .browse_tab.browse_tab import BrowseTab
@@ -91,7 +89,6 @@ class MainWidget(QWidget):
     fade_manager: FadeManager
     font_color_updater: "FontColorUpdater"
     pictograph_collector: "PictographCollector"
-    grid_toggler: "NonRadialPointsToggler"
 
     # Layouts and Widgets
     top_layout: QHBoxLayout

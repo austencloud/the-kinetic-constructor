@@ -72,7 +72,7 @@ class PictographInitializer:
         self.reversal_symbol_manager.update_reversal_symbols()
 
     def set_nonradial_points_visibility(self, visible: bool) -> None:
-        self.pictograph.grid.toggle_non_radial_points_visibility(visible)
+        self.pictograph.grid.toggle_non_radial_points(visible)
 
     def init_grid(self, grid_mode: str) -> Grid:
         if not self.grid_initialized:

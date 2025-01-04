@@ -61,7 +61,7 @@ class VisibilityTabPictographView(PictographView):
         ]
         for glyph in glyphs:
             glyph.setVisible(True)
-        self.pictograph.grid.toggle_non_radial_points_visibility(True)
+        self.pictograph.grid.toggle_non_radial_points(True)
 
         return self.pictograph
 

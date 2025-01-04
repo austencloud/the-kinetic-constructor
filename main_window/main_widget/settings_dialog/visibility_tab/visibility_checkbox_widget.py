@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 from PyQt6.QtGui import QFont
-from PyQt6.QtCore import QEvent
+from PyQt6.QtCore import QEvent, Qt
 from typing import TYPE_CHECKING
 
 
@@ -27,6 +27,9 @@ class VisibilityCheckboxWidget(QWidget):
     def __init__(self, visibility_tab: "VisibilityTab"):
         super().__init__()
         self.visibility_tab = visibility_tab
+        self.main_widget = visibility_tab.main_widget
+        self.settings = self.main_widget.settings_manager.visibility
+
         self._create_checkboxes()
         self._setup_layout()
         self.update_checkboxes()
@@ -43,7 +46,6 @@ class VisibilityCheckboxWidget(QWidget):
 
     def _create_checkboxes(self):
         glyph_toggler = self.visibility_tab.settings.glyph_visibility_manager
-        grid_toggler = self.visibility_tab.main_widget.grid_toggler
 
         for name in self.glyph_names:
             checkbox = QCheckBox(name)
@@ -58,10 +60,21 @@ class VisibilityCheckboxWidget(QWidget):
             checkbox = QCheckBox(name)
             self.grid_checkboxes[name] = checkbox
             checkbox.stateChanged.connect(
-                lambda state, g=checkbox.text(): grid_toggler.toggle_non_radial_points(
+                lambda state, g=checkbox.text(): self.toggle_all_non_radial_points(
                     state
                 )
             )
+
+    def toggle_all_non_radial_points(self, state: int):
+        is_checked = state == Qt.CheckState.Checked.value
+        self.settings.set_non_radial_visibility(is_checked)
+        self.non_radial_visible = self.settings.get_non_radial_visibility(
+            "non_radial_points"
+        )
+
+        pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
+        for pictograph in pictographs:
+            pictograph.grid.toggle_non_radial_points(self.non_radial_visible)
 
     def update_checkboxes(self):
         """Synchronize checkboxes with the current visibility settings."""
