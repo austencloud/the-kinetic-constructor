@@ -26,9 +26,9 @@ class VisibilitySettings:
         self.settings.setValue(f"visibility/glyph_visibility/{glyph_type}", visible)
         self.glyph_visibility_manager.apply_glyph_visibility()
 
-    def get_non_radial_visibility(self, element: str) -> bool:
+    def get_non_radial_visibility(self) -> bool:
         return self.settings.value(
-            f"visibility/grid_visibility/{element}", True, type=bool
+            f"visibility/grid_visibility/non_radial_points", True, type=bool
         )
 
     def set_non_radial_visibility(self, visible: bool):

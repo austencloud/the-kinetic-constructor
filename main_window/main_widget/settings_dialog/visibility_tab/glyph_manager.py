@@ -76,7 +76,7 @@ class GlyphManager:
                 if entering
                 else (
                     1
-                    if self.pictograph.view.settings.glyph_visibility_manager.should_glyph_be_visible(
+                    if self.pictograph.view.visibility_settings.get_glyph_visibility(
                         glyph.name
                     )
                     else 0.1
@@ -91,10 +91,12 @@ class GlyphManager:
         """Create a click event for toggling glyph visibility."""
 
         def clickEvent(event):
-            current_visibility = self.pictograph.view.settings.glyph_visibility_manager.should_glyph_be_visible(
-                glyph.name
+            current_visibility = (
+                self.pictograph.view.visibility_settings.get_glyph_visibility(
+                    glyph.name
+                )
             )
-            self.pictograph.view.settings.set_glyph_visibility(
+            self.pictograph.view.visibility_settings.set_glyph_visibility(
                 glyph.name, not current_visibility
             )
             glyph.setOpacity(1 if not current_visibility else 0.1)

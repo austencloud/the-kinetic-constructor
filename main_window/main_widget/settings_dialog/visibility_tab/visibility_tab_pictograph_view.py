@@ -27,7 +27,7 @@ class VisibilityTabPictographView(PictographView):
     def __init__(self, visibility_tab: "VisibilityTab", pictograph: BasePictograph):
         self.pictograph = pictograph
         self.visibility_tab = visibility_tab
-        self.settings = visibility_tab.settings
+        self.visibility_settings = visibility_tab.settings
         self.main_widget = visibility_tab.main_widget
         self.pictograph = self._initialize_example_pictograph()
         super().__init__(pictograph)
@@ -86,12 +86,14 @@ class VisibilityTabPictographView(PictographView):
         for glyph in self.glyphs:
             glyph.setOpacity(
                 1
-                if self.settings.glyph_visibility_manager.should_glyph_be_visible(
+                if self.visibility_settings.get_glyph_visibility(
                     glyph.name
                 )
                 else 0.1
             )
-        nonradial_visible = self.settings.get_non_radial_visibility("non_radial_points")
+        nonradial_visible = self.visibility_settings.get_non_radial_visibility(
+           
+        )
         self.non_radial_points.setOpacity(1 if nonradial_visible else 0.1)
 
     def _initialize_interactions(self):
@@ -147,7 +149,9 @@ class VisibilityTabPictographView(PictographView):
                     0.5
                     if entering
                     else (
-                        1 if self.settings.get_non_radial_visibility(item.name) else 0.1
+                        1
+                        if self.visibility_settings.get_non_radial_visibility()
+                        else 0.1
                     )
                 )
             else:
@@ -157,7 +161,7 @@ class VisibilityTabPictographView(PictographView):
                     if entering
                     else (
                         1
-                        if self.settings.glyph_visibility_manager.should_glyph_be_visible(
+                        if self.visibility_settings.get_glyph_visibility(
                             item.name
                         )
                         else 0.1
@@ -172,12 +176,12 @@ class VisibilityTabPictographView(PictographView):
         """Create a click event for toggling glyph visibility."""
 
         def clickEvent(event):
-            current_visibility = (
-                self.settings.glyph_visibility_manager.should_glyph_be_visible(
-                    glyph.name
-                )
+            current_visibility = self.visibility_settings.get_glyph_visibility(
+                glyph.name
             )
-            self.settings.set_glyph_visibility(glyph.name, not current_visibility)
+            self.visibility_settings.set_glyph_visibility(
+                glyph.name, not current_visibility
+            )
             glyph.setOpacity(1 if not current_visibility else 0.1)
             self.visibility_tab.checkbox_widget.update_checkboxes()
 
@@ -187,10 +191,10 @@ class VisibilityTabPictographView(PictographView):
         """Create a click event for toggling non-radial points visibility."""
 
         def clickEvent(event):
-            current_visibility = self.settings.get_non_radial_visibility(
-                "non_radial_points"
+            current_visibility = self.visibility_settings.get_non_radial_visibility(
+                
             )
-            self.settings.set_non_radial_visibility(not current_visibility)
+            self.visibility_settings.set_non_radial_visibility(not current_visibility)
             self.non_radial_points.setOpacity(1 if not current_visibility else 0.1)
             self.visibility_tab.checkbox_widget.update_checkboxes()
 

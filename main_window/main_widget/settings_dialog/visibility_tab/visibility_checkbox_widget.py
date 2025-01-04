@@ -69,7 +69,7 @@ class VisibilityCheckboxWidget(QWidget):
         is_checked = state == Qt.CheckState.Checked.value
         self.settings.set_non_radial_visibility(is_checked)
         self.non_radial_visible = self.settings.get_non_radial_visibility(
-            "non_radial_points"
+            
         )
 
         pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
@@ -84,7 +84,7 @@ class VisibilityCheckboxWidget(QWidget):
         for name, checkbox in self.glyph_checkboxes.items():
             checkbox.setChecked(visibility_settings.get_glyph_visibility(name))
         self.grid_checkboxes["Non-radial points"].setChecked(
-            visibility_settings.get_non_radial_visibility("non_radial_points")
+            visibility_settings.get_non_radial_visibility()
         )
 
     def resizeEvent(self, event: QEvent):

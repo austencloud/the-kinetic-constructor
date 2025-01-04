@@ -45,10 +45,10 @@ class VisibilitySelector(ButtonSelector):
 
         glyph_types = ["TKA", "VTG", "Elemental", "Positions", "Reversals"]
         options = {
-            f"{glyph}": self.glyph_visibility_manager.should_glyph_be_visible(glyph)
+            f"{glyph}": self.glyph_visibility_manager.visibility_settings.get_glyph_visibility(glyph)
             for glyph in glyph_types
         }
-        options["non_radial_points"] = self.grid_visibility_manager.non_radial_visible
+        options["non_radial_points"] = self.glyph_visibility_manager.visibility_settings.get_non_radial_visibility()
 
         font = QFont()
         self.selector_font_size = self.main_widget.height() // 50
