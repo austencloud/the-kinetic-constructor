@@ -36,29 +36,3 @@ class VisibilityTabPictograph(BasePictograph):
         self.main_widget = main_widget
         self.dict_loader = self.main_widget.pictograph_dict_loader
 
-        self.glyph_manager = GlyphManager(self)
-        self.grid_manager = GridManager(self)
-        self.visibility_manager = VisibilityManager(self)
-
-        pictograph_dict = self.dict_loader.find_pictograph_dict(self.example_data)
-        self.updater.update_pictograph(pictograph_dict)
-        for glyph in self.get.glyphs():
-            glyph.setVisible(True)
-        self.grid.toggle_non_radial_points_visibility(True)
-        self.apply_initial_visibility()
-
-    def apply_initial_visibility(self):
-        """Set initial visibility for glyphs and non-radial points."""
-        for glyph in self.glyph_manager.glyphs:
-            glyph.setOpacity(
-                1
-                if self.main_widget.settings_manager.visibility.glyph.should_glyph_be_visible(
-                    glyph.name
-                )
-                else 0.1
-            )
-        self.grid_manager.non_radial_points.setOpacity(
-            1
-            if self.main_widget.settings_manager.visibility.grid.non_radial_visible
-            else 0.1
-        )

@@ -30,22 +30,26 @@ from PyQt6.QtWidgets import QGraphicsItemGroup
 
 
 class NonRadialGridPoints(QGraphicsItemGroup):
-    child_points: list[QGraphicsEllipseItem] = []
+    """Manages a group of non-radial points."""
     name = "non_radial_points"
-    
-    def __init__(self, path, visibility_manager):
+
+    def __init__(self, path: str, visibility_manager: "GridVisibilityManager"):
         super().__init__()
+        self.setFlag(self.GraphicsItemFlag.ItemHasNoContents, True)  # Prevent the group from drawing or blocking
+        self.setFiltersChildEvents(False)  # Let child items handle events
+        self.child_points: list[NonRadialPoint] = []
         self.visibility_manager = visibility_manager
         self._parse_svg(path)
 
-    def _parse_svg(self, path):
+    def _parse_svg(self, path: str):
+        """Parse the SVG file and create child points."""
         tree = ET.parse(path)
         root = tree.getroot()
         namespace = {"": "http://www.w3.org/2000/svg"}
 
         non_radial_group = root.find(".//*[@id='non_radial_points']", namespace)
         if not non_radial_group:
-            print(f"Group 'non_radial_points' not found in {path}")
+            logger.warning(f"Group 'non_radial_points' not found in {path}")
             return
 
         for circle in non_radial_group.findall("circle", namespace):
@@ -54,7 +58,7 @@ class NonRadialGridPoints(QGraphicsItemGroup):
             r = float(circle.attrib.get("r", 0))
             point_id = circle.attrib.get("id", "unknown_point")
             point = NonRadialPoint(cx, cy, r, point_id, self.visibility_manager)
-            point.setParentItem(self)
+            point.setParentItem(self)  # Add point to the group
             self.child_points.append(point)
 
 
@@ -65,29 +69,26 @@ class NonRadialPoint(QGraphicsEllipseItem):
         self.setPen(QPen(Qt.PenStyle.NoPen))
         self.setPos(QPointF(x, y))
         self.setAcceptHoverEvents(True)
+        self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
         self.setToolTip(point_id)
         self.point_id = point_id
         self.visibility_manager = visibility_manager
-        self.setZValue(101)
+        self.setZValue(101)  # Ensure it's on top
+
+        # Debug initialization
+        print(f"NonRadialPoint initialized: {point_id} at ({x}, {y})")
 
     def hoverEnterEvent(self, event):
-        if self._is_near(event.pos()):
-            self.setBrush(QBrush(QColor("yellow")))
+        print(f"Hover entered: {self.point_id}")
+        super().hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event):
-        visible = self.visibility_manager.non_radial_visible
-        self.setBrush(QBrush(QColor("black" if visible else "gray")))
+        print(f"Hover left: {self.point_id}")
+        super().hoverLeaveEvent(event)
 
     def mousePressEvent(self, event):
-        if self._is_near(event.pos()):
-            self.visibility_manager.toggle_non_radial_points_visibility()
-            visible = self.visibility_manager.non_radial_visible
-            self.setBrush(QBrush(QColor("black" if visible else "gray")))
-
-    def _is_near(self, pos):
-        """Check if the cursor is close enough to the center."""
-        distance = (pos - self.boundingRect().center()).manhattanLength()
-        return distance <= self.boundingRect().width() / 2
+        print(f"Mouse pressed: {self.point_id}")
+        super().mousePressEvent(event)
 
 
 class GridPoint:
