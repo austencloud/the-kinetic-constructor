@@ -8,9 +8,9 @@ from main_window.main_widget.browse_tab.thumbnail_box.favorites_manager import (
 from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box_nav_btns import (
     ThumbnailBoxNavButtonsWidget,
 )
+from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_image_label import ThumbnailImageLabel
 
 from .word_label import WordLabel
-from .thumbnail_image_label import ThumbnailImageWidget
 from .variation_number_label import VariationNumberLabel
 
 if TYPE_CHECKING:
@@ -42,7 +42,7 @@ class ThumbnailBox(QWidget):
 
         # Widgets
         self.word_label = WordLabel(self)
-        self.image_label = ThumbnailImageWidget(self)
+        self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self)
         self.nav_buttons_widget = ThumbnailBoxNavButtonsWidget(self)
 

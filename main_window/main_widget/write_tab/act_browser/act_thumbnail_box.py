@@ -7,7 +7,7 @@ from main_window.main_widget.browse_tab.thumbnail_box.favorites_manager import (
 )
 from main_window.main_widget.browse_tab.thumbnail_box.word_label import WordLabel
 from main_window.main_widget.write_tab.act_browser.act_thumbnail_image_label import (
-    ActThumbnailImageWidget,
+    ActThumbnailImageLabel,
 )
 
 
@@ -28,7 +28,7 @@ class ActThumbnailBox(QWidget):
         self.favorites_manager = FavoritesManager(self)
 
         self.word_label = WordLabel(self)
-        self.image_widget = ActThumbnailImageWidget(self)
+        self.image_label = ActThumbnailImageLabel(self)
 
         self._setup_layout()
 
@@ -37,7 +37,7 @@ class ActThumbnailBox(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)  # No margins in the layout
         layout.addWidget(self.word_label)
-        layout.addWidget(self.image_widget)
+        layout.addWidget(self.image_label)
         self.setLayout(layout)
 
     def toggle_favorite_status(self):
@@ -69,4 +69,4 @@ class ActThumbnailBox(QWidget):
 
         image = QPixmap(self.thumbnails[0])
         image = image.scaledToWidth(thumbnail_width)
-        self.image_widget.label.setPixmap(image)
+        self.image_label.setPixmap(image)

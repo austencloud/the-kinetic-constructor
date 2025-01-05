@@ -5,35 +5,28 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_image_label import (
-        ThumbnailImageWidget,
+        ThumbnailImageLabel,
     )
     from main_window.main_widget.browse_tab.browse_tab import (
         BrowseTab,
     )
 
 
-class BrowseTabSelectionHandler:
+class BrowseTabSelectionManager:
     def __init__(self, dictionary_widget: "BrowseTab") -> None:
         self.browse_tab = dictionary_widget
-        self.currently_selected_thumbnail: ThumbnailImageWidget = None
-
-    def update_selection(self, thumbnail_image_label: "ThumbnailImageWidget") -> None:
-        if self.currently_selected_thumbnail:
-            self.currently_selected_thumbnail.set_selected(False)
-        self.currently_selected_thumbnail: ThumbnailImageWidget = thumbnail_image_label
-        self.currently_selected_thumbnail.set_selected(True)
-        self.currently_selected_thumbnail.is_selected = True
+        self.sequence_viewer = self.browse_tab.sequence_viewer
+        self.current_thumbnail: ThumbnailImageLabel = None
 
     def thumbnail_clicked(
         self,
-        image_label: "ThumbnailImageWidget",
+        image_label: "ThumbnailImageLabel",
         thumbnail_pixmap: "QPixmap",
-        metadata,
-        thumbnail_collection,
-        thumbnail_index,
+        metadata: dict,
+        thumbnail_collection: list[str],
+        thumbnail_index: int,
     ) -> None:
         self.browse_tab.sequence_picker.selected_sequence_dict = metadata
-        self.sequence_viewer = self.browse_tab.sequence_viewer
         self.sequence_viewer.thumbnails = thumbnail_collection
         self.sequence_viewer.image_label.setPixmap(
             thumbnail_pixmap.scaled(
@@ -42,7 +35,11 @@ class BrowseTabSelectionHandler:
                 Qt.TransformationMode.SmoothTransformation,
             )
         )
-        self.update_selection(image_label)
+        if self.current_thumbnail:
+            self.current_thumbnail.set_selected(False)
+        self.current_thumbnail: ThumbnailImageLabel = image_label
+        self.current_thumbnail.set_selected(True)
+        self.current_thumbnail.is_selected = True
         self.sequence_viewer.select_thumbnail(
             image_label.thumbnail_box,
             thumbnail_index,

@@ -48,7 +48,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.update_thumbnail(self.thumbnail_box.current_index)
         if (
             self.thumbnail_box.image_label
-            == self.thumbnail_box.browse_tab.selection_handler.currently_selected_thumbnail
+            == self.thumbnail_box.browse_tab.selection_handler.current_thumbnail
         ):
             sequence_viewer = self.thumbnail_box.browse_tab.sequence_viewer
             sequence_viewer.variation_number_label.setText(

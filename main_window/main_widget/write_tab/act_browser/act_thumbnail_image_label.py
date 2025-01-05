@@ -5,8 +5,9 @@ from PyQt6.QtGui import QCursor, QMouseEvent, QDrag
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_image_label import (
-    ThumbnailImageWidget,
+    ThumbnailImageLabel,
 )
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_browser.act_browser import (
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class ActThumbnailImageWidget(ThumbnailImageWidget):
+class ActThumbnailImageLabel(ThumbnailImageLabel):
     def __init__(self, thumbnail_box: "ActThumbnailBox"):
         super().__init__(thumbnail_box)
 

@@ -2,13 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
 
-
 from .sequence_picker.sequence_picker import SequencePicker
 from .browse_tab_filter_manager import BrowseTabFilterManager
 from .browse_tab_getter import BrowseTabGetter
 from .browse_tab_ui_updater import BrowseTabUIUpdater
 from .deletion_handler.browse_tab_deletion_handler import BrowseTabDeletionHandler
-from .browse_tab_selection_handler import BrowseTabSelectionHandler
+from .browse_tab_selection_handler import BrowseTabSelectionManager
 from .sequence_viewer.sequence_viewer import SequenceViewer
 
 if TYPE_CHECKING:
@@ -28,6 +27,6 @@ class BrowseTab(QWidget):
 
         # Managers
         self.deletion_handler = BrowseTabDeletionHandler(self)
-        self.selection_handler = BrowseTabSelectionHandler(self)
+        self.selection_handler = BrowseTabSelectionManager(self)
         self.get = BrowseTabGetter(self)
         self.ui_updater = BrowseTabUIUpdater(self)

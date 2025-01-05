@@ -23,7 +23,7 @@ class VariationNumberLabel(QLabel):
         self.parent: Union["ThumbnailBox", "SequenceViewer"] = parent
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def update_index(self, index):
+    def update_index(self, index: int):
         if len(self.parent.thumbnails) > 1:
             self.setText(f"{index + 1}/{len(self.parent.thumbnails)}")
         else:
