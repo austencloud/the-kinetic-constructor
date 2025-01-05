@@ -49,7 +49,7 @@ class ThumbnailImageLabel(QLabel):
         scaled_pixmap = pixmap.scaledToWidth(
             target_width, Qt.TransformationMode.SmoothTransformation
         )
-        
+
         self.setPixmap(scaled_pixmap)
 
     def _get_target_width(self, sequence_length):
@@ -61,7 +61,7 @@ class ThumbnailImageLabel(QLabel):
             target_width = self.thumbnail_box.width() - int(
                 self.thumbnail_box.margin * 2
             )
-            
+
         return target_width
 
     def mousePressEvent(self, event: "QMouseEvent"):
@@ -69,13 +69,10 @@ class ThumbnailImageLabel(QLabel):
             metadata = self.metadata_extractor.extract_metadata_from_file(
                 self.thumbnails[0]
             )
-            self.thumbnail_box.browse_tab.selection_handler.thumbnail_clicked(
-                self,
-                QPixmap(self.thumbnails[self.thumbnail_box.current_index]),
-                metadata,
-                self.thumbnails,
-                self.thumbnail_box.current_index,
+            self.thumbnail_box.browse_tab.selection_handler.on_thumbnail_clicked(
+                self, metadata
             )
+
         else:
             self.thumbnail_box.browse_tab.deletion_handler.delete_variation(
                 self.thumbnail_box, self.thumbnail_box.current_index
