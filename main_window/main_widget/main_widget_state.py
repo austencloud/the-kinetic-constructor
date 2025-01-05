@@ -16,3 +16,10 @@ class MainWidgetState:
             self.main_widget.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
                 current_sequence
             )
+        left_stack = self.main_widget.left_stack
+        right_stack = self.main_widget.right_stack
+
+        total_width = self.main_widget.width()
+        left_width = int(total_width * 0.5)
+        left_stack.setFixedWidth(left_width)
+        right_stack.setFixedWidth(total_width - left_width)

@@ -90,14 +90,6 @@ class SequenceViewer(QWidget):
                 self.thumbnails[index]
             )
 
-    def select_thumbnail(self, thumbnail_box, index, word):
-        self.current_index = index
-        self.current_thumbnail_box = thumbnail_box
-        self.variation_number_label.update_index(index)
-        self.word_label.update_word_label(word)
-        self.update_thumbnails(self.thumbnails)
-        self.update_nav_buttons()
-
     def update_nav_buttons(self):
         self.nav_buttons_widget.current_index = self.current_index
         self.nav_buttons_widget.refresh()

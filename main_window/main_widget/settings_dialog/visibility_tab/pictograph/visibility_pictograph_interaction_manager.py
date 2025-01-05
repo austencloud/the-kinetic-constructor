@@ -1,5 +1,6 @@
 from typing import Union, TYPE_CHECKING
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
 from base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
 from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,
@@ -16,12 +17,12 @@ if TYPE_CHECKING:
 class VisibilityPictographInteractionManager:
     """Manages glyph and non-radial point interactions for the pictograph view."""
 
-    def __init__(self, parent: "VisibilityPictographView"):
-        self.parent = parent
-        self.pictograph = parent.pictograph
-        self.visibility_settings = parent.visibility_settings
-        self.glyphs = parent.glyphs
-        self.non_radial_points = parent.non_radial_points
+    def __init__(self, view: "VisibilityPictographView"):
+        self.view = view
+        self.pictograph = view.pictograph
+        self.visibility_settings = view.visibility_settings
+        self.glyphs = view.glyphs
+        self.non_radial_points = view.non_radial_points
         self._initialize_interactions()
 
     def _initialize_interactions(self):
@@ -62,11 +63,20 @@ class VisibilityPictographInteractionManager:
         """Create a hover event for entering or leaving."""
 
         def hoverEvent(event):
+            cursor = Qt.CursorShape.PointingHandCursor
             if entering:
                 item.setOpacity(0.5)
-                item.setCursor(Qt.CursorShape.PointingHandCursor)
+                item.setCursor(cursor)
+                if isinstance(item, NonRadialPointsGroup):
+                    item.setOpacity(0.5)
+                    for point in item.child_points:
+                        point.setCursor(cursor)
+                elif isinstance(item, BeatReversalGlyph):
+                    for child_group in item.reversal_items.values():
+                        child_group.setCursor(cursor)
+                        child_group.setOpacity(0.5)  # Set opacity for the group
             else:
-                self.update_opacity(item)
+                self.update_opacity(item)  # Restore opacity
 
         return hoverEvent
 
@@ -81,7 +91,8 @@ class VisibilityPictographInteractionManager:
                 glyph.name, not current_visibility
             )
             self.update_opacity(glyph)
-            self.parent.visibility_tab.checkbox_widget.update_checkboxes()
+            QApplication.processEvents()
+            self.view.visibility_tab.checkbox_widget.update_checkboxes()
 
         return clickEvent
 
@@ -92,7 +103,7 @@ class VisibilityPictographInteractionManager:
             current_visibility = self.visibility_settings.get_non_radial_visibility()
             self.visibility_settings.set_non_radial_visibility(not current_visibility)
             self.update_opacity(self.non_radial_points)
-            self.parent.visibility_tab.checkbox_widget.update_checkboxes()
+            self.view.visibility_tab.checkbox_widget.update_checkboxes()
 
         return clickEvent
 
@@ -100,6 +111,17 @@ class VisibilityPictographInteractionManager:
         """Update the opacity of a glyph or non-radial point based on visibility settings."""
         if isinstance(item, NonRadialPointsGroup):
             visible = self.visibility_settings.get_non_radial_visibility()
+            item.setOpacity(1 if visible else 0.1)
+        elif isinstance(item, BeatReversalGlyph):
+            visible = self.visibility_settings.get_glyph_visibility(item.name)
+            # Ensure the group opacity remains 1 to avoid stacking issues
+            item.setOpacity(1)
+            # Update the opacity of each child directly
+            child_opacity = 1 if visible else 0.1
+            for child in item.reversal_items.values():
+                child.setOpacity(child_opacity)
+            # Force a redraw to immediately reflect the change
+            item.update()
         else:
             visible = self.visibility_settings.get_glyph_visibility(item.name)
-        item.setOpacity(1 if visible else 0.1)
+            item.setOpacity(1 if visible else 0.1)

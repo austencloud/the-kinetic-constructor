@@ -61,8 +61,3 @@ class SequenceViewerImageLabel(QLabel):
             return int(self.sequence_viewer.width() * 0.6)
         return int(self.sequence_viewer.width() * 0.9)
 
-    # def resizeEvent(self, event):
-    #     """Resize the placeholder label dynamically."""
-    #     if self.thumbnails:
-    #         self.update_thumbnail()
-    #     super().resizeEvent(event)

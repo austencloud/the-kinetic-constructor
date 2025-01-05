@@ -50,16 +50,10 @@ class VisibilityCheckboxWidget(QWidget):
         """Synchronize checkboxes with the current visibility settings."""
         settings = self.visibility_tab.main_widget.settings_manager.visibility
         for name, checkbox in self.glyph_checkboxes.items():
-            checkbox.stateChanged.disconnect()
             checkbox.setChecked(settings.get_glyph_visibility(name))
-            checkbox.stateChanged.connect(
-                partial(self.toggler.toggle_glyph_visibility, name)
-            )
 
         non_radial_checkbox = self.non_radial_checkboxes["Non-radial points"]
-        non_radial_checkbox.stateChanged.disconnect()
         non_radial_checkbox.setChecked(settings.get_non_radial_visibility())
-        non_radial_checkbox.stateChanged.connect(self.toggler.toggle_non_radial_points)
 
     def resizeEvent(self, event: QEvent):
         width = self.visibility_tab.width()

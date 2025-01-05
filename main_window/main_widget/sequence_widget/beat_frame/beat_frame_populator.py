@@ -3,6 +3,7 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import
     ReversalDetector,
 )
 from utilities.word_simplifier import WordSimplifier
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -38,7 +39,6 @@ class BeatFramePopulator:
         self._populate_beats()
         self._finalize_sequence()
 
-        # self.construct_tab.option_picker.update_option_picker()
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )

@@ -69,7 +69,7 @@ class ThumbnailImageLabel(QLabel):
             metadata = self.metadata_extractor.extract_metadata_from_file(
                 self.thumbnails[0]
             )
-            self.thumbnail_box.browse_tab.selection_handler.on_thumbnail_clicked(
+            self.thumbnail_box.browse_tab.selection_handler.on_box_thumbnail_clicked(
                 self, metadata
             )
 

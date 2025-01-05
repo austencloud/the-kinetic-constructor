@@ -20,7 +20,7 @@ class BrowseTabSelectionManager:
         self.sequence_viewer = self.browse_tab.sequence_viewer
         self.main_widget = self.browse_tab.main_widget
 
-    def on_thumbnail_clicked(
+    def on_box_thumbnail_clicked(
         self, image_label: "ThumbnailImageLabel", sequence_dict: dict
     ) -> None:
         sequence_viewer = self.sequence_viewer
@@ -35,11 +35,11 @@ class BrowseTabSelectionManager:
 
         self.main_widget.fade_manager.widget_fader.fade_and_update(
             widgets,
-            lambda: self.select_thumbnail(image_label, sequence_dict),
+            lambda: self.select_box_thumbnail(image_label, sequence_dict),
             300,
         )
 
-    def select_thumbnail(
+    def select_box_thumbnail(
         self,
         image_label: "ThumbnailImageLabel",
         sequence_dict: dict,
@@ -59,15 +59,26 @@ class BrowseTabSelectionManager:
         if self.current_thumbnail:
             self.current_thumbnail.set_selected(False)
 
-        self.current_thumbnail = image_label
-        self.current_thumbnail.set_selected(True)
-        self.current_thumbnail.is_selected = True
-
-        self.sequence_viewer.select_thumbnail(
+        self.sequence_viewer.update_thumbnails(image_label.thumbnails)
+        self.select_viewer_thumbnail(
             image_label.thumbnail_box,
             image_label.thumbnail_box.current_index,
             image_label.thumbnail_box.word,
         )
+
+        self.current_thumbnail = image_label
+        self.current_thumbnail.set_selected(True)
+        self.current_thumbnail.is_selected = True
+
         self.sequence_viewer.variation_number_label.update_index(
             image_label.thumbnail_box.current_index
         )
+
+    def select_viewer_thumbnail(self, thumbnail_box, index, word):
+        sequence_viewer = self.sequence_viewer
+        sequence_viewer.current_index = index
+        sequence_viewer.current_thumbnail_box = thumbnail_box
+        sequence_viewer.variation_number_label.update_index(index)
+        sequence_viewer.word_label.update_word_label(word)
+        sequence_viewer.update_thumbnails(sequence_viewer.thumbnails)
+        sequence_viewer.update_nav_buttons()

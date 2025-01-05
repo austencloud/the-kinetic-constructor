@@ -52,6 +52,7 @@ class MainWidgetUI:
         splash.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Finalizing")
+        
         self.mw.pictograph_collector = PictographCollector(self.mw)
         self.mw.settings_dialog = SettingsDialog(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)

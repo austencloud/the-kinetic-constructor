@@ -69,7 +69,7 @@ class PictographInitializer:
 
     def init_reversal_symbols(self) -> tuple[QGraphicsTextItem, QGraphicsTextItem]:
         self.reversal_symbol_manager = BeatReversalGlyph(self.pictograph)
-        self.reversal_symbol_manager.update_reversal_symbols()
+        # self.reversal_symbol_manager.update_reversal_symbols()
 
     def set_nonradial_points_visibility(self, visible: bool) -> None:
         self.pictograph.grid.toggle_non_radial_points(visible)

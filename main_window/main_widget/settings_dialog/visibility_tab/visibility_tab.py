@@ -24,9 +24,9 @@ class VisibilityTab(QWidget):
         self.toggler = VisibilityToggler(self)
 
         # Widgets
-        self.checkbox_widget = VisibilityCheckboxWidget(self)
         self.pictograph = VisibilityPictograph(self.main_widget)
         self.pictograph_view = VisibilityPictographView(self, self.pictograph)
+        self.checkbox_widget = VisibilityCheckboxWidget(self)
 
     def _setup_layout(self):
         layout: QHBoxLayout = QHBoxLayout(self)

@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-
+from .handlers.tka_letter_handler import TKALetterHandler
+from .handlers.dash_handler import DashHandler
+from .handlers.dot_handler import DotHandler
+from .handlers.turns_column import TurnsColumn
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 
 
@@ -22,10 +25,6 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         return self.childrenBoundingRect()
 
     def init_handlers(self) -> None:
-        from .handlers.tka_letter_handler import TKALetterHandler
-        from .handlers.dash_handler import DashHandler
-        from .handlers.dot_handler import DotHandler
-        from .handlers.turns_column import TurnsColumn
 
         self.letter_handler = TKALetterHandler(self)
         self.dash_handler = DashHandler(self)
@@ -47,7 +46,9 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         self.turns_column.update_turns_column(top_turn, bottom_turn)
 
         self.setVisible(
-            self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility("TKA")
+            self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility(
+                "TKA"
+            )
             if visibility
             else False
         )

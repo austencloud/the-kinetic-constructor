@@ -1,6 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+    ReversalDetector,
+)
+
 from ..GE_pictograph_view import GE_PictographView, GE_Pictograph
 
 if TYPE_CHECKING:
@@ -37,13 +41,31 @@ class GraphEditorPictographContainer(QWidget):
 
         view.pictograph.is_blank = False
         view.reference_beat = reference_beat
+        if (
+            reference_beat.view
+            in self.graph_editor.main_widget.sequence_widget.beat_frame.beats
+        ):
+            sequence_so_far = (
+                self.graph_editor.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            )
+            index = (
+                self.graph_editor.main_widget.sequence_widget.beat_frame.beats.index(
+                    reference_beat.view
+                )
+            )
+            sequence_so_far = sequence_so_far[: index - 2]
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, reference_beat.pictograph_dict
+            )
+            view.pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
+            view.pictograph.red_reversal = reversal_info.get("red_reversal", False)
+
         view.pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
         if reference_beat.number_item.beat_number_int != "":
             beat_number_text = reference_beat.number_item.beat_number_int
             view.pictograph.number_item.update_beat_number(beat_number_text)
         else:
             view.pictograph.start_text_item.add_start_text()
-        view.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
 
     def resizeEvent(self, event):
         size = self.graph_editor.height()

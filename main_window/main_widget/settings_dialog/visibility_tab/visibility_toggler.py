@@ -19,8 +19,8 @@ class VisibilityToggler:
         """Toggle visibility for all glyphs of a specific type."""
 
         is_checked = state == Qt.CheckState.Checked.value
-        self.settings.set_glyph_visibility(name, is_checked)
-        self.visibility_tab.pictograph_view._update_opacity()
+        self.settings.set_glyph_visibility(name, state)
+        # self.visibility_tab.pictograph_view._update_opacity()
 
         pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
         for pictograph in pictographs:

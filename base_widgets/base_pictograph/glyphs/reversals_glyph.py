@@ -4,6 +4,9 @@ from PyQt6.QtGui import QFont, QColor
 
 from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from data.constants import BLUE, HEX_BLUE, HEX_RED, RED
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+    ReversalDetector,
+)
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
