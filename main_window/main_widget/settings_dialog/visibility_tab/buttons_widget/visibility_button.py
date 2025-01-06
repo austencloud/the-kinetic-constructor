@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 class VisibilityButton(QPushButton):
+
     def __init__(
         self, name: str, visibility_checkbox_widget: "VisibilityButtonsWidget"
     ):
@@ -16,6 +17,7 @@ class VisibilityButton(QPushButton):
         self.visibility_checkbox_widget = visibility_checkbox_widget
         self.toggler = self.visibility_checkbox_widget.toggler
         self.name = name
+        self.view = self.visibility_checkbox_widget.visibility_tab.pictograph_view
 
         # Custom properties for hover and toggle states
         self.is_hovered = False
@@ -35,6 +37,8 @@ class VisibilityButton(QPushButton):
         self._apply_styles()
 
         # Trigger visibility toggler
+        self.view.pictograph.update_opacity(self.name, self.is_toggled)
+        
         if self.name in self.visibility_checkbox_widget.glyph_names:
             self.toggler.toggle_glyph_visibility(self.name, self.is_toggled)
         else:

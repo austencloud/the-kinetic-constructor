@@ -21,6 +21,8 @@ class VisibilityPictographInteractionManager:
         self.view = view
         self.pictograph = view.pictograph
         self.visibility_settings = view.visibility_settings
+        self.toggler = self.view.visibility_tab.toggler
+
         self.glyphs = view.pictograph.get.glyphs()
         self.non_radial_points = self.pictograph.get.non_radial_points()
         self._initialize_interactions()
@@ -87,12 +89,12 @@ class VisibilityPictographInteractionManager:
             current_visibility = self.visibility_settings.get_glyph_visibility(
                 glyph.name
             )
-            self.visibility_settings.set_glyph_visibility(
-                glyph.name, not current_visibility
-            )
+            new_visibility = not current_visibility
+            self.visibility_settings.set_glyph_visibility(glyph.name, new_visibility)
             self.update_opacity(glyph)
             QApplication.processEvents()
             self.view.visibility_tab.buttons_widget.update_buttons()
+            self.toggler.toggle_glyph_visibility(glyph.name, new_visibility)
 
         return clickEvent
 
@@ -101,9 +103,11 @@ class VisibilityPictographInteractionManager:
 
         def clickEvent(event):
             current_visibility = self.visibility_settings.get_non_radial_visibility()
-            self.visibility_settings.set_non_radial_visibility(not current_visibility)
+            new_visibility = not current_visibility
+            self.visibility_settings.set_non_radial_visibility(new_visibility)
             self.update_opacity(self.non_radial_points)
             self.view.visibility_tab.buttons_widget.update_buttons()
+            self.toggler.toggle_non_radial_points(new_visibility)
 
         return clickEvent
 

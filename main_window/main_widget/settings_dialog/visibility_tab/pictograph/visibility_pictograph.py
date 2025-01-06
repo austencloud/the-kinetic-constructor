@@ -24,6 +24,8 @@ class VisibilityPictograph(BasePictograph):
         "red_motion_type": "pro",
     }
     view: "VisibilityPictographView" = None
+    red_reversal = True
+    blue_reversal = True
 
     def __init__(self, main_widget):
         super().__init__(main_widget)
@@ -31,18 +33,26 @@ class VisibilityPictograph(BasePictograph):
         pictograph_dict = self.main_widget.pictograph_dict_loader.find_pictograph_dict(
             self.example_data
         )
-        self.visibility_settings = self.main_widget.settings_manager.visibility
-        self.red_reversal = True
-        self.blue_reversal = True
+        self.settings = self.main_widget.settings_manager.visibility
         self.updater.update_pictograph(pictograph_dict)
         self.glyphs = self.get.glyphs()
         for glyph in self.glyphs:
             glyph.setVisible(True)
-            glyph.setOpacity(
-                1 if self.visibility_settings.get_glyph_visibility(glyph.name) else 0.1
-            )
         self.grid.toggle_non_radial_points(True)
-        self.non_radial_points = self.grid.items.get(f"{self.grid.grid_mode}_nonradial")
-        self.non_radial_points.setOpacity(
-            1 if self.visibility_settings.get_non_radial_visibility() else 0.1
+        for glyph in self.glyphs:
+            self.update_opacity(
+                glyph.name, self.settings.get_glyph_visibility(glyph.name)
+            )
+        self.update_opacity(
+            "Non-radial points", self.settings.get_non_radial_visibility()
         )
+
+    def update_opacity(self, glyph_name: str, state: bool):
+        for glyph in self.glyphs:
+            if glyph.name == glyph_name:
+                glyph.setOpacity(1 if state else 0.1)
+        if glyph_name == "Non-radial points":
+            self.non_radial_points = self.grid.items.get(
+                f"{self.grid.grid_mode}_nonradial"
+            )
+            self.non_radial_points.setOpacity(1 if state else 0.1)

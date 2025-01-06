@@ -9,10 +9,10 @@ if TYPE_CHECKING:
 
 
 class VisibilityButtonsWidget(QWidget):
-    glyph_checkboxes: dict[str, VisibilityButton] = {}
-    non_radial_checkboxes: dict[str, VisibilityButton] = {}
+    glyph_buttons: dict[str, VisibilityButton] = {}
+    non_radial_button: VisibilityButton = None
     glyph_names = ["TKA", "Reversals", "VTG", "Elemental", "Positions"]
-    grid_names = ["Non-radial points"]
+    grid_name = "Non-radial points"
 
     def __init__(self, visibility_tab: "VisibilityTab"):
         super().__init__()
@@ -26,39 +26,40 @@ class VisibilityButtonsWidget(QWidget):
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(4)
-        for button in {**self.glyph_checkboxes, **self.non_radial_checkboxes}.values():
+        for button in self.glyph_buttons.values():
             self.layout.addWidget(button)
+            self.layout.addStretch(1)
+        if self.non_radial_button:
+            self.layout.addWidget(self.non_radial_button)
             self.layout.addStretch(1)
         self.layout.addStretch(3)
 
     def _create_buttons(self):
-        for name in self.glyph_names + self.grid_names:
+        for name in self.glyph_names:
             button = VisibilityButton(name, self)
-            if name in self.glyph_names:
-                self.glyph_checkboxes[name] = button
-            else:
-                self.non_radial_checkboxes[name] = button
+            self.glyph_buttons[name] = button
+        self.non_radial_button = VisibilityButton(self.grid_name, self)
 
     def update_buttons(self):
         """Synchronize buttons with the current visibility settings."""
         settings = self.visibility_tab.main_widget.settings_manager.visibility
-        for name, button in {
-            **self.glyph_checkboxes,
-            **self.non_radial_checkboxes,
-        }.items():
-            if name in self.glyph_names:
-                button.is_toggled = settings.get_glyph_visibility(name)
-            else:
-                button.is_toggled = settings.get_non_radial_visibility()
+        for name, button in self.glyph_buttons.items():
+            button.is_toggled = settings.get_glyph_visibility(name)
             button._apply_styles()
-
+        if self.non_radial_button:
+            self.non_radial_button.is_toggled = settings.get_non_radial_visibility()
+            self.non_radial_button._apply_styles()
+            
     def resizeEvent(self, event: QEvent):
         width = self.visibility_tab.width()
         font_size = width // 40
         font = QFont()
         font.setPointSize(font_size)
 
-        for button in {**self.glyph_checkboxes, **self.non_radial_checkboxes}.values():
+        for button in self.glyph_buttons.values():
             button.setFont(font)
+
+        if self.non_radial_button:
+            self.non_radial_button.setFont(font)
 
         super().resizeEvent(event)

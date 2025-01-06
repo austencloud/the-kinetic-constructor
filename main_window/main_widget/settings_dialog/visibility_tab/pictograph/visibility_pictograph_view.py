@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 
 class VisibilityPictographView(PictographView):
+    pictograph: "VisibilityPictograph"
 
     def __init__(
         self, visibility_tab: "VisibilityTab", pictograph: "VisibilityPictograph"
