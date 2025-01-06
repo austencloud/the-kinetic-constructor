@@ -21,8 +21,8 @@ class VisibilityPictographInteractionManager:
         self.view = view
         self.pictograph = view.pictograph
         self.visibility_settings = view.visibility_settings
-        self.glyphs = view.glyphs
-        self.non_radial_points = view.non_radial_points
+        self.glyphs = view.pictograph.get.glyphs()
+        self.non_radial_points = self.pictograph.get.non_radial_points()
         self._initialize_interactions()
 
     def _initialize_interactions(self):
@@ -114,13 +114,10 @@ class VisibilityPictographInteractionManager:
             item.setOpacity(1 if visible else 0.1)
         elif isinstance(item, BeatReversalGlyph):
             visible = self.visibility_settings.get_glyph_visibility(item.name)
-            # Ensure the group opacity remains 1 to avoid stacking issues
             item.setOpacity(1)
-            # Update the opacity of each child directly
             child_opacity = 1 if visible else 0.1
             for child in item.reversal_items.values():
                 child.setOpacity(child_opacity)
-            # Force a redraw to immediately reflect the change
             item.update()
         else:
             visible = self.visibility_settings.get_glyph_visibility(item.name)

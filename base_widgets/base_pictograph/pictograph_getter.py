@@ -133,3 +133,18 @@ class PictographGetter:
             self.pictograph.start_to_end_pos_glyph,
             self.pictograph.reversal_glyph,
         ]
+
+    def non_radial_points(self) -> QGraphicsItemGroup:
+        return self.pictograph.grid.items.get(
+            f"{self.pictograph.grid.grid_mode}_nonradial"
+        )
+
+    def glyph(self, name: str) -> Glyph:
+        glyph_map = {
+            "TKA": self.pictograph.tka_glyph,
+            "VTG": self.pictograph.vtg_glyph,
+            "Elemental": self.pictograph.elemental_glyph,
+            "Positions": self.pictograph.start_to_end_pos_glyph,
+            "Reversals": self.pictograph.reversal_glyph,
+        }
+        return glyph_map.get(name)

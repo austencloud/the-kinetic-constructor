@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from .pictograph.visibility_pictograph import VisibilityPictograph
 from .visibility_toggler import VisibilityToggler
-from .visibility_checkbox_widget import VisibilityCheckboxWidget
+from .checkbox_widget.visibility_checkbox_widget import VisibilityCheckboxWidget
 from .pictograph.visibility_pictograph_view import VisibilityPictographView
 
 if TYPE_CHECKING:

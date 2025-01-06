@@ -55,7 +55,7 @@ class VisibilityToggler:
         """Toggle visibility for non-radial points."""
         is_checked = state == Qt.CheckState.Checked.value
         self.settings.set_non_radial_visibility(is_checked)
-        self.visibility_tab.pictograph_view._update_opacity()
+        # self.visibility_tab.pictograph_view._update_opacity()
 
         pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
         for pictograph in pictographs:
