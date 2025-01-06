@@ -34,12 +34,12 @@ class VisibilityPictograph(BasePictograph):
         self.glyphs = self.get.glyphs()
         for glyph in self.glyphs:
             glyph.setVisible(True)
+            self.update_opacity(glyph.name, True)
         self.grid.toggle_non_radial_points(True)
-
+        self.update_opacity("non_radial_points", True)
+        
     def update_opacity(self, glyph_name: str, state: bool):
         """Animate the opacity of the corresponding glyph."""
-        self.view.setGraphicsEffect(None)
-        self.view.tab.setGraphicsEffect(None)
         
         target_opacity = 1.0 if state else 0.1
         for glyph in self.glyphs:
@@ -48,7 +48,7 @@ class VisibilityPictograph(BasePictograph):
                     glyph, target_opacity
                 )
 
-        if glyph_name == "Non-radial points":
+        if glyph_name == "non_radial_points":
             non_radial_points = self.grid.items.get(f"{self.grid.grid_mode}_nonradial")
             if non_radial_points:
                 self.main_widget.fade_manager.widget_fader.fade_visibility_items_to_opacity(

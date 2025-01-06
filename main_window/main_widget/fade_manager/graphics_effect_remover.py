@@ -20,12 +20,34 @@ class GraphicsEffectRemover:
             self.manager.parallel_stack_fader.left_new_widget,
             self.manager.main_widget.right_stack.currentWidget(),
             self.manager.main_widget.left_stack.currentWidget(),
-            self.manager.main_widget.settings_dialog.visibility_tab,
         ]
         widgets = default_widgets + widgets
         for widget in widgets:
             if widget:
                 self._remove_all_graphics_effects(widget)
+
+        # self._clear_visibility_tab_graphics_effects()
+
+    def _clear_visibility_tab_graphics_effects(self):
+        """Clear graphics effects specifically for the visibility tab."""
+        visibility_tab = self.manager.main_widget.settings_dialog.visibility_tab
+        if visibility_tab:
+            for button in visibility_tab.buttons_widget.glyph_buttons.values():
+                if button.graphicsEffect():
+                    button.setGraphicsEffect(None)
+            if visibility_tab.pictograph_view:
+                for glyph in visibility_tab.pictograph.get.glyphs():
+                    self.widget_fader = self.manager.widget_fader
+                    items = self.widget_fader._get_corresponding_items(glyph)
+                    for item in items:
+                        if item.graphicsEffect():
+                            item.setGraphicsEffect(None)
+                if visibility_tab.pictograph.get.non_radial_points():
+                    for (
+                        point
+                    ) in visibility_tab.pictograph.get.non_radial_points().child_points:
+                        if point.graphicsEffect():
+                            point.setGraphicsEffect(None)
 
     def _remove_all_graphics_effects(self, widget: QWidget):
         """Remove graphics effects recursively and reset widget visibility."""

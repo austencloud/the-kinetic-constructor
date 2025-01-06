@@ -85,11 +85,11 @@ class VisibilityPictographInteractionManager:
                         child.setOpacity(0.5)  # Set opacity for the group
             else:
                 (
-                    self.fade_item(
+                    self.fade_and_toggle_visibility(
                         item, self.visibility_settings.get_glyph_visibility(item.name)
                     )
                     if item.name != "non_radial_points"
-                    else self.fade_item(
+                    else self.fade_and_toggle_visibility(
                         item, self.visibility_settings.get_non_radial_visibility()
                     )
                 )
@@ -106,7 +106,7 @@ class VisibilityPictographInteractionManager:
             new_visibility = not current_visibility
             self.visibility_settings.set_glyph_visibility(glyph.name, new_visibility)
             self.view.tab.buttons_widget.update_button_flags()
-            self.fade_item(glyph, new_visibility)
+            self.fade_and_toggle_visibility(glyph, new_visibility)
 
         return clickEvent
 
@@ -117,12 +117,14 @@ class VisibilityPictographInteractionManager:
             current_visibility = self.visibility_settings.get_non_radial_visibility()
             new_visibility = not current_visibility
             self.visibility_settings.set_non_radial_visibility(new_visibility)
-            self.fade_item(self.non_radial_points, new_visibility)
+            self.fade_and_toggle_visibility(self.non_radial_points, new_visibility)
             self.view.tab.buttons_widget.update_button_flags()
 
         return clickEvent
 
-    def fade_item(self, item: Union[Glyph, NonRadialPointsGroup], new_visibility):
+    def fade_and_toggle_visibility(
+        self, item: Union[Glyph, NonRadialPointsGroup], new_visibility
+    ):
         target_opacity = 1.0 if new_visibility else 0.1
 
         if new_visibility and item.opacity() < 1.0:

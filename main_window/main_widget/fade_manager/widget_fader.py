@@ -116,7 +116,7 @@ class WidgetFader:
 
     def _get_corresponding_items(
         self, element: Union[Glyph, NonRadialPointsGroup]
-    ) -> list:
+    ) -> list[Union[Glyph, NonRadialPointsGroup]]:
         if element.name == "TKA":
             items = element.get_all_items()
         elif element.name == "VTG":
@@ -130,3 +130,53 @@ class WidgetFader:
         elif element.name == "non_radial_points":
             items = element.child_points
         return items
+
+    def fade_widgets_and_element(
+        self,
+        widgets: list[QWidget],
+        element: Union[Glyph, NonRadialPointsGroup],
+        opacity: float,
+        duration: int = 300,
+        callback: Optional[callable] = None,
+    ) -> None:
+        """Fade widgets and a corresponding element in parallel."""
+        if not widgets and not element:
+            if callback:
+                callback()
+            return
+
+        animation_group = QParallelAnimationGroup(self.manager)
+
+        # Add animations for widgets
+        for widget in widgets:
+            effect = self._ensure_opacity_effect(widget)
+            animation = QPropertyAnimation(effect, b"opacity")
+            animation.setDuration(duration)
+            animation.setStartValue(effect.opacity() if effect else 1.0)
+            animation.setEndValue(opacity)
+            animation.setEasingCurve(QEasingCurve.Type.InOutCubic)
+            animation_group.addAnimation(animation)
+
+        # Add animations for elements
+        if isinstance(element, QGraphicsItem):
+            # Directly manipulate opacity for QGraphicsItem
+            element.setOpacity(opacity)
+        elif element:
+            items = self._get_corresponding_items(element)
+            for item in items:
+                if isinstance(item, QGraphicsItem):
+                    item.setOpacity(opacity)
+                elif isinstance(item, QWidget):
+                    effect = self._ensure_opacity_effect(item)
+                    if effect:
+                        animation = QPropertyAnimation(effect, b"opacity")
+                        animation.setDuration(duration)
+                        animation.setStartValue(effect.opacity() if effect else 1.0)
+                        animation.setEndValue(opacity)
+                        animation.setEasingCurve(QEasingCurve.Type.InOutCubic)
+                        animation_group.addAnimation(animation)
+
+        # Execute callback after animation finishes
+        if callback:
+            animation_group.finished.connect(callback)
+        animation_group.start()

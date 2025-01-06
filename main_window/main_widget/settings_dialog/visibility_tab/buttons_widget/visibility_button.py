@@ -35,6 +35,10 @@ class VisibilityButton(QPushButton):
     def _initialize_state(self):
         """Initialize the toggle state and colors based on settings."""
         self.update_is_toggled(self.name)
+        self.update_colors()
+
+    def update_colors(self):
+        """Update the background and text colors based on the toggle state."""
         self.background_color = QColor("#4CAF50" if self.is_toggled else "#F5F5F5")
         self.text_color = QColor("#FFFFFF" if self.is_toggled else "#000000")
 
@@ -68,25 +72,28 @@ class VisibilityButton(QPushButton):
             self.is_toggled = (
                 self.visibility_checkbox_widget.visibility_tab.settings.get_non_radial_visibility()
             )
+        self.update_colors()
 
     def _connect_signals(self):
         self.clicked.connect(self._toggle_state)
 
     def _toggle_state(self):
-        """Handle button toggle state."""
+        """Handle button toggle state with parallel fading."""
         self.is_toggled = not self.is_toggled
+
         self.animations.play_toggle_animation(self.is_toggled)
 
+        target_opacity = 1.0 if self.is_toggled else 0.1
+
         if self.name in self.visibility_checkbox_widget.glyph_names:
-            self.toggler.toggle_glyph_visibility(self.name, self.is_toggled)
-            self.view.interaction_manager.fade_item(
-                self.view.pictograph.get.glyph(self.name), self.is_toggled
-            )
+            element = self.view.pictograph.get.glyph(self.name)
         else:
-            self.toggler.toggle_non_radial_points(self.is_toggled)
-            self.view.interaction_manager.fade_item(
-                self.view.pictograph.get.non_radial_points(), self.is_toggled
-            )
+            element = self.view.pictograph.get.non_radial_points()
+
+        # Create a parallel fade animation
+        self.visibility_tab.pictograph.view.interaction_manager.fade_and_toggle_visibility(
+            element, self.is_toggled
+        )
 
     def paintEvent(self, event):
         """Custom paint event for button visuals."""
