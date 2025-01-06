@@ -1,7 +1,5 @@
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional
 from Enums.Enums import LetterType, Letter, Glyph
-from PyQt6.QtWidgets import QGraphicsItemGroup
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 from base_widgets.base_pictograph.grid.non_radial_points_group import NonRadialPointsGroup
 from base_widgets.base_pictograph.lead_state_determiner import (

@@ -8,7 +8,6 @@ from .turns_number_group.turns_number import TurnsNumber
 from .tka_letter import TKALetter
 from .dash import Dash
 from .turns_number_group.turns_number_group import TurnsNumberGroup
-from .utils import parse_turns_tuple_string
 
 
 if TYPE_CHECKING:
@@ -47,11 +46,10 @@ class TKA_Glyph(QGraphicsItemGroup):
             return
 
         turns_tuple = self.pictograph.get.turns_tuple()
-        direction, top_turn, bottom_turn = parse_turns_tuple_string(turns_tuple)
-        self.dot_handler.update_dots(direction)
+        self.dot_handler.update_dots(turns_tuple)
         self.dash.update_dash()
 
-        self.turns_column.update_turns_column(top_turn, bottom_turn)
+        self.turns_column.update_turns(turns_tuple)
 
         self.setVisible(
             self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility(

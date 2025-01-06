@@ -1,7 +1,9 @@
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
+
+from base_widgets.base_pictograph.glyphs.tka.turns_parser import parse_turns_tuple_string
 from .dot import Dot
-from data.constants import OPP, SAME
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -24,7 +26,8 @@ class DotHandler:
         self.glyph.same_dot.hide()
         self.glyph.opp_dot.hide()
 
-    def update_dots(self, dir: str) -> None:
+    def update_dots(self, turns_tuple: tuple) -> None:
+        dir = parse_turns_tuple_string(turns_tuple)[0]
         padding = 10
         letter_scene_rect = self.glyph.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
@@ -45,3 +48,4 @@ class DotHandler:
 
         self.glyph.same_dot.setVisible(dir == SAME)
         self.glyph.opp_dot.setVisible(dir == OPP)
+
