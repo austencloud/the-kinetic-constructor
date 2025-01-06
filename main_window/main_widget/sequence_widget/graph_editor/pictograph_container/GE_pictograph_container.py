@@ -53,7 +53,7 @@ class GraphEditorPictographContainer(QWidget):
                     reference_beat.view
                 )
             )
-            sequence_so_far = sequence_so_far[: index - 2]
+            sequence_so_far = sequence_so_far[: index - 3]
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, reference_beat.pictograph_dict
             )

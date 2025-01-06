@@ -58,7 +58,7 @@ class BeatAdder:
 
             new_beat.reversal_glyph.update_reversal_symbols()
             self.beat_frame.selection_overlay.select_beat(
-                self.beats[next_beat_index], toggle_graph_editor=False
+                self.beats[next_beat_index], toggle_animation=False
             )
             self.json_manager.updater.update_current_sequence_file_with_beat(
                 self.beats[next_beat_index]

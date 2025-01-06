@@ -46,5 +46,5 @@ class NonFirstBeatDeleter:
         self.option_picker._update_pictographs()
         if index > 0:
             self.deleter.selection_overlay.select_beat(
-                beats[index - 1], toggle_graph_editor=False, defer_show=True
+                beats[index - 1], toggle_animation=False, defer_show=True
             )
