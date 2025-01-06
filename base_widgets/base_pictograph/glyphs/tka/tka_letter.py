@@ -8,7 +8,7 @@ from utilities.path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:
-    from ..tka_glyph import TKA_Glyph
+    from .tka_glyph import TKA_Glyph
 
 SVG_PATHS = {
     LetterType.Type1: "Type1/{letter}.svg",
@@ -25,10 +25,10 @@ SVG_PATHS = {
 }
 
 
-class TKALetterHandler:
+class TKALetter(QGraphicsSvgItem):
     def __init__(self, glyph: "TKA_Glyph") -> None:
+        super().__init__(glyph)
         self.glyph = glyph
-        self.glyph.letter_item = QGraphicsSvgItem(self.glyph)
         self.renderer = None
 
     def set_letter(self) -> None:
@@ -38,16 +38,9 @@ class TKALetterHandler:
         self.glyph.pictograph.letter_type = letter_type
         svg_path: str = SVG_PATHS.get(letter_type, "")
         svg_path = svg_path.format(letter=self.glyph.pictograph.letter.value)
-        self.renderer = QSvgRenderer(svg_path)
+        self.renderer: QSvgRenderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
-            self.glyph.letter_item.setSharedRenderer(self.renderer)
-            self.position_letter()
-
-    def position_letter(self) -> None:
-        x = int(self.glyph.letter_item.boundingRect().height() / 1.5)
-        y = int(
-            self.glyph.pictograph.height()
-            - (self.glyph.letter_item.boundingRect().height() * 1.7)
-        )
-        self.glyph.letter_item.setPos(x, y)
-
+            self.setSharedRenderer(self.renderer)
+            x = int(self.boundingRect().height() / 1.5)
+            y = int(self.glyph.pictograph.height() - (self.boundingRect().height() * 1.7))
+            self.setPos(x, y)

@@ -85,7 +85,7 @@ class SequenceWidgetBeatFrameLayoutManager:
                     if index < len(beats):
                         beat_view = beats[index]
                         self.beat_frame.layout.addWidget(beat_view, row, col)
-                        beat_view.beat.number_item.update_beat_number(index + 1)
+                        beat_view.beat.beat_number_item.update_beat_number(index + 1)
                         beat_view.show()
                     index += 1
                 else:

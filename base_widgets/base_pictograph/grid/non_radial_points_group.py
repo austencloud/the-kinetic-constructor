@@ -1,10 +1,6 @@
-from typing import TYPE_CHECKING
 import xml.etree.ElementTree as ET
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from .non_radial_point import NonRadialGridPoint
-
-if TYPE_CHECKING:
-    from .non_radial_points_toggler import NonRadialPointsToggler
 
 
 class NonRadialPointsGroup(QGraphicsItemGroup):
@@ -12,12 +8,11 @@ class NonRadialPointsGroup(QGraphicsItemGroup):
 
     name = "non_radial_points"
 
-    def __init__(self, path: str, visibility_manager: "NonRadialPointsToggler"):
+    def __init__(self, path: str):
         super().__init__()
         self.setFlag(self.GraphicsItemFlag.ItemHasNoContents, True)
         self.setFiltersChildEvents(False)
         self.child_points: list[NonRadialGridPoint] = []
-        self.visibility_manager = visibility_manager
         self._parse_svg(path)
 
     def _parse_svg(self, path: str):
@@ -35,6 +30,6 @@ class NonRadialPointsGroup(QGraphicsItemGroup):
             cy = float(circle.attrib.get("cy", 0))
             r = float(circle.attrib.get("r", 0))
             point_id = circle.attrib.get("id", "unknown_point")
-            point = NonRadialGridPoint(cx, cy, r, point_id, self.visibility_manager)
+            point = NonRadialGridPoint(cx, cy, r, point_id)
             point.setParentItem(self)  # Add point to the group
             self.child_points.append(point)

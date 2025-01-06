@@ -11,12 +11,12 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.glyphs.elemental_glyph.elemental_glyph import (
         ElementalGlyph,
     )
-    from base_widgets.base_pictograph.glyphs.reversals_glyph import BeatReversalGlyph
+    from base_widgets.base_pictograph.glyphs.reversals import BeatReversalGlyph
     from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
         StartToEndPosGlyph,
     )
-    from base_widgets.base_pictograph.glyphs.tka_glyph.tka_glyph import TKA_Glyph
-    from base_widgets.base_pictograph.glyphs.vtg_glyph.vtg_glyph import VTG_Glyph
+    from base_widgets.base_pictograph.glyphs.tka.tka_glyph import TKA_Glyph
+    from base_widgets.base_pictograph.glyphs.vtg.vtg_glyph import VTG_Glyph
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from main_window.settings_manager.visibility_settings.visibility_settings import (
         VisibilitySettings,
@@ -319,7 +319,7 @@ class VTG_Timings(Enum):
     TOGETHER = "together"
 
 
-class VTG_Directions(Enum):
+class str(Enum):
     SAME = "same"
     OPP = "opp"
 

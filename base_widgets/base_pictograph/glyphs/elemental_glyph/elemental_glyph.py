@@ -4,7 +4,6 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
-from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from data.constants import (
     QUARTER_OPP,
     QUARTER_SAME,
@@ -35,9 +34,11 @@ SVG_PATHS = {
 }
 
 
-class ElementalGlyph(QGraphicsSvgItem, BaseGlyph):
+class ElementalGlyph(QGraphicsSvgItem):
+    name = "Elemental"
+    
     def __init__(self, pictograph: "BasePictograph") -> None:
-        super().__init__(name="Elemental")
+        super().__init__()
         self.pictograph = pictograph
 
     def set_elemental_glyph(self) -> None:

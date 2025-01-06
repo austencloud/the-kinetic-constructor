@@ -1,19 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QApplication
+from PyQt6.QtWidgets import QApplication
 
-from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box_nav_btns import (
-    ThumbnailBoxNavButtonsWidget,
-)
 
-from .word_label import WordLabel
-from .variation_number_label import VariationNumberLabel
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import (
         ThumbnailBox,
     )
-    from main_window.main_widget.browse_tab.browse_tab import BrowseTab
 
 
 class FavoritesManager:

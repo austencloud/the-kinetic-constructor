@@ -3,9 +3,6 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QLabel
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.browse_tab.sequence_viewer.placeholder_text_label import (
-    PlaceholderTextLabel,
-)
 
 if TYPE_CHECKING:
     from .sequence_viewer import SequenceViewer

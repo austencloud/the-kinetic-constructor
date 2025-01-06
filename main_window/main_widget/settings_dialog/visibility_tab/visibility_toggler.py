@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
 from Enums.Enums import Glyph
 
 if TYPE_CHECKING:

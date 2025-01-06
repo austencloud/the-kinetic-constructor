@@ -36,21 +36,27 @@ class WidgetCollector:
         items.extend(GE_pictograph.props.values())
 
         glyph_items = [
+            # TKA
             GE_pictograph.tka_glyph.letter_item,
-            GE_pictograph.tka_glyph.dash_handler.dash_item,
-            GE_pictograph.tka_glyph.dot_handler.same_dot_item,
-            GE_pictograph.tka_glyph.dot_handler.opp_dot_item,
+            GE_pictograph.tka_glyph.dash,
+            GE_pictograph.tka_glyph.same_dot,
+            GE_pictograph.tka_glyph.opp_dot,
+            GE_pictograph.tka_glyph.top_number,
+            GE_pictograph.tka_glyph.bottom_number,
+            # VTG
+            GE_pictograph.vtg_glyph,
+            # Elementals
+            GE_pictograph.elemental_glyph,
+            # Positions
             GE_pictograph.start_to_end_pos_glyph.start_glyph,
             GE_pictograph.start_to_end_pos_glyph.end_glyph,
             GE_pictograph.start_to_end_pos_glyph.arrow_glyph,
-            GE_pictograph.elemental_glyph,
-            GE_pictograph.vtg_glyph,
-            GE_pictograph.number_item,
+            # Beat number
+            GE_pictograph.beat_number_item,
+            GE_pictograph.start_text_item,
+            # Reversals
             GE_pictograph.blue_reversal_symbol,
             GE_pictograph.red_reversal_symbol,
-            GE_pictograph.start_text_item,
-            GE_pictograph.tka_glyph.turns_column.top_number_item,
-            GE_pictograph.tka_glyph.turns_column.bottom_number_item,
         ]
 
         items.extend(glyph_items)

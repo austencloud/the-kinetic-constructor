@@ -42,9 +42,7 @@ class Grid:
 
         non_radial_path = non_radial_paths.get(self.grid_mode)
         if non_radial_path:
-            non_radial_points = NonRadialPointsGroup(
-                non_radial_path, self.pictograph.main_widget.settings_manager.visibility
-            )
+            non_radial_points = NonRadialPointsGroup(non_radial_path)
             self.pictograph.addItem(non_radial_points)
             is_visible = (
                 self.pictograph.main_widget.settings_manager.visibility.get_non_radial_visibility()

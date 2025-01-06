@@ -2,19 +2,17 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsTextItem, QGraphicsItemGroup
 from PyQt6.QtGui import QFont, QColor
 
-from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from data.constants import BLUE, HEX_BLUE, HEX_RED, RED
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
-    ReversalDetector,
-)
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class BeatReversalGlyph(QGraphicsItemGroup, BaseGlyph):
+class BeatReversalGlyph(QGraphicsItemGroup):
+    name = "Reversals"
+    
     def __init__(self, pictograph: "BasePictograph"):
-        super().__init__(name="Reversals")
+        super().__init__()
         self.pictograph = pictograph
         self.reversal_items: dict[str, QGraphicsTextItem] = {}
         self.create_reversal_symbols()

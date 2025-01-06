@@ -3,7 +3,6 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import
     ReversalDetector,
 )
 from utilities.word_simplifier import WordSimplifier
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame

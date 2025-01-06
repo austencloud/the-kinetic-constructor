@@ -5,7 +5,6 @@ from PyQt6.QtSvg import QSvgRenderer
 import os
 
 from Enums.letters import Letter
-from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -13,9 +12,9 @@ if TYPE_CHECKING:
 
 
 class StartToEndPosGlyph(QGraphicsItemGroup):
+    name = "Positions"
+    
     def __init__(self, pictograph: "BasePictograph"):
-        QGraphicsItemGroup.__init__(self)
-        BaseGlyph.__init__(self, "Positions")
         super().__init__()
         self.pictograph = pictograph
 

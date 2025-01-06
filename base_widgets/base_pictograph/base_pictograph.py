@@ -26,11 +26,11 @@ from placement_managers.arrow_placement_manager.arrow_placement_manager import (
 from placement_managers.prop_placement_manager.prop_placement_manager import (
     PropPlacementManager,
 )
-from .glyphs.reversals_glyph import BeatReversalGlyph
+from .glyphs.reversals import BeatReversalGlyph
 from .glyphs.elemental_glyph.elemental_glyph import ElementalGlyph
 from .glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
-from .glyphs.tka_glyph.tka_glyph import TKA_Glyph
-from .glyphs.vtg_glyph.vtg_glyph import VTG_Glyph
+from .glyphs.tka.tka_glyph import TKA_Glyph
+from .glyphs.vtg.vtg_glyph import VTG_Glyph
 from .pictograph_attr_manager import PictographAttrManager
 from .pictograph_checker import PictographChecker
 from .pictograph_getter import PictographGetter

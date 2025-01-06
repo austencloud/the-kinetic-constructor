@@ -14,8 +14,8 @@ class BeatStartTextItem(QGraphicsTextItem):
         self.beat.addItem(self)
 
     def add_start_text(self):
-        if self.beat.number_item:
-            self.beat.number_item.setVisible(False)
+        if self.beat.beat_number_item:
+            self.beat.beat_number_item.setVisible(False)
         self.setVisible(True)
         self.setFont(QFont("Georgia", 60, QFont.Weight.DemiBold))
         text_padding = self.beat.height() // 28

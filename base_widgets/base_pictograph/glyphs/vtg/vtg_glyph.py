@@ -3,7 +3,6 @@ from PyQt6.QtSvg import QSvgRenderer
 
 from typing import TYPE_CHECKING, Literal
 
-from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
 from data.constants import (
     ALPHA1,
     BOX,
@@ -44,9 +43,11 @@ SVG_PATHS = {
 }
 
 
-class VTG_Glyph(QGraphicsSvgItem, BaseGlyph):
+class VTG_Glyph(QGraphicsSvgItem):
+    name = "VTG"
+    
     def __init__(self, pictograph: "BasePictograph") -> None:
-        super().__init__(name="VTG")
+        super().__init__()
         self.pictograph = pictograph
 
     def set_vtg_mode(self) -> None:

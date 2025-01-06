@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Optional, Union
-from Enums.Enums import LetterType, Letter
+from Enums.Enums import LetterType, Letter, Glyph
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
+from base_widgets.base_pictograph.grid.non_radial_points_group import NonRadialPointsGroup
 from base_widgets.base_pictograph.lead_state_determiner import (
     LeadStateDeterminer,
 )
@@ -15,7 +15,6 @@ from Enums.MotionAttributes import Location, MotionType
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
-Glyph = Union["BaseGlyph", "QGraphicsItemGroup", "QGraphicsSvgItem"]
 
 
 class PictographGetter:
@@ -134,7 +133,7 @@ class PictographGetter:
             self.pictograph.reversal_glyph,
         ]
 
-    def non_radial_points(self) -> QGraphicsItemGroup:
+    def non_radial_points(self) -> NonRadialPointsGroup:
         return self.pictograph.grid.items.get(
             f"{self.pictograph.grid.grid_mode}_nonradial"
         )

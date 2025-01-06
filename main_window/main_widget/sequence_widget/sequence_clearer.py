@@ -71,8 +71,8 @@ class SequenceClearer:
         props: dict = GE_pictograph.props
         tka_glyph = GE_pictograph.tka_glyph
         tka_glyph_parts = [
-            tka_glyph.letter_handler.letter_item,
-            tka_glyph.dash_handler.dash_item,
+            tka_glyph.letter_item.letter_item,
+            tka_glyph.dash.dash_item,
             tka_glyph.dot_handler.same_dot_item,
             tka_glyph.dot_handler.opp_dot_item,
         ]
@@ -86,7 +86,7 @@ class SequenceClearer:
             [
                 GE_pictograph.vtg_glyph,
                 GE_pictograph.elemental_glyph,
-                GE_pictograph.number_item,
+                GE_pictograph.beat_number_item,
                 GE_pictograph.start_text_item,
             ]
             + tka_glyph_parts

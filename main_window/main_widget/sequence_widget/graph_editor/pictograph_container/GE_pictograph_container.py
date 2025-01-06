@@ -61,9 +61,9 @@ class GraphEditorPictographContainer(QWidget):
             view.pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
         view.pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
-        if reference_beat.number_item.beat_number_int != "":
-            beat_number_text = reference_beat.number_item.beat_number_int
-            view.pictograph.number_item.update_beat_number(beat_number_text)
+        if reference_beat.beat_number_item.beat_number_int != "":
+            beat_number_text = reference_beat.beat_number_item.beat_number_int
+            view.pictograph.beat_number_item.update_beat_number(beat_number_text)
         else:
             view.pictograph.start_text_item.add_start_text()
 

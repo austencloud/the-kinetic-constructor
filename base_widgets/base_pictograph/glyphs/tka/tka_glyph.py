@@ -1,22 +1,32 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsItemGroup
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from .handlers.tka_letter_handler import TKALetterHandler
-from .handlers.dash_handler import DashHandler
-from .handlers.dot_handler import DotHandler
-from .handlers.turns_column import TurnsColumn
-from base_widgets.base_pictograph.glyphs.tka_glyph.base_glyph import BaseGlyph
+
+from .dot_handler.dot import Dot
+from .dot_handler.dot_handler import DotHandler
+
+from .turns_number_group.turns_number import TurnsNumber
+from .tka_letter import TKALetter
+from .dash import Dash
+from .turns_number_group.turns_number_group import TurnsNumberGroup
+from .utils import parse_turns_tuple_string
 
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
-    letter_item: "QGraphicsSvgItem"
+class TKA_Glyph(QGraphicsItemGroup):
+    name = "TKA"
+
+    letter_item: TKALetter
+    dash: Dash
+    top_number: TurnsNumber
+    bottom_number: TurnsNumber
+    same_dot: Dot
+    opp_dot: Dot
 
     def __init__(self, pictograph: "BasePictograph") -> None:
-        super().__init__(name="TKA")  # Ensure MRO handles initialization
+        super().__init__()
         self.pictograph = pictograph
         self.letter = None
         self.init_handlers()
@@ -25,23 +35,21 @@ class TKA_Glyph(QGraphicsItemGroup, BaseGlyph):
         return self.childrenBoundingRect()
 
     def init_handlers(self) -> None:
-
-        self.letter_handler = TKALetterHandler(self)
-        self.dash_handler = DashHandler(self)
+        self.letter_item = TKALetter(self)
+        self.dash = Dash(self)
         self.dot_handler = DotHandler(self)
-        self.turns_column = TurnsColumn(self)
+        self.turns_column = TurnsNumberGroup(self)
 
     def update_tka_glyph(self, visibility=True) -> None:
         self.letter = self.pictograph.letter
-        self.letter_handler.set_letter()
+        self.letter_item.set_letter()
         if not self.letter:
             return
-        from .handlers.utils import parse_turns_tuple_string
 
         turns_tuple = self.pictograph.get.turns_tuple()
         direction, top_turn, bottom_turn = parse_turns_tuple_string(turns_tuple)
         self.dot_handler.update_dots(direction)
-        self.dash_handler.update_dash()
+        self.dash.update_dash()
 
         self.turns_column.update_turns_column(top_turn, bottom_turn)
 

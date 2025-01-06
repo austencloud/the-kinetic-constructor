@@ -27,9 +27,9 @@ class BeatDrawer:
 
         for beat_view in filled_beats:
             if add_beat_numbers:
-                beat_view.beat.number_item.setVisible(True)
+                beat_view.beat.beat_number_item.setVisible(True)
             else:
-                beat_view.beat.number_item.setVisible(False)
+                beat_view.beat.beat_number_item.setVisible(False)
 
         beat_size = int(
             self.beat_frame.start_pos_view.beat.width() * self.image_creator.beat_scale
