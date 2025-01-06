@@ -1,6 +1,5 @@
 from PyQt6.QtCore import QEvent
 from typing import TYPE_CHECKING
-from base_widgets.base_pictograph.grid import non_radial_point
 from base_widgets.base_pictograph.pictograph_view import PictographView
 from .visibility_pictograph_interaction_manager import (
     VisibilityPictographInteractionManager,
@@ -24,11 +23,10 @@ class VisibilityPictographView(PictographView):
         self.interaction_manager = VisibilityPictographInteractionManager(self)
         self.setStyleSheet("border: 2px solid black;")
 
-
     def resizeEvent(self, event: QEvent):
         available_width = (
             self.visibility_tab.dialog.width()
-            - self.visibility_tab.checkbox_widget.width()
+            - self.visibility_tab.buttons_widget.width()
         )
         size = int(available_width * 0.7)
         self.setFixedSize(size, size)

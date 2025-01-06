@@ -92,7 +92,7 @@ class VisibilityPictographInteractionManager:
             )
             self.update_opacity(glyph)
             QApplication.processEvents()
-            self.view.visibility_tab.checkbox_widget.update_checkboxes()
+            self.view.visibility_tab.buttons_widget.update_buttons()
 
         return clickEvent
 
@@ -103,7 +103,7 @@ class VisibilityPictographInteractionManager:
             current_visibility = self.visibility_settings.get_non_radial_visibility()
             self.visibility_settings.set_non_radial_visibility(not current_visibility)
             self.update_opacity(self.non_radial_points)
-            self.view.visibility_tab.checkbox_widget.update_checkboxes()
+            self.view.visibility_tab.buttons_widget.update_buttons()
 
         return clickEvent
 

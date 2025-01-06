@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from .pictograph.visibility_pictograph import VisibilityPictograph
 from .visibility_toggler import VisibilityToggler
-from .checkbox_widget.visibility_checkbox_widget import VisibilityCheckboxWidget
+from .buttons_widget.visibility_buttons_widget import VisibilityButtonsWidget
 from .pictograph.visibility_pictograph_view import VisibilityPictographView
 
 if TYPE_CHECKING:
@@ -26,10 +26,10 @@ class VisibilityTab(QWidget):
         # Widgets
         self.pictograph = VisibilityPictograph(self.main_widget)
         self.pictograph_view = VisibilityPictographView(self, self.pictograph)
-        self.checkbox_widget = VisibilityCheckboxWidget(self)
+        self.buttons_widget = VisibilityButtonsWidget(self)
 
     def _setup_layout(self):
         layout: QHBoxLayout = QHBoxLayout(self)
-        layout.addWidget(self.checkbox_widget)
+        layout.addWidget(self.buttons_widget)
         layout.addWidget(self.pictograph_view)
         self.setLayout(layout)
