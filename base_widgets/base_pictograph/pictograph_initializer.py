@@ -4,7 +4,7 @@ from PyQt6.QtCore import QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
-from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import (
+from base_widgets.base_pictograph.glyphs.beat_reversal_group import (
     BeatReversalGroup,
 )
 from objects.arrow.arrow import Arrow

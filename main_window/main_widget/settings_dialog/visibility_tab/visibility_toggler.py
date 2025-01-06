@@ -52,8 +52,6 @@ class VisibilityToggler:
 
     def toggle_non_radial_points(self, state: bool):
         """Toggle visibility for non-radial points."""
-        self.settings.set_non_radial_visibility(state)
-
         pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
         for pictograph in pictographs:
             pictograph.grid.toggle_non_radial_points(state)

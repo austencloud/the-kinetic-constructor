@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsTextItem
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import (
+from base_widgets.base_pictograph.glyphs.beat_reversal_group import (
     BeatReversalGroup,
 )
 

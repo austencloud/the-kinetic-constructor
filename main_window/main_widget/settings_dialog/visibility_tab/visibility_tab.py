@@ -24,7 +24,7 @@ class VisibilityTab(QWidget):
         self.toggler = VisibilityToggler(self)
 
         # Widgets
-        self.pictograph = VisibilityPictograph(self.main_widget)
+        self.pictograph = VisibilityPictograph(self)
         self.pictograph_view = VisibilityPictographView(self, self.pictograph)
         self.buttons_widget = VisibilityButtonsWidget(self)
 

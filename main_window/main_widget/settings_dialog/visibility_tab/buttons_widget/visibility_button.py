@@ -80,12 +80,12 @@ class VisibilityButton(QPushButton):
         if self.name in self.visibility_checkbox_widget.glyph_names:
             self.toggler.toggle_glyph_visibility(self.name, self.is_toggled)
             self.view.interaction_manager.fade_item(
-                self.view.pictograph.get.glyph(self.name)
+                self.view.pictograph.get.glyph(self.name), self.is_toggled
             )
         else:
             self.toggler.toggle_non_radial_points(self.is_toggled)
             self.view.interaction_manager.fade_item(
-                self.view.pictograph.get.non_radial_points()
+                self.view.pictograph.get.non_radial_points(), self.is_toggled
             )
 
     def paintEvent(self, event):

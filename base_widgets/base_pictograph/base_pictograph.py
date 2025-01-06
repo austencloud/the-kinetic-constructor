@@ -26,7 +26,7 @@ from placement_managers.arrow_placement_manager.arrow_placement_manager import (
 from placement_managers.prop_placement_manager.prop_placement_manager import (
     PropPlacementManager,
 )
-from .glyphs.beat_reversal_glyph import BeatReversalGroup
+from .glyphs.beat_reversal_group import BeatReversalGroup
 from .glyphs.elemental_glyph.elemental_glyph import ElementalGlyph
 from .glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
 from .glyphs.tka.tka_glyph import TKA_Glyph

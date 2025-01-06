@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
+    from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
+        VisibilityTab,
+    )
     from .visibility_pictograph_view import VisibilityPictographView
 
 
@@ -19,9 +22,10 @@ class VisibilityPictograph(BasePictograph):
     red_reversal = True
     blue_reversal = True
 
-    def __init__(self, main_widget):
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self, tab: "VisibilityTab"):
+        super().__init__(tab.main_widget)
+        self.tab = tab
+        self.main_widget = tab.main_widget
         pictograph_dict = self.main_widget.pictograph_dict_loader.find_pictograph_dict(
             self.example_data
         )
@@ -31,16 +35,12 @@ class VisibilityPictograph(BasePictograph):
         for glyph in self.glyphs:
             glyph.setVisible(True)
         self.grid.toggle_non_radial_points(True)
-        for glyph in self.glyphs:
-            self.update_opacity(
-                glyph.name, self.settings.get_glyph_visibility(glyph.name)
-            )
-        self.update_opacity(
-            "Non-radial points", self.settings.get_non_radial_visibility()
-        )
 
     def update_opacity(self, glyph_name: str, state: bool):
         """Animate the opacity of the corresponding glyph."""
+        self.view.setGraphicsEffect(None)
+        self.view.tab.setGraphicsEffect(None)
+        
         target_opacity = 1.0 if state else 0.1
         for glyph in self.glyphs:
             if glyph.name == glyph_name:

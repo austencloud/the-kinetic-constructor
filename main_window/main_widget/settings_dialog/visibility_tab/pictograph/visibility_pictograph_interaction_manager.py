@@ -1,7 +1,7 @@
 from typing import Union, TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
-from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import BeatReversalGroup
+from base_widgets.base_pictograph.glyphs.beat_reversal_group import BeatReversalGroup
 from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,
 )
@@ -22,7 +22,7 @@ class VisibilityPictographInteractionManager:
         self.view = view
         self.pictograph = view.pictograph
         self.visibility_settings = view.visibility_settings
-        self.toggler = self.view.visibility_tab.toggler
+        self.toggler = self.view.tab.toggler
 
         self.glyphs = view.pictograph.get.glyphs()
         self.non_radial_points = self.pictograph.get.non_radial_points()
@@ -70,16 +70,29 @@ class VisibilityPictographInteractionManager:
             if entering:
                 item.setOpacity(0.5)
                 item.setCursor(cursor)
-                if isinstance(item, NonRadialPointsGroup):
+                if item.name == "non_radial_points":
                     item.setOpacity(0.5)
                     for point in item.child_points:
                         point.setCursor(cursor)
-                elif isinstance(item, BeatReversalGroup):
+                        point.setOpacity(0.5)  # Set opacity for the group
+                elif item.name == "Reversals":
                     for child_group in item.reversal_items.values():
                         child_group.setCursor(cursor)
                         child_group.setOpacity(0.5)  # Set opacity for the group
+                elif item.name == "TKA":
+                    for child in item.get_all_items():
+                        child.setCursor(cursor)
+                        child.setOpacity(0.5)  # Set opacity for the group
             else:
-                self.fade_item(item)  # Restore opacity
+                (
+                    self.fade_item(
+                        item, self.visibility_settings.get_glyph_visibility(item.name)
+                    )
+                    if item.name != "non_radial_points"
+                    else self.fade_item(
+                        item, self.visibility_settings.get_non_radial_visibility()
+                    )
+                )
 
         return hoverEvent
 
@@ -92,10 +105,8 @@ class VisibilityPictographInteractionManager:
             )
             new_visibility = not current_visibility
             self.visibility_settings.set_glyph_visibility(glyph.name, new_visibility)
-            self.view.visibility_tab.buttons_widget.update_button_flags()
-            self.fade_item(glyph)
-            QApplication.processEvents()
-            self.toggler.toggle_glyph_visibility(glyph.name, new_visibility)
+            self.view.tab.buttons_widget.update_button_flags()
+            self.fade_item(glyph, new_visibility)
 
         return clickEvent
 
@@ -106,16 +117,25 @@ class VisibilityPictographInteractionManager:
             current_visibility = self.visibility_settings.get_non_radial_visibility()
             new_visibility = not current_visibility
             self.visibility_settings.set_non_radial_visibility(new_visibility)
-            self.fade_item(self.non_radial_points)
-            self.view.visibility_tab.buttons_widget.update_button_flags()
-            self.toggler.toggle_non_radial_points(new_visibility)
+            self.fade_item(self.non_radial_points, new_visibility)
+            self.view.tab.buttons_widget.update_button_flags()
 
         return clickEvent
 
-    def fade_item(self, item: Union[Glyph, NonRadialPointsGroup]):
-        """Update the opacity of a glyph or non-radial point based on visibility settings."""
-        target_opacity = (
-            1.0 if self.visibility_settings.get_glyph_visibility(item.name) else 0.1
-        )
+    def fade_item(self, item: Union[Glyph, NonRadialPointsGroup], new_visibility):
+        target_opacity = 1.0 if new_visibility else 0.1
+
+        if new_visibility and item.opacity() < 1.0:
+            item.setOpacity(1.0)
+
         widget_fader = self.pictograph.main_widget.fade_manager.widget_fader
-        widget_fader.fade_visibility_items_to_opacity(item, target_opacity)
+        widget_fader.fade_visibility_items_to_opacity(
+            item,
+            target_opacity,
+            300,
+            lambda: (
+                self.toggler.toggle_non_radial_points(new_visibility)
+                if item.name == "non_radial_points"
+                else self.toggler.toggle_glyph_visibility(item.name, new_visibility)
+            ),
+        )

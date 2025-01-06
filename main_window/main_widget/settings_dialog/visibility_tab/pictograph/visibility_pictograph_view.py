@@ -16,7 +16,7 @@ class VisibilityPictographView(PictographView):
     def __init__(
         self, visibility_tab: "VisibilityTab", pictograph: "VisibilityPictograph"
     ):
-        self.visibility_tab = visibility_tab
+        self.tab = visibility_tab
         self.visibility_settings = visibility_tab.settings
         self.main_widget = visibility_tab.main_widget
         super().__init__(pictograph)
@@ -25,10 +25,7 @@ class VisibilityPictographView(PictographView):
         self.setStyleSheet("border: 2px solid black;")
 
     def resizeEvent(self, event: QEvent):
-        available_width = (
-            self.visibility_tab.dialog.width()
-            - self.visibility_tab.buttons_widget.width()
-        )
+        available_width = self.tab.dialog.width() - self.tab.buttons_widget.width()
         size = int(available_width * 0.7)
         self.setFixedSize(size, size)
         super().resizeEvent(event)

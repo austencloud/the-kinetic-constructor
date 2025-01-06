@@ -81,28 +81,20 @@ class WidgetFader:
 
     def fade_visibility_items_to_opacity(
         self,
-        element: Union[Glyph, NonRadialPointsGroup],
+        visibility_element: Union[Glyph, NonRadialPointsGroup],
         opacity: float,
         duration: int = 300,
         callback: Optional[callable] = None,
     ) -> None:
-        if not element:
+        if not visibility_element:
             if callback:
                 callback()
             return
-        if element.name == "TKA":
-            items = element.get_all_items()
-        elif element.name == "VTG":
-            items = [element]
-        elif element.name == "Elemental":
-            items = [element]
-        elif element.name == "Positions":
-            items = element.get_all_items()
-        elif element.name == "Reversals":
-            items = list(element.reversal_items.values())
-        elif element.name == "non_radial_points":
-            items = element.child_points
-            
+        items = self._get_corresponding_items(visibility_element)
+
+        self.manager.graphics_effect_remover.clear_graphics_effects(
+            [visibility_element]
+        )
         animation_group = QParallelAnimationGroup(self.manager)
         for item in items:
             self.manager.graphics_effect_remover.clear_graphics_effects([item])
@@ -121,3 +113,20 @@ class WidgetFader:
         if callback:
             animation_group.finished.connect(callback)
         animation_group.start()
+
+    def _get_corresponding_items(
+        self, element: Union[Glyph, NonRadialPointsGroup]
+    ) -> list:
+        if element.name == "TKA":
+            items = element.get_all_items()
+        elif element.name == "VTG":
+            items = [element]
+        elif element.name == "Elemental":
+            items = [element]
+        elif element.name == "Positions":
+            items = element.get_all_items()
+        elif element.name == "Reversals":
+            items = list(element.reversal_items.values())
+        elif element.name == "non_radial_points":
+            items = element.child_points
+        return items

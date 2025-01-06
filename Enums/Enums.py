@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.glyphs.elemental_glyph.elemental_glyph import (
         ElementalGlyph,
     )
-    from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import (
+    from base_widgets.base_pictograph.glyphs.beat_reversal_group import (
         BeatReversalGroup,
     )
     from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
