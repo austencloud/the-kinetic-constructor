@@ -11,7 +11,9 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.glyphs.elemental_glyph.elemental_glyph import (
         ElementalGlyph,
     )
-    from base_widgets.base_pictograph.glyphs.reversals import BeatReversalGlyph
+    from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import (
+        BeatReversalGroup,
+    )
     from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
         StartToEndPosGlyph,
     )
@@ -27,7 +29,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 Glyph = Union[
     QGraphicsTextItem,
     QGraphicsSvgItem,
-    "BeatReversalGlyph",
+    "BeatReversalGroup",
     "ElementalGlyph",
     "StartToEndPosGlyph",
     "TKA_Glyph",

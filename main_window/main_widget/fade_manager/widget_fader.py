@@ -1,3 +1,4 @@
+from math import e
 from typing import TYPE_CHECKING, Optional, Union
 from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QGraphicsItem
 from PyQt6.QtCore import (
@@ -7,6 +8,10 @@ from PyQt6.QtCore import (
     QTimer,
 )
 from base_widgets.base_pictograph.glyphs.tka.tka_glyph import TKA_Glyph
+from Enums.Enums import Glyph
+from base_widgets.base_pictograph.grid.non_radial_points_group import (
+    NonRadialPointsGroup,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
@@ -74,29 +79,37 @@ class WidgetFader:
 
         self.fade_widgets(widget, False, duration, on_fade_out_finished)
 
-    def fade_widgets_to_opacity(
+    def fade_visibility_items_to_opacity(
         self,
-        widgets: list,
+        element: Union[Glyph, NonRadialPointsGroup],
         opacity: float,
         duration: int = 300,
         callback: Optional[callable] = None,
     ) -> None:
-        if not widgets:
+        if not element:
             if callback:
                 callback()
             return
-        if len(widgets) == 1 and isinstance(widgets[0], TKA_Glyph):
-            widgets = widgets[0].childItems()
-
-        self.manager.graphics_effect_remover.clear_graphics_effects(widgets)
-
+        if element.name == "TKA":
+            items = element.get_all_items()
+        elif element.name == "VTG":
+            items = [element]
+        elif element.name == "Elemental":
+            items = [element]
+        elif element.name == "Positions":
+            items = element.get_all_items()
+        elif element.name == "Reversals":
+            items = list(element.reversal_items.values())
+        elif element.name == "non_radial_points":
+            items = element.child_points
+            
         animation_group = QParallelAnimationGroup(self.manager)
-        for widget in widgets:
-            if isinstance(widget, QGraphicsItem):
-                # Directly set opacity for QGraphicsItem
-                widget.setOpacity(opacity)
-            elif isinstance(widget, QWidget):
-                effect = self._ensure_opacity_effect(widget)
+        for item in items:
+            self.manager.graphics_effect_remover.clear_graphics_effects([item])
+            if isinstance(item, QGraphicsItem):
+                item.setOpacity(opacity)
+            elif isinstance(item, QWidget):
+                effect = self._ensure_opacity_effect(item)
                 if effect:
                     start_opacity = effect.opacity() if effect else 1.0
                     animation = QPropertyAnimation(effect, b"opacity")

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsTextItem
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from base_widgets.base_pictograph.glyphs.reversals import (
-    BeatReversalGlyph,
+from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import (
+    BeatReversalGroup,
 )
 
 if TYPE_CHECKING:
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 class ActBeat(BasePictograph):
     def __init__(self, beat_frame: "ActBeatFrame", duration: Union[int, float] = 1):
         super().__init__(beat_frame.write_tab.main_widget)
-        self.reversal_glyph = BeatReversalGlyph(self)
+        self.reversal_glyph = BeatReversalGroup(self)
         self.view: "ActBeatView" = None
         self.beat_number_item: QGraphicsTextItem = None
         self.duration = duration

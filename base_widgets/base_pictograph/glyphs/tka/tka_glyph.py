@@ -58,3 +58,13 @@ class TKA_Glyph(QGraphicsItemGroup):
             if visibility
             else False
         )
+
+    def get_all_items(self):
+        return [
+            self.letter_item,
+            self.dash,
+            self.same_dot,
+            self.opp_dot,
+            self.top_number,
+            self.bottom_number,
+        ]

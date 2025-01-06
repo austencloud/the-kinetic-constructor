@@ -26,7 +26,7 @@ from placement_managers.arrow_placement_manager.arrow_placement_manager import (
 from placement_managers.prop_placement_manager.prop_placement_manager import (
     PropPlacementManager,
 )
-from .glyphs.reversals import BeatReversalGlyph
+from .glyphs.beat_reversal_glyph import BeatReversalGroup
 from .glyphs.elemental_glyph.elemental_glyph import ElementalGlyph
 from .glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
 from .glyphs.tka.tka_glyph import TKA_Glyph
@@ -62,7 +62,7 @@ class BasePictograph(QGraphicsScene):
     attr_manager: PictographAttrManager
     arrow_placement_manager: ArrowPlacementManager
     prop_placement_manager: PropPlacementManager
-    reversal_glyph: BeatReversalGlyph
+    reversal_glyph: BeatReversalGroup
     wasd_manager: WASD_AdjustmentManager
 
     # bool
@@ -140,4 +140,4 @@ class BasePictograph(QGraphicsScene):
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
-        self.reversal_glyph = BeatReversalGlyph(self)
+        self.reversal_glyph = BeatReversalGroup(self)

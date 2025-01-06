@@ -8,9 +8,9 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class BeatReversalGlyph(QGraphicsItemGroup):
+class BeatReversalGroup(QGraphicsItemGroup):
     name = "Reversals"
-    
+
     def __init__(self, pictograph: "BasePictograph"):
         super().__init__()
         self.pictograph = pictograph

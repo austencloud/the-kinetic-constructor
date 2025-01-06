@@ -4,8 +4,8 @@ from PyQt6.QtCore import QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
-from base_widgets.base_pictograph.glyphs.reversals import (
-    BeatReversalGlyph,
+from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import (
+    BeatReversalGroup,
 )
 from objects.arrow.arrow import Arrow
 from base_widgets.base_pictograph.grid.grid import Grid, GridData
@@ -62,13 +62,11 @@ class PictographInitializer:
         self.init_reversal_symbols()
 
         self.set_nonradial_points_visibility(
-            self.pictograph.main_widget.main_window.settings_manager.visibility.get_non_radial_visibility(
-              
-            )
+            self.pictograph.main_widget.main_window.settings_manager.visibility.get_non_radial_visibility()
         )
 
     def init_reversal_symbols(self) -> tuple[QGraphicsTextItem, QGraphicsTextItem]:
-        self.reversal_symbol_manager = BeatReversalGlyph(self.pictograph)
+        self.reversal_symbol_manager = BeatReversalGroup(self.pictograph)
         # self.reversal_symbol_manager.update_reversal_symbols()
 
     def set_nonradial_points_visibility(self, visible: bool) -> None:

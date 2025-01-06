@@ -33,3 +33,4 @@ class NonRadialPointsGroup(QGraphicsItemGroup):
             point = NonRadialGridPoint(cx, cy, r, point_id)
             point.setParentItem(self)  # Add point to the group
             self.child_points.append(point)
+

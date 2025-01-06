@@ -102,3 +102,6 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
             - self.arrow_glyph.boundingRect().height() * scale_factor,
         )
         self.setPos(x_position, y_position)
+
+    def get_all_items(self):
+        return [self.start_glyph, self.arrow_glyph, self.end_glyph]

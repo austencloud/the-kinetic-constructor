@@ -1,7 +1,7 @@
 from typing import Union, TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
-from base_widgets.base_pictograph.glyphs.reversals import BeatReversalGlyph
+from base_widgets.base_pictograph.glyphs.beat_reversal_glyph import BeatReversalGroup
 from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,
 )
@@ -41,7 +41,7 @@ class VisibilityPictographInteractionManager:
         glyph.hoverEnterEvent = self._create_hover_event(glyph, entering=True)
         glyph.hoverLeaveEvent = self._create_hover_event(glyph, entering=False)
 
-        if isinstance(glyph, (StartToEndPosGlyph, BeatReversalGlyph)):
+        if isinstance(glyph, (StartToEndPosGlyph, BeatReversalGroup)):
             for child in glyph.childItems():
                 child.setCursor(Qt.CursorShape.PointingHandCursor)
                 child.setAcceptHoverEvents(True)
@@ -74,7 +74,7 @@ class VisibilityPictographInteractionManager:
                     item.setOpacity(0.5)
                     for point in item.child_points:
                         point.setCursor(cursor)
-                elif isinstance(item, BeatReversalGlyph):
+                elif isinstance(item, BeatReversalGroup):
                     for child_group in item.reversal_items.values():
                         child_group.setCursor(cursor)
                         child_group.setOpacity(0.5)  # Set opacity for the group
@@ -118,19 +118,4 @@ class VisibilityPictographInteractionManager:
             1.0 if self.visibility_settings.get_glyph_visibility(item.name) else 0.1
         )
         widget_fader = self.pictograph.main_widget.fade_manager.widget_fader
-
-        if isinstance(item, NonRadialPointsGroup):
-            widget_fader.fade_widgets_to_opacity(item.child_points, target_opacity)
-        elif isinstance(item, BeatReversalGlyph):
-            widget_fader.fade_widgets_to_opacity([item], target_opacity)
-            for child in item.reversal_items.values():
-                widget_fader.fade_widgets_to_opacity([child], target_opacity)
-        elif isinstance(item, TKA_Glyph):
-            widget_fader.fade_widgets_to_opacity([item], target_opacity)
-            for child in item.childItems():
-                widget_fader.fade_widgets_to_opacity([child], target_opacity)
-        else:
-            widget_fader.fade_widgets_to_opacity([item], target_opacity)
-            if isinstance(item, StartToEndPosGlyph):
-                for child in item.childItems():
-                    widget_fader.fade_widgets_to_opacity([child], target_opacity)
+        widget_fader.fade_visibility_items_to_opacity(item, target_opacity)
