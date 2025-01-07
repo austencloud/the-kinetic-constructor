@@ -64,7 +64,7 @@ class PropTypeChanger:
                     pictographs.add(pictograph)
 
         # Collect pictographs from the sequence widget's beat frame
-        for beat_view in main_widget.sequence_widget.beat_frame.beats:
+        for beat_view in main_widget.sequence_widget.beat_frame.beat_views:
             if beat_view.is_filled:
                 pictographs.add(beat_view.beat)
 

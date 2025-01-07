@@ -1,0 +1,80 @@
+from typing import TYPE_CHECKING
+from data.positions_map import positions_map
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
+
+
+if TYPE_CHECKING:
+    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
+
+
+class SequenceColorSwapper:
+    def __init__(self, sequence_widget: "SequenceWidget"):
+        self.sequence_widget = sequence_widget
+        self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
+
+    def swap_current_sequence(self):
+
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+
+        self.sequence_widget.button_panel.toggle_swap_colors_icon()
+        swapped_sequence = self.swap_sequence()
+        self.sequence_widget.beat_frame.updater.update_beats_from(swapped_sequence)
+        self.sequence_widget.main_widget.construct_tab.option_picker.update_option_picker()
+        self.sequence_widget.graph_editor.pictograph_container.update_pictograph()
+        self.sequence_widget.indicator_label.show_message("Colors swapped!")
+
+        QApplication.restoreOverrideCursor()
+
+    def check_length(self, current_sequence):
+        if len(current_sequence) < 2:
+            self.sequence_widget.indicator_label.show_message(
+                "No sequence to color swap."
+            )
+            QApplication.restoreOverrideCursor()
+            return False
+
+    def swap_sequence(self) -> list[dict]:
+        current_sequence = self.json_loader.load_current_sequence_json()
+        metadata = current_sequence[0].copy()
+        if self.check_length(current_sequence):
+            return
+        swapped_sequence = []
+        swapped_sequence.append(metadata)
+
+        start_pos_beat_dict: dict = (
+            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
+        )
+        self._swap_dict_values(start_pos_beat_dict)
+        swapped_sequence.append(start_pos_beat_dict)
+
+        beat_dicts = self.sequence_widget.beat_frame.get.beat_dicts()
+        for beat in beat_dicts:
+            swapped_beat = beat.copy()
+            self._swap_dict_values(swapped_beat)
+            swapped_sequence.append(swapped_beat)
+        return swapped_sequence
+
+    def _swap_dict_values(self, _dict):
+        _dict["blue_attributes"], _dict["red_attributes"] = (
+            _dict["red_attributes"],
+            _dict["blue_attributes"],
+        )
+
+        if (
+            "start_loc" in _dict["blue_attributes"]
+            and "start_loc" in _dict["red_attributes"]
+        ):
+            left_start_loc = _dict["blue_attributes"]["start_loc"]
+            right_start_loc = _dict["red_attributes"]["start_loc"]
+            _dict["start_pos"] = positions_map.get((left_start_loc, right_start_loc))
+
+        if (
+            "end_loc" in _dict["blue_attributes"]
+            and "end_loc" in _dict["red_attributes"]
+        ):
+            left_end_loc = _dict["blue_attributes"]["end_loc"]
+            right_end_loc = _dict["red_attributes"]["end_loc"]
+            _dict["end_pos"] = positions_map.get((left_end_loc, right_end_loc))
+
+        return _dict

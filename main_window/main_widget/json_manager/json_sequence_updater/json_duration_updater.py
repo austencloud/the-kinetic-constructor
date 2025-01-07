@@ -111,7 +111,9 @@ class JsonDurationUpdater:
 
     def _update_beat_view_numbers(self, beat_number_mapping: dict[int, int]) -> None:
         """Update the BeatView numbers based on the provided mapping."""
-        for beat_view in self.json_manager.main_widget.sequence_widget.beat_frame.beats:
+        for (
+            beat_view
+        ) in self.json_manager.main_widget.sequence_widget.beat_frame.beat_views:
             if beat_view.number in beat_number_mapping:
                 old_number = beat_view.number
                 beat_view.number = beat_number_mapping[old_number]

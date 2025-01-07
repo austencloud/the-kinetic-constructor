@@ -10,7 +10,7 @@ class WidgetCollector:
         self.deleter = deleter
 
     def collect_shared_widgets(self):
-        beats = self.deleter.beat_frame.beats
+        beats = self.deleter.beat_frame.beat_views
         pictograph_items = self._get_GE_pictograph_items()
         adjustment_panel_items = self.get_adjustment_panel_items()
         widgets = (

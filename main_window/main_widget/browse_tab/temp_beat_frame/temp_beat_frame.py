@@ -48,8 +48,8 @@ class TempBeatFrame(BaseBeatFrame):
         self._setup_layout()
 
     def _init_beats(self):
-        self.beats = [BeatView(self, number=i + 1) for i in range(64)]
-        for beat in self.beats:
+        self.beat_views = [BeatView(self, number=i + 1) for i in range(64)]
+        for beat in self.beat_views:
             beat.hide()
 
     def _setup_components(self) -> None:
@@ -65,7 +65,7 @@ class TempBeatFrame(BaseBeatFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.start_pos_view, 0, 0)
-        for i, beat in enumerate(self.beats):
+        for i, beat in enumerate(self.beat_views):
             row, col = divmod(i, 8)
             self.layout.addWidget(beat, row + 1, col + 1)
         self.layout_manager.configure_beat_frame(16)
@@ -75,21 +75,21 @@ class TempBeatFrame(BaseBeatFrame):
 
         if (
             next_beat_index is not None
-            and self.beats[next_beat_index].is_filled is False
+            and self.beat_views[next_beat_index].is_filled is False
         ):
-            self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+            self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
             self.json_manager.updater.update_current_sequence_file_with_beat(
-                self.beats[next_beat_index]
+                self.beat_views[next_beat_index]
             )
             self.update_current_word()
             self.adjust_layout_to_sequence_length()
 
     def adjust_layout_to_sequence_length(self):
-        last_filled_index = self.get.next_available_beat() or len(self.beats)
+        last_filled_index = self.get.next_available_beat() or len(self.beat_views)
         self.layout_manager.configure_beat_frame(last_filled_index)
 
     def get_last_filled_beat(self) -> BeatView:
-        for beat_view in reversed(self.beats):
+        for beat_view in reversed(self.beat_views):
             if beat_view.is_filled:
                 return beat_view
         return self.start_pos_view
@@ -107,7 +107,7 @@ class TempBeatFrame(BaseBeatFrame):
             elif i == 1:
                 self.update_start_pos_from_current_sequence_json(entry)
             elif i > 1:
-                beat = self.beats[i - 2].beat
+                beat = self.beat_views[i - 2].beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
@@ -170,7 +170,7 @@ class TempBeatFrame(BaseBeatFrame):
             self.layout_manager.configure_beat_frame(0)
 
     def _reset_beat_frame(self) -> None:
-        for beat_view in self.beats:
+        for beat_view in self.beat_views:
             beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
         self.start_pos_view.setScene(self.start_pos_view.blank_beat)

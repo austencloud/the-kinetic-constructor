@@ -11,29 +11,25 @@ if TYPE_CHECKING:
     from .sequence_widget import SequenceWidget
 
 
-class SequenceRotationManager:
-    """Handles rotating the sequence in 45° increments."""
-
+class SequenceRotater:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
 
-    def rotate_beats(self):
+    def rotate_current_sequence(self):
+
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
         rotated_sequence = self.rotate_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(rotated_sequence)
         self.rotate_option_picker_pictographs()
-
+        self.sequence_widget.graph_editor.pictograph_container.update_pictograph()
         self.sequence_widget.indicator_label.show_message("Sequence rotated!")
 
         QApplication.restoreOverrideCursor()
 
     def rotate_option_picker_pictographs(self):
         option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
-        # for pictograph in option_picker.option_pool:
-        #     new_dict = self._rotate_dict(pictograph.pictograph_dict.copy())
-        #     pictograph.updater.update_pictograph(new_dict)
         option_picker.update_option_picker()
 
     def check_length(self, current_sequence):
@@ -43,7 +39,6 @@ class SequenceRotationManager:
             return False
 
     def rotate_sequence(self):
-        """Rotate the sequence by rotation_steps * 45°."""
         current_sequence = self.json_loader.load_current_sequence_json()
         metadata = current_sequence[0].copy()
 

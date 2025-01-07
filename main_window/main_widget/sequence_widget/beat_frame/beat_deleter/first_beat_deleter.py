@@ -43,7 +43,7 @@ class FirstBeatDeleter:
             self.deleter.beat_frame.start_pos_view.beat
         )
         self.deleter.beat_frame.selection_overlay.deselect_beat()
-        beats = self.deleter.beat_frame.beats
+        beats = self.deleter.beat_frame.beat_views
         start_index = beats.index(start_beat)
         for beat in beats[start_index:]:
             self.deleter._delete_beat(beat)

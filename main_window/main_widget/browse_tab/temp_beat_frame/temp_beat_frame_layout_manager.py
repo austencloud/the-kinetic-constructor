@@ -48,7 +48,7 @@ class TempBeatFrameLayoutManager:
         self.beat_frame.start_pos_view.show()
 
         index = 0
-        beats = self.beat_frame.beats
+        beats = self.beat_frame.beat_views
         for row in range(rows):
             for col in range(1, columns + 1):
                 if index < num_beats:

@@ -50,7 +50,7 @@ class BeatFrameResizer:
         return min(int(width // 5), int(height // 6))
 
     def resize_beats(self, beat_size: int) -> None:
-        for beat in self.beat_frame.beats:
+        for beat in self.beat_frame.beat_views:
             beat.setFixedSize(beat_size, beat_size)
         self.start_pos_view.setFixedSize(beat_size, beat_size)
 

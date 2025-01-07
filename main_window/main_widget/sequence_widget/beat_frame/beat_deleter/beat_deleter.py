@@ -36,7 +36,7 @@ class BeatDeleter:
         if isinstance(selected_beat, StartPositionBeatView):
             self.start_position_deleter.delete_all_beats(show_indicator=True)
         else:
-            if selected_beat == self.beat_frame.beats[0]:
+            if selected_beat == self.beat_frame.beat_views[0]:
                 self.first_beat_deleter.delete_first_beat(selected_beat)
             else:
                 self.other_beat_deleter.delete_non_first_beat(selected_beat)
@@ -51,7 +51,7 @@ class BeatDeleter:
         self.beat_frame.sequence_widget.difficulty_label.update_difficulty_label()
 
     def _delete_beat_and_following(self, beat: BeatView) -> None:
-        beats = self.beat_frame.beats
+        beats = self.beat_frame.beat_views
         start_index = beats.index(beat)
         beats = [beat for beat in beats[start_index:]]
         for beat in beats:

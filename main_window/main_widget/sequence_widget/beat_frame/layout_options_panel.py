@@ -246,7 +246,7 @@ class LayoutOptionsPanel(QWidget):
     def get_currently_visible_beats(self) -> int:
         """Get the number of currently visible beats."""
         num_beats = 0
-        for beat in self.beat_frame.beats:
+        for beat in self.beat_frame.beat_views:
             if beat.isVisible():
                 num_beats += 1
         return num_beats

@@ -41,8 +41,8 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
     def _init_beats(self):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
-        self.beats = [BeatView(self, number=i + 1) for i in range(64)]
-        for beat in self.beats:
+        self.beat_views = [BeatView(self, number=i + 1) for i in range(64)]
+        for beat in self.beat_views:
             beat.hide()
 
     def _setup_components(self) -> None:

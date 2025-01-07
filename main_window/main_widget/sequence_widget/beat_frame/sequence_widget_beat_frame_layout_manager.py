@@ -25,7 +25,7 @@ class SequenceWidgetBeatFrameLayoutManager:
             False
         )
         layout.addWidget(self.beat_frame.start_pos_view, 0, 0)
-        for i, beat in enumerate(self.beat_frame.beats):
+        for i, beat in enumerate(self.beat_frame.beat_views):
             row, col = divmod(i, 8)
             layout.addWidget(beat, row + 1, col + 1)
         self.beat_frame.layout = layout
@@ -52,7 +52,9 @@ class SequenceWidgetBeatFrameLayoutManager:
 
     def configure_beat_frame_for_filled_beats(self) -> None:
         if self.settings_manager.global_settings.get_grow_sequence():
-            filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
+            filled_beats = [
+                beat for beat in self.beat_frame.beat_views if beat.is_filled
+            ]
             self.beat_frame.layout_manager.configure_beat_frame(len(filled_beats))
 
     def configure_beat_frame(self, num_beats, override_grow_sequence=False):
@@ -78,7 +80,7 @@ class SequenceWidgetBeatFrameLayoutManager:
         self.beat_frame.start_pos_view.show()
 
         index = 0
-        beats = self.beat_frame.beats
+        beats = self.beat_frame.beat_views
         for row in range(rows):
             for col in range(1, columns + 1):
                 if index < num_beats:

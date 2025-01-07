@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class BeatAdder:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
-        self.beats = beat_frame.beats
+        self.beats = beat_frame.beat_views
         self.sequence_widget = beat_frame.sequence_widget
         self.main_widget = beat_frame.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager

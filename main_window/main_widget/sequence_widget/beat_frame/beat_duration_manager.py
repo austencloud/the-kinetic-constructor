@@ -42,7 +42,7 @@ class BeatDurationManager:
         beat_entries = {beat["beat"]: beat for beat in sequence_beats}
 
         # Update BeatView numbers
-        for beat_view in self.beat_frame.beats:
+        for beat_view in self.beat_frame.beat_views:
             if beat_view.beat:
                 beat_number = beat_view.number
                 if beat_number in beat_entries:

@@ -28,7 +28,7 @@ class JsonTurnsUpdater:
         beat_frame = self.json_manager.main_widget.sequence_widget.beat_frame
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if sequence[index][f"{color}_attributes"]["turns"] > 0:
-                pictograph = beat_frame.beats[index - 2].beat
+                pictograph = beat_frame.beat_views[index - 2].beat
                 if pictograph:
                     motion = pictograph.get.motion_by_color(color)
                     prop_rot_dir = motion.prop_rot_dir
@@ -39,7 +39,7 @@ class JsonTurnsUpdater:
 
                 del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         elif sequence[index][f"{color}_attributes"]["turns"] == "fl":
-            pictograph = beat_frame.beats[index - 2].beat
+            pictograph = beat_frame.beat_views[index - 2].beat
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
 
@@ -53,7 +53,7 @@ class JsonTurnsUpdater:
 
     def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
         current_beat = (
-            self.main_widget.sequence_widget.beat_frame.get.currently_selected_beat()
+            self.main_widget.sequence_widget.beat_frame.get.currently_selected_beat_view()
         )
         current_beat_number = (
             current_beat.number

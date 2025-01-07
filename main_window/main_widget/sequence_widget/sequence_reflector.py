@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceMirrorManager:
+class SequenceReflector:
     vertical_mirror_positions = mirrored_positions["vertical"]
 
     def __init__(self, sequence_widget: "SequenceWidget"):
@@ -21,12 +21,13 @@ class SequenceMirrorManager:
         self.json_updater = json_manager.updater
 
     def mirror_current_sequence(self):
+
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
         mirrored_sequence = self.mirror_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(mirrored_sequence)
         self.mirror_option_picker_pictographs()
-
+        self.sequence_widget.graph_editor.pictograph_container.update_pictograph()
         self.sequence_widget.indicator_label.show_message("Sequence mirrored!")
 
         QApplication.restoreOverrideCursor()
@@ -35,15 +36,12 @@ class SequenceMirrorManager:
         option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
         option_picker.update_option_picker()
         for option in option_picker.option_pool:
-            # new_dict = self._mirror_dict(option.pictograph_dict.copy())
             sequence_so_far = self.json_loader.load_current_sequence_json()
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, option.pictograph_dict
             )
             option.blue_reversal = reversal_info.get("blue_reversal", False)
             option.red_reversal = reversal_info.get("red_reversal", False)
-
-            # option.updater.update_pictograph(new_dict)
 
     def check_length(self, current_sequence):
         if len(current_sequence) < 2:

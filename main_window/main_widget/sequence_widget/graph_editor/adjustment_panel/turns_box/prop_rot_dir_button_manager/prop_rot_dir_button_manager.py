@@ -60,7 +60,7 @@ class PropRotDirButtonManager:
         if self.turns_box.prop_rot_dir_btn_state[prop_rot_dir]:
             return
         selected_beat = (
-            self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat()
+            self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat_view()
         )
         both_beats: list[Beat] = [
             selected_beat.beat,
@@ -95,7 +95,7 @@ class PropRotDirButtonManager:
             self.turns_box.graph_editor.sequence_widget.main_widget.construct_tab.option_picker
         )
         self.option_picker.update_option_picker()
-        self.graph_editor.pictograph_container.update_GE_pictograph(pictograph)
+        self.graph_editor.pictograph_container.update_pictograph(pictograph)
 
     def _update_pictograph_and_json(
         self, motion: "Motion", new_letter: Letter = None

@@ -85,7 +85,7 @@ class MainWidgetTabSwitcher:
     def get_construct_tab_index(self):
         """Return the index of the construct tab."""
         beat_frame = self.mw.sequence_widget.beat_frame
-        for beat in beat_frame.beats:
+        for beat in beat_frame.beat_views:
             if beat.is_filled:
                 return self.mw.right_option_picker_index
         return self.mw.right_start_pos_picker_index

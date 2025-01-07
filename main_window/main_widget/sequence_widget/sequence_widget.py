@@ -1,12 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
-from main_window.main_widget.sequence_widget.beat_frame.beat_deleter.beat_deleter import BeatDeleter
+from main_window.main_widget.sequence_widget.beat_frame.beat_deleter.beat_deleter import (
+    BeatDeleter,
+)
 
 
-from .sequence_color_swap_manager import SequenceColorSwapManager
-from .sequence_mirror_manager import SequenceMirrorManager
-from .sequence_rotation_manager import SequenceRotationManager
+from .sequence_color_swapper import SequenceColorSwapper
+from .sequence_reflector import SequenceReflector
+from .sequence_rotater import SequenceRotater
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
 from .beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -35,9 +37,9 @@ class SequenceWidget(QWidget):
         self.autocompleter = SequenceAutoCompleter(self)
 
         # Modification Managers
-        self.mirror_manager = SequenceMirrorManager(self)
-        self.color_swap_manager = SequenceColorSwapManager(self)
-        self.rotation_manager = SequenceRotationManager(self)
+        self.mirror_manager = SequenceReflector(self)
+        self.color_swap_manager = SequenceColorSwapper(self)
+        self.rotation_manager = SequenceRotater(self)
 
         # Labels
         self.indicator_label = SequenceWidgetIndicatorLabel(self)

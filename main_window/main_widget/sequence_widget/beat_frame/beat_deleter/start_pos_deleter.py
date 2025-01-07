@@ -11,7 +11,7 @@ class StartPositionDeleter:
         self.beat_frame = deleter.beat_frame
 
     def delete_all_beats(self, show_indicator=True) -> None:
-        beats = self.beat_frame.beats
+        beats = self.beat_frame.beat_views
         widgets = self.deleter.widget_collector.collect_shared_widgets()
         beats_filled = any(beat.is_filled for beat in beats)
         start_pos_filled = self.beat_frame.start_pos_view.is_filled

@@ -19,7 +19,7 @@ class SequenceClearer:
         beat_frame = self.sequence_widget.beat_frame
         if not self.construct_tab:
             self.construct_tab = self.sequence_widget.main_widget.construct_tab
-        beats = beat_frame.beats
+        beats = beat_frame.beat_views
         pictograph_items = self._get_GE_pictograph_items()
         adjustment_panel_items = self._get_adjustment_panel_items()
         widgets = (
@@ -137,7 +137,7 @@ class SequenceClearer:
 
     def _reset_beat_frame(self) -> None:
         beat_frame = self.sequence_widget.beat_frame
-        for beat_view in beat_frame.beats:
+        for beat_view in beat_frame.beat_views:
             beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
         self.sequence_widget.beat_frame.start_pos_view.setScene(

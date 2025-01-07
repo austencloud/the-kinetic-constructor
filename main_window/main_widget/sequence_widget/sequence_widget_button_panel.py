@@ -70,17 +70,17 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "mirror_sequence": {
                 "icon": "mirror.png",
-                "callback": self.sequence_widget.mirror_manager.mirror_current_sequence,
+                "callback": self.sequence_widget.mirror_manager.mirror_beats,
                 "tooltip": "Mirror Sequence",
             },
             "swap_colors": {
                 "icon": "yinyang1.png",
-                "callback": self.sequence_widget.color_swap_manager.swap_colors_in_sequence,
+                "callback": self.sequence_widget.color_swap_manager.swap_current_sequence,
                 "tooltip": "Swap Colors",
             },
             "rotate_sequence": {
                 "icon": "rotate.png",
-                "callback": self.sequence_widget.rotation_manager.rotate_beats,
+                "callback": self.sequence_widget.rotation_manager.rotate_current_sequence,
                 "tooltip": "Rotate Sequence",
             },
             "delete_beat": {

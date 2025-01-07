@@ -81,8 +81,8 @@ class LayoutOptionsDialog(QDialog):
                         rows, cols, num_beats
                     )
                     for i in range(num_beats, num_filled_beats):
-                        self.sequence_widget.beat_frame.beats[i].setScene(
-                            self.sequence_widget.beat_frame.beats[i].blank_beat
+                        self.sequence_widget.beat_frame.beat_views[i].setScene(
+                            self.sequence_widget.beat_frame.beat_views[i].blank_beat
                         )
                     selected_beat = (
                         self.sequence_widget.beat_frame.selection_overlay.selected_beat
@@ -94,7 +94,9 @@ class LayoutOptionsDialog(QDialog):
                             and selected_beat_index >= num_beats
                         ):
                             self.sequence_widget.beat_frame.selection_overlay.select_beat(
-                                self.sequence_widget.beat_frame.beats[num_beats - 1]
+                                self.sequence_widget.beat_frame.beat_views[
+                                    num_beats - 1
+                                ]
                             )
                 else:
                     return
@@ -111,7 +113,9 @@ class LayoutOptionsDialog(QDialog):
             not self.settings_manager.global_settings.get_grow_sequence()
             and self.sequence_widget.beat_frame.get.next_available_beat() - 1
             >= sum(
-                1 for beat in self.sequence_widget.beat_frame.beats if beat.isVisible()
+                1
+                for beat in self.sequence_widget.beat_frame.beat_views
+                if beat.isVisible()
             )
         ):
             option_picker.set_disabled(True)

@@ -28,7 +28,12 @@ class GraphEditorPictographContainer(QWidget):
         self.GE_pictograph = GE_Pictograph(self)
         self.GE_view = GE_PictographView(self, self.GE_pictograph)
 
-    def update_GE_pictograph(self, reference_beat: "Beat") -> None:
+    def update_pictograph(self, reference_beat: "Beat" = None) -> None:
+        if not reference_beat:
+            reference_beat = (
+                self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat_view().beat
+            )
+
         view = self.GE_view
         pictograph = view.pictograph
 
@@ -37,7 +42,7 @@ class GraphEditorPictographContainer(QWidget):
         view.is_start_pos = reference_beat.view.is_start_pos
         pictograph.blue_reversal = reference_beat.blue_reversal
         pictograph.red_reversal = reference_beat.red_reversal
-        
+
         pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
 
         beat_number_text = reference_beat.beat_number_item.beat_number_int

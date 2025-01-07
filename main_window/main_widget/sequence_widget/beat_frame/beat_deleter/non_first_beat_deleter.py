@@ -10,13 +10,13 @@ class NonFirstBeatDeleter:
         self.deleter = deleter
 
     def delete_non_first_beat(self, selected_beat: "BeatView"):
-        index_of_selected_beat = self.deleter.beat_frame.beats.index(selected_beat)
+        index_of_selected_beat = self.deleter.beat_frame.beat_views.index(selected_beat)
         self.option_picker = self.deleter.main_widget.construct_tab.option_picker
         widgets = self.deleter.widget_collector.collect_shared_widgets()
         views = [option.view for option in self.option_picker.option_pool]
         widgets.extend(views)
         widgets.remove(self.deleter.beat_frame.start_pos_view)
-        beats_to_remove = self.deleter.beat_frame.beats[:index_of_selected_beat]
+        beats_to_remove = self.deleter.beat_frame.beat_views[:index_of_selected_beat]
         for beat in beats_to_remove:
             widgets.remove(beat)
         last_filled_beat = self.deleter.beat_frame.get.last_filled_beat()
@@ -36,7 +36,7 @@ class NonFirstBeatDeleter:
             self.deleter.beat_frame.start_pos_view.beat
         )
         self.deleter.selection_overlay.deselect_beat()
-        beats = self.deleter.beat_frame.beats
+        beats = self.deleter.beat_frame.beat_views
         index = beats.index(beat)
         for beat in beats[index:]:
             self.deleter._delete_beat(beat)

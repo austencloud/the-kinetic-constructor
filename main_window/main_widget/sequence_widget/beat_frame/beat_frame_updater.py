@@ -78,15 +78,17 @@ class BeatFrameUpdater:
             self.json_manager.start_pos_handler.set_start_position_data(start_pos)
 
         for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
-            if i < len(self.bf.beats) and self.bf.beats[i].is_filled:
-                beat = self.bf.beats[i].beat
+            if i < len(self.bf.beat_views) and self.bf.beat_views[i].is_filled:
+                beat = self.bf.beat_views[i].beat
                 beat.updater.update_pictograph(beat_dict)
                 grid_mode = self.bf.main_widget.grid_mode_checker.get_grid_mode(
                     beat_dict
                 )
                 beat.grid.hide()
                 beat.grid.__init__(beat, beat.grid.grid_data, grid_mode)
-                json_updater.update_current_sequence_file_with_beat(self.bf.beats[i])
+                json_updater.update_current_sequence_file_with_beat(
+                    self.bf.beat_views[i]
+                )
             else:
                 break
         if not beat:
@@ -96,7 +98,7 @@ class BeatFrameUpdater:
         )
 
     def reset_beat_frame(self) -> None:
-        for beat_view in self.bf.beats:
+        for beat_view in self.bf.beat_views:
             beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
         self.bf.start_pos_view.setScene(self.bf.start_pos_view.blank_beat)

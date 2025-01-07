@@ -78,7 +78,7 @@ class JsonSequenceUpdater:
     def clear_and_repopulate_json_from_beat_view(self):
         self.json_manager.loader_saver.clear_current_sequence_file()
         beat_frame = self.json_manager.main_widget.sequence_widget.beat_frame
-        beat_views = beat_frame.beats
+        beat_views = beat_frame.beat_views
         start_pos = beat_frame.start_pos_view.start_pos
         if start_pos.view.is_filled:
             self.json_manager.start_pos_handler.set_start_position_data(start_pos)

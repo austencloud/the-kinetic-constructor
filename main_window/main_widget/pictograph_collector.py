@@ -15,7 +15,7 @@ class PictographCollector:
 
         sequence_widget = self.main_widget.sequence_widget
         beat_frame = sequence_widget.beat_frame
-        beat_views = beat_frame.beats
+        beat_views = beat_frame.beat_views
         codex = self.main_widget.learn_tab.codex
         graph_editor = sequence_widget.graph_editor
         option_picker = self.main_widget.construct_tab.option_picker
