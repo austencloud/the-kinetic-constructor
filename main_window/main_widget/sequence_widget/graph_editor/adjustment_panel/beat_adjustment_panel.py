@@ -72,9 +72,8 @@ class BeatAdjustmentPanel(QFrame):
         self._set_current_stack_widgets(
             ORI_WIDGET_INDEX if is_blank or view.is_start_pos else TURNS_WIDGET_INDEX
         )
-        if self.stacked_widget.currentIndex() == TURNS_WIDGET_INDEX:
-            self.update_turns_displays()
-            self.update_rot_dir_buttons()
+        self.update_turns_displays()
+        self.update_rot_dir_buttons()
 
     def update_rot_dir_buttons(self) -> None:
         """Update the rotation direction buttons based on the current pictograph state."""

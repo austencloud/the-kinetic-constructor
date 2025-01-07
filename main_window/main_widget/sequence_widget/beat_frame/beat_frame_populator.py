@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 
 
 class BeatFramePopulator:
+    loading_text = "Loading sequence..."
+    
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
@@ -23,7 +25,7 @@ class BeatFramePopulator:
     ) -> None:
         self.current_sequence_json = current_sequence_json  # Store the sequence JSON
         indicator_label = self.sequence_widget.indicator_label
-        indicator_label.show_message("Loading sequence...")
+        indicator_label.show_message(self.loading_text)
         self.json_manager.loader_saver.clear_current_sequence_file()
         self.construct_tab = self.main_widget.construct_tab
 
@@ -48,7 +50,6 @@ class BeatFramePopulator:
             self.current_sequence_json
         )
         self.json_manager.start_pos_handler.set_start_position_data(start_pos_beat)
-        # QApplication.processEvents()
         self.start_pos_view.set_start_pos(start_pos_beat)
 
     def _update_sequence_layout(self):
@@ -117,13 +118,7 @@ class BeatFramePopulator:
         self.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
         self.selection_overlay.update_overlay_position()
 
-    def _add_placeholder_beat(self, pictograph_dict: dict) -> None:
-        """
-        Create and add a placeholder beat to the sequence.
-        """
-        self.json_manager.updater.add_placeholder_entry_to_current_sequence(
-            pictograph_dict["beat"], pictograph_dict["parent_beat"]
-        )
+
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.beat_frame.layout_manager.configure_beat_frame(

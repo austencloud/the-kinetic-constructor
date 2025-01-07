@@ -104,7 +104,7 @@ class GE_PictographView(PictographView):
         painter.end()
 
     def get_current_pictograph(self) -> BasePictograph:
-        return self.scene()
+        return self.pictograph
 
     def set_scene(self, beat: "Beat") -> None:
         # self.setScene(beat)

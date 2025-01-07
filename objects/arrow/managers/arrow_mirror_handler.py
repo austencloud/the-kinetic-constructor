@@ -28,9 +28,12 @@ class ArrowMirrorManager:
 
         motion_type = self.arrow.motion.motion_type
         prop_rot_dir = self.arrow.motion.prop_rot_dir
-        self.arrow.is_svg_mirrored = mirror_conditions.get(
-            motion_type, mirror_conditions["other"]
-        ).get(prop_rot_dir)
+        if motion_type in mirror_conditions:
+            is_svg_mirrored = mirror_conditions[motion_type].get(prop_rot_dir)
+        else:
+            is_svg_mirrored = mirror_conditions["other"].get(prop_rot_dir, False)
+
+        self.arrow.is_svg_mirrored = is_svg_mirrored
 
     def _set_svg_mirror(self, arrow: "Arrow") -> None:
         center_x = arrow.boundingRect().center().x()
