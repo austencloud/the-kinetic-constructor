@@ -1,4 +1,3 @@
-from math import e
 from typing import TYPE_CHECKING, Optional, Union
 from PyQt6.QtWidgets import QWidget, QGraphicsOpacityEffect, QGraphicsItem
 from PyQt6.QtCore import (
@@ -7,7 +6,6 @@ from PyQt6.QtCore import (
     QEasingCurve,
     QTimer,
 )
-from base_widgets.base_pictograph.glyphs.tka.tka_glyph import TKA_Glyph
 from Enums.Enums import Glyph
 from base_widgets.base_pictograph.grid.non_radial_points_group import (
     NonRadialPointsGroup,

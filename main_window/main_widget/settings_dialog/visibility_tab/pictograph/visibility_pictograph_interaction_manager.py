@@ -1,11 +1,9 @@
 from typing import Union, TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication
 from base_widgets.base_pictograph.glyphs.beat_reversal_group import BeatReversalGroup
 from base_widgets.base_pictograph.glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,
 )
-from base_widgets.base_pictograph.glyphs.tka.tka_glyph import TKA_Glyph
 from base_widgets.base_pictograph.grid.grid import NonRadialPointsGroup
 from Enums.Enums import Glyph
 
