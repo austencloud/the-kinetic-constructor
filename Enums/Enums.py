@@ -1,6 +1,5 @@
 from typing import TypedDict
 from enum import Enum
-from Enums.MotionAttributes import *
 from Enums.letters import *
 from typing import TYPE_CHECKING, Union
 from Enums.letters import Letter
@@ -374,17 +373,17 @@ class PictographAttributesDict(TypedDict):
     letter: Letter
     start_pos: str
     end_pos: str
-    blue_motion_type: MotionType
-    blue_prop_rot_dir: PropRotDir
-    blue_start_loc: Location
-    blue_end_loc: Location
+    blue_motion_type: str
+    blue_prop_rot_dir: str
+    blue_start_loc: str
+    blue_end_loc: str
     blue_turns: Turns
-    blue_start_ori: Orientations
-    blue_end_ori: Orientations
-    red_motion_type: MotionType
-    red_prop_rot_dir: PropRotDir
-    red_start_loc: Location
-    red_end_loc: Location
+    blue_start_ori: str
+    blue_end_ori: str
+    red_motion_type: str
+    red_prop_rot_dir: str
+    red_start_loc: str
+    red_end_loc: str
     red_turns: Turns
-    red_start_ori: Orientations
-    red_end_ori: Orientations
+    red_start_ori: str
+    red_end_ori: str

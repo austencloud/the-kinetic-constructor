@@ -5,7 +5,6 @@ from .managers.arrow_attr_handler import ArrowAttrManager
 from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleManager
 
 from ..graphical_object.graphical_object import GraphicalObject
-from Enums.MotionAttributes import Location
 from Enums.Enums import Turns
 from typing import TYPE_CHECKING
 
@@ -31,9 +30,9 @@ class Arrow(GraphicalObject):
     turns: Turns
     motion: "Motion"
     color: str
-    location: Location
+    location: str
     is_svg_mirrored: bool
-    loc: Location = None
+    loc: str = None
     initialized: bool = False
 
     def __init__(self, pictograph, arrow_dict) -> None:

@@ -4,7 +4,6 @@ from .prop_attr_manager import PropAttrManager
 from .prop_checker import PropChecker
 from .prop_rot_angle_manager import PropRotAngleManager
 from .prop_updater import PropUpdater
-from Enums.MotionAttributes import Location, Orientations
 from Enums.Enums import Axes
 from Enums.PropTypes import PropType
 
@@ -30,8 +29,8 @@ class Prop(GraphicalObject):
         The motion to which the prop belongs.
     """
 
-    loc: Location = None
-    ori: Orientations = None
+    loc: str = None
+    ori: str = None
     axis: Axes
     prop_type: PropType
 
@@ -40,7 +39,7 @@ class Prop(GraphicalObject):
         self.motion = motion
         self.scene: BasePictograph = pictograph
         self.arrow: Arrow
-        self.previous_location: Location
+        self.previous_location: str
         self.prop_dict = prop_dict
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)

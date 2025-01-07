@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from base_widgets.base_rot_dir_button import BaseRotDirButton
 from PyQt6.QtCore import Qt, QSize
+
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.graph_editor.adjustment_panel.turns_box.turns_box import (
         TurnsBox,

@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
 from Enums.Enums import Letter, OpenCloseStates, VTG_Modes
-from Enums.MotionAttributes import Location
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
@@ -50,7 +49,7 @@ if TYPE_CHECKING:
 class BasePictograph(QGraphicsScene):
     # dicts
     arrows: dict[str, Arrow]
-    locations: dict[Location, tuple[int, int, int, int]]
+    locations: dict[str, tuple[int, int, int, int]]
     motions: dict[str, Motion]
     motion_dict_list: list[dict]
     pictograph_dict: dict[str, Union[str, dict[str, str]]]

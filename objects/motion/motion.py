@@ -6,13 +6,7 @@ from .managers.motion_manipulator import MotionManipulator
 from .managers.motion_ori_calculator import MotionOriCalculator
 from .managers.motion_updater import MotionUpdater
 from .managers.motion_turn_manager import MotionTurnsManager
-from Enums.MotionAttributes import (
-    Location,
-    Orientations,
-    MotionType,
-    PropRotDir,
-    LeadStates,
-)
+
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -37,12 +31,12 @@ class Motion:
     turns: Union[int, str]
     arrow: "Arrow"
     prop: "Prop"
-    motion_type: MotionType
-    start_loc: Location
-    start_ori: Orientations
-    end_loc: Location
-    end_ori: Orientations
-    prop_rot_dir: PropRotDir
-    lead_state: LeadStates
+    motion_type: str
+    start_loc: str
+    start_ori: str
+    end_loc: str
+    end_ori: str
+    prop_rot_dir: str
+    lead_state: str
     prefloat_motion_type: str = None
     prefloat_prop_rot_dir: str

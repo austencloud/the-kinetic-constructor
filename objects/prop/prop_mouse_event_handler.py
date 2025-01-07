@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from typing import TYPE_CHECKING
 
 from data.constants import *
-from Enums.MotionAttributes import Location, MotionType, PropRotDir
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop
@@ -15,17 +14,11 @@ class PropMouseEventHandler:
     def __init__(self, prop: "Prop") -> None:
         self.p = prop
 
-
-
-
-
-    def update_arrow_location_during_prop_drag(
-        self, new_arrow_location: Location
-    ) -> None:
+    def update_arrow_location_during_prop_drag(self, new_arrow_location: str) -> None:
         if self.p.motion.motion_type in [PRO, ANTI]:
             shift_location_map: dict[
-                tuple[Location, PropRotDir, MotionType],
-                dict[Location, Location],
+                tuple[str, str, str],
+                dict[str, str],
             ] = {
                 ### ISO ###
                 (NORTHEAST, CLOCKWISE, PRO): {

@@ -17,7 +17,6 @@ from data.constants import (
     STATIC,
     DASH,
 )
-from Enums.MotionAttributes import Location
 
 if TYPE_CHECKING:
     from .arrow_placement_manager import ArrowPlacementManager
@@ -49,7 +48,7 @@ class QuadrantIndexHandler:
             grid_mode = DIAMOND
         return grid_mode
 
-    def _diamond_shift_quadrant_index(self, location: Location) -> Literal[0, 1, 2, 3]:
+    def _diamond_shift_quadrant_index(self, location: str) -> Literal[0, 1, 2, 3]:
         location_to_index = {
             NORTHEAST: 0,
             SOUTHEAST: 1,
@@ -58,9 +57,7 @@ class QuadrantIndexHandler:
         }
         return location_to_index.get(location, 0)
 
-    def _diamond_static_dash_quadrant_index(
-        self, location: Location
-    ) -> Literal[0, 1, 2, 3]:
+    def _diamond_static_dash_quadrant_index(self, location: str) -> Literal[0, 1, 2, 3]:
         location_to_index = {
             NORTH: 0,
             EAST: 1,
@@ -69,7 +66,7 @@ class QuadrantIndexHandler:
         }
         return location_to_index.get(location, 0)
 
-    def _box_shift_quadrant_index(self, location: Location) -> Literal[0, 1, 2, 3]:
+    def _box_shift_quadrant_index(self, location: str) -> Literal[0, 1, 2, 3]:
         location_to_index = {
             NORTH: 0,
             EAST: 1,
@@ -78,9 +75,7 @@ class QuadrantIndexHandler:
         }
         return location_to_index.get(location, 0)
 
-    def _box_static_dash_quadrant_index(
-        self, location: Location
-    ) -> Literal[0, 1, 2, 3]:
+    def _box_static_dash_quadrant_index(self, location: str) -> Literal[0, 1, 2, 3]:
         location_to_index = {
             NORTHEAST: 0,
             SOUTHEAST: 1,

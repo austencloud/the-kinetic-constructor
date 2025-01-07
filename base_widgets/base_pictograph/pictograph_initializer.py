@@ -2,7 +2,6 @@ import json
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPoint, Qt
 from PyQt6.QtWidgets import QGraphicsTextItem
-from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
 from base_widgets.base_pictograph.glyphs.beat_reversal_group import (
     BeatReversalGroup,
@@ -176,7 +175,7 @@ class PictographInitializer:
 
     def init_quadrant_boundaries(
         self, grid: Grid
-    ) -> dict[Location, tuple[int, int, int, int]]:
+    ) -> dict[str, tuple[int, int, int, int]]:
         grid_center: QPoint = grid.center.toPoint()
 
         grid_center_x = grid_center.x()

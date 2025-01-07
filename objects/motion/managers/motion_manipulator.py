@@ -2,10 +2,9 @@ from typing import Callable
 
 from data.constants import *
 from data.start_end_loc_map import get_start_end_locs
-from Enums.Enums import  Handpaths
+from Enums.Enums import Handpaths
 
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Location
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -125,7 +124,7 @@ class MotionManipulator:
             ),
         }
 
-    def _rotate_arrow(self, handpath, locations: list[Location]) -> None:
+    def _rotate_arrow(self, handpath, locations: list[str]) -> None:
         """
         Generic method to rotate arrows based on the handpath and locations.
         """
@@ -159,8 +158,6 @@ class MotionManipulator:
         Refresh the arrow and prop, and update the pictograph.
         """
         self.motion.arrow.pictograph.updater.update_pictograph()
-
-
 
     def set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         self.motion.prop_rot_dir = prop_rot_dir

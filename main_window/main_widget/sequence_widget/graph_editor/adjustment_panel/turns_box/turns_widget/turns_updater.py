@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 from Enums.Enums import Turns
-from Enums.MotionAttributes import PropRotDir
 from data.constants import (
     ANTI,
     CLOCKWISE,
@@ -129,7 +128,7 @@ class TurnsUpdater:
             motion.prop_rot_dir = self._get_default_prop_rot_dir()
             self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
 
-    def _get_default_prop_rot_dir(self) -> PropRotDir:
+    def _get_default_prop_rot_dir(self) -> str:
         """Set default prop rotation direction to clockwise."""
         self._set_prop_rot_dir_state_default()
         prop_rot_dir_manager = self.turns_box.prop_rot_dir_button_manager

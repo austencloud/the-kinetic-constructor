@@ -1,11 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from Enums.letters import Letter
-from data.constants import (
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    ICON_DIR,
-)
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,

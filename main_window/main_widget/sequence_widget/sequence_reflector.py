@@ -48,6 +48,16 @@ class SequenceReflector(BaseSequenceModifier):
             mirrored_dict = beat_dict.copy()
             self._reflect_dict(mirrored_dict)
             mirrored_sequence.append(mirrored_dict)
+        for beat_view in self.sequence_widget.beat_frame.beat_views:
+            if beat_view.is_filled:
+                beat = beat_view.beat
+
+                beat.red_motion.prop_rot_dir = self.swap_dir(
+                    beat.red_motion.prop_rot_dir
+                )
+                beat.blue_motion.prop_rot_dir = self.swap_dir(
+                    beat.blue_motion.prop_rot_dir
+                )
 
         return mirrored_sequence
 
@@ -68,13 +78,13 @@ class SequenceReflector(BaseSequenceModifier):
                         )
                 if "prop_rot_dir" in attributes:
                     prop_rot_dir = attributes["prop_rot_dir"]
-                    attributes["prop_rot_dir"] = (
-                        COUNTER_CLOCKWISE
-                        if prop_rot_dir == CLOCKWISE
-                        else (
-                            CLOCKWISE
-                            if prop_rot_dir == COUNTER_CLOCKWISE
-                            else prop_rot_dir
-                        )
-                    )
+                    attributes["prop_rot_dir"] = self.swap_dir(prop_rot_dir)
+
         return pictograph_dict
+
+    def swap_dir(self, prop_rot_dir):
+        return (
+            COUNTER_CLOCKWISE
+            if prop_rot_dir == CLOCKWISE
+            else (CLOCKWISE if prop_rot_dir == COUNTER_CLOCKWISE else prop_rot_dir)
+        )

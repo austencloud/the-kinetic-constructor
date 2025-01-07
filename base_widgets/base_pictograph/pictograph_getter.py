@@ -1,18 +1,18 @@
 from typing import TYPE_CHECKING, Optional
 from Enums.Enums import LetterType, Letter, Glyph
 
-from base_widgets.base_pictograph.grid.non_radial_points_group import NonRadialPointsGroup
+from base_widgets.base_pictograph.grid.non_radial_points_group import (
+    NonRadialPointsGroup,
+)
 from base_widgets.base_pictograph.lead_state_determiner import (
     LeadStateDeterminer,
 )
 from data.constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from Enums.MotionAttributes import Location, MotionType
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
 
 
 class PictographGetter:
@@ -41,7 +41,7 @@ class PictographGetter:
         }
         return letter_type_map.get(letter)
 
-    def motions_by_type(self, motion_type: MotionType) -> list[Motion]:
+    def motions_by_type(self, motion_type: str) -> list[Motion]:
         return [
             motion
             for motion in self.pictograph.motions.values()
@@ -78,7 +78,7 @@ class PictographGetter:
         float_map = {True: self.red_motion, False: self.blue_motion}
         return float_map.get(self.red_motion.check.is_float())
 
-    def opposite_location(self, loc: Location) -> Location:
+    def opposite_location(self, loc: str) -> str:
         opposite_locations = {
             NORTH: SOUTH,
             SOUTH: NORTH,

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 from .json_duration_updater import JsonDurationUpdater
-from .json_prop_rot_dir_updater import JsonPropRotDirUpdater
+from .json_prop_rot_dir_updater import JsonstrUpdater
 from .json_prop_type_updater import JsonPropTypeUpdater
 from .json_letter_updater import JsonLetterUpdater
 from .json_motion_type_updater import JsonMotionTypeUpdater
@@ -21,7 +21,7 @@ class JsonSequenceUpdater:
         self.motion_type_updater = JsonMotionTypeUpdater(self)
         self.prop_type_updater = JsonPropTypeUpdater(self)
         self.letter_updater = JsonLetterUpdater(self)
-        self.prop_rot_dir_updater = JsonPropRotDirUpdater(self)
+        self.prop_rot_dir_updater = JsonstrUpdater(self)
         self.duration_updater = JsonDurationUpdater(self)
 
     def update_current_sequence_file_with_beat(self, beat: Beat):
@@ -38,9 +38,7 @@ class JsonSequenceUpdater:
 
         sequence_beats.append(beat_data)
 
-        for beat_num in range(
-            view.number + 1, view.number + beat.duration
-        ):
+        for beat_num in range(view.number + 1, view.number + beat.duration):
             placeholder_entry = {
                 "beat": beat_num,
                 "is_placeholder": True,
