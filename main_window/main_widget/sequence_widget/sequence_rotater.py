@@ -24,37 +24,32 @@ class SequenceRotater(BaseSequenceModifier):
         self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
 
     def rotate_current_sequence(self):
-
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-
-        rotated_sequence = self.rotate_sequence()
+        rotated_sequence = self._rotate_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(rotated_sequence)
-        self.update_ui()
-
+        self._update_ui()
         QApplication.restoreOverrideCursor()
 
-    def rotate_sequence(self):
-        current_sequence = self.json_loader.load_current_sequence_json()
-        metadata = current_sequence[0].copy()
+    def _rotate_sequence(self):
+        if self._check_length():
+            return
 
+        metadata = self.json_loader.load_current_sequence_json()[0].copy()
         metadata["grid_mode"] = BOX if metadata["grid_mode"] == DIAMOND else DIAMOND
 
-        if self.check_length(current_sequence):
-            return
-        rotated_sequence = []
-        rotated_sequence.append(metadata)
-        start_pos_beat_dict: dict = (
+        rotated_sequence = [metadata]
+
+        start_pos_beat_dict = (
             self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
         )
-
         self._rotate_dict(start_pos_beat_dict)
         rotated_sequence.append(start_pos_beat_dict)
 
-        beat_dicts = self.sequence_widget.beat_frame.get.beat_dicts()
-        for beat_dict in beat_dicts:
+        for beat_dict in self.sequence_widget.beat_frame.get.beat_dicts():
             rotated_dict = beat_dict.copy()
             self._rotate_dict(rotated_dict)
             rotated_sequence.append(rotated_dict)
+
         return rotated_sequence
 
     def _rotate_dict(self, _dict: dict):
@@ -70,7 +65,9 @@ class SequenceRotater(BaseSequenceModifier):
             rl = _dict["red_attributes"]
             for loc in ["start_loc", "end_loc"]:
                 if loc in bl and loc in rl:
-                    _dict[f"{loc.split('_')[0]}_pos"] = positions_map[(bl[loc], rl[loc])]
+                    _dict[f"{loc.split('_')[0]}_pos"] = positions_map[
+                        (bl[loc], rl[loc])
+                    ]
 
         _dict["grid_mode"] = (
             self.sequence_widget.main_widget.grid_mode_checker.get_grid_mode(_dict)

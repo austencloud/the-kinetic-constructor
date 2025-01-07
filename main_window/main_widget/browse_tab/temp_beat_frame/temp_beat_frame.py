@@ -79,7 +79,7 @@ class TempBeatFrame(BaseBeatFrame):
         ):
             self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
             self.json_manager.updater.update_current_sequence_file_with_beat(
-                self.beat_views[next_beat_index]
+                self.beat_views[next_beat_index].beat
             )
             self.update_current_word()
             self.adjust_layout_to_sequence_length()

@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE
 from data.positions import mirrored_positions
 from data.locations import vertical_loc_mirror_map
 from main_window.main_widget.sequence_widget.base_sequence_modifier import (
     BaseSequenceModifier,
-)
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
-    ReversalDetector,
 )
 
 if TYPE_CHECKING:
@@ -26,69 +24,57 @@ class SequenceReflector(BaseSequenceModifier):
         self.json_loader = json_manager.loader_saver
         self.json_updater = json_manager.updater
 
-    def mirror_current_sequence(self):
-
+    def reflect_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-
-        mirrored_sequence = self.mirror_sequence()
+        mirrored_sequence = self._reflect_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(mirrored_sequence)
-        self.update_ui()
-
+        self._update_ui()
         QApplication.restoreOverrideCursor()
 
-    def mirror_sequence(self):
-        current_sequence = self.json_loader.load_current_sequence_json()
-        metadata = current_sequence[0].copy()
-
-        if self.check_length(current_sequence):
+    def _reflect_sequence(self):
+        if self._check_length():
             return
-        mirrored_sequence = []
-        mirrored_sequence.append(metadata)
-        start_pos_beat_dict: dict = (
+
+        metadata = self.json_loader.load_current_sequence_json()[0].copy()
+        mirrored_sequence = [metadata]
+
+        start_pos_beat_dict = (
             self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
         )
-
-        self._mirror_dict(start_pos_beat_dict)
+        self._reflect_dict(start_pos_beat_dict)
         mirrored_sequence.append(start_pos_beat_dict)
 
-        beat_dicts = self.sequence_widget.beat_frame.get.beat_dicts()
-        for beat_dict in beat_dicts:
+        for beat_dict in self.sequence_widget.beat_frame.get.beat_dicts():
             mirrored_dict = beat_dict.copy()
-            self._mirror_dict(mirrored_dict)
+            self._reflect_dict(mirrored_dict)
             mirrored_sequence.append(mirrored_dict)
+
         return mirrored_sequence
 
-    def _mirror_dict(self, pictograph_dict):
-        if "start_pos" in pictograph_dict:
-            pictograph_dict["start_pos"] = self.vertical_mirror_positions.get(
-                pictograph_dict["start_pos"], pictograph_dict["start_pos"]
-            )
-        if "end_pos" in pictograph_dict:
-            pictograph_dict["end_pos"] = self.vertical_mirror_positions.get(
-                pictograph_dict["end_pos"], pictograph_dict["end_pos"]
-            )
+    def _reflect_dict(self, pictograph_dict):
+        for key in ["start_pos", "end_pos"]:
+            if key in pictograph_dict:
+                pictograph_dict[key] = self.vertical_mirror_positions.get(
+                    pictograph_dict[key], pictograph_dict[key]
+                )
 
         for color in ["blue_attributes", "red_attributes"]:
             if color in pictograph_dict:
                 attributes = pictograph_dict[color]
-                if "start_loc" in attributes:
-                    attributes["start_loc"] = vertical_loc_mirror_map.get(
-                        attributes["start_loc"], attributes["start_loc"]
-                    )
-                if "end_loc" in attributes:
-                    attributes["end_loc"] = vertical_loc_mirror_map.get(
-                        attributes["end_loc"], attributes["end_loc"]
-                    )
+                for loc_key in ["start_loc", "end_loc"]:
+                    if loc_key in attributes:
+                        attributes[loc_key] = vertical_loc_mirror_map.get(
+                            attributes[loc_key], attributes[loc_key]
+                        )
                 if "prop_rot_dir" in attributes:
-                    attributes["prop_rot_dir"] = self.reverse_prop_rot_dir(
-                        attributes["prop_rot_dir"]
+                    prop_rot_dir = attributes["prop_rot_dir"]
+                    attributes["prop_rot_dir"] = (
+                        COUNTER_CLOCKWISE
+                        if prop_rot_dir == CLOCKWISE
+                        else (
+                            CLOCKWISE
+                            if prop_rot_dir == COUNTER_CLOCKWISE
+                            else prop_rot_dir
+                        )
                     )
         return pictograph_dict
-
-    def reverse_prop_rot_dir(self, prop_rot_dir: str) -> str:
-        if prop_rot_dir == "cw":
-            return "ccw"
-        elif prop_rot_dir == "ccw":
-            return "cw"
-        else:
-            return prop_rot_dir

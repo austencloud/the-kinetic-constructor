@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
@@ -65,34 +66,27 @@ class BeatFrameUpdater:
         self.json_manager = self.bf.json_manager
         json_updater = self.json_manager.updater
         self.json_manager.loader_saver.clear_current_sequence_file()
-        beat: "Beat" = None
+
+        def update_beat(beat: "Beat", beat_dict: dict, start_pos: bool = False):
+            beat.updater.update_pictograph(beat_dict)
+            grid_mode = self.bf.main_widget.grid_mode_checker.get_grid_mode(beat_dict)
+            beat.grid.hide()
+            beat.grid.__init__(beat, beat.grid.grid_data, grid_mode)
+            if not start_pos:
+                json_updater.update_current_sequence_file_with_beat(beat)
+
         if len(modified_sequence_json) > 1:
             start_pos_dict = modified_sequence_json[1]
             start_pos = self.bf.start_pos_view.start_pos
-            start_pos.updater.update_pictograph(start_pos_dict)
-            grid_mode = self.bf.main_widget.grid_mode_checker.get_grid_mode(
-                start_pos_dict
-            )
-            start_pos.grid.hide()
-            start_pos.grid.__init__(start_pos, start_pos.grid.grid_data, grid_mode)
+            update_beat(start_pos, start_pos_dict, start_pos=True)
             self.json_manager.start_pos_handler.set_start_position_data(start_pos)
 
         for i, beat_dict in enumerate(modified_sequence_json[2:], start=0):
             if i < len(self.bf.beat_views) and self.bf.beat_views[i].is_filled:
-                beat = self.bf.beat_views[i].beat
-                beat.updater.update_pictograph(beat_dict)
-                grid_mode = self.bf.main_widget.grid_mode_checker.get_grid_mode(
-                    beat_dict
-                )
-                beat.grid.hide()
-                beat.grid.__init__(beat, beat.grid.grid_data, grid_mode)
-                json_updater.update_current_sequence_file_with_beat(
-                    self.bf.beat_views[i]
-                )
+                update_beat(self.bf.beat_views[i].beat, beat_dict)
             else:
                 break
-        if not beat:
-            beat = start_pos
+
         self.bf.main_widget.sequence_widget.graph_editor.update_graph_editor()
 
     def reset_beat_frame(self) -> None:

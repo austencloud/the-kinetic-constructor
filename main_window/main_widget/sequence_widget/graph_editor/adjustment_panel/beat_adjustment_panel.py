@@ -6,7 +6,6 @@ from .ori_picker_box.ori_picker_box import OriPickerBox
 from .turns_box.turns_box import TurnsBox
 
 if TYPE_CHECKING:
-    from objects.motion.motion import Motion
     from ..graph_editor import GraphEditor
 
 
@@ -73,8 +72,9 @@ class BeatAdjustmentPanel(QFrame):
         self._set_current_stack_widgets(
             ORI_WIDGET_INDEX if is_blank or view.is_start_pos else TURNS_WIDGET_INDEX
         )
-        self.update_turns_displays()
-        self.update_rot_dir_buttons()
+        if self.stacked_widget.currentIndex() == TURNS_WIDGET_INDEX:
+            self.update_turns_displays()
+            self.update_rot_dir_buttons()
 
     def update_rot_dir_buttons(self) -> None:
         """Update the rotation direction buttons based on the current pictograph state."""

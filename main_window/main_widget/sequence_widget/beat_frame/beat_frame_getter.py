@@ -50,7 +50,10 @@ class BeatFrameGetter:
         for beat in self.beat_frame.beat_views:
             if beat.is_selected:
                 return beat
-        return self.beat_frame.beat_views[0]
+        start_pos_view = self.beat_frame.start_pos_view
+        if start_pos_view.is_selected:
+            return start_pos_view
+        return None
 
     def beat_number_of_currently_selected_beat(self) -> int:
         return self.currently_selected_beat_view().number

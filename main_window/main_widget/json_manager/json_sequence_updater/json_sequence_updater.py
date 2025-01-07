@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 from .json_duration_updater import JsonDurationUpdater
 from .json_prop_rot_dir_updater import JsonPropRotDirUpdater
@@ -23,26 +24,27 @@ class JsonSequenceUpdater:
         self.prop_rot_dir_updater = JsonPropRotDirUpdater(self)
         self.duration_updater = JsonDurationUpdater(self)
 
-    def update_current_sequence_file_with_beat(self, beat_view: BeatView):
+    def update_current_sequence_file_with_beat(self, beat: Beat):
+        view = beat.view
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
 
-        beat_data = beat_view.beat.pictograph_dict.copy()
-        beat_data["duration"] = beat_view.beat.duration
+        beat_data = beat.pictograph_dict.copy()
+        beat_data["duration"] = beat.duration
         number = self.get_next_beat_number(sequence_beats)
-        beat_view.number = number
+        view.number = number
         beat_data["beat"] = number
 
         sequence_beats.append(beat_data)
 
         for beat_num in range(
-            beat_view.number + 1, beat_view.number + beat_view.beat.duration
+            view.number + 1, view.number + beat.duration
         ):
             placeholder_entry = {
                 "beat": beat_num,
                 "is_placeholder": True,
-                "parent_beat": beat_view.number,
+                "parent_beat": view.number,
             }
             sequence_beats.append(placeholder_entry)
 
@@ -84,4 +86,4 @@ class JsonSequenceUpdater:
             self.json_manager.start_pos_handler.set_start_position_data(start_pos)
         for beat_view in beat_views:
             if beat_view.is_filled:
-                self.update_current_sequence_file_with_beat(beat_view)
+                self.update_current_sequence_file_with_beat(beat_view.beat)

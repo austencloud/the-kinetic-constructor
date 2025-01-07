@@ -63,7 +63,7 @@ class BeatAdder:
                     self.beats[next_beat_index], toggle_animation=False
                 )
             self.json_manager.updater.update_current_sequence_file_with_beat(
-                self.beats[next_beat_index]
+                self.beats[next_beat_index].beat
             )
             if update_word:
                 self.sequence_widget.current_word_label.update_current_word_label_from_beats()
