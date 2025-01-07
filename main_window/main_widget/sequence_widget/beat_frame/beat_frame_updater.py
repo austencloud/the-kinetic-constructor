@@ -28,13 +28,12 @@ class BeatFrameUpdater:
 
         for entry in beat_entries:
             if entry.get("is_placeholder", False):
-                continue  # Skip placeholders
+                continue
 
             beat_num = entry["beat"]
             beat_view = self.bf.get.beat_view_by_number(beat_num)
 
             if beat_view and beat_view.beat:
-                # if beat_view.beat.pictograph_dict != entry:
                 beat_view.beat.updater.update_pictograph(entry)
                 beat = beat_view.beat
                 pictograph_index = self.bf.get.index_of_beat(beat_view)
@@ -49,7 +48,6 @@ class BeatFrameUpdater:
                 beat.blue_reversal = reversal_info["blue_reversal"]
                 beat.red_reversal = reversal_info["red_reversal"]
                 beat.reversal_glyph.update_reversal_symbols()
-                # QApplication.processEvents()
             else:
                 print(
                     f"Beat with number {beat_num} not found in the beat frame. Skipping."
