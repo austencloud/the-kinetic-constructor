@@ -11,14 +11,11 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
     from ..graph_editor import GraphEditor
 
-# pictograph_container.py
-
 
 class GraphEditorPictographContainer(QWidget):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
-
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.setup_pictograph()
 
@@ -33,39 +30,21 @@ class GraphEditorPictographContainer(QWidget):
 
     def update_GE_pictograph(self, reference_beat: "Beat") -> None:
         view = self.GE_view
+        pictograph = view.pictograph
 
-        if reference_beat.view.is_start_pos:
-            view.is_start_pos = True
-        else:
-            view.is_start_pos = False
-
-        view.pictograph.is_blank = False
+        pictograph.is_blank = False
         view.reference_beat = reference_beat
-        if (
-            reference_beat.view
-            in self.graph_editor.main_widget.sequence_widget.beat_frame.beats
-        ):
-            sequence_so_far = (
-                self.graph_editor.main_widget.json_manager.loader_saver.load_current_sequence_json()
-            )
-            index = (
-                self.graph_editor.main_widget.sequence_widget.beat_frame.beats.index(
-                    reference_beat.view
-                )
-            )
-            sequence_so_far = sequence_so_far[: index - 3]
-            reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, reference_beat.pictograph_dict
-            )
-            view.pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
-            view.pictograph.red_reversal = reversal_info.get("red_reversal", False)
+        view.is_start_pos = reference_beat.view.is_start_pos
+        pictograph.blue_reversal = reference_beat.blue_reversal
+        pictograph.red_reversal = reference_beat.red_reversal
+        
+        pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
 
-        view.pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
-        if reference_beat.beat_number_item.beat_number_int != "":
-            beat_number_text = reference_beat.beat_number_item.beat_number_int
-            view.pictograph.beat_number_item.update_beat_number(beat_number_text)
+        beat_number_text = reference_beat.beat_number_item.beat_number_int
+        if beat_number_text:
+            pictograph.beat_number_item.update_beat_number(beat_number_text)
         else:
-            view.pictograph.start_text_item.add_start_text()
+            pictograph.start_text_item.add_start_text()
 
     def resizeEvent(self, event):
         size = self.graph_editor.height()

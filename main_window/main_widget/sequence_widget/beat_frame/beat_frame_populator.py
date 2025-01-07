@@ -35,7 +35,7 @@ class BeatFramePopulator:
         self._update_sequence_layout()
         self._update_sequence_word()
         self._update_difficulty_level()
-        self._populate_beats()
+        self._populate_beats(select_beat=False)
         self._finalize_sequence()
 
         indicator_label.show_message(
@@ -72,7 +72,7 @@ class BeatFramePopulator:
         self.current_word = WordSimplifier.simplify_repeated_word(self.current_word)
         self.sequence_widget.current_word_label.set_current_word(self.current_word)
 
-    def _populate_beats(self):
+    def _populate_beats(self, select_beat=True):
         for _, pictograph_dict in enumerate(self.current_sequence_json[1:]):
             if pictograph_dict.get("sequence_start_position"):
                 continue
@@ -88,6 +88,7 @@ class BeatFramePopulator:
                     update_word=False,
                     update_level=False,
                     reversal_info=reversal_info,
+                    select_beat=select_beat,
                 )
 
     def _finalize_sequence(self):

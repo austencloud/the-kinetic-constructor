@@ -26,6 +26,7 @@ class BeatAdder:
         override_grow_sequence=False,
         update_word=True,
         update_level=True,
+        select_beat=True,
     ) -> None:
         next_beat_number = self.calculate_next_beat_number()
         grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
@@ -57,9 +58,10 @@ class BeatAdder:
                 self._update_sequence_builder(next_beat_index)
 
             new_beat.reversal_glyph.update_reversal_symbols()
-            self.beat_frame.selection_overlay.select_beat(
-                self.beats[next_beat_index], toggle_animation=False
-            )
+            if select_beat:
+                self.beat_frame.selection_overlay.select_beat(
+                    self.beats[next_beat_index], toggle_animation=False
+                )
             self.json_manager.updater.update_current_sequence_file_with_beat(
                 self.beats[next_beat_index]
             )

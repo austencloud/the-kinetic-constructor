@@ -53,6 +53,7 @@ class BeatFactory:
         update_word=True,
         update_level=True,
         reversal_info=None,
+        select_beat: bool = True,
     ) -> None:
         new_beat = Beat(self.beat_frame, duration=pictograph_dict.get("duration", 1))
         new_beat.updater.update_pictograph(pictograph_dict)
@@ -64,6 +65,7 @@ class BeatFactory:
             override_grow_sequence=override_grow_sequence,
             update_word=update_word,
             update_level=update_level,
+            select_beat=select_beat,
         )
         for motion in new_beat.motions.values():
             if motion.motion_type == FLOAT:
