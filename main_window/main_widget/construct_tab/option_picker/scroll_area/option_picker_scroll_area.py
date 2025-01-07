@@ -28,6 +28,7 @@ class OptionPickerScrollArea(QScrollArea):
         self.option_manager = self.option_picker.option_getter
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
         self.json_manager = self.main_widget.json_manager
+        self.json_loader = self.json_manager.loader_saver
         self.pictograph_cache: dict[str, BasePictograph] = {}
         self.disabled = False
 
@@ -75,6 +76,12 @@ class OptionPickerScrollArea(QScrollArea):
             pictograph.red_reversal = reversal_info.get("red_reversal", False)
 
             pictograph.updater.update_pictograph(pictograph_dict)
+            sequence_so_far = self.json_loader.load_current_sequence_json()
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, pictograph.pictograph_dict
+            )
+            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
+            pictograph.red_reversal = reversal_info.get("red_reversal", False)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
             pictograph.view.update_borders()
 

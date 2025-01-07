@@ -51,9 +51,7 @@ class BeatSelectionOverlay(QWidget):
             self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
         )
         graph_editor.pictograph_container.update_pictograph(self.selected_beat.beat)
-        graph_editor.adjustment_panel.update_turns_panel(
-            self.selected_beat.beat.blue_motion, self.selected_beat.beat.red_motion
-        )
+        graph_editor.adjustment_panel.update_turns_panel()
         graph_editor.adjustment_panel.update_adjustment_panel()
 
         if toggle_animation and not graph_editor.is_toggled:

@@ -90,7 +90,7 @@ class PropRotDirButtonManager:
             pictograph.red_reversal = reversal_info["red_reversal"]
             pictograph.reversal_glyph.update_reversal_symbols()
 
-        self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
+        self._update_button_states(prop_rot_dir)
         self.option_picker = (
             self.turns_box.graph_editor.sequence_widget.main_widget.construct_tab.option_picker
         )
@@ -147,10 +147,9 @@ class PropRotDirButtonManager:
 
     def _update_button_states(
         self,
-        buttons: list[PropRotDirButton],
         prop_rot_dir: str,
     ) -> None:
-        for button in buttons:
+        for button in self.prop_rot_dir_buttons:
             if button.prop_rot_dir == prop_rot_dir:
                 button.press()
                 button.update_state_dict(self.turns_box.prop_rot_dir_btn_state, True)

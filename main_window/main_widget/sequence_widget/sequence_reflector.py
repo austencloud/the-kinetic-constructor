@@ -3,6 +3,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 from data.positions import mirrored_positions
 from data.locations import vertical_loc_mirror_map
+from main_window.main_widget.sequence_widget.base_sequence_modifier import (
+    BaseSequenceModifier,
+)
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
@@ -11,7 +14,10 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceReflector:
+class SequenceReflector(BaseSequenceModifier):
+    success_message = "Sequence mirrored!"
+    error_message = "No sequence to mirror."
+
     vertical_mirror_positions = mirrored_positions["vertical"]
 
     def __init__(self, sequence_widget: "SequenceWidget"):
@@ -26,28 +32,9 @@ class SequenceReflector:
 
         mirrored_sequence = self.mirror_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(mirrored_sequence)
-        self.mirror_option_picker_pictographs()
-        self.sequence_widget.graph_editor.pictograph_container.update_pictograph()
-        self.sequence_widget.indicator_label.show_message("Sequence mirrored!")
+        self.update_ui()
 
         QApplication.restoreOverrideCursor()
-
-    def mirror_option_picker_pictographs(self):
-        option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
-        option_picker.update_option_picker()
-        for option in option_picker.option_pool:
-            sequence_so_far = self.json_loader.load_current_sequence_json()
-            reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, option.pictograph_dict
-            )
-            option.blue_reversal = reversal_info.get("blue_reversal", False)
-            option.red_reversal = reversal_info.get("red_reversal", False)
-
-    def check_length(self, current_sequence):
-        if len(current_sequence) < 2:
-            self.sequence_widget.indicator_label.show_message("No sequence to rotate.")
-            QApplication.restoreOverrideCursor()
-            return False
 
     def mirror_sequence(self):
         current_sequence = self.json_loader.load_current_sequence_json()

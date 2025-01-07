@@ -27,8 +27,10 @@
       "red": [100, 100]
     },
     "(s, 1, 1)": {
-      "red": [-100, 0],
-      "red_rot_angle_override": true
+      "red": [100, 0],
+      "blue": [-100, 0],
+      "blue_rot_angle_override": true,
+      "swap_beta_s_radial_blue_static_s_red_static_s": true
     },
     "(s, 1, 2.5)": {
       "red": [10, 0],
@@ -222,6 +224,8 @@
     "(o, 1, 1)": {
       "swap_beta_w_radial_blue_static_w_red_static_w": true,
       "swap_beta_e_radial_blue_static_e_red_static_e": true,
+      "red": [100, 0],
+      "blue": [100, 0],
       "swap_beta_s_radial_blue_static_s_red_static_s": true
     },
     "(o, 1, 3)": {},

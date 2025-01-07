@@ -31,7 +31,7 @@ class SequenceWidgetLayoutManager:
 
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.sw.graph_editor.state.update_graph_editor_visibility()
+        # self.sw.graph_editor.state.update_graph_editorvisibility()
         self.sw.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )

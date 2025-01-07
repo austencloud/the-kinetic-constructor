@@ -93,9 +93,7 @@ class BeatFrameUpdater:
                 break
         if not beat:
             beat = start_pos
-        self.bf.main_widget.sequence_widget.graph_editor.adjustment_panel.update_turns_panel(
-            beat.blue_motion, beat.red_motion
-        )
+        self.bf.main_widget.sequence_widget.graph_editor.update_graph_editor()
 
     def reset_beat_frame(self) -> None:
         for beat_view in self.bf.beat_views:

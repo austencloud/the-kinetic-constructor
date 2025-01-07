@@ -6,7 +6,9 @@ if TYPE_CHECKING:
 
 
 class BaseSequenceModifier:
-
+    success_message: str
+    error_message: str
+    
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
@@ -14,7 +16,7 @@ class BaseSequenceModifier:
     def update_ui(self):
         """Update all UI components after a modification."""
         self.sequence_widget.main_widget.construct_tab.option_picker.update_option_picker()
-        self.sequence_widget.graph_editor.pictograph_container.update_pictograph()
+        self.sequence_widget.graph_editor.update_graph_editor()
         self.sequence_widget.indicator_label.show_message(self.success_message)
 
     def check_length(self, current_sequence):

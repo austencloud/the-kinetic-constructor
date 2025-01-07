@@ -17,7 +17,6 @@ from main_window.main_widget.sequence_widget.graph_editor.graph_editor_toggle_ta
 
 from .arrow_selection_manager import ArrowSelectionManager
 from .graph_editor_layout_manager import GraphEditorLayoutManager
-from .graph_editor_state_manager import GraphEditorStateManager
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer
 
@@ -51,7 +50,6 @@ class GraphEditor(QFrame):
         self.pictograph_container = GraphEditorPictographContainer(self)
         self.adjustment_panel = BeatAdjustmentPanel(self)
         self.layout_manager = GraphEditorLayoutManager(self)
-        self.state = GraphEditorStateManager(self)
         self.toggle_tab = GraphEditorToggleTab(self)
         self.placeholder = QFrame(self)
         self.animator = GraphEditorAnimator(self)
@@ -65,3 +63,7 @@ class GraphEditor(QFrame):
         self.setFixedSize(width, graph_editor_height)
         self.raise_()
         super().resizeEvent(event)
+
+    def update_graph_editor(self) -> None:
+        self.adjustment_panel.update_adjustment_panel()
+        self.pictograph_container.update_pictograph()

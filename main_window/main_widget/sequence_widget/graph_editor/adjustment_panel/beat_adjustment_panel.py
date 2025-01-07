@@ -19,6 +19,7 @@ class BeatAdjustmentPanel(QFrame):
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
         self.GE_pictograph = graph_editor.pictograph_container.GE_pictograph
+        self.beat_frame = self.graph_editor.sequence_widget.beat_frame
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self._initialize_ui()
 
@@ -72,26 +73,45 @@ class BeatAdjustmentPanel(QFrame):
         self._set_current_stack_widgets(
             ORI_WIDGET_INDEX if is_blank or view.is_start_pos else TURNS_WIDGET_INDEX
         )
+        self.update_turns_displays()
+        self.update_rot_dir_buttons()
+
+    def update_rot_dir_buttons(self) -> None:
+        """Update the rotation direction buttons based on the current pictograph state."""
+        reference_beat = self.beat_frame.get.currently_selected_beat_view()
+
+        blue_motion = reference_beat.beat.blue_motion
+        red_motion = reference_beat.beat.red_motion
+
+        blue_rot_dir = blue_motion.prop_rot_dir
+        red_rot_dir = red_motion.prop_rot_dir
+
+        self.blue_turns_box.prop_rot_dir_button_manager._update_button_states(
+            blue_rot_dir
+        )
+        self.red_turns_box.prop_rot_dir_button_manager._update_button_states(
+            red_rot_dir
+        )
 
     def _set_current_stack_widgets(self, index):
         """Synchronize left and right stacks to the specified index."""
         for stack in [self.graph_editor.left_stack, self.graph_editor.right_stack]:
             stack.setCurrentWidget(stack.widget(index))
 
-    def update_turns_displays(
-        self, blue_motion: "Motion", red_motion: "Motion"
-    ) -> None:
+    def update_turns_displays(self) -> None:
         """Update the turns displays in the turns boxes."""
-        self.blue_turns_box.turns_widget.update_turns_display(
-            blue_motion, blue_motion.turns
-        )
-        self.red_turns_box.turns_widget.update_turns_display(
-            red_motion, red_motion.turns
-        )
+        blue_motion = self.GE_pictograph.blue_motion
+        red_motion = self.GE_pictograph.red_motion
+        for box, motion in zip(
+            [self.blue_turns_box, self.red_turns_box], [blue_motion, red_motion]
+        ):
+            box.turns_widget.update_turns_display(motion, motion.turns)
 
-    def update_turns_panel(self, blue_motion: "Motion", red_motion: "Motion") -> None:
+    def update_turns_panel(self) -> None:
         """Update the turns panel with new motion data."""
-        self.update_turns_displays(blue_motion, red_motion)
+        blue_motion = self.GE_pictograph.blue_motion
+        red_motion = self.GE_pictograph.red_motion
+        self.update_turns_displays()
         [
             (
                 box.header.update_turns_box_header(),
