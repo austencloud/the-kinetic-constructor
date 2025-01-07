@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from utilities.word_simplifier import WordSimplifier
 from PyQt6.QtWidgets import QGraphicsView
@@ -46,14 +46,15 @@ class BeatFrameGetter:
                 return i
         return 0
 
-    def currently_selected_beat_view(self) -> "BeatView":
-        for beat in self.beat_frame.beat_views:
-            if beat.is_selected:
-                return beat
-        start_pos_view = self.beat_frame.start_pos_view
-        if start_pos_view.is_selected:
-            return start_pos_view
-        return None
+    def currently_selected_beat_view(self) -> Union["BeatView", None]:
+        for beat_view in self.beat_frame.beat_views:
+            if beat_view.is_selected:
+                return beat_view
+        return (
+            self.beat_frame.start_pos_view
+            if self.beat_frame.start_pos_view.is_selected
+            else None
+        )
 
     def beat_number_of_currently_selected_beat(self) -> int:
         return self.currently_selected_beat_view().number

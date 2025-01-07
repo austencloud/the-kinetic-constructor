@@ -43,10 +43,18 @@ class SequenceColorSwapper(BaseSequenceModifier):
         swapped_sequence.append(start_pos_beat_dict)
 
         beat_dicts = self.sequence_widget.beat_frame.get.beat_dicts()
-        for beat in beat_dicts:
-            swapped_beat = beat.copy()
+        for beat_dict in beat_dicts:
+            swapped_beat = beat_dict.copy()
             self._color_swap_dict(swapped_beat)
             swapped_sequence.append(swapped_beat)
+        for beat_view in self.sequence_widget.beat_frame.beat_views:
+            beat = beat_view.beat
+            
+            red_reversal = beat.red_reversal
+            blue_reversal = beat.blue_reversal
+            beat.red_reversal = blue_reversal
+            beat.blue_reversal = red_reversal
+            
         return swapped_sequence
 
     def _color_swap_dict(self, _dict):

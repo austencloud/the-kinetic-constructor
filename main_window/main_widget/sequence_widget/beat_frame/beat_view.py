@@ -15,10 +15,10 @@ class BeatView(PictographView):
     is_placeholder = False
     beat: "Beat" = None
 
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number: int = None):
         super().__init__(beat_frame)
-        self.number = number
         self.beat_frame = beat_frame
+        self.number = number
         self.setStyleSheet("border: none; border: 1px solid black;")
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
