@@ -70,7 +70,7 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "mirror_sequence": {
                 "icon": "mirror.png",
-                "callback": self.sequence_widget.mirror_manager.mirror_beats,
+                "callback": self.sequence_widget.mirror_manager.mirror_current_sequence,
                 "tooltip": "Mirror Sequence",
             },
             "swap_colors": {

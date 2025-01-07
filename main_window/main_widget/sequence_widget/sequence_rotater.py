@@ -6,12 +6,19 @@ from data.locations import cw_loc_order
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
 
+from main_window.main_widget.sequence_widget.base_sequence_modifier import (
+    BaseSequenceModifier,
+)
+
 
 if TYPE_CHECKING:
     from .sequence_widget import SequenceWidget
 
 
-class SequenceRotater:
+class SequenceRotater(BaseSequenceModifier):
+    error_message = "No sequence to rotate."
+    success_message = "Sequence rotated!"
+
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_loader = self.sequence_widget.main_widget.json_manager.loader_saver
@@ -22,27 +29,15 @@ class SequenceRotater:
 
         rotated_sequence = self.rotate_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(rotated_sequence)
-        self.rotate_option_picker_pictographs()
-        self.sequence_widget.graph_editor.pictograph_container.update_pictograph()
-        self.sequence_widget.indicator_label.show_message("Sequence rotated!")
+        self.update_ui()
 
         QApplication.restoreOverrideCursor()
-
-    def rotate_option_picker_pictographs(self):
-        option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
-        option_picker.update_option_picker()
-
-    def check_length(self, current_sequence):
-        if len(current_sequence) < 2:
-            self.sequence_widget.indicator_label.show_message("No sequence to rotate.")
-            QApplication.restoreOverrideCursor()
-            return False
 
     def rotate_sequence(self):
         current_sequence = self.json_loader.load_current_sequence_json()
         metadata = current_sequence[0].copy()
 
-        self.swap_grid_mode(metadata)
+        metadata["grid_mode"] = BOX if metadata["grid_mode"] == DIAMOND else DIAMOND
 
         if self.check_length(current_sequence):
             return
@@ -62,27 +57,20 @@ class SequenceRotater:
             rotated_sequence.append(rotated_dict)
         return rotated_sequence
 
-    def swap_grid_mode(self, metadata):
-        metadata["grid_mode"] = BOX if metadata["grid_mode"] == DIAMOND else DIAMOND
-
     def _rotate_dict(self, _dict: dict):
         for color in ["blue_attributes", "red_attributes"]:
             if color in _dict:
                 attributes = _dict[color]
-                if "start_loc" in attributes:
-                    attributes["start_loc"] = self._rotate_location(
-                        attributes["start_loc"]
-                    )
-                if "end_loc" in attributes:
-                    attributes["end_loc"] = self._rotate_location(attributes["end_loc"])
+                for loc in ["start_loc", "end_loc"]:
+                    if loc in attributes:
+                        attributes[loc] = self._rotate_location(attributes[loc])
 
         if "blue_attributes" in _dict and "red_attributes" in _dict:
             bl = _dict["blue_attributes"]
             rl = _dict["red_attributes"]
-            if "start_loc" in bl and "start_loc" in rl:
-                _dict["start_pos"] = positions_map[(bl["start_loc"], rl["start_loc"])]
-            if "end_loc" in bl and "end_loc" in rl:
-                _dict["end_pos"] = positions_map[(bl["end_loc"], rl["end_loc"])]
+            for loc in ["start_loc", "end_loc"]:
+                if loc in bl and loc in rl:
+                    _dict[f"{loc.split('_')[0]}_pos"] = positions_map[(bl[loc], rl[loc])]
 
         _dict["grid_mode"] = (
             self.sequence_widget.main_widget.grid_mode_checker.get_grid_mode(_dict)

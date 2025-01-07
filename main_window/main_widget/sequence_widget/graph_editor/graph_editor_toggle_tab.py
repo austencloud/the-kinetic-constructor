@@ -60,7 +60,7 @@ class GraphEditorToggleTab(QWidget):
             self.sequence_widget.height()
             - self.sequence_widget.graph_editor.get_graph_editor_height()
         )
-        if self.graph_editor.isVisible():
+        if self.graph_editor.is_toggled:
             self.move(0, graph_editor_height - self.height())
         else:
             self.move(0, sequence_widget_height - self.height())

@@ -31,6 +31,7 @@ class GraphEditor(QFrame):
     adjustment_panel_layout: QVBoxLayout
     left_stack: QStackedLayout
     right_stack: QStackedLayout
+    is_toggled: bool = False
 
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)

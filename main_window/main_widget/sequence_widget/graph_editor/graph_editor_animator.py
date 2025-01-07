@@ -20,7 +20,8 @@ class GraphEditorAnimator(QObject):
         )
 
     def toggle(self):
-        if self.graph_editor.isVisible():
+        if self.graph_editor.is_toggled:
+            self.graph_editor.is_toggled = False
             self.animate_graph_editor(show=False)
         else:
             self.sequence_widget.layout_manager.main_layout.addWidget(
@@ -28,6 +29,7 @@ class GraphEditorAnimator(QObject):
             )
 
             self.graph_editor.show()
+            self.graph_editor.is_toggled = True
             self.animate_graph_editor(show=True)
 
     def animate_graph_editor(self, show):

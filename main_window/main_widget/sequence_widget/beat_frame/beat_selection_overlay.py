@@ -56,7 +56,7 @@ class BeatSelectionOverlay(QWidget):
         )
         graph_editor.adjustment_panel.update_adjustment_panel()
 
-        if toggle_animation and not graph_editor.isVisible():
+        if toggle_animation and not graph_editor.is_toggled:
             graph_editor.animator.toggle()
 
     def deselect_beat(self):
