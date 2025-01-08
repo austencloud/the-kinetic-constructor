@@ -5,7 +5,7 @@ from data.constants import ANTI, FLOAT, PRO
 from objects.motion.motion import Motion
 
 from .adjust_turns_button import AdjustTurnsButton
-from .turns_label import GE_TurnsLabel
+from .GE_turns_label import GE_TurnsLabel
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:

@@ -100,8 +100,11 @@ class BeatAdjustmentPanel(QFrame):
 
     def update_turns_displays(self) -> None:
         """Update the turns displays in the turns boxes."""
-        blue_motion = self.GE_pictograph.blue_motion
-        red_motion = self.GE_pictograph.red_motion
+        selected_beat_view = self.beat_frame.get.currently_selected_beat_view()
+        if not selected_beat_view:
+            return
+        blue_motion = selected_beat_view.beat.blue_motion
+        red_motion = selected_beat_view.beat.red_motion
         for box, motion in zip(
             [self.blue_turns_box, self.red_turns_box], [blue_motion, red_motion]
         ):

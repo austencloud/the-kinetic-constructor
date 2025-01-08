@@ -77,5 +77,5 @@ class DirectSetTurnsDialog(QDialog):
         self.updateGeometry()
 
     def select_turns(self, value):
-        self.turns_widget.adjustment_manager.direct_set_turns(value)
+        self.turns_widget.adjustment_manager.set_turns(value)
         self.accept()
