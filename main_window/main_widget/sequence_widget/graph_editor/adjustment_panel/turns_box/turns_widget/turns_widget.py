@@ -5,7 +5,7 @@ from .motion_type_setter import MotionTypeSetter
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
 from .turns_adjustment_manager import TurnsAdjustmentManager
-from .turns_updater import TurnsUpdater
+from .turns_updater import JsonTurnsUpdater
 from .motion_type_label_widget import MotionTypeLabel
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ class TurnsWidget(QWidget):
 
     def _setup_components(self) -> None:
         self.adjustment_manager = TurnsAdjustmentManager(self)
-        self.turns_updater = TurnsUpdater(self)
+        self.json_turns_updater = JsonTurnsUpdater(self)
         self.display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self.turns_text = TurnsTextLabel(self)
