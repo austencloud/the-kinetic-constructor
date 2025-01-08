@@ -17,8 +17,7 @@ class SnowflakeManager:
                 "sway": random.uniform(-0.001, 0.001),
                 "opacity": random.uniform(0.6, 1.0),
                 "twinkle_factor": random.uniform(0.98, 1.02),
-                "is_special": random.random()
-                < 0.7,  # Increased chance for special flakes
+                "is_special": random.random() < 0.7,
                 "snowflake_type": random.choice([1, 2, 3]),
             }
             for _ in range(200)
