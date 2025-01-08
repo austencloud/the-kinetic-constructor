@@ -40,7 +40,6 @@ class TurnsUpdater:
             self._restore_motion_from_prefloat(motion, beat_index)
 
         self._update_turns_in_json(motion, new_turns)
-        self._update_motion_properties(motion, new_turns)
 
     def _calculate_beat_index(self) -> int:
         """Calculate the beat index for JSON updates."""
@@ -88,58 +87,6 @@ class TurnsUpdater:
             self.json_updater.turns_updater.set_turns_from_num_to_num_in_json(
                 motion, new_turns
             )
-
-    def _update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
-        """Update the motion's turns and rotation properties."""
-        self._handle_prop_rotation_buttons(motion, new_turns)
-        motion.turns_manager.set_motion_turns(new_turns)
-        self.turns_box.header.update_turns_box_header()
-
-    def _handle_prop_rotation_buttons(self, motion: "Motion", new_turns: Turns) -> None:
-        """Adjust prop rotation direction buttons based on the new turns value."""
-
-        if new_turns == 0:
-            self._handle_zero_turns(motion)
-        elif new_turns == "fl":
-            self._handle_float_turn_buttons(motion)
-        elif new_turns > 0:
-            self._handle_positive_turns(motion)
-
-    def _handle_zero_turns(self, motion: "Motion") -> None:
-        """Handle button states when turns are zero."""
-        if motion.motion_type in [DASH, STATIC]:
-            motion.prop_rot_dir = NO_ROT
-            self.prop_rot_dir_manager.unpress_prop_rot_dir_buttons()
-            self.prop_rot_dir_manager.hide_prop_rot_dir_buttons()
-        elif motion.motion_type in [PRO, ANTI]:
-            self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
-
-    def _handle_float_turn_buttons(self, motion: "Motion") -> None:
-        """Handle button states when turns are 'float'."""
-        self.prop_rot_dir_manager.unpress_prop_rot_dir_buttons()
-        self.prop_rot_dir_manager.hide_prop_rot_dir_buttons()
-        motion.motion_type = FLOAT
-        motion.prop_rot_dir = NO_ROT
-
-    def _handle_positive_turns(self, motion: "Motion") -> None:
-        """Handle button states when turns are positive."""
-        self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
-        if motion.prop_rot_dir == NO_ROT:
-            motion.prop_rot_dir = self._get_default_prop_rot_dir()
-            self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
-
-    def _get_default_prop_rot_dir(self) -> str:
-        """Set default prop rotation direction to clockwise."""
-        self._set_prop_rot_dir_state_default()
-        prop_rot_dir_manager = self.turns_box.prop_rot_dir_button_manager
-        prop_rot_dir_manager.show_prop_rot_dir_buttons()
-        prop_rot_dir_manager.cw_button.press()
-        return CLOCKWISE
-
-    def _set_prop_rot_dir_state_default(self) -> None:
-        """Set the prop rotation direction state to clockwise by default."""
-        self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
-        self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
 
     def _get_motion_type_from_json(self, index: int, color: str) -> int:
         """Retrieve motion type from JSON at the given index."""

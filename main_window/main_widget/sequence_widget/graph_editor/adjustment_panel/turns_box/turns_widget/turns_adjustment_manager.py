@@ -3,6 +3,7 @@ from PyQt6.QtCore import QObject, Qt
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import pyqtSignal
 from Enums.Enums import Turns
+from data.constants import ANTI, CLOCKWISE, COUNTER_CLOCKWISE, DASH, FLOAT, NO_ROT, PRO, STATIC
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
@@ -21,7 +22,8 @@ class TurnsAdjustmentManager(QObject):
         self.json_manager = self.main_widget.json_manager
         self.json_validation_engine = self.json_manager.ori_validation_engine
         self.color = self.turns_widget.turns_box.color
-
+        self.turns_box = self.turns_widget.turns_box
+        self.prop_rot_dir_manager = self.turns_box.prop_rot_dir_button_manager
         self.turns_adjusted.connect(
             self.beat_frame.updater.update_beats_from_current_sequence_json
         )
@@ -32,7 +34,7 @@ class TurnsAdjustmentManager(QObject):
         self.GE_pictograph = GE_view.pictograph
         self.reference_beat = GE_view.reference_beat
 
-        current_turns = self.get_current_turns_value()
+        current_turns = self._get_turns()
         GE_motion = self.GE_pictograph.motions[self.color]
         matching_motion = self.reference_beat.motions[self.color]
 
@@ -87,16 +89,9 @@ class TurnsAdjustmentManager(QObject):
             return True
         if motion.turns == "fl" and new_turns >= 0:
             return True
+        return False
+    
 
-    def _repaint_views(self):
-        """Repaint the pictograph and GE pictograph views to reflect the change."""
-        self.reference_beat.view.repaint()
-        GE_pictograph = (
-            self.turns_widget.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_view.get_current_pictograph()
-        )
-        GE_pictograph.view.repaint()
-        # GE_pictograph.updater.update_pictograph()
-        QApplication.processEvents()
 
     def direct_set_turns(self, new_turns: Turns) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -110,7 +105,6 @@ class TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
         self.reference_beat.motions[self.color].turns = new_turns
-        # self.reference_beat.view.repaint()
         self.turns_widget.display_frame.update_turns_display(
             self.reference_beat.motions[self.color], new_turns
         )
@@ -133,9 +127,6 @@ class TurnsAdjustmentManager(QObject):
         self.main_widget.construct_tab.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
-
-    def get_current_turns_value(self) -> Turns:
-        return self._get_turns()
 
     def _get_turns(self) -> Turns:
         turns = self.turns_widget.display_frame.turns_label.text()
@@ -168,3 +159,51 @@ class TurnsAdjustmentManager(QObject):
             self.GE_pictograph.motions[self.color],
         ]:
             self.turns_widget.turns_updater.set_motion_turns(motion, new_turns)
+            self._handle_prop_rotation_buttons(motion, new_turns)
+            motion.turns_manager.set_motion_turns(new_turns)
+            self.turns_box.header.update_turns_box_header()
+            
+    def _handle_prop_rotation_buttons(self, motion: "Motion", new_turns: Turns) -> None:
+        """Adjust prop rotation direction buttons based on the new turns value."""
+        if new_turns == 0:
+            self._handle_zero_turns(motion)
+        elif new_turns == "fl":
+            self._handle_float_turn_buttons(motion)
+        elif new_turns > 0:
+            self._handle_positive_turns(motion)
+            
+    def _handle_zero_turns(self, motion: "Motion") -> None:
+        """Handle button states when turns are zero."""
+        if motion.motion_type in [DASH, STATIC]:
+            motion.prop_rot_dir = NO_ROT
+            self.prop_rot_dir_manager.unpress_prop_rot_dir_buttons()
+            self.prop_rot_dir_manager.hide_prop_rot_dir_buttons()
+        elif motion.motion_type in [PRO, ANTI]:
+            self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
+
+    def _handle_float_turn_buttons(self, motion: "Motion") -> None:
+        """Handle button states when turns are 'float'."""
+        self.prop_rot_dir_manager.unpress_prop_rot_dir_buttons()
+        self.prop_rot_dir_manager.hide_prop_rot_dir_buttons()
+        motion.motion_type = FLOAT
+        motion.prop_rot_dir = NO_ROT
+
+    def _handle_positive_turns(self, motion: "Motion") -> None:
+        """Handle button states when turns are positive."""
+        self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
+        if motion.prop_rot_dir == NO_ROT:
+            motion.prop_rot_dir = self._get_default_prop_rot_dir()
+            self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
+
+    def _get_default_prop_rot_dir(self) -> str:
+        """Set default prop rotation direction to clockwise."""
+        self._set_prop_rot_dir_state_default()
+        prop_rot_dir_manager = self.turns_box.prop_rot_dir_button_manager
+        prop_rot_dir_manager.show_prop_rot_dir_buttons()
+        prop_rot_dir_manager.cw_button.press()
+        return CLOCKWISE
+
+    def _set_prop_rot_dir_state_default(self) -> None:
+        """Set the prop rotation direction state to clockwise by default."""
+        self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
+        self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
