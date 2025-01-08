@@ -30,7 +30,6 @@ class TurnsWidget(QWidget):
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         layout.addWidget(self.turns_text)
         layout.addStretch(1)

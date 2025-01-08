@@ -286,8 +286,8 @@ class TurnsAdjustmentManager(QObject):
         beat_index = self._calculate_beat_index()
 
         if new_turns == "fl":
-            self.turns_widget.json_turns_updater._update_prefloat_values_in_json(
+            self.turns_widget.json_turns_updater.update_prefloat_values_in_json(
                 motion, beat_index
             )
 
-        self.turns_widget.json_turns_updater._update_turns_in_json(motion, new_turns)
+        self.turns_widget.json_turns_updater.update_turns_in_json(motion, new_turns)

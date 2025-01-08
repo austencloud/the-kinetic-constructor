@@ -20,7 +20,7 @@ class JsonTurnsUpdater:
         )
         self.prop_rot_dir_manager = self.turns_box.prop_rot_dir_button_manager
 
-    def _update_turns_in_json(self, motion: "Motion", new_turns: Turns) -> None:
+    def update_turns_in_json(self, motion: "Motion", new_turns: Turns) -> None:
         """Update the turns value in the JSON data."""
         if new_turns == "fl":
             self.json_updater.turns_updater.set_turns_to_fl_from_num_in_json(
@@ -35,7 +35,7 @@ class JsonTurnsUpdater:
                 motion, new_turns
             )
 
-    def _update_prefloat_values_in_json(self, motion: "Motion", index: int) -> None:
+    def update_prefloat_values_in_json(self, motion: "Motion", index: int) -> None:
         """Update prefloat values in JSON."""
         self.json_updater.motion_type_updater.update_prefloat_motion_type_in_json(
             index, motion.color, motion.prefloat_motion_type
@@ -43,7 +43,3 @@ class JsonTurnsUpdater:
         self.json_updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(
             index, motion.color, motion.prefloat_prop_rot_dir
         )
-
-    def _clamp_turns(self, turns: Turns) -> Turns:
-        """Clamp the turns value within the allowable range."""
-        return max(0, min(3, turns))
