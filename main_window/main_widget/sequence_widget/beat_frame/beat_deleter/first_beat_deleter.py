@@ -25,9 +25,8 @@ class FirstBeatDeleter:
         for box in turns_boxes:
             widgets.extend(
                 [
-                    box.turns_widget.turns_display_frame.increment_button,
-                    box.turns_widget.turns_display_frame.decrement_button,
-                    # box.header.header_label,
+                    box.turns_widget.display_frame.increment_button,
+                    box.turns_widget.display_frame.decrement_button,
                     box.turns_widget.turns_text,
                 ]
             )

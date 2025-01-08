@@ -1,6 +1,9 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from typing import TYPE_CHECKING
 
+from data.constants import ANTI, FLOAT, PRO
+from objects.motion.motion import Motion
+
 from .adjust_turns_button import AdjustTurnsButton
 from .turns_label import GE_TurnsLabel
 from utilities.path_helpers import get_images_and_data_path
@@ -49,5 +52,24 @@ class TurnsDisplayFrame(QFrame):
         self.increment_button.customContextMenuRequested.connect(
             lambda: self.adjustment_manager.adjust_turns(0.5)
         )
-        self.turns_label.clicked.connect(self.turns_widget.on_turns_label_clicked)
+        self.turns_label.clicked.connect(self.on_turns_label_clicked)
 
+    def update_turns_display(self, motion: "Motion", new_turns: str) -> None:
+        self.turns_box.matching_motion = motion
+        display_value = "fl" if new_turns == "fl" else str(new_turns)
+        self.turns_label.setText(display_value)
+
+        if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
+            self.decrement_button.setEnabled(new_turns not in ["fl"])
+        else:
+            self.decrement_button.setEnabled(new_turns != 0)
+
+        if display_value == "3":
+            self.increment_button.setEnabled(False)
+        else:
+            self.increment_button.setEnabled(True)
+
+        self.turns_widget.motion_type_label.update_display(motion.motion_type)
+
+    def on_turns_label_clicked(self) -> None:
+        self.turns_widget.direct_set_dialog.show_direct_set_dialog()

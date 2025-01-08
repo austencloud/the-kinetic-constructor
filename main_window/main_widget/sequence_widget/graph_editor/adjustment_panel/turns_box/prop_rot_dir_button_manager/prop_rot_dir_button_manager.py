@@ -8,7 +8,6 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import
 )
 from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from ..turns_box import TurnsBox

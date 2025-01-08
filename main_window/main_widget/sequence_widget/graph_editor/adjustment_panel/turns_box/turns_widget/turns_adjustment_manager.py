@@ -47,7 +47,7 @@ class TurnsAdjustmentManager(QObject):
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
 
-        self.turns_widget.update_turns_display(matching_motion, new_turns)
+        self.turns_widget.display_frame.update_turns_display(matching_motion, new_turns)
 
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
@@ -111,7 +111,7 @@ class TurnsAdjustmentManager(QObject):
         )
         self.reference_beat.motions[self.color].turns = new_turns
         # self.reference_beat.view.repaint()
-        self.turns_widget.update_turns_display(
+        self.turns_widget.display_frame.update_turns_display(
             self.reference_beat.motions[self.color], new_turns
         )
 
@@ -138,7 +138,7 @@ class TurnsAdjustmentManager(QObject):
         return self._get_turns()
 
     def _get_turns(self) -> Turns:
-        turns = self.turns_widget.turns_display_frame.turns_label.text()
+        turns = self.turns_widget.display_frame.turns_label.text()
         if turns == "fl":
             return "fl"
         turns = self.convert_turns_from_str_to_num(turns)
@@ -160,7 +160,7 @@ class TurnsAdjustmentManager(QObject):
         return turns
 
     def _update_turns_display(self, turns: Turns) -> None:
-        self.turns_widget.update_turns_display(turns)
+        self.turns_widget.display_frame.update_turns_display(turns)
 
     def _update_motion_properties(self, new_turns) -> None:
         for motion in [

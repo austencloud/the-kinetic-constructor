@@ -18,7 +18,7 @@ class DirectSetTurnsDialog(QDialog):
         )
         self.turns_widget = turns_widget
         self.turns_box = turns_widget.turns_box
-        self.turns_display_frame = turns_widget.turns_display_frame
+        self.turns_display_frame = turns_widget.display_frame
         self._set_dialog_style()
         self._setup_buttons()
         self._setup_layout()
@@ -63,7 +63,7 @@ class DirectSetTurnsDialog(QDialog):
         global_turns_label_pos = self.turns_display_frame.turns_label.mapToGlobal(
             self.turns_display_frame.turns_label.pos()
         )
-        #get the position of the left top corner of the turns widget
+        # get the position of the left top corner of the turns widget
         turns_widget_pos = self.turns_widget.mapToGlobal(self.turns_widget.pos())
         dialog_width = self.width()
         dialog_x = turns_widget_pos.x()

@@ -105,7 +105,7 @@ class BeatAdjustmentPanel(QFrame):
         for box, motion in zip(
             [self.blue_turns_box, self.red_turns_box], [blue_motion, red_motion]
         ):
-            box.turns_widget.update_turns_display(motion, motion.turns)
+            box.turns_widget.display_frame.update_turns_display(motion, motion.turns)
 
     def update_turns_panel(self) -> None:
         """Update the turns panel with new motion data."""
