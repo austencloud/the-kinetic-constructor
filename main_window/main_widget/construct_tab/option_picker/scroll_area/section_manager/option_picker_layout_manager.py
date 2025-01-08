@@ -11,7 +11,10 @@ if TYPE_CHECKING:
 
 
 class OptionPickerLayoutManager:
-    """Manages all of the sections in the scroll area. Individual sections are managed by the OptionPickerSectionWidget class."""
+    """
+    Manages all of the sections in the scroll area.
+    Individual sections are managed by the OptionPickerSectionWidget class.
+    """
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area

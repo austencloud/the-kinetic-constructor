@@ -20,18 +20,23 @@ class OrientationSetter:
 
     def set_orientation(self, orientation: str) -> None:
         """Apply the orientation to the related pictographs and data structures."""
+        construct_tab = (
+            self.ori_picker_box.graph_editor.sequence_widget.main_widget.construct_tab
+        )
         self.ori_picker_widget.current_orientation_index = (
             self.ori_picker_widget.orientations.index(orientation)
         )
+        start_pos_picker = construct_tab.start_pos_picker
+        advanced_start_pos_picker = construct_tab.advanced_start_pos_picker
+        
         self.ori_picker_widget.clickable_ori_label.setText(orientation)
         if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
             self.json_manager.start_pos_handler.update_start_pos_ori(
                 self.color, orientation
             )
             self.json_validation_engine.run(is_current_sequence=True)
-            # self.ori_picker_widget.ori_adjusted.emit(orientation)
             start_position_pictographs = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.construct_tab.start_pos_picker.pictograph_frame.start_positions
+                construct_tab.start_pos_picker.pictograph_frame.start_positions
             )
             if start_position_pictographs:
                 for pictograph in start_position_pictographs.values():
@@ -43,17 +48,9 @@ class OrientationSetter:
                             }
                         }
                     )
-            self.option_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.construct_tab.option_picker
-            )
+            self.option_picker = construct_tab.option_picker
             self.option_picker.update_option_picker()
         else:
-            start_pos_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.construct_tab.start_pos_picker
-            )
-            advanced_start_pos_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.construct_tab.advanced_start_pos_picker
-            )
             for pictograph in start_pos_picker.start_options.values():
                 pictograph.updater.update_pictograph(
                     {
@@ -81,7 +78,6 @@ class OrientationSetter:
                     }
                 )
 
-        # propogate the change through the beat frame
         self.beat_frame.updater.update_beats_from_current_sequence_json()
 
     def set_initial_orientation(

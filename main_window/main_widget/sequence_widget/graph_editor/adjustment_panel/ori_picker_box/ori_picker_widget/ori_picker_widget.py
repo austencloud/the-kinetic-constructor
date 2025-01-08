@@ -9,7 +9,7 @@ from .clickable_ori_label import ClickableOriLabel
 from .rotate_buttons_widget import RotateButtonsWidget
 
 if TYPE_CHECKING:
-    from ......sequence_builder.option_picker.option_picker import OptionPicker
+    from main_window.main_widget.construct_tab.option_picker.option_picker import OptionPicker
     from ..ori_picker_box import OriPickerBox
 
 

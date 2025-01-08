@@ -55,6 +55,7 @@ class BeatFrameUpdater:
                 )
         if beat_entries:
             self.bf.sequence_widget.difficulty_label.update_difficulty_label()
+        self.bf.main_widget.sequence_widget.graph_editor.update_graph_editor()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]

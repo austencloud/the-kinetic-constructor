@@ -26,10 +26,13 @@ class GraphEditorPictographContainer(QWidget):
         self.GE_view = GE_PictographView(self, self.GE_pictograph)
 
     def update_pictograph(self, reference_beat: "Beat" = None) -> None:
+        selected_beat_view = (
+            self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat_view()
+        )
+        if not selected_beat_view:
+            return
         if not reference_beat:
-            reference_beat = (
-                self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat_view().beat
-            )
+            reference_beat = selected_beat_view.beat
 
         view = self.GE_view
         pictograph = view.pictograph

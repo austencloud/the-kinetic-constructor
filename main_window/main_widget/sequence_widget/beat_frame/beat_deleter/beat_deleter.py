@@ -68,11 +68,11 @@ class BeatDeleter:
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self.beat_frame.layout_manager.configure_beat_frame_for_filled_beats()
         self.sequence_widget.graph_editor.pictograph_container.GE_view.set_to_blank_grid()
-        # self.sequence_widget.graph_editor.adjustment_panel.update_adjustment_panel()
         self.sequence_widget.main_widget.construct_tab.last_beat = (
             self.sequence_widget.beat_frame.start_pos
         )
         self.sequence_widget.difficulty_label.set_difficulty_level("")
+        self.sequence_widget.graph_editor.update_graph_editor()
 
     def fade_and_reset_widgets(self, widgets, show_indicator):
         self.main_widget.fade_manager.widget_fader.fade_and_update(

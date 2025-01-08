@@ -69,28 +69,29 @@ class BeatAdjustmentPanel(QFrame):
         """Update the panel view based on the current pictograph state."""
         view = self.graph_editor.pictograph_container.GE_view
         is_blank = view.get_current_pictograph().is_blank
-        self._set_current_stack_widgets(
+        widget_index = (
             ORI_WIDGET_INDEX if is_blank or view.is_start_pos else TURNS_WIDGET_INDEX
         )
+        self._set_current_stack_widgets(widget_index)
         self.update_turns_displays()
         self.update_rot_dir_buttons()
 
     def update_rot_dir_buttons(self) -> None:
         """Update the rotation direction buttons based on the current pictograph state."""
         reference_beat = self.beat_frame.get.currently_selected_beat_view()
+        if reference_beat:
+            blue_motion = reference_beat.beat.blue_motion
+            red_motion = reference_beat.beat.red_motion
 
-        blue_motion = reference_beat.beat.blue_motion
-        red_motion = reference_beat.beat.red_motion
+            blue_rot_dir = blue_motion.prop_rot_dir
+            red_rot_dir = red_motion.prop_rot_dir
 
-        blue_rot_dir = blue_motion.prop_rot_dir
-        red_rot_dir = red_motion.prop_rot_dir
-
-        self.blue_turns_box.prop_rot_dir_button_manager._update_button_states(
-            blue_rot_dir
-        )
-        self.red_turns_box.prop_rot_dir_button_manager._update_button_states(
-            red_rot_dir
-        )
+            self.blue_turns_box.prop_rot_dir_button_manager._update_button_states(
+                blue_rot_dir
+            )
+            self.red_turns_box.prop_rot_dir_button_manager._update_button_states(
+                red_rot_dir
+            )
 
     def _set_current_stack_widgets(self, index):
         """Synchronize left and right stacks to the specified index."""
