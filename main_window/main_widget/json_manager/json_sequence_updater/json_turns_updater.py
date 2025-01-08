@@ -33,7 +33,6 @@ class JsonTurnsUpdater:
         )
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
 
-        # Clean up properties for "fl" turns
         if turns == "fl":
             self._handle_float_turn_cleanup(sequence, index, color)
         else:
