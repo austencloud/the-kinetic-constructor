@@ -1,3 +1,4 @@
+from math import pi
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from Enums.Enums import LetterType
@@ -47,6 +48,11 @@ class OptionPickerSectionWidget(QGroupBox):
         self.pictograph_frame.setVisible(is_visible)
 
     def clear_pictographs(self) -> None:
+
+        # remove them from the layout
+        for pictograph in self.pictographs.values():
+            self.pictograph_frame.layout.removeWidget(pictograph.view)
+            pictograph.view.setVisible(False)
         self.pictographs = {}
 
     def add_pictograph(self, pictograph: BasePictograph) -> None:
@@ -60,6 +66,7 @@ class OptionPickerSectionWidget(QGroupBox):
         count = len(self.pictographs)
         row, col = divmod(count - 1, COLUMN_COUNT)
         self.pictograph_frame.layout.addWidget(pictograph.view, row, col)
+        pictograph.view.setVisible(True)
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""

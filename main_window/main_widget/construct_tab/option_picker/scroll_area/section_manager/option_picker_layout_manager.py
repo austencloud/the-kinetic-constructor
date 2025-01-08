@@ -49,6 +49,6 @@ class OptionPickerLayoutManager:
                         self.scroll_area.layout.addLayout(group_layout, 3)
                     group_widget.add_section_widget(section)
                 elif letter_type == LetterType.Type1:
-                    self.scroll_area.layout.addWidget(section, 4)
+                    self.scroll_area.layout.addWidget(section, 3)
                 else:
                     self.scroll_area.layout.addWidget(section, 3)

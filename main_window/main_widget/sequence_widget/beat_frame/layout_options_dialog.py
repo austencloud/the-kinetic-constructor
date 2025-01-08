@@ -104,23 +104,8 @@ class LayoutOptionsDialog(QDialog):
                 self.sequence_widget.layout_manager.apply_layout_options(
                     cols, rows, num_beats
                 )
-        self.check_option_picker_state()
         self.accept()
 
-    def check_option_picker_state(self):
-        option_picker = self.sequence_widget.main_widget.construct_tab.option_picker
-        if (
-            not self.settings_manager.global_settings.get_grow_sequence()
-            and self.sequence_widget.beat_frame.get.next_available_beat() - 1
-            >= sum(
-                1
-                for beat in self.sequence_widget.beat_frame.beat_views
-                if beat.isVisible()
-            )
-        ):
-            option_picker.set_disabled(True)
-        else:
-            option_picker.set_disabled(False)
 
     def open_warning_dialog(self):
         dialog = LayoutWarningDialog(self)

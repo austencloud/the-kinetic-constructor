@@ -89,13 +89,11 @@ class OptionPicker(QWidget):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         selected_filter = self.reversal_filter.reversal_combobox.currentData()
         next_options = self.option_getter.get_next_options(sequence, selected_filter)
-        for section in self.scroll_area.layout_manager.sections.values():
-            section.pictographs = {}
+        # for section in self.scroll_area.layout_manager.sections.values():
+        #     section.pictographs = {}
         self.scroll_area.add_and_display_relevant_pictographs(next_options)
 
-    def set_disabled(self, disabled: bool) -> None:
-        self.disabled = disabled
-        self.scroll_area.set_disabled(disabled)
+
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

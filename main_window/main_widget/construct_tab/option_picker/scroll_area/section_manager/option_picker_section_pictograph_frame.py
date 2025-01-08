@@ -18,6 +18,3 @@ class OptionPickerSectionPictographFrame(QFrame):
         self.layout.setSpacing(self.section.scroll_area.spacing)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         
-        # self.opacity_effect = QGraphicsOpacityEffect()
-        # self.setGraphicsEffect(self.opacity_effect)
-        # self.opacity_effect.setOpacity(1.0)

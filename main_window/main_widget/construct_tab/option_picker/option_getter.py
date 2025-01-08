@@ -60,9 +60,9 @@ class OptionGetter:
                 result.append(pictograph_dict)
         return result
 
-    def _determine_reversal_filter(self, sequence: list, pictograph: dict) -> str:
+    def _determine_reversal_filter(self, sequence: list, pictograph_dict: dict) -> str:
         """Determine if pictograph is 'continuous', 'one_reversal', or 'two_reversals'."""
-        blue_cont, red_cont = self._check_continuity(sequence, pictograph)
+        blue_cont, red_cont = self._check_continuity(sequence, pictograph_dict)
         if blue_cont and red_cont:
             return "continuous"
         elif blue_cont ^ red_cont:  # XOR
