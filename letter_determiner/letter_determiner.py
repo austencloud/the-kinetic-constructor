@@ -53,8 +53,6 @@ class LetterDeterminer:
         return new_letter
 
     def find_letter_based_on_attributes(self, motion: "Motion") -> str:
-        """Find the letter in the dictionary that matches the given attributes for both blue and red motions."""
-        # Get the other motion (opposite color)
         other_motion = motion.pictograph.get.other_motion(motion)
         letter_type = motion.pictograph.letter.get_letter_type()
         original_letter = motion.pictograph.letter

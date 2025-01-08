@@ -128,14 +128,12 @@ class PropRotDirButtonManager:
 
         beat.updater.update_pictograph(beat.pictograph_dict)
         json_index = pictograph_index + 2
+        json_updater = self.json_manager.updater
         if new_letter:
-            self.json_manager.updater.letter_updater.update_letter_in_json_at_index(
+            json_updater.letter_updater.update_letter_in_json_at_index(
                 json_index, new_letter.value
             )
-        self.turns_box.turns_widget.motion_type_label.update_motion_type_label(
-            motion.motion_type
-        )
-        json_updater = self.json_manager.updater
+        self.turns_box.turns_widget.motion_type_label.update_display(motion.motion_type)
         json_updater.motion_type_updater.update_motion_type_in_json_at_index(
             json_index, motion.color, motion.motion_type
         )
@@ -146,7 +144,6 @@ class PropRotDirButtonManager:
             is_current_sequence=True
         )
         self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_current_sequence_json()
-        QApplication.processEvents()
         self.graph_editor.main_widget.sequence_widget.current_word_label.set_current_word(
             self.graph_editor.sequence_widget.beat_frame.get.current_word()
         )

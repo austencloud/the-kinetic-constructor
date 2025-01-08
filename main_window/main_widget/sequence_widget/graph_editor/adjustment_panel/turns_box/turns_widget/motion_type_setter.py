@@ -17,6 +17,6 @@ class MotionTypeSetter:
         # Update the motion type
         motion.motion_type = motion_type
         # self.turns_widget.turns_updater.set_motion_turns(motion, motion.turns)
- 
+
         # Update the motion type buttons in the UI
-        self.turns_widget.motion_type_label.update_motion_type_label(motion_type)
+        self.turns_widget.motion_type_label.update(motion_type)

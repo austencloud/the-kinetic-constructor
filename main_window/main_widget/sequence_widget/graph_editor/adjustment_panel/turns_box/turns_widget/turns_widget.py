@@ -9,7 +9,7 @@ from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
 from .turns_adjustment_manager import TurnsAdjustmentManager
 from .turns_updater import TurnsUpdater
-from .motion_type_label_widget import MotionTypeLabelWidget
+from .motion_type_label_widget import MotionTypeLabel
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -29,7 +29,7 @@ class TurnsWidget(QWidget):
         self.turns_display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()
-        self.motion_type_label = MotionTypeLabelWidget(self)
+        self.motion_type_label = MotionTypeLabel(self)
         self.motion_type_setter = MotionTypeSetter(self)
 
     def _setup_layout(self) -> None:
@@ -75,5 +75,4 @@ class TurnsWidget(QWidget):
         font.setUnderline(True)
         self.turns_text.setFont(font)
 
-        self.motion_type_label.resize_buttons()
         super().resizeEvent(event)
