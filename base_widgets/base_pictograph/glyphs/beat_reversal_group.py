@@ -67,7 +67,7 @@ class BeatReversalGroup(QGraphicsItemGroup):
         x_position = 40
         self.setPos(x_position, center_y)
 
-        self.pictograph.update()
+        # self.pictograph.update()
 
     def _create_reversal_text_item(self, color) -> QGraphicsTextItem:
         text_item = QGraphicsTextItem("R")

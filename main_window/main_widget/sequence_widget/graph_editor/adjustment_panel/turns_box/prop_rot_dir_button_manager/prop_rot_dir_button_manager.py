@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from Enums.letters import Letter
-from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR
+from data.constants import ANTI, CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR, PRO
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
 )
 from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from ..turns_box import TurnsBox
@@ -23,6 +24,7 @@ class PropRotDirButtonManager:
         self.graph_editor = turns_box.graph_editor
         self.beat_frame = self.graph_editor.sequence_widget.beat_frame
         self.json_manager = self.graph_editor.main_widget.json_manager
+        self.main_widget = self.graph_editor.main_widget
 
     def _setup_prop_rot_dir_buttons(self) -> list[PropRotDirButton]:
         cw_path = get_images_and_data_path(f"{ICON_DIR}clock/clockwise.png")
@@ -67,6 +69,7 @@ class PropRotDirButtonManager:
             for motion in pictograph.motions.values():
                 if motion.color == self.turns_box.color:
                     motion.prop_rot_dir = prop_rot_dir
+                    motion.motion_type = self._get_new_motion_type(motion)
                     new_letter = self.graph_editor.main_widget.letter_determiner.determine_letter(
                         motion, swap_prop_rot_dir=True
                     )
@@ -91,7 +94,18 @@ class PropRotDirButtonManager:
             self.turns_box.graph_editor.sequence_widget.main_widget.construct_tab.option_picker
         )
         self.option_picker.update_option_picker()
-        self.graph_editor.pictograph_container.update_pictograph(pictograph)
+
+    def _get_new_motion_type(self, motion: "Motion"):
+        motion_type = motion.motion_type
+        if motion_type == ANTI:
+            new_motion_type = PRO
+            motion.motion_type = new_motion_type
+        elif motion_type == PRO:
+            new_motion_type = ANTI
+            motion.motion_type = new_motion_type
+        else:
+            new_motion_type = motion_type
+        return new_motion_type
 
     def _update_pictograph_and_json(
         self, motion: "Motion", new_letter: Letter = None
@@ -99,29 +113,21 @@ class PropRotDirButtonManager:
         """Update the pictograph and JSON with the new letter and motion attributes."""
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         beat = motion.pictograph
-        beat.pictograph_dict[motion.color + "_attributes"].update(
-            {
-                "motion_type": motion.motion_type,
-                "prop_rot_dir": motion.prop_rot_dir,
-                "end_ori": motion.end_ori,
-                "turns": motion.turns,
-            }
-        )
+        new_dict = {
+            "motion_type": motion.motion_type,
+            "prop_rot_dir": motion.prop_rot_dir,
+            "end_ori": motion.end_ori,
+            "turns": motion.turns,
+        }
+
+        beat.pictograph_dict[motion.color + "_attributes"].update(new_dict)
 
         if new_letter:
             beat.pictograph_dict["letter"] = new_letter.value
             beat.letter = new_letter
 
         beat.updater.update_pictograph(beat.pictograph_dict)
-
         json_index = pictograph_index + 2
-
-        self.json_manager.updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
-            json_index, motion.color, motion.prop_rot_dir
-        )
-        self.json_manager.updater.motion_type_updater.update_motion_type_in_json_at_index(
-            json_index, motion.color, motion.motion_type
-        )
         if new_letter:
             self.json_manager.updater.letter_updater.update_letter_in_json_at_index(
                 json_index, new_letter.value
@@ -129,14 +135,18 @@ class PropRotDirButtonManager:
         self.turns_box.turns_widget.motion_type_label.update_motion_type_label(
             motion.motion_type
         )
-
-        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_current_sequence_json()
-        # Running the validation engine
+        json_updater = self.json_manager.updater
+        json_updater.motion_type_updater.update_motion_type_in_json_at_index(
+            json_index, motion.color, motion.motion_type
+        )
+        json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
+            json_index, motion.color, motion.prop_rot_dir
+        )
         self.graph_editor.main_widget.json_manager.ori_validation_engine.run(
             is_current_sequence=True
         )
-
-        # Triggering updates for UI components
+        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_current_sequence_json()
+        QApplication.processEvents()
         self.graph_editor.main_widget.sequence_widget.current_word_label.set_current_word(
             self.graph_editor.sequence_widget.beat_frame.get.current_word()
         )

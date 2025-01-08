@@ -23,34 +23,16 @@ class LetterDeterminer:
     ) -> Letter:
         """Update the motion attributes based on the change in prop_rot_dir."""
         if not self.beat_frame:
-            self.beat_frame = (
-                self.main_widget.sequence_widget.beat_frame
-            )
+            self.beat_frame = self.main_widget.sequence_widget.beat_frame
         other_motion = motion.pictograph.get.other_motion(motion)
         motion_type = motion.motion_type
-        if swap_prop_rot_dir:
-            if motion_type == ANTI:
-                new_motion_type = PRO
-                motion.motion_type = new_motion_type
-            elif motion_type == PRO:
-                new_motion_type = ANTI
-                motion.motion_type = new_motion_type
-            else:
-                new_motion_type = motion_type
-            json_index = self.beat_frame.get.index_of_currently_selected_beat() + 2
-            self.main_widget.json_manager.updater.motion_type_updater.update_motion_type_in_json_at_index(
-                json_index, motion.color, new_motion_type
-            )
-            self.main_widget.json_manager.updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
-                json_index, motion.color, motion.prop_rot_dir
-            )
-        elif motion_type == FLOAT and other_motion.motion_type == FLOAT:
+
+        if motion_type == FLOAT and other_motion.motion_type == FLOAT:
             return self.dual_float_letter_determiner.determine_letter(motion)
         elif motion_type in [PRO, ANTI] and other_motion.motion_type == FLOAT:
             return self.non_hybrid_shift_letter_determiner.determine_letter(
                 motion, motion.motion_type, swap_prop_rot_dir
             )
-
         elif motion_type in [DASH, STATIC]:
             new_motion_type = motion_type
         if (
@@ -117,7 +99,8 @@ class LetterDeterminer:
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
             )
-            or example[f"{motion.color}_attributes"]["prop_rot_dir"] == motion.prop_rot_dir
+            or example[f"{motion.color}_attributes"]["prop_rot_dir"]
+            == motion.prop_rot_dir
         )
 
         return is_rot_dir_matching
@@ -183,8 +166,10 @@ class LetterDeterminer:
             and example[f"{shift.color}_attributes"]["start_loc"] == shift.start_loc
             and example[f"{shift.color}_attributes"]["end_loc"] == shift.end_loc
             and self._is_shift_prop_rot_dir_matching(shift, example)
-            and example[f"{non_shift.color}_attributes"]["motion_type"] == non_shift.motion_type
-            and example[f"{non_shift.color}_attributes"]["start_loc"] == non_shift.start_loc
+            and example[f"{non_shift.color}_attributes"]["motion_type"]
+            == non_shift.motion_type
+            and example[f"{non_shift.color}_attributes"]["start_loc"]
+            == non_shift.start_loc
             and example[f"{non_shift.color}_attributes"]["end_loc"] == non_shift.end_loc
         )
 
