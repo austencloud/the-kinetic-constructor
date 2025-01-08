@@ -1,7 +1,17 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from Enums.letters import Letter
-from data.constants import ANTI, CLOCKWISE, COUNTER_CLOCKWISE, ICON_DIR, PRO
+from data.constants import (
+    ANTI,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    FLOAT,
+    ICON_DIR,
+    NO_ROT,
+    PRO,
+    STATIC,
+)
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
     ReversalDetector,
@@ -176,3 +186,47 @@ class PropRotDirButtonManager:
     def unpress_prop_rot_dir_buttons(self) -> None:
         self.cw_button.unpress()
         self.ccw_button.unpress()
+
+    def update_prop_rotation_buttons(self, motion: "Motion", new_turns: int) -> None:
+        """Adjust prop rotation direction buttons based on the new turns value."""
+        if new_turns == 0:
+            self._handle_zero_turns(motion)
+        elif new_turns == "fl":
+            self._handle_float_turn_buttons(motion)
+        elif new_turns > 0:
+            self._handle_positive_turns(motion)
+
+    def _handle_zero_turns(self, motion: "Motion") -> None:
+        """Handle button states when turns are zero."""
+        if motion.motion_type in [DASH, STATIC]:
+            motion.prop_rot_dir = NO_ROT
+            self.unpress_prop_rot_dir_buttons()
+            self.hide_prop_rot_dir_buttons()
+        elif motion.motion_type in [PRO, ANTI]:
+            self.show_prop_rot_dir_buttons()
+
+    def _handle_float_turn_buttons(self, motion: "Motion") -> None:
+        """Handle button states when turns are 'float'."""
+        self.unpress_prop_rot_dir_buttons()
+        self.hide_prop_rot_dir_buttons()
+        motion.motion_type = FLOAT
+        motion.prop_rot_dir = NO_ROT
+
+    def _handle_positive_turns(self, motion: "Motion") -> None:
+        """Handle button states when turns are positive."""
+        self.show_prop_rot_dir_buttons()
+        if motion.prop_rot_dir == NO_ROT:
+            motion.prop_rot_dir = self._get_default_prop_rot_dir()
+            self.show_prop_rot_dir_buttons()
+
+    def _get_default_prop_rot_dir(self) -> str:
+        """Set default prop rotation direction to clockwise."""
+        self._set_prop_rot_dir_state_default()
+        self.show_prop_rot_dir_buttons()
+        self.cw_button.press()
+        return CLOCKWISE
+
+    def _set_prop_rot_dir_state_default(self) -> None:
+        """Set the prop rotation direction state to clockwise by default."""
+        self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
+        self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False

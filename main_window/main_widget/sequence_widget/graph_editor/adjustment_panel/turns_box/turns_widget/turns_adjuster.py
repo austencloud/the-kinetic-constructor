@@ -5,13 +5,11 @@ from PyQt6.QtCore import pyqtSignal
 from Enums.Enums import Turns
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from data.constants import (
-    ANTI,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     FLOAT,
     NO_ROT,
-    PRO,
     STATIC,
 )
 from objects.motion.motion import Motion
@@ -45,7 +43,6 @@ class TurnsAdjustmentManager(QObject):
         self.reference_beat = GE_view.reference_beat
 
         current_turns = self._get_turns()
-        GE_motion = self.GE_pictograph.motions[self.color]
         matching_motion = self.reference_beat.motions[self.color]
 
         if current_turns == "fl" and adjustment > 0:
@@ -58,6 +55,8 @@ class TurnsAdjustmentManager(QObject):
         else:
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
+            
+        self._update_motion_properties(new_turns)
 
         self.turns_widget.display_frame.update_turns_display(matching_motion, new_turns)
 
@@ -67,17 +66,6 @@ class TurnsAdjustmentManager(QObject):
         )
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.construct_tab.option_picker.update_option_picker()
-
-        for pictograph in [self.reference_beat, self.GE_pictograph]:
-            self.adjust_turns_for_pictograph(pictograph, new_turns)
-        for motion in [matching_motion, GE_motion]:
-            motion.turns = new_turns
-            new_letter = self.get_new_letter(new_turns, motion)
-            self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
-                motion, new_letter
-            )
-            motion.prefloat_motion_type
-
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         self.beat_frame.updater.update_beats_from(sequence)
         QApplication.restoreOverrideCursor()
@@ -115,8 +103,11 @@ class TurnsAdjustmentManager(QObject):
             self.reference_beat.motions[self.color], new_turns
         )
 
-        for pictograph in [self.reference_beat, self.GE_pictograph]:
-            self.adjust_turns_for_pictograph(pictograph, new_turns)
+        pictographs: list[BasePictograph] = [self.reference_beat, self.GE_pictograph]
+        for pictograph in pictographs:
+            for motion in pictograph.motions.values():
+                if motion.color == self.turns_box.color:
+                    self.set_motion_turns(motion, new_turns)
 
         matching_motion = self.reference_beat.motions[self.color]
         GE_motion = self.GE_pictograph.motions[self.color]
@@ -162,14 +153,19 @@ class TurnsAdjustmentManager(QObject):
             self.reference_beat.motions[self.color],
             self.GE_pictograph.motions[self.color],
         ]:
-            self.turns_widget.json_turns_updater.set_motion_turns(motion, new_turns)
-            self._handle_prop_rotation_buttons(motion, new_turns)
+            self.set_motion_turns(motion, new_turns)
+            if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
+                motion.prop_rot_dir = NO_ROT
+            elif new_turns == "fl":
+                motion.motion_type = FLOAT
+                motion.prop_rot_dir = NO_ROT
+
+            self.prop_rot_dir_manager.update_prop_rotation_buttons(motion, new_turns)
             motion.turns_manager.set_motion_turns(new_turns)
             self.turns_box.header.update_turns_box_header()
             beat_index = self._calculate_beat_index()
-            if new_turns == "fl":
-                self._handle_float_turn(motion, beat_index)
-            elif motion.turns == "fl" and new_turns != "fl":
+
+            if motion.turns == "fl" and new_turns != "fl":
                 self._restore_motion_from_prefloat(motion, beat_index)
 
     def _calculate_beat_index(self) -> int:
@@ -177,17 +173,6 @@ class TurnsAdjustmentManager(QObject):
         current_beat = self.beat_frame.get.beat_number_of_currently_selected_beat()
         duration = self.beat_frame.get.duration_of_currently_selected_beat()
         return current_beat + duration
-
-    def _handle_float_turn(self, motion: "Motion", beat_index: int) -> None:
-        """Handle the case when the new turns value is 'float'."""
-        motion.prefloat_motion_type = self._get_motion_type_from_json(
-            beat_index, motion.color
-        )
-        motion.prefloat_prop_rot_dir = self._get_prop_rot_dir_from_json(
-            beat_index, motion.color
-        )
-        motion.motion_type = FLOAT
-        motion.prop_rot_dir = NO_ROT
 
     def _get_motion_type_from_json(self, index: int, color: str) -> int:
         """Retrieve motion type from JSON at the given index."""
@@ -199,87 +184,25 @@ class TurnsAdjustmentManager(QObject):
         """Retrieve prop rotation direction from JSON at the given index."""
         return self.json_manager.loader_saver.get_prop_rot_dir_from_json(index, color)
 
-    def _get_prefloat_motion_type_from_json(self, index: int, color: str) -> int:
-        """Retrieve prefloat motion type from JSON at the given index."""
-        return (
-            self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
-                index, color
-            )
-        )
-
     def _restore_motion_from_prefloat(self, motion: "Motion", beat_index: int) -> None:
         """Restore motion properties from prefloat values."""
-        motion.prefloat_motion_type = self._get_prefloat_motion_type_from_json(
-            beat_index, motion.color
+        motion.prefloat_motion_type = (
+            self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
+                beat_index, motion.color
+            )
         )
-        motion.prefloat_prop_rot_dir = self._get_prefloat_prop_rot_dir_from_json(
-            beat_index, motion.color
+        motion.prefloat_prop_rot_dir = (
+            self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+                beat_index, motion.color
+            )
         )
-
         motion.motion_type = motion.prefloat_motion_type
         motion.prop_rot_dir = motion.prefloat_prop_rot_dir
-
-    def _get_prefloat_prop_rot_dir_from_json(self, index: int, color: str) -> int:
-        """Retrieve prefloat prop rotation direction from JSON at the given index."""
-        return self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-            index, color
-        )
-
-    def _handle_prop_rotation_buttons(self, motion: "Motion", new_turns: Turns) -> None:
-        """Adjust prop rotation direction buttons based on the new turns value."""
-        if new_turns == 0:
-            self._handle_zero_turns(motion)
-        elif new_turns == "fl":
-            self._handle_float_turn_buttons(motion)
-        elif new_turns > 0:
-            self._handle_positive_turns(motion)
-
-    def _handle_zero_turns(self, motion: "Motion") -> None:
-        """Handle button states when turns are zero."""
-        if motion.motion_type in [DASH, STATIC]:
-            motion.prop_rot_dir = NO_ROT
-            self.prop_rot_dir_manager.unpress_prop_rot_dir_buttons()
-            self.prop_rot_dir_manager.hide_prop_rot_dir_buttons()
-        elif motion.motion_type in [PRO, ANTI]:
-            self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
-
-    def _handle_float_turn_buttons(self, motion: "Motion") -> None:
-        """Handle button states when turns are 'float'."""
-        self.prop_rot_dir_manager.unpress_prop_rot_dir_buttons()
-        self.prop_rot_dir_manager.hide_prop_rot_dir_buttons()
-        motion.motion_type = FLOAT
-        motion.prop_rot_dir = NO_ROT
-
-    def _handle_positive_turns(self, motion: "Motion") -> None:
-        """Handle button states when turns are positive."""
-        self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
-        if motion.prop_rot_dir == NO_ROT:
-            motion.prop_rot_dir = self._get_default_prop_rot_dir()
-            self.prop_rot_dir_manager.show_prop_rot_dir_buttons()
-
-    def _get_default_prop_rot_dir(self) -> str:
-        """Set default prop rotation direction to clockwise."""
-        self._set_prop_rot_dir_state_default()
-        prop_rot_dir_manager = self.turns_box.prop_rot_dir_button_manager
-        prop_rot_dir_manager.show_prop_rot_dir_buttons()
-        prop_rot_dir_manager.cw_button.press()
-        return CLOCKWISE
 
     def _set_prop_rot_dir_state_default(self) -> None:
         """Set the prop rotation direction state to clockwise by default."""
         self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
         self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
-
-    def adjust_turns_for_pictograph(
-        self, pictograph: "BasePictograph", new_turns: Union[int, float, str]
-    ) -> None:
-        """Adjust turns for each relevant motion in the pictograph."""
-        for motion in pictograph.motions.values():
-            if motion.color == self.turns_box.color:
-                if new_turns == "fl":
-                    motion.motion_type = FLOAT
-                    motion.prop_rot_dir = NO_ROT
-                self.set_motion_turns(motion, new_turns)
 
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         """Set the motion's turns and update related properties."""

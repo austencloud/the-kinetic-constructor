@@ -4,7 +4,7 @@ from .turns_text_label import TurnsTextLabel
 from .motion_type_setter import MotionTypeSetter
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
-from .turns_adjustment_manager import TurnsAdjustmentManager
+from .turns_adjuster import TurnsAdjustmentManager
 from .turns_updater import JsonTurnsUpdater
 from .motion_type_label_widget import MotionTypeLabel
 
