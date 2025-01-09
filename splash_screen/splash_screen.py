@@ -1,7 +1,7 @@
 import sys
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QApplication
-from PyQt6.QtGui import QScreen, QPainter
+from PyQt6.QtGui import QPainter
 
 from splash_screen.splash_geometry_manager import SplashGeometryManager
 from splash_screen.splash_background_handler import SplashBackgroundHandler

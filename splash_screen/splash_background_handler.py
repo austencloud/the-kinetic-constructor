@@ -1,6 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Callable, Union
-from PyQt6.QtGui import QPainter
-from PyQt6.QtCore import Qt, pyqtSlot
+from typing import TYPE_CHECKING, Optional
 
 from main_window.main_widget.main_background_widget.backgrounds.aurora.aurora_background import (
     AuroraBackground,
