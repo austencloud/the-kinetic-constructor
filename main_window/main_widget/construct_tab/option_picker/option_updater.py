@@ -9,13 +9,13 @@ class OptionUpdater:
     def __init__(self, option_picker: "OptionPicker"):
         self.option_picker = option_picker
         self.scroll_area = option_picker.option_scroll
-        self.json_loader = option_picker.json_manager.loader_saver
+        self.json_loader = option_picker.main_widget.json_manager.loader_saver
 
     def refresh_options(self):
         sequence = self.json_loader.load_current_sequence_json()
         if len(sequence) > 1:
             views = [option.view for option in self.option_picker.option_pool]
-            self.option_picker.fade_manager.widget_fader.fade_and_update(
+            self.option_picker.main_widget.fade_manager.widget_fader.fade_and_update(
                 views, self.update_options, 200
             )
 

@@ -31,6 +31,14 @@ class SequenceLayoutSettings:
             return json.load(file)
 
     def _save_layouts(self, layouts):
-        """Save layouts to JSON with compact formatting."""
+        """Save layouts to JSON with inline lists and readable formatting."""
         with open(self.LAYOUTS_FILE, "w") as file:
-            json.dump(layouts, file, separators=(",", ":"))
+            # Generate a JSON string with pre-formatted lists
+            formatted_json = json.dumps(layouts, indent=2)
+            # Post-process to ensure lists are inline
+            formatted_json = (
+                formatted_json.replace("[\n    ", "[")
+                .replace("\n  ]", "]")
+                .replace(",\n    ", ", ")
+            )
+            file.write(formatted_json)

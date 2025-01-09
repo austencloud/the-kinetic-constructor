@@ -25,15 +25,18 @@ if TYPE_CHECKING:
 
 
 class SequenceBeatFrame(BaseBeatFrame):
+    beat_views: list[BeatView] = []
+    start_pos_view: StartPositionBeatView = None
+    layout: "QGridLayout" = None
+    initialized = True
+    sequence_changed = False
+    
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget.main_widget)
         self.main_widget = sequence_widget.main_widget
         self.json_manager = self.main_widget.json_manager
         self.sequence_widget = sequence_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
-        self.layout: "QGridLayout" = None
-        self.initialized = True
-        self.sequence_changed = False
         self._init_beats()
         self._setup_components()
         self.layout_manager.setup_layout()

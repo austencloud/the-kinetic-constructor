@@ -96,3 +96,6 @@ class BeatFrameGetter:
             for beat in self.beat_frame.beat_views
             if beat.is_filled
         ]
+
+    def beat_count(self):
+        return sum(1 for beat in self.beat_frame.beat_views if beat.is_filled)

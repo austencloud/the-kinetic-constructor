@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal
-
-from main_window.main_widget.construct_tab.option_picker.option_scroll.option_scroll import OptionScroll
+from .option_scroll.option_scroll import OptionScroll
 from .option_factory import OptionFactory
 from .option_picker_layout_manager import OptionPickerLayoutManager
 from .option_updater import OptionUpdater
@@ -17,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class OptionPicker(QWidget):
-    """Contains the 'Choose Your Next Pictograph' label, filter combo box, and the OptionPickerScrollArea."""
+    """Contains the 'Choose Your Next Pictograph' label, reversal filter combo box, and the OptionPickerScrollArea."""
 
     COLUMN_COUNT = 8
     option_selected = pyqtSignal(str)
@@ -28,8 +27,6 @@ class OptionPicker(QWidget):
         super().__init__(construct_tab)
         self.construct_tab = construct_tab
         self.main_widget = construct_tab.main_widget
-        self.json_manager = self.main_widget.json_manager
-        self.fade_manager = self.main_widget.fade_manager
 
         # Components
         self.choose_next_label = ChooseYourNextPictographLabel(self)

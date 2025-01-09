@@ -11,8 +11,8 @@ class OptionGetter:
     def __init__(self, option_picker: "OptionPicker"):
         """Initialize with references to OptionPicker, JsonManager, and MainWidget."""
         self.option_picker = option_picker
-        self.json_manager = option_picker.json_manager
         self.main_widget = option_picker.main_widget
+        self.json_manager = self.main_widget.json_manager
 
     def get_next_options(
         self, sequence: list, selected_filter: Optional[str] = None
