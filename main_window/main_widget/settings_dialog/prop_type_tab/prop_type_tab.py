@@ -9,7 +9,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.settings_dialog.styles.card_frame import CardFrame
-from main_window.main_widget.settings_dialog.prop_button import PropButton
+from main_window.main_widget.settings_dialog.prop_type_tab.prop_button import PropButton
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog

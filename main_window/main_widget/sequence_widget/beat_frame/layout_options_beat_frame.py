@@ -10,13 +10,15 @@ from .beat_view import BeatView
 
 
 if TYPE_CHECKING:
-    from .layout_options_dialog import LayoutOptionsDialog
+    from main_window.main_widget.settings_dialog.beat_layout_tab.beat_layout_tab import (
+        BeatLayoutTab,
+    )
 
 
-class LayoutOptionsBeatFrame(QFrame):
+class SequenceLayoutOptionsBeatFrame(QFrame):
     """This class is responsible for displaying a preview of the selected layout options inside the layout options dialog."""
 
-    def __init__(self, dialog: "LayoutOptionsDialog"):
+    def __init__(self, dialog: "BeatLayoutTab"):
         super().__init__(dialog)
         self.dialog = dialog
         self.sequence_widget = dialog.sequence_widget
@@ -36,7 +38,7 @@ class LayoutOptionsBeatFrame(QFrame):
                 widget_to_remove.setParent(None)
                 widget_to_remove.deleteLater()
 
-        if not self.dialog.panel.sequence_growth_checkbox.isChecked():
+        if not self.dialog.panel.grow_sequence_checkbox.isChecked():
             num_beats = int(self.dialog.panel.beats_combo_box.currentText())
             selected_layout = self.dialog.panel.layout_combo_box.currentText()
 

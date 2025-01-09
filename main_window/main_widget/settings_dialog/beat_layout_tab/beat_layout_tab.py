@@ -1,67 +1,48 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDialog
 
-from .layout_warning_dialog import LayoutWarningDialog
-from .layout_options_beat_frame import LayoutOptionsBeatFrame
-from .layout_options_panel import LayoutOptionsPanel
-
+from ...sequence_widget.beat_frame.layout_warning_dialog import LayoutWarningDialog
+from ...sequence_widget.beat_frame.layout_options_beat_frame import (
+    SequenceLayoutOptionsBeatFrame,
+)
+from .beat_layout_options_panel import BeatLayoutOptionsPanel
 
 if TYPE_CHECKING:
-    from ..sequence_widget import SequenceWidget
+    from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
 
 
-class LayoutOptionsDialog(QDialog):
-    """The dialog allows the user to select the number of beats and the layout configuration in the sequence widget."""
-
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(sequence_widget)
-        self.sequence_widget = sequence_widget
+class BeatLayoutTab(QWidget):
+    def __init__(self, settings_dialog: "SettingsDialog"):
+        super().__init__(settings_dialog)
+        self.sequence_widget = settings_dialog.main_widget.sequence_widget
         self.settings_manager = (
             self.sequence_widget.main_widget.main_window.settings_manager
         )
         initial_state = self.sequence_widget.beat_frame.get.current_beat_frame_state()
-        self.setWindowTitle("Layout Options")
-        self._set_size()
-        self.beat_frame = LayoutOptionsBeatFrame(self)
-        self.panel = LayoutOptionsPanel(self)
-        self._setup_cancel_button()
+
+        self.beat_frame = SequenceLayoutOptionsBeatFrame(self)
+        self.panel = BeatLayoutOptionsPanel(self)
+
         self._setup_apply_button()
-        self._setup_action_button_layout()
-        self._setup_main_layout()
+        self._setup_layout()
 
         if initial_state:
             self.panel.initialize_from_state(initial_state)
         else:
             self.panel.load_settings()
 
-    def _setup_cancel_button(self):
-        self.cancel_button = QPushButton("Cancel")
-        self.cancel_button.clicked.connect(self.close)
-
     def _setup_apply_button(self):
         self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self.apply_settings)
 
-    def _setup_action_button_layout(self):
-        self.action_button_layout = QHBoxLayout()
-        self.action_button_layout.addStretch(1)
-        self.action_button_layout.addWidget(self.cancel_button)
-        self.action_button_layout.addWidget(self.apply_button)
-
-    def _set_size(self):
-        main_widget_size = self.sequence_widget.main_widget.size()
-        self.setFixedSize(
-            int(main_widget_size.width() // 3), int(main_widget_size.height() // 2)
-        )
-
-    def _setup_main_layout(self):
-        self.main_layout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.panel, 3)  # Panel for settings
-        self.main_layout.addWidget(self.beat_frame, 9)  # Frame for preview
-        self.main_layout.addLayout(self.action_button_layout, 1)
+    def _setup_layout(self):
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.panel, 3)
+        layout.addWidget(self.beat_frame, 9)
+        layout.addWidget(self.apply_button)
 
     def apply_settings(self):
-        grow_sequence = self.panel.sequence_growth_checkbox.isChecked()
+        grow_sequence = self.panel.grow_sequence_checkbox.isChecked()
         num_filled_beats = (
             self.sequence_widget.beat_frame.get.next_available_beat() - 1 or 0
         )
@@ -104,8 +85,6 @@ class LayoutOptionsDialog(QDialog):
                 self.sequence_widget.layout_manager.apply_layout_options(
                     cols, rows, num_beats
                 )
-        self.accept()
-
 
     def open_warning_dialog(self):
         dialog = LayoutWarningDialog(self)

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import QGridLayout
-from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
+from data.beat_frame_layouts import default_beat_frame_layouts
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class SequenceWidgetBeatFrameLayoutManager:
         self.configure_beat_frame(16)
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
-        return SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
+        return default_beat_frame_layouts.get(beat_count, (1, beat_count))
 
     def get_cols(self):
         layout = self.beat_frame.layout

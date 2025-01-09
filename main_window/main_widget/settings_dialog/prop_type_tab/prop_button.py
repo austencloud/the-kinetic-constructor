@@ -8,7 +8,7 @@ from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, pyqtProperty, QSi
 from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
-    from main_window.main_widget.settings_dialog.prop_type_tab import PropTypeTab
+    from main_window.main_widget.settings_dialog.prop_type_tab.prop_type_tab import PropTypeTab
 
 
 class PropButton(QPushButton):

@@ -9,7 +9,6 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .full_screen_viewer import FullScreenViewer
 from .button_panel_placeholder import ButtonPanelPlaceholder
 from utilities.path_helpers import get_images_and_data_path
@@ -58,11 +57,11 @@ class SequenceWidgetButtonPanel(QFrame):
                 ),
                 "tooltip": "Save Image",
             },
-            "layout_options": {
-                "icon": "settings.png",
-                "callback": self.show_options_panel,
-                "tooltip": "Layout Options",
-            },
+            # "layout_options": {
+            #     "icon": "settings.png",
+            #     "callback": self.show_options_panel,
+            #     "tooltip": "Layout Options",
+            # },
             "view_full_screen": {
                 "icon": "eye.png",
                 "callback": self.full_screen_viewer.view_full_screen,
@@ -119,10 +118,6 @@ class SequenceWidgetButtonPanel(QFrame):
         button.setIcon(icon)
         return button
 
-    def show_options_panel(self) -> None:
-        self.options_panel = LayoutOptionsDialog(self.sequence_widget)
-        self.options_panel.exec()
-
     def toggle_swap_colors_icon(self):
         if self.colors_swapped:
             new_icon_path = get_images_and_data_path(
@@ -169,7 +164,7 @@ class SequenceWidgetButtonPanel(QFrame):
         self.layout.addItem(self.spacer2)
 
         # Group 3 (Sequence Management)
-        for name in ["layout_options", "delete_beat", "clear_sequence"]:
+        for name in ["delete_beat", "clear_sequence"]:
             self.layout.addWidget(self.buttons[name])
 
         self.layout.addWidget(self.bottom_placeholder)
