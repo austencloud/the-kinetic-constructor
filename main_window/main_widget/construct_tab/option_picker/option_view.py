@@ -24,7 +24,7 @@ class OptionView(BorderedPictographView):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        spacing = self.option_picker.scroll_area.spacing
+        spacing = self.option_picker.option_scroll.spacing
 
         calculated_width = (self.option_picker.width() // 8) - spacing
         size = min(calculated_width, self.option_picker.height() // 8)

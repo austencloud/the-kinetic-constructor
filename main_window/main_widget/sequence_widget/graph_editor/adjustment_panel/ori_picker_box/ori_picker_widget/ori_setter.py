@@ -49,7 +49,7 @@ class OrientationSetter:
                         }
                     )
             self.option_picker = construct_tab.option_picker
-            self.option_picker.updater.update_option_picker()
+            self.option_picker.updater.refresh_options()
         else:
             for pictograph in start_pos_picker.start_options.values():
                 pictograph.updater.update_pictograph(

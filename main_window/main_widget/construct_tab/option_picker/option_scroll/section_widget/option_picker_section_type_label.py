@@ -1,20 +1,15 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QMouseEvent
 from Enums.Enums import LetterType
-
-from main_window.main_widget.construct_tab.option_picker.scroll_area.letter_type_text_painter import (
-    LetterTypeTextPainter,
-)
+from utilities.letter_type_text_painter import LetterTypeTextPainter
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_widget import (
-        OptionPickerSectionWidget,
-    )
+    from .option_picker_section_widget import OptionPickerSectionWidget
 
 
-class SectionTypeLabel(QLabel):
+class OptionPickerSectionTypeLabel(QLabel):
     clicked = pyqtSignal()
 
     def __init__(self, section_widget: "OptionPickerSectionWidget") -> None:
@@ -35,12 +30,10 @@ class SectionTypeLabel(QLabel):
         self.setText(styled_text)
 
     def _set_styles(self):
-        # Define a fixed font or other style attributes as needed
         font = QFont()
         font.setBold(True)
         self.setFont(font)
 
-        # Use Qt's built-in :hover pseudo-class for styling
         self.setStyleSheet(
             f"""
             QLabel {{
@@ -57,7 +50,7 @@ class SectionTypeLabel(QLabel):
             """
         )
 
-    def mousePressEvent(self, event) -> None:
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
             self.clicked.emit()
         super().mousePressEvent(event)

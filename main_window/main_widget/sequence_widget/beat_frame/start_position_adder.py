@@ -35,6 +35,6 @@ class StartPositionAdder:
         next_options = self.construct_tab.option_picker.option_getter.get_next_options(
             sequence[1:]
         )
-        self.construct_tab.option_picker.scroll_area.add_and_display_relevant_pictographs(
+        self.construct_tab.option_picker.updater.add_and_display_relevant_options(
             next_options
         )

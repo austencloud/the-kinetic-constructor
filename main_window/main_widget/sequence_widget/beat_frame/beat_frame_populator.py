@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class BeatFramePopulator:
     loading_text = "Loading sequence..."
-    
+
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
@@ -98,7 +98,7 @@ class BeatFramePopulator:
 
         self.construct_tab.transition_to_option_picker()
 
-        scroll_area = self.construct_tab.option_picker.scroll_area
+        option_picker = self.construct_tab.option_picker
 
         filters = self.main_widget.settings_manager.construct_tab_settings.get_filters()
 
@@ -114,11 +114,9 @@ class BeatFramePopulator:
             self.current_sequence_json, filter
         )
 
-        scroll_area.add_and_display_relevant_pictographs(next_options)
+        option_picker.updater.add_and_display_relevant_options(next_options)
         self.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
         self.selection_overlay.update_overlay_position()
-
-
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.beat_frame.layout_manager.configure_beat_frame(

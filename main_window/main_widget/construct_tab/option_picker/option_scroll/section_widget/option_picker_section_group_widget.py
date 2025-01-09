@@ -2,17 +2,16 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.construct_tab.option_picker.option_scroll.section_widget.option_picker_section_widget import OptionPickerSectionWidget
+
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.option_picker.scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
-    from main_window.main_widget.construct_tab.option_picker.scroll_area.section_manager.option_picker_section_widget import (
-        OptionPickerSectionWidget,
+    from main_window.main_widget.construct_tab.option_picker.option_scroll.option_scroll import (
+        OptionScroll,
     )
 
 
 class OptionPickerSectionGroupWidget(QWidget):
-    def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
+    def __init__(self, scroll_area: "OptionScroll") -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
 

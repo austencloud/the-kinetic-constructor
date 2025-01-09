@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
-class OptionPickerClickHandler:
+class OptionClickHandler:
     def __init__(self, option_picker: "OptionPicker") -> None:
         self.option_picker = option_picker
         self.construct_tab = self.option_picker.construct_tab
@@ -47,10 +47,10 @@ class OptionPickerClickHandler:
             selection_manager.select_beat(new_beat.view)
             QApplication.processEvents()
 
-            self.option_picker.updater.update_option_picker()
+            self.option_picker.updater.refresh_options()
 
             new_beat.view.is_filled = True
-            self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
+            self.option_picker.option_scroll.display_manager.order_and_display_pictographs()
             self.option_picker.choose_next_label.set_default_text()
 
         QApplication.restoreOverrideCursor()

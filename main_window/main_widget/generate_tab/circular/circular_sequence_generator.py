@@ -85,10 +85,10 @@ class CircularSequenceGenerator(BaseSequenceGenerator):
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
-        
+
         construct_tab = self.main_widget.construct_tab
-        construct_tab.option_picker.updater.update_option_picker(self.sequence)
-        
+        construct_tab.option_picker.updater.refresh_options(self.sequence)
+
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(

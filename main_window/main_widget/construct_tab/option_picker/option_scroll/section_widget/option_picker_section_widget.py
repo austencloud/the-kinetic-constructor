@@ -8,15 +8,13 @@ from .option_picker_section_header import OptionPickerSectionHeader
 from .option_picker_section_pictograph_frame import OptionPickerSectionPictographFrame
 
 if TYPE_CHECKING:
-    from ..option_picker_scroll_area import OptionPickerScrollArea
+    from ..option_scroll import OptionScroll
 
 
 class OptionPickerSectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
-    def __init__(
-        self, letter_type: LetterType, scroll_area: "OptionPickerScrollArea"
-    ) -> None:
+    def __init__(self, letter_type: LetterType, scroll_area: "OptionScroll") -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type

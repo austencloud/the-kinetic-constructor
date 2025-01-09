@@ -40,7 +40,7 @@ class TurnsAdjuster:
 
         self.json_turns_updater.update_turns_in_json(matching_motion, new_turns)
         self.turns_widget.display_frame.update_turns_display(matching_motion, new_turns)
-        self.main_widget.construct_tab.option_picker.updater.update_option_picker()
+        self.main_widget.construct_tab.option_picker.updater.refresh_options()
         validation_engine = self.main_widget.json_manager.ori_validation_engine
         validation_engine.run(True)
 

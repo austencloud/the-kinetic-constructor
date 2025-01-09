@@ -102,7 +102,7 @@ class PropRotDirButtonManager:
         self.option_picker = (
             self.turns_box.graph_editor.sequence_widget.main_widget.construct_tab.option_picker
         )
-        self.option_picker.updater.update_option_picker()
+        self.option_picker.updater.refresh_options()
 
     def _get_new_motion_type(self, motion: "Motion"):
         motion_type = motion.motion_type

@@ -14,8 +14,8 @@ class OptionPickerLayoutManager:
         self.setup_layout()
 
     def setup_layout(self) -> None:
-        self.op.layout = QVBoxLayout(self.op)
-        self.op.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout = QVBoxLayout(self.op)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.op.choose_next_label.show()
 
         header_layout = QVBoxLayout()
@@ -25,6 +25,8 @@ class OptionPickerLayoutManager:
         header_label_layout.addWidget(self.op.choose_next_label)
         header_layout.addLayout(header_label_layout)
 
-        self.op.layout.addLayout(header_layout)
-        self.op.layout.addWidget(self.op.reversal_filter)
-        self.op.layout.addWidget(self.op.scroll_area, 14)
+        layout.addLayout(header_layout)
+        layout.addWidget(self.op.reversal_filter)
+        layout.addWidget(self.op.option_scroll, 14)
+
+        self.op.setLayout(layout)
