@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QFrame,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+from matplotlib.pylab import f
 from data.beat_frame_layout_options import beat_frame_layout_options
 
 if TYPE_CHECKING:
@@ -17,7 +18,6 @@ if TYPE_CHECKING:
 
 
 class LayoutControls(QWidget):
-    sequence_length_spinbox_changed = pyqtSignal(int)
     layout_selected = pyqtSignal(str)
     update_default_layout = pyqtSignal()
 
@@ -43,7 +43,7 @@ class LayoutControls(QWidget):
         self.num_beats_spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.num_beats_spinbox.setValue(self.layout_tab.num_beats)
         self.num_beats_spinbox.valueChanged.connect(
-            lambda value: self.sequence_length_spinbox_changed.emit(value)
+            lambda: self._on_sequence_length_changed(self.num_beats_spinbox.value())
         )
 
         self.minus_button = QPushButton("-", self)
@@ -66,7 +66,9 @@ class LayoutControls(QWidget):
 
         # Update Button and Default Layout Label
         self.update_button = QPushButton("Set as Default", self)
-        self.update_button.clicked.connect(lambda: self.update_default_layout.emit())
+        self.update_button.clicked.connect(
+            lambda: self.set_default_layout(self.layout_dropdown.currentText())
+        )
 
         self.default_layout_label = QLabel(
             f"Default: {self.layout_tab.current_layout[0]} x {self.layout_tab.current_layout[1]}",
@@ -79,10 +81,24 @@ class LayoutControls(QWidget):
 
     def _apply_default_layout(self):
         """Update the default layout setting."""
-        self.update_default_label(self.current_layout)
+        self.update_default_layout_label(self.current_layout)
         self.settings_manager.sequence_layout.set_layout_setting(
-            str(self.num_beats), list(self.current_layout)
+            str(self.layout_tab.num_beats), list(self.current_layout)
         )
+
+    def set_default_layout(self, layout_text: str):
+        self.layout_tab.num_beats = self.num_beats_spinbox.value()
+        self.update_default_layout_label(layout_text)
+        layout_tuple = tuple(map(int, layout_text.split(" x ")))
+        self.layout_settings.set_layout_setting(
+            str(self.layout_tab.num_beats), list(layout_tuple)
+        )
+
+    def get_default_layout_text(self):
+        current_layout = self.layout_settings.get_layout_setting(
+            str(self.layout_tab.num_beats)
+        )
+        return f"Default: {current_layout[0]} x {current_layout[1]}"
 
     def _setup_layout(self):
         # Sequence Length Section
@@ -123,23 +139,25 @@ class LayoutControls(QWidget):
         """Increase the sequence length and emit the change."""
         self.num_beats_spinbox.setValue(self.num_beats_spinbox.value() + 1)
 
-    def update_default_label(self, layout):
+    def update_default_layout_label(self, layout_text):
         """Update the default layout label."""
-        self.default_layout_label.setText(f"Default: {layout[0]} x {layout[1]}")
+        self.default_layout_label.setText(f"Default: {layout_text}")
 
     def _on_sequence_length_spinbox_changed(self, new_length: int):
         """Handle updates to the sequence length."""
-        self.num_beats = new_length
-        self.valid_layouts = beat_frame_layout_options.get(self.num_beats, [(1, 1)])
+        self.layout_tab.num_beats = new_length
+        self.valid_layouts = beat_frame_layout_options.get(
+            self.layout_tab.num_beats, [(1, 1)]
+        )
         self.layout_dropdown.clear()
         self.layout_dropdown.addItems(
             [f"{cols} x {rows}" for cols, rows in self.valid_layouts]
         )
         self.current_layout = self.valid_layouts[0]
-        self.num_beats_spinbox.setValue(self.num_beats)
+        self.num_beats_spinbox.setValue(self.layout_tab.num_beats)
         # self.beat_frame.update_preview()
-        self.rearrange_beats(self.num_beats)
-        self.update_default_label(self.current_layout)
+        self.rearrange_beats(self.layout_tab.num_beats)
+        self.update_default_layout_label(self.current_layout)
 
     def _on_layout_selected(self, layout_text: str):
         """Handle updates to the selected layout."""
@@ -147,9 +165,9 @@ class LayoutControls(QWidget):
             rows, cols = map(int, layout_text.split(" x "))
             self.current_layout = (rows, cols)
             # self.beat_frame.update_preview()
-            self.rearrange_beats(self.num_beats)
+            self.rearrange_beats(self.layout_tab.num_beats)
             self.layout_settings.set_layout_setting(
-                str(self.num_beats), list(self.current_layout)
+                str(self.layout_tab.num_beats), list(self.current_layout)
             )
 
     def rearrange_beats(self, num_beats):
@@ -196,7 +214,22 @@ class LayoutControls(QWidget):
         for widget in widgets:
             widget.setFont(font)
 
-        # Adjust spin box font separately
         spinbox_font = self.num_beats_spinbox.font()
         spinbox_font.setPointSize(font_size)
         self.num_beats_spinbox.setFont(spinbox_font)
+
+    def _on_sequence_length_changed(self, new_length: int):
+        self.num_beats = new_length
+        self.valid_layouts = beat_frame_layout_options.get(self.num_beats, [(1, 1)])
+        self.current_layout = self.layout_settings.get_layout_setting(
+            str(self.num_beats)
+        )
+        self.layout_dropdown.clear()
+        self.layout_dropdown.addItems(
+            [f"{rows} x {cols}" for rows, cols in self.valid_layouts]
+        )
+        layout_text = f"{self.current_layout[0]} x {self.current_layout[1]}"
+        self.layout_dropdown.setCurrentText(layout_text)
+
+        self.beat_frame.update_preview()
+        self.default_layout_label.setText(f"Default: {layout_text}")

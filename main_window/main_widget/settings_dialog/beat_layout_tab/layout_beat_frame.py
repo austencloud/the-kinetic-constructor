@@ -34,11 +34,13 @@ class LayoutBeatFrame(QFrame):
         self.tab = tab
         self.sequence_widget = tab.sequence_widget
         self.main_widget = self.sequence_widget.main_widget
+        self.widget_fader = self.main_widget.fade_manager.widget_fader
         self._setup_layout()
         self._init_beats()
-        self.update_preview()
+        # self.update_preview()
 
     def _init_beats(self):
+        """Initialize the start position and beat views."""
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_views = [LayoutBeatView(self, number=i + 1) for i in range(64)]
@@ -46,15 +48,26 @@ class LayoutBeatFrame(QFrame):
             beat.hide()
 
     def _setup_layout(self):
+        """Set up the grid layout for the beat frame."""
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview(self):
-        """Rebuild the preview based on the current layout."""
+        """Update the preview based on the current layout."""
         self.cols, self.rows = self.tab.current_layout
-        num_beats = self.tab.num_beats
+        num_beats = self.tab.controls.num_beats_spinbox.value()
+        self._perform_relayout(num_beats)
+
+    def _perform_relayout(self, num_beats: int):
+        """Relayout the widgets based on the specified number of beats."""
+        # Remove all existing items from the layout
+        while self.layout.count():
+            item = self.layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.hide()
 
         # Handle the start position beat view
         start_pos = StartPositionBeat(self)
@@ -63,25 +76,27 @@ class LayoutBeatFrame(QFrame):
         self.layout.addWidget(self.start_pos_view, 0, 0)
         self.start_pos_view.setVisible(True)
 
+        # Add beat views to the layout
         index = 0
         for row in range(self.rows):
             for col in range(1, self.cols + 1):  # Start at column 1 for beat views
                 if index < num_beats:
-                    if index not in self.beat_views:
-                        beat_view = self.beat_views[index]
-                        beat = Beat(self)
-                        beat_view.set_beat(beat, index + 1)
-                        beat.grid.hide()
-                        self.layout.addWidget(beat_view, row, col)
-                        self.beat_views[index] = beat_view
-                    else:
-                        self.layout.addWidget(self.beat_views[index], row, col)
-                    self.beat_views[index].setVisible(True)
+                    beat_view = self.beat_views[index]
+                    beat = Beat(self)
+                    beat_view.set_beat(beat, index + 1)
+                    beat.grid.hide()
+                    self.layout.addWidget(beat_view, row, col)
+                    beat_view.setVisible(True)
                     index += 1
+                else:
+                    # Stop once we've added the specified number of beats
+                    break
+            if index >= num_beats:
+                break
 
+        # Hide unused beat views
         for unused_index in range(index, len(self.beat_views)):
-            if unused_index in self.beat_views:
-                self.beat_views[unused_index].setVisible(False)
+            self.beat_views[unused_index].setVisible(False)
 
     def _calculate_beat_size(self) -> QSize:
         """Calculate the size of each beat view cell."""
