@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
-from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget

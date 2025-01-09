@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .section_widget.option_picker_section_widget import OptionPickerSectionWidget
 
 from .option_scroll_layout_manager import OptionScrollLayoutManager

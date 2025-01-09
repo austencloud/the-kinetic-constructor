@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-from utilities.reversal_detector import ReversalDetector
 from Enums.Enums import LetterType
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker

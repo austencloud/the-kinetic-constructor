@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 from .json_duration_updater import JsonDurationUpdater
 from .json_prop_rot_dir_updater import JsonstrUpdater
 from .json_prop_type_updater import JsonPropTypeUpdater

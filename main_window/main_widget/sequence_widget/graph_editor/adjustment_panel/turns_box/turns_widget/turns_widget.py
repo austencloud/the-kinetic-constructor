@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.json_manager.json_sequence_updater.json_turns_updater import JsonTurnsUpdater
 from .turns_text_label import TurnsTextLabel
 from .motion_type_setter import MotionTypeSetter
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog

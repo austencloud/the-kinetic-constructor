@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from .motion_checker import MotionChecker
 from .motion_attr_manager import MotionAttrManager
 from .motion_manipulator import MotionManipulator

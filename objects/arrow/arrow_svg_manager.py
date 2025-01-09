@@ -2,12 +2,10 @@ from typing import TYPE_CHECKING, Union
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow.arrow import Arrow
-from data.constants import CLOCK, COUNTER, IN, NO_ROT, OUT, FLOAT  # Add FLOAT here
+from data.constants import CLOCK, COUNTER, IN, OUT, FLOAT 
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.svg_manager import (
-        SvgManager,
-    )
+    from base_widgets.base_pictograph.svg_manager import SvgManager
 
 
 class ArrowSvgManager:
