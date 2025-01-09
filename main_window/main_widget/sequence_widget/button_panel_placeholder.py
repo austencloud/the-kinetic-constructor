@@ -13,8 +13,3 @@ class ButtonPanelPlaceholder(QFrame):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setFixedHeight(0)  # Start with a height of 0
 
-    def set_height(self, new_height):
-        """Dynamically sets the height of the button panel placeholder."""
-        self.setFixedHeight(new_height)
-        self.button_panel.updateGeometry()
-        QApplication.processEvents()  # Update layout immediately

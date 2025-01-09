@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..beat_view import BeatView
-    from .beat_deleter import BeatDeleter
+    from ...beat_deleter import BeatDeleter
 
 
 class NonFirstBeatDeleter:

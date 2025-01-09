@@ -19,30 +19,31 @@ if TYPE_CHECKING:
 
 class SequenceWidgetButtonPanel(QFrame):
     swap_colors_button: QPushButton
+    colors_swapped = False
+    spacers: list[QSpacerItem] = []
 
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
-        self.placeholder = ButtonPanelPlaceholder(self)
-        self.spacers: list[QSpacerItem] = []
-        self.font_size = self.sequence_widget.width() // 45
-        self._setup_dependencies()
-        self.colors_swapped = False
-        self._setup_buttons()
-        self.top_placeholder = ButtonPanelPlaceholder(self)
-        self.bottom_placeholder = ButtonPanelPlaceholder(self)
-        self._setup_layout()
-
-    def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
         self.beat_frame = self.sequence_widget.beat_frame
         self.export_manager = self.beat_frame.image_export_manager
         self.indicator_label = self.sequence_widget.indicator_label
         self.settings_manager = self.main_widget.main_window.settings_manager
-        self.full_screen_viewer = FullScreenViewer(self.sequence_widget)
+
+        self.font_size = self.sequence_widget.width() // 45
+
+        self.top_placeholder = ButtonPanelPlaceholder(self)
+        self.bottom_placeholder = ButtonPanelPlaceholder(self)
+
+        self._setup_buttons()
+        self._setup_layout()
 
     def _setup_buttons(self) -> None:
         self.buttons: dict[str, QPushButton] = {}
+        start_pos_deleter = (
+            self.beat_frame.sequence_widget.beat_deleter.start_position_deleter
+        )
 
         button_dict = {
             "add_to_dictionary": {
@@ -57,14 +58,9 @@ class SequenceWidgetButtonPanel(QFrame):
                 ),
                 "tooltip": "Save Image",
             },
-            # "layout_options": {
-            #     "icon": "settings.png",
-            #     "callback": self.show_options_panel,
-            #     "tooltip": "Layout Options",
-            # },
             "view_full_screen": {
                 "icon": "eye.png",
-                "callback": self.full_screen_viewer.view_full_screen,
+                "callback": self.sequence_widget.full_screen_viewer.view_full_screen,
                 "tooltip": "View Full Screen",
             },
             "mirror_sequence": {
@@ -84,12 +80,12 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "delete_beat": {
                 "icon": "delete.svg",
-                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.delete_selected_beat(),
+                "callback": lambda: self.sequence_widget.beat_deleter.delete_selected_beat(),
                 "tooltip": "Delete Beat",
             },
             "clear_sequence": {
                 "icon": "clear.svg",
-                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.start_position_deleter.delete_all_beats(
+                "callback": lambda: start_pos_deleter.delete_all_beats(
                     show_indicator=True
                 ),
                 "tooltip": "Clear Sequence",

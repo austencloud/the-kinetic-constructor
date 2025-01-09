@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from .beat_deleter import BeatDeleter
+    from ...beat_deleter import BeatDeleter
 
 
 class WidgetCollector:

@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
-from .first_beat_deleter import FirstBeatDeleter
-from .non_first_beat_deleter import NonFirstBeatDeleter
-from .start_pos_deleter import StartPositionDeleter
-from .widget_collector import WidgetCollector
-from ..beat_view import BeatView
-from ..start_pos_beat_view import StartPositionBeatView
+from .beat_frame.beat_deleter.first_beat_deleter import FirstBeatDeleter
+from .beat_frame.beat_deleter.non_first_beat_deleter import NonFirstBeatDeleter
+from .beat_frame.beat_deleter.start_pos_deleter import StartPositionDeleter
+from .beat_frame.beat_deleter.widget_collector import WidgetCollector
+from .beat_frame.beat_view import BeatView
+from .beat_frame.start_pos_beat_view import StartPositionBeatView
 
 if TYPE_CHECKING:
-    from ...sequence_widget import SequenceWidget
+    from .sequence_widget import SequenceWidget
 
 
 class BeatDeleter:

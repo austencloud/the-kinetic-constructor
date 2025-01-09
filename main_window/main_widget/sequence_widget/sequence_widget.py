@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
-from main_window.main_widget.sequence_widget.beat_frame.beat_deleter.beat_deleter import (
+from main_window.main_widget.sequence_widget.beat_deleter import (
     BeatDeleter,
 )
-
-
+from .full_screen_viewer import FullScreenViewer
 from .sequence_color_swapper import SequenceColorSwapper
 from .sequence_reflector import SequenceReflector
 from .sequence_rotater import SequenceRotater
@@ -40,6 +39,9 @@ class SequenceWidget(QWidget):
         self.mirror_manager = SequenceReflector(self)
         self.color_swap_manager = SequenceColorSwapper(self)
         self.rotation_manager = SequenceRotater(self)
+        
+        # Full Screen Viewer
+        self.full_screen_viewer = FullScreenViewer(self)
 
         # Labels
         self.indicator_label = SequenceWidgetIndicatorLabel(self)
