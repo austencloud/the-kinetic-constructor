@@ -28,7 +28,7 @@ class OrientationSetter:
         )
         start_pos_picker = construct_tab.start_pos_picker
         advanced_start_pos_picker = construct_tab.advanced_start_pos_picker
-        
+
         self.ori_picker_widget.clickable_ori_label.setText(orientation)
         if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
             self.json_manager.start_pos_handler.update_start_pos_ori(
@@ -49,7 +49,7 @@ class OrientationSetter:
                         }
                     )
             self.option_picker = construct_tab.option_picker
-            self.option_picker.update_option_picker()
+            self.option_picker.updater.update_option_picker()
         else:
             for pictograph in start_pos_picker.start_options.values():
                 pictograph.updater.update_pictograph(

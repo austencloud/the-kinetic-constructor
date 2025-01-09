@@ -15,7 +15,7 @@ class BaseSequenceModifier:
 
     def _update_ui(self):
         """Update all UI components after a modification."""
-        self.sequence_widget.main_widget.construct_tab.option_picker.update_option_picker()
+        self.sequence_widget.main_widget.construct_tab.option_picker.updater.update_option_picker()
         self.sequence_widget.graph_editor.update_graph_editor()
         self.sequence_widget.indicator_label.show_message(self.success_message)
 

@@ -47,10 +47,10 @@ class OptionPickerClickHandler:
             selection_manager.select_beat(new_beat.view)
             QApplication.processEvents()
 
-            self.option_picker.update_option_picker()
+            self.option_picker.updater.update_option_picker()
 
             new_beat.view.is_filled = True
             self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
-            self.option_picker.choose_your_next_pictograph_label.set_default_text()
+            self.option_picker.choose_next_label.set_default_text()
 
         QApplication.restoreOverrideCursor()

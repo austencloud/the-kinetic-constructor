@@ -96,17 +96,7 @@ class DefaultArrowPositioner:
             print(f"Error loading default placements from {path}: {e}")
             return {}
 
-    # ------------------------------------------------------------------------
-    #         *** EXACT `_get_adjustment_key` LOGIC FROM YOUR ORIGINAL CODE ***
-    # ------------------------------------------------------------------------
     def _get_adjustment_key(self, arrow: Arrow, default_placements: dict) -> str:
-        """
-        Identical logic to your original code. This method is unmodified
-        except for removing the forced `_load_all_default_placements` call
-        (we already do that at init).
-        """
-        # Not reloading anything here, to avoid infinite recursion
-        # self._load_all_default_placements()  # removed
 
         has_beta_props = arrow.pictograph.check.ends_with_beta()
         has_alpha_props = arrow.pictograph.check.ends_with_alpha()
@@ -161,13 +151,11 @@ class DefaultArrowPositioner:
         elif has_gamma_props:
             key_middle += "_gamma"
 
-        # Build the final keys
         key = arrow.motion.motion_type + (
             key_suffix + motion_end_ori_key + key_middle if key_middle else ""
         )
         key_with_letter = f"{key}{letter_suffix}"
 
-        # Check in the default_placements dictionary
         if key_with_letter in default_placements:
             return key_with_letter
         elif key in default_placements:

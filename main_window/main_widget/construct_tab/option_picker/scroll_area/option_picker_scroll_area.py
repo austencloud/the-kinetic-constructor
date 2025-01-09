@@ -25,7 +25,6 @@ class OptionPickerScrollArea(QScrollArea):
         self.option_picker = option_picker
         self.main_widget = option_picker.main_widget
         self.construct_tab = option_picker.construct_tab
-        self.option_manager = self.option_picker.option_getter
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
         self.json_manager = self.main_widget.json_manager
         self.json_loader = self.json_manager.loader_saver

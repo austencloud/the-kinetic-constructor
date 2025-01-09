@@ -56,13 +56,17 @@ class MainBackgroundWidget(QWidget):
     def apply_background(self):
         """Applies or reapplies the background."""
         if self.background:
-            self.background.stop_animation()
+            self.background.stop_animation()  # Stop any existing animation
 
         self._setup_background()
         self.main_widget.font_color_updater.update_main_widget_font_colors(
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
-        
+
+        # Start the new background's animation if applicable
+        if isinstance(self.background, SnowfallBackground):
+            self.background.start_animation()
+
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""
         background_map = {
