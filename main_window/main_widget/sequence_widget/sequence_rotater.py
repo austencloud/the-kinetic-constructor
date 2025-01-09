@@ -25,7 +25,7 @@ class SequenceRotater(BaseSequenceModifier):
 
     def rotate_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if self._check_length():
+        if not self._check_length():
             QApplication.restoreOverrideCursor()
             return
         rotated_sequence = self._rotate_sequence()

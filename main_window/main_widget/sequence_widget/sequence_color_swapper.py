@@ -22,7 +22,7 @@ class SequenceColorSwapper(BaseSequenceModifier):
 
     def swap_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if self._check_length():
+        if not self._check_length():
             QApplication.restoreOverrideCursor()
             return
         swapped_sequence = self._color_swap_sequence()
