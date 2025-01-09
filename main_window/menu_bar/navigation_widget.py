@@ -62,10 +62,34 @@ class NavigationWidget(QWidget):
         font_size = self.mw.width() // 120
         if idx == active_index:
             button.setStyleSheet(
-                f"background-color: lightblue; font-size: {font_size}pt; font-family: Georgia;"
+                f"""
+                QPushButton {{
+                    background-color: blue;
+                    font-size: {font_size}pt;
+                    font-family: Georgia;
+                    font-weight: bold;
+                    color: white;
+                }}
+                QPushButton:pressed {{
+                    background-color: lightblue;
+                    color: white;
+                }}
+                """
             )
         else:
-            button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
+            button.setStyleSheet(
+                f"""
+                QPushButton {{
+                    font-size: {font_size}pt;
+                    font-family: Georgia;
+                }}
+                QPushButton:pressed {{
+                    background-color: gray;
+                    font-weight: bold;
+                    color: white;
+                }}
+                """
+            )
         button.setFixedWidth(self.mw.width() // 10)
         button.setFixedHeight(self.mw.height() // 22)
 

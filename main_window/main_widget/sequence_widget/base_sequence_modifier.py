@@ -27,3 +27,4 @@ class BaseSequenceModifier:
             self.sequence_widget.indicator_label.show_message(self.error_message)
             QApplication.restoreOverrideCursor()
             return False
+        return True

@@ -26,14 +26,15 @@ class SequenceReflector(BaseSequenceModifier):
 
     def reflect_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        if not self._check_length():
+            QApplication.restoreOverrideCursor()
+            return
         mirrored_sequence = self._reflect_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(mirrored_sequence)
         self._update_ui()
         QApplication.restoreOverrideCursor()
 
     def _reflect_sequence(self):
-        if self._check_length():
-            return
 
         metadata = self.json_loader.load_current_sequence_json()[0].copy()
         mirrored_sequence = [metadata]

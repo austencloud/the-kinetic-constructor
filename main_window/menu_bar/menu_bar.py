@@ -14,7 +14,6 @@ class MenuBarWidget(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        # self.layout.setSpacing(0)
 
         self.social_media_widget = SocialMediaWidget(self)
         self.settings_button = SettingsButton(self)

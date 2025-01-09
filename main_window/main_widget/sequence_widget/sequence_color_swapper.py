@@ -22,14 +22,15 @@ class SequenceColorSwapper(BaseSequenceModifier):
 
     def swap_current_sequence(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        if self._check_length():
+            QApplication.restoreOverrideCursor()
+            return
         swapped_sequence = self._color_swap_sequence()
         self.sequence_widget.beat_frame.updater.update_beats_from(swapped_sequence)
         self._update_ui()
         QApplication.restoreOverrideCursor()
 
     def _color_swap_sequence(self) -> list[dict]:
-        if self._check_length():
-            return
 
         self.sequence_widget.button_panel.toggle_swap_colors_icon()
         metadata = self.json_loader.load_current_sequence_json()[0].copy()
@@ -49,12 +50,12 @@ class SequenceColorSwapper(BaseSequenceModifier):
             swapped_sequence.append(swapped_beat)
         for beat_view in self.sequence_widget.beat_frame.beat_views:
             beat = beat_view.beat
-            
+
             red_reversal = beat.red_reversal
             blue_reversal = beat.blue_reversal
             beat.red_reversal = blue_reversal
             beat.blue_reversal = red_reversal
-            
+
         return swapped_sequence
 
     def _color_swap_dict(self, _dict):
