@@ -46,7 +46,7 @@ class BeatLayoutControlPanel(QWidget):
     def _initialize_components(self):
         """Initialize all UI components."""
         self.beats_label = QLabel("Number of Beats:")
-        self.layout_label = QLabel("Layout Options:")
+        self.layout_label = QLabel("Beat Layout Options:")
         self.beats_combo_box = QComboBox(self)
         self.layout_combo_box = QComboBox(self)
 
