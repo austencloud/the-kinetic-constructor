@@ -297,11 +297,6 @@ class OrientationTypes(Enum):
     NONRADIAL = "nonradial"
 
 
-class Axes(Enum):
-    HORIZONTAL = "horizontal"
-    VERTICAL = "vertical"
-
-
 class MotionTypeCombinations(Enum):
     PRO_VS_PRO = "pro_vs_pro"
     ANTI_VS_ANTI = "anti_vs_anti"

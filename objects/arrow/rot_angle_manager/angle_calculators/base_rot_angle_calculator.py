@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 from data.constants import *
-from objects.motion.managers.handpath_calculator import (
+from objects.motion.handpath_calculator import (
     HandpathCalculator,
 )
 

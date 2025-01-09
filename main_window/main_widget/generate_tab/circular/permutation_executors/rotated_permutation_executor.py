@@ -20,7 +20,7 @@ from data.constants import (
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
-from objects.motion.managers.handpath_calculator import HandpathCalculator
+from objects.motion.handpath_calculator import HandpathCalculator
 from .permutation_executor_base import PermutationExecutor
 from data.positions_map import positions_map
 

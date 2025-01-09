@@ -3,12 +3,12 @@ import re
 from data.constants import BLUE, HEX_BLUE, HEX_RED, RED
 
 if TYPE_CHECKING:
-    from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
+    from base_widgets.base_pictograph.svg_manager import (
         SvgManager,
     )
 
 
-class SvgColorManager:
+class SvgColorHandler:
     def __init__(self, manager: "SvgManager"):
         self.manager = manager
 

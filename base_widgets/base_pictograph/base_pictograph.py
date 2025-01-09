@@ -4,6 +4,7 @@ from Enums.Enums import Letter, OpenCloseStates, VTG_Modes
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
+from base_widgets.base_pictograph.svg_manager import SvgManager
 from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import (
     LessonPictographView,
 )
@@ -140,3 +141,4 @@ class BasePictograph(QGraphicsScene):
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
         self.reversal_glyph = BeatReversalGroup(self)
+        self.svg_manager = SvgManager(self)

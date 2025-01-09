@@ -16,7 +16,7 @@ from .json_manager.json_manager import JsonManager
 from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 from .pictograph_key_generator import PictographKeyGenerator
 from .special_placement_loader import SpecialPlacementLoader
-from objects.graphical_object.svg_manager.graphical_object_svg_manager import SvgManager
+from base_widgets.base_pictograph.svg_manager import SvgManager
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
@@ -38,7 +38,6 @@ class MainWidgetManager:
         mw = self.main_widget
         
         mw.json_manager = JsonManager(mw)
-        mw.svg_manager = SvgManager(mw)
         mw.turns_tuple_generator = TurnsTupleGenerator()
         mw.pictograph_key_generator = PictographKeyGenerator(mw)
         mw.special_placement_loader = SpecialPlacementLoader(mw)

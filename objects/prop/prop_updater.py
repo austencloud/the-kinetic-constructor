@@ -14,7 +14,7 @@ class PropUpdater:
 
         if prop_dict:
             self.prop.attr_manager.update_attributes(prop_dict)
-        self.prop.pictograph.main_widget.svg_manager.prop_manager.update_prop_svg(
+        self.prop.pictograph.svg_manager.prop_manager.update_prop_svg(
             self.prop
         )
         self.prop.rot_angle_manager.update_prop_rot_angle()

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Union
 
 from data.constants import *
 
-from Enums.Enums import Axes, PropAttribute, int
+from Enums.Enums import  PropAttribute, int
 
 
 if TYPE_CHECKING:
@@ -29,14 +29,6 @@ class PropAttrManager:
         for attr in prop_attributes:
             setattr(self.prop, attr, None)
 
-    def get_axis_from_ori(self) -> None:
-        if self.prop.check.is_radial():
-            axis: Axes = VERTICAL if self.prop.loc in [NORTH, SOUTH] else HORIZONTAL
-        elif self.prop.check.is_nonradial():
-            axis: Axes = HORIZONTAL if self.prop.loc in [NORTH, SOUTH] else VERTICAL
-        else:
-            axis: Axes = None
-        return axis
 
     def swap_ori(self) -> None:
         ori_map = {

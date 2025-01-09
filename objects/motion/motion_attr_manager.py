@@ -44,7 +44,6 @@ class MotionAttrManager:
                 self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
             self.motion.prop.ori = self.motion.end_ori
             self.motion.prop.loc = self.motion.end_loc
-            self.motion.prop.axis = self.motion.prop.attr_manager.get_axis_from_ori()
 
     def get_attributes(self) -> dict[str, str]:
         return {

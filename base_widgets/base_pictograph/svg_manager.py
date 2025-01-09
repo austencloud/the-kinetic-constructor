@@ -1,16 +1,19 @@
 from typing import TYPE_CHECKING
+from objects.arrow.arrow_svg_manager import ArrowSvgManager
+from objects.graphical_object.svg_manager.svg_color_handler import SvgColorHandler
+from objects.prop.prop_svg_manager import PropSvgManager
 from utilities.path_helpers import get_images_and_data_path
-from .arrow_svg_manager import ArrowSvgManager
-from .prop_svg_manager import PropSvgManager
-from .svg_color_manager import SvgColorManager
+
 if TYPE_CHECKING:
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from main_window.main_widget.main_widget import MainWidget
 
+
 class SvgManager:
-    def __init__(self, main_widget: "MainWidget") -> None:
-        self.main_widget = main_widget
-        
-        self.color_manager = SvgColorManager(self)
+    def __init__(self, pictograph: "BasePictograph") -> None:
+        self.pictograph = pictograph
+
+        self.color_manager = SvgColorHandler(self)
         self.arrow_manager = ArrowSvgManager(self)
         self.prop_manager = PropSvgManager(self)
 

@@ -15,7 +15,7 @@ from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
 )
-from objects.motion.managers.handpath_calculator import (
+from objects.motion.handpath_calculator import (
     HandpathCalculator,
 )
 

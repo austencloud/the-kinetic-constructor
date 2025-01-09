@@ -3,7 +3,7 @@ from Enums.letters import Letter, LetterConditions, LetterType
 from data.constants import ANTI, COUNTER_CLOCKWISE, DASH, FLOAT, PRO, CLOCKWISE, STATIC
 from .dual_float_letter_determiner import DualFloatLetterDeterminer
 from .non_hybrid_letter_determiner import NonHybridShiftLetterDeterminer
-from objects.motion.managers.motion_ori_calculator import MotionOriCalculator
+from objects.motion.motion_ori_calculator import MotionOriCalculator
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:

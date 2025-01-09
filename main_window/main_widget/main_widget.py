@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from .json_manager.json_manager import JsonManager
     from .sequence_widget.sequence_widget import SequenceWidget
 
-    from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
+    from base_widgets.base_pictograph.svg_manager import (
         SvgManager,
     )
     from .main_background_widget.backgrounds.base_background import (

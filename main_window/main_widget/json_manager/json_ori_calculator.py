@@ -13,7 +13,7 @@ from data.constants import (
     PRO,
     STATIC,
 )
-from objects.motion.managers.handpath_calculator import HandpathCalculator
+from objects.motion.handpath_calculator import HandpathCalculator
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JsonManager

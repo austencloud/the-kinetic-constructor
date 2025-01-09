@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING, Union
-
-from .managers.motion_checker import MotionChecker
-from .managers.motion_attr_manager import MotionAttrManager
-from .managers.motion_manipulator import MotionManipulator
-from .managers.motion_ori_calculator import MotionOriCalculator
-from .managers.motion_updater import MotionUpdater
-
+from .motion_checker import MotionChecker
+from .motion_attr_manager import MotionAttrManager
+from .motion_manipulator import MotionManipulator
+from .motion_ori_calculator import MotionOriCalculator
+from .motion_updater import MotionUpdater
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -15,18 +13,9 @@ if TYPE_CHECKING:
 
 
 class Motion:
-    def __init__(self, pictograph: "BasePictograph", motion_dict: dict) -> None:
-        self.pictograph = pictograph
-        self.motion_dict = motion_dict
-        self.ori_calculator = MotionOriCalculator(self)
-        self.manipulator = MotionManipulator(self)
-        self.attr_manager = MotionAttrManager(self)
-        self.updater = MotionUpdater(self)
-        self.check = MotionChecker(self)
-
     pictograph: "BasePictograph"
     color: str
-    turns: Union[int, str]
+    turns: int
     arrow: "Arrow"
     prop: "Prop"
     motion_type: str
@@ -38,3 +27,12 @@ class Motion:
     lead_state: str
     prefloat_motion_type: str = None
     prefloat_prop_rot_dir: str
+
+    def __init__(self, pictograph: "BasePictograph", motion_dict: dict) -> None:
+        self.pictograph = pictograph
+        self.motion_dict = motion_dict
+        self.ori_calculator = MotionOriCalculator(self)
+        self.manipulator = MotionManipulator(self)
+        self.attr_manager = MotionAttrManager(self)
+        self.updater = MotionUpdater(self)
+        self.check = MotionChecker(self)
