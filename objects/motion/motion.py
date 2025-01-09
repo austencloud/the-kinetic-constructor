@@ -5,7 +5,6 @@ from .managers.motion_attr_manager import MotionAttrManager
 from .managers.motion_manipulator import MotionManipulator
 from .managers.motion_ori_calculator import MotionOriCalculator
 from .managers.motion_updater import MotionUpdater
-from .managers.motion_turn_manager import MotionTurnsManager
 
 
 if TYPE_CHECKING:
@@ -22,7 +21,6 @@ class Motion:
         self.ori_calculator = MotionOriCalculator(self)
         self.manipulator = MotionManipulator(self)
         self.attr_manager = MotionAttrManager(self)
-        self.turns_manager = MotionTurnsManager(self)
         self.updater = MotionUpdater(self)
         self.check = MotionChecker(self)
 

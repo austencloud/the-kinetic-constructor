@@ -1,21 +1,16 @@
 from typing import Union, TYPE_CHECKING
-
-from Enums.Enums import Turns
-from data.constants import *
-
+from data.constants import COLOR, LOC, MOTION_TYPE, TURNS
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
-
-
 
 class ArrowAttrManager:
     def __init__(self, arrow: "Arrow") -> None:
         self.arrow = arrow
         self.arrow.color = self.arrow.arrow_dict[COLOR]
-        self.arrow.turns = self.arrow.arrow_dict[TURNS]
+        self.arrow.motion.turns = self.arrow.arrow_dict[TURNS]
 
     def update_attributes(
-        self, arrow_dict: dict[str, Union[str, str, str, Turns]]
+        self, arrow_dict: dict[str, Union[str, str, str, int]]
     ) -> None:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         for attr in arrow_attributes:

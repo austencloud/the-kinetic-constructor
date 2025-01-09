@@ -2,8 +2,7 @@ from Enums.Enums import Letter
 from Enums.letters import LetterType
 from data.constants import *
 from objects.motion.motion import Motion
-from .base_location_calculator import BaseLocationCalculator
-from typing import TYPE_CHECKING
+from .base_loc_calculator import BaseLocationCalculator
 
 
 

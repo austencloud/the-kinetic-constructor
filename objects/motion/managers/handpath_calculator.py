@@ -1,8 +1,6 @@
 from collections import defaultdict
 from data.constants import (
     CCW_HANDPATH,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
     CW_HANDPATH,
     DASH,
     STATIC,

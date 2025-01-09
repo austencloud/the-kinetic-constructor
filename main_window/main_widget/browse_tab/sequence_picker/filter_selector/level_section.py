@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 class LevelSection(FilterSectionBase):
     LEVEL_DESCRIPTIONS = {
         1: "Base letters with no turns.",
-        2: "Turns added with only radial orientations.",
+        2: "int added with only radial orientations.",
         3: "Non-radial orientations.",
     }
     AVAILABLE_LEVELS = [1, 2, 3]

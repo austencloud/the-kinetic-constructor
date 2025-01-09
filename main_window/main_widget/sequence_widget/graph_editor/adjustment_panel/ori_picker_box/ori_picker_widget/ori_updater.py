@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import Turns
 from data.constants import *
 
 if TYPE_CHECKING:
@@ -14,12 +13,12 @@ class OriUpdater:
         self.ori_picker_box = ori_picker_widget.ori_picker_box
         self.turns_widget = ori_picker_widget
 
-    def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
+    def set_motion_turns(self, motion: "Motion", new_turns: int) -> None:
         pictograph_dict = {f"{motion.color}_turns": new_turns}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _adjust_turns_for_pictograph(
-        self, pictograph: "BasePictograph", adjustment: Turns
+        self, pictograph: "BasePictograph", adjustment: int
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""
         for motion in pictograph.motions.values():
@@ -27,7 +26,7 @@ class OriUpdater:
                 new_turns = self._calculate_new_turns(motion.turns, adjustment)
                 self.set_motion_turns(motion, new_turns)
 
-    def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:
+    def _calculate_new_turns(self, current_turns: int, adjustment: int) -> int:
         """Calculate new turns value based on adjustment."""
         new_turns = max(0, min(3, current_turns + adjustment))
         return int(new_turns) if new_turns.is_integer() else new_turns
@@ -42,6 +41,6 @@ class OriUpdater:
         self.ori_picker_box.prop_rot_dir_btn_state[SAME] = True
         self.ori_picker_box.prop_rot_dir_btn_state[OPP] = False
 
-    def _clamp_turns(self, turns: Turns) -> Turns:
+    def _clamp_turns(self, turns: int) -> int:
         """Clamp the turns value to be within allowable range."""
         return max(0, min(3, turns))

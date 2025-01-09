@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Union
 
 from data.constants import *
 
-from Enums.Enums import Axes, PropAttribute, Turns
+from Enums.Enums import Axes, PropAttribute, int
 
 
 if TYPE_CHECKING:
@@ -15,7 +15,7 @@ class PropAttrManager:
         self.update_attributes(self.prop.prop_dict)
 
     def update_attributes(
-        self, prop_dict: dict[str, Union[str, str, str, Turns]]
+        self, prop_dict: dict[str, Union[str, str, str, int]]
     ) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, MOTION, PROP_TYPE]
         for attr in prop_attributes:

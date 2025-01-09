@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from .calculators.base_location_calculator import BaseLocationCalculator
-from .calculators.dash_location_calculator import DashLocationCalculator
-from .calculators.shift_location_calculator import ShiftLocationCalculator
-from .calculators.static_location_calculator import StaticLocationCalculator
+from .loc_calculators.base_loc_calculator import BaseLocationCalculator
+from .loc_calculators.dash_loc_calculator import DashLocationCalculator
+from .loc_calculators.shift_loc_calculator import ShiftLocationCalculator
+from .loc_calculators.static_loc_calculator import StaticLocationCalculator
 from data.constants import *
 
 if TYPE_CHECKING:

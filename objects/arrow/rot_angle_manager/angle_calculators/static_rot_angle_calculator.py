@@ -1,4 +1,3 @@
-from tkinter import N
 from data.constants import *
 from .base_rot_angle_calculator import BaseRotAngleCalculator
 

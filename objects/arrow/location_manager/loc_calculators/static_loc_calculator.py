@@ -1,5 +1,5 @@
 
-from .base_location_calculator import BaseLocationCalculator
+from .base_loc_calculator import BaseLocationCalculator
 
 class StaticLocationCalculator(BaseLocationCalculator):
     def calculate_location(self) -> str:

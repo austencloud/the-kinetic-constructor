@@ -36,7 +36,7 @@ Glyph = Union[
 ]
 
 
-class Turns(Enum):
+class int(Enum):
     ZERO = 0
     ZERO_POINT_FIVE = 0.5
     ONE = 1
@@ -377,13 +377,13 @@ class PictographAttributesDict(TypedDict):
     blue_prop_rot_dir: str
     blue_start_loc: str
     blue_end_loc: str
-    blue_turns: Turns
+    blue_turns: int
     blue_start_ori: str
     blue_end_ori: str
     red_motion_type: str
     red_prop_rot_dir: str
     red_start_loc: str
     red_end_loc: str
-    red_turns: Turns
+    red_turns: int
     red_start_ori: str
     red_end_ori: str

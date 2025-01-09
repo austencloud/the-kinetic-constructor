@@ -1,5 +1,5 @@
 from data.constants import *
-from .base_location_calculator import BaseLocationCalculator
+from .base_loc_calculator import BaseLocationCalculator
 
 
 class ShiftLocationCalculator(BaseLocationCalculator):

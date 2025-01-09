@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
-from Enums.Enums import Turns
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
@@ -26,13 +25,20 @@ class TurnsAdjuster:
             QApplication.restoreOverrideCursor()
             return
 
-        current_turns = self._convert_turns_to_num(turns)
-        new_turns = self._calculate_new_turns(current_turns, adjustment)
+        if turns == "fl":
+            current_turns = "fl"
+        current_turns = int(turns) if turns in ["0", "1", "2", "3"] else float(turns)
+
+        if current_turns == "fl" and adjustment > 0:
+            new_turns = 0
+        if current_turns == 0 and adjustment < 0:
+            new_turns = "fl"
+        new_turns = max(0, min(3, current_turns + adjustment))
 
         self.set_turns(new_turns)
         QApplication.restoreOverrideCursor()
 
-    def set_turns(self, new_turns: Turns) -> None:
+    def set_turns(self, new_turns: int) -> None:
         """Set the new turns value."""
         matching_motion = (
             self.beat_frame.get.currently_selected_beat_view().beat.motions[self.color]
@@ -46,16 +52,6 @@ class TurnsAdjuster:
 
         self.beat_frame.updater.update_beats_from_current_sequence_json()
         self.beat_frame.sequence_widget.graph_editor.update_graph_editor()
-
-    def _calculate_new_turns(
-        self, current_turns: Turns, adjustment: Union[int, float]
-    ) -> Turns:
-        """Calculate the new turns value."""
-        if current_turns == "fl" and adjustment > 0:
-            return 0
-        if current_turns == 0 and adjustment < 0:
-            return "fl"
-        return max(0, min(3, current_turns + adjustment))
 
     def _convert_turns_to_num(self, turns: Union[int, float, str]) -> Union[int, float]:
         """Convert turns from string to numerical representation."""

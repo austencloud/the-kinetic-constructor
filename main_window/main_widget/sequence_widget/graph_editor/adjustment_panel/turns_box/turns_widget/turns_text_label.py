@@ -6,9 +6,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget
 
+
 class TurnsTextLabel(QLabel):
     def __init__(self, turns_widget: "TurnsWidget") -> None:
-        super().__init__("Turns", turns_widget)
+        super().__init__("int", turns_widget)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_widget = turns_widget
 

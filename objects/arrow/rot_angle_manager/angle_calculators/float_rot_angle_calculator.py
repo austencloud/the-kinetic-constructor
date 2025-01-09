@@ -1,7 +1,4 @@
 from data.constants import *
-from objects.motion.managers.handpath_calculator import (
-    HandpathCalculator,
-)
 from .base_rot_angle_calculator import BaseRotAngleCalculator
 
 
