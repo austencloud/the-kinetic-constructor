@@ -37,7 +37,7 @@ class SettingsDialog(QDialog):
         self.tab_widget.addTab(self.prop_type_tab, "Prop Type")
         self.tab_widget.addTab(self.background_tab, "Background")
         self.tab_widget.addTab(self.visibility_tab, "Visibility")
-        self.tab_widget.addTab(self.layout_options_tab, "Beat Layout")
+        self.tab_widget.addTab(self.layout_options_tab, "Beat Layouts")
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.tab_widget)

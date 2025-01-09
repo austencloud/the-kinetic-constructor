@@ -35,10 +35,11 @@ class LayoutControls(QWidget):
 
     def _setup_components(self):
         # Sequence Length Controls
-        self.sequence_length_label = QLabel("Sequence Length:", self)
-        self.sequence_length_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.sequence_length_label = QLabel("Length:", self)
+        self.sequence_length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.num_beats_spinbox = QSpinBox(self)
+        self.num_beats_spinbox.setCursor(Qt.CursorShape.PointingHandCursor)
         self.num_beats_spinbox.setRange(1, 64)
         self.num_beats_spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.num_beats_spinbox.setValue(self.layout_tab.num_beats)
@@ -48,15 +49,16 @@ class LayoutControls(QWidget):
 
         self.minus_button = QPushButton("-", self)
         self.minus_button.clicked.connect(self._decrease_sequence_length)
-
+        self.minus_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.plus_button = QPushButton("+", self)
         self.plus_button.clicked.connect(self._increase_sequence_length)
+        self.plus_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         # Layout Dropdown
-        self.layout_dropdown_label = QLabel("Options:", self)
+        self.layout_dropdown_label = QLabel("Select Layout:", self)
         self.layout_dropdown_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
         self.layout_dropdown = QComboBox(self)
+        self.layout_dropdown.setCursor(Qt.CursorShape.PointingHandCursor)
         self.layout_dropdown.addItems(
             [f"{rows} x {cols}" for rows, cols in self.layout_tab.valid_layouts]
         )
@@ -65,8 +67,9 @@ class LayoutControls(QWidget):
         )
 
         # Update Button and Default Layout Label
-        self.update_button = QPushButton("Set as Default", self)
-        self.update_button.clicked.connect(
+        self.update_layout_button = QPushButton("Update Layout", self)
+        self.update_layout_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.update_layout_button.clicked.connect(
             lambda: self.set_default_layout(self.layout_dropdown.currentText())
         )
 
@@ -127,7 +130,7 @@ class LayoutControls(QWidget):
         self.layout.addWidget(sequence_length_frame)
         self.layout.addWidget(self.default_layout_label)
         self.layout.addWidget(layout_dropdown_frame)
-        self.layout.addWidget(self.update_button)
+        self.layout.addWidget(self.update_layout_button)
 
     def _decrease_sequence_length(self):
         """Decrease the sequence length and emit the change."""
@@ -208,7 +211,7 @@ class LayoutControls(QWidget):
             self.minus_button,
             self.plus_button,
             self.layout_dropdown,
-            self.update_button,
+            self.update_layout_button,
             self.default_layout_label,
         ]
         for widget in widgets:

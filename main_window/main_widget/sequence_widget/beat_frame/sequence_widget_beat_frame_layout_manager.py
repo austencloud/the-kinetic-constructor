@@ -63,7 +63,7 @@ class SequenceWidgetBeatFrameLayoutManager:
             if grow_sequence:
                 num_filled_beats = self.beat_frame.get.next_available_beat() or 0
                 num_beats = num_filled_beats
-        rows, columns = self.calculate_layout(num_beats)
+        columns, rows = self.calculate_layout(num_beats)
 
         self.beat_frame.sequence_widget.scroll_area.verticalScrollBarPolicy = (
             Qt.ScrollBarPolicy.ScrollBarAlwaysOn
