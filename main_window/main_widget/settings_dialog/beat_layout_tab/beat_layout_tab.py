@@ -45,7 +45,8 @@ class BeatLayoutTab(QWidget):
             [f"{rows} x {cols}" for rows, cols in self.valid_layouts]
         )
         self.beat_frame.update_preview()
-
+        self._set_default_layout()
+        
     def _on_layout_selected(self, layout_text: str):
         if layout_text:
             rows, cols = map(int, layout_text.split(" x "))

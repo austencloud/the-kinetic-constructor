@@ -32,6 +32,7 @@ class LayoutControls(QWidget):
         self.settings_manager = layout_tab.settings_dialog.main_widget.settings_manager
         self._setup_components()
         self._setup_layout()
+
     def _setup_components(self):
         # Sequence Length Controls
         self.sequence_length_label = QLabel("Sequence Length:", self)
@@ -52,7 +53,7 @@ class LayoutControls(QWidget):
         self.plus_button.clicked.connect(self._increase_sequence_length)
 
         # Layout Dropdown
-        self.layout_dropdown_label = QLabel("Layout Options:", self)
+        self.layout_dropdown_label = QLabel("Options:", self)
         self.layout_dropdown_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.layout_dropdown = QComboBox(self)
@@ -65,20 +66,16 @@ class LayoutControls(QWidget):
 
         # Update Button and Default Layout Label
         self.update_button = QPushButton("Set as Default", self)
-        self.update_button.clicked.connect(
-            lambda: self.update_default_layout.emit()
-        )
+        self.update_button.clicked.connect(lambda: self.update_default_layout.emit())
 
         self.default_layout_label = QLabel(
-            f"Default Layout: {self.layout_tab.current_layout[0]} x {self.layout_tab.current_layout[1]}",
+            f"Default: {self.layout_tab.current_layout[0]} x {self.layout_tab.current_layout[1]}",
             self,
         )
-        self.default_layout_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.default_layout_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         font = self.default_layout_label.font()
         font.setBold(True)
         self.default_layout_label.setFont(font)
-
-
 
     def _apply_default_layout(self):
         """Update the default layout setting."""
@@ -116,7 +113,6 @@ class LayoutControls(QWidget):
         self.layout.addWidget(layout_dropdown_frame)
         self.layout.addWidget(self.update_button)
 
-
     def _decrease_sequence_length(self):
         """Decrease the sequence length and emit the change."""
         current_value = self.num_beats_spinbox.value()
@@ -129,7 +125,7 @@ class LayoutControls(QWidget):
 
     def update_default_label(self, layout):
         """Update the default layout label."""
-        self.default_layout_label.setText(f"Default Layout: {layout[0]} x {layout[1]}")
+        self.default_layout_label.setText(f"Default: {layout[0]} x {layout[1]}")
 
     def _on_sequence_length_spinbox_changed(self, new_length: int):
         """Handle updates to the sequence length."""
@@ -181,7 +177,6 @@ class LayoutControls(QWidget):
                         index += 1
         self.beat_frame.adjustSize()
         self.beat_frame.update_preview()
-
 
     def resizeEvent(self, event):
         """Dynamically adjust font sizes on resize."""
