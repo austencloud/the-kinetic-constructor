@@ -87,7 +87,7 @@ class CircularSequenceGenerator(BaseSequenceGenerator):
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
 
         construct_tab = self.main_widget.construct_tab
-        construct_tab.option_picker.updater.refresh_options(self.sequence)
+        construct_tab.option_picker.updater.refresh_options()
 
         QApplication.restoreOverrideCursor()
 
