@@ -21,7 +21,6 @@ class StartPositionBeatView(BeatView):
         super().__init__(beat_frame)
         self.is_start_pos = True
         self._setup_blank_beat()
-        self.is_filled = False
 
     def _setup_blank_beat(self):
         self.blank_beat = StartPositionBeat(self.beat_frame)

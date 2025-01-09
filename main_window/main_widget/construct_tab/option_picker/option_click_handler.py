@@ -26,18 +26,6 @@ class OptionClickHandler:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
         new_beat = self.add_to_sequence_manager.create_new_beat(clicked_option)
-        next_beat_number = self.beat_frame.beat_adder.calculate_next_beat_number()
-        num_beats = int(self.layout_settings.get_layout_setting("num_beats"))
-
-        if (
-            next_beat_number > num_beats
-        ) and not self.layout_settings.get_layout_setting("grow_sequence"):
-            error_message = (
-                f"Can't add the beat. Sequence length is set to "
-                f"{next_beat_number - 1} beats."
-            )
-            self.sequence_widget.indicator_label.show_message(error_message)
-            return
         self.beat_frame.beat_adder.add_beat_to_sequence(new_beat)
 
         if new_beat.view:

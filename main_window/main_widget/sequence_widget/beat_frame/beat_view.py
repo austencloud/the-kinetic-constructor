@@ -11,8 +11,6 @@ class BeatView(PictographView):
     is_start_pos = False
     is_filled = False
     is_selected = False
-    is_start = False
-    is_placeholder = False
     beat: "Beat" = None
 
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number: int = None):
@@ -32,7 +30,6 @@ class BeatView(PictographView):
         self.blank_beat.beat_number_item.update_beat_number()
 
     def set_beat(self, beat: "Beat", number: int) -> None:
-        # super().__init__(beat)
         self.beat = beat
         self.beat.view = self
         self.is_filled = True
