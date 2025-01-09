@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+from utilities.reversal_detector import (
     ReversalDetector,
 )
 from utilities.word_simplifier import WordSimplifier
@@ -95,26 +95,8 @@ class BeatFramePopulator:
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
         self.construct_tab.last_beat = last_beat
-
         self.construct_tab.transition_to_option_picker()
-
-        option_picker = self.construct_tab.option_picker
-
-        filters = self.main_widget.settings_manager.construct_tab_settings.get_filters()
-
-        if filters["continuous"]:
-            filter = "continuous"
-        elif filters["one_reversal"]:
-            filter = "one_reversal"
-        elif filters["two_reversals"]:
-            filter = "two_reversals"
-        else:
-            filter = None
-        next_options = self.construct_tab.option_picker.option_getter.get_next_options(
-            self.current_sequence_json, filter
-        )
-
-        option_picker.updater.add_and_display_relevant_options(next_options)
+        self.construct_tab.option_picker.updater.update_options()
         self.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
         self.selection_overlay.update_overlay_position()
 

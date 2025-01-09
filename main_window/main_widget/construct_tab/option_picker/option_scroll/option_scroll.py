@@ -2,11 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.construct_tab.option_picker.option_scroll.option_scroll_sections_populator import OptionScrollSectionsPopulator
 from main_window.main_widget.construct_tab.option_picker.option_scroll.section_widget.option_picker_section_widget import OptionPickerSectionWidget
 
 from .option_scroll_layout_manager import OptionScrollLayoutManager
-from .option_scroll_display_manager import OptionScrollDisplayManager
 from Enums.Enums import LetterType
 
 if TYPE_CHECKING:
@@ -31,5 +29,3 @@ class OptionScroll(QScrollArea):
         self.pictograph_cache: dict[str, BasePictograph] = {}
 
         self.layout_manager = OptionScrollLayoutManager(self)
-        self.display_manager = OptionScrollDisplayManager(self)
-        self.section_initializer = OptionScrollSectionsPopulator(self)

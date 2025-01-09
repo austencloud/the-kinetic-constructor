@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QGraphicsTextItem, QGraphicsItemGroup
 from PyQt6.QtGui import QFont, QColor
 
 from data.constants import BLUE, HEX_BLUE, HEX_RED, RED
+from utilities.reversal_detector import ReversalDetector
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -35,8 +36,17 @@ class BeatReversalGroup(QGraphicsItemGroup):
         self.setVisible(False)
 
     def update_reversal_symbols(self):
-        blue_visible = self.pictograph.blue_reversal
-        red_visible = self.pictograph.red_reversal
+        if self.pictograph.view.__class__.__name__ == "OptionView":
+            json_loader = self.pictograph.main_widget.json_manager.loader_saver
+            sequence_so_far = json_loader.load_current_sequence_json()
+            reversal_dict = ReversalDetector.detect_reversal(
+                sequence_so_far, self.pictograph.pictograph_dict
+            )
+            blue_visible = reversal_dict.get("blue_reversal", False)
+            red_visible = reversal_dict.get("red_reversal", False)
+        else:
+            blue_visible = self.pictograph.blue_reversal
+            red_visible = self.pictograph.red_reversal
 
         self.reversal_items[BLUE].setVisible(blue_visible)
         self.reversal_items[RED].setVisible(red_visible)

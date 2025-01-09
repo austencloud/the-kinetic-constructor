@@ -1,5 +1,3 @@
-# option_picker_click_handler.py
-
 from PyQt6.QtWidgets import QApplication
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
@@ -50,7 +48,7 @@ class OptionClickHandler:
             self.option_picker.updater.refresh_options()
 
             new_beat.view.is_filled = True
-            self.option_picker.option_scroll.display_manager.order_and_display_pictographs()
+            # self.option_picker.updater.order_and_display_pictographs()
             self.option_picker.choose_next_label.set_default_text()
 
         QApplication.restoreOverrideCursor()

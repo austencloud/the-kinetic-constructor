@@ -30,11 +30,4 @@ class StartPositionAdder:
         self.beat_frame.start_pos_view.set_start_pos(start_pos_beat)
         self.beat_frame.selection_overlay.select_beat(start_pos_view, False)
         self.construct_tab.transition_to_option_picker()
-
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        next_options = self.construct_tab.option_picker.option_getter.get_next_options(
-            sequence[1:]
-        )
-        self.construct_tab.option_picker.updater.add_and_display_relevant_options(
-            next_options
-        )
+        self.construct_tab.option_picker.updater.update_options()

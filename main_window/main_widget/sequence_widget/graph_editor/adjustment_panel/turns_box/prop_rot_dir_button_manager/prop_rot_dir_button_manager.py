@@ -13,7 +13,7 @@ from data.constants import (
     STATIC,
 )
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+from utilities.reversal_detector import (
     ReversalDetector,
 )
 from utilities.path_helpers import get_images_and_data_path

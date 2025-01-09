@@ -43,7 +43,7 @@ class NonFirstBeatDeleter:
         self.deleter._post_deletion_updates()
 
         self.option_picker = self.deleter.main_widget.construct_tab.option_picker
-        self.option_picker._update_pictographs()
+        self.option_picker.updater.update_options()
         if index > 0:
             self.deleter.selection_overlay.select_beat(
                 beats[index - 1], toggle_animation=False, defer_show=True
