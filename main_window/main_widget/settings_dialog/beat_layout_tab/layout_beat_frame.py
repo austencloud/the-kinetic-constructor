@@ -10,8 +10,8 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
 from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
-from main_window.main_widget.settings_dialog.beat_layout_tab.layout_preview_beat_view import (
-    LayoutPreviewBeatView,
+from main_window.main_widget.settings_dialog.beat_layout_tab.layout_beat_view import (
+    LayoutBeatView,
 )
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     )
 
 
-class LayoutPreviewBeatFrame(QFrame):
+class LayoutBeatFrame(QFrame):
     """Displays a live preview of the selected beat layout options."""
 
     rows = 0
@@ -41,7 +41,7 @@ class LayoutPreviewBeatFrame(QFrame):
     def _init_beats(self):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
-        self.beat_views = [LayoutPreviewBeatView(self, number=i + 1) for i in range(64)]
+        self.beat_views = [LayoutBeatView(self, number=i + 1) for i in range(64)]
         for beat in self.beat_views:
             beat.hide()
 

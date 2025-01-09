@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import QGridLayout
-from data.beat_frame_layouts import default_beat_frame_layouts
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
@@ -64,7 +63,7 @@ class SequenceWidgetBeatFrameLayoutManager:
             if grow_sequence:
                 num_filled_beats = self.beat_frame.get.next_available_beat() or 0
                 num_beats = num_filled_beats
-        columns, rows = self.calculate_layout(num_beats)
+        rows, columns = self.calculate_layout(num_beats)
 
         self.beat_frame.sequence_widget.scroll_area.verticalScrollBarPolicy = (
             Qt.ScrollBarPolicy.ScrollBarAlwaysOn

@@ -3,17 +3,14 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatVie
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from .layout_preview_beat_frame import LayoutPreviewBeatFrame
+    from .layout_beat_frame import LayoutBeatFrame
 
 
-class LayoutPreviewBeatView(BeatView):
+class LayoutBeatView(BeatView):
     """A beat view designed for the layout preview frame."""
 
-    def __init__(self, beat_frame: "LayoutPreviewBeatFrame", number: int) -> None:
+    def __init__(self, beat_frame: "LayoutBeatFrame", number: int) -> None:
         self.beat_frame = beat_frame
         super().__init__(beat_frame, number)
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
-    # def resizeEvent(self, event):
-    #     """Override resize to handle dynamic sizing."""
-    #     pass
