@@ -48,7 +48,6 @@ class OptionClickHandler:
             self.option_picker.updater.refresh_options()
 
             new_beat.view.is_filled = True
-            # self.option_picker.updater.order_and_display_pictographs()
             self.option_picker.choose_next_label.set_default_text()
 
         QApplication.restoreOverrideCursor()

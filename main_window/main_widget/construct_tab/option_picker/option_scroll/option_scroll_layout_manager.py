@@ -28,7 +28,6 @@ class OptionScrollLayoutManager:
         for letter_type in LetterType:
             section = OptionPickerSectionWidget(letter_type, self.os)
             self.os.sections[letter_type] = section
-            self.os.ordered_section_types.append(letter_type)
             section.setup_components()
 
     def add_sections_to_layout(self) -> None:
@@ -40,9 +39,7 @@ class OptionScrollLayoutManager:
             if section:
                 if letter_type in grouped_sections:
                     if group_widget is None:
-                        group_widget = OptionPickerSectionGroupWidget(
-                            self.os
-                        )
+                        group_widget = OptionPickerSectionGroupWidget(self.os)
                         group_layout = QHBoxLayout()
                         group_layout.addStretch()
                         group_layout.addWidget(group_widget)
@@ -71,13 +68,7 @@ class OptionScrollLayoutManager:
         self.os.container.setLayout(self.os.layout)
         self.os.setWidget(self.os.container)
 
-        self.os.setVerticalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAsNeeded
-        )
-        self.os.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-        )
-        self.os.viewport().setAttribute(
-            Qt.WidgetAttribute.WA_TranslucentBackground
-        )
+        self.os.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.os.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.os.viewport().setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.os.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)

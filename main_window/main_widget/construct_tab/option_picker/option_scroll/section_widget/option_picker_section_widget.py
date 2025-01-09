@@ -16,7 +16,7 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def __init__(self, letter_type: LetterType, scroll_area: "OptionScroll") -> None:
         super().__init__(None)
-        self.scroll_area = scroll_area
+        self.option_scroll = scroll_area
         self.letter_type = letter_type
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
 
@@ -53,9 +53,9 @@ class OptionPickerSectionWidget(QGroupBox):
         self.pictographs = {}
 
     def add_pictograph(self, pictograph: BasePictograph) -> None:
-        COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
+        COLUMN_COUNT = self.option_scroll.option_picker.COLUMN_COUNT
         self.pictographs[
-            self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
+            self.option_scroll.main_widget.pictograph_key_generator.generate_pictograph_key(
                 pictograph.pictograph_dict
             )
         ] = pictograph
@@ -67,22 +67,22 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""
-        width = self.scroll_area.construct_tab.option_picker.width()
+        width = self.option_scroll.construct_tab.option_picker.width()
 
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
             self.setFixedWidth(width)
 
         elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
-            COLUMN_COUNT = self.scroll_area.option_picker.COLUMN_COUNT
+            COLUMN_COUNT = self.option_scroll.option_picker.COLUMN_COUNT
 
             calculated_width = int(
-                (width / COLUMN_COUNT) - ((self.scroll_area.spacing))
+                (width / COLUMN_COUNT) - ((self.option_scroll.spacing))
             )
 
             view_width = (
                 calculated_width
-                if calculated_width < self.scroll_area.option_picker.height() // 8
-                else self.scroll_area.option_picker.height() // 8
+                if calculated_width < self.option_scroll.option_picker.height() // 8
+                else self.option_scroll.option_picker.height() // 8
             )
             width = int(view_width * 8) // 3
             self.setFixedWidth(width)
