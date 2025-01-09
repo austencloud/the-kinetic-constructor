@@ -6,8 +6,8 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatVie
 
 if TYPE_CHECKING:
     from .image_export_manager import ImageExportManager
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
     )
 
     from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
@@ -19,7 +19,7 @@ class ImageExportBeatFactory:
     def __init__(
         self,
         export_manager: "ImageExportManager",
-        beat_frame_class: Union["SequenceWidgetBeatFrame", "TempBeatFrame"],
+        beat_frame_class: Union["SequenceBeatFrame", "TempBeatFrame"],
     ):
         self.export_manager = export_manager
         self.beat_frame_class = beat_frame_class

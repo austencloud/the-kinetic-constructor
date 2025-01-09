@@ -4,7 +4,7 @@ from base_widgets.base_pictograph.pictograph_view import PictographView
 from .beat import Beat
 
 if TYPE_CHECKING:
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
 
 
 class BeatView(PictographView):
@@ -13,7 +13,7 @@ class BeatView(PictographView):
     is_selected = False
     beat: "Beat" = None
 
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number: int = None):
+    def __init__(self, beat_frame: "SequenceBeatFrame", number: int = None):
         super().__init__(beat_frame)
         self.beat_frame = beat_frame
         self.number = number

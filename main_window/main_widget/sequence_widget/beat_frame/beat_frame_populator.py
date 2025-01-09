@@ -5,13 +5,13 @@ from utilities.reversal_detector import (
 from utilities.word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
 
 
 class BeatFramePopulator:
     loading_text = "Loading sequence..."
 
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
         self.sequence_widget = beat_frame.sequence_widget

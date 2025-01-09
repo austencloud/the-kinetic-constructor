@@ -4,13 +4,13 @@ from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtWidgets import QWidget  # Import QWidget
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
     )
 
 
 class BeatFrameKeyEventHandler(QWidget):
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         super().__init__(beat_frame)
         self.beat_frame = beat_frame
 

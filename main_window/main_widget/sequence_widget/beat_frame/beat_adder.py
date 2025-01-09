@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
         Beat,
     )
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
 
 
 class BeatAdder:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         self.beat_frame = beat_frame
         self.beats = beat_frame.beat_views
         self.sequence_widget = beat_frame.sequence_widget

@@ -5,12 +5,12 @@ from utilities.reversal_detector import (
 )
 
 if TYPE_CHECKING:
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
     from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
 
 class BeatFrameUpdater:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceBeatFrame") -> None:
         self.bf = beat_frame
 
     def update_beats_from_current_sequence_json(self) -> None:

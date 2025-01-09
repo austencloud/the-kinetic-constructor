@@ -14,11 +14,13 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
+    )
 
 
 class BeatFactory:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceBeatFrame") -> None:
         self.pictograph_cache = beat_frame.main_widget.pictograph_cache
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget

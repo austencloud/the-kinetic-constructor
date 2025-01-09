@@ -7,13 +7,13 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
         BeatView,
     )
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
     )
 
 
 class BeatFrameGetter:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         self.beat_frame = beat_frame
 
     def next_available_beat(self) -> int:

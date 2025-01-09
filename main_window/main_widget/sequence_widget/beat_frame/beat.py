@@ -8,8 +8,8 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_start_text_manager 
 from .beat_number_item import BeatNumberItem
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
     )
     from .beat_view import BeatView
 
@@ -23,7 +23,7 @@ class Beat(BasePictograph):
     red_reversal = False
 
     def __init__(
-        self, beat_frame: "SequenceWidgetBeatFrame", duration: Union[int, float] = 1
+        self, beat_frame: "SequenceBeatFrame", duration: Union[int, float] = 1
     ):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget

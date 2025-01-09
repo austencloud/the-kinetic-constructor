@@ -6,11 +6,11 @@ from data.beat_frame_layouts import default_beat_frame_layouts
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
 
 
 class SequenceWidgetBeatFrameLayoutManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_overlay
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager
@@ -32,7 +32,8 @@ class SequenceWidgetBeatFrameLayoutManager:
         self.configure_beat_frame(16)
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
-        return default_beat_frame_layouts.get(beat_count, (1, beat_count))
+        """Get the default layout for a given beat count from settings."""
+        return self.settings_manager.sequence_layout.get_layout_setting(str(beat_count))
 
     def get_cols(self):
         layout = self.beat_frame.layout
@@ -97,8 +98,6 @@ class SequenceWidgetBeatFrameLayoutManager:
         self.beat_frame.adjustSize()
         selected_beat = self.selection_manager.selected_beat
         if selected_beat:
-            # self.selection_manager.deselect_beat()
-            # self.selection_manager.select_beat(selected_beat, toggle_graph_editor=False)
             self.selection_manager.update_overlay_position()
 
     def adjust_layout_to_sequence_length(self):

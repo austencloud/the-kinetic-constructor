@@ -9,11 +9,11 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view impo
 from .beat_view import BeatView
 
 if TYPE_CHECKING:
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
 
 
 class BeatSelectionOverlay(QWidget):
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")

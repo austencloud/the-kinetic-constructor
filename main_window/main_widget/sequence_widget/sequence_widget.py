@@ -10,7 +10,7 @@ from .sequence_reflector import SequenceReflector
 from .sequence_rotater import SequenceRotater
 from .sequence_widget_layout_manager import SequenceWidgetLayoutManager
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
-from .beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
+from .beat_frame.sequence_beat_frame import SequenceBeatFrame
 from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager
 from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
@@ -39,9 +39,6 @@ class SequenceWidget(QWidget):
         self.mirror_manager = SequenceReflector(self)
         self.color_swap_manager = SequenceColorSwapper(self)
         self.rotation_manager = SequenceRotater(self)
-        
-        # Full Screen Viewer
-        self.full_screen_viewer = FullScreenViewer(self)
 
         # Labels
         self.indicator_label = SequenceWidgetIndicatorLabel(self)
@@ -50,9 +47,12 @@ class SequenceWidget(QWidget):
 
         # Sections
         self.scroll_area = SequenceWidgetScrollArea(self)
-        self.beat_frame = SequenceWidgetBeatFrame(self)
+        self.beat_frame = SequenceBeatFrame(self)
         self.button_panel = SequenceWidgetButtonPanel(self)
         self.graph_editor = GraphEditor(self)
+
+        # Full Screen Viewer
+        self.full_screen_viewer = FullScreenViewer(self)
 
         # Layout
         self.layout_manager = SequenceWidgetLayoutManager(self)

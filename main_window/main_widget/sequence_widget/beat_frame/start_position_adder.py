@@ -4,12 +4,12 @@ from copy import deepcopy
 from .start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class StartPositionAdder:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         self.beat_frame = beat_frame
         self.sequence_widget = beat_frame.sequence_widget
         self.main_widget = beat_frame.main_widget

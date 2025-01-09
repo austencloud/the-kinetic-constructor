@@ -10,13 +10,13 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
     )
 
 
 class StartPositionBeatView(BeatView):
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceBeatFrame") -> None:
         self.beat_frame = beat_frame
         super().__init__(beat_frame)
         self.is_start_pos = True

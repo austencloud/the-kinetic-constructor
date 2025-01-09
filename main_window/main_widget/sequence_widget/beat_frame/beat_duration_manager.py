@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .beat_view import BeatView
-    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from .sequence_beat_frame import SequenceBeatFrame
 
 
 class BeatDurationManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SequenceBeatFrame"):
         self.beat_frame = beat_frame
         self.json_duration_updater = beat_frame.json_manager.updater.duration_updater
 

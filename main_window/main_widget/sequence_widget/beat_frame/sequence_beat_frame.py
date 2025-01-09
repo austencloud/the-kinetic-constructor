@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from ..sequence_widget import SequenceWidget
 
 
-class SequenceWidgetBeatFrame(BaseBeatFrame):
+class SequenceBeatFrame(BaseBeatFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget.main_widget)
         self.main_widget = sequence_widget.main_widget
@@ -49,7 +49,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.beat_factory = BeatFactory(self)
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = SequenceWidgetBeatFrameLayoutManager(self)
-        self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
+        self.image_export_manager = ImageExportManager(self, SequenceBeatFrame)
         self.populator = BeatFramePopulator(self)
         self.beat_adder = BeatAdder(self)
         self.start_position_adder = StartPositionAdder(self)

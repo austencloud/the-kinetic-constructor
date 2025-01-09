@@ -41,9 +41,6 @@ class SequenceWidgetButtonPanel(QFrame):
 
     def _setup_buttons(self) -> None:
         self.buttons: dict[str, QPushButton] = {}
-        start_pos_deleter = (
-            self.beat_frame.sequence_widget.beat_deleter.start_position_deleter
-        )
 
         button_dict = {
             "add_to_dictionary": {
@@ -60,22 +57,22 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "view_full_screen": {
                 "icon": "eye.png",
-                "callback": self.sequence_widget.full_screen_viewer.view_full_screen,
+                "callback": lambda: self.sequence_widget.full_screen_viewer.view_full_screen(),
                 "tooltip": "View Full Screen",
             },
             "mirror_sequence": {
                 "icon": "mirror.png",
-                "callback": self.sequence_widget.mirror_manager.reflect_current_sequence,
+                "callback": lambda: self.sequence_widget.mirror_manager.reflect_current_sequence(),
                 "tooltip": "Mirror Sequence",
             },
             "swap_colors": {
                 "icon": "yinyang1.png",
-                "callback": self.sequence_widget.color_swap_manager.swap_current_sequence,
+                "callback": lambda: self.sequence_widget.color_swap_manager.swap_current_sequence(),
                 "tooltip": "Swap Colors",
             },
             "rotate_sequence": {
                 "icon": "rotate.png",
-                "callback": self.sequence_widget.rotation_manager.rotate_current_sequence,
+                "callback": lambda: self.sequence_widget.rotation_manager.rotate_current_sequence(),
                 "tooltip": "Rotate Sequence",
             },
             "delete_beat": {
@@ -85,7 +82,7 @@ class SequenceWidgetButtonPanel(QFrame):
             },
             "clear_sequence": {
                 "icon": "clear.svg",
-                "callback": lambda: start_pos_deleter.delete_all_beats(
+                "callback": lambda: self.beat_frame.sequence_widget.beat_deleter.start_position_deleter.delete_all_beats(
                     show_indicator=True
                 ),
                 "tooltip": "Clear Sequence",
