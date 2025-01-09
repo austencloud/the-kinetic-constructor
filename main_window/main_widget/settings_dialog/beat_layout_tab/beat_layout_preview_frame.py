@@ -6,7 +6,7 @@ from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view impo
     StartPositionBeatView,
 )
 
-from .beat_view import BeatView
+from ...sequence_widget.beat_frame.beat_view import BeatView
 
 
 if TYPE_CHECKING:
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceLayoutOptionsBeatFrame(QFrame):
+class BeatLayoutPreviewFrame(QFrame):
     """This class is responsible for displaying a preview of the selected layout options inside the layout options dialog."""
 
     def __init__(self, dialog: "BeatLayoutTab"):

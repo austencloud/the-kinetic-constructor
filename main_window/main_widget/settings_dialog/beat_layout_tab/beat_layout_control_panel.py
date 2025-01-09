@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from data.beat_frame_layouts import beat_frame_layout_options
-from main_window.main_widget.settings_dialog.grow_sequence_checkbox import (
+from main_window.main_widget.settings_dialog.beat_layout_tab.grow_sequence_checkbox import (
     GrowSequenceCheckbox,
 )
 

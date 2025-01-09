@@ -10,7 +10,7 @@ class LayoutWarningDialog(QDialog):
 
         message = QLabel(
             "You are setting the number of beats to fewer than the number of filled beats. "
-            "Do you wish to proceed and clear the excess beats?",
+            "Do you want to proceed and clear the excess beats?",
             self,
         )
         message.setWordWrap(True)

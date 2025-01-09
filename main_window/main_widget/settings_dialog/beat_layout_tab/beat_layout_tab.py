@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDialog
 
-from ...sequence_widget.beat_frame.layout_warning_dialog import LayoutWarningDialog
-from ...sequence_widget.beat_frame.layout_options_beat_frame import (
-    SequenceLayoutOptionsBeatFrame,
+from .beat_layout_warning_dialog import LayoutWarningDialog
+from .beat_layout_preview_frame import (
+    BeatLayoutPreviewFrame,
 )
 from .beat_layout_options_panel import BeatLayoutOptionsPanel
 
@@ -20,7 +20,7 @@ class BeatLayoutTab(QWidget):
         )
         initial_state = self.sequence_widget.beat_frame.get.current_beat_frame_state()
 
-        self.beat_frame = SequenceLayoutOptionsBeatFrame(self)
+        self.beat_frame = BeatLayoutPreviewFrame(self)
         self.panel = BeatLayoutOptionsPanel(self)
 
         self._setup_apply_button()
