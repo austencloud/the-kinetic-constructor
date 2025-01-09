@@ -12,19 +12,8 @@ from PyQt6.QtCore import Qt, pyqtSignal
 if TYPE_CHECKING:
     from .beat_layout_tab import BeatLayoutTab
 
-# Utility function for font size calculation
-def calculate_font_size(widget_width: int, base_factor: int = 50) -> int:
-    return max(10, widget_width // base_factor)
 
 class BeatLayoutControls(QWidget):
-    """
-    Controls for managing the layout of beats in the BeatLayoutTab.
-
-    Signals:
-        sequence_length_changed (int): Emitted when the sequence length changes.
-        layout_selected (str): Emitted when a new layout is selected.
-    """
-
     sequence_length_changed = pyqtSignal(int)
     layout_selected = pyqtSignal(str)
 
@@ -78,7 +67,7 @@ class BeatLayoutControls(QWidget):
 
     def resizeEvent(self, event):
         """Dynamically adjust font sizes on resize."""
-        font_size = calculate_font_size(self.width())
+        font_size = max(10, self.width() // 50)
         font = self.sequence_length_label.font()
         font.setPointSize(font_size)
         

@@ -1,17 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QComboBox,
-    QPushButton,
-    QHBoxLayout,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.settings_dialog.beat_layout_tab.beat_layout_controls import (
-    BeatLayoutControls,
-)
+from .beat_layout_controls import BeatLayoutControls
 from .layout_preview_beat_frame import LayoutPreviewBeatFrame
 
 if TYPE_CHECKING:
