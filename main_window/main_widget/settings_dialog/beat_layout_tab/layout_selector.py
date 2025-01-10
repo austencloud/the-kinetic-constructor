@@ -1,17 +1,14 @@
+import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from PyQt6.QtCore import Qt
-from data.beat_frame_layout_options import beat_frame_layout_options
-
-from .layout_dropdown import (
-    LayoutDropdown,
-)
-from .select_layout_label import (
-    SelectLayoutLabel,
-)
+from .layout_dropdown import LayoutDropdown
+from .select_layout_label import SelectLayoutLabel
 
 if TYPE_CHECKING:
     from .layout_controls_widget import LayoutControlsWidget
+    
+BEAT_FRAME_LAYOUT_OPTIONS_PATH = "data/beat_frame_layout_options.json"
 
 
 class LayoutSelector(QFrame):
@@ -27,7 +24,20 @@ class LayoutSelector(QFrame):
         self._setup_layout()
 
     def _update_valid_layouts(self, num_beats):
-        self.valid_layouts =  beat_frame_layout_options.get(num_beats, [(1, 1)])
+        beat_frame_layout_options = self.load_beat_frame_layout_options(
+            BEAT_FRAME_LAYOUT_OPTIONS_PATH
+        )
+        self.valid_layouts = beat_frame_layout_options.get(num_beats, [(1, 1)])
+
+    def load_beat_frame_layout_options(
+        self, file_path: str
+    ) -> dict[int, list[list[int]]]:
+        try:
+            with open(file_path, "r") as f:
+                return {int(key): value for key, value in json.load(f).items()}
+        except FileNotFoundError:
+            print(f"File not found: {file_path}. Using default options.")
+            return {}
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)

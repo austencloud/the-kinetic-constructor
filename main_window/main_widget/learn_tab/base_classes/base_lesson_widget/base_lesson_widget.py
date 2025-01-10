@@ -23,7 +23,7 @@ class BaseLessonWidget(QWidget):
     question_generator: BaseQuestionGenerator = None
     question_widget: BaseQuestionWidget = None
     answers_widget: BaseAnswersWidget = None
-    total_questions = 1
+    total_questions = 30
     current_question = 1
     quiz_time = 120
     mode = "fixed_question"
