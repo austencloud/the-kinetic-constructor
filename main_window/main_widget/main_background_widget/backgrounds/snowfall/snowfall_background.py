@@ -106,9 +106,7 @@ class SnowfallBackground(QWidget):
         def update_bounds():
             self.widget_width = self.main_widget.width()
             self.widget_height = self.main_widget.height()
-            print(
-                f"Updated bounds: width={self.widget_width}, height={self.widget_height}"
-            )
+
             self.worker.update_bounds(self.widget_width, self.widget_height)
 
         QTimer.singleShot(0, update_bounds)

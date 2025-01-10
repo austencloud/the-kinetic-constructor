@@ -14,14 +14,10 @@ class GraphicsEffectRemover:
     def clear_graphics_effects(self, widgets: list[QWidget] = []) -> None:
         """Remove all graphics effects from widgets and their children."""
         default_widgets = [
-            self.manager.parallel_stack_fader.right_old_widget,
-            self.manager.parallel_stack_fader.left_old_widget,
-            self.manager.parallel_stack_fader.right_new_widget,
-            self.manager.parallel_stack_fader.left_new_widget,
             self.manager.main_widget.right_stack.currentWidget(),
             self.manager.main_widget.left_stack.currentWidget(),
         ]
-        widgets = default_widgets + widgets
+        widgets = default_widgets
         for widget in widgets:
             if widget:
                 self._remove_all_graphics_effects(widget)

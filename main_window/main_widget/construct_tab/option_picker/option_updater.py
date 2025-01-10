@@ -19,6 +19,11 @@ class OptionUpdater:
             for section in sections.values():
                 pictograph_frames.append(section.pictograph_frame)
             
+            # can we put them all in a QWidgetGroup
+            # and pass them to the widget fader as [item]?
+            
+            
+            
             self.option_picker.main_widget.fade_manager.widget_fader.fade_and_update(
                 pictograph_frames, self.update_options, 200
             )
