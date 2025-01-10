@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
-from PyQt6.QtCore import Qt
-from .layout_controls import LayoutControls
+from .layout_controls_widget import LayoutControlsWidget
 from .layout_beat_frame import LayoutBeatFrame
 from data.beat_frame_layout_options import beat_frame_layout_options
 
@@ -21,12 +20,11 @@ class BeatLayoutTab(QWidget):
         self.current_layout = self.valid_layouts[0]
         self.layout_settings = self.main_widget.settings_manager.sequence_layout
         self.beat_frame = LayoutBeatFrame(self)
-        self.controls = LayoutControls(self)
+        self.controls = LayoutControlsWidget(self)
         self.beat_frame.update_preview()
         # Connect signals
 
         self.controls.layout_selected.connect(self._on_layout_selected)
-        self.controls.update_default_layout.connect(self.controls.set_default_layout)
 
         self._setup_layout()
 

@@ -57,7 +57,7 @@ class LayoutBeatFrame(QFrame):
     def update_preview(self):
         """Update the preview based on the current layout."""
         self.cols, self.rows = self.tab.current_layout
-        num_beats = self.tab.controls.num_beats_spinbox.value()
+        num_beats = self.tab.controls.length_selector.num_beats_spinbox.value()
         self._perform_relayout(num_beats)
 
     def _perform_relayout(self, num_beats: int):
