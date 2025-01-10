@@ -8,9 +8,6 @@ if TYPE_CHECKING:
         LessonResultsWidget,
     )
 
-    from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
-        BaseLessonWidget,
-    )
 
 
 class LessonResultLabel(QLabel):

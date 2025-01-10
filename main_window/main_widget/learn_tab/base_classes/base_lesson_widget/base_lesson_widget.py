@@ -1,18 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 
-from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_answer_checker import (
-    LessonAnswerChecker,
-)
+from .lesson_answer_checker import LessonAnswerChecker
 from .lesson_go_back_button import LessonGoBackButton
 from .lesson_progress_label import LessonProgressLabel
-from .lesson_results_label import LessonResultLabel
 from .lesson_indicator_label import LessonIndicatorLabel
 from ..base_answers_widget import BaseAnswersWidget
 from .lesson_quiz_timer_manager import QuizTimerManager
 from ..base_question_generator import BaseQuestionGenerator
 from ..base_question_widget import BaseQuestionWidget
-from .lesson_results_widget import LessonResultsWidget
 
 if TYPE_CHECKING:
     from ...learn_tab import LearnTab

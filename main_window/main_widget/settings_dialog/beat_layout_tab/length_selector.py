@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
-from PyQt6.QtCore import Qt
 
 from main_window.main_widget.settings_dialog.beat_layout_tab.layout_length_button import (
     LayoutLengthButton,

@@ -10,7 +10,6 @@ from PyQt6.QtWidgets import (
     QFrame,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from matplotlib.pylab import f
 
 if TYPE_CHECKING:
     from .beat_layout_tab import BeatLayoutTab
