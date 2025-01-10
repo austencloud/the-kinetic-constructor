@@ -11,7 +11,6 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from matplotlib.pylab import f
-from data.beat_frame_layout_options import beat_frame_layout_options
 
 if TYPE_CHECKING:
     from .beat_layout_tab import BeatLayoutTab
@@ -149,9 +148,7 @@ class LayoutControlsWidget(QWidget):
     def _on_sequence_length_spinbox_changed(self, new_length: int):
         """Handle updates to the sequence length."""
         self.layout_tab.num_beats = new_length
-        self.valid_layouts = beat_frame_layout_options.get(
-            self.layout_tab.num_beats, [(1, 1)]
-        )
+
         self.layout_dropdown.clear()
         self.layout_dropdown.addItems(
             [f"{cols} x {rows}" for cols, rows in self.valid_layouts]
@@ -223,7 +220,6 @@ class LayoutControlsWidget(QWidget):
 
     def _on_sequence_length_changed(self, new_length: int):
         self.num_beats = new_length
-        self.valid_layouts = beat_frame_layout_options.get(self.num_beats, [(1, 1)])
         self.beat_frame.current_layout = self.layout_settings.get_layout_setting(
             str(self.num_beats)
         )

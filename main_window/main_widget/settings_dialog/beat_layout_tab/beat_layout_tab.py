@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from .layout_controls_widget import LayoutControlsWidget
 from .layout_beat_frame import LayoutBeatFrame
-from data.beat_frame_layout_options import beat_frame_layout_options
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
