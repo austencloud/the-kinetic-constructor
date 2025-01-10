@@ -50,6 +50,7 @@ class ShootingStarManager:
             # Calculate movement
             new_x = star["x"] + (star["dx"] * star["speed"])
             new_y = star["y"] + (star["dy"] * star["speed"])
+            print(f"Shooting Star position: ({new_x}, {new_y})")
 
             # Add multiple points between the previous and new positions
             steps = 25  # Increased number of intermediate points
@@ -77,6 +78,11 @@ class ShootingStarManager:
                 star["tail"].pop(0)
 
     def draw_shooting_star(self, painter: QPainter, widget: "QWidget"):
+        if self.shooting_star:
+            print(
+                f"Drawing shooting star at ({self.shooting_star['x']}, {self.shooting_star['y']})"
+            )
+
         """Draw the shooting star and its smooth tail."""
         if not self.shooting_star:
             return
