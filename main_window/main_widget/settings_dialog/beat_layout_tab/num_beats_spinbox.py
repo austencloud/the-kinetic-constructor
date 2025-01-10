@@ -5,38 +5,41 @@ from data.beat_frame_layout_options import beat_frame_layout_options
 
 if TYPE_CHECKING:
     from .layout_controls_widget import LayoutControlsWidget
+    from .length_selector import LengthSelector
 
 
 class NumBeatsSpinbox(QSpinBox):
-    def __init__(self, control_widget: "LayoutControlsWidget"):
-        super().__init__(control_widget)
-        self.control_widget = control_widget
+    def __init__(self, length_selector: "LengthSelector"):
+        super().__init__(length_selector)
+        self.length_selector = length_selector
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setRange(1, 64)
-        self.setValue(self.control_widget.layout_tab.num_beats)
+        self.setValue(self.length_selector.layout_tab.num_beats)
         self.valueChanged.connect(
             lambda: self._on_sequence_length_changed(self.value())
         )
 
-    def resizeEvent(self, event):
-        font = self.font()
-        font.setPointSize(self.control_widget.width() // 50)
-        self.setFont(font)
-
     def _on_sequence_length_changed(self, new_length: int):
+        self.controls_widget = self.length_selector.controls_widget
+        self.layout_dropdown = self.controls_widget.layout_selector.layout_dropdown
         self.num_beats = new_length
         self.valid_layouts = beat_frame_layout_options.get(self.num_beats, [(1, 1)])
         self.current_layout = (
-            self.control_widget.layout_tab.layout_settings.get_layout_setting(
+            self.length_selector.layout_tab.layout_settings.get_layout_setting(
                 str(self.num_beats)
             )
         )
-        self.control_widget.layout_selector.layout_dropdown.clear()
-        self.control_widget.layout_selector.layout_dropdown.addItems(
+        self.layout_dropdown.clear()
+        self.layout_dropdown.addItems(
             [f"{rows} x {cols}" for rows, cols in self.valid_layouts]
         )
         layout_text = f"{self.current_layout[0]} x {self.current_layout[1]}"
-        self.control_widget.layout_selector.layout_dropdown.setCurrentText(layout_text)
+        self.layout_dropdown.setCurrentText(layout_text)
 
-        self.control_widget.beat_frame.update_preview()
-        self.control_widget.default_layout_label.setText(f"Default: {layout_text}")
+        self.controls_widget.beat_frame.update_preview()
+        self.controls_widget.default_layout_label.setText(f"Default: {layout_text}")
+
+    def resizeEvent(self, event):
+        font = self.font()
+        font.setPointSize(self.length_selector.layout_tab.width() // 50)
+        self.setFont(font)

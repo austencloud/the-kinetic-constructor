@@ -4,15 +4,15 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .layout_controls_widget import LayoutControlsWidget
-
+    from .layout_selector import LayoutSelector
 
 class SelectLayoutLabel(QLabel):
-    def __init__(self, control_widget: "LayoutControlsWidget"):
-        super().__init__("Select Layout:", control_widget)
+    def __init__(self, layout_selector: "LayoutSelector"):
+        super().__init__("Select Layout:", layout_selector)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.control_widget = control_widget
+        self.layout_selector = layout_selector
 
     def resizeEvent(self, event):
         font = self.font()
-        font.setPointSize(max(10, self.control_widget.width() // 50))
+        font.setPointSize(self.layout_selector.layout_tab.width() // 50)
         self.setFont(font)

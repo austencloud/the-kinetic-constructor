@@ -20,7 +20,7 @@ class UpdateLayoutButton(QPushButton):
 
     def resizeEvent(self, event):
         font = self.font()
-        font.setPointSize(max(10, self.control_widget.width() // 50))
+        font.setPointSize(max(10, self.control_widget.layout_tab.width() // 50))
         self.setFont(font)
 
     def set_default_layout(self, layout_text: str):
@@ -36,4 +36,3 @@ class UpdateLayoutButton(QPushButton):
     def update_default_layout_label(self, layout_text):
         """Update the default layout label."""
         self.control_widget.default_layout_label.setText(f"Default: {layout_text}")
-

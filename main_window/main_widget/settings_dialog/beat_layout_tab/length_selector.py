@@ -20,15 +20,11 @@ class LengthSelector(QFrame):
     def __init__(self, controls_widget: "LayoutControlsWidget"):
         super().__init__(controls_widget)
         self.controls_widget = controls_widget
-
-        self.sequence_length_label = SequenceLengthLabel(self.controls_widget)
-        self.minus_button = LayoutLengthButton(
-            "-", self.controls_widget, self._decrease_length
-        )
-        self.plus_button = LayoutLengthButton(
-            "+", self.controls_widget, self._increase_length
-        )
-        self.num_beats_spinbox = NumBeatsSpinbox(self.controls_widget)
+        self.layout_tab = controls_widget.layout_tab
+        self.sequence_length_label = SequenceLengthLabel(self)
+        self.minus_button = LayoutLengthButton("-", self, self._decrease_length)
+        self.plus_button = LayoutLengthButton("+", self, self._increase_length)
+        self.num_beats_spinbox = NumBeatsSpinbox(self)
 
         self._setup_layout()
 

@@ -20,5 +20,5 @@ class DefaultLayoutLabel(QLabel):
 
     def resizeEvent(self, event):
         font = self.font()
-        font.setPointSize(self.control_widget.width() // 50)
+        font.setPointSize(self.control_widget.layout_tab.width() // 50)
         self.setFont(font)
