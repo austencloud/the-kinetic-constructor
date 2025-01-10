@@ -28,6 +28,7 @@ class LayoutBeatFrame(QFrame):
     current_num_beats = 16
     beat_views: list[Union[BeatView]] = []
     start_pos_view: StartPositionBeatView = None
+    current_layout: tuple[int, int] = (4, 4)
 
     def __init__(self, tab: "BeatLayoutTab"):
         super().__init__(tab)
@@ -56,7 +57,7 @@ class LayoutBeatFrame(QFrame):
 
     def update_preview(self):
         """Update the preview based on the current layout."""
-        self.cols, self.rows = self.tab.current_layout
+        self.cols, self.rows = self.current_layout
         num_beats = self.tab.controls.length_selector.num_beats_spinbox.value()
         self._perform_relayout(num_beats)
 
@@ -97,6 +98,7 @@ class LayoutBeatFrame(QFrame):
         # Hide unused beat views
         for unused_index in range(index, len(self.beat_views)):
             self.beat_views[unused_index].setVisible(False)
+        self.resize_beats()
 
     def _calculate_beat_size(self) -> QSize:
         """Calculate the size of each beat view cell."""
@@ -114,6 +116,9 @@ class LayoutBeatFrame(QFrame):
     def resizeEvent(self, event):
         """Recalculate cell sizes when the frame is resized."""
         super().resizeEvent(event)
+        self.resize_beats()
+
+    def resize_beats(self):
         cell_size = self._calculate_beat_size()
         for beat_view in self.beat_views:
             beat_view.setFixedSize(cell_size)

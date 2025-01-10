@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtCore import Qt
-
+from data.beat_frame_layout_options import beat_frame_layout_options
 
 if TYPE_CHECKING:
-    from .layout_controls_widget import LayoutControlsWidget
     from .layout_selector import LayoutSelector
 
 
@@ -13,18 +12,16 @@ class LayoutDropdown(QComboBox):
         super().__init__(layout_selector)
         self.layout_selector = layout_selector
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        valid_layout_strs = [
-            f"{rows} x {cols}"
-            for rows, cols in self.layout_selector.layout_tab.valid_layouts
-        ]
+        self._populate_dropdown()
+
+    def _populate_dropdown(self):
+        num_beats = self.layout_selector.controls_widget.layout_tab.num_beats
+        self.valid_layouts = beat_frame_layout_options.get(num_beats, [(1, 1)])
+        valid_layout_strs = [f"{rows} x {cols}" for rows, cols in self.valid_layouts]
         self.addItems(valid_layout_strs)
         self.currentTextChanged.connect(
             lambda layout: self.layout_selector.controls_widget.layout_selected.emit(
                 layout
             )
         )
-
-    def resizeEvent(self, event):
-        font = self.font()
-        font.setPointSize(self.layout_selector.layout_tab.width() // 50)
-        self.setFont(font)
+        

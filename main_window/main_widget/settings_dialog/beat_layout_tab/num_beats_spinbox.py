@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt
 from data.beat_frame_layout_options import beat_frame_layout_options
 
 if TYPE_CHECKING:
-    from .layout_controls_widget import LayoutControlsWidget
     from .length_selector import LengthSelector
 
 
@@ -39,7 +38,3 @@ class NumBeatsSpinbox(QSpinBox):
         self.controls_widget.beat_frame.update_preview()
         self.controls_widget.default_layout_label.setText(f"Default: {layout_text}")
 
-    def resizeEvent(self, event):
-        font = self.font()
-        font.setPointSize(self.length_selector.layout_tab.width() // 50)
-        self.setFont(font)

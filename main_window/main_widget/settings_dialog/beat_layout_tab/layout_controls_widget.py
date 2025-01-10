@@ -17,10 +17,8 @@ class LayoutControlsWidget(QWidget):
     def __init__(self, layout_tab: "BeatLayoutTab"):
         super().__init__(layout_tab)
         self.layout_tab = layout_tab
-        self.json_loader = layout_tab.sequence_widget.main_widget.json_manager.loader_saver
         self.beat_frame = layout_tab.beat_frame
         self.layout_settings = layout_tab.layout_settings
-        self.settings_manager = layout_tab.settings_dialog.main_widget.settings_manager
 
         # Widgets
         self.length_selector = LengthSelector(self)
@@ -39,4 +37,7 @@ class LayoutControlsWidget(QWidget):
         layout.addWidget(self.layout_selector)
         layout.addWidget(self.update_layout_button)
 
-
+    def resizeEvent(self, event):
+        font = self.font()
+        font.setPointSize(max(10, self.layout_tab.width() // 50))
+        self.setFont(font)

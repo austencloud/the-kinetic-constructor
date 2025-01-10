@@ -30,13 +30,12 @@ class LengthSelector(QFrame):
 
     def _setup_layout(self):
         spinbox_layout = QHBoxLayout()
-        spinbox_layout.setSpacing(10)
         spinbox_layout.addWidget(self.minus_button)
         spinbox_layout.addWidget(self.num_beats_spinbox)
         spinbox_layout.addWidget(self.plus_button)
 
         main_layout = QVBoxLayout(self)
-        main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(self.sequence_length_label)
         main_layout.addLayout(spinbox_layout)
 
@@ -49,3 +48,4 @@ class LengthSelector(QFrame):
     def _increase_length(self):
         """Increase the sequence length and emit the change."""
         self.num_beats_spinbox.setValue(self.num_beats_spinbox.value() + 1)
+

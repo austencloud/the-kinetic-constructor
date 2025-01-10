@@ -16,8 +16,6 @@ class BeatLayoutTab(QWidget):
         self.settings_dialog = settings_dialog
         self.main_widget = settings_dialog.main_widget
         self.sequence_widget = self.main_widget.sequence_widget
-        self.valid_layouts = beat_frame_layout_options.get(self.num_beats, [(1, 1)])
-        self.current_layout = self.valid_layouts[0]
         self.layout_settings = self.main_widget.settings_manager.sequence_layout
         self.beat_frame = LayoutBeatFrame(self)
         self.controls = LayoutControlsWidget(self)
@@ -37,5 +35,5 @@ class BeatLayoutTab(QWidget):
     def _on_layout_selected(self, layout_text: str):
         if layout_text:
             rows, cols = map(int, layout_text.split(" x "))
-            self.current_layout = (rows, cols)
+            self.beat_frame.current_layout = (rows, cols)
             self.beat_frame.update_preview()

@@ -12,7 +12,7 @@ class SequenceLayoutSettings:
     def __init__(self, settings_manager: "SettingsManager"):
         self.settings_manager = settings_manager
 
-    def get_layout_setting(self, beat_count: str):
+    def get_layout_setting(self, beat_count: str) -> list[int]:
         """Retrieve layout setting for a specific beat count."""
         layouts = self._load_layouts()
         return layouts.get(beat_count, [1, int(beat_count)])

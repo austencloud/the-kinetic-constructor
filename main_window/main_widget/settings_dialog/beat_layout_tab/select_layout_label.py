@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from .layout_controls_widget import LayoutControlsWidget
     from .layout_selector import LayoutSelector
 
 class SelectLayoutLabel(QLabel):
@@ -12,7 +11,3 @@ class SelectLayoutLabel(QLabel):
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout_selector = layout_selector
 
-    def resizeEvent(self, event):
-        font = self.font()
-        font.setPointSize(self.layout_selector.layout_tab.width() // 50)
-        self.setFont(font)

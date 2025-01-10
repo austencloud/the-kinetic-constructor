@@ -8,9 +8,13 @@ if TYPE_CHECKING:
 
 class DefaultLayoutLabel(QLabel):
     def __init__(self, control_widget: "LayoutControlsWidget"):
-        super().__init__(
-            f"Default: {control_widget.layout_tab.current_layout[0]} x {control_widget.layout_tab.current_layout[1]}",
-            control_widget,
+        super().__init__(control_widget)
+        layout_settings = (
+            control_widget.layout_tab.main_widget.settings_manager.sequence_layout
+        )
+        current_layout = control_widget.layout_tab.beat_frame.current_layout
+        self.setText(
+            f"Default: {current_layout[0]} x {current_layout[1]}",
         )
         self.control_widget = control_widget
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
