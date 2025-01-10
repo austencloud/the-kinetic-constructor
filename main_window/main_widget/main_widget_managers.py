@@ -2,6 +2,7 @@ import json
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
+from main_window.main_widget.pictograph_collector import PictographCollector
 from utilities.path_helpers import get_images_and_data_path
 
 from .grid_mode_checker import GridModeChecker
@@ -21,7 +22,7 @@ if TYPE_CHECKING:
     from .main_widget import MainWidget
 
 
-class MainWidgetManager:
+class MainWidgetManagers:
     def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
@@ -35,7 +36,7 @@ class MainWidgetManager:
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
         mw = self.main_widget
-        
+
         mw.json_manager = JsonManager(mw)
         mw.turns_tuple_generator = TurnsTupleGenerator()
         mw.pictograph_key_generator = PictographKeyGenerator(mw)
@@ -45,6 +46,7 @@ class MainWidgetManager:
         mw.sequence_properties_manager = SequencePropertiesManager(mw)
         mw.thumbnail_finder = ThumbnailFinder(mw)
         mw.grid_mode_checker = GridModeChecker(self)
+        mw.pictograph_collector = PictographCollector(mw)
 
     def _setup_pictograph_cache(self) -> None:
         from Enums.Enums import Letter

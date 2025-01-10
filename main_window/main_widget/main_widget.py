@@ -18,7 +18,7 @@ from .main_widget_tab_switcher import MainWidgetTabSwitcher
 from .font_color_updater.font_color_updater import FontColorUpdater
 
 
-from .main_widget_manager import MainWidgetManager
+from .main_widget_managers import MainWidgetManagers
 from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
@@ -59,19 +59,22 @@ class MainWidget(QWidget):
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
     settings_dialog: "SettingsDialog"
-    # Left Widgets
-    sequence_widget: "SequenceWidget"
 
-    # Right Widgets
+    # Tabs
     construct_tab: "ConstructTab"
     generate_tab: "GenerateTab"
     browse_tab: "BrowseTab"
     learn_tab: "LearnTab"
     write_tab: "WriteTab"
 
+    # Widgets
+    sequence_widget: "SequenceWidget"
+    background_widget: "MainBackgroundWidget"
+    full_screen_overlay: "FullScreenImageOverlay"
+
     # Handlers
     tab_switcher: "MainWidgetTabSwitcher"
-    manager: "MainWidgetManager"
+    manager: "MainWidgetManagers"
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
     state_handler: "MainWidgetState"
@@ -94,10 +97,8 @@ class MainWidget(QWidget):
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
     menu_bar: "MenuBarWidget"
-    background_widget: "MainBackgroundWidget"
     left_stack: QStackedWidget
     right_stack: QStackedWidget
-    full_screen_overlay: "FullScreenImageOverlay"
 
     # Indices for tabs
     main_construct_tab_index: int = 0
@@ -143,7 +144,7 @@ class MainWidget(QWidget):
         self.splash_screen = splash_screen
 
         self.tab_switcher = MainWidgetTabSwitcher(self)
-        self.manager = MainWidgetManager(self)
+        self.manager = MainWidgetManagers(self)
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)

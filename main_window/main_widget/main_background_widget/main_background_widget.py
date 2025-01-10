@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class MainBackgroundWidget(QWidget):
-    background: Optional[BaseBackground] = None
+    background: Optional[SnowfallBackground] = None
 
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
@@ -35,8 +35,7 @@ class MainBackgroundWidget(QWidget):
         self.animation_timer.start(60)
 
     def _on_animation_tick(self):
-        if self.main_widget.background_widget:
-            self.main_widget.background.animate_background()
+
         self.update()
 
     def paintEvent(self, event):
@@ -47,25 +46,26 @@ class MainBackgroundWidget(QWidget):
 
     def _setup_background(self):
         """Initializes the background based on the current background type."""
-        bg_type = (
-            self.main_widget.settings_manager.global_settings.get_background_type()
-        )
+        bg_type = self.main_widget.settings_manager.global_settings.get_background_type()
+        print(f"Setting up background: {bg_type}")
         self.background = self._get_background(bg_type)
         self.main_widget.background = self.background
 
     def apply_background(self):
         """Applies or reapplies the background."""
+        print("Applying background")
         if self.background:
-            self.background.stop_animation()  # Stop any existing animation
+            self.background.stop_animation()
 
         self._setup_background()
         self.main_widget.font_color_updater.update_main_widget_font_colors(
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
 
-        # Start the new background's animation if applicable
         if isinstance(self.background, SnowfallBackground):
+            print("Starting animation for SnowfallBackground")
             self.background.start_animation()
+
 
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""
@@ -82,9 +82,11 @@ class MainBackgroundWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.resize_background()
+        self.background.resizeEvent(event)
 
     def resize_background(self):
         self.setGeometry(self.main_widget.rect())
         self.setFixedSize(self.main_widget.size())
-        self.background: Optional[BaseBackground] = None
-        self.is_animating = False
+        print(f"Background resized to: {self.geometry()}")
+        if isinstance(self.background, SnowfallBackground):
+            self.background.resize(self.width(), self.height())
