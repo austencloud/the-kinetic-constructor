@@ -14,9 +14,13 @@ class OptionUpdater:
     def refresh_options(self):
         sequence = self.json_loader.load_current_sequence_json()
         if len(sequence) > 1:
-            views = [option.view for option in self.option_picker.option_pool]
+            sections = self.scroll_area.sections
+            pictograph_frames = []
+            for section in sections.values():
+                pictograph_frames.append(section.pictograph_frame)
+            
             self.option_picker.main_widget.fade_manager.widget_fader.fade_and_update(
-                views, self.update_options, 200
+                pictograph_frames, self.update_options, 200
             )
 
     def update_options(self):

@@ -41,7 +41,7 @@ class MainBackgroundWidget(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        # self.main_widget.background.paint_background(self, painter)
+        self.main_widget.background.paint_background(self, painter)
         painter.end()
 
     def _setup_background(self):
