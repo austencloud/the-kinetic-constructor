@@ -83,11 +83,11 @@ class MainBackgroundWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.resize_background()
-        self.background.resizeEvent(event)
+        # self.background.resizeEvent(event)
 
     def resize_background(self):
         self.setGeometry(self.main_widget.rect())
         self.setFixedSize(self.main_widget.size())
         print(f"Background resized to: {self.geometry()}")
-        if isinstance(self.background, SnowfallBackground):
-            self.background.resize(self.width(), self.height())
+        # if isinstance(self.background, SnowfallBackground):
+        #     self.background.resize(self.width(), self.height())

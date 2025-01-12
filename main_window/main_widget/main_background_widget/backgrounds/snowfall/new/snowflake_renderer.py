@@ -5,9 +5,11 @@ from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtOpenGL import QOpenGLWindow
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 
-from main_window.main_widget.main_background_widget.backgrounds.snowfall.snowflake import Snowflake
-from main_window.main_widget.main_background_widget.backgrounds.snowfall.snowflake_config_manager import SnowflakeConfigManager
-from main_window.main_widget.main_background_widget.backgrounds.snowfall.snowflake_update_task import SnowflakeUpdateTask
+from main_window.main_widget.main_background_widget.backgrounds.snowfall.new.snowflake import Snowflake
+from main_window.main_widget.main_background_widget.backgrounds.snowfall.new.snowflake_config_manager import SnowflakeConfigManager
+from main_window.main_widget.main_background_widget.backgrounds.snowfall.new.snowflake_update_task import SnowflakeUpdateTask
+
+
 class SnowflakeRenderer(QOpenGLWidget):
     def __init__(self, config_path):
         super().__init__()
