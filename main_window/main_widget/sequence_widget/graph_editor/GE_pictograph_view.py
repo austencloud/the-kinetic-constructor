@@ -13,6 +13,7 @@ from base_widgets.base_pictograph.pictograph_view import (
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
+from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph import GE_Pictograph
 from .GE_pictograph_view_mouse_event_handler import GE_PictographViewMouseEventHandler
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -23,7 +24,6 @@ if TYPE_CHECKING:
         GraphEditorPictographContainer,
     )
 
-    from .GE_pictograph_view import GE_Pictograph
 
 
 class GE_PictographView(PictographView):
@@ -128,7 +128,3 @@ class GE_PictographView(PictographView):
         self.scale(scale_factor, scale_factor)
 
 
-class GE_Pictograph(Beat):
-    def __init__(self, pictograph_container: "GraphEditorPictographContainer") -> None:
-        super().__init__(pictograph_container.graph_editor.sequence_widget.beat_frame)
-        self.is_blank = True

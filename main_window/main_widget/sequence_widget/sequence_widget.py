@@ -15,7 +15,7 @@ from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionary
 from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
 from .graph_editor.graph_editor import GraphEditor
-from .sequence_widget_indicator_label import SequenceWidgetIndicatorLabel
+from .labels.sequence_widget_indicator_label import SequenceWidgetIndicatorLabel
 from .sequence_widget_button_panel import SequenceWidgetButtonPanel
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 

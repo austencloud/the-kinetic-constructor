@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from .motion_checker import MotionChecker
 from .motion_attr_manager import MotionAttrManager
-from .motion_manipulator import MotionManipulator
 from .motion_ori_calculator import MotionOriCalculator
 from .motion_updater import MotionUpdater
 
@@ -32,7 +31,6 @@ class Motion:
         self.pictograph = pictograph
         self.motion_dict = motion_dict
         self.ori_calculator = MotionOriCalculator(self)
-        self.manipulator = MotionManipulator(self)
         self.attr_manager = MotionAttrManager(self)
         self.updater = MotionUpdater(self)
         self.check = MotionChecker(self)

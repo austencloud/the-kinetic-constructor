@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget, QSizePolicy
 from data.constants import BLUE, RED, IN
-from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
 from .ori_picker_box.ori_picker_box import OriPickerBox
 from .turns_box.turns_box import TurnsBox
 
@@ -53,7 +52,6 @@ class BeatAdjustmentPanel(QFrame):
         self.stacked_widget.addWidget(
             self._create_box_set(self.blue_ori_picker, self.red_ori_picker)
         )
-        self.stacked_widget.addWidget(AdjustmentPanelPlaceHolderText(self))
 
     def _create_box_set(self, blue_box, red_box):
         """Creates a container with a horizontal layout for a pair of boxes."""
