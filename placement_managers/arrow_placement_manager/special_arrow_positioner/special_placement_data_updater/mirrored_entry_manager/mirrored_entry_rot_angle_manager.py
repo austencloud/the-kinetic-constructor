@@ -1,5 +1,3 @@
-import logging
-import sys
 from typing import Optional
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING

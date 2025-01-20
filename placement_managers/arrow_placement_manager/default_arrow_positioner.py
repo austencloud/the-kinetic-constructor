@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Dict, Any
 from Enums.letters import LetterConditions
 from data.constants import (
     ANTI,
-    BOX,
     DIAMOND,
     FLOAT,
     NONRADIAL,

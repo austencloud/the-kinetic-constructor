@@ -2,11 +2,11 @@
 
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
+from base_widgets.base_pictograph.grid.grid_point import GridPoint
 from objects.prop.prop import Prop
 import logging
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.grid.grid import GridPoint
     from ..prop_placement_manager import PropPlacementManager
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
