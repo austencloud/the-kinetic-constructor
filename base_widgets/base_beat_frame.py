@@ -34,6 +34,6 @@ class BaseBeatFrame(QFrame):
         self.get = BeatFrameGetter(self)
 
     def _init_beats(self):
-        self.beats = [BeatView(self, number=i + 1) for i in range(64)]
-        for beat in self.beats:
-            beat.hide()
+        self.beat_views = [BeatView(self, number=i + 1) for i in range(64)]
+        for beat_view in self.beat_views:
+            beat_view.hide()
