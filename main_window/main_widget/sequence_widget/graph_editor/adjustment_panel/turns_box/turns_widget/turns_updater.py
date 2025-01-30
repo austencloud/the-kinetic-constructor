@@ -188,4 +188,6 @@ class TurnsUpdater:
 
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value within the allowable range."""
+        if turns == "fl":
+            return turns
         return max(0, min(3, turns))
