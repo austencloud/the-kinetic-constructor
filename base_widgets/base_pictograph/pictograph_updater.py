@@ -58,25 +58,25 @@ class PictographUpdater:
 
     def _update_from_pictograph_data(self, pictograph_data: dict) -> None:
         self.pictograph.attr_manager.update_attributes(pictograph_data)
-        motion_dicts = self._get_motion_dicts(pictograph_data)
-        print(f"Motion Dicts: {motion_dicts}")
+        motion_dataset = self._get_motion_dataset(pictograph_data)
+        print(f"Motion Dicts: {motion_dataset}")
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
-        red_arrow_dict, blue_arrow_dict = self.get_arrow_dicts(pictograph_data)
-        self._update_motions(pictograph_data, motion_dicts)
-        self._update_arrows(red_arrow_dict, blue_arrow_dict)
+        red_arrow_data, blue_arrow_data = self.get_arrow_dataset(pictograph_data)
+        self._update_motions(pictograph_data, motion_dataset)
+        self._update_arrows(red_arrow_data, blue_arrow_data)
         self._set_lead_states()
 
     def _update_motions(
-        self, pictograph_data: dict, motion_dicts: dict[str, dict]
+        self, pictograph_data: dict, motion_dataset: dict[str, dict]
     ) -> None:
         for motion in self.pictograph.motions.values():
             self.override_motion_type_if_necessary(pictograph_data, motion)
-            if motion_dicts.get(motion.color) is not None:
+            if motion_dataset.get(motion.color) is not None:
                 self.show_graphical_objects(motion.color)
-            if motion_dicts[motion.color].get("turns", "") == "fl":
+            if motion_dataset[motion.color].get("turns", "") == "fl":
                 motion.turns = "fl"
-            motion.updater.update_motion(motion_dicts[motion.color])
-            turns_value = motion_dicts[motion.color].get("turns", None)
+            motion.updater.update_motion(motion_dataset[motion.color])
+            turns_value = motion_dataset[motion.color].get("turns", None)
             if turns_value is not None:
                 motion.turns = turns_value
         for motion in self.pictograph.motions.values():
@@ -96,41 +96,41 @@ class PictographUpdater:
             for motion in self.pictograph.motions.values():
                 motion.lead_state = None
 
-    def _update_arrows(self, red_arrow_dict, blue_arrow_dict):
+    def _update_arrows(self, red_arrow_data, blue_arrow_data):
         if self.pictograph.letter_type == LetterType.Type3:
             self.pictograph.get.shift().arrow.updater.update_arrow()
             self.pictograph.get.dash().arrow.updater.update_arrow()
         else:
-            self.pictograph.arrows.get(RED).updater.update_arrow(red_arrow_dict)
-            self.pictograph.arrows.get(BLUE).updater.update_arrow(blue_arrow_dict)
+            self.pictograph.arrows.get(RED).updater.update_arrow(red_arrow_data)
+            self.pictograph.arrows.get(BLUE).updater.update_arrow(blue_arrow_data)
 
-    def get_arrow_dicts(self, pictograph_data):
+    def get_arrow_dataset(self, pictograph_data):
         if pictograph_data.get("red_attributes") and not pictograph_data.get(
             "blue_attributes"
         ):
-            red_arrow_dict = self.get_arrow_dict_from_pictograph_data(
+            red_arrow_data = self.get_arrow_data_from_pictograph_data(
                 pictograph_data, RED
             )
-            blue_arrow_dict = None
+            blue_arrow_data = None
         elif pictograph_data.get("blue_attributes") and not pictograph_data.get(
             "red_attributes"
         ):
-            blue_arrow_dict = self.get_arrow_dict_from_pictograph_data(
+            blue_arrow_data = self.get_arrow_data_from_pictograph_data(
                 pictograph_data, BLUE
             )
-            red_arrow_dict = None
+            red_arrow_data = None
         elif pictograph_data.get("red_attributes") and pictograph_data.get(
             "blue_attributes"
         ):
-            red_arrow_dict = self.get_arrow_dict_from_pictograph_data(
+            red_arrow_data = self.get_arrow_data_from_pictograph_data(
                 pictograph_data, RED
             )
-            blue_arrow_dict = self.get_arrow_dict_from_pictograph_data(
+            blue_arrow_data = self.get_arrow_data_from_pictograph_data(
                 pictograph_data, BLUE
             )
-        return red_arrow_dict, blue_arrow_dict
+        return red_arrow_data, blue_arrow_data
 
-    def get_arrow_dict_from_pictograph_data(
+    def get_arrow_data_from_pictograph_data(
         self, pictograph_data: dict, color: str
     ) -> dict:
         turns = pictograph_data[f"{color}_attributes"].get("turns", None)
@@ -138,14 +138,14 @@ class PictographUpdater:
         loc = pictograph_data[f"{color}_attributes"].get("loc", None)
 
         if turns or turns == 0:
-            arrow_dict = {"turns": turns}
+            arrow_data = {"turns": turns}
         elif prop_rot_dir:
-            arrow_dict = {"prop_rot_dir": prop_rot_dir}
+            arrow_data = {"prop_rot_dir": prop_rot_dir}
         else:
-            arrow_dict = None
+            arrow_data = None
         if loc:
-            arrow_dict["loc"] = loc
-        return arrow_dict
+            arrow_data["loc"] = loc
+        return arrow_data
 
     def show_graphical_objects(self, color: str) -> None:
         self.pictograph.props[color].show()
@@ -159,13 +159,13 @@ class PictographUpdater:
         if turns_key in pictograph_data:
             motion.turns = pictograph_data[turns_key]
 
-    def _get_motion_dicts(self, pictograph_data: dict) -> dict:
+    def _get_motion_dataset(self, pictograph_data: dict) -> dict:
         # Convert the dict to a hashable type (tuple of tuples)
         hashable_dict = self._dict_to_tuple(pictograph_data)
-        return self._get_motion_dicts_from_pictograph_data(hashable_dict)
+        return self._get_motion_dataset_from_pictograph_data(hashable_dict)
 
     @lru_cache(maxsize=None)
-    def _get_motion_dicts_from_pictograph_data(self, hashable_dict: tuple) -> dict:
+    def _get_motion_dataset_from_pictograph_data(self, hashable_dict: tuple) -> dict:
         # Convert the hashable dict back to a normal dict
         pictograph_data = self._tuple_to_dict(hashable_dict)
 
@@ -178,35 +178,35 @@ class PictographUpdater:
             "prop_rot_dir",
         ]
 
-        motion_dicts = {}
+        motion_dataset = {}
         for color in [RED, BLUE]:
-            motion_dict = pictograph_data.get(f"{color}_attributes", {})
-            motion_dicts[color] = {
-                attr: motion_dict.get(attr)
+            motion_data = pictograph_data.get(f"{color}_attributes", {})
+            motion_dataset[color] = {
+                attr: motion_data.get(attr)
                 for attr in motion_attributes
-                if attr in motion_dict
+                if attr in motion_data
             }
             if pictograph_data.get(f"{color}_attributes", {}).get(
                 "prefloat_motion_type", {}
             ):
-                motion_dicts[color]["prefloat_motion_type"] = pictograph_data.get(
+                motion_dataset[color]["prefloat_motion_type"] = pictograph_data.get(
                     f"{color}_attributes"
                 ).get("prefloat_motion_type")
             else:
-                motion_dicts[color]["prefloat_motion_type"] = motion_dicts[color].get(
-                    "motion_type"
-                )
+                motion_dataset[color]["prefloat_motion_type"] = motion_dataset[
+                    color
+                ].get("motion_type")
             if pictograph_data.get(f"{color}_attributes", {}).get(
                 "prefloat_prop_rot_dir", {}
             ):
-                motion_dicts[color]["prefloat_prop_rot_dir"] = pictograph_data.get(
+                motion_dataset[color]["prefloat_prop_rot_dir"] = pictograph_data.get(
                     f"{color}_attributes"
                 ).get("prefloat_prop_rot_dir")
             else:
-                motion_dicts[color]["prefloat_prop_rot_dir"] = motion_dicts[color].get(
-                    "prop_rot_dir"
-                )
-        return motion_dicts
+                motion_dataset[color]["prefloat_prop_rot_dir"] = motion_dataset[
+                    color
+                ].get("prop_rot_dir")
+        return motion_dataset
 
     def _dict_to_tuple(self, d: dict) -> tuple:  # Changed parameter name from dict->d
         """Recursively convert a dictionary to a hashable tuple of tuples, handling circular references."""

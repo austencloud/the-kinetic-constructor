@@ -29,9 +29,9 @@ class Motion:
     prefloat_motion_type: str = None
     prefloat_prop_rot_dir: str
 
-    def __init__(self, pictograph: "BasePictograph", motion_dict: dict) -> None:
+    def __init__(self, pictograph: "BasePictograph", motion_data: dict) -> None:
         self.pictograph = pictograph
-        self.motion_dict = motion_dict
+        self.motion_data = motion_data
         self.ori_calculator = MotionOriCalculator(self)
         self.attr_manager = MotionAttrManager(self)
         self.updater = MotionUpdater(self)

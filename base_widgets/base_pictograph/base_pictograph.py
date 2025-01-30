@@ -52,7 +52,7 @@ class BasePictograph(QGraphicsScene):
     arrows: dict[str, Arrow]
     locations: dict[str, tuple[int, int, int, int]]
     motions: dict[str, Motion]
-    motion_dict_list: list[dict]
+    motion_data_list: list[dict]
     pictograph_data: dict[str, Union[str, dict[str, str]]]
     props: dict[str, Prop]
 

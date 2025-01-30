@@ -223,7 +223,7 @@ class PictographInitializer:
         return arrow
 
     def _create_motion(self, color: str) -> Motion:
-        motion_dict = {
+        motion_data = {
             COLOR: color,
             ARROW: None,
             PROP: None,
@@ -234,4 +234,4 @@ class PictographInitializer:
             END_LOC: None,
             START_ORI: None,
         }
-        return Motion(self.pictograph, motion_dict)
+        return Motion(self.pictograph, motion_data)

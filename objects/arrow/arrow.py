@@ -19,9 +19,9 @@ class Arrow(GraphicalObject):
     loc: str = None
     initialized: bool = False
 
-    def __init__(self, pictograph, arrow_dict) -> None:
+    def __init__(self, pictograph, arrow_data) -> None:
         super().__init__(pictograph)
-        self.arrow_dict = arrow_dict
+        self.arrow_data = arrow_data
         self.pictograph: BasePictograph = pictograph
 
     def setup_components(self):

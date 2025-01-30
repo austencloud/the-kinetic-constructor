@@ -8,12 +8,12 @@ if TYPE_CHECKING:
 
 class BaseTurnsTupleGenerator:
     def _normalize_turns(self, motion: Motion) -> int:
-        if motion.motion_dict["turns"] == "fl":
+        if motion.motion_data["turns"] == "fl":
             return "fl"
         return (
-            int(motion.motion_dict["turns"])
-            if motion.motion_dict["turns"] in {0.0, 1.0, 2.0, 3.0}
-            else motion.motion_dict["turns"]
+            int(motion.motion_data["turns"])
+            if motion.motion_data["turns"] in {0.0, 1.0, 2.0, 3.0}
+            else motion.motion_data["turns"]
         )
 
     def set_pictograph(self, pictograph: "BasePictograph"):

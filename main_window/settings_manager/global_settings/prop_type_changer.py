@@ -25,12 +25,12 @@ class PropTypeChanger:
         old_prop = pictograph.props[color]
         old_prop.deleteLater()
         old_prop.hide()
-        old_prop_dict = old_prop.prop_dict
+        old_prop_data = old_prop.prop_data
         pictograph.props[color] = new_prop
         pictograph.addItem(new_prop)
         pictograph.motions[color].prop = new_prop
         new_prop.motion.attr_manager.update_prop_ori()
-        new_prop.updater.update_prop(old_prop_dict)
+        new_prop.updater.update_prop(old_prop_data)
 
     def _finalize_pictograph_update(self, pictograph: "BasePictograph"):
         pictograph.red_prop = pictograph.props[RED]

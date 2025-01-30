@@ -37,7 +37,7 @@ class PropFactory:
 
         if target_prop_type.name.lower() in self.prop_classes:
             return self.prop_classes[target_prop_type.name.lower()](
-                existing_prop.pictograph, existing_prop.prop_dict, existing_prop.motion
+                existing_prop.pictograph, existing_prop.prop_data, existing_prop.motion
             )
         else:
             raise ValueError(f"Unknown prop type: {target_prop_type}")

@@ -25,7 +25,7 @@ class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
             print("static_turns", static.turns)
 
         if shift.motion_type in [PRO, ANTI]:
-            if static.motion_dict["turns"] != 0 and static.prop_rot_dir != NO_ROT:
+            if static.motion_data["turns"] != 0 and static.prop_rot_dir != NO_ROT:
                 direction = "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
                 return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
             else:
