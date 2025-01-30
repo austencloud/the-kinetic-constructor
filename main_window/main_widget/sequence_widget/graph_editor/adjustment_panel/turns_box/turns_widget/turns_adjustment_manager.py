@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import QObject, Qt
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import pyqtSignal
+from data.constants import FLOAT
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
@@ -57,11 +58,13 @@ class TurnsAdjustmentManager(QObject):
         )
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.construct_tab.option_picker.updater.update_options()
+        self.json_updater = self.json_manager.updater
         QApplication.processEvents()
         for pictograph in [self.reference_beat, self.GE_pictograph]:
             self.turns_widget.turns_updater.adjust_turns_for_pictograph(
                 pictograph, new_turns
             )
+
         for motion in [matching_motion, GE_motion]:
             motion.turns = new_turns
             new_letter = self.get_new_letter(new_turns, motion)

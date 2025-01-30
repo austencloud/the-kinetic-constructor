@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 PropRotDir = str
 Turns = Union[int, float, str]
 
+
 class TurnsUpdater:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_widget = turns_widget
@@ -40,7 +41,6 @@ class TurnsUpdater:
         elif motion.turns == "fl" and new_turns != "fl":
             self._restore_motion_from_prefloat(motion, beat_index)
 
-        self._update_turns_in_json(motion, new_turns)
         self._update_motion_properties(motion, new_turns)
 
     def _calculate_beat_index(self) -> int:
@@ -74,21 +74,6 @@ class TurnsUpdater:
 
         motion.motion_type = motion.prefloat_motion_type
         motion.prop_rot_dir = motion.prefloat_prop_rot_dir
-
-    def _update_turns_in_json(self, motion: "Motion", new_turns: Turns) -> None:
-        """Update the turns value in the JSON data."""
-        if new_turns == "fl":
-            self.json_updater.turns_updater.set_turns_to_fl_from_num_in_json(
-                motion, new_turns
-            )
-        elif motion.motion_type == FLOAT and new_turns != "fl":
-            self.json_updater.turns_updater.set_turns_to_num_from_fl_in_json(
-                motion, new_turns
-            )
-        else:
-            self.json_updater.turns_updater.set_turns_from_num_to_num_in_json(
-                motion, new_turns
-            )
 
     def _update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
         """Update the motion's turns and rotation properties."""
@@ -144,31 +129,27 @@ class TurnsUpdater:
 
     def _get_motion_type_from_json(self, index: int, color: str) -> int:
         """Retrieve motion type from JSON at the given index."""
-        return self.json_manager.loader_saver.get_motion_type_from_json_at_index(
-            index, color
-        )
+        return self.json_manager.loader_saver.get_json_motion_type(index, color)
 
     def _get_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         """Retrieve prop rotation direction from JSON at the given index."""
-        return self.json_manager.loader_saver.get_prop_rot_dir_from_json(index, color)
+        return self.json_manager.loader_saver.get_json_prop_rot_dir(index, color)
 
     def _get_prefloat_motion_type_from_json(self, index: int, color: str) -> int:
         """Retrieve prefloat motion type from JSON at the given index."""
-        return (
-            self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
-                index, color
-            )
+        return self.json_manager.loader_saver.get_json_prefloat_motion_type(
+            index, color
         )
 
     def _get_prefloat_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         """Retrieve prefloat prop rotation direction from JSON at the given index."""
-        return self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+        return self.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
             index, color
         )
 
     def _update_prefloat_values_in_json(self, motion: "Motion", index: int) -> None:
         """Update prefloat values in JSON."""
-        self.json_updater.motion_type_updater.update_prefloat_motion_type_in_json(
+        self.json_updater.motion_type_updater.update_json_prefloat_motion_type(
             index, motion.color, motion.prefloat_motion_type
         )
         self.json_updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(

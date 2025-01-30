@@ -93,7 +93,7 @@ class LetterDeterminer:
     def _is_shift_prop_rot_dir_matching(self, motion: "Motion", example):
         is_rot_dir_matching = (
             example[f"{motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
             )
@@ -115,7 +115,7 @@ class LetterDeterminer:
             and example[f"{float_motion.color}_attributes"]["end_loc"]
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 float_motion.color,
             )
@@ -141,7 +141,7 @@ class LetterDeterminer:
             and example[f"{float_motion.color}_attributes"]["end_loc"]
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 float_motion.color,
             )

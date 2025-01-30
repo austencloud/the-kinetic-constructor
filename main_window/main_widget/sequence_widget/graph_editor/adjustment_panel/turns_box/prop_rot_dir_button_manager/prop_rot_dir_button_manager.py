@@ -144,10 +144,10 @@ class PropRotDirButtonManager:
                 json_index, new_letter.value
             )
         self.turns_box.turns_widget.motion_type_label.update_display(motion.motion_type)
-        json_updater.motion_type_updater.update_motion_type_in_json_at_index(
+        json_updater.motion_type_updater.update_json_motion_type(
             json_index, motion.color, motion.motion_type
         )
-        json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
+        json_updater.prop_rot_dir_updater.update_json_prop_rot_dir(
             json_index, motion.color, motion.prop_rot_dir
         )
         self.graph_editor.main_widget.json_manager.ori_validation_engine.run(

@@ -43,13 +43,15 @@ class DualFloatLetterDeterminer:
     def _update_json_with_prefloat_attributes(
         self, json_index: int, color: str, motion_type: str
     ) -> None:
-        self.main_widget.json_manager.updater.motion_type_updater.update_prefloat_motion_type_in_json(
+        self.main_widget.json_manager.updater.motion_type_updater.update_json_prefloat_motion_type(
             json_index, color, motion_type
         )
 
     def _get_prefloat_prop_rot_dir(self, json_index: int, motion: "Motion") -> str:
-        return self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-            json_index, motion.color
+        return (
+            self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
+                json_index, motion.color
+            )
         )
 
     def _get_opposite_rotation_direction(self, rotation_direction: str) -> str:
@@ -74,7 +76,7 @@ class DualFloatLetterDeterminer:
             and example[f"{other_motion.color}_attributes"]["end_loc"]
             == other_motion.end_loc
             and example[f"{other_motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self._get_json_index_for_current_beat(), other_motion.color
             )
         )
