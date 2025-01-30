@@ -24,7 +24,6 @@ class PictographUpdater:
             self.pictograph.get.initiallize_getter()
 
         if pictograph_data:
-            # Skip placeholder beats
             if pictograph_data.get("is_placeholder", False):
                 return
 
@@ -57,7 +56,7 @@ class PictographUpdater:
         return self.pictograph.end_pos[:-1]
 
     def _update_from_pictograph_data(self, pictograph_data: dict) -> None:
-        self.pictograph.attr_manager.update_attributes(pictograph_data)
+        self.pictograph.attr_manager.update_data(pictograph_data)
         motion_dataset = self._get_motion_dataset(pictograph_data)
         print(f"Motion Dicts: {motion_dataset}")
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)

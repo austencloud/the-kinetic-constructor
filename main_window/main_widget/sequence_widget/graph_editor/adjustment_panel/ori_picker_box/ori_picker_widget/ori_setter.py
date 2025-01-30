@@ -22,21 +22,19 @@ class OrientationSetter:
         """Apply the orientation to the related pictographs and data structures."""
         self._update_current_orientation_index(orientation)
         self._update_clickable_ori_label(orientation)
-        if len(self.json_manager.loader_saver.load_current_sequence_json()) == 2:
-            self._update_start_pos_ori(orientation)
-            self.update_graph_editor_orientation(orientation)
-            self._update_start_position_pictographs(orientation)
-            self._refresh_option_picker()
-        elif len(self.json_manager.loader_saver.load_current_sequence_json()) > 2 :
+        
+        if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
             self._update_start_pos_ori(orientation)
             self._update_start_position_pictographs(orientation)
+            self._update_graph_editor_orientation(orientation)
             self._refresh_option_picker()
         else:
             self._update_start_options(orientation)
             self._update_advanced_start_pos_picker(orientation)
+            
         self._update_beats_from_current_sequence_json()
 
-    def update_graph_editor_orientation(self, orientation: str) -> None:
+    def _update_graph_editor_orientation(self, orientation: str) -> None:
         self.ori_picker_box.graph_editor.pictograph_container.GE_pictograph.updater.update_pictograph(
             {
                 f"{self.color}_attributes": {

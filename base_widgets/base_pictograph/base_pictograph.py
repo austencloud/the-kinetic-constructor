@@ -31,7 +31,7 @@ from .glyphs.elemental_glyph.elemental_glyph import ElementalGlyph
 from .glyphs.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
 from .glyphs.tka.tka_glyph import TKA_Glyph
 from .glyphs.vtg.vtg_glyph import VTG_Glyph
-from .pictograph_attr_manager import PictographAttrManager
+from .pictograph_data_updater import PictographDataUpdater
 from .pictograph_checker import PictographChecker
 from .pictograph_getter import PictographGetter
 from .pictograph_view import PictographView
@@ -59,7 +59,7 @@ class BasePictograph(QGraphicsScene):
     # int
     arrow_turns: int
     # managers
-    attr_manager: PictographAttrManager
+    attr_manager: PictographDataUpdater
     arrow_placement_manager: ArrowPlacementManager
     prop_placement_manager: PropPlacementManager
     reversal_glyph: BeatReversalGroup
@@ -139,6 +139,6 @@ class BasePictograph(QGraphicsScene):
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
-        self.attr_manager = PictographAttrManager(self)
+        self.attr_manager = PictographDataUpdater(self)
         self.reversal_glyph = BeatReversalGroup(self)
         self.svg_manager = SvgManager(self)
