@@ -20,6 +20,8 @@ class MotionAttrManager:
         for attribute, value in motion_dict.items():
             if value is not None:
                 setattr(self.motion, attribute, value)
+                # print the motion attribute and value
+                print(f"Setting {attribute} to {value} for {self.motion}")
                 self.motion.motion_dict[attribute] = value  # Sync to motion_dict
         if self.motion.check.is_shift():
             if "prefloat_motion_type" not in motion_dict:

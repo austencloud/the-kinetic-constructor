@@ -12,7 +12,7 @@ class MotionUpdater:
     def update_motion(self, motion_dict: dict = None) -> None:
         if motion_dict:
             if motion_dict["turns"] == 1:
-                print(self.motion)
+                print(f"Setting turns to 1 for {self.motion}")
             self.motion.attr_manager.update_attributes(motion_dict)
         self.motion.turns_manager.set_motion_turns(motion_dict.get("turns"))
         if not self.motion.arrow.initialized:

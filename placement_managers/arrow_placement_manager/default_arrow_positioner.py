@@ -173,9 +173,9 @@ class DefaultArrowPositioner:
         # 5) Look up "turns" sub-dictionary
         if (
             adjustment_key in default_placements
-            and str(arrow.motion.turns) in default_placements[adjustment_key]
+            and str(arrow.motion.motion_dict["turns"]) in default_placements[adjustment_key]
         ):
-            return default_placements[adjustment_key][str(arrow.motion.turns)]
+            return default_placements[adjustment_key][str(arrow.motion.motion_dict["turns"])]
         else:
             # Fallback: no match for key or turns => (0, 0)
             return default_placements.get(motion_type, {}).get(
