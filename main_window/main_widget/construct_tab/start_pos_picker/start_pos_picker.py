@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 
 class StartPosPicker(BaseStartPosPicker):
     SPACING = 10
-    start_position_selected = pyqtSignal(BasePictograph)
     COLUMN_COUNT = 3
 
     def __init__(self, construct_tab: "ConstructTab"):

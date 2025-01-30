@@ -23,16 +23,12 @@ class StartPosPickerPictographFrame(QWidget):
         self.start_positions: dict[str, BasePictograph] = {}
 
     def resizeEvent(self, event) -> None:
-        # self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
         for button in self.variation_buttons.values():
             button.setMaximumWidth(
                 self.start_positions[list(self.start_positions.keys())[0]].view.width()
             )
 
     def _add_start_pos_to_layout(self, start_pos: BasePictograph) -> None:
-        # start_pos.view.mousePressEvent = self.option_click_handler.handle_click(
-        #     start_pos
-        # )
         self.pictographs_layout.addWidget(start_pos.view)
         self.start_pos_picker.start_options[start_pos.letter] = start_pos
         key = f"{start_pos.letter}_{start_pos.start_pos}_{start_pos.end_pos}"
