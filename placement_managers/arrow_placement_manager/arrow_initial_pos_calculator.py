@@ -16,7 +16,7 @@ class ArrowInitialPosCalculator:
         if arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
             return self._get_shift_coords(arrow)
         elif arrow.motion.motion_type in [STATIC, DASH]:
-            return self._get_static_coords(arrow)
+            return self._get_static_dash_coords(arrow)
 
     def _get_shift_coords(self, arrow: Arrow) -> QPointF:
         """
@@ -30,12 +30,12 @@ class ArrowInitialPosCalculator:
             print(f"Warning: Shift coordinate for '{point_name}' not found.")
             return QPointF(0, 0)
 
-    def _get_static_coords(self, arrow: Arrow) -> QPointF:
+    def _get_static_dash_coords(self, arrow: Arrow) -> QPointF:
         """
         Retrieves the coordinates for a given static point name.
         """
         point_name = f"{arrow.loc}_{arrow.pictograph.grid_mode}_hand_point"
-        coord = self.pictograph.grid.grid_data.get_static_coord(point_name)
+        coord = self.pictograph.grid.grid_data.get_static_dash_coord(point_name)
         if coord:
             return coord
         else:

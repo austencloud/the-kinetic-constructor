@@ -26,10 +26,7 @@ class ArrowLocationManager:
         )
         return calculator_class(self.arrow)
 
-    def update_location(self, location: str = None) -> None:
+    def update_location(self) -> None:
         self.calculator = self._select_calculator()
-        if location:
-            self.arrow.loc = location
-        else:
-            calculated_location = self.calculator.calculate_location()
-            self.arrow.loc = calculated_location
+        calculated_location = self.calculator.calculate_location()
+        self.arrow.loc = calculated_location

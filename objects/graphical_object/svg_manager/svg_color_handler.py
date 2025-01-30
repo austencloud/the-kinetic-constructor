@@ -27,4 +27,5 @@ class SvgColorHandler:
 
         svg_data = class_color_pattern.sub(replace_color, svg_data)
         svg_data = fill_pattern.sub(replace_color, svg_data)
+
         return svg_data
