@@ -17,7 +17,6 @@ class MotionAttrManager:
 
     def update_attributes(self, motion_dict: dict[str, str]) -> None:
         # print the dict
-        print(motion_dict)
         for attribute, value in motion_dict.items():
             if value is not None:
                 setattr(self.motion, attribute, value)

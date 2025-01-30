@@ -9,9 +9,12 @@ class MotionUpdater:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
 
-    def update_motion(self, motion_dict=None) -> None:
+    def update_motion(self, motion_dict: dict = None) -> None:
         if motion_dict:
+            if motion_dict["turns"] == 1:
+                print(self.motion)
             self.motion.attr_manager.update_attributes(motion_dict)
+        self.motion.turns_manager.set_motion_turns(motion_dict.get("turns"))
         if not self.motion.arrow.initialized:
             self.motion.arrow.setup_components()
         self.update_end_ori()

@@ -48,7 +48,7 @@ class TurnsAdjustmentManager(QObject):
             new_turns = self.convert_turn_floats_to_ints(new_turns)
 
         self.turns_widget.update_turns_display(matching_motion, new_turns)
-
+        matching_motion.turns = new_turns
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Union
 
 from data.constants import BLUE, RED
+
 Turns = Union[int, float, str]
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -48,13 +49,13 @@ class MotionTurnsManager:
 
     def set_motion_turns(self, turns: Union[str, int, float]) -> None:
         self.motion.turns = turns
-        print(self.motion)
-        print(self.motion.turns)
-        print(self.motion.color, self.motion.turns)
+        print(f"[DEBUG] Set {self.motion.color} motion turns to: {turns}")  # Debug log
+
         other_motion_color = RED if self.motion.color == BLUE else BLUE
         other_motion = self.motion.pictograph.get.other_motion(self.motion)
         arrow_dict = {
             f"{self.motion.color}_attributes": {"turns": turns},
             f"{other_motion_color}_attributes": {"turns": other_motion.turns},
         }
-        self.motion.arrow.updater.update_arrow(arrow_dict)
+        if hasattr(self.motion.arrow, "updater"):
+            self.motion.arrow.updater.update_arrow(arrow_dict)

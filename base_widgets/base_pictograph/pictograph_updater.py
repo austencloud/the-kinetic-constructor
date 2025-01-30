@@ -74,7 +74,6 @@ class PictographUpdater:
                 self.show_graphical_objects(motion.color)
             if motion_dicts[motion.color].get("turns", "") == "fl":
                 motion.turns = "fl"
-            print(f'updating motion: {motion}')
             motion.updater.update_motion(motion_dicts[motion.color])
         for motion in self.pictograph.motions.values():
             if motion.pictograph.letter in [
@@ -221,6 +220,7 @@ class PictographUpdater:
     def _position_objects(self) -> None:
         self.pictograph.prop_placement_manager.update_prop_positions()
         self.pictograph.arrow_placement_manager.update_arrow_placements()
+        self.pictograph.update()  # Add this line
 
     def update_dict_from_attributes(self) -> dict:
         pictograph_dict = self.pictograph.get.pictograph_dict()

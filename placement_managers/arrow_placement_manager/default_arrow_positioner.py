@@ -25,12 +25,6 @@ if TYPE_CHECKING:  # Replace with: if TYPE_CHECKING:
 
 
 class DefaultArrowPositioner:
-    """
-    A refactored version that loads BOTH diamond and box defaults up front,
-    preserves the exact `_get_adjustment_key` logic, and gracefully handles
-    pictographs that may lack `grid_mode`.
-    """
-
     def __init__(self, placement_manager: "ArrowPlacementManager"):
         self.placement_manager = placement_manager
         self.pictograph = placement_manager.pictograph
@@ -59,10 +53,6 @@ class DefaultArrowPositioner:
         self._load_all_default_placements()
 
     def _load_all_default_placements(self) -> None:
-        """
-        Load diamond AND box data for each motion type, so we never rely on
-        'pictograph.grid_mode' at init (avoiding 'Beat' object has no attribute grid_mode').
-        """
         motion_types = [PRO, ANTI, FLOAT, DASH, STATIC]
 
         for motion_type in motion_types:
@@ -85,9 +75,6 @@ class DefaultArrowPositioner:
             self.all_defaults["box"][motion_type] = box_data
 
     def _load_json(self, path: str) -> dict:
-        """
-        Safely load a JSON file. Returns an empty dict on error.
-        """
         try:
             with codecs.open(path, "r", encoding="utf-8") as file:
                 return json.load(file)
@@ -163,11 +150,6 @@ class DefaultArrowPositioner:
             return arrow.motion.motion_type
 
     def get_default_adjustment(self, arrow: Arrow) -> tuple[int, int]:
-        """
-        Use the arrow's motion_type and pictograph's grid_mode (fallback to 'diamond')
-        to find the correct dictionary in self.all_defaults. Then build the exact same
-        key via _get_adjustment_key, and look up offset data for arrow.motion.turns.
-        """
         # 1) Figure out motion type
         motion_type = arrow.motion.motion_type
 

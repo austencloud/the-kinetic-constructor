@@ -24,7 +24,7 @@ class ArrowSvgManager:
         start_ori = arrow.motion.start_ori
         if arrow.motion.motion_type == FLOAT:
             return get_images_and_data_path("images/arrows/float.svg")
-        arrow_turns: Union[str, int, float] = arrow.motion.turns
+        arrow_turns: Union[str, int, float] = arrow.motion.motion_dict['turns']
         if isinstance(arrow_turns, (int, float)):
             turns = float(arrow_turns)
         else:
