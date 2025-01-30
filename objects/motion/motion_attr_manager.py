@@ -17,6 +17,9 @@ class MotionAttrManager:
 
     def update_attributes(self, motion_dict: dict[str, str]) -> None:
         # print the dict
+        # if motion_dict has "turns", set motion.turns directly to it
+        if TURNS in motion_dict:
+            self.motion.turns = motion_dict[TURNS]
         for attribute, value in motion_dict.items():
             if value is not None:
                 setattr(self.motion, attribute, value)
