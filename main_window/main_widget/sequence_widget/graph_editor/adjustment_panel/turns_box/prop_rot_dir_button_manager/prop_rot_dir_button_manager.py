@@ -136,7 +136,7 @@ class PropRotDirButtonManager:
             beat.pictograph_dict["letter"] = new_letter.value
             beat.letter = new_letter
 
-        # beat.updater.update_pictograph(beat.pictograph_dict)
+        beat.updater.update_pictograph(beat.pictograph_dict)
         json_index = pictograph_index + 2
         json_updater = self.json_manager.updater
         if new_letter:

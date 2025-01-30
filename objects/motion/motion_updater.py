@@ -15,6 +15,7 @@ class MotionUpdater:
 
         if not self.motion.arrow.initialized:
             self.motion.arrow.setup_components()
+            
         self.update_end_ori()
         prop_dict = {
             LOC: self.motion.end_loc,
