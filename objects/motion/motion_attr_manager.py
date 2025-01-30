@@ -16,9 +16,12 @@ class MotionAttrManager:
         self.motion.motion_type = None
 
     def update_attributes(self, motion_dict: dict[str, str]) -> None:
+        # print the dict
+        print(motion_dict)
         for attribute, value in motion_dict.items():
             if value is not None:
                 setattr(self.motion, attribute, value)
+                self.motion.motion_dict[attribute] = value  # Sync to motion_dict
         if self.motion.check.is_shift():
             if "prefloat_motion_type" not in motion_dict:
                 if self.motion.motion_type != FLOAT:
@@ -27,9 +30,8 @@ class MotionAttrManager:
                 if motion_dict["prefloat_motion_type"] == FLOAT:
                     print("Warning: prefloat_motion_type cannot be 'float'")
                 else:
-                    self.motion.prefloat_motion_type = motion_dict[
-                        "prefloat_motion_type"
-                    ]
+                    prefloat_motion_type = motion_dict["prefloat_motion_type"]
+                    self.motion.prefloat_motion_type = prefloat_motion_type
             if "prefloat_prop_rot_dir" in motion_dict:
                 if motion_dict["prefloat_prop_rot_dir"] == NO_ROT:
                     print("Warning: prefloat_prop_rot_dir cannot be 'no_rot'")

@@ -50,6 +50,12 @@ class BeatDrawer:
             for col in range(start_col, column_count):
                 if beat_number < len(filled_beats):
                     beat_view = filled_beats[beat_number]
+                    print('drawing beats for beat number: ', beat_number)
+                    print(f"Blue motion dict for beat {beat_number}: {beat_view.beat.blue_motion.motion_dict}")
+                    print(f"Red motion dict for beat {beat_number}: {beat_view.beat.red_motion.motion_dict}")
+                    print("blue motion turns: ", beat_view.beat.blue_motion.turns)
+                    print(f"Red motion turns: {beat_view.beat.red_motion.turns}")  # ✅ Correct value                    # print the motion itself
+                    print(beat_view.beat.red_motion)
                     beat_pixmap = self._grab_pixmap(beat_view, beat_size, beat_size)
                     target_x = col * beat_size
                     target_y = row * beat_size + additional_height_top

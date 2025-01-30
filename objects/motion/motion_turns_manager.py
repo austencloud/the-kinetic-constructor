@@ -48,7 +48,9 @@ class MotionTurnsManager:
 
     def set_motion_turns(self, turns: Union[str, int, float]) -> None:
         self.motion.turns = turns
-        self.motion.arrow.motion.turns = turns
+        print(self.motion)
+        print(self.motion.turns)
+        print(self.motion.color, self.motion.turns)
         other_motion_color = RED if self.motion.color == BLUE else BLUE
         other_motion = self.motion.pictograph.get.other_motion(self.motion)
         arrow_dict = {

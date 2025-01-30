@@ -33,13 +33,14 @@ class BeatFramePopulator:
             return
 
         # self.beat_frame.deletion_manager.delete_start_pos()
+        self.beat_frame.updater.reset_beat_frame()
         self._set_start_position()
         self._update_sequence_layout()
         self._update_sequence_word()
         self._update_difficulty_level()
         self._populate_beats(select_beat=False)
         self._finalize_sequence()
-
+        self.beat_frame.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )
