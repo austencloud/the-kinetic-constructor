@@ -35,14 +35,13 @@ class ArrowAdjustmentCalculator:
                 ori_key, {}
             )
         )
-
+        letter = self.placement_manager.pictograph.letter.value
         if self.placement_manager.pictograph.letter not in special_placements:
             special_placements[self.placement_manager.pictograph.letter] = {}
 
         special_adjustment = self.get_adjustment_for_letter(
             self.placement_manager.pictograph.letter, arrow, turns_tuple, ori_key
         )
-
         x, y = (
             special_adjustment
             or self.placement_manager.default_positioner.get_default_adjustment(arrow)

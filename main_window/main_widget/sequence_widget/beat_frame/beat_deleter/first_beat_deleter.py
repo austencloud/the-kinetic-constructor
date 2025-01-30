@@ -20,7 +20,6 @@ class FirstBeatDeleter:
 
         panel = self.deleter.sequence_widget.graph_editor.adjustment_panel
         turns_boxes = [panel.red_turns_box, panel.blue_turns_box]
-        ori_pickers = [panel.blue_ori_picker, panel.red_ori_picker]
 
         for box in turns_boxes:
             widgets.extend(

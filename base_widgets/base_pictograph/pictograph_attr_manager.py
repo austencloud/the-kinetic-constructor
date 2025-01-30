@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import TYPE_CHECKING
 
 from Enums.Enums import Letter
@@ -13,7 +14,7 @@ class PictographAttrManager:
         self.pictograph = pictograph
 
     def update_attributes(self, pictograph_dict: dict) -> None:
-        for attr_name, attr_value in pictograph_dict.items():
+        for attr_name, attr_value in deepcopy(list(pictograph_dict.items())):
             if attr_name == LETTER:
                 attr_value = Letter.get_letter(attr_value)
                 self.pictograph.letter = attr_value

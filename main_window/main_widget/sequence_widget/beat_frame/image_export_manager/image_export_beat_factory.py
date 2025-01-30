@@ -3,17 +3,14 @@ from typing import TYPE_CHECKING, Union
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
-
 if TYPE_CHECKING:
     from .image_export_manager import ImageExportManager
     from main_window.main_widget.sequence_widget.beat_frame.sequence_beat_frame import (
         SequenceBeatFrame,
     )
-
     from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
         TempBeatFrame,
     )
-
 
 class ImageExportBeatFactory:
     def __init__(
@@ -35,23 +32,20 @@ class ImageExportBeatFactory:
             )
 
         filled_beats = []
-        current_beat_number = 1  # Start beat numbering from 1
+        current_beat_number = 1
 
-        for beat_data in sequence[2:]:  # Skip the metadata (first entry)
+        for beat_data in sequence[2:]:
             if beat_data.get("is_placeholder"):
-                continue  # Skip placeholder beats
+                continue
 
-            # Determine beat duration
             duration = beat_data.get("duration", 1)
 
-            # Create the beat view and assign it the correct beat range
             beat_view = self.create_beat_view_from_data(
                 beat_data, current_beat_number, temp_beat_frame
             )
 
             filled_beats.append(beat_view)
 
-            # Increment beat number by the duration of the current beat
             current_beat_number += duration
 
         return filled_beats
@@ -61,7 +55,6 @@ class ImageExportBeatFactory:
         beat = Beat(temp_beat_frame)
         beat.pictograph_dict = beat_data
         beat.updater.update_pictograph(beat_data)
-
-        # Set the beat with the actual number, not the display text
+        print(f"blue end_ori should be counter. It's: ", beat.blue_motion.end_ori)
         new_beat_view.set_beat(beat, number)
         return new_beat_view

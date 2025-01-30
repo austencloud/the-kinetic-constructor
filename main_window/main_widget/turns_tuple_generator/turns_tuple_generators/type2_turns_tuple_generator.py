@@ -18,8 +18,14 @@ class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
         static = (
             self.red_motion if self.red_motion.check.is_static() else self.blue_motion
         )
+        # check if the letter is Omega
+        if static.pictograph.letter.value == "Ω":
+            print("static_pictograph_letter", static.pictograph.letter.value)
+            print("Static Motion in Generator: ", static)
+            print("static_turns", static.turns)
+
         if shift.motion_type in [PRO, ANTI]:
-            if static.turns != 0 and static.prop_rot_dir != NO_ROT:
+            if static.motion_dict["turns"] != 0 and static.prop_rot_dir != NO_ROT:
                 direction = "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
                 return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
             else:

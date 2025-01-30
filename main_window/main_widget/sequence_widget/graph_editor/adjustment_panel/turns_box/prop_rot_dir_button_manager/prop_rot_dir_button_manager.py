@@ -69,12 +69,12 @@ class PropRotDirButtonManager:
         selected_beat = (
             self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat_view()
         )
-        both_beats: list[Beat] = [
+        both_pictographs: list[Beat] = [
             selected_beat.beat,
             self.graph_editor.pictograph_container.GE_view.pictograph,
         ]
 
-        for pictograph in both_beats:
+        for pictograph in both_pictographs:
             for motion in pictograph.motions.values():
                 if motion.color == self.turns_box.color:
                     motion.prop_rot_dir = prop_rot_dir
@@ -83,6 +83,7 @@ class PropRotDirButtonManager:
                         motion, swap_prop_rot_dir=True
                     )
                     self._update_pictograph_and_json(motion, new_letter)
+                    pictograph.update()
 
             pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
 
@@ -135,7 +136,7 @@ class PropRotDirButtonManager:
             beat.pictograph_dict["letter"] = new_letter.value
             beat.letter = new_letter
 
-        beat.updater.update_pictograph(beat.pictograph_dict)
+        # beat.updater.update_pictograph(beat.pictograph_dict)
         json_index = pictograph_index + 2
         json_updater = self.json_manager.updater
         if new_letter:
@@ -143,10 +144,10 @@ class PropRotDirButtonManager:
                 json_index, new_letter.value
             )
         self.turns_box.turns_widget.motion_type_label.update_display(motion.motion_type)
-        json_updater.motion_type_updater.update_motion_type_in_json_at_index(
+        json_updater.motion_type_updater.update_json_motion_type(
             json_index, motion.color, motion.motion_type
         )
-        json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
+        json_updater.prop_rot_dir_updater.update_json_prop_rot_dir(
             json_index, motion.color, motion.prop_rot_dir
         )
         self.graph_editor.main_widget.json_manager.ori_validation_engine.run(

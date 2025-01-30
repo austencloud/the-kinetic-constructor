@@ -94,7 +94,8 @@ class SequenceViewerActionButtonPanel(QWidget):
                 self.sequence_viewer.main_widget.main_construct_tab_index
             )
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-            populator = self.browse_tab.main_widget.sequence_widget.beat_frame.populator
+            beat_frame = self.browse_tab.main_widget.sequence_widget.beat_frame
+            populator = beat_frame.populator
             if sequence_json:
                 populator.populate_beat_frame_from_json(sequence_json["sequence"])
             else:

@@ -1,4 +1,6 @@
 from typing import TYPE_CHECKING
+
+from objects.motion.motion_turns_manager import MotionTurnsManager
 from .motion_checker import MotionChecker
 from .motion_attr_manager import MotionAttrManager
 from .motion_ori_calculator import MotionOriCalculator
@@ -34,3 +36,4 @@ class Motion:
         self.attr_manager = MotionAttrManager(self)
         self.updater = MotionUpdater(self)
         self.check = MotionChecker(self)
+        self.turns_manager = MotionTurnsManager(self)

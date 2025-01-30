@@ -9,9 +9,10 @@ class MotionUpdater:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
 
-    def update_motion(self, motion_dict=None) -> None:
+    def update_motion(self, motion_dict: dict = None) -> None:
         if motion_dict:
             self.motion.attr_manager.update_attributes(motion_dict)
+
         if not self.motion.arrow.initialized:
             self.motion.arrow.setup_components()
         self.update_end_ori()
