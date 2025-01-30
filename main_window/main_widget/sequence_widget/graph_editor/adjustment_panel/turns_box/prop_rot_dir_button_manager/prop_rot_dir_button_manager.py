@@ -69,12 +69,12 @@ class PropRotDirButtonManager:
         selected_beat = (
             self.graph_editor.sequence_widget.beat_frame.get.currently_selected_beat_view()
         )
-        both_beats: list[Beat] = [
+        both_pictographs: list[Beat] = [
             selected_beat.beat,
             self.graph_editor.pictograph_container.GE_view.pictograph,
         ]
 
-        for pictograph in both_beats:
+        for pictograph in both_pictographs:
             for motion in pictograph.motions.values():
                 if motion.color == self.turns_box.color:
                     motion.prop_rot_dir = prop_rot_dir
