@@ -43,7 +43,7 @@ class GraphEditorPictographContainer(QWidget):
         pictograph.blue_reversal = reference_beat.blue_reversal
         pictograph.red_reversal = reference_beat.red_reversal
 
-        pictograph.updater.update_pictograph(reference_beat.pictograph_dict)
+        pictograph.updater.update_pictograph(reference_beat.pictograph_data)
 
         beat_number_text = reference_beat.beat_number_item.beat_number_int
         if beat_number_text:

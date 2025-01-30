@@ -15,7 +15,7 @@ class MotionUpdater:
 
         if not self.motion.arrow.initialized:
             self.motion.arrow.setup_components()
-            
+
         self.update_end_ori()
         prop_dict = {
             LOC: self.motion.end_loc,
@@ -25,6 +25,6 @@ class MotionUpdater:
 
     def update_end_ori(self) -> None:
         self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
-        self.motion.pictograph.pictograph_dict[f"{self.motion.color}_attributes"][
+        self.motion.pictograph.pictograph_data[f"{self.motion.color}_attributes"][
             "end_ori"
         ] = self.motion.end_ori

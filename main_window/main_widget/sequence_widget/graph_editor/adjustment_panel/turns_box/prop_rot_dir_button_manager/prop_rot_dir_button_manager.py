@@ -93,7 +93,7 @@ class PropRotDirButtonManager:
                 ]
             )
             reversal_info = ReversalDetector.detect_reversal(
-                sequence_so_far, pictograph.pictograph_dict
+                sequence_so_far, pictograph.pictograph_data
             )
             pictograph.blue_reversal = reversal_info["blue_reversal"]
             pictograph.red_reversal = reversal_info["red_reversal"]
@@ -130,13 +130,13 @@ class PropRotDirButtonManager:
             "turns": motion.turns,
         }
 
-        beat.pictograph_dict[motion.color + "_attributes"].update(new_dict)
+        beat.pictograph_data[motion.color + "_attributes"].update(new_dict)
 
         if new_letter:
-            beat.pictograph_dict["letter"] = new_letter.value
+            beat.pictograph_data["letter"] = new_letter.value
             beat.letter = new_letter
 
-        beat.updater.update_pictograph(beat.pictograph_dict)
+        beat.updater.update_pictograph(beat.pictograph_data)
         json_index = pictograph_index + 2
         json_updater = self.json_manager.updater
         if new_letter:

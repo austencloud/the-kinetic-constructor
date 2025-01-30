@@ -12,10 +12,10 @@ class JsonStartPositionHandler:
         self.manager = manager
 
     def set_start_position_data(self, start_pos_pictograph: BasePictograph) -> None:
-        red_start_ori = start_pos_pictograph.pictograph_dict["red_attributes"][
+        red_start_ori = start_pos_pictograph.pictograph_data["red_attributes"][
             "start_ori"
         ]
-        blue_start_ori = start_pos_pictograph.pictograph_dict["blue_attributes"][
+        blue_start_ori = start_pos_pictograph.pictograph_data["blue_attributes"][
             "start_ori"
         ]
 

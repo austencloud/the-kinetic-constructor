@@ -25,8 +25,8 @@ class CodexDataManager:
         for letter in letters:
             params = self._get_pictograph_params(letter)
             if params:
-                pictograph_dict = (
-                    self.main_widget.pictograph_dict_loader.find_pictograph_dict(
+                pictograph_data = (
+                    self.main_widget.pictograph_data_loader.find_pictograph_data(
                         {
                             "letter": letter,
                             "start_pos": params["start_pos"],
@@ -36,7 +36,7 @@ class CodexDataManager:
                         }
                     )
                 )
-                pictograph_data[letter] = pictograph_dict
+                pictograph_data[letter] = pictograph_data
             else:
                 pictograph_data[letter] = None  # Or handle as needed
 

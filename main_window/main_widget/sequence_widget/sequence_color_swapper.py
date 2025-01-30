@@ -38,7 +38,7 @@ class SequenceColorSwapper(BaseSequenceModifier):
         swapped_sequence.append(metadata)
 
         start_pos_beat_dict: dict = (
-            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
+            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_data.copy()
         )
         self._color_swap_dict(start_pos_beat_dict)
         swapped_sequence.append(start_pos_beat_dict)

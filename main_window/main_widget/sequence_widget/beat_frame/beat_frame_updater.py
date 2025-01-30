@@ -44,7 +44,7 @@ class BeatFrameUpdater:
                     ]
                 )
                 reversal_info = ReversalDetector.detect_reversal(
-                    sequence_so_far, beat.pictograph_dict
+                    sequence_so_far, beat.pictograph_data
                 )
                 beat.blue_reversal = reversal_info["blue_reversal"]
                 beat.red_reversal = reversal_info["red_reversal"]

@@ -60,7 +60,7 @@ class Grid:
 
     def update_grid_mode(self):
         grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
-            self.pictograph.pictograph_dict
+            self.pictograph.pictograph_data
         )
         self.pictograph.grid.hide()
         self.pictograph.grid.__init__(

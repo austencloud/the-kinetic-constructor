@@ -44,7 +44,6 @@ class OptionUpdater:
 
         _refresh_options()
 
-
     def update_options(self):
         # @self.profiler.profile
         def _update_options():
@@ -59,13 +58,14 @@ class OptionUpdater:
             for section in self.option_picker.option_scroll.sections.values():
                 section.clear_pictographs()
 
-            for i, pictograph_dict in enumerate(next_options):
+            for i, pictograph_data in enumerate(next_options):
                 pictograph = self.option_picker.option_pool[i]
-                pictograph.updater.update_pictograph(pictograph_dict)
+                pictograph.updater.update_pictograph(pictograph_data)
                 pictograph.view.update_borders()
                 self.scroll_area.sections[
                     LetterType.get_letter_type(pictograph.letter)
                 ].add_pictograph(pictograph)
+
         self.profiler.enable()
 
         _update_options()

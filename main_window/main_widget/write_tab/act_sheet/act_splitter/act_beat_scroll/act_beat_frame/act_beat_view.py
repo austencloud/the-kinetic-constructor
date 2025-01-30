@@ -45,7 +45,7 @@ class ActBeatView(QGraphicsView):
         """Extract beat data for saving in act JSON."""
         return {
             "beat_number": self.get_beat_number_in_act_beat_frame(),
-            "pictograph_dict": self.beat.pictograph_dict,
+            "pictograph_data": self.beat.pictograph_data,
         }
 
     def get_beat_number_in_act_beat_frame(self):

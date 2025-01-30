@@ -14,8 +14,8 @@ class OriUpdater:
         self.turns_widget = ori_picker_widget
 
     def set_motion_turns(self, motion: "Motion", new_turns: int) -> None:
-        pictograph_dict = {f"{motion.color}_turns": new_turns}
-        motion.pictograph.updater.update_pictograph(pictograph_dict)
+        pictograph_data = {f"{motion.color}_turns": new_turns}
+        motion.pictograph.updater.update_pictograph(pictograph_data)
 
     def _adjust_turns_for_pictograph(
         self, pictograph: "BasePictograph", adjustment: int

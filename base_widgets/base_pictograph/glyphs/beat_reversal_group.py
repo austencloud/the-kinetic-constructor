@@ -40,7 +40,7 @@ class BeatReversalGroup(QGraphicsItemGroup):
             json_loader = self.pictograph.main_widget.json_manager.loader_saver
             sequence_so_far = json_loader.load_current_sequence_json()
             reversal_dict = ReversalDetector.detect_reversal(
-                sequence_so_far, self.pictograph.pictograph_dict
+                sequence_so_far, self.pictograph.pictograph_data
             )
             blue_visible = reversal_dict.get("blue_reversal", False)
             red_visible = reversal_dict.get("red_reversal", False)

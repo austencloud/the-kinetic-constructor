@@ -52,20 +52,20 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
         num_pictographs = len(pictographs)
         rows = (num_pictographs + self.columns - 1) // self.columns  # Ceiling division
 
-        for index, pictograph_dict in enumerate(pictographs):
-            key = self.key_generator.generate_pictograph_key(pictograph_dict)
+        for index, pictograph_data in enumerate(pictographs):
+            key = self.key_generator.generate_pictograph_key(pictograph_data)
             pictograph = BasePictograph(self.lesson_2_widget.main_widget)
             view = LessonPictographView(pictograph)
             pictograph.view = view
             pictograph.disable_gold_overlay = False
-            pictograph.updater.update_pictograph(pictograph_dict)
+            pictograph.updater.update_pictograph(pictograph_data)
             pictograph.view.update_borders()
             self.pictographs[key] = pictograph
             pictograph.quiz_mode = True
             pictograph.tka_glyph.setVisible(False)
 
             view.mousePressEvent = (
-                lambda event, opt=pictograph_dict: check_answer_callback(
+                lambda event, opt=pictograph_data: check_answer_callback(
                     opt, correct_pictograph
                 )
             )

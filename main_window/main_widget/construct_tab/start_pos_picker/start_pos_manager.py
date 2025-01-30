@@ -89,12 +89,12 @@ class StartPosManager(QObject):
     def get_box_variations(self) -> list[BasePictograph]:
         """Retrieve box mode variations (without using a global or context manager)."""
         box_variations = []
-        for letter, pictograph_dicts in self.main_widget.pictograph_dicts.items():
-            for pictograph_dict in pictograph_dicts:
+        for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
+            for pictograph_data in pictograph_datas:
                 # Only create if it’s in box_positions
-                if pictograph_dict["start_pos"] in box_positions:
+                if pictograph_data["start_pos"] in box_positions:
                     # We supply 'BOX' as the local grid mode
-                    pictograph = self.create_pictograph_from_dict(pictograph_dict, BOX)
+                    pictograph = self.create_pictograph_from_dict(pictograph_data, BOX)
                     box_variations.append(pictograph)
 
         return box_variations
@@ -102,11 +102,11 @@ class StartPosManager(QObject):
     def get_diamond_variations(self) -> list[BasePictograph]:
         """Retrieve diamond mode variations."""
         diamond_variations = []
-        for letter, pictograph_dicts in self.main_widget.pictograph_dicts.items():
-            for pictograph_dict in pictograph_dicts:
-                if pictograph_dict["start_pos"] in diamond_positions:
+        for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
+            for pictograph_data in pictograph_datas:
+                if pictograph_data["start_pos"] in diamond_positions:
                     pictograph = self.create_pictograph_from_dict(
-                        pictograph_dict, DIAMOND
+                        pictograph_data, DIAMOND
                     )
                     diamond_variations.append(pictograph)
 
@@ -121,14 +121,14 @@ class StartPosManager(QObject):
         """
         start_pos, end_pos = position_key.split("_")
 
-        for letter, pictograph_dicts in self.main_widget.pictograph_dicts.items():
-            for pictograph_dict in pictograph_dicts:
+        for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
+            for pictograph_data in pictograph_datas:
                 if (
-                    pictograph_dict[START_POS] == start_pos
-                    and pictograph_dict[END_POS] == end_pos
+                    pictograph_data[START_POS] == start_pos
+                    and pictograph_data[END_POS] == end_pos
                 ):
                     pictograph = self.create_pictograph_from_dict(
-                        pictograph_dict, grid_mode
+                        pictograph_data, grid_mode
                     )
                     self.start_options[letter] = pictograph
 
@@ -156,7 +156,7 @@ class StartPosManager(QObject):
 
         # Copy and set the data to the start_position_beat
         start_position_beat.updater.update_pictograph(
-            deepcopy(clicked_start_option.pictograph_dict)
+            deepcopy(clicked_start_option.pictograph_data)
         )
 
         seq_widget.beat_frame.start_pos_view.set_start_pos(start_position_beat)
@@ -190,7 +190,7 @@ class StartPosManager(QObject):
         start_pos_beat = StartPositionBeat(self.main_widget.sequence_widget.beat_frame)
 
         start_pos_beat.updater.update_pictograph(
-            start_position_pictograph.pictograph_dict
+            start_position_pictograph.pictograph_data
         )
         return start_pos_beat
 
@@ -201,15 +201,15 @@ class StartPosManager(QObject):
         start_pos_key = start_pos_data["end_pos"]
         letter_str = self.start_pos_key_to_letter(start_pos_key)
         letter = Letter(letter_str)
-        matching_letter_pictographs = self.main_widget.pictograph_dicts.get(letter, [])
+        matching_letter_pictographs = self.main_widget.pictograph_datas.get(letter, [])
 
-        for pictograph_dict in matching_letter_pictographs:
-            if pictograph_dict["start_pos"] == start_pos_key:
+        for pictograph_data in matching_letter_pictographs:
+            if pictograph_data["start_pos"] == start_pos_key:
                 # Transfer orientation data
-                pictograph_dict["blue_attributes"]["start_ori"] = start_pos_data[
+                pictograph_data["blue_attributes"]["start_ori"] = start_pos_data[
                     "blue_attributes"
                 ]["end_ori"]
-                pictograph_dict["red_attributes"]["start_ori"] = start_pos_data[
+                pictograph_data["red_attributes"]["start_ori"] = start_pos_data[
                     "red_attributes"
                 ]["end_ori"]
 
@@ -219,11 +219,11 @@ class StartPosManager(QObject):
                 )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                        pictograph_dict
+                        pictograph_data
                     )
                 )
                 start_pos_pictograph = pictograph_factory.create_start_pos_beat(
-                    pictograph_key, pictograph_dict
+                    pictograph_key, pictograph_data
                 )
                 return start_pos_pictograph
 
@@ -239,13 +239,13 @@ class StartPosManager(QObject):
         return None
 
     def create_pictograph_from_dict(
-        self, pictograph_dict: dict, target_grid_mode: str
+        self, pictograph_data: dict, target_grid_mode: str
     ) -> BasePictograph:
         """
         Create a pictograph with a local 'grid_mode' in its dictionary,
         no context manager or global flips.
         """
-        local_dict = deepcopy(pictograph_dict)
+        local_dict = deepcopy(pictograph_data)
         local_dict["grid_mode"] = target_grid_mode
 
         pictograph = BasePictograph(self.main_widget)

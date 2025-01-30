@@ -95,7 +95,7 @@ class PictographGetter:
         generator = self.pictograph.main_widget.turns_tuple_generator
         return generator.generate_turns_tuple(self.pictograph)
 
-    def pictograph_dict(self) -> dict:
+    def pictograph_data(self) -> dict:
         return {
             "letter": self.pictograph.letter.value,
             "start_pos": self.pictograph.start_pos,

@@ -1,5 +1,3 @@
-
-
 # From grid.py
 from typing import TYPE_CHECKING
 
@@ -63,7 +61,7 @@ class Grid:
 
     def update_grid_mode(self):
         grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
-            self.pictograph.pictograph_dict
+            self.pictograph.pictograph_data
         )
         self.pictograph.grid.hide()
         self.pictograph.grid.__init__(
@@ -215,7 +213,6 @@ from PyQt6.QtGui import QBrush, QPen, QColor
 from PyQt6.QtCore import QPointF, Qt
 
 
-
 class NonRadialGridPoint(QGraphicsEllipseItem):
     def __init__(self, x, y, r, point_id):
         super().__init__(-r, -r, 2 * r, 2 * r)
@@ -265,6 +262,3 @@ class NonRadialPointsGroup(QGraphicsItemGroup):
             point = NonRadialGridPoint(cx, cy, r, point_id)
             point.setParentItem(self)  # Add point to the group
             self.child_points.append(point)
-
-
-

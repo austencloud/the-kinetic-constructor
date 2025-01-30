@@ -45,7 +45,7 @@ SVG_PATHS = {
 
 class VTG_Glyph(QGraphicsSvgItem):
     name = "VTG"
-    
+
     def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
@@ -95,7 +95,7 @@ class VTG_Glyph(QGraphicsSvgItem):
         letter_str = self.pictograph.letter.value
         start_pos = self.pictograph.start_pos
         grid_mode = self.pictograph.main_widget.grid_mode_checker.get_grid_mode(
-            self.pictograph.pictograph_dict
+            self.pictograph.pictograph_data
         )
 
         mode_mapping = {

@@ -31,16 +31,16 @@ class AddToSequenceManager:
 
         new_beat = Beat(clicked_option.main_widget.sequence_widget.beat_frame)
         new_beat.setSceneRect(clicked_option.sceneRect())
-        pictograph_dict = clicked_option.get.pictograph_dict()
+        pictograph_data = clicked_option.get.pictograph_data()
 
-        pictograph_dict["duration"] = 1
-        pictograph_dict = dict(
-            list(pictograph_dict.items())[:1]
+        pictograph_data["duration"] = 1
+        pictograph_data = dict(
+            list(pictograph_data.items())[:1]
             + [("duration", 1)]
-            + list(pictograph_dict.items())[1:]
+            + list(pictograph_data.items())[1:]
         )
 
-        new_beat.updater.update_pictograph(pictograph_dict)
+        new_beat.updater.update_pictograph(pictograph_data)
         self.construct_tab.last_beat = new_beat
         SW_beat_frame = self.construct_tab.main_widget.sequence_widget.beat_frame
         if not SW_beat_frame.sequence_changed:

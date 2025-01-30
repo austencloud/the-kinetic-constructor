@@ -26,11 +26,11 @@ class VisibilityPictograph(BasePictograph):
         super().__init__(tab.main_widget)
         self.tab = tab
         self.main_widget = tab.main_widget
-        pictograph_dict = self.main_widget.pictograph_dict_loader.find_pictograph_dict(
+        pictograph_data = self.main_widget.pictograph_data_loader.find_pictograph_data(
             self.example_data
         )
         self.settings = self.main_widget.settings_manager.visibility
-        self.updater.update_pictograph(pictograph_dict)
+        self.updater.update_pictograph(pictograph_data)
         self.glyphs = self.get.glyphs()
         for glyph in self.glyphs:
             glyph.setVisible(True)

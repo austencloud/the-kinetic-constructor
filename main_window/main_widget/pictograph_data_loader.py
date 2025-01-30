@@ -9,38 +9,27 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class PictographDictLoader:
+class PictographDataLoader:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 
-    def load_all_pictograph_dicts(self) -> dict[Letter, list[dict]]:
-        # Load both Box and Diamond CSV files
+    def load_all_pictograph_data(self) -> dict[Letter, list[dict]]:
         diamond_csv_path = get_images_and_data_path(
             "data/DiamondPictographDataframe.csv"
         )
         box_csv_path = get_images_and_data_path("data/BoxPictographDataframe.csv")
-
-        # Read both CSVs and combine them
         diamond_df = pd.read_csv(diamond_csv_path)
         box_df = pd.read_csv(box_csv_path)
-
-        # Combine the dataframes, ensuring the columns are aligned
         combined_df = pd.concat([diamond_df, box_df], ignore_index=True)
         combined_df = combined_df.sort_values(by=[LETTER, START_POS, END_POS])
-
-        # Apply necessary transformations
-        combined_df = self.add_turns_and_ori_to_pictograph_dict(combined_df)
+        combined_df = self.add_turns_and_ori_to_pictograph_data(combined_df)
         combined_df = self.restructure_dataframe_for_new_json_format(combined_df)
-
-        # Create the dictionary with letters as keys and records as values
         letters = {
             self.get_letter_enum_by_value(letter_str): combined_df[
                 combined_df[LETTER] == letter_str
             ].to_dict(orient="records")
             for letter_str in combined_df[LETTER].unique()
         }
-
-        # Convert the turns to integers or floats in the dictionary
         self._convert_turns_str_to_int_or_float(letters)
         return letters
 
@@ -54,14 +43,12 @@ class PictographDictLoader:
                     motion["red_attributes"]["turns"]
                 )
 
-    def add_turns_and_ori_to_pictograph_dict(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Example logic for assigning turns and orientations; adjust according to your specific needs
+    def add_turns_and_ori_to_pictograph_data(self, df: pd.DataFrame) -> pd.DataFrame:
         for index, row in df.iterrows():
-            # Placeholder logic for turns and orientation assignments; replace with your actual logic
-            df.at[index, "blue_turns"] = 0  # Assign turns as integer
-            df.at[index, "red_turns"] = 0  # Assign turns as integer
-            df.at[index, "blue_start_ori"] = IN  # Assuming IN is a predefined variable
-            df.at[index, "red_start_ori"] = IN  # Assuming IN is a predefined variable
+            df.at[index, "blue_turns"] = 0
+            df.at[index, "red_turns"] = 0
+            df.at[index, "blue_start_ori"] = IN
+            df.at[index, "red_start_ori"] = IN
         return df
 
     def restructure_dataframe_for_new_json_format(
@@ -81,8 +68,6 @@ class PictographDictLoader:
             lambda row: nest_attributes(row, "blue"), axis=1
         )
         df["red_attributes"] = df.apply(lambda row: nest_attributes(row, "red"), axis=1)
-
-        # Drop the old, now unnecessary columns
         blue_columns = [
             "blue_motion_type",
             "blue_prop_rot_dir",
@@ -100,7 +85,6 @@ class PictographDictLoader:
             "red_start_ori",
         ]
         df = df.drop(columns=blue_columns + red_columns)
-
         return df
 
     @staticmethod
@@ -110,8 +94,7 @@ class PictographDictLoader:
                 return letter
         raise ValueError(f"No matching Letters enum for value: {letter_value}")
 
-    def find_pictograph_dict(self, simplified_dict: dict) -> Optional[dict]:
-        """Find and return the appropriate pictograph dictionary."""
+    def find_pictograph_data(self, simplified_dict: dict) -> Optional[dict]:
         from Enums.letters import Letter
 
         target_letter = next(
@@ -123,7 +106,7 @@ class PictographDictLoader:
             )
             return None
 
-        letter_dicts = self.main_widget.pictograph_dicts.get(target_letter, [])
+        letter_dicts = self.main_widget.pictograph_datas.get(target_letter, [])
         for pdict in letter_dicts:
             if (
                 pdict.get("start_pos") == simplified_dict["start_pos"]

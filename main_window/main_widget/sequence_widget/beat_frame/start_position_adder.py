@@ -22,7 +22,7 @@ class StartPositionAdder:
         start_pos_view = self.beat_frame.start_pos_view
         self.main_widget.construct_tab.last_beat = start_pos_beat
         self.construct_tab = self.main_widget.construct_tab
-        start_pos_dict = clicked_start_option.pictograph_dict
+        start_pos_dict = clicked_start_option.pictograph_data
 
         start_pos_beat.updater.update_pictograph(deepcopy(start_pos_dict))
         clicked_start_option.updater.update_dict_from_attributes()

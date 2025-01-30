@@ -24,6 +24,7 @@ from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 
 if TYPE_CHECKING:
+    from main_window.main_widget.pictograph_data_loader import PictographDataLoader
     from main_window.settings_manager.settings_manager import SettingsManager
     from main_window.menu_bar.menu_bar import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
@@ -49,7 +50,6 @@ if TYPE_CHECKING:
     from .thumbnail_finder import ThumbnailFinder
     from .grid_mode_checker import GridModeChecker
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from .pictograph_dict_loader import PictographDictLoader
     from Enums.Enums import Letter
     from letter_determiner.letter_determiner import LetterDeterminer
 
@@ -131,8 +131,8 @@ class MainWidget(QWidget):
     # Other attributes
     pictograph_cache: dict[str, dict[str, "BasePictograph"]]
     prop_type: PropType
-    pictograph_dict_loader: "PictographDictLoader"
-    pictograph_dicts: dict["Letter", list[dict]]
+    pictograph_data_loader: "PictographDataLoader"
+    pictograph_datas: dict["Letter", list[dict]]
     letter_determiner: "LetterDeterminer"
     special_placements: dict[str, dict[str, dict[str, dict[str, list[int]]]]]
 

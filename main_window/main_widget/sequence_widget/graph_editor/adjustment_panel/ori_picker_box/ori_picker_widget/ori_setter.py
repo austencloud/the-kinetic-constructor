@@ -84,11 +84,11 @@ class OrientationSetter:
         self, start_pos_pictograph: "BasePictograph", color: str
     ) -> None:
         if color == BLUE:
-            initial_orientation = start_pos_pictograph.pictograph_dict[
+            initial_orientation = start_pos_pictograph.pictograph_data[
                 "blue_attributes"
             ][START_ORI]
         else:
-            initial_orientation = start_pos_pictograph.pictograph_dict[
+            initial_orientation = start_pos_pictograph.pictograph_data[
                 "red_attributes"
             ][START_ORI]
         self.current_orientation_index = self.ori_picker_widget.orientations.index(

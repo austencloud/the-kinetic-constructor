@@ -35,9 +35,9 @@ class BeatFrameGetter:
         word = ""
         for beat_view in self.beat_frame.beat_views:
             if beat_view.is_filled:
-                if beat_view.beat.pictograph_dict.get("is_placeholder", False):
+                if beat_view.beat.pictograph_data.get("is_placeholder", False):
                     continue
-                word += beat_view.beat.pictograph_dict.get("letter", "")
+                word += beat_view.beat.pictograph_data.get("letter", "")
         return WordSimplifier.simplify_repeated_word(word)
 
     def index_of_currently_selected_beat(self) -> int:
@@ -92,7 +92,7 @@ class BeatFrameGetter:
 
     def beat_dicts(self):
         return [
-            beat.beat.get.pictograph_dict()
+            beat.beat.get.pictograph_data()
             for beat in self.beat_frame.beat_views
             if beat.is_filled
         ]

@@ -12,6 +12,7 @@ if TYPE_CHECKING:
         TempBeatFrame,
     )
 
+
 class ImageExportBeatFactory:
     def __init__(
         self,
@@ -53,7 +54,7 @@ class ImageExportBeatFactory:
     def create_beat_view_from_data(self, beat_data, number, temp_beat_frame):
         new_beat_view = BeatView(temp_beat_frame)
         beat = Beat(temp_beat_frame)
-        beat.pictograph_dict = beat_data
+        beat.pictograph_data = beat_data
         beat.updater.update_pictograph(beat_data)
         print(f"blue end_ori should be counter. It's: ", beat.blue_motion.end_ori)
         new_beat_view.set_beat(beat, number)

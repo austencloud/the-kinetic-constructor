@@ -29,7 +29,7 @@ class JsonSequenceUpdater:
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
 
-        beat_data = beat.pictograph_dict.copy()
+        beat_data = beat.pictograph_data.copy()
         beat_data["duration"] = beat.duration
         number = self.get_next_beat_number(sequence_beats)
         view.number = number

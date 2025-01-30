@@ -26,14 +26,14 @@ class BeatFactory:
         self.main_widget = beat_frame.main_widget
 
     def create_start_pos_beat(
-        self, pictograph_key: str, pictograph_dict=None
+        self, pictograph_key: str, pictograph_data=None
     ) -> StartPositionBeat:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
 
-        if pictograph_dict is not None:
+        if pictograph_data is not None:
             start_pos_beat = StartPositionBeat(self.beat_frame)
-            start_pos_beat.updater.update_pictograph(pictograph_dict)
+            start_pos_beat.updater.update_pictograph(pictograph_data)
 
             if letter not in self.pictograph_cache:
                 self.pictograph_cache[letter] = {}
@@ -50,19 +50,20 @@ class BeatFactory:
 
     def create_new_beat_and_add_to_sequence(
         self,
-        pictograph_dict: dict,
+        pictograph_data: dict,
         override_grow_sequence=False,
         update_word=True,
         update_level=True,
         reversal_info=None,
         select_beat: bool = True,
     ) -> None:
-        new_beat = Beat(self.beat_frame, duration=pictograph_dict.get("duration", 1))
-        new_beat.updater.update_pictograph(pictograph_dict)
+        new_beat = Beat(self.beat_frame, duration=pictograph_data.get("duration", 1))
+        new_beat.updater.update_pictograph(pictograph_data)
 
         if reversal_info:
             new_beat.blue_reversal = reversal_info.get("blue_reversal", False)
             new_beat.red_reversal = reversal_info.get("red_reversal", False)
+
         self.beat_frame.beat_adder.add_beat_to_sequence(
             new_beat,
             override_grow_sequence=override_grow_sequence,

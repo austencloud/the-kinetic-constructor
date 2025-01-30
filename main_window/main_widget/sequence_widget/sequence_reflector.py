@@ -40,7 +40,7 @@ class SequenceReflector(BaseSequenceModifier):
         mirrored_sequence = [metadata]
 
         start_pos_beat_dict = (
-            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_dict.copy()
+            self.sequence_widget.beat_frame.start_pos_view.start_pos.pictograph_data.copy()
         )
         self._reflect_dict(start_pos_beat_dict)
         mirrored_sequence.append(start_pos_beat_dict)
@@ -62,16 +62,16 @@ class SequenceReflector(BaseSequenceModifier):
 
         return mirrored_sequence
 
-    def _reflect_dict(self, pictograph_dict):
+    def _reflect_dict(self, pictograph_data):
         for key in ["start_pos", "end_pos"]:
-            if key in pictograph_dict:
-                pictograph_dict[key] = self.vertical_mirror_positions.get(
-                    pictograph_dict[key], pictograph_dict[key]
+            if key in pictograph_data:
+                pictograph_data[key] = self.vertical_mirror_positions.get(
+                    pictograph_data[key], pictograph_data[key]
                 )
 
         for color in ["blue_attributes", "red_attributes"]:
-            if color in pictograph_dict:
-                attributes = pictograph_dict[color]
+            if color in pictograph_data:
+                attributes = pictograph_data[color]
                 for loc_key in ["start_loc", "end_loc"]:
                     if loc_key in attributes:
                         attributes[loc_key] = vertical_loc_mirror_map.get(
@@ -81,7 +81,7 @@ class SequenceReflector(BaseSequenceModifier):
                     prop_rot_dir = attributes["prop_rot_dir"]
                     attributes["prop_rot_dir"] = self.swap_dir(prop_rot_dir)
 
-        return pictograph_dict
+        return pictograph_data
 
     def swap_dir(self, prop_rot_dir):
         return (

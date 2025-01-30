@@ -46,13 +46,13 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         self.layout.addStretch(1)
 
     def create_pictograph_from_dict(
-        self, pictograph_dict: dict, target_grid_mode: str
+        self, pictograph_data: dict, target_grid_mode: str
     ) -> BasePictograph:
-        pictograph_key = self.generate_pictograph_key(pictograph_dict, target_grid_mode)
+        pictograph_key = self.generate_pictograph_key(pictograph_data, target_grid_mode)
         if pictograph_key in self.pictograph_cache:
             return self.pictograph_cache[pictograph_key]
 
-        local_dict = deepcopy(pictograph_dict)
+        local_dict = deepcopy(pictograph_data)
         local_dict["grid_mode"] = target_grid_mode
 
         pictograph = BasePictograph(self.main_widget)

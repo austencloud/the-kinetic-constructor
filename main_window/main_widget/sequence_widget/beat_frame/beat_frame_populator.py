@@ -79,17 +79,17 @@ class BeatFramePopulator:
         self.sequence_widget.current_word_label.set_current_word(self.current_word)
 
     def _populate_beats(self, select_beat=True):
-        for _, pictograph_dict in enumerate(self.current_sequence_json[1:]):
-            if pictograph_dict.get("sequence_start_position"):
+        for _, pictograph_data in enumerate(self.current_sequence_json[1:]):
+            if pictograph_data.get("sequence_start_position"):
                 continue
-            if pictograph_dict.get("is_placeholder", False):
+            if pictograph_data.get("is_placeholder", False):
                 continue
             else:
                 reversal_info = ReversalDetector.detect_reversal(
-                    self.current_sequence_json, pictograph_dict
+                    self.current_sequence_json, pictograph_data
                 )
                 self.sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
-                    pictograph_dict,
+                    pictograph_data,
                     override_grow_sequence=True,
                     update_word=False,
                     update_level=False,

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class LetterDeterminer:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
-        self.letters = self.main_widget.pictograph_dicts
+        self.letters = self.main_widget.pictograph_datas
         self.non_hybrid_shift_letter_determiner = NonHybridShiftLetterDeterminer(self)
         self.dual_float_letter_determiner = DualFloatLetterDeterminer(self)
         self.beat_frame = None

@@ -91,14 +91,14 @@ class StartPosPicker(BaseStartPosPicker):
             self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
         )
         start_pos, end_pos = position_key.split("_")
-        for letter, pictograph_dicts in self.main_widget.pictograph_dicts.items():
-            for pictograph_dict in pictograph_dicts:
+        for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
+            for pictograph_data in pictograph_datas:
                 if (
-                    pictograph_dict[START_POS] == start_pos
-                    and pictograph_dict[END_POS] == end_pos
+                    pictograph_data[START_POS] == start_pos
+                    and pictograph_data[END_POS] == end_pos
                 ):
                     pictograph = self.create_pictograph_from_dict(
-                        pictograph_dict, grid_mode
+                        pictograph_data, grid_mode
                     )
                     self.start_options[letter] = pictograph
                     pictograph.letter = letter
@@ -119,7 +119,7 @@ class StartPosPicker(BaseStartPosPicker):
             self.main_widget.sequence_widget.beat_frame,
         )
         start_pos_beat.updater.update_pictograph(
-            start_position_pictograph.pictograph_dict
+            start_position_pictograph.pictograph_data
         )
 
         return start_pos_beat
@@ -130,14 +130,14 @@ class StartPosPicker(BaseStartPosPicker):
         start_pos_key = start_pos_data["end_pos"]
         letter_str = self.start_pos_key_to_letter(start_pos_key)
         letter = Letter(letter_str)
-        matching_letter_pictographs = self.main_widget.pictograph_dicts.get(letter, [])
-        for pictograph_dict in matching_letter_pictographs:
-            if pictograph_dict["start_pos"] == start_pos_key:
+        matching_letter_pictographs = self.main_widget.pictograph_datas.get(letter, [])
+        for pictograph_data in matching_letter_pictographs:
+            if pictograph_data["start_pos"] == start_pos_key:
 
-                pictograph_dict["blue_attributes"]["start_ori"] = start_pos_data[
+                pictograph_data["blue_attributes"]["start_ori"] = start_pos_data[
                     "blue_attributes"
                 ]["end_ori"]
-                pictograph_dict["red_attributes"]["start_ori"] = start_pos_data[
+                pictograph_data["red_attributes"]["start_ori"] = start_pos_data[
                     "red_attributes"
                 ]["end_ori"]
                 pictograph_factory = (
@@ -145,11 +145,11 @@ class StartPosPicker(BaseStartPosPicker):
                 )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                        pictograph_dict
+                        pictograph_data
                     )
                 )
                 start_pos_pictograph = pictograph_factory.create_start_pos_beat(
-                    pictograph_key, pictograph_dict
+                    pictograph_key, pictograph_data
                 )
                 return start_pos_pictograph
 

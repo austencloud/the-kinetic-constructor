@@ -13,8 +13,8 @@ class PictographAttrManager:
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
 
-    def update_attributes(self, pictograph_dict: dict) -> None:
-        for attr_name, attr_value in deepcopy(list(pictograph_dict.items())):
+    def update_attributes(self, pictograph_data: dict) -> None:
+        for attr_name, attr_value in deepcopy(list(pictograph_data.items())):
             if attr_name == LETTER:
                 attr_value = Letter.get_letter(attr_value)
                 self.pictograph.letter = attr_value
