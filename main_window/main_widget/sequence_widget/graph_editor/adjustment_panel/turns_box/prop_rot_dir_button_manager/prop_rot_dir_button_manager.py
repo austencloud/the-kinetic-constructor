@@ -83,6 +83,7 @@ class PropRotDirButtonManager:
                         motion, swap_prop_rot_dir=True
                     )
                     self._update_pictograph_and_json(motion, new_letter)
+                    pictograph.update()
 
             pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
 

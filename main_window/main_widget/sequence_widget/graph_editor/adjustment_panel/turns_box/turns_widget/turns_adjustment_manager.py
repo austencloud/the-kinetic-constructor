@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 
 # assign Turns as int |float | str
 Turns = Union[int, float, str]
+
+
 class TurnsAdjustmentManager(QObject):
     turns_adjusted = pyqtSignal(object)  # Signal can now handle any type
 
@@ -55,7 +57,7 @@ class TurnsAdjustmentManager(QObject):
         )
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.construct_tab.option_picker.updater.update_options()
-
+        QApplication.processEvents()
         for pictograph in [self.reference_beat, self.GE_pictograph]:
             self.turns_widget.turns_updater.adjust_turns_for_pictograph(
                 pictograph, new_turns

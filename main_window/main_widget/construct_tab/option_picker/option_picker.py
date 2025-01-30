@@ -39,3 +39,4 @@ class OptionPicker(QWidget):
         self.updater = OptionUpdater(self)
         self.option_factory = OptionFactory(self)
         self.layout_manager = OptionPickerLayoutManager(self)
+ 

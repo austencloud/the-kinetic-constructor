@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Union
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow.arrow import Arrow
-from data.constants import CLOCK, COUNTER, IN, OUT, FLOAT 
+from data.constants import CLOCK, COUNTER, IN, OUT, FLOAT
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.svg_manager import SvgManager
@@ -24,7 +24,7 @@ class ArrowSvgManager:
         start_ori = arrow.motion.start_ori
         if arrow.motion.motion_type == FLOAT:
             return get_images_and_data_path("images/arrows/float.svg")
-        arrow_turns: Union[str, int, float] = arrow.motion.motion_dict['turns']
+        arrow_turns: Union[str, int, float] = arrow.motion.turns
         if isinstance(arrow_turns, (int, float)):
             turns = float(arrow_turns)
         else:

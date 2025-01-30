@@ -93,7 +93,7 @@ class TurnsUpdater:
     def _update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
         """Update the motion's turns and rotation properties."""
         self._handle_prop_rotation_buttons(motion, new_turns)
-        motion.turns_manager.set_motion_turns(new_turns)
+        motion.turns = self._clamp_turns(new_turns)
         self.turns_box.header.update_turns_box_header()
 
     def _handle_prop_rotation_buttons(self, motion: "Motion", new_turns: Turns) -> None:

@@ -23,7 +23,9 @@ class BeatFramePopulator:
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
+
         self.current_sequence_json = current_sequence_json  # Store the sequence JSON
+        print(f"current_sequence_json = {current_sequence_json}")
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message(self.loading_text)
         self.json_manager.loader_saver.clear_current_sequence_file()
@@ -40,7 +42,9 @@ class BeatFramePopulator:
         self._update_difficulty_level()
         self._populate_beats(select_beat=False)
         self._finalize_sequence()
-        self.beat_frame.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
+        self.beat_frame.selection_overlay.select_beat(
+            self.beat_frame.get.last_filled_beat()
+        )
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )

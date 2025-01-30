@@ -59,6 +59,7 @@ class PictographUpdater:
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
         self.pictograph.attr_manager.update_attributes(pictograph_dict)
         motion_dicts = self._get_motion_dicts(pictograph_dict)
+        print(f"Motion Dicts: {motion_dicts}")
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
         red_arrow_dict, blue_arrow_dict = self.get_arrow_dicts(pictograph_dict)
         self._update_motions(pictograph_dict, motion_dicts)
@@ -75,6 +76,9 @@ class PictographUpdater:
             if motion_dicts[motion.color].get("turns", "") == "fl":
                 motion.turns = "fl"
             motion.updater.update_motion(motion_dicts[motion.color])
+            turns_value = motion_dicts[motion.color].get("turns", None)
+            if turns_value is not None:
+                motion.turns = turns_value
         for motion in self.pictograph.motions.values():
             if motion.pictograph.letter in [
                 Letter.S,
@@ -227,10 +231,3 @@ class PictographUpdater:
         self.pictograph.pictograph_dict = pictograph_dict
         return pictograph_dict
 
-    def update_motions(self, pictograph_dict):
-        if "blue_attributes" in pictograph_dict:
-            blue_attributes = pictograph_dict["blue_attributes"]
-            self.pictograph.blue_motion.updater.update_motion(blue_attributes)
-        if "red_attributes" in pictograph_dict:
-            red_attributes = pictograph_dict["red_attributes"]
-            self.pictograph.red_motion.updater.update_motion(red_attributes)

@@ -22,6 +22,5 @@ class PictographAttrManager:
                 for k, v in attr_value.items():
                     attr_name = k
                     attr_value = v
-                    self.pictograph.pictograph_dict[attr_name] = attr_value
             if attr_value is not None:
                 setattr(self.pictograph, attr_name, attr_value)

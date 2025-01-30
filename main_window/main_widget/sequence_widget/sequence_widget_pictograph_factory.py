@@ -59,8 +59,7 @@ class BeatFactory:
     ) -> None:
         new_beat = Beat(self.beat_frame, duration=pictograph_dict.get("duration", 1))
         new_beat.updater.update_pictograph(pictograph_dict)
-        new_beat.arrow_placement_manager.update_arrow_placements()
-        new_beat.prop_placement_manager.update_prop_positions()
+
         if reversal_info:
             new_beat.blue_reversal = reversal_info.get("blue_reversal", False)
             new_beat.red_reversal = reversal_info.get("red_reversal", False)
