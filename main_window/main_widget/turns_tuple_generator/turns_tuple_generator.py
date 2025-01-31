@@ -64,6 +64,15 @@ class TurnsTupleGenerator:
 
     def _get_generator_key(self, pictograph: "BasePictograph") -> Union[str, LetterType]:
         letter = pictograph.letter
+        special_cases = {
+            "S": "LeadState",
+            "T": "LeadState",
+            "Λ": "Lambda",
+            "Λ-": "LambdaDash",
+            "Γ": "Gamma",
+        }
+        if letter.value in special_cases:
+            return special_cases[letter.value]
         if letter.value in [
             letter.value
             for letter in letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID)
@@ -76,18 +85,21 @@ class TurnsTupleGenerator:
             )
         ]:
             return "Type1NonHybrid"
-        special_cases = {
-            "S": "LeadState",
-            "T": "LeadState",
-            "Λ": "Lambda",
-            "Λ-": "LambdaDash",
-            "Γ": "Gamma",
-        }
-        if letter.value in special_cases:
-            return special_cases[letter.value]
 
         for letter_type in LetterType:
             if letter.value in letter_type.value[0]:
                 return letter_type
 
         return None
+
+    def _safe_assign(key: str, value: str, color_map: dict) -> None:
+        """
+        Inserts (key -> value) into color_map. If key already exists,
+        appends '_2' to make it unique.
+        """
+        if key in color_map:
+            # e.g. if '0' is taken, store under '0_2'
+            unique_key = f"{key}_2"
+            color_map[unique_key] = value
+        else:
+            color_map[key] = value

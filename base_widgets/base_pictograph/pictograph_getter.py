@@ -62,6 +62,14 @@ class PictographGetter:
         other_arrow_map = {RED: self.blue_arrow, BLUE: self.red_arrow}
         return other_arrow_map.get(arrow.color)
 
+    def pro(self) -> Motion:
+        pro_map = {True: self.red_motion, False: self.blue_motion}
+        return pro_map.get(self.red_motion.motion_type == PRO)
+    
+    def anti(self) -> Motion:
+        anti_map = {True: self.red_motion, False: self.blue_motion}
+        return anti_map.get(self.red_motion.motion_type == ANTI)
+
     def dash(self) -> Motion:
         dash_map = {True: self.red_motion, False: self.blue_motion}
         return dash_map.get(self.red_motion.check.is_dash())

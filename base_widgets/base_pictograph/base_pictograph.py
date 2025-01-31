@@ -55,9 +55,7 @@ class BasePictograph(QGraphicsScene):
     motion_data_list: list[dict]
     pictograph_data: dict[str, Union[str, dict[str, str]]] = {}
     props: dict[str, Prop]
-
-    # int
-    arrow_turns: int
+    
     # managers
     attr_manager: PictographDataUpdater
     arrow_placement_manager: ArrowPlacementManager
