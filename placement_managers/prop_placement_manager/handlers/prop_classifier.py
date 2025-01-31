@@ -33,6 +33,7 @@ string_to_enum_map = {
     "guitar": PropType.Guitar,
     "ukulele": PropType.Ukulele,
     "chicken": PropType.Chicken,
+    "triquetra": PropType.Triquetra,
 }
 
 

@@ -19,10 +19,12 @@ class Prop(GraphicalObject):
     prop_type: "PropType"
     arrow: "Arrow"
 
-    def __init__(self, pictograph, prop_data: dict, motion: "Motion") -> None:
+    def __init__(self, pictograph, prop_data:dict, motion, prop_type: "PropType"):
         super().__init__(pictograph)
         self.motion = motion
         self.prop_data = prop_data
+        self.prop_type = prop_type  # Store the prop type for reference
+
         self.pictograph: BasePictograph = pictograph
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)
