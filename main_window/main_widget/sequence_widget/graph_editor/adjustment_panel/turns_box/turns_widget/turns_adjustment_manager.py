@@ -57,7 +57,6 @@ class TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
         self.json_validation_engine.run(is_current_sequence=True)
-        self.main_widget.construct_tab.option_picker.updater.update_options()
         self.json_updater = self.json_manager.updater
         QApplication.processEvents()
         for pictograph in [self.reference_beat, self.GE_pictograph]:
@@ -73,6 +72,7 @@ class TurnsAdjustmentManager(QObject):
             )
             motion.prefloat_motion_type
 
+        self.main_widget.construct_tab.option_picker.updater.update_options()
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         self.beat_frame.updater.update_beats_from(sequence)
         QApplication.restoreOverrideCursor()

@@ -37,8 +37,10 @@ class SnowfallBackground(BaseBackground):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         gradient = QLinearGradient(0, 0, 0, widget.height())
-        gradient.setColorAt(0, QColor(20, 30, 48))
-        gradient.setColorAt(1, QColor(50, 80, 120))
+        gradient.setColorAt(0, QColor("#0b1d2a"))
+        gradient.setColorAt(0.3, QColor("#142030"))
+        gradient.setColorAt(0.7, QColor("#325078"))
+        gradient.setColorAt(1, QColor("#49708a"))
         painter.fillRect(widget.rect(), gradient)
 
         self.snowflake_manager.draw_snowflakes(painter, widget)

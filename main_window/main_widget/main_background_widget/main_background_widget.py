@@ -62,8 +62,8 @@ class MainBackgroundWidget(QWidget):
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
 
-        if isinstance(self.background, SnowfallBackground):
-            self.background.start_animation()
+        # if isinstance(self.background, SnowfallBackground):
+        #     self.background.start_animation()
 
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""

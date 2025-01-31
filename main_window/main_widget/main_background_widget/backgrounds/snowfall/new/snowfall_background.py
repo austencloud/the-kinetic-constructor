@@ -45,31 +45,31 @@ class SnowfallBackground(QWidget):
         self.worker_thread.started.connect(self.worker.process)
 
         # Animation timer
-        self.animation_timer = QTimer()
-        self.animation_timer.timeout.connect(self.update)
-        self.animation_timer.timeout.connect(self.animate_background)
+        # self.animation_timer = QTimer()
+        # self.animation_timer.timeout.connect(self.update)
+        # self.animation_timer.timeout.connect(self.animate_background)
 
         # Additional managers
         self.shooting_star_manager = ShootingStarManager()
         self.santa_manager = SantaManager()
 
-    def start_animation(self):
-        """Start the background animation."""
-        self.worker.running = True
-        self.worker_thread.start()
-        self.animation_timer.start(16)  # Approximately 60 FPS
+    # def start_animation(self):
+    #     """Start the background animation."""
+    #     self.worker.running = True
+    #     self.worker_thread.start()
+    #     self.animation_timer.start(16)  # Approximately 60 FPS
 
-    def stop_animation(self):
-        """Stop the background animation."""
-        self.worker.running = False
-        self.worker_thread.quit()
-        self.worker_thread.wait()
-        self.animation_timer.stop()
+    # def stop_animation(self):
+    #     """Stop the background animation."""
+    #     self.worker.running = False
+    #     self.worker_thread.quit()
+    #     self.worker_thread.wait()
+    #     self.animation_timer.stop()
 
-    def closeEvent(self, event):
-        """Stop the worker thread and timer when the widget is closed."""
-        self.stop_animation()
-        super().closeEvent(event)
+    # def closeEvent(self, event):
+    #     """Stop the worker thread and timer when the widget is closed."""
+    #     self.stop_animation()
+    #     super().closeEvent(event)
 
     def paint_background(self, parent_widget: QWidget, painter: QPainter):
         # Ensure gradient, snowflakes, Santa, and shooting stars are all drawn
@@ -78,15 +78,15 @@ class SnowfallBackground(QWidget):
         gradient.setColorAt(1, QColor(50, 80, 120))  # Light blue
         painter.fillRect(self.main_widget.rect(), gradient)
 
-        # Draw Snowflakes
-        for snowflake in self.snowflakes:
-            x, y, image_index = snowflake["x"], snowflake["y"], snowflake["image_index"]
-            pixmap = self.snowflake_images[image_index]
-            painter.drawPixmap(int(x), int(y), pixmap)
+        # # Draw Snowflakes
+        # for snowflake in self.snowflakes:
+        #     x, y, image_index = snowflake["x"], snowflake["y"], snowflake["image_index"]
+        #     pixmap = self.snowflake_images[image_index]
+        #     painter.drawPixmap(int(x), int(y), pixmap)
 
-        # Draw Shooting Stars and Santa
-        self.shooting_star_manager.draw_shooting_star(painter, parent_widget)
-        self.santa_manager.draw_santa(painter, parent_widget)
+        # # Draw Shooting Stars and Santa
+        # self.shooting_star_manager.draw_shooting_star(painter, parent_widget)
+        # self.santa_manager.draw_santa(painter, parent_widget)
 
     @pyqtSlot(list)
     def _update_snowflakes_from_worker(self, snowflakes):

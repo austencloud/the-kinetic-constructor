@@ -177,33 +177,35 @@ class PictographUpdater:
 
         motion_dataset = {}
         for color in [RED, BLUE]:
-            motion_data = pictograph_data.get(f"{color}_attributes", {})
+            motion_data: dict = pictograph_data.get(f"{color}_attributes", {})
             motion_dataset[color] = {
                 attr: motion_data.get(attr)
                 for attr in motion_attributes
                 if attr in motion_data
             }
-            if pictograph_data.get(f"{color}_attributes", {}).get(
-                "prefloat_motion_type", {}
-            ):
-                motion_dataset[color]["prefloat_motion_type"] = pictograph_data.get(
-                    f"{color}_attributes"
-                ).get("prefloat_motion_type")
+
+            # Ensure prefloat_motion_type is not "float"
+            prefloat_motion_type = motion_data.get("prefloat_motion_type")
+            if prefloat_motion_type == "float":
+                prefloat_motion_type = None  # Prevent it from being set to "float"
+
+            if prefloat_motion_type:
+                motion_dataset[color]["prefloat_motion_type"] = prefloat_motion_type
             else:
-                motion_dataset[color]["prefloat_motion_type"] = motion_dataset[
-                    color
-                ].get("motion_type")
-            if pictograph_data.get(f"{color}_attributes", {}).get(
-                "prefloat_prop_rot_dir", {}
-            ):
-                motion_dataset[color]["prefloat_prop_rot_dir"] = pictograph_data.get(
-                    f"{color}_attributes"
-                ).get("prefloat_prop_rot_dir")
+                motion_dataset[color]["prefloat_motion_type"] = motion_dataset[color].get("motion_type")
+
+            # Ensure prefloat_prop_rot_dir is not "no_rot"
+            prefloat_prop_rot_dir = motion_data.get("prefloat_prop_rot_dir")
+            if prefloat_prop_rot_dir == "no_rot":
+                prefloat_prop_rot_dir = None  # Prevent it from being set to "no_rot"
+
+            if prefloat_prop_rot_dir:
+                motion_dataset[color]["prefloat_prop_rot_dir"] = prefloat_prop_rot_dir
             else:
-                motion_dataset[color]["prefloat_prop_rot_dir"] = motion_dataset[
-                    color
-                ].get("prop_rot_dir")
+                motion_dataset[color]["prefloat_prop_rot_dir"] = motion_dataset[color].get("prop_rot_dir")
+
         return motion_dataset
+
 
     def _dict_to_tuple(self, d: dict) -> tuple:  # Changed parameter name from dict->d
         """Recursively convert a dictionary to a hashable tuple of tuples, handling circular references."""

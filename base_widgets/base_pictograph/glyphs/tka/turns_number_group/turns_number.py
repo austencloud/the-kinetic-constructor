@@ -25,7 +25,7 @@ class TurnsNumber(QGraphicsSvgItem):
         else:
             svg_path = (
                 self.blank_svg_path
-                if int(number) == 0
+                if float(number) == 0
                 else f"{self.svg_path_prefix}{number}.svg"
             )
 
