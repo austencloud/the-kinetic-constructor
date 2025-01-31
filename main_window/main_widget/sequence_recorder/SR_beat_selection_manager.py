@@ -42,8 +42,6 @@ class SR_BeatSelectionManager(QWidget):
         self.deselect_beat()
         self.move_selection()
 
-    def handle_media_error(self, error) -> None:
-        print(f"Error occurred: {error.errorString()}")
 
     def set_bpm(self, bpm) -> None:
         milliseconds_per_beat = 60000 / bpm
@@ -81,8 +79,7 @@ class SR_BeatSelectionManager(QWidget):
     def set_metronome_sound(self, sound_name) -> None:
         if sound_name in self.metronome_sounds:
             self.selected_metronome_sound = self.metronome_sounds[sound_name]
-        else:
-            print("Selected metronome sound does not exist, retaining previous choice.")
+
 
     def get_current_bpm(self) -> Optional[int]:
         if self.timer.isActive():

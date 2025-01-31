@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy, QFrame, QApplication
 from PyQt6.QtCore import Qt
+from cycler import V
 
 from main_window.main_widget.sequence_recorder.SR_beat_frame import SR_BeatFrame
 from main_window.main_widget.sequence_recorder.SR_video_combiner import SR_VideoCombiner
@@ -59,15 +60,11 @@ class SR_CaptureFrame(QFrame):
 
     def concatenate_videos(self, video_path_1, video_path_2):
         if video_path_1 is None or video_path_2 is None:
-            print("Error: One or both video paths are None. Cannot concatenate.")
             return
 
         if not (
             isinstance(video_path_1, str) and video_path_1.endswith(".avi")
         ) or not (isinstance(video_path_2, str) and video_path_2.endswith(".avi")):
-            print(
-                "Error: Invalid file paths. Make sure the paths are strings and point to '.avi' files."
-            )
             return
 
         try:
@@ -76,8 +73,8 @@ class SR_CaptureFrame(QFrame):
             final_clip = concatenate_videoclips([clip1, clip2], method="compose")
             final_clip.write_videofile("combined_video.mp4")
         except Exception as e:
-            print(f"Failed to concatenate videos: {e}")
-
+            raise ValueError(f"Failed to concatenate videos: {e}")
+        
     def resize_capture_frame(self) -> None:
         size = int(self.sequence_recorder.height() * 0.8)
         self.SR_beat_frame.setFixedSize(size, size)

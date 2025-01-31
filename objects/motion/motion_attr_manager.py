@@ -16,16 +16,12 @@ class MotionAttrManager:
         self.motion.motion_type = None
 
     def update_attributes(self, motion_data: dict[str, str]) -> None:
-        # print the dict
-        # if motion_data has "turns", set motion.turns directly to it
         if TURNS in motion_data:
             self.motion.turns = motion_data[TURNS]
         for attribute, value in motion_data.items():
             if value is not None:
                 setattr(self.motion, attribute, value)
-                # print the motion attribute and value
-                print(f"Setting {attribute} to {value} for {self.motion}")
-                self.motion.motion_data[attribute] = value  # Sync to motion_data
+                self.motion.motion_data[attribute] = value 
         if self.motion.check.is_shift():
             if "prefloat_motion_type" not in motion_data:
                 if self.motion.motion_type != FLOAT:

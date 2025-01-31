@@ -25,10 +25,7 @@ class SequenceCardPageExporter:
         for i, page_widget in enumerate(self.sequence_card_tab.pages):
             page_image_path = os.path.join(directory, f"page_{i + 1}.png")
             self._save_page_as_image(page_widget, page_image_path)
-            print(f"Page {i + 1} saved as image.")
-        print(
-            f"Exported {len(self.sequence_card_tab.pages)} pages as images at {directory}."
-        )
+
 
     def _save_page_as_image(self, widget: QFrame, page_image_path):
         """Helper function to save a QWidget as an image."""

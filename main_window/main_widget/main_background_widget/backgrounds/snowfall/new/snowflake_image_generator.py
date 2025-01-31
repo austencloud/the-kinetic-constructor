@@ -173,4 +173,3 @@ if __name__ == "__main__":
     for i, (image, snowflake_type) in enumerate(images):
         image.save(os.path.join(output_dir, f"snowflake_{snowflake_type}_{i + 1}.png"))
 
-    print(f"Generated {len(images)} snowflake images in '{output_dir}' directory.")

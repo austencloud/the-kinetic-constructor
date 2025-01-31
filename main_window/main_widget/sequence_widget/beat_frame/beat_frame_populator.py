@@ -25,7 +25,6 @@ class BeatFramePopulator:
     ) -> None:
 
         self.current_sequence_json = current_sequence_json  # Store the sequence JSON
-        print(f"current_sequence_json = {current_sequence_json}")
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message(self.loading_text)
         self.json_manager.loader_saver.clear_current_sequence_file()

@@ -181,7 +181,7 @@ class StartPosManager(QObject):
                 )
                 return start_pos_pictograph
 
-        print(f"No matching start position found for key: {start_pos_key}")
+        raise ValueError("No matching start position pictograph found")
         return None
 
     def start_pos_key_to_letter(self, start_pos_key: str) -> str:

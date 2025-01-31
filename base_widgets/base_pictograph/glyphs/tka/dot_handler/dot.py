@@ -17,5 +17,3 @@ class Dot(QGraphicsSvgItem):
         self.renderer: QSvgRenderer = QSvgRenderer(dot_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
-        else:
-            print(f"Warning: Renderer for {dot_path} is not valid.")

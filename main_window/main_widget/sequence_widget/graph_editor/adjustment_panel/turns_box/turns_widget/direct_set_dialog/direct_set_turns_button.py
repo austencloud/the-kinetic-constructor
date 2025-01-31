@@ -23,7 +23,7 @@ class DirectSetTurnsButton(QPushButton):
         QApplication.restoreOverrideCursor()
 
     def direct_set_adjustment(self):
-        print("Direct set adjustment button clicked!")
+        pass
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

@@ -98,8 +98,7 @@ class CustomPrintDialog(QDialog):
             self.sequence_viewer.fitInView(
                 self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
             )
-        else:
-            print("Error: Pixmap is null.")
+
 
     def print(self) -> None:
         self.printer.setCopyCount(self.copies_spinbox.value())

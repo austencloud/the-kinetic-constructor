@@ -40,12 +40,11 @@ class PictographUpdater:
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
                 self.pictograph.vtg_glyph.set_vtg_mode()
                 self.pictograph.elemental_glyph.set_elemental_glyph()
-                self.pictograph.start_to_end_pos_glyph.update_start_to_end_pos_glyph()
+                self.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
             else:
                 self._update_from_pictograph_data(pictograph_data)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
 
-        self.pictograph.start_to_end_pos_glyph.update_start_to_end_pos_glyph()
         self.pictograph.tka_glyph.update_tka_glyph()
         self.pictograph.elemental_glyph.update_elemental_glyph()
         self.pictograph.reversal_glyph.update_reversal_symbols()
@@ -58,7 +57,6 @@ class PictographUpdater:
     def _update_from_pictograph_data(self, pictograph_data: dict) -> None:
         self.pictograph.attr_manager.update_data(pictograph_data)
         motion_dataset = self._get_motion_dataset(pictograph_data)
-        print(f"Motion Dicts: {motion_dataset}")
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
         red_arrow_data, blue_arrow_data = self.get_arrow_dataset(pictograph_data)
         self._update_motions(pictograph_data, motion_dataset)

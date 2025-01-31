@@ -79,7 +79,6 @@ class DefaultArrowPositioner:
             with codecs.open(path, "r", encoding="utf-8") as file:
                 return json.load(file)
         except Exception as e:
-            print(f"Error loading default placements from {path}: {e}")
             return {}
 
     def _get_adjustment_key(self, arrow: Arrow, default_placements: dict) -> str:

@@ -29,7 +29,7 @@ class VariationNumberFixer:
                 if metadata:
                     return json.loads(metadata)
         except Exception as e:
-            print(f"Error loading sequence from thumbnail: {e}")
+            raise Exception(f"Error extracting metadata from {file_path}: {e}")
         return None
 
     def get_start_orientation(self, metadata):
@@ -89,4 +89,3 @@ class VariationNumberFixer:
 
     def main(self):
         self.ensure_sequential_versions()
-        print("Versioning and naming cleanup completed.")

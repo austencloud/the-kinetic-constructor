@@ -49,13 +49,11 @@ class MainBackgroundWidget(QWidget):
         bg_type = (
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
-        print(f"Setting up background: {bg_type}")
         self.background = self._get_background(bg_type)
         self.main_widget.background = self.background
 
     def apply_background(self):
         """Applies or reapplies the background."""
-        print("Applying background")
         if self.background:
             self.background.stop_animation()
 
@@ -65,7 +63,6 @@ class MainBackgroundWidget(QWidget):
         )
 
         if isinstance(self.background, SnowfallBackground):
-            print("Starting animation for SnowfallBackground")
             self.background.start_animation()
 
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
@@ -83,11 +80,7 @@ class MainBackgroundWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.resize_background()
-        # self.background.resizeEvent(event)
 
     def resize_background(self):
         self.setGeometry(self.main_widget.rect())
         self.setFixedSize(self.main_widget.size())
-        print(f"Background resized to: {self.geometry()}")
-        # if isinstance(self.background, SnowfallBackground):
-        #     self.background.resize(self.width(), self.height())

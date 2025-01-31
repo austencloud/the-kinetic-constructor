@@ -32,8 +32,6 @@ class PictographDataCopier:
                 )
 
             except Exception as e:
-                print(f"Error copying pictograph_data to clipboard: {e}")
                 QToolTip.showText(QCursor.pos(), "Failed to copy dictionary.", None)
         else:
-            print("No pictograph_data available to copy.")
             QToolTip.showText(QCursor.pos(), "No dictionary to copy.", None)

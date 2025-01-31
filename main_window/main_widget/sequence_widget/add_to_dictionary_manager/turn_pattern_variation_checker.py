@@ -29,7 +29,8 @@ class TurnPatternVariationChecker:
                     seq2 = json.loads(metadata)
                     return self.compare_turns_patterns(seq1, seq2)
         except IOError as e:
-            print(f"Error opening image: {e}")
+            # raise an error
+            raise e
         return False
 
     def compare_turns_patterns(self, seq1, seq2):

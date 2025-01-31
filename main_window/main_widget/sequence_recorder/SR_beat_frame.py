@@ -161,7 +161,6 @@ class SR_BeatFrame(QFrame):
 
     def save_beat_frame_recording(self) -> str:
         if not self.frame_captures:
-            print("No frames captured.")
             return
         output_path = get_my_videos_path("beat_frame_capture.avi")
 
@@ -177,7 +176,6 @@ class SR_BeatFrame(QFrame):
             out.write(frame)
 
         out.release()
-        print("Beat frame recording saved successfully." + output_path)
         return output_path
 
     def resize_beat_frame(self) -> None:

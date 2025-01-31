@@ -56,6 +56,5 @@ class ImageExportBeatFactory:
         beat = Beat(temp_beat_frame)
         beat.pictograph_data = beat_data
         beat.updater.update_pictograph(beat_data)
-        print(f"blue end_ori should be counter. It's: ", beat.blue_motion.end_ori)
         new_beat_view.set_beat(beat, number)
         return new_beat_view

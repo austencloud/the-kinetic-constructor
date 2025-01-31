@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING, Union
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.glyphs.tka.turns_number_group.turns_number_group import TurnsNumberGroup
+    from base_widgets.base_pictograph.glyphs.tka.turns_number_group.turns_number_group import (
+        TurnsNumberGroup,
+    )
 
 
 class TurnsNumber(QGraphicsSvgItem):
@@ -23,7 +25,7 @@ class TurnsNumber(QGraphicsSvgItem):
         else:
             svg_path = (
                 self.blank_svg_path
-                if number == 0
+                if int(number) == 0
                 else f"{self.svg_path_prefix}{number}.svg"
             )
 

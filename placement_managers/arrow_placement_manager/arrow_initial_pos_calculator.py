@@ -27,7 +27,6 @@ class ArrowInitialPosCalculator:
         if coord:
             return coord
         else:
-            print(f"Warning: Shift coordinate for '{point_name}' not found.")
             return QPointF(0, 0)
 
     def _get_static_dash_coords(self, arrow: Arrow) -> QPointF:
@@ -39,5 +38,4 @@ class ArrowInitialPosCalculator:
         if coord:
             return coord
         else:
-            print(f"Warning: Static coordinate for '{point_name}' not found.")
             return QPointF(0, 0)  # Example default
