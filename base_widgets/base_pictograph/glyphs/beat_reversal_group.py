@@ -6,13 +6,13 @@ from data.constants import BLUE, HEX_BLUE, HEX_RED, RED
 from utilities.reversal_detector import ReversalDetector
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class BeatReversalGroup(QGraphicsItemGroup):
     name = "Reversals"
 
-    def __init__(self, pictograph: "BasePictograph"):
+    def __init__(self, pictograph: "Pictograph"):
         super().__init__()
         self.pictograph = pictograph
         self.reversal_items: dict[str, QGraphicsTextItem] = {}

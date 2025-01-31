@@ -5,12 +5,12 @@ from objects.prop.prop_svg_manager import PropSvgManager
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
     from main_window.main_widget.main_widget import MainWidget
 
 
 class SvgManager:
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
         self.color_manager = SvgColorHandler(self)

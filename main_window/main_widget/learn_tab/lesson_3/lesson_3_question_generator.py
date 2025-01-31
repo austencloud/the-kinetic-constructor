@@ -1,6 +1,6 @@
 import random
 from typing import TYPE_CHECKING
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph import Pictograph
 from main_window.main_widget.learn_tab.base_classes.base_question_generator import (
     BaseQuestionGenerator,
 )
@@ -32,7 +32,7 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
         wrong_pictographs = self.generate_wrong_answers(correct_pictograph)
 
         # Add the correct pictograph to the answers and shuffle
-        pictographs: list["BasePictograph"] = [correct_pictograph] + wrong_pictographs
+        pictographs: list["Pictograph"] = [correct_pictograph] + wrong_pictographs
         random.shuffle(pictographs)
 
         self.lesson_widget.answers_widget.display_answers(

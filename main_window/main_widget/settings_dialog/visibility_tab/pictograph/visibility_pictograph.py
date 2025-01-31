@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .visibility_pictograph_view import VisibilityPictographView
 
 
-class VisibilityPictograph(BasePictograph):
+class VisibilityPictograph(Pictograph):
     """Special class for the visibility tab pictograph."""
 
     example_data = {

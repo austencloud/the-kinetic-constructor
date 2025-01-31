@@ -1,6 +1,6 @@
 # orientation_setter.py
 from typing import TYPE_CHECKING
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph import Pictograph
 from data.constants import BLUE, START_ORI, END_ORI, BOX, DIAMOND
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class OrientationSetter:
         """Apply the orientation to the related pictographs and data structures."""
         self._update_current_orientation_index(orientation)
         self._update_clickable_ori_label(orientation)
-        
+
         if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
             self._update_start_pos_ori(orientation)
             self._update_start_position_pictographs(orientation)
@@ -31,7 +31,7 @@ class OrientationSetter:
         else:
             self._update_start_options(orientation)
             self._update_advanced_start_pos_picker(orientation)
-            
+
         self._update_beats_from_current_sequence_json()
 
     def _update_graph_editor_orientation(self, orientation: str) -> None:
@@ -124,7 +124,7 @@ class OrientationSetter:
         self.beat_frame.updater.update_beats_from_current_sequence_json()
 
     def set_initial_orientation(
-        self, start_pos_pictograph: "BasePictograph", color: str
+        self, start_pos_pictograph: "Pictograph", color: str
     ) -> None:
         initial_orientation = self._get_initial_orientation(start_pos_pictograph, color)
         self.current_orientation_index = self.ori_picker_widget.orientations.index(
@@ -133,7 +133,7 @@ class OrientationSetter:
         self.ori_picker_widget.clickable_ori_label.setText(initial_orientation)
 
     def _get_initial_orientation(
-        self, start_pos_pictograph: "BasePictograph", color: str
+        self, start_pos_pictograph: "Pictograph", color: str
     ) -> str:
         if color == BLUE:
             return start_pos_pictograph.pictograph_data["blue_attributes"][START_ORI]

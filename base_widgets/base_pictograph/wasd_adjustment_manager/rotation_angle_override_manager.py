@@ -7,7 +7,7 @@ from base_widgets.base_pictograph.wasd_adjustment_manager.rotation_angle_overrid
 
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
     from ..wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
 
@@ -46,7 +46,7 @@ class RotationAngleOverrideManager:
             pictograph.updater.update_pictograph()
             pictograph.arrow_placement_manager.update_arrow_placements()
 
-    def get_visible_pictographs(self) -> list["BasePictograph"]:
+    def get_visible_pictographs(self) -> list["Pictograph"]:
         visible_pictographs = []
         for pictograph_list in self.pictograph.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():

@@ -5,7 +5,7 @@ from .start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
     from .sequence_beat_frame import SequenceBeatFrame
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class StartPositionAdder:
@@ -15,7 +15,7 @@ class StartPositionAdder:
         self.main_widget = beat_frame.main_widget
         self.json_manager = self.main_widget.json_manager
 
-    def add_start_pos_to_sequence(self, clicked_start_option: "BasePictograph") -> None:
+    def add_start_pos_to_sequence(self, clicked_start_option: "Pictograph") -> None:
 
         start_pos_beat = StartPositionBeat(self.beat_frame)
 

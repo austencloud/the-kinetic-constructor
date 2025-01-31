@@ -6,11 +6,11 @@ from PyQt6.QtGui import QCursor, QAction
 from base_widgets.base_pictograph.pictograph_data_copier import PictographDataCopier
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class PictographView(QGraphicsView):
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__(pictograph)
         if pictograph:
             self.pictograph = pictograph

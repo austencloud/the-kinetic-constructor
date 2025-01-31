@@ -5,11 +5,11 @@ from main_window.main_widget.turns_tuple_generator.turns_tuple_generators.base_t
 )
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_turns_tuple(self, pictograph: "BasePictograph") -> str:
+    def generate_turns_tuple(self, pictograph: "Pictograph") -> str:
         super().set_pictograph(pictograph)
 
         shift = (
@@ -18,11 +18,6 @@ class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
         static = (
             self.red_motion if self.red_motion.check.is_static() else self.blue_motion
         )
-        # check if the letter is Omega
-        if static.pictograph.letter.value == "Ω":
-            print("static_pictograph_letter", static.pictograph.letter.value)
-            print("Static Motion in Generator: ", static)
-            print("static_turns", static.turns)
 
         if shift.motion_type in [PRO, ANTI]:
             if static.motion_data["turns"] != 0 and static.prop_rot_dir != NO_ROT:

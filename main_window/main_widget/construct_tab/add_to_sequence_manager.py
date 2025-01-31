@@ -4,7 +4,7 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
 )
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
     from main_window.main_widget.construct_tab.construct_tab import (
         ConstructTab,
@@ -18,7 +18,7 @@ class AddToSequenceManager:
     def __init__(self, construct_tab: "ConstructTab") -> None:
         self.construct_tab = construct_tab
 
-    def create_new_beat(self, clicked_option: "BasePictograph") -> "Beat":
+    def create_new_beat(self, clicked_option: "Pictograph") -> "Beat":
         sequence = (
             self.construct_tab.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )

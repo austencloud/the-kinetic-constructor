@@ -13,17 +13,18 @@ from base_widgets.base_pictograph.pictograph_view import (
 from base_widgets.base_pictograph.pictograph_view_key_event_handler import (
     PictographViewKeyEventHandler,
 )
-from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph import GE_Pictograph
+from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph import (
+    GE_Pictograph,
+)
 from .GE_pictograph_view_mouse_event_handler import GE_PictographViewMouseEventHandler
 
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph import Pictograph
 from ..beat_frame.beat_view import Beat
 
 if TYPE_CHECKING:
     from .pictograph_container.GE_pictograph_container import (
         GraphEditorPictographContainer,
     )
-
 
 
 class GE_PictographView(PictographView):
@@ -103,7 +104,7 @@ class GE_PictographView(PictographView):
         painter.drawRect(overlay_rect)
         painter.end()
 
-    def get_current_pictograph(self) -> BasePictograph:
+    def get_current_pictograph(self) -> Pictograph:
         return self.pictograph
 
     def set_scene(self, beat: "Beat") -> None:
@@ -126,5 +127,3 @@ class GE_PictographView(PictographView):
         )
         self.resetTransform()
         self.scale(scale_factor, scale_factor)
-
-

@@ -15,7 +15,7 @@ from main_window.main_widget.sequence_widget.beat_frame.beat import (
 from utilities.path_helpers import get_my_videos_path
 
 
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
@@ -80,7 +80,7 @@ class SR_BeatFrame(QFrame):
         self.layout.addWidget(beat_view, row, col)
         self.beat_views.append(beat_view)
 
-    def add_scene_to_sequence(self, new_beat: "BasePictograph") -> None:
+    def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 2)

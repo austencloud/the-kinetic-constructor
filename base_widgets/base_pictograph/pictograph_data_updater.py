@@ -6,11 +6,11 @@ from data.constants import LETTER
 
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class PictographDataUpdater:
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
     def update_data(self, pictograph_data: dict) -> None:

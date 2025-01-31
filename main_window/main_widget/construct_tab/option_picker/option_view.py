@@ -4,13 +4,11 @@ from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictog
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class OptionView(BorderedPictographView):
-    def __init__(
-        self, option_picker: "OptionPicker", pictograph: "BasePictograph"
-    ) -> None:
+    def __init__(self, option_picker: "OptionPicker", pictograph: "Pictograph") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
         self.option_picker = option_picker

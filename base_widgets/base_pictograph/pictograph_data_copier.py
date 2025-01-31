@@ -4,11 +4,11 @@ from PyQt6.QtWidgets import QToolTip, QApplication
 from PyQt6.QtGui import QCursor, QClipboard
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class PictographDataCopier:
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
     def copy_pictograph_data(self) -> None:

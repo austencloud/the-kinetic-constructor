@@ -12,11 +12,11 @@ from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class PictographGetter:
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.is_initialized = False
 
@@ -65,7 +65,7 @@ class PictographGetter:
     def pro(self) -> Motion:
         pro_map = {True: self.red_motion, False: self.blue_motion}
         return pro_map.get(self.red_motion.motion_type == PRO)
-    
+
     def anti(self) -> Motion:
         anti_map = {True: self.red_motion, False: self.blue_motion}
         return anti_map.get(self.red_motion.motion_type == ANTI)

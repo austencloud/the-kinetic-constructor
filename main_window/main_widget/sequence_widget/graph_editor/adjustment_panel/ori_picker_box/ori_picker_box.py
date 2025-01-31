@@ -6,7 +6,7 @@ from .ori_picker_header import OriPickerHeader
 
 if TYPE_CHECKING:
     from ..beat_adjustment_panel import BeatAdjustmentPanel
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class OriPickerBox(QFrame):
@@ -19,7 +19,7 @@ class OriPickerBox(QFrame):
     def __init__(
         self,
         adjustment_panel: "BeatAdjustmentPanel",
-        start_pos: "BasePictograph",
+        start_pos: "Pictograph",
         color: str,
     ) -> None:
         super().__init__(adjustment_panel)

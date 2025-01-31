@@ -6,11 +6,11 @@ from objects.motion.motion import Motion
 from functools import lru_cache
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class PictographUpdater:
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
     def update_pictograph(self, pictograph_data: dict = None) -> None:
@@ -192,7 +192,9 @@ class PictographUpdater:
             if prefloat_motion_type:
                 motion_dataset[color]["prefloat_motion_type"] = prefloat_motion_type
             else:
-                motion_dataset[color]["prefloat_motion_type"] = motion_dataset[color].get("motion_type")
+                motion_dataset[color]["prefloat_motion_type"] = motion_dataset[
+                    color
+                ].get("motion_type")
 
             # Ensure prefloat_prop_rot_dir is not "no_rot"
             prefloat_prop_rot_dir = motion_data.get("prefloat_prop_rot_dir")
@@ -202,10 +204,11 @@ class PictographUpdater:
             if prefloat_prop_rot_dir:
                 motion_dataset[color]["prefloat_prop_rot_dir"] = prefloat_prop_rot_dir
             else:
-                motion_dataset[color]["prefloat_prop_rot_dir"] = motion_dataset[color].get("prop_rot_dir")
+                motion_dataset[color]["prefloat_prop_rot_dir"] = motion_dataset[
+                    color
+                ].get("prop_rot_dir")
 
         return motion_dataset
-
 
     def _dict_to_tuple(self, d: dict) -> tuple:  # Changed parameter name from dict->d
         """Recursively convert a dictionary to a hashable tuple of tuples, handling circular references."""

@@ -25,16 +25,7 @@ class ActHeader(QWidget):
     def _configure_header_style(self):
         """Set up styling for the header widget."""
         self.setObjectName("timelineHeader")
-        self.setStyleSheet(
-            """
-            #timelineHeader {
-                background-color: rgba(255, 255, 255, 0.9);
-                border: 2px solid black;
-                border-radius: 10px;
-                padding: 10px;
-            }
-            """
-        )
+
 
     def _initialize_components(self):
         """Initialize the labels for date, title, and author."""

@@ -3,7 +3,7 @@ from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, END_POS, START_POS
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.pictograph import Pictograph
 from data.position_maps import box_positions, diamond_positions
 
 from typing import TYPE_CHECKING
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class StartPosManager(QObject):
-    start_position_selected = pyqtSignal(BasePictograph)
+    start_position_selected = pyqtSignal(Pictograph)
 
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__()
@@ -28,9 +28,9 @@ class StartPosManager(QObject):
         self.start_pos_frame = start_pos_picker.pictograph_frame
 
         self.top_builder_widget = None
-        self.box_pictographs: list[BasePictograph] = []
-        self.diamond_pictographs: list[BasePictograph] = []
-        self.start_options: dict[str, BasePictograph] = {}
+        self.box_pictographs: list[Pictograph] = []
+        self.diamond_pictographs: list[Pictograph] = []
+        self.start_options: dict[str, Pictograph] = {}
 
         self.start_position_selected.connect(
             self.construct_tab.transition_to_option_picker
@@ -38,7 +38,7 @@ class StartPosManager(QObject):
 
         self.load_relevant_start_positions()
 
-    def get_all_start_positions(self) -> list[BasePictograph]:
+    def get_all_start_positions(self) -> list[Pictograph]:
         return self.box_pictographs + self.diamond_pictographs
 
     def clear_start_positions(self) -> None:
@@ -60,7 +60,7 @@ class StartPosManager(QObject):
                     position_key, DIAMOND
                 )
 
-    def get_box_variations(self) -> list[BasePictograph]:
+    def get_box_variations(self) -> list[Pictograph]:
         box_variations = []
         for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
             for pictograph_data in pictograph_datas:
@@ -70,7 +70,7 @@ class StartPosManager(QObject):
 
         return box_variations
 
-    def get_diamond_variations(self) -> list[BasePictograph]:
+    def get_diamond_variations(self) -> list[Pictograph]:
         diamond_variations = []
         for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
             for pictograph_data in pictograph_datas:
@@ -110,7 +110,7 @@ class StartPosManager(QObject):
                     pictograph.start_to_end_pos_glyph.hide()
 
     def add_start_pos_to_sequence(
-        self, clicked_start_option: BasePictograph, event: QWidget = None
+        self, clicked_start_option: Pictograph, event: QWidget = None
     ) -> None:
         seq_widget = self.main_widget.sequence_widget
         start_position_beat = StartPositionBeat(seq_widget.beat_frame)
@@ -150,7 +150,7 @@ class StartPosManager(QObject):
         )
         return start_pos_beat
 
-    def get_start_pos_pictograph(self, start_pos_data) -> "BasePictograph":
+    def get_start_pos_pictograph(self, start_pos_data) -> "Pictograph":
         if not start_pos_data:
             return None
 
@@ -193,11 +193,11 @@ class StartPosManager(QObject):
 
     def create_pictograph_from_dict(
         self, pictograph_data: dict, target_grid_mode: str
-    ) -> BasePictograph:
+    ) -> Pictograph:
         local_dict = deepcopy(pictograph_data)
         local_dict["grid_mode"] = target_grid_mode
 
-        pictograph = BasePictograph(self.main_widget)
+        pictograph = Pictograph(self.main_widget)
         pictograph.updater.update_pictograph(local_dict)
 
         if target_grid_mode == BOX:

@@ -31,12 +31,6 @@ class MainBackgroundWidget(QWidget):
 
     def start_timer(self):
         self.animation_timer = QTimer(self)
-        self.animation_timer.timeout.connect(self._on_animation_tick)
-        self.animation_timer.start(60)
-
-    def _on_animation_tick(self):
-
-        self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)

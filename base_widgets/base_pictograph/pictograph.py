@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class BasePictograph(QGraphicsScene):
+class Pictograph(QGraphicsScene):
     # dicts
     arrows: dict[str, Arrow]
     locations: dict[str, tuple[int, int, int, int]]
@@ -55,7 +55,7 @@ class BasePictograph(QGraphicsScene):
     motion_data_list: list[dict]
     pictograph_data: dict[str, Union[str, dict[str, str]]] = {}
     props: dict[str, Prop]
-    
+
     # managers
     attr_manager: PictographDataUpdater
     arrow_placement_manager: ArrowPlacementManager

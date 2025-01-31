@@ -3,7 +3,7 @@ from data.constants import BLUE, RED
 from objects.prop.prop import Prop
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
     from ..settings_manager import SettingsManager
 
 
@@ -11,7 +11,7 @@ class PropTypeChanger:
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.main_window = settings_manager.main_window
 
-    def replace_props(self, new_prop_type, pictograph: "BasePictograph"):
+    def replace_props(self, new_prop_type, pictograph: "Pictograph"):
         for color, prop in pictograph.props.items():
             new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
                 prop, new_prop_type
@@ -20,7 +20,7 @@ class PropTypeChanger:
         self._finalize_pictograph_update(pictograph)
 
     def _update_pictograph_prop(
-        self, pictograph: "BasePictograph", color, new_prop: "Prop"
+        self, pictograph: "Pictograph", color, new_prop: "Prop"
     ):
         old_prop = pictograph.props[color]
         old_prop.deleteLater()
@@ -32,7 +32,7 @@ class PropTypeChanger:
         new_prop.motion.attr_manager.update_prop_ori()
         new_prop.updater.update_prop(old_prop_data)
 
-    def _finalize_pictograph_update(self, pictograph: "BasePictograph"):
+    def _finalize_pictograph_update(self, pictograph: "Pictograph"):
         pictograph.red_prop = pictograph.props[RED]
         pictograph.blue_prop = pictograph.props[BLUE]
         pictograph.updater.update_pictograph()
@@ -53,7 +53,7 @@ class PropTypeChanger:
         self._update_start_pos_view(new_prop_type)
         self._update_json_manager(new_prop_type)
 
-    def _collect_all_pictographs(self) -> list["BasePictograph"]:
+    def _collect_all_pictographs(self) -> list["Pictograph"]:
         main_widget = self.main_window.main_widget
         pictographs = set()
 
@@ -106,7 +106,7 @@ class PropTypeChanger:
         )
         pictographs.add(lesson_3_question_pictograph)
         pictographs.update(lesson_3_answer_pictographs.values())
-        pictograph_list: list["BasePictograph"] = list(pictographs)
+        pictograph_list: list["Pictograph"] = list(pictographs)
 
         pictograph_list = [pictograph for pictograph in pictograph_list if pictograph]
 
