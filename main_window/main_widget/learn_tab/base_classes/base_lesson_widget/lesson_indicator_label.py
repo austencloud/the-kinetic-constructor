@@ -16,5 +16,5 @@ class LessonIndicatorLabel(BaseIndicatorLabel):
     def resizeEvent(self, event) -> None:
         self.setFixedHeight(self.lesson_widget.height() // 16)
         font = self.font()
-        font.setPointSize(self.lesson_widget.width() // 30)
+        font.setPointSize(self.lesson_widget.learn_tab.main_widget.width() // 30)
         self.setFont(font)

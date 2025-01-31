@@ -31,10 +31,10 @@ class MainWindow(QMainWindow):
         self.geometry_manager.set_dimensions()
 
     def exec(self, app: QApplication) -> int:
-        # self.profiler.enable()
+        self.profiler.enable()
         result = app.exec()
-        # self.profiler.disable()
-        # self.profiler.write_profiling_stats_to_file("profiling_output.txt", os.getcwd())
+        self.profiler.disable()
+        self.profiler.write_profiling_stats_to_file("profiling_output.txt", os.getcwd())
         return result
 
     def closeEvent(self, event):

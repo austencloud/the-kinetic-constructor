@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QApplication
 
 
 from main_window.main_widget.fade_manager.fade_manager import FadeManager
@@ -74,9 +74,10 @@ class MainWidgetUI:
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
         self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 6
 
-        self.mw.menu_bar.navigation_widget.set_active_tab(
-            self.mw.menu_bar.navigation_widget.current_index
-        )
+
+        # self.mw.menu_bar.navigation_widget.set_active_tab(
+        #     self.mw.menu_bar.navigation_widget.current_index
+        # )
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)

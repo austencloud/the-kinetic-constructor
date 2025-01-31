@@ -29,7 +29,8 @@ class Timestamp(EditableLabel):
         self.edit.setFixedWidth(self.edit.sizeHint().width())
 
         font_size = int(
-            self.cue_box.cue_frame.cue_scroll.act_sheet.write_tab.height() // 80
+            self.cue_box.cue_frame.cue_scroll.act_sheet.write_tab.main_widget.height()
+            // 80
         )
         font = self.label.font()
         font.setPointSize(font_size)

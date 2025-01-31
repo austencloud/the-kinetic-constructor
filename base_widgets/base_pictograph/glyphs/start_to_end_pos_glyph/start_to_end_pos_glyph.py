@@ -61,7 +61,8 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
             visible = self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility(
                 "Positions"
             )
-            self.pictograph.addItem(self)
+            if self.scene() is None:
+                self.pictograph.addItem(self)
             self.setVisible(visible)
         else:
             print(

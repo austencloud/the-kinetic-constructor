@@ -47,7 +47,6 @@ class NavigationWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
 
-
     def on_button_clicked(self, index):
         self.set_active_tab(index)
         self.tab_changed.emit(index)

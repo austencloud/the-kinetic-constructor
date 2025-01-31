@@ -67,7 +67,7 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def resizeEvent(self, event) -> None:
         """Resizes the section widget and ensures minimal space usage."""
-        width = self.option_scroll.construct_tab.option_picker.width()
+        width = self.option_scroll.construct_tab.option_picker.main_widget.width() // 2
 
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
             self.setFixedWidth(width)
