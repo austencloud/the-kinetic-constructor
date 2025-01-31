@@ -35,18 +35,30 @@ class BeatReversalGroup(QGraphicsItemGroup):
 
         self.setVisible(False)
 
-    def update_reversal_symbols(self):
-        if self.pictograph.view.__class__.__name__ == "OptionView":
-            json_loader = self.pictograph.main_widget.json_manager.loader_saver
-            sequence_so_far = json_loader.load_current_sequence_json()
-            reversal_dict = ReversalDetector.detect_reversal(
-                sequence_so_far, self.pictograph.pictograph_data
-            )
-            blue_visible = reversal_dict.get("blue_reversal", False)
-            red_visible = reversal_dict.get("red_reversal", False)
+    def update_reversal_symbols(self, visible: bool = True):
+        if visible:
+            if self.pictograph.view.__class__.__name__ == "OptionView":
+                json_loader = self.pictograph.main_widget.json_manager.loader_saver
+                sequence_so_far = json_loader.load_current_sequence_json()
+                if not self.pictograph.pictograph_data:
+                    return
+                reversal_dict = ReversalDetector.detect_reversal(
+                    sequence_so_far, self.pictograph.pictograph_data
+                )
+                blue_visible = reversal_dict.get("blue_reversal", False)
+                red_visible = reversal_dict.get("red_reversal", False)
+                settings = self.pictograph.main_widget.settings_manager.visibility
+                reversals_enabled = settings.get_glyph_visibility("Reversals")
+
+                # Apply global visibility setting
+                blue_visible = blue_visible and reversals_enabled
+                red_visible = red_visible and reversals_enabled
+            else:
+                blue_visible = self.pictograph.blue_reversal
+                red_visible = self.pictograph.red_reversal
         else:
-            blue_visible = self.pictograph.blue_reversal
-            red_visible = self.pictograph.red_reversal
+            blue_visible = False
+            red_visible = False
 
         self.reversal_items[BLUE].setVisible(blue_visible)
         self.reversal_items[RED].setVisible(red_visible)

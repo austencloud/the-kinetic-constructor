@@ -32,13 +32,13 @@ class MotionAttrManager:
                     self.motion.prefloat_motion_type = self.motion.motion_type
             if "prefloat_motion_type" in motion_data:
                 if motion_data["prefloat_motion_type"] == FLOAT:
-                    print("Warning: prefloat_motion_type cannot be 'float'")
+                    raise ValueError("prefloat_motion_type cannot be 'float'")
                 else:
                     prefloat_motion_type = motion_data["prefloat_motion_type"]
                     self.motion.prefloat_motion_type = prefloat_motion_type
             if "prefloat_prop_rot_dir" in motion_data:
                 if motion_data["prefloat_prop_rot_dir"] == NO_ROT:
-                    print("Warning: prefloat_prop_rot_dir cannot be 'no_rot'")
+                    raise ValueError("prefloat_prop_rot_dir cannot be 'no_rot'")
                 else:
                     self.motion.prefloat_prop_rot_dir = motion_data[
                         "prefloat_prop_rot_dir"

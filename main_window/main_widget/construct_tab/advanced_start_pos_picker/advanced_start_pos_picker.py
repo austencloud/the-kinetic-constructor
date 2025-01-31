@@ -23,12 +23,12 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
 
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)
-        self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
-        self._setup_layout()
-        self.start_pos_cache: dict[str, list[BasePictograph]] = {}
         self.start_position_adder = (
             self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
         )
+        self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
+        
+        self._setup_layout()
         self.generate_pictographs()
 
     def _setup_layout(self):
@@ -52,12 +52,12 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
         if pictograph_key in self.pictograph_cache:
             return self.pictograph_cache[pictograph_key]
 
-        local_dict = deepcopy(pictograph_data)
-        local_dict["grid_mode"] = target_grid_mode
+        local_pictograph_data = deepcopy(pictograph_data)
+        local_pictograph_data["grid_mode"] = target_grid_mode
 
         pictograph = BasePictograph(self.main_widget)
         pictograph.view = AdvancedStartPosPickerPictographView(self, pictograph)
-        pictograph.updater.update_pictograph(local_dict)
+        pictograph.updater.update_pictograph(local_pictograph_data)
         pictograph.view.update_borders()
 
         self.pictograph_cache[pictograph_key] = pictograph

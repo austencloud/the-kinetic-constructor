@@ -27,7 +27,6 @@ class UFOAppearanceManager:
                 ufo["fly_off"] = False  # Reset fly-off state
                 self.entering = True  # UFO is entering from off-screen
                 self.set_offscreen_entry(ufo)
-                print("UFO is now active, starting to appear.")
                 self.appearance_timer = random.randint(500, 1000)  # Reset the timer
                 self.active_duration = random.randint(300, 500)  # Ensure the UFO stays for a while
 
@@ -40,7 +39,6 @@ class UFOAppearanceManager:
                 self.active = False
                 ufo["active"] = False  # Set UFO state to inactive
                 self.appearance_timer = random.randint(500, 1000)  # Reset the timer
-                print("UFO is now inactive, disappearing.")
 
     def set_offscreen_entry(self, ufo):
         """Initialize the UFO's entry from off-screen for a straight fly-by."""

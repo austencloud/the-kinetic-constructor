@@ -17,7 +17,9 @@ if TYPE_CHECKING:
 class StartPosPicker(BaseStartPosPicker):
     SPACING = 10
     COLUMN_COUNT = 3
-
+    start_options: dict[str, BasePictograph] = {}
+    initialized = False
+    
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)
         self.construct_tab = construct_tab
@@ -27,8 +29,6 @@ class StartPosPicker(BaseStartPosPicker):
         self.setup_layout()
         self.setObjectName("StartPosPicker")
         self.setStyleSheet("background-color: white;")
-        self.initialized = False
-        self.start_options: dict[str, BasePictograph] = {}
 
         self.display_variations()
 
@@ -62,10 +62,9 @@ class StartPosPicker(BaseStartPosPicker):
         button_layout.addStretch(1)
         return button_layout
 
-    def display_variations(self) -> None:
+    def display_variations(self, grid_mode: str = DIAMOND) -> None:
         """Load only the start positions relevant to the current grid mode."""
         self.pictograph_frame.clear_pictographs()
-        grid_mode = DIAMOND
         start_pos_keys = (
             ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
             if grid_mode == DIAMOND
