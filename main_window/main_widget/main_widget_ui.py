@@ -52,7 +52,7 @@ class MainWidgetUI:
         splash.updater.update_progress("WriteTab")
         self.mw.write_tab = WriteTab(self.mw)
         splash.updater.update_progress("Finalizing")
-        
+
         self.mw.settings_dialog = SettingsDialog(self.mw)
         self.mw.background_widget = MainBackgroundWidget(self.mw)
         self.mw.background_widget.lower()
@@ -73,6 +73,10 @@ class MainWidgetUI:
         self.mw.right_stack.addWidget(self.mw.learn_tab)  # 4
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
         self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 6
+
+        self.mw.menu_bar.navigation_widget.set_active_tab(
+            self.mw.menu_bar.navigation_widget.current_index
+        )
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)
