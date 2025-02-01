@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
 from main_window.main_widget.base_indicator_label import BaseIndicatorLabel
+from main_window.main_widget.fade_manager.fadeable_opacity_effect import FadableOpacityEffect
 
 if TYPE_CHECKING:
     from .fade_manager import FadeManager
@@ -11,23 +12,29 @@ class GraphicsEffectRemover:
     def __init__(self, fade_manager: "FadeManager"):
         self.manager = fade_manager
 
-    def clear_graphics_effects(self, widgets: list[QWidget] = []) -> None:
-        """Remove all graphics effects from widgets and their children."""
-        default_widgets = [
-            self.manager.main_widget.right_stack.currentWidget(),
-            self.manager.main_widget.left_stack.currentWidget(),
-        ]
-        widgets = default_widgets
+    def clear_graphics_effects(self, widgets: list[QWidget] = None) -> None:
+        """Remove all graphics effects from specified widgets and their children."""
+        if not widgets:  # Handle None or empty list
+            widgets = [
+                self.manager.main_widget.right_stack.currentWidget(),
+                self.manager.main_widget.left_stack.currentWidget(),
+            ]
         for widget in widgets:
             if widget:
                 self._remove_all_graphics_effects(widget)
 
-    def _remove_all_graphics_effects(self, widget: QWidget):
-        """Remove graphics effects recursively and reset widget visibility."""
-        if widget.graphicsEffect():
-            widget.setGraphicsEffect(None)
-        if hasattr(widget, "children"):
+
+    def _remove_all_graphics_effects(self, widget):
+        # If widget is a QWidget, process its graphics effect and its children.
+        if isinstance(widget, QWidget):
+            if widget.graphicsEffect():
+                widget.setGraphicsEffect(None)
             for child in widget.findChildren(QWidget):
                 if child.graphicsEffect():
-                    if child.__class__.__base__ != BaseIndicatorLabel:
+                    # Optionally, check for a specific base class as you already do.
+                    if not isinstance(child, BaseIndicatorLabel):
                         child.setGraphicsEffect(None)
+        else:
+            # For non-QWidget items (e.g. QGraphicsItemGroup), you might choose to do nothing,
+            # or handle them in a custom way.
+            pass

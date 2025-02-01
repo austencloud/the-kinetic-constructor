@@ -37,10 +37,8 @@ class BorderedPictographView(PictographView):
         self.primary_color, self.secondary_color = border_colors_map.get(
             letter_type, ("black", "black")
         )
-        # Store original colors
         self.original_primary_color = self.primary_color
         self.original_secondary_color = self.secondary_color
-        # self.update()  # Trigger repaint
 
     def set_gold_border(self):
         """Set the border colors to gold, typically on hover."""

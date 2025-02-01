@@ -150,7 +150,7 @@ class MainWidget(QWidget):
         self.state_handler = MainWidgetState(self)
 
         QTimer.singleShot(0, self.state_handler.load_state)
-        QTimer.singleShot(0, self.ui_handler.load_current_tab)
+        # QTimer.singleShot(0, self.ui_handler.load_current_tab)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

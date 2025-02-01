@@ -74,6 +74,14 @@ class MainWidgetUI:
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
         self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 6
 
+        # get the current sequience json - set the right stack to option picker if its length is more than 2, otherwise start pos picker
+        json_loader = self.mw.json_manager.loader_saver
+        current_sequence = json_loader.load_current_sequence_json()
+        if len(current_sequence) > 1:
+            construct_tab.option_picker.updater.update_options()
+            self.mw.right_stack.setCurrentIndex(2)
+        else:
+            self.mw.right_stack.setCurrentIndex(0)
 
         # self.mw.menu_bar.navigation_widget.set_active_tab(
         #     self.mw.menu_bar.navigation_widget.current_index

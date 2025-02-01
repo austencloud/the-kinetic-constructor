@@ -11,9 +11,18 @@ from Enums.Enums import Glyph
 from base_widgets.base_pictograph.grid.non_radial_points_group import (
     NonRadialPointsGroup,
 )
+from main_window.main_widget.fade_manager.fade_when_ready_helper import (
+    FadeWhenReadyHelper,
+)
+from main_window.main_widget.fade_manager.fadeable_opacity_effect import FadableOpacityEffect
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
+
+
+def safe_remove_effect(widget: QWidget, effect: QGraphicsOpacityEffect):
+    if widget.graphicsEffect() is effect:
+        widget.setGraphicsEffect(None)
 
 
 class WidgetFader:
@@ -33,27 +42,52 @@ class WidgetFader:
                 callback()
             return
 
-        self.manager.graphics_effect_remover.clear_graphics_effects(widgets)
+        ready_widgets: list[QWidget] = []
+        for widget in widgets:
+            if widget.isVisible() and widget.window().winId():
+                ready_widgets.append(widget)
+            else:
+                from main_window.main_widget.fade_manager.fade_when_ready_helper import FadeWhenReadyHelper
+                helper = FadeWhenReadyHelper(widget, fade_in, duration, callback, self)
+                widget.installEventFilter(helper)
+        
+        if not ready_widgets:
+            return
 
         animation_group = QParallelAnimationGroup(self.manager)
-        for widget in widgets:
+        for widget in ready_widgets:
             effect = self._ensure_opacity_effect(widget)
+            # Mark the effect as in use.
+            effect.in_animation = True
+
             animation = QPropertyAnimation(effect, b"opacity")
             animation.setDuration(duration)
             animation.setStartValue(0.0 if fade_in else 1.0)
             animation.setEndValue(1.0 if fade_in else 0.0)
             animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
             animation_group.addAnimation(animation)
+
+            # When the animation finishes, mark the effect as no longer in use and then remove it safely.
+            animation.finished.connect(lambda w=widget, eff=effect: self._animation_finished(w, eff))
+
         if callback:
             animation_group.finished.connect(callback)
         animation_group.start()
 
-    def _ensure_opacity_effect(self, widget: QWidget) -> QGraphicsOpacityEffect:
+    def _animation_finished(self, widget: QWidget, effect: FadableOpacityEffect):
+        effect.in_animation = False
+        # Only remove if the widget’s current effect is still ours.
+        if widget.graphicsEffect() is effect:
+            widget.setGraphicsEffect(None)
+
+
+    def _ensure_opacity_effect(self, widget: QWidget) -> FadableOpacityEffect:
         effect = widget.graphicsEffect()
-        if not effect or not isinstance(effect, QGraphicsOpacityEffect):
-            effect = QGraphicsOpacityEffect(widget)
+        if not effect or not isinstance(effect, FadableOpacityEffect):
+            effect = FadableOpacityEffect(widget)
             widget.setGraphicsEffect(effect)
         return effect
+
 
     def fade_and_update(
         self,
@@ -63,7 +97,6 @@ class WidgetFader:
     ) -> None:
 
         # self.profiler.enable()
-
 
         def on_fade_out_finished():
             self.manager.graphics_effect_remover.clear_graphics_effects(widget)
@@ -87,7 +120,6 @@ class WidgetFader:
         # self.profiler.write_profiling_stats_to_file(
         #     "option_updater_profile.txt", os.getcwd()
         # )
-
 
     def fade_visibility_items_to_opacity(
         self,
@@ -140,4 +172,3 @@ class WidgetFader:
         elif element.name == "non_radial_points":
             items = element.child_points
         return items
-
