@@ -1,12 +1,19 @@
 from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QWidget, QStackedWidget, QApplication
-from PyQt6.QtCore import QPropertyAnimation, QParallelAnimationGroup, QEasingCurve, QTimer
+from PyQt6.QtCore import (
+    QPropertyAnimation,
+    QParallelAnimationGroup,
+    QEasingCurve,
+    QTimer,
+)
+
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
 
+
 class ParallelStackFader:
     """Handles fading transitions between two stacks and then animates a resize event (via minimumWidth) after the fade."""
-    
+
     left_old_widget: Optional[QWidget] = None
     left_new_widget: Optional[QWidget] = None
     right_old_widget: Optional[QWidget] = None
@@ -25,7 +32,7 @@ class ParallelStackFader:
         left_new_index: int,
         width_ratio: tuple[float, float],
         fade_duration: int = 300,
-        resize_duration: int = 300,
+        resize_duration: int = 200,
         callback: Optional[callable] = None,
     ):
         """
@@ -37,31 +44,37 @@ class ParallelStackFader:
         self.left_old_widget = left_stack.currentWidget()
         self.right_new_widget = right_stack.widget(right_new_index)
         self.left_new_widget = left_stack.widget(left_new_index)
-        
-        if not (self.right_old_widget and self.left_old_widget and 
-                self.right_new_widget and self.left_new_widget):
+
+        if not (
+            self.right_old_widget
+            and self.left_old_widget
+            and self.right_new_widget
+            and self.left_new_widget
+        ):
             return
 
         # Step 1: Fade out the current widgets.
         def fade_out_finished():
-            # Step 2: Switch the stacks to the new tab’s widgets and fade them in.
+            # Step 2: Switch the stacks to the new tab’s widgets.
             right_stack.setCurrentIndex(right_new_index)
             left_stack.setCurrentIndex(left_new_index)
+
+            # Step 3: Fade in the new widgets and animate the resizing simultaneously.
             self.manager.widget_fader.fade_widgets(
                 [self.right_new_widget, self.left_new_widget],
                 fade_in=True,
                 duration=fade_duration,
-                callback=lambda: QTimer.singleShot(0, animate_resize)
             )
-            
+            animate_resize()
+
         self.manager.widget_fader.fade_widgets(
             [self.right_old_widget, self.left_old_widget],
             fade_in=False,
             duration=fade_duration,
-            callback=fade_out_finished
+            callback=fade_out_finished,
         )
 
-        # Step 3: Once the new tab is visible, animate the resizing.
+        # Step 4: Animate the resizing.
         def animate_resize():
             total_width = self.manager.main_widget.width()
             left_target = int(total_width * width_ratio[0])
@@ -95,4 +108,4 @@ class ParallelStackFader:
             group.start()
             self._current_resize_animation = group  # Keep a reference
 
-        # End of fade_tabs_then_resize()
+        # End of fade_both_stacks()
