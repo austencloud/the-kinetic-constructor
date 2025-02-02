@@ -24,13 +24,14 @@ from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 
 if TYPE_CHECKING:
+    from main_window.main_widget.pictograph_data_loader import PictographDataLoader
     from main_window.settings_manager.settings_manager import SettingsManager
     from main_window.menu_bar.menu_bar import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
 
     from .json_manager.json_manager import JsonManager
-    from .sequence_widget.sequence_widget import SequenceWidget
+    from .sequence_workbench.sequence_workbench import SequenceWorkbench
 
     from base_widgets.base_pictograph.svg_manager import (
         SvgManager,
@@ -48,8 +49,7 @@ if TYPE_CHECKING:
     )
     from .thumbnail_finder import ThumbnailFinder
     from .grid_mode_checker import GridModeChecker
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from .pictograph_dict_loader import PictographDictLoader
+    from base_widgets.base_pictograph.pictograph import Pictograph
     from Enums.Enums import Letter
     from letter_determiner.letter_determiner import LetterDeterminer
 
@@ -68,7 +68,7 @@ class MainWidget(QWidget):
     write_tab: "WriteTab"
 
     # Widgets
-    sequence_widget: "SequenceWidget"
+    sequence_workbench: "SequenceWorkbench"
     background_widget: "MainBackgroundWidget"
     full_screen_overlay: "FullScreenImageOverlay"
 
@@ -108,7 +108,7 @@ class MainWidget(QWidget):
     main_write_tab_index: int = 4
 
     # Left Indices
-    left_sequence_widget_index: int = 0
+    left_sequence_workbench_index: int = 0
     left_codex_index: int = 1
     left_act_sheet_index: int = 2
     left_filter_selector_index: int = 3
@@ -129,10 +129,10 @@ class MainWidget(QWidget):
     json_manager: "JsonManager"
 
     # Other attributes
-    pictograph_cache: dict[str, dict[str, "BasePictograph"]]
+    pictograph_cache: dict[str, dict[str, "Pictograph"]]
     prop_type: PropType
-    pictograph_dict_loader: "PictographDictLoader"
-    pictograph_dicts: dict["Letter", list[dict]]
+    pictograph_data_loader: "PictographDataLoader"
+    pictograph_datas: dict["Letter", list[dict]]
     letter_determiner: "LetterDeterminer"
     special_placements: dict[str, dict[str, dict[str, dict[str, list[int]]]]]
 
@@ -150,7 +150,7 @@ class MainWidget(QWidget):
         self.state_handler = MainWidgetState(self)
 
         QTimer.singleShot(0, self.state_handler.load_state)
-        QTimer.singleShot(0, self.ui_handler.load_current_tab)
+        # QTimer.singleShot(0, self.ui_handler.load_current_tab)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

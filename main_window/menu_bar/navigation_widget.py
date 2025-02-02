@@ -28,7 +28,7 @@ class NavigationWidget(QWidget):
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
-            "Write ✍️",
+            # "Write ✍️",
         ]
         self.current_index = 0
         for index, name in enumerate(self.tab_names):
@@ -46,8 +46,6 @@ class NavigationWidget(QWidget):
         )
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
-
-        self.set_active_tab(self.current_index)
 
     def on_button_clicked(self, index):
         self.set_active_tab(index)

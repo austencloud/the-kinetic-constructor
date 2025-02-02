@@ -19,12 +19,12 @@ class MainWindow(QMainWindow):
     def __init__(self, profiler: "Profiler", splash_screen: "SplashScreen") -> None:
         super().__init__()
         self.profiler = profiler
-        self.main_widget = None  # Initialize main_widget to None
+        self.main_widget = None
         self.settings_manager = SettingsManager(self)
         self.palette_manager = PaletteManager(self)
 
         self.geometry_manager = MainWindowGeometryManager(self)
-        self.main_widget = MainWidget(self, splash_screen)  # Set main_widget here
+        self.main_widget = MainWidget(self, splash_screen) 
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("The Kinetic Constructor")

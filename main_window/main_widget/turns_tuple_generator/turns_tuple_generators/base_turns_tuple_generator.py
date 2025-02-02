@@ -3,22 +3,24 @@ from data.constants import BLUE, RED
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class BaseTurnsTupleGenerator:
     def _normalize_turns(self, motion: Motion) -> int:
-        if motion.turns == "fl":
+        if motion.motion_data["turns"] == "fl":
             return "fl"
         return (
-            int(motion.turns) if motion.turns in {0.0, 1.0, 2.0, 3.0} else motion.turns
+            int(motion.motion_data["turns"])
+            if motion.motion_data["turns"] in {0.0, 1.0, 2.0, 3.0}
+            else motion.motion_data["turns"]
         )
 
-    def set_pictograph(self, pictograph: "BasePictograph"):
+    def set_pictograph(self, pictograph: "Pictograph"):
         self.pictograph = pictograph
 
         self.blue_motion = self.pictograph.motions.get(BLUE)
         self.red_motion = self.pictograph.motions.get(RED)
 
     def generate_turns_tuple(self, pictograph) -> str:
-        pass 
+        pass

@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import Glyph
+from base_widgets.base_pictograph.glyphs.beat_reversal_group import BeatReversalGroup
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
     from main_window.main_widget.settings_dialog.visibility_tab.visibility_tab import (
         VisibilityTab,
     )
@@ -19,33 +20,32 @@ class VisibilityToggler:
 
         is_checked = state
         self.settings.set_glyph_visibility(name, state)
-        # self.visibility_tab.pictograph_view._update_opacity()
 
         pictographs = self.main_widget.pictograph_collector.collect_all_pictographs()
         for pictograph in pictographs:
             self._apply_glyph_visibility_to_pictograph(pictograph, name, is_checked)
 
     def _apply_glyph_visibility_to_pictograph(
-        self, pictograph: "BasePictograph", glyph_type: str, is_visible: bool
+        self, pictograph: "Pictograph", glyph_type: str, is_visible: bool
     ):
         """Apply glyph visibility to a specific pictograph."""
-        glyph_mapping = {
+        glyph_mapping: dict[str, Glyph] = {
             "VTG": pictograph.vtg_glyph,
             "TKA": pictograph.tka_glyph,
             "Elemental": pictograph.elemental_glyph,
             "Positions": pictograph.start_to_end_pos_glyph,
-            "Reversals": [
-                pictograph.blue_reversal_symbol if pictograph.blue_reversal else None,
-                pictograph.red_reversal_symbol if pictograph.red_reversal else None,
-            ],
+            "Reversals": pictograph.reversal_glyph,  # Reference the BeatReversalGroup
         }
         glyphs = glyph_mapping.get(glyph_type, [])
         if not isinstance(glyphs, list):
-            glyphs: list[Glyph] = [glyphs]
+            glyphs = [glyphs]
 
         for glyph in glyphs:
             if glyph:
-                glyph.setVisible(is_visible)
+                if glyph_type == "Reversals":
+                    glyph.update_reversal_symbols(visible=is_visible)
+                else:
+                    glyph.setVisible(is_visible)
 
         if pictograph.letter in ["α", "β", "Γ"]:
             pictograph.start_to_end_pos_glyph.setVisible(False)

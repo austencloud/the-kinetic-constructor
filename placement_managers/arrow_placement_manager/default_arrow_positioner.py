@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Dict, Any
 from Enums.letters import LetterConditions
 from data.constants import (
     ANTI,
-    BOX,
     DIAMOND,
     FLOAT,
     NONRADIAL,
@@ -26,12 +25,6 @@ if TYPE_CHECKING:  # Replace with: if TYPE_CHECKING:
 
 
 class DefaultArrowPositioner:
-    """
-    A refactored version that loads BOTH diamond and box defaults up front,
-    preserves the exact `_get_adjustment_key` logic, and gracefully handles
-    pictographs that may lack `grid_mode`.
-    """
-
     def __init__(self, placement_manager: "ArrowPlacementManager"):
         self.placement_manager = placement_manager
         self.pictograph = placement_manager.pictograph
@@ -60,10 +53,6 @@ class DefaultArrowPositioner:
         self._load_all_default_placements()
 
     def _load_all_default_placements(self) -> None:
-        """
-        Load diamond AND box data for each motion type, so we never rely on
-        'pictograph.grid_mode' at init (avoiding 'Beat' object has no attribute grid_mode').
-        """
         motion_types = [PRO, ANTI, FLOAT, DASH, STATIC]
 
         for motion_type in motion_types:
@@ -86,14 +75,10 @@ class DefaultArrowPositioner:
             self.all_defaults["box"][motion_type] = box_data
 
     def _load_json(self, path: str) -> dict:
-        """
-        Safely load a JSON file. Returns an empty dict on error.
-        """
         try:
             with codecs.open(path, "r", encoding="utf-8") as file:
                 return json.load(file)
         except Exception as e:
-            print(f"Error loading default placements from {path}: {e}")
             return {}
 
     def _get_adjustment_key(self, arrow: Arrow, default_placements: dict) -> str:
@@ -164,11 +149,6 @@ class DefaultArrowPositioner:
             return arrow.motion.motion_type
 
     def get_default_adjustment(self, arrow: Arrow) -> tuple[int, int]:
-        """
-        Use the arrow's motion_type and pictograph's grid_mode (fallback to 'diamond')
-        to find the correct dictionary in self.all_defaults. Then build the exact same
-        key via _get_adjustment_key, and look up offset data for arrow.motion.turns.
-        """
         # 1) Figure out motion type
         motion_type = arrow.motion.motion_type
 
@@ -192,9 +172,12 @@ class DefaultArrowPositioner:
         # 5) Look up "turns" sub-dictionary
         if (
             adjustment_key in default_placements
-            and str(arrow.motion.turns) in default_placements[adjustment_key]
+            and str(arrow.motion.motion_data["turns"])
+            in default_placements[adjustment_key]
         ):
-            return default_placements[adjustment_key][str(arrow.motion.turns)]
+            return default_placements[adjustment_key][
+                str(arrow.motion.motion_data["turns"])
+            ]
         else:
             # Fallback: no match for key or turns => (0, 0)
             return default_placements.get(motion_type, {}).get(

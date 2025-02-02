@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGridLayout, QFrame
 from PyQt6.QtCore import Qt, QSize
 
-from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+from main_window.main_widget.sequence_workbench.beat_frame.beat import Beat
+from main_window.main_widget.sequence_workbench.beat_frame.beat_view import BeatView
+from main_window.main_widget.sequence_workbench.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
+from main_window.main_widget.sequence_workbench.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
 from main_window.main_widget.settings_dialog.beat_layout_tab.layout_beat_view import (
@@ -33,8 +33,8 @@ class LayoutBeatFrame(QFrame):
     def __init__(self, tab: "BeatLayoutTab"):
         super().__init__(tab)
         self.tab = tab
-        self.sequence_widget = tab.sequence_widget
-        self.main_widget = self.sequence_widget.main_widget
+        self.sequence_workbench = tab.sequence_workbench
+        self.main_widget = self.sequence_workbench.main_widget
         self.widget_fader = self.main_widget.fade_manager.widget_fader
         self._setup_layout()
         self._init_beats()

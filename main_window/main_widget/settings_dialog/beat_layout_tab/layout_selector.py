@@ -36,7 +36,9 @@ class LayoutSelector(QFrame):
             with open(file_path, "r") as f:
                 return {int(key): value for key, value in json.load(f).items()}
         except FileNotFoundError:
-            print(f"File not found: {file_path}. Using default options.")
+            raise FileNotFoundError(
+                f"Beat frame layout options file not found at {file_path}"
+            )
             return {}
 
     def _setup_layout(self):

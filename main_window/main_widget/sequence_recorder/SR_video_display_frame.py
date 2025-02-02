@@ -61,7 +61,6 @@ class SR_VideoDisplayFrame(QFrame):
             # self.video_timer = QTimer(self)
             # self.video_timer.timeout.connect(self.update_video_feed)
             self.update_timer_interval()
-        print("Webcam initialized successfully.")
 
     def find_available_cameras(self) -> list[int]:
         available_cameras = []
@@ -119,7 +118,6 @@ class SR_VideoDisplayFrame(QFrame):
             for frame in self.recording_frames:
                 out.write(frame)  # Write at original (maximum) resolution
             out.release()
-            print("Video display recording saved successfully." + output_path)
 
         self.recording_frames = []  # Clear the frames after saving
         return output_path

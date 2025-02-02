@@ -31,42 +31,29 @@ class MainBackgroundWidget(QWidget):
 
     def start_timer(self):
         self.animation_timer = QTimer(self)
-        self.animation_timer.timeout.connect(self._on_animation_tick)
-        self.animation_timer.start(60)
-
-    def _on_animation_tick(self):
-
-        self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.main_widget.background.paint_background(self, painter)
         painter.end()
+        # pass
 
     def _setup_background(self):
         """Initializes the background based on the current background type."""
         bg_type = (
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
-        print(f"Setting up background: {bg_type}")
         self.background = self._get_background(bg_type)
         self.main_widget.background = self.background
 
     def apply_background(self):
         """Applies or reapplies the background."""
-        print("Applying background")
-        if self.background:
-            self.background.stop_animation()
-
         self._setup_background()
         self.main_widget.font_color_updater.update_main_widget_font_colors(
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
-
-        if isinstance(self.background, SnowfallBackground):
-            print("Starting animation for SnowfallBackground")
-            self.background.start_animation()
+        self.update()
 
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""
@@ -83,11 +70,7 @@ class MainBackgroundWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.resize_background()
-        self.background.resizeEvent(event)
 
     def resize_background(self):
         self.setGeometry(self.main_widget.rect())
         self.setFixedSize(self.main_widget.size())
-        print(f"Background resized to: {self.geometry()}")
-        if isinstance(self.background, SnowfallBackground):
-            self.background.resize(self.width(), self.height())

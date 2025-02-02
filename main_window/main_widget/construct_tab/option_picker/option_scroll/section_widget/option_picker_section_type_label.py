@@ -42,7 +42,6 @@ class OptionPickerSectionTypeLabel(QLabel):
                 border: none;
                 border-radius: {self.height() // 2}px;
                 padding: 5px;
-                transition: border 0.3s;
             }}
             QLabel:hover {{
                 border: 2px solid black;
@@ -83,7 +82,6 @@ class OptionPickerSectionTypeLabel(QLabel):
                 border: none;
                 border-radius: {label_height // 2}px;
                 padding: 5px;
-                transition: border 0.3s;
             }}
             QLabel:hover {{
                 border: 2px solid black;

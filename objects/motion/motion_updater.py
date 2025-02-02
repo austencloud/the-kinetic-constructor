@@ -9,20 +9,22 @@ class MotionUpdater:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
 
-    def update_motion(self, motion_dict=None) -> None:
-        if motion_dict:
-            self.motion.attr_manager.update_attributes(motion_dict)
+    def update_motion(self, motion_data: dict = None) -> None:
+        if motion_data:
+            self.motion.attr_manager.update_attributes(motion_data)
+
         if not self.motion.arrow.initialized:
             self.motion.arrow.setup_components()
+
         self.update_end_ori()
-        prop_dict = {
+        prop_data = {
             LOC: self.motion.end_loc,
             ORI: self.motion.end_ori,
         }
-        self.motion.prop.updater.update_prop(prop_dict)
+        self.motion.prop.updater.update_prop(prop_data)
 
     def update_end_ori(self) -> None:
         self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
-        self.motion.pictograph.pictograph_dict[f"{self.motion.color}_attributes"][
+        self.motion.pictograph.pictograph_data[f"{self.motion.color}_attributes"][
             "end_ori"
         ] = self.motion.end_ori

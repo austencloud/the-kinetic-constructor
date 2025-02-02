@@ -7,12 +7,14 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.base_lesson_widget import (
         BaseLessonWidget,
     )
-    from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.sequence_workbench.sequence_workbench import (
+        SequenceWorkbench,
+    )
 
 
 class BaseIndicatorLabel(QLabel):
     def __init__(
-        self, parent_widget: Union["BaseLessonWidget", "SequenceWidget"]
+        self, parent_widget: Union["BaseLessonWidget", "SequenceWorkbench"]
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget
@@ -28,7 +30,6 @@ class BaseIndicatorLabel(QLabel):
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.start_fade_out)
-
 
     def show_message(self, text) -> None:
         self.opacity_effect = QGraphicsOpacityEffect(self)

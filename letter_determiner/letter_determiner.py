@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class LetterDeterminer:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
-        self.letters = self.main_widget.pictograph_dicts
+        self.letters = self.main_widget.pictograph_datas
         self.non_hybrid_shift_letter_determiner = NonHybridShiftLetterDeterminer(self)
         self.dual_float_letter_determiner = DualFloatLetterDeterminer(self)
         self.beat_frame = None
@@ -23,7 +23,7 @@ class LetterDeterminer:
     ) -> Letter:
         """Update the motion attributes based on the change in prop_rot_dir."""
         if not self.beat_frame:
-            self.beat_frame = self.main_widget.sequence_widget.beat_frame
+            self.beat_frame = self.main_widget.sequence_workbench.beat_frame
         other_motion = motion.pictograph.get.other_motion(motion)
         motion_type = motion.motion_type
 
@@ -93,7 +93,7 @@ class LetterDeterminer:
     def _is_shift_prop_rot_dir_matching(self, motion: "Motion", example):
         is_rot_dir_matching = (
             example[f"{motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
             )
@@ -115,7 +115,7 @@ class LetterDeterminer:
             and example[f"{float_motion.color}_attributes"]["end_loc"]
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 float_motion.color,
             )
@@ -141,7 +141,7 @@ class LetterDeterminer:
             and example[f"{float_motion.color}_attributes"]["end_loc"]
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
-            == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            == self.main_widget.json_manager.loader_saver.get_json_prefloat_prop_rot_dir(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 float_motion.color,
             )

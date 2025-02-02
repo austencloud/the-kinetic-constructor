@@ -5,8 +5,6 @@ from objects.motion.motion import Motion
 from .base_loc_calculator import BaseLocationCalculator
 
 
-
-
 class DashLocationCalculator(BaseLocationCalculator):
     def calculate_location(self) -> str:
         if self.pictograph.letter in [Letter.Φ_DASH, Letter.Ψ_DASH]:

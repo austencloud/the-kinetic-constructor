@@ -4,17 +4,17 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class OptionClickHandler:
     def __init__(self, option_picker: "OptionPicker") -> None:
         self.option_picker = option_picker
         self.construct_tab = self.option_picker.construct_tab
-        self.beat_frame = self.construct_tab.main_widget.sequence_widget.beat_frame
+        self.beat_frame = self.construct_tab.main_widget.sequence_workbench.beat_frame
         self.add_to_sequence_manager = self.construct_tab.add_to_sequence_manager
 
-    def handle_click(self, clicked_option: "BasePictograph") -> None:
+    def handle_click(self, clicked_option: "Pictograph") -> None:
         """Handle the logic when an option is clicked."""
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         new_beat = self.add_to_sequence_manager.create_new_beat(clicked_option)

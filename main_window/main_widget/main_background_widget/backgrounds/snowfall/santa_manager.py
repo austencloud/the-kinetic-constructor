@@ -15,7 +15,7 @@ class SantaManager:
             santa_image_path = get_images_and_data_path("images/backgrounds/santa.png")
             SantaManager._cached_santa_image = QPixmap(santa_image_path)
 
-        self.santa_image: QPixmap = SantaManager._cached_santa_image
+        self.santa_image = SantaManager._cached_santa_image
 
         # Set initial parameters for Santa
         self.santa = {
@@ -28,11 +28,10 @@ class SantaManager:
         }
 
         self.santa_timer = 0  # Timer to control when Santa appears
-        self.santa_interval = random.randint(500, 1000)  # Frames between appearances
+        self.santa_interval = random.randint(3000, 5000)  # Frames between appearances
 
     def animate_santa(self):
         if self.santa["active"]:
-
             # Move Santa across the screen
             self.santa["x"] += self.santa["speed"] * self.santa["direction"]
 
@@ -55,7 +54,6 @@ class SantaManager:
                 self.santa_interval = random.randint(500, 1000)
 
     def draw_santa(self, painter: QPainter, widget: QWidget):
-
         # Define minimum and maximum Santa widths in pixels
         MIN_SANTA_WIDTH = 50
         MAX_SANTA_WIDTH = 100
@@ -73,6 +71,8 @@ class SantaManager:
 
         x = int(self.santa["x"] * widget.width())
         y = int(self.santa["y"] * widget.height())
+
+        # Scale the Santa image
         santa_image = self.santa_image.scaled(
             santa_width,
             santa_height,
@@ -80,6 +80,7 @@ class SantaManager:
             Qt.TransformationMode.SmoothTransformation,
         )
 
+        # Mirror the image if Santa is moving from right to left
         if self.santa["direction"] == -1:
             transform = QTransform().scale(-1, 1)
             santa_image = santa_image.transformed(
@@ -87,6 +88,11 @@ class SantaManager:
             )
             x -= santa_width  # Adjust position since image is mirrored
 
+        # Set opacity
         painter.setOpacity(self.santa["opacity"])
+
+        # Draw the image
         painter.drawPixmap(x, y, santa_image)
+
+        # Reset opacity
         painter.setOpacity(1.0)

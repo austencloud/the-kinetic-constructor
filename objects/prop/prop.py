@@ -8,7 +8,7 @@ from .prop_updater import PropUpdater
 if TYPE_CHECKING:
     from Enums.PropTypes import PropType
     from objects.arrow.arrow import Arrow
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 
 
@@ -19,11 +19,13 @@ class Prop(GraphicalObject):
     prop_type: "PropType"
     arrow: "Arrow"
 
-    def __init__(self, pictograph, prop_dict: dict, motion: "Motion") -> None:
+    def __init__(self, pictograph, prop_data: dict, motion, prop_type: "PropType"):
         super().__init__(pictograph)
         self.motion = motion
-        self.prop_dict = prop_dict
-        self.pictograph: BasePictograph = pictograph
+        self.prop_data = prop_data
+        self.prop_type = prop_type  # Store the prop type for reference
+
+        self.pictograph: Pictograph = pictograph
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)
         self.check = PropChecker(self)

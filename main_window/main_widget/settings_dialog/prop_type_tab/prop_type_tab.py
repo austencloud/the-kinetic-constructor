@@ -40,15 +40,16 @@ class PropTypeTab(QWidget):
 
         # Define props and corresponding SVG icons
         props = {
-            "Hand": "images/props/hand.svg",
+            # "Hand": "images/props/hand.svg",
             "Staff": "images/props/staff.svg",
             "Club": "images/props/club.svg",
             "Fan": "images/props/fan.svg",
             "Triad": "images/props/triad.svg",
             "Minihoop": "images/props/minihoop.svg",
             "Buugeng": "images/props/buugeng.svg",
-            "Sword": "images/props/sword.svg",
-            "Ukulele": "images/props/ukulele.svg",
+            "Triquetra": "images/props/triquetra.svg",
+            # "Sword": "images/props/sword.svg",
+            # "Ukulele": "images/props/ukulele.svg",
         }
 
         # Add buttons to grid
@@ -72,7 +73,6 @@ class PropTypeTab(QWidget):
         settings_manager = self.main_widget.settings_manager
         settings_manager.global_settings.set_prop_type(prop_type)
         self.main_widget.settings_manager.global_settings.prop_type_changer.apply_prop_type()
-
 
     def resizeEvent(self, event):
         font = QFont()

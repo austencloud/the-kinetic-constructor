@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt, QUrl, QTimer
 from typing import TYPE_CHECKING, Optional
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
+from main_window.main_widget.sequence_workbench.beat_frame.beat_view import BeatView
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtMultimedia import QAudioOutput, QSoundEffect
 
@@ -42,9 +42,6 @@ class SR_BeatSelectionManager(QWidget):
         self.deselect_beat()
         self.move_selection()
 
-    def handle_media_error(self, error) -> None:
-        print(f"Error occurred: {error.errorString()}")
-
     def set_bpm(self, bpm) -> None:
         milliseconds_per_beat = 60000 / bpm
         self.timer.start(int(milliseconds_per_beat))
@@ -81,8 +78,6 @@ class SR_BeatSelectionManager(QWidget):
     def set_metronome_sound(self, sound_name) -> None:
         if sound_name in self.metronome_sounds:
             self.selected_metronome_sound = self.metronome_sounds[sound_name]
-        else:
-            print("Selected metronome sound does not exist, retaining previous choice.")
 
     def get_current_bpm(self) -> Optional[int]:
         if self.timer.isActive():
@@ -101,7 +96,7 @@ class SR_BeatSelectionManager(QWidget):
     #         red_turns = self.selected_beat.beat.red_motion.turns
     #         self.selected_beat.is_selected = True
     #         graph_editor = (
-    #             self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
+    #             self.selected_beat.beat_frame.main_widget.sequence_workbench.graph_editor
     #         )
     #         graph_editor.update_GE_pictograph(self.selected_beat.beat)
 

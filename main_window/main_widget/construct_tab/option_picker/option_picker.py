@@ -12,7 +12,7 @@ from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
 
 if TYPE_CHECKING:
     from ..construct_tab import ConstructTab
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
 class OptionPicker(QWidget):
@@ -21,7 +21,7 @@ class OptionPicker(QWidget):
     COLUMN_COUNT = 8
     option_selected = pyqtSignal(str)
     layout: QVBoxLayout
-    option_pool: list["BasePictograph"]
+    option_pool: list["Pictograph"]
 
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)

@@ -41,7 +41,7 @@ class SplashBackgroundHandler:
             # Connect the update_required signal to the main widget's update method
             self.background_manager.update_required.connect(self.splash_screen.update)
             # Start the background animation
-            self.background_manager.start_animation()
+            # self.background_manager.start_animation()
 
     def apply_background(self):
         """Applies or reapplies the background manager."""

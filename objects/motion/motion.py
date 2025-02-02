@@ -1,19 +1,20 @@
 from typing import TYPE_CHECKING
+
+from objects.motion.motion_turns_manager import MotionTurnsManager
 from .motion_checker import MotionChecker
 from .motion_attr_manager import MotionAttrManager
-from .motion_manipulator import MotionManipulator
 from .motion_ori_calculator import MotionOriCalculator
 from .motion_updater import MotionUpdater
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
 
 
 class Motion:
-    pictograph: "BasePictograph"
+    pictograph: "Pictograph"
     color: str
     turns: int
     arrow: "Arrow"
@@ -28,11 +29,11 @@ class Motion:
     prefloat_motion_type: str = None
     prefloat_prop_rot_dir: str
 
-    def __init__(self, pictograph: "BasePictograph", motion_dict: dict) -> None:
+    def __init__(self, pictograph: "Pictograph", motion_data: dict) -> None:
         self.pictograph = pictograph
-        self.motion_dict = motion_dict
+        self.motion_data = motion_data
         self.ori_calculator = MotionOriCalculator(self)
-        self.manipulator = MotionManipulator(self)
         self.attr_manager = MotionAttrManager(self)
         self.updater = MotionUpdater(self)
         self.check = MotionChecker(self)
+        self.turns_manager = MotionTurnsManager(self)

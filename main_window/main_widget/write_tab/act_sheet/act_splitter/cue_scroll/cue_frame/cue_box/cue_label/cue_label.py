@@ -41,7 +41,10 @@ class CueLabel(EditableLabel):
     def calculate_font_size(self, width):
         """Calculate font size based on width without expanding height."""
         font = self.label.font()
-        font_size = self.cue_box.cue_frame.cue_scroll.act_sheet.write_tab.width() // 150
+        font_size = (
+            self.cue_box.cue_frame.cue_scroll.act_sheet.write_tab.main_widget.width()
+            // 150
+        )
         font.setPointSize(font_size)
         font_metrics = QFontMetrics(font)
         text = self.label.text()

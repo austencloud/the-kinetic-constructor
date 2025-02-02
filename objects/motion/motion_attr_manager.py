@@ -9,32 +9,34 @@ if TYPE_CHECKING:
 class MotionAttrManager:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
-        self.motion.color = self.motion.motion_dict.get(COLOR)
-        self.motion.turns = self.motion.motion_dict.get(TURNS)
+        self.motion.color = self.motion.motion_data.get(COLOR)
+        self.motion.turns = self.motion.motion_data.get(TURNS)
         self.motion.start_loc = None
         self.motion.end_loc = None
         self.motion.motion_type = None
 
-    def update_attributes(self, motion_dict: dict[str, str]) -> None:
-        for attribute, value in motion_dict.items():
+    def update_attributes(self, motion_data: dict[str, str]) -> None:
+        if TURNS in motion_data:
+            self.motion.turns = motion_data[TURNS]
+        for attribute, value in motion_data.items():
             if value is not None:
                 setattr(self.motion, attribute, value)
+                self.motion.motion_data[attribute] = value 
         if self.motion.check.is_shift():
-            if "prefloat_motion_type" not in motion_dict:
+            if "prefloat_motion_type" not in motion_data:
                 if self.motion.motion_type != FLOAT:
                     self.motion.prefloat_motion_type = self.motion.motion_type
-            if "prefloat_motion_type" in motion_dict:
-                if motion_dict["prefloat_motion_type"] == FLOAT:
-                    print("Warning: prefloat_motion_type cannot be 'float'")
+            if "prefloat_motion_type" in motion_data:
+                if motion_data["prefloat_motion_type"] == FLOAT:
+                    return
                 else:
-                    self.motion.prefloat_motion_type = motion_dict[
-                        "prefloat_motion_type"
-                    ]
-            if "prefloat_prop_rot_dir" in motion_dict:
-                if motion_dict["prefloat_prop_rot_dir"] == NO_ROT:
-                    print("Warning: prefloat_prop_rot_dir cannot be 'no_rot'")
+                    prefloat_motion_type = motion_data["prefloat_motion_type"]
+                    self.motion.prefloat_motion_type = prefloat_motion_type
+            if "prefloat_prop_rot_dir" in motion_data:
+                if motion_data["prefloat_prop_rot_dir"] == NO_ROT:
+                    return
                 else:
-                    self.motion.prefloat_prop_rot_dir = motion_dict[
+                    self.motion.prefloat_prop_rot_dir = motion_data[
                         "prefloat_prop_rot_dir"
                     ]
 
