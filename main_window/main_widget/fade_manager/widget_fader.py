@@ -44,13 +44,8 @@ class WidgetFader:
 
         ready_widgets: list[QWidget] = []
         for widget in widgets:
-            if widget.isVisible() and widget.window().winId():
                 ready_widgets.append(widget)
-            else:
-                from main_window.main_widget.fade_manager.fade_when_ready_helper import FadeWhenReadyHelper
-                helper = FadeWhenReadyHelper(widget, fade_in, duration, callback, self)
-                widget.installEventFilter(helper)
-        
+
         if not ready_widgets:
             return
 
