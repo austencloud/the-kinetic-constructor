@@ -9,15 +9,15 @@ from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame_layout_m
 )
 
 from base_widgets.base_pictograph.pictograph import Pictograph
-from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
-from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+from main_window.main_widget.sequence_workbench.beat_frame.beat import Beat
+from main_window.main_widget.sequence_workbench.beat_frame.beat_view import BeatView
+from main_window.main_widget.sequence_workbench.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+from main_window.main_widget.sequence_workbench.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat_view import (
+from main_window.main_widget.sequence_workbench.beat_frame.start_pos_beat_view import (
     StartPositionBeatView,
 )
 

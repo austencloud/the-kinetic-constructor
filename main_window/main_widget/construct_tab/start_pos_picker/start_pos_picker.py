@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from data.constants import BOX, DIAMOND, START_POS, END_POS
 from base_widgets.base_pictograph.pictograph import Pictograph
-from ...sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+from ...sequence_workbench.beat_frame.start_pos_beat import StartPositionBeat
 from .start_pos_picker_variations_button import StartPosVariationsButton
 from .start_pos_pictograph_frame import StartPosPickerPictographFrame
 from .choose_your_start_pos_label import ChooseYourStartPosLabel
@@ -86,7 +86,7 @@ class StartPosPicker(BaseStartPosPicker):
     ) -> None:
         """Adds an option for the specified start position based on the current grid mode."""
         self.start_position_adder = (
-            self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
+            self.construct_tab.main_widget.sequence_workbench.beat_frame.start_position_adder
         )
         start_pos, end_pos = position_key.split("_")
         for letter, pictograph_datas in self.main_widget.pictograph_datas.items():
@@ -114,7 +114,7 @@ class StartPosPicker(BaseStartPosPicker):
             start_pos_entry[1] if start_pos_entry else None
         )
         start_pos_beat = StartPositionBeat(
-            self.main_widget.sequence_widget.beat_frame,
+            self.main_widget.sequence_workbench.beat_frame,
         )
         start_pos_beat.updater.update_pictograph(
             start_position_pictograph.pictograph_data
@@ -139,7 +139,7 @@ class StartPosPicker(BaseStartPosPicker):
                     "red_attributes"
                 ]["end_ori"]
                 pictograph_factory = (
-                    self.main_widget.sequence_widget.beat_frame.beat_factory
+                    self.main_widget.sequence_workbench.beat_frame.beat_factory
                 )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(

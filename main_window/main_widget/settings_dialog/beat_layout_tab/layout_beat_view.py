@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
+from main_window.main_widget.sequence_workbench.beat_frame.beat_view import BeatView
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -13,4 +13,3 @@ class LayoutBeatView(BeatView):
         self.beat_frame = beat_frame
         super().__init__(beat_frame, number)
         self.setCursor(Qt.CursorShape.ArrowCursor)
-

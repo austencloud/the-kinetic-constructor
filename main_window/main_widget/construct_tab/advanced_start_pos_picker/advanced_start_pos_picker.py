@@ -24,7 +24,7 @@ class AdvancedStartPosPicker(BaseStartPosPicker):
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)
         self.start_position_adder = (
-            self.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
+            self.construct_tab.main_widget.sequence_workbench.beat_frame.start_position_adder
         )
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
 

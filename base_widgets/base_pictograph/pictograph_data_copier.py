@@ -24,7 +24,7 @@ class PictographDataCopier:
                 clipboard: QClipboard = QApplication.clipboard()
                 clipboard.setText(pictograph_json)
                 indicator_label = (
-                    self.pictograph.main_widget.sequence_widget.indicator_label
+                    self.pictograph.main_widget.sequence_workbench.indicator_label
                 )
                 indicator_label.show_message("Dictionary copied to clipboard!")
                 QToolTip.showText(

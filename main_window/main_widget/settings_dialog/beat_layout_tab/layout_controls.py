@@ -23,7 +23,7 @@ class LayoutControlsWidget(QWidget):
         super().__init__(layout_tab)
         self.layout_tab = layout_tab
         self.json_loader = (
-            self.layout_tab.sequence_widget.main_widget.json_manager.loader_saver
+            self.layout_tab.sequence_workbench.main_widget.json_manager.loader_saver
         )
         self.beat_frame = layout_tab.beat_frame
         self.layout_settings = layout_tab.layout_settings
@@ -226,7 +226,9 @@ class LayoutControlsWidget(QWidget):
         self.layout_dropdown.addItems(
             [f"{rows} x {cols}" for rows, cols in self.valid_layouts]
         )
-        layout_text = f"{self.beat_frame.current_layout[0]} x {self.beat_frame.current_layout[1]}"
+        layout_text = (
+            f"{self.beat_frame.current_layout[0]} x {self.beat_frame.current_layout[1]}"
+        )
         self.layout_dropdown.setCurrentText(layout_text)
 
         self.beat_frame.update_preview()

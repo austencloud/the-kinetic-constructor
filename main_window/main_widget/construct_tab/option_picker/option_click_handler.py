@@ -11,7 +11,7 @@ class OptionClickHandler:
     def __init__(self, option_picker: "OptionPicker") -> None:
         self.option_picker = option_picker
         self.construct_tab = self.option_picker.construct_tab
-        self.beat_frame = self.construct_tab.main_widget.sequence_widget.beat_frame
+        self.beat_frame = self.construct_tab.main_widget.sequence_workbench.beat_frame
         self.add_to_sequence_manager = self.construct_tab.add_to_sequence_manager
 
     def handle_click(self, clicked_option: "Pictograph") -> None:

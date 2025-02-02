@@ -37,6 +37,7 @@ class MainBackgroundWidget(QWidget):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.main_widget.background.paint_background(self, painter)
         painter.end()
+        # pass
 
     def _setup_background(self):
         """Initializes the background based on the current background type."""
@@ -48,16 +49,11 @@ class MainBackgroundWidget(QWidget):
 
     def apply_background(self):
         """Applies or reapplies the background."""
-        # if self.background:
-        #     self.background.stop_animation()
-
         self._setup_background()
         self.main_widget.font_color_updater.update_main_widget_font_colors(
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
-
-        # if isinstance(self.background, SnowfallBackground):
-        #     self.background.start_animation()
+        self.update()
 
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""

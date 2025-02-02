@@ -36,7 +36,7 @@ class JsonTurnsUpdater:
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
 
     def _update_prop_rot_dir(self, sequence, index: int, color: str) -> None:
-        beat_frame = self.json_manager.main_widget.sequence_widget.beat_frame
+        beat_frame = self.json_manager.main_widget.sequence_workbench.beat_frame
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if sequence[index][f"{color}_attributes"]["turns"] > 0:
                 pictograph = beat_frame.beat_views[index - 2].beat
@@ -66,7 +66,7 @@ class JsonTurnsUpdater:
         self, motion: "Motion", new_turns: Union[int, float]
     ) -> None:
         current_beat = (
-            self.main_widget.sequence_widget.beat_frame.get.currently_selected_beat_view()
+            self.main_widget.sequence_workbench.beat_frame.get.currently_selected_beat_view()
         )
         current_beat_number = (
             current_beat.number
@@ -96,7 +96,7 @@ class JsonTurnsUpdater:
         self, motion: "Motion", new_turns: Union[int, float]
     ) -> None:
         beat_index = (
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+            self.main_widget.sequence_workbench.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         motion.motion_type = (
@@ -121,7 +121,7 @@ class JsonTurnsUpdater:
         self, motion: "Motion", new_turns: Union[int, float]
     ) -> None:
         beat_index = (
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+            self.main_widget.sequence_workbench.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         self.update_turns_in_json_at_index(json_index, motion.color, new_turns)

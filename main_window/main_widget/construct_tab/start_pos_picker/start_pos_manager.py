@@ -9,7 +9,7 @@ from data.position_maps import box_positions, diamond_positions
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+from main_window.main_widget.sequence_workbench.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
 
@@ -112,7 +112,7 @@ class StartPosManager(QObject):
     def add_start_pos_to_sequence(
         self, clicked_start_option: Pictograph, event: QWidget = None
     ) -> None:
-        seq_widget = self.main_widget.sequence_widget
+        seq_widget = self.main_widget.sequence_workbench
         start_position_beat = StartPositionBeat(seq_widget.beat_frame)
 
         clicked_start_option.updater.update_dict_from_attributes()
@@ -143,7 +143,9 @@ class StartPosManager(QObject):
         start_position_pictograph = self.get_start_pos_pictograph(
             start_pos_entry[1] if start_pos_entry else None
         )
-        start_pos_beat = StartPositionBeat(self.main_widget.sequence_widget.beat_frame)
+        start_pos_beat = StartPositionBeat(
+            self.main_widget.sequence_workbench.beat_frame
+        )
 
         start_pos_beat.updater.update_pictograph(
             start_position_pictograph.pictograph_data
@@ -169,7 +171,7 @@ class StartPosManager(QObject):
                 ]["end_ori"]
 
                 pictograph_factory = (
-                    self.main_widget.sequence_widget.beat_frame.beat_factory
+                    self.main_widget.sequence_workbench.beat_frame.beat_factory
                 )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(

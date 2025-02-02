@@ -1,3 +1,4 @@
+import logging
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
@@ -23,17 +24,19 @@ class GraphicsEffectRemover:
             if widget:
                 self._remove_all_graphics_effects(widget)
 
-
     def _remove_all_graphics_effects(self, widget):
+        if isinstance(widget, BaseIndicatorLabel):
+            # Do nothing; let it keep its effect
+            return
         # If widget is a QWidget, process its graphics effect and its children.
         if isinstance(widget, QWidget):
             if widget.graphicsEffect():
+                print(f"Removing effect from widget: {widget.objectName()}")
                 widget.setGraphicsEffect(None)
             for child in widget.findChildren(QWidget):
                 if child.graphicsEffect():
-                    # Optionally, check for a specific base class as you already do.
-                    if not isinstance(child, BaseIndicatorLabel):
-                        child.setGraphicsEffect(None)
+                    print(f"Removing effect from child widget: {child.objectName()}")
+                    child.setGraphicsEffect(None)
         else:
             # For non-QWidget items (e.g. QGraphicsItemGroup), you might choose to do nothing,
             # or handle them in a custom way.

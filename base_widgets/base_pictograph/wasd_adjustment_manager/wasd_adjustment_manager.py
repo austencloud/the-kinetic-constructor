@@ -24,7 +24,7 @@ class WASD_AdjustmentManager:
 
     def handle_special_placement_removal(self) -> None:
         selected_arrow = (
-            self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow
+            self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow
         )
         if not selected_arrow:
             return

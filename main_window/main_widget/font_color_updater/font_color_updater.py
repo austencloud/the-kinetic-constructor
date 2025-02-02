@@ -6,7 +6,7 @@ from .browse_tab_font_color_updater import BrowseTabFontColorUpdater
 from .learn_tab_font_color_updater import LearnTabFontColorUpdater
 from .act_tab_font_color_updater import WriteTabFontColorUpdater
 from .menu_bar_font_color_updater import MenuBarFontColorUpdater
-from .sequence_widget_font_color_updater import SequenceWidgetFontColorUpdater
+from .sequence_workbench_font_color_updater import SequenceWorkbenchFontColorUpdater
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -19,7 +19,7 @@ class FontColorUpdater:
 
         self.sub_updater_classes: list[BaseFontColorUpdater] = [
             MenuBarFontColorUpdater,
-            SequenceWidgetFontColorUpdater,
+            SequenceWorkbenchFontColorUpdater,
             ConstructTabFontColorUpdater,
             GenerateTabFontColorUpdater,
             BrowseTabFontColorUpdater,

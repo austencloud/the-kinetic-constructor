@@ -12,7 +12,7 @@ class SplashUpdater:
         self.widget_messages = {
             "MenuBarWidget": "Initializing menu...",
             "NavigationWidget": "Setting up navigation...",
-            "SequenceWidget": "Loading sequences...",
+            "SequenceWorkbench": "Loading sequences...",
             "BrowseTab": "Building dictionary...",
             "LearnTab": "Preparing lessons...",
             "WriteTab": "Setting up Act Tab...",

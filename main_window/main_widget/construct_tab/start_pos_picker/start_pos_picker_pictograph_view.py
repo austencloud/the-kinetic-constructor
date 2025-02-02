@@ -16,7 +16,7 @@ class StartPosPickerPictographView(BorderedPictographView):
         self.start_pos_picker = start_pos_picker
         self.pictograph = pictograph
         self.start_position_adder = (
-            start_pos_picker.construct_tab.main_widget.sequence_widget.beat_frame.start_position_adder
+            start_pos_picker.construct_tab.main_widget.sequence_workbench.beat_frame.start_position_adder
         )
 
     ### EVENTS ###

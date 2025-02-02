@@ -14,7 +14,7 @@ class BeatLayoutTab(QWidget):
         super().__init__(settings_dialog)
         self.settings_dialog = settings_dialog
         self.main_widget = settings_dialog.main_widget
-        self.sequence_widget = self.main_widget.sequence_widget
+        self.sequence_workbench = self.main_widget.sequence_workbench
         self.layout_settings = self.main_widget.settings_manager.sequence_layout
         self.beat_frame = LayoutBeatFrame(self)
         self.controls = LayoutControlsWidget(self)

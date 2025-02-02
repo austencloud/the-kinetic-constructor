@@ -31,7 +31,7 @@ if TYPE_CHECKING:
     from ..main_window import MainWindow
 
     from .json_manager.json_manager import JsonManager
-    from .sequence_widget.sequence_widget import SequenceWidget
+    from .sequence_workbench.sequence_workbench import SequenceWorkbench
 
     from base_widgets.base_pictograph.svg_manager import (
         SvgManager,
@@ -68,7 +68,7 @@ class MainWidget(QWidget):
     write_tab: "WriteTab"
 
     # Widgets
-    sequence_widget: "SequenceWidget"
+    sequence_workbench: "SequenceWorkbench"
     background_widget: "MainBackgroundWidget"
     full_screen_overlay: "FullScreenImageOverlay"
 
@@ -108,7 +108,7 @@ class MainWidget(QWidget):
     main_write_tab_index: int = 4
 
     # Left Indices
-    left_sequence_widget_index: int = 0
+    left_sequence_workbench_index: int = 0
     left_codex_index: int = 1
     left_act_sheet_index: int = 2
     left_filter_selector_index: int = 3

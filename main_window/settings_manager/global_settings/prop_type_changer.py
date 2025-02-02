@@ -64,7 +64,7 @@ class PropTypeChanger:
                     pictographs.add(pictograph)
 
         # Collect pictographs from the sequence widget's beat frame
-        for beat_view in main_widget.sequence_widget.beat_frame.beat_views:
+        for beat_view in main_widget.sequence_workbench.beat_frame.beat_views:
             if beat_view.is_filled:
                 pictographs.add(beat_view.beat)
 
@@ -79,7 +79,7 @@ class PropTypeChanger:
 
         # Collect the graph editor's pictograph
         graph_editor_pictograph = (
-            main_widget.sequence_widget.graph_editor.pictograph_container.GE_view.pictograph
+            main_widget.sequence_workbench.graph_editor.pictograph_container.GE_view.pictograph
         )
         if graph_editor_pictograph.red_arrow.loc:
             pictographs.add(graph_editor_pictograph)
@@ -120,7 +120,7 @@ class PropTypeChanger:
 
     def _update_start_pos_view(self, new_prop_type):
         start_pos_view = (
-            self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view
+            self.main_window.main_widget.sequence_workbench.beat_frame.start_pos_view
         )
         if hasattr(start_pos_view, "start_pos"):
             start_pos = start_pos_view.start_pos

@@ -187,7 +187,7 @@ if TYPE_CHECKING:
 class CodexControlButton(QPushButton):
     """A reusable button class for the Codex control panel."""
 
-    ICON_BASE_PATH = "images/icons/sequence_widget_icons"
+    ICON_BASE_PATH = "images/icons/sequence_workbench_icons"
 
     def __init__(
         self, control_widget: "CodexControlWidget", icon_name: str, callback: Callable
@@ -317,7 +317,6 @@ class CodexControlWidget(QWidget):
             self.button_layout.addWidget(button)
 
         return codex_buttons
-
 
 
 # From codex_data_manager.py
@@ -681,7 +680,6 @@ LETTER_TYPE_GROUPS = {
     LetterType.Type5: [["Φ-", "Ψ-", "Λ-"]],
     LetterType.Type6: [["α", "β", "Γ"]],
 }
-
 
 
 # From codex_mirror_manager.py
@@ -1184,5 +1182,3 @@ class CodexToggleButton(QPushButton):
 
 
 # From concatenated_classes.py
-
-

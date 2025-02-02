@@ -34,7 +34,7 @@ class RotationAngleOverrideManager:
             return
 
         ori_key = self.special_positioner.data_updater._generate_ori_key(
-            self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow.motion
+            self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow.motion
         )
         data = self.pictograph.main_widget.special_placements
         letter = self.pictograph.letter
@@ -57,8 +57,8 @@ class RotationAngleOverrideManager:
 
     def _is_valid_for_override(self) -> bool:
         return (
-            self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow
-            and self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow.motion.motion_type
+            self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow
+            and self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow.motion.motion_type
             in [STATIC, DASH]
         )
 
@@ -66,7 +66,7 @@ class RotationAngleOverrideManager:
         self, letter: Letter, data: dict, ori_key: str
     ) -> None:
         rot_angle_key = self.key_generator.generate_rotation_angle_override_key(
-            self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow
+            self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow
         )
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
         self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
@@ -111,7 +111,7 @@ class RotationAngleOverrideManager:
             self.wasd_manager.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_manager
         )
         mirrored_entry_manager.rot_angle_manager.update_rotation_angle_in_mirrored_entry(
-            self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow,
+            self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow,
             updated_turn_data,
         )
 
@@ -121,6 +121,6 @@ class RotationAngleOverrideManager:
         )
         if mirrored_entry_handler:
             mirrored_entry_handler.rot_angle_manager.remove_rotation_angle_in_mirrored_entry(
-                self.pictograph.main_widget.sequence_widget.graph_editor.selection_manager.selected_arrow,
+                self.pictograph.main_widget.sequence_workbench.graph_editor.selection_manager.selected_arrow,
                 hybrid_key,
             )

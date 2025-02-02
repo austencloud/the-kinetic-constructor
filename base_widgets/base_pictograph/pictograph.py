@@ -41,7 +41,7 @@ from .pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.graph_editor.GE_pictograph_view import (
+    from main_window.main_widget.sequence_workbench.graph_editor.GE_pictograph_view import (
         GE_PictographView,
     )
     from main_window.main_widget.main_widget import MainWidget

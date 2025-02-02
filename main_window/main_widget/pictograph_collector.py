@@ -11,16 +11,16 @@ class PictographCollector:
 
     def collect_all_pictographs(self) -> List["Pictograph"]:
         return (
-            self._collect_from_sequence_widget()
+            self._collect_from_sequence_workbench()
             + self._collect_from_pictograph_cache()
             + self._collect_from_construct_tab()
             + self._collect_from_graph_editor()
             # + self._collect_from_codex()
         )
 
-    def _collect_from_sequence_widget(self) -> List["Pictograph"]:
-        sequence_widget = self.main_widget.sequence_widget
-        beat_frame = sequence_widget.beat_frame
+    def _collect_from_sequence_workbench(self) -> List["Pictograph"]:
+        sequence_workbench = self.main_widget.sequence_workbench
+        beat_frame = sequence_workbench.beat_frame
         return [beat_frame.start_pos_view.beat] + [
             beat_view.beat for beat_view in beat_frame.beat_views
         ]
@@ -45,7 +45,7 @@ class PictographCollector:
 
     def _collect_from_graph_editor(self) -> List["Pictograph"]:
         return [
-            self.main_widget.sequence_widget.graph_editor.pictograph_container.GE_view.pictograph
+            self.main_widget.sequence_workbench.graph_editor.pictograph_container.GE_view.pictograph
         ]
 
     def _collect_from_codex(self) -> List["Pictograph"]:

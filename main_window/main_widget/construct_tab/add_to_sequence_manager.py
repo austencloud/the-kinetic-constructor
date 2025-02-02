@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
+from main_window.main_widget.sequence_workbench.beat_frame.beat_view import (
     Beat,
 )
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.construct_tab.construct_tab import (
         ConstructTab,
     )
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
+    from main_window.main_widget.sequence_workbench.beat_frame.beat_view import (
         Beat,
     )
 
@@ -29,7 +29,7 @@ class AddToSequenceManager:
             if last_beat_dict.get("is_placeholder", False):
                 last_beat_dict = sequence[-2]
 
-        new_beat = Beat(clicked_option.main_widget.sequence_widget.beat_frame)
+        new_beat = Beat(clicked_option.main_widget.sequence_workbench.beat_frame)
         new_beat.setSceneRect(clicked_option.sceneRect())
         pictograph_data = clicked_option.get.pictograph_data()
 
@@ -42,7 +42,7 @@ class AddToSequenceManager:
 
         new_beat.updater.update_pictograph(pictograph_data)
         self.construct_tab.last_beat = new_beat
-        SW_beat_frame = self.construct_tab.main_widget.sequence_widget.beat_frame
+        SW_beat_frame = self.construct_tab.main_widget.sequence_workbench.beat_frame
         if not SW_beat_frame.sequence_changed:
             SW_beat_frame.sequence_changed = True
         return new_beat
