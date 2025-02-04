@@ -55,11 +55,14 @@ class ParallelStackFader:
 
         # Step 1: Fade out the current widgets.
         def fade_out_finished():
-            # Step 2: Switch the stacks to the new tab’s widgets.
             right_stack.setCurrentIndex(right_new_index)
             left_stack.setCurrentIndex(left_new_index)
 
-            # Step 3: Fade in the new widgets and animate the resizing simultaneously.
+            # Force layout refresh to ensure correct positions before fading in
+            right_stack.currentWidget().updateGeometry()
+            left_stack.currentWidget().updateGeometry()
+            QApplication.processEvents()  # Ensure immediate layout processing
+
             self.manager.widget_fader.fade_widgets(
                 [self.right_new_widget, self.left_new_widget],
                 fade_in=True,

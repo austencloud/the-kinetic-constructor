@@ -23,14 +23,15 @@ class PropTypeChanger:
         self, pictograph: "Pictograph", color, new_prop: "Prop"
     ):
         old_prop = pictograph.props[color]
-        old_prop.deleteLater()
-        old_prop.hide()
-        old_prop_data = old_prop.prop_data
-        pictograph.props[color] = new_prop
-        pictograph.addItem(new_prop)
-        pictograph.motions[color].prop = new_prop
-        new_prop.motion.attr_manager.update_prop_ori()
-        new_prop.updater.update_prop(old_prop_data)
+        if hasattr(old_prop, "loc"):
+            old_prop.deleteLater()
+            old_prop.hide()
+            old_prop_data = old_prop.prop_data
+            pictograph.props[color] = new_prop
+            pictograph.addItem(new_prop)
+            pictograph.motions[color].prop = new_prop
+            new_prop.motion.attr_manager.update_prop_ori()
+            new_prop.updater.update_prop(old_prop_data)
 
     def _finalize_pictograph_update(self, pictograph: "Pictograph"):
         pictograph.red_prop = pictograph.props[RED]
@@ -113,7 +114,7 @@ class PropTypeChanger:
         pictograph_list = [
             pictograph
             for pictograph in pictograph_list
-            if pictograph.red_prop.loc and pictograph.blue_prop.loc
+            if hasattr(pictograph.red_prop, 'loc') and hasattr(pictograph.blue_prop, 'loc')
         ]
 
         return pictograph_list
