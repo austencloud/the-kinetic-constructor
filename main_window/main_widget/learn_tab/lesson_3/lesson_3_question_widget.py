@@ -30,9 +30,9 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
         self.layout.addItem(self.spacer)
         self.setLayout(self.layout)
 
-    def load_pictograph(self, pictograph_data) -> None:
+    def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""
-        super().load_pictograph(pictograph_data)
+        super().load_pictograph(pictograph_dict)
         if self.pictograph:
             self.pictograph.tka_glyph.setVisible(True)
 

@@ -84,4 +84,4 @@ class WelcomeDialog(QDialog):
 
     def on_donate(self):
         """Open the donation page or show donation options."""
-        pass
+        print("Opening donation page...")

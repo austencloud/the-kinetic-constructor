@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Callable, Union
+from PyQt6.QtGui import QPainter
+from PyQt6.QtCore import Qt, pyqtSlot
 
 from main_window.main_widget.main_background_widget.backgrounds.aurora.aurora_background import (
     AuroraBackground,
@@ -41,7 +43,7 @@ class SplashBackgroundHandler:
             # Connect the update_required signal to the main widget's update method
             self.background_manager.update_required.connect(self.splash_screen.update)
             # Start the background animation
-            # self.background_manager.start_animation()
+            self.background_manager.start_animation()
 
     def apply_background(self):
         """Applies or reapplies the background manager."""

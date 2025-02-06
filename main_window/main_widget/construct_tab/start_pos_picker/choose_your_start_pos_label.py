@@ -3,10 +3,11 @@ from PyQt6.QtGui import QFontMetrics
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
-    from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker import StartPosPicker
+    from ...advanced_start_pos_picker.advanced_start_pos_picker import (
+        AdvancedStartPosPicker,
+    )
+    from ...components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class ChooseYourStartPosLabel(QLabel):
@@ -37,7 +38,7 @@ class ChooseYourStartPosLabel(QLabel):
 
         self.setFixedSize(width, height)
 
-        border_radius = height // 2#
+        border_radius = height // 2
 
         self.setStyleSheet(
             f"QLabel {{"

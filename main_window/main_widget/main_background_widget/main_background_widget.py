@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class MainBackgroundWidget(QWidget):
-    background: Optional[SnowfallBackground] = None
+    background: Optional[BaseBackground] = None
 
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
@@ -31,13 +31,19 @@ class MainBackgroundWidget(QWidget):
 
     def start_timer(self):
         self.animation_timer = QTimer(self)
+        self.animation_timer.timeout.connect(self._on_animation_tick)
+        self.animation_timer.start(60)
+
+    def _on_animation_tick(self):
+        if self.main_widget.background_widget:
+            self.main_widget.background.animate_background()
+        self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.main_widget.background.paint_background(self, painter)
         painter.end()
-        # pass
 
     def _setup_background(self):
         """Initializes the background based on the current background type."""
@@ -49,12 +55,14 @@ class MainBackgroundWidget(QWidget):
 
     def apply_background(self):
         """Applies or reapplies the background."""
+        if self.background:
+            self.background.stop_animation()
+
         self._setup_background()
         self.main_widget.font_color_updater.update_main_widget_font_colors(
             self.main_widget.settings_manager.global_settings.get_background_type()
         )
-        self.update()
-
+        
     def _get_background(self, bg_type: str) -> Optional[BaseBackground]:
         """Returns an instance of the appropriate Background based on bg_type."""
         background_map = {
@@ -74,3 +82,5 @@ class MainBackgroundWidget(QWidget):
     def resize_background(self):
         self.setGeometry(self.main_widget.rect())
         self.setFixedSize(self.main_widget.size())
+        self.background: Optional[BaseBackground] = None
+        self.is_animating = False

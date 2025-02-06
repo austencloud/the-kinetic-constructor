@@ -48,13 +48,13 @@ class FreeFormSequenceGenerator(BaseSequenceGenerator):
                 red_rot_dir,
             )
             self.sequence.append(next_pictograph)
-            self.sequence_workbench.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
+            self.sequence_widget.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
             )
             QApplication.processEvents()
 
         construct_tab = self.main_widget.construct_tab
-        construct_tab.option_picker.updater.refresh_options()
+        construct_tab.option_picker.update_option_picker(self.sequence)
 
         QApplication.restoreOverrideCursor()
 

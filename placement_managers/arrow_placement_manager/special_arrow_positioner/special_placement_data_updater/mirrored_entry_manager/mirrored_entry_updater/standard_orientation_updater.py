@@ -41,7 +41,7 @@ class StandardOrientationUpdater(BaseMirroredEntryUpdater):
         )
         if (
             not self.arrow.motion.turns
-            == self.arrow.pictograph.get.other_arrow(self.arrow).motion.turns
+            == self.arrow.pictograph.get.other_arrow(self.arrow).turns
             and self.arrow.motion.motion_type
             == self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
         ):
@@ -55,7 +55,7 @@ class StandardOrientationUpdater(BaseMirroredEntryUpdater):
             )
         elif (
             not self.arrow.motion.turns
-            == self.arrow.pictograph.get.other_arrow(self.arrow).motion.turns
+            == self.arrow.pictograph.get.other_arrow(self.arrow).turns
             and self.arrow.motion.motion_type
             != self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
             and not self.arrow.pictograph.check.has_one_float()
@@ -70,7 +70,7 @@ class StandardOrientationUpdater(BaseMirroredEntryUpdater):
             )
         elif (
             not self.arrow.motion.turns
-            == self.arrow.pictograph.get.other_arrow(self.arrow).motion.turns
+            == self.arrow.pictograph.get.other_arrow(self.arrow).turns
             and self.arrow.motion.motion_type
             != self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
             and self.arrow.pictograph.check.has_one_float()

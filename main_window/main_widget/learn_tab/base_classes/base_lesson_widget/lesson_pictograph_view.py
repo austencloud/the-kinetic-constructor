@@ -6,11 +6,11 @@ from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictog
 
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.pictograph import Pictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class LessonPictographView(BorderedPictographView):
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
 

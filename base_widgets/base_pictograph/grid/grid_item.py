@@ -11,6 +11,15 @@ if TYPE_CHECKING:
 GRID_DIR = "images/grid/"
 
 
+
+
+
+
+
+
+
+
+
 class GridItem(QGraphicsSvgItem):
     def __init__(self, path: str) -> None:
         super().__init__(path)

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
-from base_widgets.base_pictograph.pictograph import Pictograph
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import (
     LessonPictographView,
 )
@@ -12,8 +12,7 @@ if TYPE_CHECKING:
 
 class BaseQuestionWidget(QWidget):
     letter_label: QLabel = None
-    pictograph: Pictograph = None
-
+    pictograph: BasePictograph = None
     def __init__(self, lesson_widget: "BaseLessonWidget"):
         super().__init__(lesson_widget)
         self.lesson_widget = lesson_widget
@@ -37,12 +36,14 @@ class BaseQuestionWidget(QWidget):
             "This function should be implemented by the subclass."
         )
 
-    def load_pictograph(self, pictograph_data) -> None:
+
+
+    def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""
-        self.pictograph: Pictograph = Pictograph(self.main_widget)
+        self.pictograph: BasePictograph = BasePictograph(self.main_widget)
         self.pictograph.view = LessonPictographView(self.pictograph)
         self.pictograph.disable_gold_overlay = True
-        self.pictograph.updater.update_pictograph(pictograph_data)
+        self.pictograph.updater.update_pictograph(pictograph_dict)
         self.pictograph.view.update_borders()
         self.pictograph.quiz_mode = True
         self.layout.addWidget(

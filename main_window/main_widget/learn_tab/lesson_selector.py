@@ -147,6 +147,9 @@ class LessonSelector(QWidget):
                 self.learn_widget.stack,
                 lesson_widget_index,
                 300,
-                lesson_widget.prepare_quiz_ui(),
+                self.reset_layout_and_start_question(lesson_widget),
             )
 
+    def reset_layout_and_start_question(self, lesson_widget: "BaseLessonWidget"):
+        lesson_widget.prepare_quiz_ui()
+        lesson_widget.question_generator.start_new_question()

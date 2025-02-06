@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .splash_screen import SplashScreen

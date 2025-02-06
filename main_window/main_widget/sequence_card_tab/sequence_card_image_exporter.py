@@ -9,7 +9,7 @@ from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
     TempBeatFrame,
 )
 
-from main_window.main_widget.sequence_workbench.beat_frame.image_export_manager.image_export_manager import (
+from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )
 from utilities.path_helpers import (
@@ -67,6 +67,7 @@ class SequenceCardImageExporter:
                 pil_image.save(
                     os.path.join(export_path, image_filename), "PNG", pnginfo=info
                 )
+                print(f"Exported: {image_filename}")
 
     def get_all_images(self, path: str) -> list[str]:
         images = []

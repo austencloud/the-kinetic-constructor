@@ -1,6 +1,6 @@
 from typing import Literal
 from data.constants import BOX, DIAMOND
-from objects.motion.handpath_calculator import (
+from objects.motion.managers.handpath_calculator import (
     HandpathCalculator,
 )
 from objects.motion.motion import Motion

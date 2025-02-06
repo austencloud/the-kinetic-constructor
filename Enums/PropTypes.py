@@ -23,7 +23,6 @@ class PropType(Enum):
     Guitar = auto()
     Ukulele = auto()
     Chicken = auto()
-    Triquetra = auto()
 
     def get_prop_type(prop_type_value):
         for prop_type_enum in PropType:
@@ -43,7 +42,6 @@ small_unilateral_prop_types = [
     PropType.Minihoop,
     PropType.Triad,
     PropType.Ukulele,
-    PropType.Triquetra,
 ]
 big_bilateral_prop_types = [
     PropType.Bigstaff,
@@ -78,7 +76,6 @@ strictly_placed_props = [
     PropType.Doublestar,
     PropType.Bigbuugeng,
     PropType.Bigdoublestar,
-    PropType.Triquetra,
 ]
 
 ### LISTS FOR ITERATION ###

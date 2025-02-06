@@ -300,7 +300,7 @@ class SequencePickerNavSidebar(QWidget):
         self.setFixedWidth(max_width + extra_padding)
 
     def resize_label(self, label: QLabel):
-        font_size = self.sequence_picker.main_widget.height() // 40
+        font_size = self.sequence_picker.height() // 40
         label_font = label.font()
         label_font.setPointSize(font_size)
         label.setFont(label_font)

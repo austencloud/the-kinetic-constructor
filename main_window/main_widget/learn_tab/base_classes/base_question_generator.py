@@ -16,17 +16,17 @@ class BaseQuestionGenerator:
         self.main_widget = lesson_widget.main_widget
         self.lesson_widget = lesson_widget
 
-    def filter_pictograph_datas_by_grid_mode(self) -> dict[Letter, list[dict]]:
+    def filter_pictograph_dicts_by_grid_mode(self) -> dict[Letter, list[dict]]:
         """Filter pictograph dicts by grid mode."""
         valid_dicts: dict[Letter, list[dict]] = {}
-        for letter in self.main_widget.pictograph_datas:
+        for letter in self.main_widget.pictograph_dicts:
             valid_dicts.setdefault(letter, [])
-            for pictograph_data in self.main_widget.pictograph_datas[letter]:
+            for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
                 if (
-                    self.main_widget.grid_mode_checker.get_grid_mode(pictograph_data)
+                    self.main_widget.grid_mode_checker.get_grid_mode(pictograph_dict)
                     # == grid_mode
                 ):
-                    valid_dicts[letter].append(pictograph_data)
+                    valid_dicts[letter].append(pictograph_dict)
         return valid_dicts
 
     def start_new_question(self):

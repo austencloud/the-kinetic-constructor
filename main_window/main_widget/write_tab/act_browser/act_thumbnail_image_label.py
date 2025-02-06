@@ -42,7 +42,7 @@ class ActThumbnailImageLabel(ThumbnailImageLabel):
                 metadata = img.info.get("metadata")
                 return json.loads(metadata) if metadata else {}
         except Exception as e:
-            raise e
+            print(f"Error extracting metadata: {e}")
             return {}
 
     def mousePressEvent(self, event: QMouseEvent):
@@ -67,5 +67,4 @@ class ActThumbnailImageLabel(ThumbnailImageLabel):
             drag.setMimeData(mime_data)
             drag.exec(Qt.DropAction.CopyAction)
         except json.JSONDecodeError as e:
-            raise e
-            return
+            print(f"Error encoding metadata to JSON: {e}")

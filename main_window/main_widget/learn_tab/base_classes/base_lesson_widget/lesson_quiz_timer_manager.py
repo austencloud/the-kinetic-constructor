@@ -10,18 +10,20 @@ if TYPE_CHECKING:
 class QuizTimerManager:
     """Handles timer logic for the quiz."""
 
-    def __init__(self, lesson: "BaseLessonWidget"):
-        self.lesson = lesson
+    def __init__(self, base_widget: "BaseLessonWidget"):
+        self.base_widget = base_widget
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_timer)
 
     def start_timer(self, duration):
         """Start the quiz timer."""
-        self.lesson.quiz_time = duration
+        self.base_widget.quiz_time = duration
 
         # Update the timer label immediately
-        minutes, seconds = divmod(self.lesson.quiz_time, 60)
-        self.lesson.progress_label.setText(f"Time Remaining: {minutes}:{seconds:02d}")
+        minutes, seconds = divmod(self.base_widget.quiz_time, 60)
+        self.base_widget.progress_label.setText(
+            f"Time Remaining: {minutes}:{seconds:02d}"
+        )
 
         self.timer.start(1000)
 
@@ -29,18 +31,18 @@ class QuizTimerManager:
         """Update the quiz timer each second."""
 
         # Decrement the quiz_time first
-        self.lesson.quiz_time -= 1
+        self.base_widget.quiz_time -= 1
 
-        if self.lesson.quiz_time >= 0:
-            minutes, seconds = divmod(self.lesson.quiz_time, 60)
-            self.lesson.progress_label.setText(
+        if self.base_widget.quiz_time >= 0:
+            minutes, seconds = divmod(self.base_widget.quiz_time, 60)
+            self.base_widget.progress_label.setText(
                 f"Time Remaining: {minutes}:{seconds:02d}"
             )
         else:
             self.timer.stop()
-            self.lesson.learn_tab.results_widget.show_results(
-                self, self.lesson.incorrect_guesses
-            )
+            self.base_widget.results_widget.show_results(
+                self.base_widget.incorrect_guesses
+            )()
 
     def stop_timer(self):
         """Stop the quiz timer."""

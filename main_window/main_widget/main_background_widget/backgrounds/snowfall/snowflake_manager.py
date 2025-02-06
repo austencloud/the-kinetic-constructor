@@ -17,11 +17,12 @@ class SnowflakeManager:
                 "sway": random.uniform(-0.001, 0.001),
                 "opacity": random.uniform(0.6, 1.0),
                 "twinkle_factor": random.uniform(0.98, 1.02),
-                "is_special": random.random()
-                < 0.7,  # Increased chance for special flakes
-                "snowflake_type": random.choice([1, 2, 3]),
+                "is_special": random.random() < 0.7,  # Increased chance for special flakes
+                "snowflake_type": random.choice(
+                    [1, 2, 3]
+                ),
             }
-            for _ in range(1)
+            for _ in range(200)
         ]
         self.wind = 0.0002
         self.wind_direction_change = 0.00001
@@ -85,7 +86,6 @@ class SnowflakeManager:
             painter.setOpacity(1.0)
         finally:
             painter.restore()
-
     def draw_star_snowflake(self, painter, x, y, size):
         """Draws an even spikier star-like snowflake."""
         path = QPainterPath()

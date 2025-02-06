@@ -5,7 +5,6 @@ from PyQt6.QtCore import Qt
 
 from utilities.path_helpers import get_images_and_data_path
 
-
 class SantaManager:
     _cached_santa_image = None
 
@@ -15,7 +14,7 @@ class SantaManager:
             santa_image_path = get_images_and_data_path("images/backgrounds/santa.png")
             SantaManager._cached_santa_image = QPixmap(santa_image_path)
 
-        self.santa_image = SantaManager._cached_santa_image
+        self.santa_image:QPixmap = SantaManager._cached_santa_image
 
         # Set initial parameters for Santa
         self.santa = {
@@ -96,3 +95,5 @@ class SantaManager:
 
         # Reset opacity
         painter.setOpacity(1.0)
+
+

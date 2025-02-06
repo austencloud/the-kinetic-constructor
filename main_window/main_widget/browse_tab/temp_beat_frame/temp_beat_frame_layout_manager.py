@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.temp_beat_frame.temp_beat_frame import (
@@ -12,8 +13,7 @@ class TempBeatFrameLayoutManager:
         self.settings_manager = temp_beat_frame.main_widget.main_window.settings_manager
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
-        """Get the default layout for a given beat count from settings."""
-        return self.settings_manager.sequence_layout.get_layout_setting(str(beat_count))
+        return SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
 
     def get_cols(self):
         layout = self.beat_frame.layout

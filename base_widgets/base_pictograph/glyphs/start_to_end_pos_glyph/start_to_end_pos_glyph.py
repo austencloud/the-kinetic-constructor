@@ -8,13 +8,13 @@ from Enums.letters import Letter
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.pictograph import Pictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class StartToEndPosGlyph(QGraphicsItemGroup):
     name = "Positions"
-
-    def __init__(self, pictograph: "Pictograph"):
+    
+    def __init__(self, pictograph: "BasePictograph"):
         super().__init__()
         self.pictograph = pictograph
 
@@ -32,7 +32,7 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
         self.SVG_ARROW_PATH = get_images_and_data_path("images/arrow.svg")
         self.SVG_PATHS = {"alpha": "α.svg", "beta": "β.svg", "gamma": "Γ.svg"}
 
-    def set_start_to_end_pos_glyph(self):
+    def update_start_to_end_pos_glyph(self):
         # if the letter is alpha, beta, or gamma then don't show the start to end pos glyph
         if self.pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:
             return
@@ -61,8 +61,7 @@ class StartToEndPosGlyph(QGraphicsItemGroup):
             visible = self.pictograph.main_widget.settings_manager.visibility.get_glyph_visibility(
                 "Positions"
             )
-            if self.scene() is None:
-                self.pictograph.addItem(self)
+            self.pictograph.addItem(self)
             self.setVisible(visible)
         else:
             print(

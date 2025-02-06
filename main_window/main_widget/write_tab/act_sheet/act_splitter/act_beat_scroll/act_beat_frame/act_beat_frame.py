@@ -9,9 +9,7 @@ from .act_populator import ActPopulator
 from .act_beat_view import ActBeatView
 from .act_step_label import ActStepLabel
 from .act_beat_frame_layout_manager import ActBeatFrameLayoutManager
-from ......sequence_workbench.beat_frame.beat_selection_overlay import (
-    BeatSelectionOverlay,
-)
+from ......sequence_widget.beat_frame.beat_selection_overlay import BeatSelectionOverlay
 
 if TYPE_CHECKING:
     from ..act_beat_scroll import ActBeatScroll

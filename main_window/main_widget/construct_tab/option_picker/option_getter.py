@@ -11,8 +11,8 @@ class OptionGetter:
     def __init__(self, option_picker: "OptionPicker"):
         """Initialize with references to OptionPicker, JsonManager, and MainWidget."""
         self.option_picker = option_picker
+        self.json_manager = option_picker.json_manager
         self.main_widget = option_picker.main_widget
-        self.json_manager = self.main_widget.json_manager
 
     def get_next_options(
         self, sequence: list, selected_filter: Optional[str] = None
@@ -52,17 +52,17 @@ class OptionGetter:
     ) -> list[dict]:
         """Apply a reversal-based filter to the given list of options."""
         result = []
-        for pictograph_data in options:
+        for pictograph_dict in options:
             if (
-                self._determine_reversal_filter(sequence, pictograph_data)
+                self._determine_reversal_filter(sequence, pictograph_dict)
                 == selected_filter
             ):
-                result.append(pictograph_data)
+                result.append(pictograph_dict)
         return result
 
-    def _determine_reversal_filter(self, sequence: list, pictograph_data: dict) -> str:
+    def _determine_reversal_filter(self, sequence: list, pictograph_dict: dict) -> str:
         """Determine if pictograph is 'continuous', 'one_reversal', or 'two_reversals'."""
-        blue_cont, red_cont = self._check_continuity(sequence, pictograph_data)
+        blue_cont, red_cont = self._check_continuity(sequence, pictograph_dict)
         if blue_cont and red_cont:
             return "continuous"
         elif blue_cont ^ red_cont:  # XOR
@@ -78,7 +78,7 @@ class OptionGetter:
         start_pos = last_pictograph[END_POS]
 
         if start_pos:
-            for dict_list in self.main_widget.pictograph_datas.values():
+            for dict_list in self.main_widget.pictograph_dicts.values():
                 for pict_dict in dict_list:
                     if pict_dict[START_POS] == start_pos:
                         next_opts.append(pict_dict)

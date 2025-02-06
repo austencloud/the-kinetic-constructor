@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     )
     from base_widgets.base_pictograph.glyphs.tka.tka_glyph import TKA_Glyph
     from base_widgets.base_pictograph.glyphs.vtg.vtg_glyph import VTG_Glyph
-    from base_widgets.base_pictograph.pictograph import Pictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from main_window.settings_manager.visibility_settings.visibility_settings import (
         VisibilitySettings,
     )
@@ -36,7 +36,7 @@ Glyph = Union[
 ]
 
 
-class int(Enum):
+class Turns(Enum):
     ZERO = 0
     ZERO_POINT_FIVE = 0.5
     ONE = 1
@@ -297,6 +297,11 @@ class OrientationTypes(Enum):
     NONRADIAL = "nonradial"
 
 
+class Axes(Enum):
+    HORIZONTAL = "horizontal"
+    VERTICAL = "vertical"
+
+
 class MotionTypeCombinations(Enum):
     PRO_VS_PRO = "pro_vs_pro"
     ANTI_VS_ANTI = "anti_vs_anti"
@@ -372,13 +377,13 @@ class PictographAttributesDict(TypedDict):
     blue_prop_rot_dir: str
     blue_start_loc: str
     blue_end_loc: str
-    blue_turns: int
+    blue_turns: Turns
     blue_start_ori: str
     blue_end_ori: str
     red_motion_type: str
     red_prop_rot_dir: str
     red_start_loc: str
     red_end_loc: str
-    red_turns: int
+    red_turns: Turns
     red_start_ori: str
     red_end_ori: str

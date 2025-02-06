@@ -1,18 +1,12 @@
 from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QWidget, QStackedWidget, QApplication
-from PyQt6.QtCore import (
-    QPropertyAnimation,
-    QParallelAnimationGroup,
-    QEasingCurve,
-    QTimer,
-)
+from PyQt6.QtWidgets import QWidget, QStackedWidget
 
 if TYPE_CHECKING:
     from main_window.main_widget.fade_manager.fade_manager import FadeManager
 
 
 class ParallelStackFader:
-    """Handles fading transitions between two stacks and then animates a resize event (via minimumWidth) after the fade."""
+    """Handles parallel fading of two stacked widgets with optional resizing."""
 
     left_old_widget: Optional[QWidget] = None
     left_new_widget: Optional[QWidget] = None
@@ -21,8 +15,6 @@ class ParallelStackFader:
 
     def __init__(self, manager: "FadeManager"):
         self.manager = manager
-        # Keep a reference to the current resize animation to prevent GC.
-        self._current_resize_animation = None
 
     def fade_both_stacks(
         self,
@@ -31,15 +23,10 @@ class ParallelStackFader:
         left_stack: QStackedWidget,
         left_new_index: int,
         width_ratio: tuple[float, float],
-        fade_duration: int = 300,
-        resize_duration: int = 200,
+        duration: int = 300,
         callback: Optional[callable] = None,
     ):
-        """
-        Fade out the current tab (e.g. generate), then switch to the new tab (e.g. browse) and fade it in.
-        After the new tab is visible, animate the resizing of the left/right stacks.
-        """
-        # Cache current and target widgets.
+        """Fades out both stacks in parallel, resizes the layout, and fades in the new widgets."""
         self.right_old_widget = right_stack.currentWidget()
         self.left_old_widget = left_stack.currentWidget()
         self.right_new_widget = right_stack.widget(right_new_index)
@@ -53,62 +40,25 @@ class ParallelStackFader:
         ):
             return
 
-        # Step 1: Fade out the current widgets.
-        def fade_out_finished():
+        def switch_and_resize():
+            total_width = self.manager.main_widget.width()
+            left_width = int(total_width * width_ratio[0])
+            left_stack.setFixedWidth(left_width)
+            right_stack.setFixedWidth(total_width - left_width)
             right_stack.setCurrentIndex(right_new_index)
             left_stack.setCurrentIndex(left_new_index)
 
-            # Force layout refresh to ensure correct positions before fading in
-            right_stack.currentWidget().updateGeometry()
-            left_stack.currentWidget().updateGeometry()
-            QApplication.processEvents()  # Ensure immediate layout processing
-
+        def fade_in_new_widgets():
             self.manager.widget_fader.fade_widgets(
                 [self.right_new_widget, self.left_new_widget],
                 fade_in=True,
-                duration=fade_duration,
+                duration=duration,
+                callback=callback,
             )
-            animate_resize()
 
         self.manager.widget_fader.fade_widgets(
             [self.right_old_widget, self.left_old_widget],
             fade_in=False,
-            duration=fade_duration,
-            callback=fade_out_finished,
+            duration=duration,
+            callback=lambda: (switch_and_resize(), fade_in_new_widgets()),
         )
-
-        # Step 4: Animate the resizing.
-        def animate_resize():
-            total_width = self.manager.main_widget.width()
-            left_target = int(total_width * width_ratio[0])
-            right_target = total_width - left_target
-
-            # Animate minimumWidth so that the widget actually reflows its layout.
-            left_anim = QPropertyAnimation(left_stack, b"minimumWidth")
-            left_anim.setDuration(resize_duration)
-            left_anim.setStartValue(left_stack.width())
-            left_anim.setEndValue(left_target)
-            left_anim.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-            right_anim = QPropertyAnimation(right_stack, b"minimumWidth")
-            right_anim.setDuration(resize_duration)
-            right_anim.setStartValue(right_stack.width())
-            right_anim.setEndValue(right_target)
-            right_anim.setEasingCurve(QEasingCurve.Type.InOutQuad)
-
-            group = QParallelAnimationGroup()
-            group.addAnimation(left_anim)
-            group.addAnimation(right_anim)
-
-            def on_resize_finished():
-                # Set the fixed width after the animation completes.
-                left_stack.setFixedWidth(left_target)
-                right_stack.setFixedWidth(right_target)
-                if callback:
-                    callback()
-
-            group.finished.connect(on_resize_finished)
-            group.start()
-            self._current_resize_animation = group  # Keep a reference
-
-        # End of fade_both_stacks()

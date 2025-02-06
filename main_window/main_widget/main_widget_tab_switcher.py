@@ -45,21 +45,21 @@ class MainWidgetTabSwitcher:
             (2 / 3, 1 / 3) if index == self.mw.main_browse_tab_index else (1 / 2, 1 / 2)
         )
 
+        right_construct_tab_index = self.get_construct_tab_index()
         if (
             index in [self.mw.main_generate_tab_index, self.mw.main_construct_tab_index]
-            and self.mw.left_stack.currentIndex()
-            == self.mw.left_sequence_workbench_index
+            and self.mw.left_stack.currentIndex() == self.mw.left_sequence_widget_index
         ):
             new_index = (
                 3
                 if index == self.mw.main_generate_tab_index
-                else self.get_construct_tab_index()
+                else right_construct_tab_index
             )
             self.mw.fade_manager.stack_fader.fade_stack(self.mw.right_stack, new_index)
         elif index in [self.mw.main_construct_tab_index]:
             self.mw.fade_manager.parallel_stack_fader.fade_both_stacks(
                 self.mw.right_stack,
-                self.get_construct_tab_index(),
+                right_construct_tab_index,
                 self.mw.left_stack,
                 left_new_index,
                 width_ratio,
@@ -84,11 +84,10 @@ class MainWidgetTabSwitcher:
 
     def get_construct_tab_index(self):
         """Return the index of the construct tab."""
-        current_sequence = (
-            self.mw.json_manager.loader_saver.load_current_sequence_json()
-        )
-        if len(current_sequence) > 1:
-            return self.mw.right_option_picker_index
+        beat_frame = self.mw.sequence_widget.beat_frame
+        for beat in beat_frame.beat_views:
+            if beat.is_filled:
+                return self.mw.right_option_picker_index
         return self.mw.right_start_pos_picker_index
 
     def update_tab_based_on_settings(self) -> None:

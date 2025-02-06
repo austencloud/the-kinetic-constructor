@@ -4,36 +4,34 @@ from Enums.Enums import LetterType, Letter
 from Enums.Enums import LetterType
 
 
-from base_widgets.base_pictograph.pictograph import Pictograph
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.construct_tab.start_pos_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from ..components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class AdvancedStartPosPickerPictographFactory:
     def __init__(
         self,
         advanced_start_pos_picker: "StartPosPicker",
-        advanced_start_pos_cache: dict[str, Pictograph],
+        advanced_start_pos_cache: dict[str, BasePictograph],
     ) -> None:
         self.advanced_start_pos_picker = advanced_start_pos_picker
         self.advanced_start_pos_cache = advanced_start_pos_cache
 
     def get_or_create_pictograph(
-        self, pictograph_key: str, pictograph_data=None
-    ) -> Pictograph:
+        self, pictograph_key: str, pictograph_dict=None
+    ) -> BasePictograph:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
 
         if pictograph_key in self.advanced_start_pos_cache.get(letter, {}):
             return self.advanced_start_pos_cache[letter][pictograph_key]
 
-        if pictograph_data is not None:
+        if pictograph_dict is not None:
             pictograph = self.create_pictograph()
-            pictograph.updater.update_pictograph(pictograph_data)
+            pictograph.updater.update_pictograph(pictograph_dict)
 
             if letter not in self.advanced_start_pos_cache:
                 self.advanced_start_pos_cache[letter] = {}
@@ -61,11 +59,11 @@ class AdvancedStartPosPickerPictographFactory:
             pictograph = self.advanced_start_pos_cache.pop(key)
             pictograph.view.setParent(None)
 
-    def get_pictograph(self, pictograph_key) -> Pictograph:
+    def get_pictograph(self, pictograph_key) -> BasePictograph:
         return self.advanced_start_pos_cache[pictograph_key]
 
-    def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(
+    def create_pictograph(self) -> BasePictograph:
+        pictograph = BasePictograph(
             self.advanced_start_pos_picker.main_widget,
         )
         return pictograph

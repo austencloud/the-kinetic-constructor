@@ -28,7 +28,7 @@ class NavigationWidget(QWidget):
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
-            # "Write ✍️",
+            "Write ✍️",
         ]
         self.current_index = 0
         for index, name in enumerate(self.tab_names):
@@ -47,6 +47,8 @@ class NavigationWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
 
+        self.set_active_tab(self.current_index)
+
     def on_button_clicked(self, index):
         self.set_active_tab(index)
         self.tab_changed.emit(index)
@@ -60,34 +62,10 @@ class NavigationWidget(QWidget):
         font_size = self.mw.width() // 120
         if idx == active_index:
             button.setStyleSheet(
-                f"""
-                QPushButton {{
-                    background-color: blue;
-                    font-size: {font_size}pt;
-                    font-family: Georgia;
-                    font-weight: bold;
-                    color: white;
-                }}
-                QPushButton:pressed {{
-                    background-color: lightblue;
-                    color: white;
-                }}
-                """
+                f"background-color: lightblue; font-size: {font_size}pt; font-family: Georgia;"
             )
         else:
-            button.setStyleSheet(
-                f"""
-                QPushButton {{
-                    font-size: {font_size}pt;
-                    font-family: Georgia;
-                }}
-                QPushButton:pressed {{
-                    background-color: gray;
-                    font-weight: bold;
-                    color: white;
-                }}
-                """
-            )
+            button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
         button.setFixedWidth(self.mw.width() // 10)
         button.setFixedHeight(self.mw.height() // 22)
 

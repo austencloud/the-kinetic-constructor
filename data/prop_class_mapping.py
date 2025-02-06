@@ -8,7 +8,7 @@ prop_class_mapping = {
     PropType.Bigstaff: BigStaff,
     PropType.Club: Club,
     PropType.Fan: Fan,
-    PropType.Minihoop: Minihoop,
+    PropType.Minihoop: MiniHoop,
     PropType.Buugeng: Buugeng,
     PropType.Bigbuugeng: BigBuugeng,
     PropType.Fractalgeng: Fractalgeng,
@@ -23,5 +23,4 @@ prop_class_mapping = {
     PropType.Guitar: Guitar,
     PropType.Ukulele: Ukulele,
     PropType.Chicken: Chicken,
-    PropType.Triquetra: Triquetra,
 }

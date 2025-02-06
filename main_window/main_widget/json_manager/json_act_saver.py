@@ -19,4 +19,4 @@ class JsonActSaver:
 
         with open(self.current_act_json, "w", encoding="utf-8") as f:
             json.dump(act_data, f, indent=4, ensure_ascii=False)
-        
+        print(f"Act saved to {self.current_act_json}")
