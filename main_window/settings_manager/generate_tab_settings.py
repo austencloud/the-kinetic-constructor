@@ -1,55 +1,61 @@
+# In generate_tab_settings.py
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
 
-
+# In GenerateTabSettings class
 class GenerateTabSettings:
-    DEFAULT_FREEFORM_SETTINGS = {
-        "sequence_type": "freeform",
+    SHARED_DEFAULTS = {
         "sequence_length": 16,
         "max_turn_intensity": 1,
         "sequence_level": 1,
         "continuous_rotation": False,
         "overwrite_sequence": False,
     }
-
-    DEFAULT_CIRCULAR_SETTINGS = {
-        "sequence_type": "circular",
-        "sequence_length": 16,
-        "max_turn_intensity": 1,
-        "sequence_level": 1,
-        "rotation_type": "quartered",
-        "permutation_type": "rotated",
-        "continuous_rotation": False,
-        "overwrite_sequence": False,
+    
+    MODE_SPECIFIC_DEFAULTS = {
+        "freeform": {
+            "selected_letter_types": ["Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"]
+        },
+        "circular": {
+            "rotation_type": "quartered",
+            "permutation_type": "rotated"
+        }
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager
-        self.settings = self.settings_manager.settings  # QSettings instance
+        self.settings = self.settings_manager.settings
 
-    def get_sequence_generator_setting(self, key: str, builder_type: str):
-        """Retrieve a setting for a specific builder type."""
-        prefix = f"builder/sequence_generator/{builder_type}_sequence_generator/"
-        default = (
-            self.DEFAULT_FREEFORM_SETTINGS.get(key)
-            if builder_type == "freeform"
-            else self.DEFAULT_CIRCULAR_SETTINGS.get(key)
-        )
+    def get_setting(self, key: str, mode: str = None):
+        """Get setting with fallback to unified defaults"""
+        if mode and key in self.MODE_SPECIFIC_DEFAULTS.get(mode, {}):
+            prefix = f"builder/sequence_generator/{mode}/"
+            default = self.MODE_SPECIFIC_DEFAULTS[mode].get(key)
+        else:
+            prefix = "builder/sequence_generator/"
+            default = self.SHARED_DEFAULTS.get(key)
+            
         return self.settings.value(prefix + key, default)
 
-    def set_sequence_generator_setting(self, key: str, value, builder_type: str):
-        """Set a setting for a specific builder type."""
-        prefix = f"builder/sequence_generator/{builder_type}_sequence_generator/"
+    def set_setting(self, key: str, value, mode: str = None):
+        """Set setting in appropriate section"""
+        if mode and key in self.MODE_SPECIFIC_DEFAULTS.get(mode, {}):
+            prefix = f"builder/sequence_generator/{mode}/"
+        else:
+            prefix = "builder/sequence_generator/"
+            
         self.settings.setValue(prefix + key, value)
 
-    def get_current_sequence_generator(self) -> str:
+    def get_current_mode(self) -> str:
         return self.settings.value(
-            "builder/sequence_generator/current_sequence_generator", "circular"
+            "builder/sequence_generator/current_mode", 
+            "freeform"
         )
 
-    def update_current_sequence_generator(self, builder_type: str):
+    def set_current_mode(self, mode: str):
         self.settings.setValue(
-            "builder/sequence_generator/current_sequence_generator", builder_type
+            "builder/sequence_generator/current_mode", 
+            mode
         )

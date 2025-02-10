@@ -17,7 +17,9 @@
       "trailing_from_layer2": [-70, 45],
       "trailing_from_layer1": [-80, 95],
       "leading_from_layer2": [-75, 75],
-      "leading_from_layer1": [-120, 85]
+      "leading_from_layer1": [-120, 85],
+      "leading": [-85, 80],
+      "trailing": [-80, 75]
     },
     "(0.5, 1.5)": {
       "trailing_from_layer2": [-90, 105],
@@ -64,6 +66,9 @@
     },
     "(0, 0.5)": {
       "leading": [80, -50]
+    },
+    "(1.5, 0.5)": {
+      "leading": [-15, 60]
     }
   }
 }

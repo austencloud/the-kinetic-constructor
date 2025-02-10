@@ -4,13 +4,14 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 
+from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 from main_window.main_widget.pictograph_collector import PictographCollector
 from main_window.main_widget.settings_dialog.settings_dialog import SettingsDialog
+from main_window.main_widget.startup_dialog import StartupDialog
 from .browse_tab.browse_tab import BrowseTab
 from .fade_manager.fade_manager import FadeManager
 from .full_screen_image_overlay import FullScreenImageOverlay
 from .construct_tab.construct_tab import ConstructTab
-from .generate_tab.generate_tab import GenerateTab
 from .learn_tab.learn_tab import LearnTab
 from .write_tab.write_tab import WriteTab
 from .main_background_widget.main_background_widget import MainBackgroundWidget
@@ -18,21 +19,22 @@ from .main_widget_tab_switcher import MainWidgetTabSwitcher
 from .font_color_updater.font_color_updater import FontColorUpdater
 
 
-from .main_widget_manager import MainWidgetManager
+from .main_widget_managers import MainWidgetManagers
 from .main_widget_ui import MainWidgetUI
 from .main_widget_events import MainWidgetEvents
 from .main_widget_state import MainWidgetState
 
 if TYPE_CHECKING:
+    from main_window.main_widget.pictograph_data_loader import PictographDataLoader
     from main_window.settings_manager.settings_manager import SettingsManager
     from main_window.menu_bar.menu_bar import MenuBarWidget
     from splash_screen.splash_screen import SplashScreen
     from ..main_window import MainWindow
 
     from .json_manager.json_manager import JsonManager
-    from .sequence_widget.sequence_widget import SequenceWorkbench
+    from .sequence_workbench.sequence_workbench import SequenceWorkbench
 
-    from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
+    from base_widgets.base_pictograph.svg_manager import (
         SvgManager,
     )
     from .main_background_widget.backgrounds.base_background import (
@@ -48,8 +50,7 @@ if TYPE_CHECKING:
     )
     from .thumbnail_finder import ThumbnailFinder
     from .grid_mode_checker import GridModeChecker
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
-    from .pictograph_dict_loader import PictographDictLoader
+    from base_widgets.base_pictograph.pictograph import Pictograph
     from Enums.Enums import Letter
     from letter_determiner.letter_determiner import LetterDeterminer
 
@@ -59,19 +60,22 @@ class MainWidget(QWidget):
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
     settings_dialog: "SettingsDialog"
-    # Left Widgets
-    sequence_widget: "SequenceWorkbench"
 
-    # Right Widgets
+    # Tabs
     construct_tab: "ConstructTab"
     generate_tab: "GenerateTab"
     browse_tab: "BrowseTab"
     learn_tab: "LearnTab"
     write_tab: "WriteTab"
 
+    # Widgets
+    sequence_workbench: "SequenceWorkbench"
+    background_widget: "MainBackgroundWidget"
+    full_screen_overlay: "FullScreenImageOverlay"
+
     # Handlers
     tab_switcher: "MainWidgetTabSwitcher"
-    manager: "MainWidgetManager"
+    manager: "MainWidgetManagers"
     ui_handler: "MainWidgetUI"
     event_handler: "MainWidgetEvents"
     state_handler: "MainWidgetState"
@@ -94,10 +98,8 @@ class MainWidget(QWidget):
     top_layout: QHBoxLayout
     main_layout: QVBoxLayout
     menu_bar: "MenuBarWidget"
-    background_widget: "MainBackgroundWidget"
     left_stack: QStackedWidget
     right_stack: QStackedWidget
-    full_screen_overlay: "FullScreenImageOverlay"
 
     # Indices for tabs
     main_construct_tab_index: int = 0
@@ -107,7 +109,7 @@ class MainWidget(QWidget):
     main_write_tab_index: int = 4
 
     # Left Indices
-    left_sequence_widget_index: int = 0
+    left_sequence_workbench_index: int = 0
     left_codex_index: int = 1
     left_act_sheet_index: int = 2
     left_filter_selector_index: int = 3
@@ -128,10 +130,10 @@ class MainWidget(QWidget):
     json_manager: "JsonManager"
 
     # Other attributes
-    pictograph_cache: dict[str, dict[str, "BasePictograph"]]
+    pictograph_cache: dict[str, dict[str, "Pictograph"]]
     prop_type: PropType
-    pictograph_dict_loader: "PictographDictLoader"
-    pictograph_dicts: dict["Letter", list[dict]]
+    pictograph_data_loader: "PictographDataLoader"
+    pictograph_dataset: dict["Letter", list[dict]]
     letter_determiner: "LetterDeterminer"
     special_placements: dict[str, dict[str, dict[str, dict[str, list[int]]]]]
 
@@ -143,13 +145,25 @@ class MainWidget(QWidget):
         self.splash_screen = splash_screen
 
         self.tab_switcher = MainWidgetTabSwitcher(self)
-        self.manager = MainWidgetManager(self)
+        self.manager = MainWidgetManagers(self)
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
         self.state_handler = MainWidgetState(self)
 
         QTimer.singleShot(0, self.state_handler.load_state)
         QTimer.singleShot(0, self.ui_handler.load_current_tab)
+        # QTimer.singleShot(10, self.ensure_user_exists)
+
+    def ensure_user_exists(self):
+        """Check if a user exists; if not, prompt for a name and show welcome info."""
+        show_welcome = self.settings_manager.global_settings.get_show_welcome_screen()
+        current_user = self.settings_manager.users.get_current_user()
+
+        if show_welcome or not current_user:
+            dialog = StartupDialog(self.settings_manager, self)
+            if dialog.exec():
+                user_name = dialog.get_name()
+                self.settings_manager.users.set_current_user(user_name)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

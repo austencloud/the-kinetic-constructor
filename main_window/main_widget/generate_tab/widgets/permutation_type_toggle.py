@@ -4,15 +4,13 @@ from pytoggle import PyToggle
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from ..circular.circular_sequence_generator_frame import (
-        CircularSequenceGeneratorFrame,
-    )
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class PermutationTypeToggle(QWidget):
-    def __init__(self, circular_builder_frame: "CircularSequenceGeneratorFrame"):
+    def __init__(self, generate_tab: "GenerateTab"):
         super().__init__()
-        self.circular_builder_frame = circular_builder_frame
+        self.generate_tab = generate_tab
         self.layout: QHBoxLayout = QHBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
@@ -32,16 +30,16 @@ class PermutationTypeToggle(QWidget):
 
     def _toggle_changed(self, state):
         permutation_type = "rotated" if state else "mirrored"
-        self.circular_builder_frame._update_permutation_type(permutation_type)
+        self.generate_tab.settings.set_setting("permutation_type", permutation_type)
         self.update_mode_label_styles()
 
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected permutation type."""
         font_color_updater = (
-            self.circular_builder_frame.tab.main_widget.font_color_updater
+            self.generate_tab.main_widget.font_color_updater
         )
         font_color = font_color_updater.get_font_color(
-            self.circular_builder_frame.tab.main_widget.settings_manager.global_settings.get_background_type()
+            self.generate_tab.main_widget.settings_manager.global_settings.get_background_type()
         )
         if self.permutation_type_toggle.isChecked():
             self.mirrored_label.setStyleSheet("font-weight: normal; color: gray;")
@@ -58,7 +56,7 @@ class PermutationTypeToggle(QWidget):
         self.update_mode_label_styles()
 
     def resizeEvent(self, event):
-        font_size = self.circular_builder_frame.tab.main_widget.width() // 75
+        font_size = self.generate_tab.main_widget.width() // 75
         self.mirrored_label.setStyleSheet(f"font-size: {font_size}px;")
         self.rotated_label.setStyleSheet(f"font-size: {font_size}px;")
         self.mirrored_label.updateGeometry()

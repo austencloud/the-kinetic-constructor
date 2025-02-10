@@ -172,7 +172,8 @@ SWORD = "sword"
 GUITAR = "guitar"
 UKULELE = "ukulele"
 CHICKEN = "chicken"
-
+TRIQUETRA = "triquetra"
+TRIQUETRA2 = "triquetra2"
 
 DIAMOND = "diamond"
 BOX = "box"

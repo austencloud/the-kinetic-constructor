@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING, Union
-from Enums.Enums import int
 from data.constants import (
     ANTI,
     CCW_HANDPATH,

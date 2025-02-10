@@ -1,7 +1,7 @@
 {
   "R": {
     "(0, 0)": {
-      "pro_from_layer2": {}
+      "pro_from_layer2": [105, -50]
     }
   }
 }

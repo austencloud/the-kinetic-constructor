@@ -1,77 +1,163 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QToolButton, QLabel
+from PyQt6.QtGui import (
+    QIcon,
+    QPixmap,
+    QImage,
+    QCursor,
+    qRed,
+    qGreen,
+    qBlue,
+    qAlpha,
+    qRgba,
+)
+from PyQt6.QtCore import Qt, QSize, QEvent
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.generate_tab.widgets.level_button import LevelButton
-
-
 if TYPE_CHECKING:
-    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class LevelSelector(QWidget):
-    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
+    def __init__(self, generate_tab: "GenerateTab"):
         super().__init__()
-        self.sequence_generator_frame = sequence_generator_frame
+        self.generate_tab = generate_tab
+        self.normal_pixmaps: list[QPixmap] = []
+        self.grayscale_pixmaps: list[QPixmap] = []
+        self.buttons: list[QToolButton] = []
+        self.info_labels: list[QLabel] = []
+        self.current_level = self.generate_tab.settings.get_setting("sequence_level", 1)
+        self.default_icon_size = QSize(64, 64)
+        self._load_pixmaps()
+        self._init_ui()
+        self._apply_styles()
 
-        # Main layout: Central alignment for the entire widget
-        self.main_layout: QVBoxLayout = QVBoxLayout(self)
-        self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.main_layout.setSpacing(0)
+    def _load_pixmaps(self):
+        for level in [1, 2, 3]:
+            pixmap = QPixmap(f"images/icons/level_{level}.png")
+            if pixmap.isNull():
+                pixmap = QPixmap(64, 64)
+                pixmap.fill(Qt.GlobalColor.transparent)
 
-        self.group_layout: QHBoxLayout = QHBoxLayout()  #
-        self.group_layout.addStretch(1)
-        self.group_layout.setSpacing(10)
+            self.normal_pixmaps.append(pixmap)
+            self.grayscale_pixmaps.append(self._create_grayscale_pixmap(pixmap))
 
-        self.level_label = QLabel("Level:")
-        self.level_label.setFont(QFont("Arial", 16))
-        self.group_layout.addWidget(self.level_label)
+    def _create_grayscale_pixmap(self, color_pixmap: QPixmap) -> QPixmap:
+        image = color_pixmap.toImage().convertToFormat(QImage.Format.Format_ARGB32)
+        width = image.width()
+        height = image.height()
+        for y in range(height):
+            for x in range(width):
+                pixel = image.pixel(x, y)
+                alpha = qAlpha(pixel)
+                r = qRed(pixel)
+                g = qGreen(pixel)
+                b = qBlue(pixel)
+                gray = int(0.299 * r + 0.587 * g + 0.114 * b)
+                new_pixel = qRgba(gray, gray, gray, alpha)
+                image.setPixel(x, y, new_pixel)
+        return QPixmap.fromImage(image)
 
-        self.level_buttons_layout = QHBoxLayout()
-        self.level_buttons_layout.setSpacing(10)
+    def _init_ui(self):
+        self.main_layout = QHBoxLayout()
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(20)
+        self.main_layout.addStretch(4)
 
-        self.level_buttons: dict[str, LevelButton] = {}
-        self._create_level_buttons()
-
-        self.group_layout.addLayout(self.level_buttons_layout)
-        self.group_layout.addStretch(1)
-        self.main_layout.addLayout(self.group_layout)
-
-    def _create_level_buttons(self):
-        levels = [
-            {"level": 1, "icon": "images/icons/level_1.png"},
-            {"level": 2, "icon": "images/icons/level_2.png"},
-            {"level": 3, "icon": "images/icons/level_3.png"},
+        level_data = [
+            ("No Turns", "Base motions only\nNo turns added"),
+            ("Whole Turns", "Whole turns allowed\nRadial orientations only"),
+            ("Half Turns", "Half turns allowed\nRadial/nonradial orientations"),
         ]
-        for level_info in levels:
-            level = level_info["level"]
-            icon_path = level_info["icon"]
 
-            # Create a custom LevelButton
-            button = LevelButton(level, icon_path)
-            button.clicked.connect(self._on_level_change)
-            self.level_buttons_layout.addWidget(button)
-            self.level_buttons[f"level_{level}"] = button
+        for i, (label_text, info_text) in enumerate(level_data):
+            vbox = QVBoxLayout()
+            vbox.setSpacing(5)
+            vbox.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-    def _on_level_change(self, selected_level: int):
-        # Trigger sequence generator update
-        self.sequence_generator_frame._update_sequence_level(selected_level)
+            button = QToolButton()
+            button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+            button.setCheckable(True)
+            button.setText(label_text)
+            button.clicked.connect(lambda _, idx=i: self.set_level(idx + 1))
+            button.setToolTip(info_text)
 
-        if selected_level == 1:
-            self.sequence_generator_frame.turn_intensity_adjuster.hide()
-        else:
-            self.sequence_generator_frame.turn_intensity_adjuster.show()
-            self.sequence_generator_frame.turn_intensity_adjuster.adjust_values(
-                selected_level
+            info_label = QLabel(label_text)
+            info_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            info_label.setStyleSheet(
+                "color: white; font-size: 12pt; font-weight: bold;"
             )
 
+            self.buttons.append(button)
+            self.info_labels.append(info_label)
+
+            vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignHCenter)
+            vbox.addWidget(info_label)
+
+            self.main_layout.addLayout(vbox)
+            self.main_layout.addStretch(1)
+
+        self.main_layout.addStretch(3)
+        self.setLayout(self.main_layout)
+
+    def _apply_styles(self):
+        self.setStyleSheet(
+            """
+            QToolButton {
+                background: transparent;
+                border: none;
+                margin: 0;
+                padding: 0;
+                outline: 0;
+            }
+            QToolButton:hover:!checked {
+                background: rgba(200, 200, 200, 30);
+                border-radius: 10px;
+            }
+            QToolButton:checked {
+                background: rgba(255, 255, 255, 20);
+                border-bottom: 3px solid rgba(255, 255, 255, 80);
+                border-radius: 10px 10px 0 0;
+            }
+            """
+        )
+
     def set_level(self, level: int):
-        """Set the initial level when loading settings."""
-        self._on_level_change(level)
+        self.current_level = level
+        for i, btn in enumerate(self.buttons):
+            btn.setChecked((i + 1) == level)
+        self._update_icons()
+        self._update_sequence_settings(level)
+
+    def _update_icons(self):
+        icon_size = self._desired_icon_size()
+        for i, btn in enumerate(self.buttons):
+            is_selected = (i + 1) == self.current_level
+            source_pixmap = (
+                self.normal_pixmaps[i] if is_selected else self.grayscale_pixmaps[i]
+            )
+            scaled = source_pixmap.scaled(
+                icon_size,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            btn.setIcon(QIcon(scaled))
+            btn.setIconSize(icon_size)
+            btn_size = icon_size.width() + 10
+            btn.setFixedSize(btn_size, btn_size)
+
+    def _desired_icon_size(self) -> QSize:
+        parent_size = self.generate_tab.size()
+        side = max(32, parent_size.width() // 10)
+        return QSize(side, side)
 
     def resizeEvent(self, event):
-        """Resize the level label font dynamically based on the parent height."""
-        self.level_label.setFont(
-            QFont("Arial", self.sequence_generator_frame.height() // 30, 0)
-        )
+        super().resizeEvent(event)
+        self._update_icons()
+
+    def _update_sequence_settings(self, level: int):
+        self.generate_tab.settings.set_setting("sequence_level", str(level))
+        
+        adjuster = self.generate_tab.turn_intensity
+        adjuster.setVisible(level > 1)
+        if level > 1:
+            adjuster.adjust_values(level)

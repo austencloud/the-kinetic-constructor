@@ -56,15 +56,12 @@ class MainWidgetManagers:
             self.main_widget.pictograph_cache[letter] = {}
 
     def _set_prop_type(self) -> None:
-        settings_path = get_images_and_data_path("settings.json")
-        with open(settings_path, "r", encoding="utf-8") as file:
-            settings: dict[str, dict[str, str | bool]] = json.load(file)
-        prop_type_value = settings.get("global", {}).get("prop_type", "staff")
-        self.main_widget.prop_type = PropType.get_prop_type(prop_type_value)
+        prop_type = self.settings_manager.global_settings.get_prop_type()
+        self.main_widget.prop_type = prop_type
 
     def _setup_letters(self) -> None:
         self.main_widget.pictograph_data_loader = PictographDataLoader(self.main_widget)
-        self.main_widget.pictograph_datas = (
+        self.main_widget.pictograph_dataset = (
             self.main_widget.pictograph_data_loader.load_all_pictograph_data()
         )
         self.main_widget.letter_determiner = LetterDeterminer(self.main_widget)

@@ -2,8 +2,9 @@ from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
-    from .generate_tab import GenerateTab
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class CustomizeSequenceLabel(QLabel):

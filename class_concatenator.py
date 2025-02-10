@@ -48,7 +48,9 @@ class ClassConcatenatorApp(QWidget):
             QMessageBox.warning(self, "Error", "Please select a directory first.")
             return
 
-        output_file = os.path.join(self.selected_directory, "concatenated_classes.py")
+        dir_name = os.path.basename(self.selected_directory)
+        output_file = os.path.join(self.selected_directory, f"concatenated_{dir_name}.py")
+
         try:
             imports = set()
             class_definitions = []
@@ -59,28 +61,18 @@ class ClassConcatenatorApp(QWidget):
                             file_path = os.path.join(root, file)
                             with open(file_path, "r") as infile:
                                 content = infile.read()
-
-                                # Extract imports
                                 for line in content.splitlines():
                                     if line.startswith("import") or line.startswith("from"):
                                         imports.add(line)
-
-                                # Append full content for classes
                                 class_definitions.append(f"# From {file}\n" + content)
-
-                # Write imports to the output file
                 outfile.write("\n".join(sorted(imports)) + "\n\n")
-
-                # Write class definitions to the output file
                 for class_definition in class_definitions:
                     outfile.write(class_definition + "\n\n")
-
             QMessageBox.information(
                 self, "Success", f"Classes concatenated into {output_file}"
             )
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred: {e}")
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

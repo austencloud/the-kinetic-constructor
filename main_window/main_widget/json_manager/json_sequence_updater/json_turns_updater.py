@@ -25,7 +25,7 @@ class JsonTurnsUpdater:
             sequence[index], color
         )
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
-        beat_frame = self.json_manager.main_widget.sequence_widget.beat_frame
+        beat_frame = self.json_manager.main_widget.sequence_workbench.beat_frame
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if sequence[index][f"{color}_attributes"]["turns"] > 0:
                 pictograph = beat_frame.beat_views[index - 2].beat
@@ -35,9 +35,7 @@ class JsonTurnsUpdater:
                     sequence[index][f"{color}_attributes"][
                         "prop_rot_dir"
                     ] = prop_rot_dir
-            if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:
 
-                del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         elif sequence[index][f"{color}_attributes"]["turns"] == "fl":
             pictograph = beat_frame.beat_views[index - 2].beat
             if pictograph:
@@ -53,7 +51,7 @@ class JsonTurnsUpdater:
 
     def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
         current_beat = (
-            self.main_widget.sequence_widget.beat_frame.get.currently_selected_beat_view()
+            self.main_widget.sequence_workbench.beat_frame.get.currently_selected_beat_view()
         )
         current_beat_number = (
             current_beat.number
@@ -80,7 +78,7 @@ class JsonTurnsUpdater:
 
     def set_turns_to_num_from_fl_in_json(self, motion: "Motion", new_turns):
         beat_index = (
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+            self.main_widget.sequence_workbench.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         motion.motion_type = (
@@ -105,7 +103,7 @@ class JsonTurnsUpdater:
 
     def set_turns_to_fl_from_num_in_json(self, motion: "Motion", new_turns):
         beat_index = (
-            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+            self.main_widget.sequence_workbench.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         self.update_turns_in_json_at_index(json_index, motion.color, new_turns)

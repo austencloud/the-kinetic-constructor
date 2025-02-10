@@ -28,7 +28,7 @@ class NavigationWidget(QWidget):
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
-            "Write ✍️",
+            # "Write ✍️",
         ]
         self.current_index = 0
         for index, name in enumerate(self.tab_names):
@@ -57,17 +57,35 @@ class NavigationWidget(QWidget):
         self.current_index = index
         for idx, button in enumerate(self.tab_buttons.values()):
             self.set_button_appearance(index, idx, button)
-
+            
     def set_button_appearance(self, active_index, idx, button: "QPushButton"):
         font_size = self.mw.width() // 120
+        border_radius = font_size  # Adjust the radius as needed
+        default_background = "white"
+        active_background = "#3A4CC0"
+        default_text_color = "black"
+        active_text_color = "white"
         if idx == active_index:
             button.setStyleSheet(
-                f"background-color: lightblue; font-size: {font_size}pt; font-family: Georgia;"
+                f"background-color: {active_background}; "
+                f"color: {active_text_color}; "
+                f"font-size: {font_size}pt; "
+                f"font-family: Georgia; "
+                f"border-radius: {border_radius}px; "
+                f"font-weight: bold;"
             )
         else:
-            button.setStyleSheet(f"font-size: {font_size}pt; font-family: Georgia;")
+            button.setStyleSheet(
+                f"background-color: {default_background}; "
+                f"color: {default_text_color}; "
+                f"font-size: {font_size}pt; "
+                f"font-family: Georgia; "
+                f"border-radius: {border_radius}px; "
+                f"font-weight: normal;"
+            )
         button.setFixedWidth(self.mw.width() // 10)
         button.setFixedHeight(self.mw.height() // 22)
+
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

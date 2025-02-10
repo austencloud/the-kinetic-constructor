@@ -487,6 +487,10 @@
     "(1, 0)": {
       "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true,
       "swap_beta_s_nonradial_blue_pro_se_red_static_s": true
+    },
+    "(o, fl, 0.5)": {
+      "static_rot_angle_override": true,
+      "static": [115, -130]
     }
   }
 }

@@ -1,6 +1,6 @@
 from copy import deepcopy
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QWidget, QApplication
 from utilities.reversal_detector import (
     ReversalDetector,
 )
@@ -93,7 +93,12 @@ class BeatFrameUpdater:
         for beat_view in self.bf.beat_views:
             beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
+
         self.bf.start_pos_view.setScene(self.bf.start_pos_view.blank_beat)
         self.bf.start_pos_view.is_filled = False
         self.bf.selection_overlay.deselect_beat()
+
         self.bf.sequence_workbench.current_word_label.update_current_word_label_from_beats()
+        # self.bf.layout_manager.setup_layout()  # Re-setup layout
+        # self.bf.updateGeometry()               # Force layout recalculation
+        QApplication.processEvents()           # Process pending events

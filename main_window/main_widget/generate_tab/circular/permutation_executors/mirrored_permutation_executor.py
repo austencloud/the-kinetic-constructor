@@ -4,13 +4,13 @@ from PyQt6.QtWidgets import QApplication
 from data.locations import vertical_loc_mirror_map, horizontal_loc_mirror_map
 
 if TYPE_CHECKING:
-    from ..circular_sequence_generator import CircularSequenceGenerator
+    from ..circular_sequence_builder import CircularSequenceBuilder
 
 
 class MirroredPermutationExecutor(PermutationExecutor):
     def __init__(
         self,
-        circular_sequence_generator: "CircularSequenceGenerator",
+        circular_sequence_generator: "CircularSequenceBuilder",
         color_swap_second_half: bool,
     ):
         self.circular_sequence_generator = circular_sequence_generator
@@ -42,10 +42,10 @@ class MirroredPermutationExecutor(PermutationExecutor):
             new_entries.append(next_pictograph)
             sequence.append(next_pictograph)
 
-            sequence_widget = (
-                self.circular_sequence_generator.top_builder_widget.sequence_widget
+            sequence_workbench = (
+                self.circular_sequence_generator.sequence_workbench
             )
-            sequence_widget.create_new_beat_and_add_to_sequence(
+            sequence_workbench.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
             )
             self.validation_engine.validate_last_pictograph()

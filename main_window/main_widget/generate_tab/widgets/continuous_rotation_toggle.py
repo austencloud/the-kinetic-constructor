@@ -3,14 +3,15 @@ from pytoggle import PyToggle
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class ContinuousRotationToggle(QWidget):
-    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
+    def __init__(self, generate_tab: "GenerateTab"):
         super().__init__()
-        self.sequence_generator_frame = sequence_generator_frame
-        self.main_widget = self.sequence_generator_frame.tab.main_widget
+        self.generate_tab = generate_tab
+        self.main_widget = self.generate_tab.main_widget
         self.layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(self.layout)
         self._create_rotation_toggle()
@@ -29,7 +30,9 @@ class ContinuousRotationToggle(QWidget):
         # self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
-        self.sequence_generator_frame._update_continuous_rotation(bool(state))
+        rotation = "continuous" if state else "random"
+        self.generate_tab.settings.set_setting("continuous_rotation", rotation)
+        
         self.update_mode_label_styles()
 
     def update_mode_label_styles(self):

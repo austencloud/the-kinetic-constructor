@@ -32,7 +32,7 @@ class GlobalSettings:
 
     # Getter and Setter for Background Type
     def get_background_type(self) -> str:
-        return self.settings.value("global/background_type", "Aurora")
+        return self.settings.value("global/background_type", "Snowfall")
 
     def set_background_type(self, background_type: str) -> None:
         self.settings.setValue("global/background_type", background_type)

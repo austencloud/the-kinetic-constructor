@@ -4,16 +4,14 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.base_classes.base_sequence_generator_frame import (
-        BaseSequenceGeneratorFrame,
-    )
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class GeneratorTypeButton(QPushButton):
-    def __init__(self, text: str, frame: "BaseSequenceGeneratorFrame", key: str):
+    def __init__(self, text: str, frame: "GenerateTab", key: str):
         super().__init__(text)
         self.frame = frame
-        self.tab = frame.tab
+        self.tab = frame.generate_tab
         self.key = key
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.clicked.connect(self.show_frame)

@@ -158,6 +158,9 @@
       "swap_beta_w_nonradial_blue_dash_s_red_pro_nw": true,
       "swap_beta_n_nonradial_blue_pro_nw_red_dash_e": true,
       "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true
+    },
+    "(s, fl, 0.5)": {
+      "float": [65, -70]
     }
   }
 }

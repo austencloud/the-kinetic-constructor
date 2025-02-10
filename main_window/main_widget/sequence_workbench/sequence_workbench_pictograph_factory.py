@@ -46,7 +46,9 @@ class BeatFactory:
 
             return start_pos_beat
 
-        raise ValueError("Pictograph dict is required for creating a new pictograph.")
+        raise ValueError(
+            "BasePictograph dict is required for creating a new pictograph."
+        )
 
     def create_new_beat_and_add_to_sequence(
         self,

@@ -3,13 +3,13 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base_classes.base_sequence_generator_frame import BaseSequenceGeneratorFrame
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class TurnIntensityAdjuster(QWidget):
-    def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
+    def __init__(self, generate_tab: "GenerateTab"):
         super().__init__()
-        self.sequence_generator_frame = sequence_generator_frame
+        self.generate_tab = generate_tab
         self.layout: QHBoxLayout = QHBoxLayout()
         self.layout.setSpacing(10)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -52,7 +52,9 @@ class TurnIntensityAdjuster(QWidget):
         if current_index < len(self.values) - 1:
             self.intensity = self.values[current_index + 1]
             self.intensity_value_label.setText(str(self.intensity))
-            self.sequence_generator_frame._update_max_turn_intensity(self.intensity)
+            self.generate_tab.settings.set_setting(
+                "turn_intensity", str(self.intensity)
+            )
 
     def _decrease_intensity(self):
         # Check the current index and make sure we do not go below the min valid value
@@ -60,7 +62,9 @@ class TurnIntensityAdjuster(QWidget):
         if current_index > 0:
             self.intensity = self.values[current_index - 1]
             self.intensity_value_label.setText(str(self.intensity))
-            self.sequence_generator_frame._update_max_turn_intensity(self.intensity)
+            self.generate_tab.settings.set_setting(
+                "turn_intensity", str(self.intensity)
+            )
 
     def set_intensity(self, intensity):
         """Set the initial intensity when loading settings."""
@@ -83,10 +87,12 @@ class TurnIntensityAdjuster(QWidget):
         if self.intensity not in self.values:
             self.intensity = min(self.values, key=lambda x: abs(x - self.intensity))
             self.intensity_value_label.setText(str(self.intensity))
-            self.sequence_generator_frame._update_max_turn_intensity(self.intensity)
+            self.generate_tab.settings.set_setting(
+                "turn_intensity", str(self.intensity)
+            )
 
     def resizeEvent(self, event):
-        font_size = self.sequence_generator_frame.tab.main_widget.width() // 75
+        font_size = self.generate_tab.main_widget.width() // 75
         font = self.intensity_label.font()
         font.setPointSize(font_size)
 
@@ -94,6 +100,6 @@ class TurnIntensityAdjuster(QWidget):
         self.plus_button.setFont(font)
         self.intensity_label.setFont(font)
         self.intensity_value_label.setFont(font)
-        btn_size = self.sequence_generator_frame.tab.main_widget.width() // 40
+        btn_size = self.generate_tab.main_widget.width() // 40
         self.minus_button.setFixedSize(btn_size, btn_size)
         self.plus_button.setFixedSize(btn_size, btn_size)

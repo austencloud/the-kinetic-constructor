@@ -9,35 +9,13 @@ from Enums.PropTypes import (
 )
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.pictograph import Pictograph
 
 
-string_to_enum_map = {
-    "hand": PropType.Hand,
-    "staff": PropType.Staff,
-    "bigstaff": PropType.Bigstaff,
-    "club": PropType.Club,
-    "buugeng": PropType.Buugeng,
-    "bigbuugeng": PropType.Bigbuugeng,
-    "fractalgeng": PropType.Fractalgeng,
-    "eightrings": PropType.Eightrings,
-    "bigeightrings": PropType.BigEightRings,
-    "fan": PropType.Fan,
-    "triad": PropType.Triad,
-    "minihoop": PropType.Minihoop,
-    "bighoop": PropType.Bighoop,
-    "doublestar": PropType.Doublestar,
-    "bigdoublestar": PropType.Bigdoublestar,
-    "quiad": PropType.Quiad,
-    "sword": PropType.Sword,
-    "guitar": PropType.Guitar,
-    "ukulele": PropType.Ukulele,
-    "chicken": PropType.Chicken,
-}
 
 
 class PropClassifier:
-    def __init__(self, pictograph: "BasePictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.classify_props()
 

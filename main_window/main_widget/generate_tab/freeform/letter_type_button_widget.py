@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QColor
 
 from Enums.letters import LetterType
-from main_window.main_widget.sequence_widget.beat_frame.button_styled_border_overlay import (
+from main_window.main_widget.sequence_workbench.beat_frame.button_styled_border_overlay import (
     StyledBorderOverlayForButton,
 )
 
@@ -99,7 +99,7 @@ class LetterTypeButtonWidget(QWidget):
         self.overlay.setFixedSize(self.size())
         font = self.label.font()
         font.setPointSize(
-            self.letter_type_picker.generator_frame.tab.main_widget.height() // 10
+            self.letter_type_picker.generate_tab.main_widget.height() // 10
         )
         font.setBold(True)
         self.label.setFont(font)

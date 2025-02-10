@@ -106,7 +106,7 @@ class PictographDataLoader:
             )
             return None
 
-        letter_dicts = self.main_widget.pictograph_datas.get(target_letter, [])
+        letter_dicts = self.main_widget.pictograph_dataset.get(target_letter, [])
         for pdict in letter_dicts:
             if (
                 pdict.get("start_pos") == simplified_dict["start_pos"]

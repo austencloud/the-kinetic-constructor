@@ -8,17 +8,15 @@ from main_window.main_widget.generate_tab.freeform.letter_type_button_widget imp
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.freeform.freeform_sequence_generator_frame import (
-        FreeformSequenceGeneratorFrame,
-    )
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
+    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class LetterTypePickerWidget(QWidget):
-    def __init__(self, generator_frame: "FreeformSequenceGeneratorFrame"):
-        super().__init__(generator_frame)
-        self.generator_frame = generator_frame
-        self.sequence_generator_settings = generator_frame.generate_tab_settings
-        self.builder_type = generator_frame.generator_type
+    def __init__(self, generate_tab: "GenerateTab"):
+        super().__init__(generate_tab)
+        self.generate_tab = generate_tab
+        self.settings = generate_tab.settings
 
         # Instead of a checkbox, use a label
         self.filter_label = QLabel("Filter by type:")
@@ -38,7 +36,7 @@ class LetterTypePickerWidget(QWidget):
 
         # Initially hide these since the default could be "All Letters"
         # (Adjust logic as needed if you want them always visible)
-        self._set_letter_type_buttons_visible(False)
+        # self._set_letter_type_buttons_visible(False)
 
         # Main layout
         main_layout = QVBoxLayout(self)
@@ -47,7 +45,6 @@ class LetterTypePickerWidget(QWidget):
         mode_layout.addWidget(self.filter_label)
         main_layout.addLayout(mode_layout)
         main_layout.addLayout(self.letter_types_layout)
-        main_layout.addStretch(1)
 
     def _on_letter_type_clicked(self, letter_type: LetterType, is_selected: bool):
         # Ensure at least one is selected
@@ -64,21 +61,15 @@ class LetterTypePickerWidget(QWidget):
             for lt, w in zip(LetterType, self.letter_type_widgets)
             if w.is_selected
         ]
-        self.sequence_generator_settings.set_sequence_generator_setting(
-            "selected_letter_types", chosen, self.builder_type
+        self.settings.set_setting(
+            "selected_letter_types", chosen, self.generate_tab.mode_toggle.current_mode()
         )
 
     def _set_letter_type_buttons_visible(self, visible: bool):
         for w in self.letter_type_widgets:
             w.setVisible(visible)
 
-    def apply_settings(self):
-        selected_types = (
-            self.sequence_generator_settings.get_sequence_generator_setting(
-                "selected_letter_types", self.builder_type
-            )
-        )
-
+    def set_selected_types(self, selected_types: list[str]) -> None:
         if selected_types is None:
             # Means all letters are used, so hide the buttons if you like
             self._set_letter_type_buttons_visible(False)
@@ -98,20 +89,20 @@ class LetterTypePickerWidget(QWidget):
                     for w in self.letter_type_widgets:
                         w.is_selected = True
                         w.update_colors()
-                    self.sequence_generator_settings.set_sequence_generator_setting(
+                    self.settings.set_setting(
                         "selected_letter_types",
                         [lt.description for lt in LetterType],
-                        self.builder_type,
+                        self.generate_tab.controller.current_mode,
                     )
             else:
                 # None chosen, select all
                 for w in self.letter_type_widgets:
                     w.is_selected = True
                     w.update_colors()
-                self.sequence_generator_settings.set_sequence_generator_setting(
+                self.settings.set_setting(
                     "selected_letter_types",
                     [lt.description for lt in LetterType],
-                    self.builder_type,
+                    self.generate_tab.controller.current_mode,
                 )
 
     def get_selected_letter_types(self) -> list[LetterType]:
@@ -121,10 +112,10 @@ class LetterTypePickerWidget(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        font_size = self.generator_frame.tab.main_widget.height() // 50
+        font_size = self.generate_tab.main_widget.height() // 50
         self.filter_label.setFont(QFont("Arial", font_size))
-        self.layout().setSpacing(self.generator_frame.height() // 50)
-        width = self.generator_frame.width() // 16
+        self.layout().setSpacing(self.generate_tab.height() // 50)
+        width = self.generate_tab.width() // 16
         for w in self.letter_type_widgets:
             w.setFixedSize(width, width)
             f = w.label.font()
@@ -135,9 +126,9 @@ class LetterTypePickerWidget(QWidget):
         f.setPointSize(font_size)
         self.filter_label.setFont(f)
         global_settings = (
-            self.generator_frame.tab.main_widget.main_window.settings_manager.global_settings
+            self.generate_tab.main_widget.main_window.settings_manager.global_settings
         )
-        color = self.generator_frame.tab.main_widget.font_color_updater.get_font_color(
+        color = self.generate_tab.main_widget.font_color_updater.get_font_color(
             global_settings.get_background_type()
         )
         existing_style = self.filter_label.styleSheet()
