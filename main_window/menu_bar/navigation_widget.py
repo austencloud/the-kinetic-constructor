@@ -56,9 +56,11 @@ class NavigationWidget(QWidget):
     def set_active_tab(self, index):
         self.current_index = index
         for idx, button in enumerate(self.tab_buttons.values()):
-            self.set_button_appearance(index, idx, button)
-            
-    def set_button_appearance(self, active_index, idx, button: "QPushButton"):
+            self.set_button_appearances(index, idx, button)
+
+    def set_button_appearances(
+        self, active_index: int, idx: int, button: "QPushButton"
+    ):
         font_size = self.mw.width() // 120
         border_radius = font_size  # Adjust the radius as needed
         default_background = "white"
@@ -86,8 +88,7 @@ class NavigationWidget(QWidget):
         button.setFixedWidth(self.mw.width() // 10)
         button.setFixedHeight(self.mw.height() // 22)
 
-
     def resizeEvent(self, event):
         super().resizeEvent(event)
         for idx, button in enumerate(self.tab_buttons.values()):
-            self.set_button_appearance(self.current_index, idx, button)
+            self.set_button_appearances(self.current_index, idx, button)

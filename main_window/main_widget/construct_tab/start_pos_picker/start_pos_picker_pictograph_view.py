@@ -27,7 +27,7 @@ class StartPosPickerPictographView(BorderedPictographView):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        size = self.start_pos_picker.width() // 5
+        size = self.start_pos_picker.main_widget.width() // 10
         border_width = max(1, int(size * 0.015))
         size -= 2 * border_width
         self.pictograph.view.update_border_widths()

@@ -43,6 +43,7 @@ class MainWidgetUI:
         self.mw.sequence_workbench = SequenceWorkbench(self.mw)
         splash.updater.update_progress("ConstructTab")
         self.mw.construct_tab = ConstructTab(self.mw)
+
         splash.updater.update_progress("GenerateTab")
         self.mw.generate_tab = GenerateTab(self.mw)
         splash.updater.update_progress("BrowseTab")
@@ -74,6 +75,56 @@ class MainWidgetUI:
         self.mw.right_stack.addWidget(self.mw.learn_tab)  # 4
         self.mw.right_stack.addWidget(self.mw.write_tab)  # 5
         self.mw.right_stack.addWidget(self.mw.browse_tab.sequence_viewer)  # 6
+
+        current_tab = self.mw.settings_manager.global_settings.get_current_tab()
+        current_tab_index = {
+            "construct": self.mw.main_construct_tab_index,
+            "generate": self.mw.main_generate_tab_index,
+            "browse": self.mw.main_browse_tab_index,
+            "learn": self.mw.main_learn_tab_index,
+            "write": self.mw.main_write_tab_index,
+        }.get(current_tab, 0)
+        if current_tab == "construct":
+            current_sequence = (
+                self.mw.json_manager.loader_saver.load_current_sequence_json()
+            )
+            if len(current_sequence) > 1:
+                self.mw.right_stack.setCurrentIndex(2)
+            else:
+                self.mw.right_stack.setCurrentIndex(0)
+            self.mw.left_stack.setCurrentIndex(0)
+            self.mw.menu_bar.navigation_widget.tab_buttons["Construct ⚒️"].setChecked(
+                True
+            )
+
+        elif current_tab == "generate":
+            self.mw.left_stack.setCurrentIndex(0)
+            self.mw.right_stack.setCurrentIndex(3)
+            self.mw.menu_bar.navigation_widget.tab_buttons["Generate 🤖"].setChecked(
+                True
+            )
+        elif current_tab == "learn":
+            self.mw.left_stack.setCurrentIndex(1)
+            self.mw.right_stack.setCurrentIndex(4)
+            self.mw.menu_bar.navigation_widget.tab_buttons["Learn 🧠"].setChecked(True)
+        elif current_tab == "write":
+            self.mw.left_stack.setCurrentIndex(2)
+            self.mw.right_stack.setCurrentIndex(5)
+            self.mw.menu_bar.navigation_widget.tab_buttons["Write ✍️"].setChecked(True)
+        elif current_tab == "browse":
+            self.mw.left_stack.setCurrentIndex(4)
+            self.mw.right_stack.setCurrentIndex(6)
+        self.mw.menu_bar.navigation_widget.set_active_tab(current_tab_index)
+        self.mw.state_handler.load_state(self.mw.sequence_workbench.beat_frame)
+
+    def resizeEvent(self, event):
+        current_tab = self.mw.settings_manager.global_settings.get_current_tab()
+        if current_tab == "browse":
+            self.mw.left_stack.setFixedWidth(int(2 * self.mw.width() / 3))
+            self.mw.right_stack.setFixedWidth(int(self.mw.width() / 3))
+        else:
+            self.mw.left_stack.setFixedWidth(int(self.mw.width() / 2))
+            self.mw.right_stack.setFixedWidth(int(self.mw.width() / 2))
 
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)

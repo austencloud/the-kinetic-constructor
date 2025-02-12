@@ -22,10 +22,13 @@ from data.constants import (
     COUNTER_CLOCKWISE,
     TURNS,
 )
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+from main_window.main_widget.sequence_workbench.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from main_window.main_widget.sequence_widget.sequence_widget import SequenceWorkbench
+from main_window.main_widget.sequence_workbench.sequence_workbench import (
+    SequenceWorkbench,
+)
+
 
 if TYPE_CHECKING:
     from .base_sequence_generator_frame import BaseSequenceGeneratorFrame
@@ -34,7 +37,7 @@ if TYPE_CHECKING:
 class BaseSequenceGenerator:
     def __init__(self, sequence_generator_frame: "BaseSequenceGeneratorFrame"):
         self.sequence_generator_frame = sequence_generator_frame
-        self.sequence_widget: "SequenceWorkbench" = None
+        self.sequence_workbench: "SequenceWorkbench" = None
 
         self.main_widget = sequence_generator_frame.tab.main_widget
         self.validation_engine = self.main_widget.json_manager.ori_validation_engine
@@ -42,15 +45,15 @@ class BaseSequenceGenerator:
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
 
     def _initialize_sequence(self, length):
-        if not self.sequence_widget:
-            self.sequence_widget = self.main_widget.sequence_widget
+        if not self.sequence_workbench:
+            self.sequence_workbench = self.main_widget.sequence_workbench
         self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(self.sequence) == 1:
             self.add_start_pos_pictograph()
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
-        self.sequence_widget.beat_frame.populator.modify_layout_for_chosen_number_of_beats(
+        self.sequence_workbench.beat_frame.populator.modify_layout_for_chosen_number_of_beats(
             int(length)
         )
 
@@ -66,7 +69,7 @@ class BaseSequenceGenerator:
 
     def _add_start_position_to_sequence(self, position_key: str) -> None:
         start_pos, end_pos = position_key.split("_")
-        letters = deepcopy(self.sequence_widget.main_widget.pictograph_dicts)
+        letters = deepcopy(self.sequence_workbench.main_widget.pictograph_dataset)
         for _, pictograph_dicts in letters.items():
             for pictograph_dict in pictograph_dicts:
                 if (
@@ -75,7 +78,7 @@ class BaseSequenceGenerator:
                 ):
                     self.set_start_pos_to_in_orientation(pictograph_dict)
                     start_position_beat = StartPositionBeat(
-                        self.main_widget.sequence_widget.beat_frame
+                        self.sequence_workbench.beat_frame
                     )
                     start_position_beat.updater.update_pictograph(
                         deepcopy(pictograph_dict)
@@ -84,7 +87,7 @@ class BaseSequenceGenerator:
                     self.main_widget.json_manager.start_pos_handler.set_start_position_data(
                         start_position_beat
                     )
-                    self.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+                    self.sequence_workbench.beat_frame.start_pos_view.set_start_pos(
                         start_position_beat
                     )
                     return

@@ -47,10 +47,10 @@ class GeneratorTypeToggle(QWidget):
         return "circular" if self.toggle.isChecked() else "freeform"
 
     def _toggle_changed(self, state: bool):
-        new_type = "circular" if state else "freeform"
-        self.generate_tab.on_generator_type_changed(new_type)
+        new_mode = "circular" if state else "freeform"
+        self.generate_tab.controller.on_mode_changed(new_mode)
         self.update_label_styles()
-        self.toggled.emit(new_type)
+        self.toggled.emit(new_mode)
 
     def set_state(self, generator_type: str):
         self.toggle.setChecked(generator_type == "circular")

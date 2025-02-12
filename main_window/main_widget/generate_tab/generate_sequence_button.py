@@ -6,21 +6,29 @@ from PyQt6.QtGui import QColor
 if TYPE_CHECKING:
     from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
+
 class GenerateSequenceButton(QPushButton):
-    def __init__(self, sequence_generator_widget: "GenerateTab", text: str):
+    def __init__(
+        self, sequence_generator_widget: "GenerateTab", text: str, overwrite: bool
+    ):
         super().__init__(sequence_generator_widget)
+        self.clicked.connect(
+            lambda: sequence_generator_widget.controller.handle_generate_sequence(
+                overwrite=overwrite
+            )
+        )
 
         self.sequence_generator_widget = sequence_generator_widget
         self.main_widget = sequence_generator_widget.main_widget
-        
+
         # Initialize button properties
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setText(text)
-        
+
         # Setup animations
         self.click_animation = QPropertyAnimation(self, b"geometry")
         self.click_animation.setDuration(100)
-        
+
         # Connect press and release events
         self.pressed.connect(self._handle_press)
         self.released.connect(self._handle_release)
@@ -32,7 +40,8 @@ class GenerateSequenceButton(QPushButton):
         button_height = self.main_widget.height() // 14
         border_radius = button_height // 4
 
-        self.setStyleSheet(f"""
+        self.setStyleSheet(
+            f"""
             QPushButton {{
                 font-size: {font_size}px;
                 padding: 8px;
@@ -48,8 +57,9 @@ class GenerateSequenceButton(QPushButton):
             QPushButton:pressed {{
                 background-color: #0D47A1;
             }}
-        """)
-        
+        """
+        )
+
         self.setFixedWidth(self.main_widget.width() // 6)
         self.setFixedHeight(button_height)
 

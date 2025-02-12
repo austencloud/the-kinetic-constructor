@@ -19,7 +19,6 @@ class BeatLayoutTab(QWidget):
         self.beat_frame = LayoutBeatFrame(self)
         self.controls = LayoutControlsWidget(self)
         self.beat_frame.update_preview()
-        # Connect signals
 
         self.controls.layout_selected.connect(self._on_layout_selected)
 

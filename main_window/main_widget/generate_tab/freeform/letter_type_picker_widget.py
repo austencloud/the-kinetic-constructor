@@ -9,7 +9,6 @@ from main_window.main_widget.generate_tab.freeform.letter_type_button_widget imp
 
 if TYPE_CHECKING:
     from main_window.main_widget.generate_tab.generate_tab import GenerateTab
-    from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
 class LetterTypePickerWidget(QWidget):
@@ -18,15 +17,12 @@ class LetterTypePickerWidget(QWidget):
         self.generate_tab = generate_tab
         self.settings = generate_tab.settings
 
-        # Instead of a checkbox, use a label
         self.filter_label = QLabel("Filter by type:")
         self.filter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Layout for letter type buttons
         self.letter_types_layout = QHBoxLayout()
         self.letter_types_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Create 6 letter type button widgets
         self.letter_type_widgets: list[LetterTypeButtonWidget] = []
         for i, letter_type in enumerate(LetterType, start=1):
             w = LetterTypeButtonWidget(self, letter_type, i)
@@ -34,11 +30,6 @@ class LetterTypePickerWidget(QWidget):
             self.letter_types_layout.addWidget(w)
             self.letter_type_widgets.append(w)
 
-        # Initially hide these since the default could be "All Letters"
-        # (Adjust logic as needed if you want them always visible)
-        # self._set_letter_type_buttons_visible(False)
-
-        # Main layout
         main_layout = QVBoxLayout(self)
         mode_layout = QHBoxLayout()
         mode_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -46,11 +37,9 @@ class LetterTypePickerWidget(QWidget):
         main_layout.addLayout(mode_layout)
         main_layout.addLayout(self.letter_types_layout)
 
-    def _on_letter_type_clicked(self, letter_type: LetterType, is_selected: bool):
-        # Ensure at least one is selected
+    def _on_letter_type_clicked(self, letter_type: LetterType):
         selected_count = sum(w.is_selected for w in self.letter_type_widgets)
         if selected_count == 0:
-            # revert this one to selected if none remain selected
             for lt, w in zip(LetterType, self.letter_type_widgets):
                 if lt == letter_type:
                     w.is_selected = True
@@ -62,7 +51,9 @@ class LetterTypePickerWidget(QWidget):
             if w.is_selected
         ]
         self.settings.set_setting(
-            "selected_letter_types", chosen, self.generate_tab.mode_toggle.current_mode()
+            "selected_letter_types",
+            chosen,
+            self.generate_tab.mode_toggle.current_mode(),
         )
 
     def _set_letter_type_buttons_visible(self, visible: bool):
@@ -71,10 +62,8 @@ class LetterTypePickerWidget(QWidget):
 
     def set_selected_types(self, selected_types: list[str]) -> None:
         if selected_types is None:
-            # Means all letters are used, so hide the buttons if you like
             self._set_letter_type_buttons_visible(False)
         else:
-            # Specific letters mode, show buttons and restore their states
             self._set_letter_type_buttons_visible(True)
             if len(selected_types) > 0:
                 any_selected = False
@@ -85,7 +74,6 @@ class LetterTypePickerWidget(QWidget):
                     if is_selected:
                         any_selected = True
                 if not any_selected:
-                    # If none selected, select all by default
                     for w in self.letter_type_widgets:
                         w.is_selected = True
                         w.update_colors()
@@ -95,7 +83,6 @@ class LetterTypePickerWidget(QWidget):
                         self.generate_tab.controller.current_mode,
                     )
             else:
-                # None chosen, select all
                 for w in self.letter_type_widgets:
                     w.is_selected = True
                     w.update_colors()
@@ -111,10 +98,10 @@ class LetterTypePickerWidget(QWidget):
         ]
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
+        # super().resizeEvent(event)
         font_size = self.generate_tab.main_widget.height() // 50
         self.filter_label.setFont(QFont("Arial", font_size))
-        self.layout().setSpacing(self.generate_tab.height() // 50)
+        self.layout().setSpacing(font_size)
         width = self.generate_tab.width() // 16
         for w in self.letter_type_widgets:
             w.setFixedSize(width, width)

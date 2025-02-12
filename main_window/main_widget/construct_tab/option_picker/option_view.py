@@ -24,7 +24,7 @@ class OptionView(BorderedPictographView):
         super().resizeEvent(event)
         spacing = self.option_picker.option_scroll.spacing
 
-        size = max(self.option_picker.construct_tab.start_pos_picker.width() // 8, 
+        size = max(self.option_picker.construct_tab.start_pos_picker.main_widget.width() // 16, 
                      self.option_picker.width() // 8)
         border_width = max(1, int(size * 0.015))
         size -= 2 * border_width + spacing

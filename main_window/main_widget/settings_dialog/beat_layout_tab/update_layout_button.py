@@ -32,6 +32,10 @@ class UpdateLayoutButton(QPushButton):
         self.control_widget.layout_settings.set_layout_setting(
             str(self.control_widget.layout_tab.num_beats), list(layout_tuple)
         )
+        beat_frame = (
+            self.control_widget.layout_tab.main_widget.sequence_workbench.beat_frame
+        )
+        beat_frame.layout_manager.configure_beat_frame(beat_frame.get.beat_count())
 
     def update_default_layout_label(self, layout_text):
         """Update the default layout label."""

@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QTabWidget
 from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt
+
+from main_window.main_widget.settings_dialog.beat_layout_tab.beat_layout_tab import BeatLayoutTab
 from .settings_dialog_action_buttons import SettingsDialogActionButtons
 from .styles.settings_dialog_styler import SettingsDialogStyler
 from .user_profile_tab import UserProfileTab
@@ -31,12 +33,14 @@ class SettingsDialog(QDialog):
         self.prop_type_tab = PropTypeTab(self)
         # self.background_tab = BackgroundTab(self)
         self.visibility_tab = VisibilityTab(self)
+        self.beat_layout_tab = BeatLayoutTab(self)
 
         self.tab_widget.addTab(self.user_profile_tab, "User")
         self.tab_widget.addTab(self.prop_type_tab, "Prop Type")
         # self.tab_widget.addTab(self.background_tab, "Background")
         self.tab_widget.addTab(self.visibility_tab, "Visibility")
-
+        self.tab_widget.addTab(self.beat_layout_tab, "Beat Layout")
+        
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.tab_widget)
         main_layout.addWidget(self.action_btns)

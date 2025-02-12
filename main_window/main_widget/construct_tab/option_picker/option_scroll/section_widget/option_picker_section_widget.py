@@ -46,7 +46,6 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def clear_pictographs(self) -> None:
 
-        # remove them from the layout
         for pictograph in self.pictographs.values():
             self.pictograph_frame.layout.removeWidget(pictograph.view)
             pictograph.view.setVisible(False)
@@ -81,8 +80,9 @@ class OptionPickerSectionWidget(QGroupBox):
 
             view_width = (
                 calculated_width
-                if calculated_width < self.option_scroll.option_picker.height() // 8
-                else self.option_scroll.option_picker.height() // 8
+                if calculated_width
+                < self.option_scroll.option_picker.main_widget.height() // 8
+                else self.option_scroll.option_picker.main_widget.height() // 8
             )
             width = int(view_width * 8) // 3
             self.setFixedWidth(width)

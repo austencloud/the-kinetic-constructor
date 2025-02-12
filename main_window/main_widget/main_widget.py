@@ -146,12 +146,11 @@ class MainWidget(QWidget):
 
         self.tab_switcher = MainWidgetTabSwitcher(self)
         self.manager = MainWidgetManagers(self)
+        self.state_handler = MainWidgetState(self)
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
-        self.state_handler = MainWidgetState(self)
 
-        QTimer.singleShot(0, self.state_handler.load_state)
-        QTimer.singleShot(0, self.ui_handler.load_current_tab)
+        # QTimer.singleShot(0, self.ui_handler.load_current_tab)
         # QTimer.singleShot(10, self.ensure_user_exists)
 
     def ensure_user_exists(self):

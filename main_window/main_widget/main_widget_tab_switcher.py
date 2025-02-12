@@ -10,6 +10,7 @@ class MainWidgetTabSwitcher:
     def __init__(self, main_widget: "MainWidget"):
         """Initialize MainWidgetTabs."""
         self.mw = main_widget
+        self.settings = main_widget.main_window.settings_manager.global_settings
 
     def on_tab_changed(self, index: int) -> None:
 
@@ -51,13 +52,21 @@ class MainWidgetTabSwitcher:
             and self.mw.left_stack.currentIndex()
             == self.mw.left_sequence_workbench_index
         ):
-            new_index = (
+            new_right_index = (
                 3
                 if index == self.mw.main_generate_tab_index
                 else right_construct_tab_index
             )
-            self.mw.fade_manager.stack_fader.fade_stack(self.mw.right_stack, new_index)
+            if index == self.mw.main_generate_tab_index:
+                self.settings.set_current_tab("generate")
+            elif index == right_construct_tab_index:
+                self.settings.set_current_tab("construct")
+
+            self.mw.fade_manager.stack_fader.fade_stack(
+                self.mw.right_stack, new_right_index
+            )
         elif index in [self.mw.main_construct_tab_index]:
+            self.settings.set_current_tab("construct")
             self.mw.fade_manager.parallel_stack_fader.fade_both_stacks(
                 self.mw.right_stack,
                 right_construct_tab_index,
@@ -66,6 +75,7 @@ class MainWidgetTabSwitcher:
                 width_ratio,
             )
         elif index in [self.mw.main_generate_tab_index]:
+            self.settings.set_current_tab("generate")
             self.mw.fade_manager.parallel_stack_fader.fade_both_stacks(
                 self.mw.right_stack,
                 self.mw.right_generate_tab_index,
@@ -75,6 +85,14 @@ class MainWidgetTabSwitcher:
             )
 
         else:
+            if index == self.mw.main_learn_tab_index:
+                self.settings.set_current_tab("learn")
+            elif index == self.mw.main_write_tab_index:
+                self.settings.set_current_tab("write")
+            elif index == self.mw.main_browse_tab_index:
+                self.settings.set_current_tab("browse")
+            else:
+                self.settings.set_current_tab("construct")
             self.mw.fade_manager.parallel_stack_fader.fade_both_stacks(
                 right_stack=self.mw.right_stack,
                 right_new_index=right_new_index,
@@ -85,11 +103,13 @@ class MainWidgetTabSwitcher:
 
     def get_construct_tab_index(self):
         """Return the index of the construct tab."""
-        beat_frame = self.mw.sequence_workbench.beat_frame
-        for beat in beat_frame.beat_views:
-            if beat.is_filled:
-                return self.mw.right_option_picker_index
-        return self.mw.right_start_pos_picker_index
+        sequence_length = len(
+            self.mw.json_manager.loader_saver.load_current_sequence_json()
+        )
+        if sequence_length < 2:
+            return self.mw.right_start_pos_picker_index
+        else:
+            return self.mw.right_option_picker_index
 
     def update_tab_based_on_settings(self) -> None:
         """Switch to the tab indicated by saved settings."""
