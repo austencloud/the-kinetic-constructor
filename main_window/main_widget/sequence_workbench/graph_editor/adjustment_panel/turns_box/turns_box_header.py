@@ -46,3 +46,8 @@ class TurnsBoxHeader(BaseAdjustmentBoxHeaderWidget):
         self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
         self.top_hbox.addStretch(1)
         self.separator_hbox.addWidget(self.separator)
+
+    def resizeEvent(self, event):
+        self.turns_box.prop_rot_dir_button_manager.ccw_button.resizeEvent(event)
+        self.turns_box.prop_rot_dir_button_manager.cw_button.resizeEvent(event)
+        super().resizeEvent(event)

@@ -54,4 +54,5 @@ class TurnsBox(QFrame):
             f"{self.color}; background-color: white;}}"
         )
         self.turns_widget.resizeEvent(event)
+        self.header.resizeEvent(event)
         super().resizeEvent(event)
