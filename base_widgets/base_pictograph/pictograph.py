@@ -5,6 +5,7 @@ from Enums.PropTypes import PropType
 from Enums.letters import LetterType
 from base_widgets.base_pictograph.bordered_pictograph_view import BorderedPictographView
 from base_widgets.base_pictograph.svg_manager import SvgManager
+from main_window.main_widget.construct_tab.option_picker.option_view import OptionView
 from main_window.main_widget.learn_tab.base_classes.base_lesson_widget.lesson_pictograph_view import (
     LessonPictographView,
 )
@@ -124,6 +125,7 @@ class Pictograph(QGraphicsScene):
         StartPosPickerPictographView,
         CodexPictographView,
         "GE_PictographView",
+        "OptionView"
     ]
 
     def __init__(self, main_widget: "MainWidget") -> None:

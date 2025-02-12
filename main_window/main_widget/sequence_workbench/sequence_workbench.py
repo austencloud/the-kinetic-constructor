@@ -4,7 +4,9 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from main_window.main_widget.sequence_workbench.beat_deleter import (
     BeatDeleter,
 )
-from main_window.main_widget.sequence_workbench.labels.sequence_workbench_indicator_label import SequenceWorkbenchIndicatorLabel
+from main_window.main_widget.sequence_workbench.labels.sequence_workbench_indicator_label import (
+    SequenceWorkbenchIndicatorLabel,
+)
 from .full_screen_viewer import FullScreenViewer
 from .sequence_color_swapper import SequenceColorSwapper
 from .sequence_reflector import SequenceReflector
@@ -60,4 +62,5 @@ class SequenceWorkbench(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.graph_editor.toggle_tab.reposition_toggle_tab()
+        self.graph_editor.resizeEvent(event)
+

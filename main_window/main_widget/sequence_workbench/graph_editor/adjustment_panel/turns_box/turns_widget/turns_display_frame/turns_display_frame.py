@@ -35,9 +35,9 @@ class TurnsDisplayFrame(QFrame):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        layout.addWidget(self.decrement_button)
-        layout.addWidget(self.turns_label)
-        layout.addWidget(self.increment_button)
+        layout.addWidget(self.decrement_button, 1)
+        layout.addWidget(self.turns_label, 2)
+        layout.addWidget(self.increment_button, 1)
 
     def _attach_listeners(self):
         self.increment_button.clicked.connect(
@@ -73,3 +73,9 @@ class TurnsDisplayFrame(QFrame):
 
     def on_turns_label_clicked(self) -> None:
         self.turns_widget.direct_set_dialog.show_direct_set_dialog()
+
+    def resizeEvent(self, event):
+        self.turns_label.resizeEvent(event)
+        self.increment_button.resizeEvent(event)
+        self.decrement_button.resizeEvent(event)
+        return super().resizeEvent(event)

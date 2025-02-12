@@ -13,6 +13,9 @@ TURNS_WIDGET_INDEX = 1
 
 
 class BeatAdjustmentPanel(QFrame):
+    turns_boxes: list[TurnsBox]
+    ori_picker_boxes: list[OriPickerBox]
+    
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
@@ -41,7 +44,8 @@ class BeatAdjustmentPanel(QFrame):
         self.blue_ori_picker, self.red_ori_picker = OriPickerBox(
             self, self.GE_pictograph, BLUE
         ), OriPickerBox(self, self.GE_pictograph, RED)
-
+        self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
+        self.ori_picker_boxes = [self.blue_ori_picker, self.red_ori_picker]
         for picker in (self.blue_ori_picker, self.red_ori_picker):
             picker.ori_picker_widget.clickable_ori_label.setText(IN)
 

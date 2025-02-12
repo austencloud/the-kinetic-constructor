@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal
+
+from main_window.main_widget.construct_tab.option_picker.option_view import OptionView
 from .option_scroll.option_scroll import OptionScroll
 from .option_factory import OptionFactory
 from .option_picker_layout_manager import OptionPickerLayoutManager
@@ -22,7 +24,7 @@ class OptionPicker(QWidget):
     option_selected = pyqtSignal(str)
     layout: QVBoxLayout
     option_pool: list["Pictograph"]
-
+    
     def __init__(self, construct_tab: "ConstructTab"):
         super().__init__(construct_tab)
         self.construct_tab = construct_tab
@@ -39,3 +41,7 @@ class OptionPicker(QWidget):
         self.updater = OptionUpdater(self)
         self.option_factory = OptionFactory(self)
         self.layout_manager = OptionPickerLayoutManager(self)
+
+    def resizeEvent(self, event):
+        for option in self.option_pool:
+            option.view.resize_option_view()

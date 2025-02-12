@@ -27,6 +27,7 @@ class OriPickerBox(QFrame):
         self.color = color
         self.start_pos = start_pos
         self.graph_editor = self.adjustment_panel.graph_editor
+        self.setObjectName(self.__class__.__name__)
 
         self._setup_widgets()
         self._setup_layout()
@@ -44,11 +45,11 @@ class OriPickerBox(QFrame):
 
     def resizeEvent(self, event):
         border_width = self.graph_editor.sequence_workbench.width() // 200
-        self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
             f"#{self.__class__.__name__} {{ "
             f"border: {border_width}px solid {self.color}; "
             f"background-color: white; "
             f"}}"
         )
+        self.ori_picker_widget.resizeEvent(event)
         super().resizeEvent(event)

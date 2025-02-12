@@ -63,3 +63,11 @@ class TurnsWidget(QWidget):
             self.display_frame.increment_button.setEnabled(True)
 
         self.motion_type_label.update_display(motion.motion_type)
+
+
+    def resizeEvent( self, event)   :
+        super().resizeEvent(event)
+        self.display_frame.resizeEvent(event)
+        self.turns_text.resizeEvent(event)
+        self.motion_type_label.resizeEvent(event)
+        self.direct_set_dialog.resizeEvent(event)

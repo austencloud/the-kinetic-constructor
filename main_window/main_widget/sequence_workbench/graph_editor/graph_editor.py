@@ -57,15 +57,33 @@ class GraphEditor(QFrame):
         self.animator = GraphEditorAnimator(self)
 
     def get_graph_editor_height(self):
-        return int(self.main_widget.height() // 3.5)
+        return min(int(self.main_widget.height() // 3.5), self.width() // 4)
 
     def resizeEvent(self, event) -> None:
-        graph_editor_height = self.get_graph_editor_height()
+        self.graph_editor_height = self.get_graph_editor_height()
         width = self.main_widget.left_stack.width()
-        self.setFixedSize(width, graph_editor_height)
+        self.setFixedSize(width, self.graph_editor_height)
         self.raise_()
+        self.pictograph_container.GE_view.resizeEvent(event)
+        for turns_box in self.adjustment_panel.turns_boxes:
+            turns_box.resizeEvent(event)
+        for ori_picker_box in self.adjustment_panel.ori_picker_boxes:
+            ori_picker_box.resizeEvent(event)
+        self.position_graph_editor()
+        self.toggle_tab.reposition_toggle_tab()
         super().resizeEvent(event)
 
     def update_graph_editor(self) -> None:
         self.adjustment_panel.update_adjustment_panel()
         self.pictograph_container.update_pictograph()
+
+    def position_graph_editor(self):
+        if self.is_toggled:
+            desired_height = self.get_graph_editor_height()
+            new_width = self.sequence_workbench.width()
+            new_height = desired_height
+            new_x = 0
+            new_y = self.sequence_workbench.height() - new_height
+
+            self.setGeometry(new_x, new_y, new_width, new_height)
+            self.raise_()

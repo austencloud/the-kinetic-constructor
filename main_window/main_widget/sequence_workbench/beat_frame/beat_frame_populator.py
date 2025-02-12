@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-from utilities.reversal_detector import (
-    ReversalDetector,
-)
+from utilities.reversal_detector import ReversalDetector
 from utilities.word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
@@ -40,11 +38,7 @@ class BeatFramePopulator:
         self._update_difficulty_level()
         self._populate_beats(select_beat=False)
         self._finalize_sequence()
-        # self.beat_frame.selection_overlay.select_beat(
-        #     self.beat_frame.get.last_filled_beat(),
-        #     toggle_animation=False,
-        #     defer_show=True,
-        # )
+
         indicator_label.show_message(
             f"{self.current_word} loaded successfully! Ready to edit."
         )
@@ -102,8 +96,7 @@ class BeatFramePopulator:
         self.construct_tab.last_beat = last_beat
         self.construct_tab.option_picker.updater.update_options()
         # self.construct_tab.transition_to_option_picker()
-        # self.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
-        # self.selection_overlay.update_overlay_position()
+
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.beat_frame.layout_manager.configure_beat_frame(

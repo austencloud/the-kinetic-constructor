@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QStackedLayout
-
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QStackedLayout, QSizePolicy
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_workbench.graph_editor.graph_editor import (
@@ -19,9 +19,17 @@ class GraphEditorLayoutManager:
         self.ge.adjustment_panel_layout = self._setup_adjustment_panel_layout()
         self._setup_stacks()
 
-        self.ge.main_layout.addLayout(self.ge.left_stack)
-        self.ge.main_layout.addLayout(self.ge.pictograph_layout)
-        self.ge.main_layout.addLayout(self.ge.right_stack)
+        # Make the pictograph container "fixed" in the middle:
+        self.ge.pictograph_container.setSizePolicy(
+            QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
+        )
+        # You’ll still call setFixedSize(w, h) in the pictograph code (below),
+        # or do it in the resize event to enforce a perfect square.
+
+        # Add them to the main_layout with no spacing:
+        self.ge.main_layout.addLayout(self.ge.left_stack, stretch=1)
+        self.ge.main_layout.addLayout(self.ge.pictograph_layout, stretch=0)
+        self.ge.main_layout.addLayout(self.ge.right_stack, stretch=1)
 
     def _setup_main_layout(self):
         self.ge.main_layout = QHBoxLayout(self.ge)
@@ -42,7 +50,6 @@ class GraphEditorLayoutManager:
         pictograph_layout.addWidget(self.ge.pictograph_container)
         pictograph_layout.setContentsMargins(0, 0, 0, 0)
         pictograph_layout.setSpacing(0)
-        pictograph_layout.setStretch(1, 1)
         return pictograph_layout
 
     def _setup_adjustment_panel_layout(self) -> None:

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class GE_TurnsLabel(QLabel):
-    """This class is the colored box that displays the turns number inside the turns box display frame of the graph editor."""
+    """This is the colored box that displays the turns number inside the turns box display frame of the graph editor."""
     clicked = pyqtSignal()
 
     def __init__(self, turns_display_frame: "TurnsDisplayFrame") -> None:
@@ -30,10 +30,10 @@ class GE_TurnsLabel(QLabel):
         )
         self.setFont(QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold))
         self.setMaximumWidth(
-            int(self.turns_box.adjustment_panel.graph_editor.width() / 10)
+            int(self.turns_box.adjustment_panel.graph_editor.width() / 9)
         )
         self.setMaximumHeight(
-            int(self.turns_box.adjustment_panel.graph_editor.height() / 5)
+            int(self.turns_box.adjustment_panel.graph_editor.height() / 4)
         )
         border_radius = self.width() // 4
 

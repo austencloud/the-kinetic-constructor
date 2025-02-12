@@ -117,15 +117,6 @@ class MainWidgetUI:
         self.mw.menu_bar.navigation_widget.set_active_tab(current_tab_index)
         self.mw.state_handler.load_state(self.mw.sequence_workbench.beat_frame)
 
-    def resizeEvent(self, event):
-        current_tab = self.mw.settings_manager.global_settings.get_current_tab()
-        if current_tab == "browse":
-            self.mw.left_stack.setFixedWidth(int(2 * self.mw.width() / 3))
-            self.mw.right_stack.setFixedWidth(int(self.mw.width() / 3))
-        else:
-            self.mw.left_stack.setFixedWidth(int(self.mw.width() / 2))
-            self.mw.right_stack.setFixedWidth(int(self.mw.width() / 2))
-
     def _setup_layout(self):
         self.mw.main_layout = QVBoxLayout(self.mw)
         self.mw.main_layout.setContentsMargins(0, 0, 0, 0)

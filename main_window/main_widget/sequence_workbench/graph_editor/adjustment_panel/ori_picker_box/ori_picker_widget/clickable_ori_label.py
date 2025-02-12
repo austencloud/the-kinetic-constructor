@@ -36,23 +36,6 @@ class ClickableOriLabel(QLabel):
     def set_orientation(self, orientation):
         self.setText(orientation)
 
-    def resize_clickable_ori_label(self):
-        font_size = self.ori_picker_widget.ori_picker_box.graph_editor.width() // 30
-        font = QFont("Arial", font_size, QFont.Weight.Bold)
-        self.setFont(font)
-
-        font_metrics = QFontMetrics(font)
-        text_width = font_metrics.horizontalAdvance("counter")
-        padding = font_metrics.horizontalAdvance("  ")
-
-        required_width = text_width + padding
-        self.setMinimumWidth(required_width)
-
-        border_size = max(int(required_width / 60), 1)
-        border_color = self._get_border_color(self.ori_picker_widget.color)
-        self.setStyleSheet(
-            f"QLabel {{ border: {border_size}px solid {border_color}; background-color: white; }}"
-        )
 
     def _get_border_color(
         self, color
@@ -83,5 +66,21 @@ class ClickableOriLabel(QLabel):
         self.ori_picker_widget.ori_setter.set_orientation(new_ori)
 
     def resizeEvent(self, event):
-        self.resize_clickable_ori_label()
+        font_size = self.ori_picker_widget.ori_picker_box.graph_editor.width() // 30
+        font = QFont("Arial", font_size, QFont.Weight.Bold)
+        self.setFont(font)
+
+        font_metrics = QFontMetrics(font)
+        text_width = font_metrics.horizontalAdvance("counter")
+        padding = font_metrics.horizontalAdvance("  ")
+
+        required_width = text_width + padding
+        self.setMinimumWidth(required_width)
+
+        border_size = max(int(required_width / 60), 1)
+        border_color = self._get_border_color(self.ori_picker_widget.color)
+        self.setStyleSheet(
+            f"QLabel {{ border: {border_size}px solid {border_color}; background-color: white; }}"
+        )
+
         super().resizeEvent(event)

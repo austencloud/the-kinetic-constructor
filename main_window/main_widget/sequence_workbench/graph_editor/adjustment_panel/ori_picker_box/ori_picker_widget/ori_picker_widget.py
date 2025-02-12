@@ -40,10 +40,10 @@ class OriPickerWidget(QWidget):
         self._setup_layout()
 
     def _setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
+        layout: QVBoxLayout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         widgets = [
             self.orientation_text_label,
@@ -52,6 +52,11 @@ class OriPickerWidget(QWidget):
         ]
 
         for widget in widgets:
-            self.layout.addStretch(1)
-            self.layout.addWidget(widget)
-        self.layout.addStretch(1)
+            layout.addStretch(1)
+            layout.addWidget(widget)
+        layout.addStretch(1)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.orientation_text_label.resizeEvent(event)
+        self.clickable_ori_label.resizeEvent(event)

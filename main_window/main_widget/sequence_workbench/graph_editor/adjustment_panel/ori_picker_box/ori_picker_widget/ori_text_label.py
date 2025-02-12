@@ -16,14 +16,11 @@ class OrientationTextLabel(QLabel):
         self.ori_picker_widget = ori_picker_widget
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def resize_orientation_label(self):
+    def resizeEvent(self, event):
         font_size = int(
             self.ori_picker_widget.ori_picker_box.graph_editor.width() // 60
         )
         font = QFont("Cambria", font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.setFont(font)
-
-    def resizeEvent(self, event):
-        self.resize_orientation_label()
-        event.accept()
+        super().resizeEvent(event)

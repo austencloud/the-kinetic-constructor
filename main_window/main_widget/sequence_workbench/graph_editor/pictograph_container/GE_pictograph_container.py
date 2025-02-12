@@ -13,7 +13,7 @@ class GraphEditorPictographContainer(QWidget):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.setup_pictograph()
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -52,9 +52,9 @@ class GraphEditorPictographContainer(QWidget):
             pictograph.start_text_item.add_start_text()
 
     def resizeEvent(self, event):
-        size = self.graph_editor.height()
-        self.setFixedWidth(size)
-        self.setFixedHeight(size)
+        # size = self.graph_editor.height()
+        # self.setFixedWidth(size)
+        # self.setFixedHeight(size)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
