@@ -36,11 +36,11 @@ class GenerateTab(QWidget):
 
         self.main_layout = QVBoxLayout(self)
         self.setLayout(self.main_layout)
-
-        # The controller that handles logic
+at handles logic
         self.controller = GenerateTabController(self)
 
-        # 1) Create all sub-widgets
+        # 1) Create all sub-w
+        # The controller thidgets
         self._create_widgets()
 
         # 2) Layout them with a manager
