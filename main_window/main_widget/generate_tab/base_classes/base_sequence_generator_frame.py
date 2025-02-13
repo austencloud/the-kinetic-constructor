@@ -3,9 +3,9 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 
-from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
+from ..widgets.prop_continuity_toggle import PropContinuityToggle
 from ..widgets.length_adjuster import LengthAdjuster
-from ..widgets.level_selector import LevelSelector
+from ..widgets.level_selector.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
@@ -15,15 +15,15 @@ if TYPE_CHECKING:
     from main_window.main_widget.generate_tab.widgets.permutation_type_toggle import (
         PermutationTypeToggle,
     )
-    from main_window.main_widget.generate_tab.widgets.rotation_type_toggle import (
-        RotationTypeToggle,
+    from main_window.main_widget.generate_tab.widgets.slice_size_toggle import (
+        SliceSizeToggle,
     )
     from ..generate_tab import GenerateTab
 
 
 class BaseSequenceGeneratorFrame(QFrame):
     letter_type_picker: "LetterTypePickerWidget" = None
-    rotation_type_toggle: "RotationTypeToggle" = None
+    slice_size_toggle: "SliceSizeToggle" = None
     permutation_type_toggle: "PermutationTypeToggle" = None
 
     def __init__(self, generate_tab: "GenerateTab", builder_type: str) -> None:
@@ -43,7 +43,7 @@ class BaseSequenceGeneratorFrame(QFrame):
         self.level_selector = LevelSelector(self)
         self.length_adjuster = LengthAdjuster(self)
         self.turn_intensity_adjuster = TurnIntensityAdjuster(self)
-        self.continuous_rotation_toggle = ContinuousRotationToggle(self)
+        self.continuous_rotation_toggle = PropContinuityToggle(self)
 
         self.layout.addStretch(1)
         self.layout.addWidget(self.level_selector)
@@ -104,8 +104,6 @@ class BaseSequenceGeneratorFrame(QFrame):
     def on_create_sequence(self, overwrite_sequence: bool):
         """Trigger sequence creation for the specific builder."""
         raise NotImplementedError
-
-
 
     def show(self):
         """Display Freeform frame by setting it in the stacked layout."""

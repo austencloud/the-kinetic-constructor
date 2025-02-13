@@ -35,13 +35,14 @@ class GenerateTabController:
 
     def handle_generate_sequence(self, overwrite: bool):
         if overwrite:
-            self.tab.main_widget.sequence_workbench.beat_frame.sequence_workbench.beat_deleter.reset_widgets(False)
+            self.tab.main_widget.sequence_workbench.beat_frame.sequence_workbench.beat_deleter.reset_widgets(
+                False
+            )
 
         length = int(self.settings.get_setting("length") or 16)
         intensity = float(self.settings.get_setting("max_turn_intensity") or 1.0)
         level = int(self.settings.get_setting("sequence_level") or 1)
         continuous = self._as_bool(self.settings.get_setting("continuous_rotation"))
-
 
         if self.current_mode == "freeform":
             self.tab.freeform_builder.build_sequence(
@@ -62,8 +63,6 @@ class GenerateTabController:
                 continuous,
             )
 
-
-
     def _apply_unified_settings(self):
         seq_level = self.settings.get_setting("sequence_level") or 1
         seq_length = self.settings.get_setting("length") or 16
@@ -72,19 +71,24 @@ class GenerateTabController:
         self.tab.level_selector.set_level(int(seq_level))
         self.tab.length_adjuster.set_length(int(seq_length))
         self.tab.turn_intensity.set_intensity(float(turn_intensity))
-        self.tab.rotation_toggle.set_state(self._as_bool(cont_rot))
-        
-        # current_sequence_length = len(self.tab.main_widget.json_manager.loader_saver.load_current_sequence_json()) - 1
-        # self.tab.auto_complete_button.setEnabled(int(current_sequence_length) > 1)
-        
+        self.tab.prop_continuity_toggle.set_state(self._as_bool(cont_rot))
+
+        current_sequence_length = (
+            len(
+                self.tab.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            )
+            - 1
+        )
+        self.tab.auto_complete_button.setEnabled(int(current_sequence_length) > 1)
+
     def _load_circular_settings(self):
         rotation_type = self.settings.get_setting("rotation_type", "circular")
         if rotation_type:
-            self.tab.rotation_type.set_state(rotation_type == "quartered")
+            self.tab.slice_size_toggle.set_state(rotation_type == "quartered")
 
         permutation_type = self.settings.get_setting("permutation_type", "circular")
-        # if permutation_type:
-        #     self.tab.permutation_type.set_state(permutation_type == "rotated")
+        if permutation_type:
+            self.tab.permutation_type.set_state(permutation_type == "rotated")
 
     def _load_freeform_settings(self):
         letter_types = self.settings.get_setting("selected_letter_types", "freeform")
@@ -94,8 +98,8 @@ class GenerateTabController:
     def _update_ui_visibility(self):
         is_freeform = self.current_mode == "freeform"
         self.tab.letter_picker.setVisible(is_freeform)
-        self.tab.rotation_type.setVisible(not is_freeform)
-        # self.tab.permutation_type.setVisible(not is_freeform)
+        self.tab.slice_size_toggle.setVisible(not is_freeform)
+        self.tab.permutation_type.setVisible(not is_freeform)
 
     def _as_bool(self, val) -> bool:
         if isinstance(val, bool):

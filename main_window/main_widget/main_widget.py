@@ -167,3 +167,4 @@ class MainWidget(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.background_widget.resize_background()
+        self.beat_frame = self.sequence_workbench.beat_frame

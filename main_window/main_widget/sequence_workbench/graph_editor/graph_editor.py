@@ -70,8 +70,8 @@ class GraphEditor(QFrame):
         for ori_picker_box in self.adjustment_panel.ori_picker_boxes:
             ori_picker_box.resizeEvent(event)
         self.position_graph_editor()
-        self.toggle_tab.reposition_toggle_tab()
         super().resizeEvent(event)
+        self.toggle_tab.reposition_toggle_tab()
 
     def update_graph_editor(self) -> None:
         self.adjustment_panel.update_adjustment_panel()

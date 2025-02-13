@@ -25,8 +25,6 @@ class PermutationTypeToggle(QWidget):
         self.layout.addWidget(self.permutation_type_toggle)
         self.layout.addWidget(self.rotated_label)
 
-        # Initial style update
-        # self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
         permutation_type = "rotated" if state else "mirrored"
@@ -34,10 +32,8 @@ class PermutationTypeToggle(QWidget):
         self.update_mode_label_styles()
 
     def update_mode_label_styles(self):
-        """Update the styles of the labels to indicate the selected permutation type."""
-        font_color_updater = (
-            self.generate_tab.main_widget.font_color_updater
-        )
+        """Update the styles of the labels to indicate the selected rotation type."""
+        font_color_updater = self.generate_tab.main_widget.font_color_updater
         font_color = font_color_updater.get_font_color(
             self.generate_tab.main_widget.settings_manager.global_settings.get_background_type()
         )
@@ -49,6 +45,8 @@ class PermutationTypeToggle(QWidget):
                 f"font-weight: bold; color: {font_color};"
             )
             self.rotated_label.setStyleSheet("font-weight: normal; color: gray;")
+        self.mirrored_label.repaint()
+        self.rotated_label.repaint()
 
     def set_state(self, state):
         """Set the toggle state when loading settings."""
@@ -57,10 +55,12 @@ class PermutationTypeToggle(QWidget):
 
     def resizeEvent(self, event):
         font_size = self.generate_tab.main_widget.width() // 75
-        self.mirrored_label.setStyleSheet(f"font-size: {font_size}px;")
-        self.rotated_label.setStyleSheet(f"font-size: {font_size}px;")
+        font = self.mirrored_label.font()
+        font.setPointSize(font_size)
+        self.mirrored_label.setFont(font)
+        self.rotated_label.setFont(font)
+
         self.mirrored_label.updateGeometry()
         self.rotated_label.updateGeometry()
-
         self.mirrored_label.repaint()
         self.rotated_label.repaint()

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QApplication
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QColor, QMouseEvent
 
 from Enums.letters import LetterType
 from main_window.main_widget.sequence_workbench.beat_frame.button_styled_border_overlay import (
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class LetterTypeButtonWidget(QWidget):
-    clicked = pyqtSignal(LetterType, bool)  # (letter_type, is_selected)
+    clicked = pyqtSignal(LetterType, bool)
 
     def __init__(
         self,
@@ -32,14 +32,7 @@ class LetterTypeButtonWidget(QWidget):
 
         self.label = QLabel(str(self.index), self)
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # font = QFont("Arial", 14)
-        # font.setBold(True)
-        # self.label.setFont(font)
-
-        # Make the label ignore mouse events so parent widget gets enter/leave events
         self.label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
-
-        # Set mouse tracking is not required for enter/leave, but doesn't hurt
         self.setMouseTracking(True)
 
         self.overlay = StyledBorderOverlayForButton(self)
@@ -49,7 +42,6 @@ class LetterTypeButtonWidget(QWidget):
         self.setFixedSize(60, 60)
 
     def enterEvent(self, event):
-        # This should now trigger correctly since the label won't consume events
         QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
 
     def leaveEvent(self, event):
@@ -66,7 +58,7 @@ class LetterTypeButtonWidget(QWidget):
         }
         return border_colors_map.get(letter_type, ("black", "black"))
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: "QMouseEvent"):
         if event.button() == Qt.MouseButton.LeftButton:
             self.is_selected = not self.is_selected
             self.update_colors()
@@ -79,11 +71,9 @@ class LetterTypeButtonWidget(QWidget):
         if not self.is_selected:
             p = self._dim_color(p)
             s = self._dim_color(s)
-            # dim the text font color too
             self.label.setStyleSheet("color: lightgray;")
 
         else:
-
             self.label.setStyleSheet("color: black;")
         self.overlay.update_border_colors(p, s)
         self.setStyleSheet("background-color: white; color: black;")
@@ -97,9 +87,5 @@ class LetterTypeButtonWidget(QWidget):
         super().resizeEvent(event)
         self.label.setGeometry(0, 0, self.width(), self.height())
         self.overlay.setFixedSize(self.size())
-        font = self.label.font()
-        font.setPointSize(
-            self.letter_type_picker.generate_tab.main_widget.height() // 10
-        )
-        font.setBold(True)
-        self.label.setFont(font)
+        # font = self.label.font()
+        # self.label.setFont(font)

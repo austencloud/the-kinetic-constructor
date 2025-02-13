@@ -34,8 +34,6 @@ class SequenceViewerImageLabel(QLabel):
             Qt.TransformationMode.SmoothTransformation,
         )
         self.setPixmap(scaled_pixmap)
-        self.setFixedHeight(new_height)
-        self.sequence_viewer.stacked_widget.setFixedHeight(new_height)
 
     def update_thumbnail(self):
         self.thumbnails = self.sequence_viewer.thumbnails
@@ -47,14 +45,23 @@ class SequenceViewerImageLabel(QLabel):
         sequence_length = self.metadata_extractor.get_sequence_length(
             self.thumbnails[current_index]
         )
-        target_width = self._get_target_width(sequence_length)
+        target_width = self._get_target_width(
+            sequence_length, pixmap.height() / pixmap.width()
+        )
         scaled_pixmap = pixmap.scaledToWidth(
             target_width, Qt.TransformationMode.SmoothTransformation
         )
+        # print the height of the scaled pixmap
+        print(scaled_pixmap.height())
         self.setPixmap(scaled_pixmap)
+        self.setFixedHeight(scaled_pixmap.height())
+        self.sequence_viewer.stacked_widget.setFixedHeight(scaled_pixmap.height())
 
-    def _get_target_width(self, sequence_length):
+    def _get_target_width(self, sequence_length, aspect_ratio):
+        if aspect_ratio > 1.3:
+            if sequence_length == 1:
+                return int(self.sequence_viewer.width() * 0.4)
+            return int(self.sequence_viewer.width() * 0.6)
         if sequence_length == 1:
             return int(self.sequence_viewer.width() * 0.6)
-        return int(self.sequence_viewer.width() * 0.9)
-
+        return int(self.sequence_viewer.width() * 0.85)

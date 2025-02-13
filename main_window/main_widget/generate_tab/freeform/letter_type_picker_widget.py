@@ -61,36 +61,30 @@ class LetterTypePickerWidget(QWidget):
             w.setVisible(visible)
 
     def set_selected_types(self, selected_types: list[str]) -> None:
-        if selected_types is None:
-            self._set_letter_type_buttons_visible(False)
+        self._set_letter_type_buttons_visible(selected_types is not None)
+        if selected_types:
+            any_selected = False
+            for lt, w in zip(LetterType, self.letter_type_widgets):
+                is_selected = lt.description in selected_types
+                w.is_selected = is_selected
+                w.update_colors()
+                if is_selected:
+                    any_selected = True
+            if not any_selected:
+                self._select_all_letter_types()
         else:
-            self._set_letter_type_buttons_visible(True)
-            if len(selected_types) > 0:
-                any_selected = False
-                for lt, w in zip(LetterType, self.letter_type_widgets):
-                    is_selected = lt.description in selected_types
-                    w.is_selected = is_selected
-                    w.update_colors()
-                    if is_selected:
-                        any_selected = True
-                if not any_selected:
-                    for w in self.letter_type_widgets:
-                        w.is_selected = True
-                        w.update_colors()
-                    self.settings.set_setting(
-                        "selected_letter_types",
-                        [lt.description for lt in LetterType],
-                        self.generate_tab.controller.current_mode,
-                    )
-            else:
-                for w in self.letter_type_widgets:
-                    w.is_selected = True
-                    w.update_colors()
-                self.settings.set_setting(
-                    "selected_letter_types",
-                    [lt.description for lt in LetterType],
-                    self.generate_tab.controller.current_mode,
-                )
+            self._select_all_letter_types()
+
+    def _select_all_letter_types(self):
+        descriptions = [lt.description for lt in LetterType]
+        for w in self.letter_type_widgets:
+            w.is_selected = True
+            w.update_colors()
+        self.settings.set_setting(
+            "selected_letter_types",
+            descriptions,
+            self.generate_tab.controller.current_mode,
+        )
 
     def get_selected_letter_types(self) -> list[LetterType]:
         return [
@@ -98,7 +92,7 @@ class LetterTypePickerWidget(QWidget):
         ]
 
     def resizeEvent(self, event):
-        # super().resizeEvent(event)
+        super().resizeEvent(event)
         font_size = self.generate_tab.main_widget.height() // 50
         self.filter_label.setFont(QFont("Arial", font_size))
         self.layout().setSpacing(font_size)
@@ -106,6 +100,7 @@ class LetterTypePickerWidget(QWidget):
         for w in self.letter_type_widgets:
             w.setFixedSize(width, width)
             f = w.label.font()
+            f.setBold(True)
             f.setPointSize(font_size)
             w.label.setFont(f)
 
