@@ -38,15 +38,15 @@ class CircularSequenceBuilder(BaseSequenceBuilder):
         level: int,
         rotation_type: str,
         permutation_type: str,
-        continuous: bool,
+        prop_continuity: bool,
     ):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self._initialize_sequence(length)
 
-        if continuous:
+        if prop_continuity == "continuous":
             blue_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
             red_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
-        else:
+        elif prop_continuity == "random":
             blue_rot_dir = None
             red_rot_dir = None
 
@@ -74,16 +74,14 @@ class CircularSequenceBuilder(BaseSequenceBuilder):
                 is_last_in_word,
                 rotation_type,
                 permutation_type,
-                continuous,
+                prop_continuity,
                 blue_rot_dir,
                 red_rot_dir,
             )
-            print(f"generated next_pictograph: {next_pictograph}")
             self.sequence.append(next_pictograph)
             self.sequence_workbench.beat_frame.beat_factory.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
             )
-            print(f"next_pictograph successfully added: {next_pictograph}")
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
@@ -109,12 +107,10 @@ class CircularSequenceBuilder(BaseSequenceBuilder):
             self.sequence
         )
         options = [deepcopy(option) for option in options]
-        print(f"options: {options}")
         if is_continuous_rot_dir:
             options = self._filter_options_by_rotation(
                 options, blue_rot_dir, red_rot_dir
             )
-        print(f"options after filtering: {options}")
         if permutation_type == "rotated":
             if is_last_in_word:
                 expected_end_pos = self._determine_rotated_end_pos(rotation_type)
@@ -123,7 +119,6 @@ class CircularSequenceBuilder(BaseSequenceBuilder):
                 )
             else:
                 next_beat = random.choice(options)
-            print(f"next_beat: {next_beat}")
         elif permutation_type == "mirrored":
             if is_last_in_word:
                 expected_end_pos = self.sequence[1]["end_pos"]
@@ -132,41 +127,35 @@ class CircularSequenceBuilder(BaseSequenceBuilder):
                 )
             else:
                 next_beat = random.choice(options)
-            print(f"next_beat: {next_beat}")
 
         if level == 2 or level == 3:
             next_beat = self._set_turns(next_beat, turn_blue, turn_red)
-        print (f"next_beat after setting turns: {next_beat}")
         self._update_start_oris(next_beat, self.sequence[-1])
-        print (f"next_beat after updating start oris: {next_beat}")
         self._update_end_oris(next_beat)
-        print (f"next_beat after updating end oris: {next_beat}")
         self._update_dash_static_prop_rot_dirs(
             next_beat,
             is_continuous_rot_dir,
             blue_rot_dir,
             red_rot_dir,
         )
-        print (f"next_beat after updating dash static prop rot dirs: {next_beat}")
         next_beat = self._update_beat_number_depending_on_sequence_length(
             next_beat, self.sequence
         )
-        print (f"next_beat after updating beat number: {next_beat}")
         return next_beat
 
-    def _determine_rotated_end_pos(self, rotation_type: str) -> str:
+    def _determine_rotated_end_pos(self, slice_size: str) -> str:
         """Determine the expected end position based on rotation type and current sequence."""
         start_pos = self.sequence[1]["end_pos"]
 
-        if rotation_type == "quartered":
+        if slice_size == "quartered":
             if random.choice([True, False]):
                 return quarter_position_map_cw[start_pos]
             else:
                 return quarter_position_map_ccw[start_pos]
-        elif rotation_type == "halved":
+        elif slice_size == "halved":
             return half_position_map[start_pos]
         else:
-            print("Invalid rotation type - expected 'quartered' or 'halved'")
+            print("Invalid slice size - expected 'quartered' or 'halved'")
             return None
 
     def _select_pictograph_with_end_pos(

@@ -93,8 +93,7 @@
       "dash": [-80, -70]
     },
     "(o, 2, 3)": {
-      "static_rot_angle_override": true,
-      "static": [25, -15]
+      "dash": [-60, -55]
     },
     "(o, 2.5, 0.5)": {
       "static": [100, 100]

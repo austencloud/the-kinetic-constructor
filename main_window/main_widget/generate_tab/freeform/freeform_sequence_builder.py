@@ -21,15 +21,15 @@ class FreeFormSequenceBuilder(BaseSequenceBuilder):
         length: int,
         turn_intensity: int,
         level: int,
-        is_continuous_rot_dir: bool,
+        prop_continuity: bool,
     ):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self._initialize_sequence(length)
 
-        if is_continuous_rot_dir:
+        if prop_continuity == "continuous":
             blue_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
             red_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
-        else:
+        elif prop_continuity == "random":
             blue_rot_dir = None
             red_rot_dir = None
 
@@ -43,7 +43,7 @@ class FreeFormSequenceBuilder(BaseSequenceBuilder):
                 level,
                 turns_blue[i],
                 turns_red[i],
-                is_continuous_rot_dir,
+                prop_continuity,
                 blue_rot_dir,
                 red_rot_dir,
             )

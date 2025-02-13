@@ -23,6 +23,10 @@
     },
     "(s, 1.5, 1)": {
       "static": [110, 0]
+    },
+    "(o, 3, 1)": {
+      "static_rot_angle_override": true,
+      "static": [-100, 0]
     }
   }
 }

@@ -40,13 +40,17 @@ class GenerateTabController:
             )
 
         length = int(self.settings.get_setting("length") or 16)
-        intensity = float(self.settings.get_setting("turn_intensity") or 1)
+        intensity = (
+            float(self.settings.get_setting("turn_intensity"))
+            if self.settings.get_setting("turn_intensity") in ["0.5", "1.5", "2.5"]
+            else int(self.settings.get_setting("turn_intensity") or 1)
+        )
         level = int(self.settings.get_setting("level") or 1)
-        continuous = self._as_bool(self.settings.get_setting("prop_continuity"))
+        prop_continuity = (self.settings.get_setting("prop_continuity"))
 
         if self.current_mode == "freeform":
             self.tab.freeform_builder.build_sequence(
-                length, intensity, level, continuous
+                length, intensity, level, prop_continuity
             )
         else:
             rotation_type = self.settings.get_setting("rotation_type") or "halved"
@@ -56,11 +60,11 @@ class GenerateTabController:
 
             self.tab.circular_builder.build_sequence(
                 length,
-                int(intensity),
+                intensity,
                 level,
                 rotation_type,
                 permutation_type,
-                continuous,
+                prop_continuity,
             )
 
     def _apply_unified_settings(self):
