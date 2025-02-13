@@ -46,7 +46,10 @@ class TurnIntensityAdjuster(QWidget):
             current_index = self.values.index(int(self.intensity))
         new_index = current_index + change
         if 0 <= new_index < len(self.values):
-            self.intensity = self.values[new_index]
+            new_value = self.values[new_index]
+            if new_value == 0:
+                return
+            self.intensity = new_value
             self.intensity_value_label.setText(str(self.intensity))
             self.generate_tab.settings.set_setting(
                 "turn_intensity", str(self.intensity)
@@ -65,10 +68,12 @@ class TurnIntensityAdjuster(QWidget):
             )
         except ValueError:
             self.intensity = float(intensity)
+        if self.intensity == 0:
+            self.intensity = 0.5
         self.intensity_value_label.setText(str(self.intensity))
 
     def adjust_values(self, level):
-        self.values = [0, 1, 2, 3] if level == 2 else [0, 0.5, 1, 1.5, 2, 2.5, 3]
+        self.values = [1, 2, 3] if level == 2 else [0.5, 1, 1.5, 2, 2.5, 3]
         if self.intensity not in self.values:
             self.intensity = min(self.values, key=lambda x: abs(x - self.intensity))
             self.intensity_value_label.setText(str(self.intensity))
