@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSpacerItem, QWidget
 
-from pytoggle import PyToggle
+from base_widgets.pytoggle import PyToggle
 
 
 class ModeToggleWidget(QWidget):

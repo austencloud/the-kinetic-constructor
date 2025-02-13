@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
-from pytoggle import PyToggle
+from base_widgets.pytoggle import PyToggle
 
 if TYPE_CHECKING:
     from ..generate_tab import GenerateTab
