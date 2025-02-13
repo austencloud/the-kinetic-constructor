@@ -40,8 +40,8 @@ class GenerateTabController:
             )
 
         length = int(self.settings.get_setting("length") or 16)
-        intensity = float(self.settings.get_setting("max_turn_intensity") or 1.0)
-        level = int(self.settings.get_setting("sequence_level") or 1)
+        intensity = float(self.settings.get_setting("turn_intensity") or 1)
+        level = int(self.settings.get_setting("level") or 1)
         continuous = self._as_bool(self.settings.get_setting("prop_continuity"))
 
         if self.current_mode == "freeform":
@@ -70,7 +70,7 @@ class GenerateTabController:
         cont_rot = self.settings.get_setting("prop_continuity") or "continuous"
         self.tab.level_selector.set_level(int(seq_level))
         self.tab.length_adjuster.set_length(int(seq_length))
-        self.tab.turn_intensity.set_intensity(float(turn_intensity))
+        self.tab.turn_intensity.set_intensity(turn_intensity)
         self.tab.prop_continuity_toggle.set_state(cont_rot == "continuous")
         self.tab.slice_size_toggle.set_state(
             self.settings.get_setting("rotation_type") == "quartered"

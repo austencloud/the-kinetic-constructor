@@ -25,7 +25,7 @@ class LevelSelector(QWidget):
         self.grayscale_pixmaps: list[QPixmap] = []
         self.buttons: list[QToolButton] = []
         self.info_labels: list[QLabel] = []
-        self.current_level = self.generate_tab.settings.get_setting("sequence_level", 1)
+        self.current_level = self.generate_tab.settings.get_setting("level", 1)
         self.default_icon_size = QSize(64, 64)
         self._load_pixmaps()
         self._init_ui()
@@ -155,7 +155,7 @@ class LevelSelector(QWidget):
         self._update_icons()
 
     def _update_sequence_settings(self, level: int):
-        self.generate_tab.settings.set_setting("sequence_level", str(level))
+        self.generate_tab.settings.set_setting("level", str(level))
         
         adjuster = self.generate_tab.turn_intensity
         adjuster.setVisible(level > 1)

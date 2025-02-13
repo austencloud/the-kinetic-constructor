@@ -32,20 +32,15 @@ class GenerateTab(QWidget):
         self.settings = main_widget.main_window.settings_manager.generate_tab_settings
         self.main_layout = QVBoxLayout(self)
         self.setLayout(self.main_layout)
-        self._create_widgets()
 
         self.controller = GenerateTabController(self)
         self.layout_manager = GenerateTabLayoutManager(self)
         self.freeform_builder = FreeFormSequenceBuilder(self)
         self.circular_builder = CircularSequenceBuilder(self)
 
+        self._create_widgets()
         self.layout_manager.arrange_layout()
         self.controller.init_from_settings()
-
-    def _create_spacer(self):
-        return QSpacerItem(
-            0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
-        )
 
     def _create_widgets(self):
         self.top_spacer = self._create_spacer()
@@ -63,4 +58,17 @@ class GenerateTab(QWidget):
         self.permutation_type_toggle = PermutationTypeToggle(self)
 
     def resizeEvent(self, event):
-        self.layout_manager.resize_spacers()
+        available_height = self.height() // 24
+        self._resize_spacer(self.top_spacer, available_height)
+        self._resize_spacer(self.bottom_spacer, available_height)
+        self.main_layout.update()
+
+    def _create_spacer(self):
+        return QSpacerItem(
+            0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+        )
+
+    def _resize_spacer(self, spacer: QSpacerItem, height: int):
+        spacer.changeSize(
+            0, height, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
+        )
