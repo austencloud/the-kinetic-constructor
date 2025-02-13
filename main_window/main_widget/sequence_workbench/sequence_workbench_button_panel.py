@@ -65,7 +65,7 @@ class SequenceWorkbenchButtonPanel(QFrame):
                 "tooltip": "Mirror Sequence",
             },
             "swap_colors": {
-                "icon": "yinyang1.png",
+                "icon": "yinyang1.svg",
                 "callback": lambda: self.sequence_workbench.color_swap_manager.swap_current_sequence(),
                 "tooltip": "Swap Colors",
             },
@@ -100,7 +100,6 @@ class SequenceWorkbenchButtonPanel(QFrame):
         sequence_length = len(
             self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
-        # collapse the grpah editor
         graph_editor = self.sequence_workbench.graph_editor
         if sequence_length < 2:
             self.indicator_label.show_message("No sequence to clear")
@@ -125,7 +124,7 @@ class SequenceWorkbenchButtonPanel(QFrame):
         return button
 
     def toggle_swap_colors_icon(self):
-        icon_name = "yinyang1.png" if self.colors_swapped else "yinyang2.png"
+        icon_name = "yinyang1.svg" if self.colors_swapped else "yinyang2.svg"
         new_icon_path = get_images_and_data_path(
             f"images/icons/sequence_workbench_icons/{icon_name}"
         )
@@ -186,11 +185,34 @@ class SequenceWorkbenchButtonPanel(QFrame):
 
     def resize_button_panel(self):
         button_size = self.sequence_workbench.main_widget.height() // 22
+        border_radius = (
+            button_size // 2
+        )  # for a more "pill" shape, or use e.g. button_size//3
+
         for button in self.buttons.values():
             button.setFixedSize(button_size, button_size)
             button.setIconSize(button.size() * 0.8)
-            button.setStyleSheet(f"font-size: {self.font_size}px")
 
+            # Create a style sheet with a dynamic border radius
+            button.setStyleSheet(
+                f"""
+                QPushButton {{
+                    /* Rounded corners: half the button size makes a circle if it's square */
+                    border-radius: {border_radius}px;
+                    background-color: white;  
+                    color: black;               /* white text/icon tint */
+                    border: 1px solid #555;     /* thin border for contrast */
+                }}
+                QPushButton:hover {{
+                    background-color: #F0F0F0;  /* slightly lighter on hover */
+                }}
+                QPushButton:pressed {{
+                    background-color: #D0D0D0;  /* darker when pressed */
+                }}
+            """
+            )
+
+        # Keep any other spacing logic you already have...
         self.layout.setSpacing(
             self.sequence_workbench.beat_frame.main_widget.height() // 120
         )

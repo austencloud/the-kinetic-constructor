@@ -53,7 +53,6 @@ class LetterTypePickerWidget(QWidget):
         self.settings.set_setting(
             "selected_letter_types",
             chosen,
-            self.generate_tab.mode_toggle.current_mode(),
         )
 
     def _set_letter_type_buttons_visible(self, visible: bool):
@@ -82,8 +81,7 @@ class LetterTypePickerWidget(QWidget):
             w.update_colors()
         self.settings.set_setting(
             "selected_letter_types",
-            descriptions,
-            self.generate_tab.controller.current_mode,
+            descriptions
         )
 
     def get_selected_letter_types(self) -> list[LetterType]:

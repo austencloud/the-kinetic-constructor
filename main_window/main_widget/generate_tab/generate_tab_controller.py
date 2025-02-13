@@ -82,6 +82,9 @@ class GenerateTabController:
         self.tab.permutation_type_toggle.set_state(
             self.settings.get_setting("permutation_type") == "rotated"
         )
+        self._update_auto_complete_button()
+
+    def _update_auto_complete_button(self):
         current_sequence_length = (
             len(
                 self.tab.main_widget.json_manager.loader_saver.load_current_sequence_json()

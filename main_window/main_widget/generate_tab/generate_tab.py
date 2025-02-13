@@ -58,15 +58,13 @@ class GenerateTab(QWidget):
         self.permutation_type_toggle = PermutationTypeToggle(self)
 
     def resizeEvent(self, event):
-        available_height = self.height() // 24
-        self._resize_spacer(self.top_spacer, available_height)
-        self._resize_spacer(self.bottom_spacer, available_height)
+        spacer_height = self.height() // 26
+        self._resize_spacer(self.top_spacer, spacer_height)
+        self._resize_spacer(self.bottom_spacer, spacer_height)
         self.main_layout.update()
 
     def _create_spacer(self):
-        return QSpacerItem(
-            0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed
-        )
+        return QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
     def _resize_spacer(self, spacer: QSpacerItem, height: int):
         spacer.changeSize(
