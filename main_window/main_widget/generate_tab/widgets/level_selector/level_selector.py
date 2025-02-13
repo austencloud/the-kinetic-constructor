@@ -10,7 +10,7 @@ from PyQt6.QtGui import (
     qAlpha,
     qRgba,
 )
-from PyQt6.QtCore import Qt, QSize, QEvent
+from PyQt6.QtCore import Qt, QSize
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

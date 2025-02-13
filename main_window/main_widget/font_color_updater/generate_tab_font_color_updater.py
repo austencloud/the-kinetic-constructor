@@ -18,12 +18,6 @@ class GenerateTabFontColorUpdater(BaseFontColorUpdater):
             gen_tab.length_adjuster.length_value_label,
             gen_tab.turn_intensity.intensity_label,
             gen_tab.turn_intensity.intensity_value_label,
-            gen_tab.slice_size_toggle.halved_label,
-            gen_tab.slice_size_toggle.quartered_label,
-            gen_tab.permutation_type.mirrored_label,
-            gen_tab.permutation_type.rotated_label,
         ]
 
         self._apply_font_colors(labels)
-        gen_tab.prop_continuity_toggle.update_mode_label_styles()
-        gen_tab.prop_continuity_toggle.update_mode_label_styles()

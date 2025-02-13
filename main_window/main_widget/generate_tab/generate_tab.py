@@ -60,7 +60,7 @@ class GenerateTab(QWidget):
         self.prop_continuity_toggle = PropContinuityToggle(self)
         self.letter_picker = LetterTypePickerWidget(self)
         self.slice_size_toggle = SliceSizeToggle(self)
-        self.permutation_type = PermutationTypeToggle(self)
+        self.permutation_type_toggle = PermutationTypeToggle(self)
 
     def resizeEvent(self, event):
         self.layout_manager.resize_spacers()

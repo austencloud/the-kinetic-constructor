@@ -67,7 +67,7 @@ class BaseSequenceGeneratorFrame(QFrame):
             "max_turn_intensity", self.generator_type
         )
         continuous_rotation = self.generate_tab_settings.get_sequence_generator_setting(
-            "continuous_rotation", self.generator_type
+            "prop_continuity", self.generator_type
         )
         continuous_rotation = (
             continuous_rotation.lower() == "true"
@@ -98,7 +98,7 @@ class BaseSequenceGeneratorFrame(QFrame):
 
     def _update_continuous_rotation(self, state: bool):
         self.generate_tab_settings.set_sequence_generator_setting(
-            "continuous_rotation", state, self.generator_type
+            "prop_continuity", state, self.generator_type
         )
 
     def on_create_sequence(self, overwrite_sequence: bool):

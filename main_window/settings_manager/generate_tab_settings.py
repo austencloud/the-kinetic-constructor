@@ -4,24 +4,29 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
 
+
 # In GenerateTabSettings class
 class GenerateTabSettings:
     SHARED_DEFAULTS = {
         "sequence_length": 16,
         "max_turn_intensity": 1,
         "sequence_level": 1,
-        "continuous_rotation": False,
+        "prop_continuity": False,
         "overwrite_sequence": False,
     }
-    
+
     MODE_SPECIFIC_DEFAULTS = {
         "freeform": {
-            "selected_letter_types": ["Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"]
+            "selected_letter_types": [
+                "Dual-Shift",
+                "Shift",
+                "Cross-Shift",
+                "Dash",
+                "Dual-Dash",
+                "Static",
+            ]
         },
-        "circular": {
-            "rotation_type": "quartered",
-            "permutation_type": "rotated"
-        }
+        "circular": {"rotation_type": "quartered", "permutation_type": "rotated"},
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
@@ -36,7 +41,7 @@ class GenerateTabSettings:
         else:
             prefix = "builder/sequence_generator/"
             default = self.SHARED_DEFAULTS.get(key)
-            
+
         return self.settings.value(prefix + key, default)
 
     def set_setting(self, key: str, value, mode: str = None):
@@ -45,17 +50,13 @@ class GenerateTabSettings:
             prefix = f"builder/sequence_generator/{mode}/"
         else:
             prefix = "builder/sequence_generator/"
-            
+
         self.settings.setValue(prefix + key, value)
 
     def get_current_mode(self) -> str:
         return self.settings.value(
-            "builder/sequence_generator/current_mode", 
-            "freeform"
+            "builder/sequence_generator/current_mode", "freeform"
         )
 
     def set_current_mode(self, mode: str):
-        self.settings.setValue(
-            "builder/sequence_generator/current_mode", 
-            mode
-        )
+        self.settings.setValue("builder/sequence_generator/current_mode", mode)

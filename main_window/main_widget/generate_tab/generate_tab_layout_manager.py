@@ -38,7 +38,7 @@ class GenerateTabLayoutManager:
         content_layout.addWidget(self.generate_tab.prop_continuity_toggle, 1)
         content_layout.addWidget(self.generate_tab.letter_picker, 1)
         content_layout.addWidget(self.generate_tab.slice_size_toggle, 1)
-        content_layout.addWidget(self.generate_tab.permutation_type, 1)
+        content_layout.addWidget(self.generate_tab.permutation_type_toggle, 1)
 
         # Add a spacer below the last widget, but above the buttons
         self.bottom_spacer = QSpacerItem(
