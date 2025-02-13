@@ -9,7 +9,7 @@ from ..widgets.level_selector.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget import (
+    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_picker_widget import (
         LetterTypePickerWidget,
     )
     from main_window.main_widget.generate_tab.widgets.permutation_type_toggle import (
