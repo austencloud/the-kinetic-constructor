@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.generate_tab.generate_tab import GenerateTab
 
 
-class LetterTypePickerWidget(QWidget):
+class LetterTypePicker(QWidget):
     def __init__(self, generate_tab: "GenerateTab"):
         super().__init__(generate_tab)
         self.generate_tab = generate_tab

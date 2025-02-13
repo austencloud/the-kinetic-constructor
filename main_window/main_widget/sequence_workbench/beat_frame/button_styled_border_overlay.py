@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_button_widget import LetterTypeButtonWidget
+    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_widget import (
+        LetterTypeButton,
+    )
 
 
 class StyledBorderOverlayForButton(QWidget):
@@ -13,7 +15,7 @@ class StyledBorderOverlayForButton(QWidget):
     Draws two concentric circles (outer + inner border) over the parent button.
     """
 
-    def __init__(self, parent: "LetterTypeButtonWidget"):
+    def __init__(self, parent: "LetterTypeButton"):
         super().__init__(parent)
         self.parent_button = parent
         self.is_set = False

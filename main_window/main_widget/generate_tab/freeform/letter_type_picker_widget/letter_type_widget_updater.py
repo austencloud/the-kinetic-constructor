@@ -2,12 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor
 
 if TYPE_CHECKING:
-    from .letter_type_button_widget import LetterTypeButtonWidget
+    from .letter_type_widget import LetterTypeButton
 
 
-
-class LetterTypeButtonWidgetUpdater:
-    def __init__(self, button_widget: "LetterTypeButtonWidget"):
+class LetterTypeButtonUpdater:
+    def __init__(self, button_widget: "LetterTypeButton"):
         self.button_widget = button_widget
 
     def update_colors(self):

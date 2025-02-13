@@ -14,7 +14,7 @@ from .widgets.length_adjuster import LengthAdjuster
 from .widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 from .widgets.prop_continuity_toggle import PropContinuityToggle
 from .widgets.slice_size_toggle import SliceSizeToggle
-from .freeform.letter_type_picker_widget.letter_type_picker_widget import LetterTypePickerWidget
+from .freeform.letter_type_picker_widget.letter_type_picker import LetterTypePicker
 from .customize_your_sequence_label import CustomizeSequenceLabel
 from .generate_sequence_button import GenerateSequenceButton
 
@@ -53,7 +53,7 @@ class GenerateTab(QWidget):
         self.length_adjuster = LengthAdjuster(self)
         self.turn_intensity = TurnIntensityAdjuster(self)
         self.prop_continuity_toggle = PropContinuityToggle(self)
-        self.letter_picker = LetterTypePickerWidget(self)
+        self.letter_picker = LetterTypePicker(self)
         self.slice_size_toggle = SliceSizeToggle(self)
         self.permutation_type_toggle = PermutationTypeToggle(self)
 

@@ -4,24 +4,24 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QPainter, QMouseEvent
 
 from Enums.letters import LetterType
-from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_button_widget_animator import (
-    LetterTypeButtonWidgetAnimator,
+from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_widget_animator import (
+    LetterTypeButtonAnimator,
 )
-from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_button_widget_updater import (
-    LetterTypeButtonWidgetUpdater,
+from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_widget_updater import (
+    LetterTypeButtonUpdater,
 )
 from .styled_border_overlay_for_button import StyledBorderOverlayForButton
 
 if TYPE_CHECKING:
-    from .letter_type_picker_widget import LetterTypePickerWidget
+    from .letter_type_picker import LetterTypePicker
 
 
-class LetterTypeButtonWidget(QWidget):
+class LetterTypeButton(QWidget):
     clicked = pyqtSignal(LetterType, bool)
 
     def __init__(
         self,
-        letter_type_picker: "LetterTypePickerWidget",
+        letter_type_picker: "LetterTypePicker",
         letter_type: LetterType,
         index: int,
     ):
@@ -43,8 +43,8 @@ class LetterTypeButtonWidget(QWidget):
         self.overlay.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
 
         self._baseColor = QColor("white")
-        self.animator = LetterTypeButtonWidgetAnimator(self)
-        self.updater = LetterTypeButtonWidgetUpdater(self)
+        self.animator = LetterTypeButtonAnimator(self)
+        self.updater = LetterTypeButtonUpdater(self)
 
         self.updater.update_colors()
         self.setFixedSize(60, 60)

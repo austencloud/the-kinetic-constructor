@@ -9,8 +9,8 @@ from ..widgets.level_selector.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
-    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_picker_widget import (
-        LetterTypePickerWidget,
+    from main_window.main_widget.generate_tab.freeform.letter_type_picker_widget.letter_type_picker import (
+        LetterTypePicker,
     )
     from main_window.main_widget.generate_tab.widgets.permutation_type_toggle import (
         PermutationTypeToggle,
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class BaseSequenceGeneratorFrame(QFrame):
-    letter_type_picker: "LetterTypePickerWidget" = None
+    letter_type_picker: "LetterTypePicker" = None
     slice_size_toggle: "SliceSizeToggle" = None
     permutation_type_toggle: "PermutationTypeToggle" = None
 

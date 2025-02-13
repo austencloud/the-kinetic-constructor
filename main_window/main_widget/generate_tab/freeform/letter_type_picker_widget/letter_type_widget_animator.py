@@ -9,11 +9,11 @@ from PyQt6.QtCore import (
 from PyQt6.QtGui import QColor
 
 if TYPE_CHECKING:
-    from .letter_type_button_widget import LetterTypeButtonWidget
+    from .letter_type_widget import LetterTypeButton
 
 
-class LetterTypeButtonWidgetAnimator(QObject):
-    def __init__(self, button_widget: "LetterTypeButtonWidget"):
+class LetterTypeButtonAnimator(QObject):
+    def __init__(self, button_widget: "LetterTypeButton"):
         super().__init__(button_widget)
         self._scale = 1.0
         self._bg_color = QColor("white")
