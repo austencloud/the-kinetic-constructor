@@ -38,7 +38,7 @@ class SequenceReflector(BaseSequenceModifier):
 
     def _reflect_sequence(self):
 
-        metadata = self.json_loader.load_current_sequence_json()[0].copy()
+        metadata = self.json_loader.load_current_sequence()[0].copy()
         mirrored_sequence = [metadata]
 
         start_pos_beat_dict = (

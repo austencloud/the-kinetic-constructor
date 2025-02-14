@@ -39,7 +39,7 @@ class BeatReversalGroup(QGraphicsItemGroup):
         if visible:
             if self.pictograph.view.__class__.__name__ == "OptionView":
                 json_loader = self.pictograph.main_widget.json_manager.loader_saver
-                sequence_so_far = json_loader.load_current_sequence_json()
+                sequence_so_far = json_loader.load_current_sequence()
                 if not self.pictograph.pictograph_data:
                     return
                 reversal_dict = ReversalDetector.detect_reversal(

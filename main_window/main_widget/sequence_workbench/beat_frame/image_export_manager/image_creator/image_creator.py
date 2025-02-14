@@ -123,7 +123,7 @@ class ImageCreator:
 
         if options["add_difficulty_level"]:
             difficulty_level = self.export_manager.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
-                self.export_manager.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+                self.export_manager.beat_frame.json_manager.loader_saver.load_current_sequence()
             )
             self.difficulty_level_drawer.draw_difficulty_level(
                 image, difficulty_level, options["additional_height_top"]

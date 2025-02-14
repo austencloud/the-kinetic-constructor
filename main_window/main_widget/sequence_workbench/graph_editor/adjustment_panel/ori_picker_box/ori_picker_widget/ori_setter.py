@@ -23,7 +23,7 @@ class OrientationSetter:
         self._update_current_orientation_index(orientation)
         self._update_clickable_ori_label(orientation)
 
-        if len(self.json_manager.loader_saver.load_current_sequence_json()) > 1:
+        if len(self.json_manager.loader_saver.load_current_sequence()) > 1:
             self._update_start_pos_ori(orientation)
             self._update_start_position_pictographs(orientation)
             self._update_graph_editor_orientation(orientation)

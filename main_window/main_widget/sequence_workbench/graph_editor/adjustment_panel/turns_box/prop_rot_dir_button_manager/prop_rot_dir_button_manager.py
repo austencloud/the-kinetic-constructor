@@ -87,11 +87,9 @@ class PropRotDirButtonManager:
 
             pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
 
-            sequence_so_far = (
-                self.json_manager.loader_saver.load_current_sequence_json()[
-                    : pictograph_index + 2
-                ]
-            )
+            sequence_so_far = self.json_manager.loader_saver.load_current_sequence()[
+                : pictograph_index + 2
+            ]
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, pictograph.pictograph_data
             )

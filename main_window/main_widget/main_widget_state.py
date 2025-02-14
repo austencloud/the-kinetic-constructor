@@ -14,7 +14,7 @@ class MainWidgetState:
 
     def load_state(self, beat_frame: "SequenceBeatFrame"):
         current_sequence = (
-            self.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.main_widget.json_manager.loader_saver.load_current_sequence()
         )
         if len(current_sequence) > 1:
             beat_frame.populator.populate_beat_frame_from_json(current_sequence)

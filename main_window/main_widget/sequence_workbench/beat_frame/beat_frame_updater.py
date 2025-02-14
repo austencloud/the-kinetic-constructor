@@ -17,7 +17,7 @@ class BeatFrameUpdater:
     def update_beats_from_current_sequence_json(self) -> None:
 
         current_sequence_json = (
-            self.bf.json_manager.loader_saver.load_current_sequence_json()
+            self.bf.json_manager.loader_saver.load_current_sequence()
         )
         sequence_entries = current_sequence_json[1:]
 
@@ -39,7 +39,7 @@ class BeatFrameUpdater:
                 beat = beat_view.beat
                 pictograph_index = self.bf.get.index_of_beat(beat_view)
                 sequence_so_far = (
-                    self.bf.json_manager.loader_saver.load_current_sequence_json()[
+                    self.bf.json_manager.loader_saver.load_current_sequence()[
                         : pictograph_index + 2
                     ]
                 )
@@ -101,4 +101,4 @@ class BeatFrameUpdater:
         self.bf.sequence_workbench.current_word_label.update_current_word_label_from_beats()
         # self.bf.layout_manager.setup_layout()  # Re-setup layout
         # self.bf.updateGeometry()               # Force layout recalculation
-        QApplication.processEvents()           # Process pending events
+        QApplication.processEvents()  # Process pending events

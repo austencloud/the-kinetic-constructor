@@ -26,7 +26,7 @@ class JsonSequenceUpdater:
 
     def update_current_sequence_file_with_beat(self, beat: Beat):
         view = beat.view
-        sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence_data = self.json_manager.loader_saver.load_current_sequence()
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
 
@@ -59,7 +59,7 @@ class JsonSequenceUpdater:
     def add_placeholder_entry_to_current_sequence(
         self, beat_num: int, parent_beat: int
     ):
-        sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence_data = self.json_manager.loader_saver.load_current_sequence()
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
 

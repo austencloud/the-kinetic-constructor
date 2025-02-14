@@ -74,12 +74,12 @@ class JsonOrientationValidationEngine:
     def run(self, is_current_sequence=False) -> None:
         """Public method to run the sequence validation and update process."""
         if is_current_sequence:
-            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+            self.sequence = self.json_manager.loader_saver.load_current_sequence()
         self.validate_and_update_json_orientations(is_current_sequence)
 
     def validate_last_pictograph(self) -> None:
         """Validates the most recently added pictograph dict."""
-        self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        self.sequence = self.json_manager.loader_saver.load_current_sequence()
         self.update_json_entry_start_orientation(-1)
         self.update_json_entry_end_orientation(-1)
         self.json_manager.loader_saver.save_current_sequence(self.sequence)

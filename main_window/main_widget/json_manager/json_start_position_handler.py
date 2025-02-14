@@ -19,7 +19,7 @@ class JsonStartPositionHandler:
             "start_ori"
         ]
 
-        sequence = self.manager.loader_saver.load_current_sequence_json()
+        sequence = self.manager.loader_saver.load_current_sequence()
 
         start_position_dict = {
             "beat": 0,
@@ -58,7 +58,7 @@ class JsonStartPositionHandler:
         self.manager.loader_saver.save_current_sequence(sequence)
 
     def update_start_pos_ori(self, color: str, ori: int) -> None:
-        sequence = self.manager.loader_saver.load_current_sequence_json()
+        sequence = self.manager.loader_saver.load_current_sequence()
         if sequence:
             sequence[1][f"{color}_attributes"]["end_ori"] = ori
             sequence[1][f"{color}_attributes"]["start_ori"] = ori

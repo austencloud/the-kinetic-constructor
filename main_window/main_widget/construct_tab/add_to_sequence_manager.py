@@ -20,7 +20,7 @@ class AddToSequenceManager:
 
     def create_new_beat(self, clicked_option: "Pictograph") -> "Beat":
         sequence = (
-            self.construct_tab.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.construct_tab.main_widget.json_manager.loader_saver.load_current_sequence()
         )
 
         last_beat_dict = None

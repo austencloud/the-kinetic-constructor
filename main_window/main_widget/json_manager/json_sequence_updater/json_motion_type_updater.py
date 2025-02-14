@@ -14,7 +14,7 @@ class JsonMotionTypeUpdater:
         self.main_widget = self.json_manager.main_widget
 
     def update_json_motion_type(self, index: int, color: str, motion_type: str) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         sequence[index][f"{color}_attributes"]["motion_type"] = motion_type
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if "prefloat_motion_type" in sequence[index][f"{color}_attributes"]:
@@ -24,7 +24,7 @@ class JsonMotionTypeUpdater:
     def update_json_prefloat_motion_type(
         self, index: int, color: str, motion_type: str
     ) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         if motion_type == "float":
             raise ValueError("prefloat_motion_type cannot be 'float'")
         else:

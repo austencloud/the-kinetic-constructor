@@ -73,7 +73,7 @@ class TurnsAdjustmentManager(QObject):
             motion.prefloat_motion_type
 
         self.main_widget.construct_tab.option_picker.updater.update_options()
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         self.beat_frame.updater.update_beats_from(sequence)
         QApplication.restoreOverrideCursor()
 

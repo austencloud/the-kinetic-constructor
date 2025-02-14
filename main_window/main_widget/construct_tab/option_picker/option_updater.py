@@ -20,7 +20,7 @@ class OptionUpdater:
         return os.path.dirname(os.path.dirname(os.path.dirname(current_file_path)))
 
     def refresh_options(self):
-        sequence = self.json_loader.load_current_sequence_json()
+        sequence = self.json_loader.load_current_sequence()
         if len(sequence) > 1:
             sections = self.scroll_area.sections
             pictograph_frames = [
@@ -32,7 +32,7 @@ class OptionUpdater:
             )
 
     def update_options(self):
-        sequence = self.json_loader.load_current_sequence_json()
+        sequence = self.json_loader.load_current_sequence()
         selected_filter = (
             self.option_picker.reversal_filter.reversal_combobox.currentData()
         )

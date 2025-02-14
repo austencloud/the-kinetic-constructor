@@ -15,7 +15,7 @@ class SequenceDataLoaderSaver:
             "current_sequence.json"
         )
 
-    def load_current_sequence_json(self) -> list[dict]:
+    def load_current_sequence(self) -> list[dict]:
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
                 content = file.read().strip()
@@ -96,19 +96,19 @@ class SequenceDataLoaderSaver:
         self.save_current_sequence([])
 
     def get_json_prop_rot_dir(self, index: int, color: str) -> int:
-        sequence = self.load_current_sequence_json()
+        sequence = self.load_current_sequence()
         if sequence:
             return sequence[index][f"{color}_attributes"].get("prop_rot_dir", 0)
         return 0
 
     def get_json_motion_type(self, index: int, color: str) -> int:
-        sequence = self.load_current_sequence_json()
+        sequence = self.load_current_sequence()
         if sequence:
             return sequence[index][f"{color}_attributes"].get("motion_type", 0)
         return 0
 
     def get_json_prefloat_prop_rot_dir(self, index: int, color: str) -> int:
-        sequence = self.load_current_sequence_json()
+        sequence = self.load_current_sequence()
         if sequence:
             return sequence[index][f"{color}_attributes"].get(
                 "prefloat_prop_rot_dir", ""
@@ -116,7 +116,7 @@ class SequenceDataLoaderSaver:
         return 0
 
     def get_json_prefloat_motion_type(self, index: int, color: str) -> int:
-        sequence = self.load_current_sequence_json()
+        sequence = self.load_current_sequence()
         if sequence:
             return sequence[index][f"{color}_attributes"].get(
                 "prefloat_motion_type",
@@ -147,7 +147,7 @@ class SequenceDataLoaderSaver:
         return 0
 
     def load_last_beat_dict(self) -> dict:
-        sequence = self.load_current_sequence_json()
+        sequence = self.load_current_sequence()
         if sequence:
             return sequence[-1]
         return {}

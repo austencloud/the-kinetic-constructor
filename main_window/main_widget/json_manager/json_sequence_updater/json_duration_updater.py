@@ -44,7 +44,7 @@ class JsonDurationUpdater:
 
     def _load_sequence_data(self) -> list[dict]:
         """Load the current sequence JSON data."""
-        return self.json_manager.loader_saver.load_current_sequence_json()
+        return self.json_manager.loader_saver.load_current_sequence()
 
     def _extract_metadata_and_beats(
         self, sequence_data: list[dict]

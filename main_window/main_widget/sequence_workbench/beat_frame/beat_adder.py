@@ -42,9 +42,7 @@ class BeatAdder:
             return
 
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:
-            sequence_so_far = (
-                self.json_manager.loader_saver.load_current_sequence_json()
-            )
+            sequence_so_far = self.json_manager.loader_saver.load_current_sequence()
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, new_beat.pictograph_data
             )

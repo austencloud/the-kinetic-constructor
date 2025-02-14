@@ -95,9 +95,7 @@ class TempBeatFrame(BaseBeatFrame):
         return self.start_pos_view
 
     def on_beat_adjusted(self) -> None:
-        current_sequence_json = (
-            self.json_manager.loader_saver.load_current_sequence_json()
-        )
+        current_sequence_json = self.json_manager.loader_saver.load_current_sequence()
         self.propogate_turn_adjustment(current_sequence_json)
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:

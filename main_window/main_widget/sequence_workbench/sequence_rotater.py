@@ -35,7 +35,7 @@ class SequenceRotater(BaseSequenceModifier):
 
     def _rotate_sequence(self):
 
-        metadata = self.json_loader.load_current_sequence_json()[0].copy()
+        metadata = self.json_loader.load_current_sequence()[0].copy()
         metadata["grid_mode"] = BOX if metadata["grid_mode"] == DIAMOND else DIAMOND
 
         rotated_sequence = [metadata]

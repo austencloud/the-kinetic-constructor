@@ -23,7 +23,7 @@ class BaseSequenceModifier:
 
     def _check_length(self):
         """Check if the sequence is long enough to modify."""
-        current_sequence = self.json_loader.load_current_sequence_json()
+        current_sequence = self.json_loader.load_current_sequence()
 
         if len(current_sequence) < 2:
             self.sequence_workbench.indicator_label.show_message(self.error_message)

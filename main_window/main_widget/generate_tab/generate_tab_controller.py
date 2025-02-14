@@ -46,7 +46,7 @@ class GenerateTabController:
             else int(self.settings.get_setting("turn_intensity") or 1)
         )
         level = int(self.settings.get_setting("level") or 1)
-        prop_continuity = (self.settings.get_setting("prop_continuity"))
+        prop_continuity = self.settings.get_setting("prop_continuity")
 
         if self.current_mode == "freeform":
             self.tab.freeform_builder.build_sequence(
@@ -83,9 +83,7 @@ class GenerateTabController:
             self.settings.get_setting("permutation_type") == "rotated"
         )
         current_sequence_length = (
-            len(
-                self.tab.main_widget.json_manager.loader_saver.load_current_sequence_json()
-            )
+            len(self.tab.main_widget.json_manager.loader_saver.load_current_sequence())
             - 1
         )
         self.tab.auto_complete_button.setEnabled(int(current_sequence_length) > 1)

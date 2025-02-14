@@ -66,7 +66,7 @@ class OptionPickerScrollArea(QScrollArea):
                 break
             pictograph = self.option_picker.option_pool[i]
             pictograph.updater.update_pictograph(pictograph_data)
-            sequence_so_far = self.json_loader.load_current_sequence_json()
+            sequence_so_far = self.json_loader.load_current_sequence()
             reversal_info = ReversalDetector.detect_reversal(
                 sequence_so_far, pictograph.pictograph_data
             )

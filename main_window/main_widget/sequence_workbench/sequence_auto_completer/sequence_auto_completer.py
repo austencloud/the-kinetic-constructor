@@ -29,7 +29,7 @@ class SequenceAutoCompleter:
 
     def auto_complete_sequence(self):
         sequence = (
-            self.sequence_workbench.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+            self.sequence_workbench.beat_frame.json_manager.loader_saver.load_current_sequence()
         )
         self.sequence_properties_manager = self.main_widget.sequence_properties_manager
         self.sequence_properties_manager.instantiate_sequence(sequence)

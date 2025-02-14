@@ -84,7 +84,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
 
     def is_quartered_permutation(self) -> bool:
         sequence = (
-            self.circular_sequence_generator.json_manager.loader_saver.load_current_sequence_json()
+            self.circular_sequence_generator.json_manager.loader_saver.load_current_sequence()
         )
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
@@ -92,7 +92,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
 
     def is_halved_permutation(self) -> bool:
         sequence = (
-            self.circular_sequence_generator.json_manager.loader_saver.load_current_sequence_json()
+            self.circular_sequence_generator.json_manager.loader_saver.load_current_sequence()
         )
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]

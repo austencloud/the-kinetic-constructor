@@ -13,14 +13,14 @@ class JsonstrUpdater:
     def update_prefloat_prop_rot_dir_in_json(
         self, index: int, color: str, prop_rot_dir: str
     ) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"] = prop_rot_dir
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def update_json_prop_rot_dir(
         self, index: int, color: str, prop_rot_dir: str
     ) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:

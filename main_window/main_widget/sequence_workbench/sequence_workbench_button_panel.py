@@ -50,7 +50,7 @@ class SequenceWorkbenchButtonPanel(QFrame):
             "save_image": {
                 "icon": "save_image.svg",
                 "callback": lambda: self.export_manager.dialog_executor.exec_dialog(
-                    self.sequence_workbench.main_widget.json_manager.loader_saver.load_current_sequence_json()
+                    self.sequence_workbench.main_widget.json_manager.loader_saver.load_current_sequence()
                 ),
                 "tooltip": "Save Image",
             },
@@ -98,7 +98,7 @@ class SequenceWorkbenchButtonPanel(QFrame):
 
     def clear_sequence(self):
         sequence_length = len(
-            self.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.main_widget.json_manager.loader_saver.load_current_sequence()
         )
         # collapse the grpah editor
         graph_editor = self.sequence_workbench.graph_editor

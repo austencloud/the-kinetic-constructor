@@ -19,7 +19,7 @@ class JsonTurnsUpdater:
     def update_turns_in_json_at_index(
         self, index: int, color: str, turns: Union[int, float]
     ) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         sequence[index][f"{color}_attributes"]["turns"] = turns
         end_ori = self.json_manager.ori_calculator.calculate_end_ori(
             sequence[index], color
@@ -69,7 +69,7 @@ class JsonTurnsUpdater:
         )
 
     def get_number_of_placeholders_before_current_beat(self, current_beat_number):
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence()
         number_of_placeholders = 0
         for beat in sequence[2:]:
             if beat["beat"] < current_beat_number and beat.get("is_placeholder"):

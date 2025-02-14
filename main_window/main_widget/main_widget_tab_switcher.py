@@ -63,6 +63,16 @@ class MainWidgetTabSwitcher:
 
     def get_stack_indices_for_tab(self, index: int) -> tuple[int, int]:
         """Get the left and right stack indices for the given tab index."""
-        return self.tab_to_left_stack.get(
-            index, LeftStackIndex.WORKBENCH
-        ), self.tab_to_right_stack.get(index, index)
+        left_index = self.tab_to_left_stack.get(index, LeftStackIndex.WORKBENCH)
+        right_index: int
+        if index == TAB_INDEX[TabName.CONSTRUCT]:
+            current_sequence = self.mw.json_manager.loader_saver.load_current_sequence()
+            right_index = (
+                RightStackIndex.OPTION_PICKER
+                if len(current_sequence) > 1
+                else RightStackIndex.START_POS_PICKER
+            )
+        else:
+            right_index = self.tab_to_right_stack.get(index, index)
+
+        return left_index, right_index

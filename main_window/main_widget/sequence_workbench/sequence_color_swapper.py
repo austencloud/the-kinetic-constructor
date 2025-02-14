@@ -35,7 +35,7 @@ class SequenceColorSwapper(BaseSequenceModifier):
     def _color_swap_sequence(self) -> list[dict]:
 
         self.sequence_workbench.button_panel.toggle_swap_colors_icon()
-        metadata = self.json_loader.load_current_sequence_json()[0].copy()
+        metadata = self.json_loader.load_current_sequence()[0].copy()
         swapped_sequence = []
         swapped_sequence.append(metadata)
 
