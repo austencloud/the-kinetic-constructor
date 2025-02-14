@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
 
-
 if TYPE_CHECKING:
     from main_window.main_widget.browse_tab.thumbnail_box.thumbnail_box import (
         ThumbnailBox,
@@ -25,8 +24,8 @@ class FavoritesManager:
         self.save_favorite_status()
 
     def load_favorite_status(self):
-        if self.thumbnail_box.thumbnails:
-            first_thumbnail = self.thumbnail_box.thumbnails[0]
+        if self.thumbnail_box.state.thumbnails:
+            first_thumbnail = self.thumbnail_box.state.thumbnails[0]
             self.favorite_status = (
                 self.thumbnail_box.main_widget.metadata_extractor.get_favorite_status(
                     first_thumbnail
@@ -34,7 +33,7 @@ class FavoritesManager:
             )
 
     def save_favorite_status(self):
-        for thumbnail in self.thumbnail_box.thumbnails:
+        for thumbnail in self.thumbnail_box.state.thumbnails:
             self.thumbnail_box.main_widget.metadata_extractor.set_favorite_status(
                 thumbnail, self.favorite_status
             )

@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget, QSizePolicy
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
+from typing import TYPE_CHECKING, Optional
 
+from .sequence_viewer_state import SequenceViewerState
 from .sequence_viewer_image_label import SequenceViewerImageLabel
 from .placeholder_text_label import PlaceholderTextLabel
 from .sequence_viewer_action_button_panel import SequenceViewerActionButtonPanel
@@ -9,22 +11,21 @@ from .sequence_viewer_word_label import SequenceViewerWordLabel
 from .sequence_viewer_nav_buttons_widget import SequenceViewerNavButtonsWidget
 from ..thumbnail_box.thumbnail_box import ThumbnailBox
 from ..thumbnail_box.variation_number_label import VariationNumberLabel
-from typing import TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     from ..browse_tab import BrowseTab
 
 
 class SequenceViewer(QWidget):
-    thumbnails: list[str] = []
-    current_index = 0
-    sequence_json = None
-
     def __init__(self, browse_tab: "BrowseTab"):
         super().__init__(browse_tab)
         self.main_widget = browse_tab.main_widget
         self.browse_tab = browse_tab
-        self.current_thumbnail_box: ThumbnailBox = None
+
+        self.current_thumbnail_box: Optional[ThumbnailBox] = None
+        self.state = SequenceViewerState()
+
         self._setup_components()
         self._setup_layout()
         self.clear()
@@ -32,13 +33,12 @@ class SequenceViewer(QWidget):
     def _setup_layout(self):
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # layout.addStretch(1)
         layout.addWidget(self.word_label)
         layout.addWidget(self.variation_number_label)
         layout.addWidget(self.stacked_widget)
         layout.addWidget(self.nav_buttons_widget)
         layout.addWidget(self.action_button_panel)
-        # layout.addStretch(1)
+
         self.setLayout(layout)
 
     def _setup_components(self):
@@ -54,60 +54,60 @@ class SequenceViewer(QWidget):
         self.word_label = SequenceViewerWordLabel(self)
         self.action_button_panel = SequenceViewerActionButtonPanel(self)
 
-    def update_thumbnails(self, thumbnails=[]):
-        self.thumbnails = thumbnails
-        if self.current_index >= len(self.thumbnails):
-            self.current_index = len(self.thumbnails) - 1
+    def update_thumbnails(self, thumbnails: list[str]):
+        self.state.update_thumbnails(thumbnails)
+        self._update_display_after_thumbnail_change()
 
-        self.update_preview(self.current_index)
+    def _update_display_after_thumbnail_change(self):
+        current_thumbnail = self.state.get_current_thumbnail()
+        if current_thumbnail:
+            self.update_preview(self.state.current_index)
+            self._toggle_navigation_visibility(len(self.state.thumbnails))
+        else:
+            self.clear()
 
-        if len(self.thumbnails) > 1:
+    def update_preview(self, index: int):
+        self.state.set_current_index(index)
+        current_thumbnail = self.state.get_current_thumbnail()
+
+        if current_thumbnail:
+            pixmap = QPixmap(current_thumbnail)
+            if not pixmap.isNull():
+                self.image_label.set_pixmap_with_scaling(pixmap)
+                self.stacked_widget.setCurrentWidget(self.image_label)
+
+                if self.current_thumbnail_box:
+                    metadata_extractor = self.main_widget.metadata_extractor
+                    self.state.sequence_json = metadata_extractor.extract_metadata_from_file(current_thumbnail)
+
+        else:
+            self.stacked_widget.setCurrentWidget(self.placeholder_label)
+            self.variation_number_label.clear()
+
+    def update_nav_buttons(self):
+        self.nav_buttons_widget.current_index = self.state.current_index
+        self.nav_buttons_widget.refresh()
+
+    def _toggle_navigation_visibility(self, num_thumbnails: int):
+        if num_thumbnails > 1:
             self.nav_buttons_widget.show()
             self.variation_number_label.show()
-        elif len(self.thumbnails) == 1:
+        elif num_thumbnails == 1:
             self.nav_buttons_widget.hide()
             if self.current_thumbnail_box:
                 self.current_thumbnail_box.nav_buttons_widget.hide()
             self.variation_number_label.hide()
-        elif len(self.thumbnails) == 0:
+        else:
             self.clear()
 
-    def update_preview(self, index):
-        if index is None or not self.thumbnails:
-            self.stacked_widget.setCurrentWidget(self.placeholder_label)
-            self.variation_number_label.clear()
-            return
-
-        pixmap = QPixmap(self.thumbnails[index])
-        if not pixmap.isNull():
-            self.image_label.set_pixmap_with_scaling(pixmap)
-            self.stacked_widget.setCurrentWidget(self.image_label)
-
-        if self.current_thumbnail_box:
-            metadata_extractor = (
-                self.current_thumbnail_box.main_widget.metadata_extractor
-            )
-            self.sequence_json = metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[index]
-            )
-
-    def update_nav_buttons(self):
-        self.nav_buttons_widget.current_index = self.current_index
-        self.nav_buttons_widget.refresh()
-
     def clear(self):
+        self.state.clear()
         self.stacked_widget.setCurrentWidget(self.placeholder_label)
         self.variation_number_label.clear()
         self.word_label.clear()
-        self.current_index = 0
-        self.current_thumbnail_box = None
-        self.thumbnails = []
         self.nav_buttons_widget.hide()
         self.variation_number_label.hide()
-        min_height = self.height() // 5
-        self.stacked_widget.setFixedHeight(min_height)
+        self.current_thumbnail_box = None
 
-    def get_thumbnail_at_current_index(self):
-        if self.current_index < len(self.thumbnails):
-            return self.thumbnails[self.current_index]
-        return None
+    def get_thumbnail_at_current_index(self) -> Optional[str]:
+        return self.state.get_current_thumbnail()

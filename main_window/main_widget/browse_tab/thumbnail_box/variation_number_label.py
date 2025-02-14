@@ -16,16 +16,16 @@ if TYPE_CHECKING:
 class VariationNumberLabel(QLabel):
     def __init__(self, parent: Union["ThumbnailBox", "SequenceViewer"]):
         super().__init__(parent)
-        if len(parent.thumbnails) > 1:
-            self.setText(f"{parent.current_index + 1}/{len(parent.thumbnails)}")
+        if len(parent.state.thumbnails) > 1:
+            self.setText(f"{parent.state.current_index + 1}/{len(parent.state.thumbnails)}")
         else:
             self.hide()
         self.parent: Union["ThumbnailBox", "SequenceViewer"] = parent
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_index(self, index: int):
-        if len(self.parent.thumbnails) > 1:
-            self.setText(f"{index + 1}/{len(self.parent.thumbnails)}")
+        if len(self.parent.state.thumbnails) > 1:
+            self.setText(f"{index + 1}/{len(self.parent.state.thumbnails)}")
         else:
             self.hide()
 

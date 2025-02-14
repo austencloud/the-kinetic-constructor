@@ -43,7 +43,11 @@ class SequenceViewerActionButtonPanel(QWidget):
                 "action": lambda: (
                     self.browse_tab.deletion_handler.delete_variation(
                         self.sequence_viewer.current_thumbnail_box,
-                        ((self.sequence_viewer.current_thumbnail_box.current_index)),
+                        (
+                            (
+                                self.sequence_viewer.current_thumbnail_box.state.current_index
+                            )
+                        ),
                     )
                     if self.sequence_viewer.current_thumbnail_box
                     else None
@@ -114,8 +118,8 @@ class SequenceViewerActionButtonPanel(QWidget):
 
     def save_image(self):
         sequence_json = self.sequence_viewer.sequence_json
-        current_thumbnail = self.sequence_viewer.thumbnails[
-            self.sequence_viewer.current_index
+        current_thumbnail = self.sequence_viewer.state.thumbnails[
+            self.sequence_viewer.state.current_index
         ]
         if not current_thumbnail:
             QMessageBox.warning(

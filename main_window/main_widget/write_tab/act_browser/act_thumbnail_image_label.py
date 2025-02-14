@@ -50,7 +50,7 @@ class ActThumbnailImageLabel(ThumbnailImageLabel):
         if event.button() == Qt.MouseButton.LeftButton and self.thumbnails:
             # Retrieve metadata for drag
             metadata = self.metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[self.thumbnail_box.current_index]
+                self.thumbnails[self.thumbnail_box.state.current_index]
             )
             if metadata:
                 self.startDrag(metadata)

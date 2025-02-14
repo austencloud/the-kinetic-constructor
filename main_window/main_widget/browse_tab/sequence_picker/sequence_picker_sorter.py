@@ -60,7 +60,7 @@ class SequencePickerSorter:
                 (word, thumbnails)
             )
 
-    def update_ui(self, sorted_sections, sort_method: str):
+    def update_ui(self, sorted_sections: list[str], sort_method: str):
         self.sequence_picker.nav_sidebar.update_sidebar(sorted_sections, sort_method)
         self.sequence_picker.control_panel.sort_widget.highlight_appropriate_button(
             sort_method
@@ -93,7 +93,9 @@ class SequencePickerSorter:
         )
         QApplication.restoreOverrideCursor()
 
-    def add_section_headers(self, row_index, section, sort_method, current_section):
+    def add_section_headers(
+        self, row_index: int, section: str, sort_method: str, current_section: str
+    ):
         if sort_method == "date_added":
             day, month, year = section.split("-")
             formatted_day = f"{int(day)}-{int(month)}"
@@ -114,7 +116,12 @@ class SequencePickerSorter:
         return row_index
 
     def add_thumbnail_box(
-        self, row_index, column_index, word, thumbnails, hidden: bool = False
+        self,
+        row_index: int,
+        column_index: int,
+        word: str,
+        thumbnails: list[str],
+        hidden: bool,
     ):
         if word not in self.scroll_widget.thumbnail_boxes:
             thumbnail_box = ThumbnailBox(self.browse_tab, word, thumbnails)
@@ -129,7 +136,9 @@ class SequencePickerSorter:
 
         if not hidden:
             thumbnail_box.show()
-            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
+            thumbnail_box.image_label.update_thumbnail(
+                thumbnail_box.state.current_index
+            )
 
     def reload_currently_displayed_filtered_sequences(self):
         sort_method = (

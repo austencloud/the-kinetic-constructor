@@ -31,7 +31,7 @@ class ActBrowser(QScrollArea):
         )
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self._setup_layout()
-        self.populate_favorites()
+        # self.populate_favorites()
         self.setStyleSheet("background-color: rgba(0,0,0,0);")
 
     def _setup_layout(self):

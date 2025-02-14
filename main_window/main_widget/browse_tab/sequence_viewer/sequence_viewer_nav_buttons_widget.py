@@ -17,8 +17,9 @@ class SequenceViewerNavButtonsWidget(QWidget):
     def __init__(self, sequence_viewer: "SequenceViewer"):
         super().__init__(sequence_viewer)
         self.sequence_viewer = sequence_viewer
-        self.thumbnails = sequence_viewer.thumbnails
-        self.current_index = sequence_viewer.current_index
+        self.thumbnails = sequence_viewer.state.thumbnails
+        self.state = sequence_viewer.state
+        self.current_index = self.state.current_index
         self.variation_number_label = sequence_viewer.variation_number_label
         self.image_label = sequence_viewer.image_label
         self._setup_buttons()
@@ -37,32 +38,32 @@ class SequenceViewerNavButtonsWidget(QWidget):
         self.layout.addStretch(1)
 
     def handle_button_click(self):
-        if not self.sequence_viewer.thumbnails:
+        if not self.sequence_viewer.state.thumbnails:
             return
         sender: QPushButton = self.sender()
         if sender.text() == "<":
-            self.sequence_viewer.current_index = (
-                self.sequence_viewer.current_index - 1
-            ) % len(self.sequence_viewer.thumbnails)
+            self.state.current_index = (self.state.current_index - 1) % len(
+                self.sequence_viewer.state.thumbnails
+            )
         elif sender.text() == ">":
-            self.sequence_viewer.current_index = (
-                self.sequence_viewer.current_index + 1
-            ) % len(self.sequence_viewer.thumbnails)
-        self.sequence_viewer.update_preview(self.sequence_viewer.current_index)
+            self.state.current_index = (self.state.current_index + 1) % len(
+                self.sequence_viewer.state.thumbnails
+            )
+        self.sequence_viewer.update_preview(self.state.current_index)
         self.sequence_viewer.variation_number_label.setText(
-            f"{self.sequence_viewer.current_index + 1}/{len(self.sequence_viewer.thumbnails)}"
+            f"{self.state.current_index + 1}/{len(self.sequence_viewer.state.thumbnails)}"
         )
 
-        self.sequence_viewer.current_thumbnail_box.current_index = (
-            self.sequence_viewer.current_index
+        self.sequence_viewer.current_thumbnail_box.state.current_index = (
+            self.state.current_index
         )
         box_nav_buttons_widget = (
             self.sequence_viewer.current_thumbnail_box.nav_buttons_widget
         )
-        box_nav_buttons_widget.thumbnail_box.current_index = (
-            self.sequence_viewer.current_index
+        box_nav_buttons_widget.thumbnail_box.state.current_index = (
+            self.state.current_index
         )
-        box_nav_buttons_widget.update_thumbnail(self.sequence_viewer.current_index)
+        box_nav_buttons_widget.update_thumbnail(self.state.current_index)
 
     def update_thumbnail(self):
         # self.image_label.current_index = self.current_index
@@ -70,7 +71,7 @@ class SequenceViewerNavButtonsWidget(QWidget):
         self.variation_number_label.update_index(self.current_index)
 
     def refresh(self):
-        thumbnails = self.sequence_viewer.thumbnails
+        thumbnails = self.sequence_viewer.state.thumbnails
 
         self.update_thumbnail()
         if len(thumbnails) == 1:

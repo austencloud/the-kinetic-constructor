@@ -29,9 +29,9 @@ class BrowseTabDeletionHandler:
             current_scroll_position = (
                 self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().value()
             )
-            file_path = thumbnail_box.thumbnails.pop(index)
+            file_path = thumbnail_box.state.thumbnails.pop(index)
             os.remove(file_path)
-            if len(thumbnail_box.thumbnails) == 0:
+            if len(thumbnail_box.state.thumbnails) == 0:
                 self.delete_word(thumbnail_box.word)
                 self.browse_tab.sequence_viewer.update_thumbnails()
                 self.browse_tab.sequence_picker.scroll_widget.thumbnail_boxes.pop(
@@ -39,13 +39,15 @@ class BrowseTabDeletionHandler:
                 )
             else:
                 self.delete_empty_folders(get_images_and_data_path("dictionary"))
-                thumbnail_box.current_index = 0
+                thumbnail_box.state.current_index = 0
                 # self.sequence_picker.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
-                thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-                self.browse_tab.sequence_viewer.update_thumbnails(
-                    thumbnail_box.thumbnails
+                thumbnail_box.image_label.update_thumbnail(
+                    thumbnail_box.state.current_index
                 )
-                thumbnail_box.update_thumbnails(thumbnail_box.thumbnails)
+                self.browse_tab.sequence_viewer.update_thumbnails(
+                    thumbnail_box.state.thumbnails
+                )
+                thumbnail_box.update_thumbnails(thumbnail_box.state.thumbnails)
 
             def restore_scroll_position():
                 self.browse_tab.sequence_picker.scroll_widget.scroll_area.verticalScrollBar().setValue(

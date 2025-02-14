@@ -19,29 +19,21 @@ class ThumbnailImageLabel(QLabel):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
         super().__init__()
         self.thumbnail_box = thumbnail_box
-
-        self.thumbnails = thumbnail_box.thumbnails
+        self.state = thumbnail_box.state
         self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
-
         self.setStyleSheet("border: 3px solid black;")
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_thumbnail(self, index):
-        if self.thumbnails and 0 <= index < len(self.thumbnails):
-            if index != self.index:
-                self.index = index
-                self.pixmap = QPixmap(self.thumbnails[index])
-                self.set_pixmap_to_fit(self.pixmap)
-            else:
-                self.set_pixmap_to_fit(self.pixmap)
-        else:
-            self.setText("No image available")
+        if self.state.thumbnails and 0 <= index < len(self.state.thumbnails):
+            pixmap = QPixmap(self.state.thumbnails[index])
+            self.set_pixmap_to_fit(pixmap)
 
     def set_pixmap_to_fit(self, pixmap: QPixmap):
-        current_index = self.thumbnail_box.current_index
+        current_index = self.state.current_index
         sequence_length = self.metadata_extractor.get_sequence_length(
-            self.thumbnail_box.thumbnails[current_index]
+            self.state.thumbnails[current_index]
         )
 
         target_width = self._get_target_width(sequence_length)
@@ -65,9 +57,9 @@ class ThumbnailImageLabel(QLabel):
         return target_width
 
     def mousePressEvent(self, event: "QMouseEvent"):
-        if self.thumbnails:
+        if self.state.thumbnails:
             metadata = self.metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[0]
+                self.state.thumbnails[0]
             )
             self.thumbnail_box.browse_tab.selection_handler.on_box_thumbnail_clicked(
                 self, metadata
@@ -75,7 +67,7 @@ class ThumbnailImageLabel(QLabel):
 
         else:
             self.thumbnail_box.browse_tab.deletion_handler.delete_variation(
-                self.thumbnail_box, self.thumbnail_box.current_index
+                self.thumbnail_box, self.state.current_index
             )
 
     def set_selected(self, selected: bool):

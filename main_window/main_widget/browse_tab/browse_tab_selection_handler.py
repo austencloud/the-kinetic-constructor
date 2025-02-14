@@ -45,9 +45,9 @@ class BrowseTabSelectionManager:
         sequence_dict: dict,
     ) -> None:
         self.browse_tab.sequence_picker.selected_sequence_dict = sequence_dict
-        self.sequence_viewer.thumbnails = image_label.thumbnails
+        self.sequence_viewer.state.thumbnails = image_label.state.thumbnails
         thumbnail_pixmap = QPixmap(
-            image_label.thumbnails[image_label.thumbnail_box.current_index]
+            image_label.state.thumbnails[image_label.thumbnail_box.state.current_index]
         )
         self.sequence_viewer.image_label.setPixmap(
             thumbnail_pixmap.scaled(
@@ -59,10 +59,10 @@ class BrowseTabSelectionManager:
         if self.current_thumbnail:
             self.current_thumbnail.set_selected(False)
 
-        self.sequence_viewer.update_thumbnails(image_label.thumbnails)
+        self.sequence_viewer.update_thumbnails(image_label.state.thumbnails)
         self.select_viewer_thumbnail(
             image_label.thumbnail_box,
-            image_label.thumbnail_box.current_index,
+            image_label.thumbnail_box.state.current_index,
             image_label.thumbnail_box.word,
         )
 
@@ -71,14 +71,14 @@ class BrowseTabSelectionManager:
         self.current_thumbnail.is_selected = True
 
         self.sequence_viewer.variation_number_label.update_index(
-            image_label.thumbnail_box.current_index
+            image_label.thumbnail_box.state.current_index
         )
 
     def select_viewer_thumbnail(self, thumbnail_box, index, word):
         sequence_viewer = self.sequence_viewer
-        sequence_viewer.current_index = index
+        sequence_viewer.state.current_index = index
         sequence_viewer.current_thumbnail_box = thumbnail_box
         sequence_viewer.variation_number_label.update_index(index)
         sequence_viewer.word_label.update_word_label(word)
-        sequence_viewer.update_thumbnails(sequence_viewer.thumbnails)
+        sequence_viewer.update_thumbnails(sequence_viewer.state.thumbnails)
         sequence_viewer.update_nav_buttons()

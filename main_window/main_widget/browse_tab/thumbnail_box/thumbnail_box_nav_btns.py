@@ -14,13 +14,12 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
         super().__init__(thumbnail_box)
         self.thumbnail_box = thumbnail_box
-        self.thumbnails = thumbnail_box.thumbnails
-        self.current_index = thumbnail_box.current_index
+        self.state = thumbnail_box.state
         self.thumbnail_label = thumbnail_box.image_label
         self.variation_number_label = thumbnail_box.variation_number_label
         self._setup_layout()
         self._setup_buttons()
-        self.has_multiple_thumbnails = len(self.thumbnails) > 1
+        self.has_multiple_thumbnails = len(self.state.thumbnails) > 1
         if not self.has_multiple_thumbnails:
             self.hide()
 
@@ -37,25 +36,23 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
     def handle_button_click(self):
         sender: QPushButton = self.sender()
         if sender.text() == "<":
-            self.thumbnail_box.current_index = (
-                self.thumbnail_box.current_index - 1
-            ) % len(self.thumbnails)
+            self.state.current_index = (self.state.current_index - 1) % len(
+                self.state.thumbnails
+            )
         elif sender.text() == ">":
-            self.thumbnail_box.current_index = (
-                self.thumbnail_box.current_index + 1
-            ) % len(self.thumbnails)
+            self.state.current_index = (self.state.current_index + 1) % len(
+                self.state.thumbnails
+            )
 
-        self.update_thumbnail(self.thumbnail_box.current_index)
+        self.update_thumbnail(self.state.current_index)
+
         if (
-            self.thumbnail_box.image_label
+            self.thumbnail_label
             == self.thumbnail_box.browse_tab.selection_handler.current_thumbnail
         ):
             sequence_viewer = self.thumbnail_box.browse_tab.sequence_viewer
-            sequence_viewer.variation_number_label.setText(
-                f"{self.thumbnail_box.current_index + 1}/{len(self.thumbnails)}"
-            )
-            sequence_viewer.current_index = self.thumbnail_box.current_index
-            sequence_viewer.update_preview(self.thumbnail_box.current_index)
+            sequence_viewer.state.current_index = self.state.current_index
+            sequence_viewer.update_preview(self.state.current_index)
 
     def update_thumbnail(self, index):
         self.thumbnail_label.update_thumbnail(index)

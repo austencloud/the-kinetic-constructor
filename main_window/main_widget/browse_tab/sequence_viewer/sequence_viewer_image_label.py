@@ -78,8 +78,10 @@ class SequenceViewerImageLabel(QLabel):
 
     def update_thumbnail(self, index: int):
         """Update the thumbnail to the one at the given index in the thumbnails list."""
-        if not self.sequence_viewer.thumbnails:
+        if not self.sequence_viewer.state.thumbnails:
             return
 
-        self.set_pixmap_with_scaling(QPixmap(self.sequence_viewer.thumbnails[index]))
+        self.set_pixmap_with_scaling(
+            QPixmap(self.sequence_viewer.state.thumbnails[index])
+        )
         self.sequence_viewer.variation_number_label.update_index(index)
