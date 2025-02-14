@@ -58,7 +58,7 @@ if TYPE_CHECKING:
 class MainWidget(QWidget):
     main_window: "MainWindow"
     settings_manager: "SettingsManager"
-    splash_screen: "SplashScreen"
+    splash: "SplashScreen"
     settings_dialog: "SettingsDialog"
 
     # Tabs
@@ -142,7 +142,7 @@ class MainWidget(QWidget):
         self.main_window = main_window
         self.main_window.main_widget = self
         self.settings_manager = main_window.settings_manager
-        self.splash_screen = splash_screen
+        self.splash = splash_screen
 
         self.tab_switcher = MainWidgetTabSwitcher(self)
         self.manager = MainWidgetManagers(self)
@@ -150,8 +150,6 @@ class MainWidget(QWidget):
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
 
-        # QTimer.singleShot(0, self.ui_handler.load_current_tab)
-        # QTimer.singleShot(10, self.ensure_user_exists)
 
     def ensure_user_exists(self):
         """Check if a user exists; if not, prompt for a name and show welcome info."""

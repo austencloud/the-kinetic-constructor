@@ -26,6 +26,7 @@ class ConstructTab(QFrame):
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
+        main_widget.splash.updater.update_progress("ConstructTab")
         self.main_widget = main_widget
         self.last_beat: "Pictograph" = None
         self.json_manager = self.main_widget.json_manager

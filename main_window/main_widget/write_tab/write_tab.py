@@ -12,6 +12,8 @@ class WriteTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
+        self.main_widget.splash.updater.update_progress("WriteTab")
+        
         self.act_browser = ActBrowser(self)
         self.act_sheet = ActSheet(self)
         self.setAcceptDrops(False)

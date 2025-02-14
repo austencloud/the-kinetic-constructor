@@ -29,6 +29,8 @@ class GenerateTab(QWidget):
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
+        self.main_widget.splash.updater.update_progress("GenerateTab")
+        
         self.settings = main_widget.main_window.settings_manager.generate_tab_settings
         self.main_layout = QVBoxLayout(self)
         self.setLayout(self.main_layout)

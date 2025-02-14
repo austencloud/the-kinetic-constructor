@@ -20,9 +20,12 @@ class LearnTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
+        self.main_widget.splash.updater.update_progress("LearnTab")
+
         self.stack = QStackedLayout()
         self._setup_components()
         self._setup_layout()
+
 
     def _setup_components(self):
         self.lesson_selector = LessonSelector(self)

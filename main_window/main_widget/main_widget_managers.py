@@ -26,7 +26,7 @@ class MainWidgetManagers:
     def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
-        self.splash_screen = main_widget.splash_screen
+        self.splash_screen = main_widget.splash
         self.settings_manager = main_widget.settings_manager
         self._setup_pictograph_cache()
         self._set_prop_type()
