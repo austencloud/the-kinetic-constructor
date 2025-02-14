@@ -5,8 +5,8 @@ class LeftStackIndex(IntEnum):
     WORKBENCH = 0
     LEARN_CODEX = 1
     WRITE_ACT_SHEET = 2
-    BROWSE_FILTER_SELECTOR = 3
-    BROWSE_SEQUENCE_PICKER = 4
+    FILTER_SELECTOR = 3
+    SEQUENCE_PICKER = 4
 
 
 class RightStackIndex(IntEnum):
@@ -16,4 +16,4 @@ class RightStackIndex(IntEnum):
     GENERATE_TAB = 3
     LEARN_TAB = 4
     WRITE_TAB = 5
-    BROWSE_SEQUENCE_VIEWER = 6
+    SEQUENCE_VIEWER = 6

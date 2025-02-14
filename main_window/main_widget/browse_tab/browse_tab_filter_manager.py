@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.tab_indices import LeftStackIndex
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -109,7 +110,7 @@ class BrowseTabFilterManager:
             self.browse_tab.filter_manager.current_filter
         )
         self.browse_tab.main_widget.left_stack.setCurrentIndex(
-            self.browse_tab.main_widget.left_sequence_picker_index
+            LeftStackIndex.SEQUENCE_PICKER
         )
 
     def sort_and_display_thumbnail_boxes_by_current_filter(
@@ -168,15 +169,25 @@ class BrowseTabFilterManager:
         self.browse_tab.sequence_picker.progress_bar.resize_progress_bar()
 
         # QApplication.processEvents()
+
     def show_sequences_with_tag(self, tag: str):
         """Show sequences that contain a specific tag."""
-        self.browse_tab.filter_manager.prepare_ui_for_filtering(f"sequences with tag '{tag}'")
+        self.browse_tab.filter_manager.prepare_ui_for_filtering(
+            f"sequences with tag '{tag}'"
+        )
         dictionary_dir = get_images_and_data_path("dictionary")
 
         tagged_sequences = [
-            (word, thumbnails, self.browse_tab.main_widget.metadata_extractor.get_sequence_length(thumbnails[0]))
+            (
+                word,
+                thumbnails,
+                self.browse_tab.main_widget.metadata_extractor.get_sequence_length(
+                    thumbnails[0]
+                ),
+            )
             for word, thumbnails in self.browse_tab.get.base_words(dictionary_dir)
-            if tag in self.browse_tab.main_widget.metadata_extractor.get_tags(thumbnails[0])
+            if tag
+            in self.browse_tab.main_widget.metadata_extractor.get_tags(thumbnails[0])
         ]
 
         self.browse_tab.sequence_picker.currently_displayed_sequences = tagged_sequences

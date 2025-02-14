@@ -30,7 +30,7 @@ class MainWidgetUI:
         self.mw = main_widget
         self.splash_screen = main_widget.splash
         self._create_components()
-        self._configure_stacks()
+        self._populate_stacks()
         self._initialize_layout()
         self._set_initial_stack_indices()
 
@@ -69,10 +69,11 @@ class MainWidgetUI:
         mw.settings_dialog = SettingsDialog(mw)
         mw.background_widget = MainBackgroundWidget(mw)
         mw.background_widget.lower()
+        mw.state_handler.load_state(mw.sequence_workbench.beat_frame)
 
         self.splash_screen.updater.update_progress("Finalizing")
 
-    def _configure_stacks(self):
+    def _populate_stacks(self):
         mw = self.mw
 
         mw.left_stack.addWidget(mw.sequence_workbench)  # 0
@@ -91,6 +92,7 @@ class MainWidgetUI:
 
     def _initialize_layout(self):
         mw = self.mw
+
         mw.main_layout = QVBoxLayout(mw)
         mw.main_layout.setContentsMargins(0, 0, 0, 0)
         mw.main_layout.setSpacing(0)

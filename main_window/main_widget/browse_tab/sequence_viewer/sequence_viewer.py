@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
@@ -45,6 +45,7 @@ class SequenceViewer(QWidget):
         self.placeholder_label = PlaceholderTextLabel(self)
         self.image_label = SequenceViewerImageLabel(self)
         self.stacked_widget = QStackedWidget()
+
         self.stacked_widget.addWidget(self.placeholder_label)
         self.stacked_widget.addWidget(self.image_label)
 
@@ -78,8 +79,8 @@ class SequenceViewer(QWidget):
             return
 
         pixmap = QPixmap(self.thumbnails[index])
-        if pixmap.height() != 0:
-            self.image_label.scale_pixmap_to_label(pixmap)
+        if not pixmap.isNull():
+            self.image_label.set_pixmap_with_scaling(pixmap)
             self.stacked_widget.setCurrentWidget(self.image_label)
 
         if self.current_thumbnail_box:

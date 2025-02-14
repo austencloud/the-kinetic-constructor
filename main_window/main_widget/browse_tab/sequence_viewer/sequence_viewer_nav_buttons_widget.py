@@ -65,8 +65,8 @@ class SequenceViewerNavButtonsWidget(QWidget):
         box_nav_buttons_widget.update_thumbnail(self.sequence_viewer.current_index)
 
     def update_thumbnail(self):
-        self.image_label.current_index = self.current_index
-        self.image_label.update_thumbnail()
+        # self.image_label.current_index = self.current_index
+        self.image_label.update_thumbnail(self.current_index)
         self.variation_number_label.update_index(self.current_index)
 
     def refresh(self):

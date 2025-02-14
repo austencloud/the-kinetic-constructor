@@ -14,7 +14,7 @@ class MainWidgetTabSwitcher:
         self.settings = main_widget.main_window.settings_manager.global_settings
 
         self.tab_to_right_stack = {
-            self.mw.main_browse_tab_index: RightStackIndex.BROWSE_SEQUENCE_VIEWER,
+            self.mw.main_browse_tab_index: RightStackIndex.SEQUENCE_VIEWER,
             self.mw.main_generate_tab_index: RightStackIndex.GENERATE_TAB,
             self.mw.main_learn_tab_index: RightStackIndex.LEARN_TAB,
             self.mw.main_write_tab_index: RightStackIndex.WRITE_TAB,
@@ -23,7 +23,7 @@ class MainWidgetTabSwitcher:
         self.tab_to_left_stack = {
             self.mw.main_learn_tab_index: LeftStackIndex.LEARN_CODEX,
             self.mw.main_write_tab_index: LeftStackIndex.WRITE_ACT_SHEET,
-            self.mw.main_browse_tab_index: LeftStackIndex.BROWSE_SEQUENCE_PICKER,
+            self.mw.main_browse_tab_index: LeftStackIndex.SEQUENCE_PICKER,
             self.mw.main_generate_tab_index: LeftStackIndex.WORKBENCH,
             self.mw.main_construct_tab_index: LeftStackIndex.WORKBENCH,
         }

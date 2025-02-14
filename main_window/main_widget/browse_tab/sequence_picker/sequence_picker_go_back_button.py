@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from base_widgets.base_go_back_button import (
     BaseGoBackButton,
 )
+from main_window.main_widget.tab_indices import LeftStackIndex
 
 
 if TYPE_CHECKING:
@@ -32,7 +33,7 @@ class SequencePickerGoBackButton(BaseGoBackButton):
         self.main_widget.fade_manager.widget_and_stack_fader.fade_widgets_and_stack(
             widgets,
             self.main_widget.left_stack,
-            self.main_widget.left_filter_selector_index,
+            LeftStackIndex.FILTER_SELECTOR,
             300,
             self.browse_tab.sequence_viewer.clear,
         )

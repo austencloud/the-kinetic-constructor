@@ -109,10 +109,6 @@ class MainWidget(QWidget):
     main_write_tab_index: int = 4
 
     # Left Indices
-    left_sequence_workbench_index: int = 0
-    left_codex_index: int = 1
-    left_act_sheet_index: int = 2
-    left_filter_selector_index: int = 3
     left_sequence_picker_index: int = 4
 
     # Right Indices
@@ -150,6 +146,8 @@ class MainWidget(QWidget):
         self.ui_handler = MainWidgetUI(self)
         self.event_handler = MainWidgetEvents(self)
 
+        # QTimer.singleShot(0, self.ui_handler.load_current_tab)
+        # QTimer.singleShot(10, self.ensure_user_exists)
 
     def ensure_user_exists(self):
         """Check if a user exists; if not, prompt for a name and show welcome info."""

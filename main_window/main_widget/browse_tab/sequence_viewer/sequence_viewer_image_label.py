@@ -1,6 +1,6 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QPixmap, QResizeEvent
+from PyQt6.QtWidgets import QLabel, QSizePolicy
 from typing import TYPE_CHECKING
 
 
@@ -9,59 +9,77 @@ if TYPE_CHECKING:
 
 
 class SequenceViewerImageLabel(QLabel):
-    thumbnails: list[str] = []
-
     def __init__(self, sequence_viewer: "SequenceViewer"):
-        super().__init__()
+        super().__init__(sequence_viewer)
         self.sequence_viewer = sequence_viewer
-        self.current_index = sequence_viewer.current_index
-        self.metadata_extractor = sequence_viewer.main_widget.metadata_extractor
+        self._original_pixmap: QPixmap | None = None
+
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setScaledContents(False)
 
-    def scale_pixmap_to_label(self, pixmap: QPixmap):
-        label_width = int(self.sequence_viewer.width() * 0.9)
-        aspect_ratio = pixmap.height() / pixmap.width()
-        new_height = int(label_width * aspect_ratio)
-        if new_height > self.sequence_viewer.height() * 0.8:
-            new_height = int(self.sequence_viewer.height() * 0.8)
-            label_width = int(new_height / aspect_ratio)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        scaled_pixmap = pixmap.scaled(
-            label_width,
-            new_height,
+    def set_pixmap_with_scaling(self, pixmap: QPixmap):
+        """Set the pixmap and scale it to fit the available space within the SequenceViewer."""
+        self._original_pixmap = pixmap
+        self._scale_pixmap_to_fit()
+
+    def _calculate_available_space(self) -> tuple[int, int]:
+        sequence_viewer = self.sequence_viewer
+        available_height = int(sequence_viewer.height() * 0.65)
+
+        # Calculate the width available for the image
+        available_width = sequence_viewer.width()
+
+        return available_width, available_height
+
+    def _scale_pixmap_to_fit(self):
+        if not self._original_pixmap:
+            return
+
+        available_width, available_height = self._calculate_available_space()
+
+        # Start with the available width
+        target_width = available_width
+        aspect_ratio = self._original_pixmap.height() / self._original_pixmap.width()
+
+        # Calculate the height that would result from using the full available width
+        target_height = int(target_width * aspect_ratio)
+
+        # If height is too tall, reduce width iteratively until it fits
+        while target_height > available_height and target_width > 0:
+            target_width -= 1
+            target_height = int(target_width * aspect_ratio)
+
+        # Final safeguard
+        target_width = max(1, target_width)
+        target_height = max(1, target_height)
+
+        #  we need to change the taget_width or target_height according to the image's aspect ratio. Whichever is set to the available width/height should be kept, the other should be calculated based on the aspect ratio.
+        if target_width == available_width:
+            target_height = int(target_width * aspect_ratio)
+        elif target_height == available_height:
+            target_width = int(target_height / aspect_ratio)
+
+        # Scale the pixmap accordingly
+        scaled_pixmap = self._original_pixmap.scaled(
+            target_width,
+            target_height,
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
+        self.setFixedHeight(target_height)
+        self.sequence_viewer.stacked_widget.setFixedHeight(target_height)
         self.setPixmap(scaled_pixmap)
 
-    def update_thumbnail(self):
-        self.thumbnails = self.sequence_viewer.thumbnails
-        pixmap = QPixmap(self.thumbnails[self.sequence_viewer.current_index])
-        self.set_pixmap_to_fit(pixmap)
+    # def resizeEvent(self, event: QResizeEvent):
+    #     self._scale_pixmap_to_fit()
+    #     super().resizeEvent(event)
 
-    def set_pixmap_to_fit(self, pixmap: QPixmap):
-        current_index = self.sequence_viewer.current_index
-        sequence_length = self.metadata_extractor.get_sequence_length(
-            self.thumbnails[current_index]
-        )
-        target_width = self._get_target_width(
-            sequence_length, pixmap.height() / pixmap.width()
-        )
-        scaled_pixmap = pixmap.scaledToWidth(
-            target_width, Qt.TransformationMode.SmoothTransformation
-        )
-        # print the height of the scaled pixmap
-        print(scaled_pixmap.height())
-        self.setPixmap(scaled_pixmap)
-        self.setFixedHeight(scaled_pixmap.height())
-        self.sequence_viewer.stacked_widget.setFixedHeight(scaled_pixmap.height())
+    def update_thumbnail(self, index: int):
+        """Update the thumbnail to the one at the given index in the thumbnails list."""
+        if not self.sequence_viewer.thumbnails:
+            return
 
-    def _get_target_width(self, sequence_length, aspect_ratio):
-        if aspect_ratio > 1.3:
-            if sequence_length == 1:
-                return int(self.sequence_viewer.width() * 0.4)
-            return int(self.sequence_viewer.width() * 0.6)
-        if sequence_length == 1:
-            return int(self.sequence_viewer.width() * 0.6)
-        return int(self.sequence_viewer.width() * 0.85)
+        self.set_pixmap_with_scaling(QPixmap(self.sequence_viewer.thumbnails[index]))
+        self.sequence_viewer.variation_number_label.update_index(index)
