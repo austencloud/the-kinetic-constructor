@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
@@ -48,8 +48,9 @@ class GenerateTabLayoutManager:
         btn_row.addWidget(self.generate_tab.generate_button)
 
         # Add everything to the main layout
-        self.generate_tab.main_layout.addLayout(top_row, 2)
+        self.generate_tab.main_layout.addLayout(top_row, 1)
         self.generate_tab.main_layout.addLayout(content_layout, 16)
         self.generate_tab.main_layout.addLayout(btn_row, 4)
 
-        self.content_layout = content_layout
+        self.content_layout = content_layout  # Store content_layout
+

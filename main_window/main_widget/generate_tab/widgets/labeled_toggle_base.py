@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import TYPE_CHECKING
-from base_widgets.pytoggle import PyToggle
+from pytoggle import PyToggle
 
 if TYPE_CHECKING:
     from ..generate_tab import GenerateTab
@@ -43,6 +43,7 @@ class LabeledToggleBase(QWidget):
 
     def _handle_toggle_changed(self, state: bool):
         print("This method should be overridden in the subclass.")
+        pass
 
     def set_state(self, is_checked: bool):
         was_blocked = self.toggle.blockSignals(True)

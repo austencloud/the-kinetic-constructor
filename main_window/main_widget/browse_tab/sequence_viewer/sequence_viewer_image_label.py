@@ -58,7 +58,10 @@ class SequenceViewerImageLabel(QLabel):
         self.sequence_viewer.stacked_widget.setFixedHeight(scaled_pixmap.height())
 
     def _get_target_width(self, sequence_length, aspect_ratio):
-
+        if aspect_ratio > 1.3:
+            if sequence_length == 1:
+                return int(self.sequence_viewer.width() * 0.4)
+            return int(self.sequence_viewer.width() * 0.6)
         if sequence_length == 1:
             return int(self.sequence_viewer.width() * 0.6)
         return int(self.sequence_viewer.width() * 0.85)

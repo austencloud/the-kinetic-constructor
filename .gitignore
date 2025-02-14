@@ -1,6 +1,5 @@
 **__pycache__
 current_sequence.json
-current_act.json
 profiling_output.txt
 *.exe
 *.dll

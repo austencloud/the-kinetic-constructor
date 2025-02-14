@@ -23,172 +23,178 @@ class SequenceWorkbenchButtonPanel(QFrame):
 
     def __init__(self, sequence_workbench: "SequenceWorkbench") -> None:
         super().__init__(sequence_workbench)
-        self.sw = sequence_workbench
-        self.main_widget = self.sw.main_widget
-        self.beat_frame = self.sw.beat_frame
+        self.sequence_workbench = sequence_workbench
+        self.main_widget = self.sequence_workbench.main_widget
+        self.beat_frame = self.sequence_workbench.beat_frame
         self.export_manager = self.beat_frame.image_export_manager
-        self.indicator_label = self.sw.indicator_label
+        self.indicator_label = self.sequence_workbench.indicator_label
         self.settings_manager = self.main_widget.main_window.settings_manager
-        self.font_size = self.sw.width() // 45
+
+        self.font_size = self.sequence_workbench.width() // 45
+
         self.top_placeholder = ButtonPanelPlaceholder(self)
         self.bottom_placeholder = ButtonPanelPlaceholder(self)
-        self.buttons: dict[str, QPushButton] = {}
+
         self._setup_buttons()
         self._setup_layout()
 
     def _setup_buttons(self) -> None:
-        button_data = {
-            "add_to_dictionary": (
-                "add_to_dictionary.svg",
-                self.sw.add_to_dictionary_manager.add_to_dictionary,
-                "Add to Dictionary",
-            ),
-            "save_image": (
-                "save_image.svg",
-                lambda: self.export_manager.dialog_executor.exec_dialog(
-                    self.sw.main_widget.json_manager.loader_saver.load_current_sequence_json()
+        self.buttons: dict[str, QPushButton] = {}
+
+        button_dict = {
+            "add_to_dictionary": {
+                "icon": "add_to_dictionary.svg",
+                "callback": self.sequence_workbench.add_to_dictionary_manager.add_to_dictionary,
+                "tooltip": "Add to Dictionary",
+            },
+            "save_image": {
+                "icon": "save_image.svg",
+                "callback": lambda: self.export_manager.dialog_executor.exec_dialog(
+                    self.sequence_workbench.main_widget.json_manager.loader_saver.load_current_sequence_json()
                 ),
-                "Save Image",
-            ),
-            "view_full_screen": (
-                "eye.png",
-                lambda: self.sw.full_screen_viewer.view_full_screen(),
-                "View Full Screen",
-            ),
-            "mirror_sequence": (
-                "mirror.png",
-                lambda: self.sw.mirror_manager.reflect_current_sequence(),
-                "Mirror Sequence",
-            ),
-            "swap_colors": (
-                "yinyang1.svg",
-                lambda: self.sw.color_swap_manager.swap_current_sequence(),
-                "Swap Colors",
-            ),
-            "rotate_sequence": (
-                "rotate.svg",
-                lambda: self.sw.rotation_manager.rotate_current_sequence(),
-                "Rotate Sequence",
-            ),
-            "delete_beat": (
-                "delete.svg",
-                lambda: self.sw.beat_deleter.delete_selected_beat(),
-                "Delete Beat",
-            ),
-            "clear_sequence": (
-                "clear.svg",
-                lambda: self.clear_sequence(),
-                "Clear Sequence",
-            ),
+                "tooltip": "Save Image",
+            },
+            "view_full_screen": {
+                "icon": "eye.png",
+                "callback": lambda: self.sequence_workbench.full_screen_viewer.view_full_screen(),
+                "tooltip": "View Full Screen",
+            },
+            "mirror_sequence": {
+                "icon": "mirror.png",
+                "callback": lambda: self.sequence_workbench.mirror_manager.reflect_current_sequence(),
+                "tooltip": "Mirror Sequence",
+            },
+            "swap_colors": {
+                "icon": "yinyang1.png",
+                "callback": lambda: self.sequence_workbench.color_swap_manager.swap_current_sequence(),
+                "tooltip": "Swap Colors",
+            },
+            "rotate_sequence": {
+                "icon": "rotate.png",
+                "callback": lambda: self.sequence_workbench.rotation_manager.rotate_current_sequence(),
+                "tooltip": "Rotate Sequence",
+            },
+            "delete_beat": {
+                "icon": "delete.svg",
+                "callback": lambda: self.sequence_workbench.beat_deleter.delete_selected_beat(),
+                "tooltip": "Delete Beat",
+            },
+            "clear_sequence": {
+                "icon": "clear.svg",
+                "callback": lambda: self.clear_sequence(),
+                "tooltip": "Clear Sequence",
+            },
         }
 
-        for name, (icon, callback, tooltip) in button_data.items():
+        for button_name, button_data in button_dict.items():
             icon_path = get_images_and_data_path(
-                f"images/icons/sequence_workbench_icons/{icon}"
+                f"images/icons/sequence_workbench_icons/{button_data['icon']}"
             )
-            button = self._create_button(icon_path, callback, tooltip)
-            setattr(self, f"{name}_button", button)
-            self.buttons[name] = button
+            button = self._create_button(
+                icon_path, button_data["callback"], button_data["tooltip"]
+            )
+            setattr(self, f"{button_name}_button", button)
+            self.buttons[button_name] = button
 
     def clear_sequence(self):
-        sequence = (
+        sequence_length = len(
             self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
-        if len(sequence) < 2:
+        # collapse the grpah editor
+        graph_editor = self.sequence_workbench.graph_editor
+        if sequence_length < 2:
             self.indicator_label.show_message("No sequence to clear")
             return
-
-        if self.sw.graph_editor.is_toggled:
-            self.sw.graph_editor.animator.toggle()
-
-        self.indicator_label.show_message("Sequence cleared")
-        self.sw.beat_deleter.start_position_deleter.delete_all_beats(
+        if graph_editor.is_toggled:
+            graph_editor.animator.toggle()
+        self.sequence_workbench.indicator_label.show_message("Sequence cleared")
+        self.beat_frame.sequence_workbench.beat_deleter.start_position_deleter.delete_all_beats(
             show_indicator=True
         )
 
     def _create_button(self, icon_path: str, callback, tooltip: str) -> QPushButton:
+        icon = QIcon(icon_path)
         button = QPushButton()
-        button.setIcon(QIcon(icon_path))
-        button.setToolTip(tooltip)
         button.clicked.connect(callback)
+        button.setToolTip(tooltip)
         button.enterEvent = lambda event: button.setCursor(
             Qt.CursorShape.PointingHandCursor
         )
         button.leaveEvent = lambda event: button.setCursor(Qt.CursorShape.ArrowCursor)
+        button.setIcon(icon)
         return button
 
     def toggle_swap_colors_icon(self):
-        icon_name = "yinyang2.svg" if self.colors_swapped else "yinyang1.svg"
+        icon_name = "yinyang1.png" if self.colors_swapped else "yinyang2.png"
         new_icon_path = get_images_and_data_path(
             f"images/icons/sequence_workbench_icons/{icon_name}"
         )
         self.colors_swapped = not self.colors_swapped
-        self.swap_colors_button.setIcon(QIcon(new_icon_path))
+        new_icon = QIcon(new_icon_path)
+        self.swap_colors_button.setIcon(new_icon)
         QApplication.processEvents()
 
     def _setup_layout(self) -> None:
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.top_placeholder)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.top_placeholder)
 
-        button_groups = [
-            ["add_to_dictionary", "save_image", "view_full_screen"],
-            ["mirror_sequence", "swap_colors", "rotate_sequence"],
-            ["delete_beat", "clear_sequence"],
-        ]
+        # Group 1 (Basic Tools)
+        for name in ["add_to_dictionary", "save_image", "view_full_screen"]:
+            self.layout.addWidget(self.buttons[name])
 
-        for group in button_groups:
-            for name in group:
-                layout.addWidget(self.buttons[name])
-            spacer = QSpacerItem(
-                20,
-                self.sw.height() // 20,
-                QSizePolicy.Policy.Minimum,
-                QSizePolicy.Policy.Expanding,
-            )
-            layout.addItem(spacer)
-
-        layout.addWidget(self.bottom_placeholder)
-        layout.setAlignment(Qt.AlignmentFlag.AlignRight)
-        spacer = QSpacerItem(
+        # Add spacing to separate groups
+        self.spacer1 = QSpacerItem(
             20,
-            self.sw.height() // 40,
+            self.sequence_workbench.height() // 20,
             QSizePolicy.Policy.Minimum,
             QSizePolicy.Policy.Expanding,
         )
-        layout.addItem(spacer)
-        self.layout: QVBoxLayout = layout
+        self.layout.addItem(self.spacer1)
+
+        # Group 2 (Transform Tools)
+        for name in ["mirror_sequence", "swap_colors", "rotate_sequence"]:
+            self.layout.addWidget(self.buttons[name])
+
+        # Add spacing before next group
+        self.spacer2 = QSpacerItem(
+            20,
+            self.sequence_workbench.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        self.layout.addItem(self.spacer2)
+
+        # Group 3 (Sequence Management)
+        for name in ["delete_beat", "clear_sequence"]:
+            self.layout.addWidget(self.buttons[name])
+
+        self.layout.addWidget(self.bottom_placeholder)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+        # Initial spacing setup
+        self.spacer3 = QSpacerItem(
+            20,
+            self.sequence_workbench.height() // 40,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        self.layout.addItem(self.spacer3)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.resize_button_panel()
 
     def resize_button_panel(self):
-        button_size = self.sw.main_widget.height() // 20
-        border_radius = button_size // 2
-        button_style = f"""
-            QPushButton {{
-                border-radius: {border_radius}px;
-                background-color: white;
-                color: black;
-                border: 1px solid #555;
-            }}
-            QPushButton:hover {{
-                background-color: #F0F0F0;
-            }}
-            QPushButton:pressed {{
-                background-color: #D0D0D0;
-            }}
-        """
-
+        button_size = self.sequence_workbench.main_widget.height() // 22
         for button in self.buttons.values():
             button.setFixedSize(button_size, button_size)
-            button.setIconSize(button.size() * 0.75)
-            button.setStyleSheet(button_style)
+            button.setIconSize(button.size() * 0.8)
+            button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        layout_spacing = self.sw.beat_frame.main_widget.height() // 120
-        self.layout.setSpacing(layout_spacing)
-
-        spacer_size = self.sw.beat_frame.main_widget.height() // 20
+        self.layout.setSpacing(
+            self.sequence_workbench.beat_frame.main_widget.height() // 120
+        )
+        spacer_size = self.sequence_workbench.beat_frame.main_widget.height() // 20
         for spacer in self.spacers:
             spacer.changeSize(
                 20,

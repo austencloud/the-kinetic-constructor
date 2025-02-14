@@ -67,8 +67,6 @@ class BeatAdder:
             )
             if update_word:
                 self.sequence_workbench.current_word_label.update_current_word_label_from_beats()
-        generate_tab_controller = self.main_widget.generate_tab.controller
-        generate_tab_controller._update_auto_complete_button()
 
     def _adjust_layout_and_update_sequence_builder(self, index: int) -> None:
         self.beat_frame.layout_manager.adjust_layout_to_sequence_length()
